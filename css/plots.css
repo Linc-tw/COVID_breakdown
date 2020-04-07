@@ -1,0 +1,60 @@
+@charset "UTF-8";
+/*!
+* Start Bootstrap - SB Admin v6.0.0 (https://startbootstrap.com/templates/sb-admin)
+* Copyright 2013-2020 Start Bootstrap
+* Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-sb-admin/blob/master/LICENSE)
+*/
+/*!
+ * Bootstrap v4.4.1 (https://getbootstrap.com/)
+ * Copyright 2011-2019 The Bootstrap Authors
+ * Copyright 2011-2019 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+
+/*body {
+    font-family: 'Roboto', sans-serif;
+}*/
+
+.case_by_transmission.xaxis,
+.case_by_transmission.xaxis text {
+  font-family: 'Roboto', sans-serif;
+}
+
+@media (min-width: 20px) {
+  .case_by_transmission.xaxis,
+  .case_by_transmission.xaxis text {
+    font-size: 24px;
+  }
+}
+@media (min-width: 576px) {
+  .case_by_transmission.xaxis,
+  .case_by_transmission.xaxis text {
+    font-size: 22px;
+  }
+}
+@media (min-width: 768px) {
+  .case_by_transmission.xaxis,
+  .case_by_transmission.xaxis text {
+    font-size: 18px;
+  }
+}
+@media (min-width: 992px) {
+  .case_by_transmission.xaxis,
+  .case_by_transmission.xaxis text {
+    font-size: 20px;
+  }
+}
+@media (min-width: 1200px) {
+  .case_by_transmission.xaxis,
+  .case_by_transmission.xaxis text {
+    font-size: 22px;
+  }
+}
+
+.case_by_transmission.xaxis line {
+  stroke: grey;
+  stroke-opacity: 0.5;
+  shape-rendering: crispEdges;
+}
+
+
