@@ -1,4 +1,4 @@
-date,indigenous unknown,indigenous known,imported
+date,indigenous unlinked,indigenous linked,imported
 2020-01-19,0,0,0
 2020-01-20,0,0,0
 2020-01-21,0,0,1
@@ -79,3 +79,5 @@ date,indigenous unknown,indigenous known,imported
 2020-04-05,0,0,8
 2020-04-06,0,1,9
 2020-04-07,0,0,3
+2020-04-08,0,1,2
+2020-04-09,0,1,0

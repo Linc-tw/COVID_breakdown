@@ -57,4 +57,15 @@
   shape-rendering: crispEdges;
 }
 
+.tooltip {
+  opacity: 0;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  margin-left: -56px;
+  margin-right: -56px;
+  margin-top: -58px;
+  margin-bottom: -58px;
+}
 
