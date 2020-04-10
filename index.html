@@ -29,7 +29,7 @@
                             <div class="sb-sidenav-menu-heading"></div>
                             <a class="nav-link" href="index.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard
+                                Summary
                             </a>
 <!--                            
                             <div class="sb-sidenav-menu-heading">Interface</div>
@@ -129,8 +129,29 @@ case network
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-area mr-1"></i>
+                                        <i class="fas fa-chart-bar mr-1"></i>
                                         Confirmed Cases by Tranmission Type
+                                    </div>
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active">
+                                                    <input type="radio" name="doCumul" value="daily" checked>Daily<br>
+                                                </label>
+                                                <label class="btn btn-covid">
+                                                    <input type="radio" name="doCumul" value="cumul">Cumulative<br>
+                                                </label>
+                                            </div>
+                                            <span style="display:inline-block; width: 12px;"></span>
+                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active">
+                                                    <input type="radio" name="date" value="onset" checked>Onset date<br>
+                                                </label>
+                                                <label class="btn btn-covid">
+                                                    <input type="radio" name="date" value="report">Report date<br>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="card-body" id="case_by_transmission"></div>
                                 </div>
@@ -138,8 +159,10 @@ case network
                             
                             <div class="col-xl-6">
                                 <div class="card mb-4">
-                                    <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>
-                                    Confirmed Cases by Detection Channel</div>
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area mr-1"></i>
+                                        Confirmed Cases by Detection Channel
+                                    </div>
                                     <div class="card-body" id="case_by_detection">Under construction</div>
                                 </div>
                             </div>

@@ -15,49 +15,64 @@
     font-family: 'Roboto', sans-serif;
 }*/
 
-.case_by_transmission.xaxis,
-.case_by_transmission.xaxis text {
+#case_by_transmission .plot,
+#case_by_transmission .plot text {
   font-family: 'Roboto', sans-serif;
 }
 
 @media (min-width: 20px) {
-  .case_by_transmission.xaxis,
-  .case_by_transmission.xaxis text {
+  #case_by_transmission .plot,
+  #case_by_transmission .plot text {
     font-size: 24px;
   }
 }
 @media (min-width: 576px) {
-  .case_by_transmission.xaxis,
-  .case_by_transmission.xaxis text {
+  #case_by_transmission .plot,
+  #case_by_transmission .plot text {
     font-size: 22px;
   }
 }
 @media (min-width: 768px) {
-  .case_by_transmission.xaxis,
-  .case_by_transmission.xaxis text {
+  #case_by_transmission .plot,
+  #case_by_transmission .plot text {
     font-size: 18px;
   }
 }
 @media (min-width: 992px) {
-  .case_by_transmission.xaxis,
-  .case_by_transmission.xaxis text {
+  #case_by_transmission .plot,
+  #case_by_transmission .plot text {
     font-size: 20px;
   }
 }
 @media (min-width: 1200px) {
-  .case_by_transmission.xaxis,
-  .case_by_transmission.xaxis text {
+  #case_by_transmission .plot,
+  #case_by_transmission .plot text {
     font-size: 22px;
   }
 }
 
-.case_by_transmission.xaxis line {
+#case_by_transmission .plot line {
   stroke: grey;
   stroke-opacity: 0.5;
   shape-rendering: crispEdges;
 }
 
-.tooltip {
+.btn-pos,
+#case_by_transmission .btn-pos {
+/*   position: absolute; */
+  float: right;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+#case_by_transmission {
+/*   position: absolute; */
+/*   margin-bottom: 0.25rem; 3.125*16 */
+/*   top: 0px; */
+/*   right: 20px; */
+}
+
+#case_by_transmission .tooltip {
   opacity: 0;
   background-color: black;
   color: white;
@@ -67,5 +82,36 @@
   margin-right: -56px;
   margin-top: -58px;
   margin-bottom: -58px;
+}
+
+
+.btn-covid {
+  color: #000;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.175);
+}
+.btn-covid:hover {
+  color: #fff;
+  background-color: #545b62;
+  border-color: #545b62;
+}
+.btn-covid:focus, .btn-covid.focus {
+  color: #fff;
+  background-color: #545b62;
+  border-color: #545b62;
+  box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
+}
+.btn-covid.disabled, .btn-covid:disabled {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+.btn-covid:not(:disabled):not(.disabled):active, .btn-covid:not(:disabled):not(.disabled).active, .show > .btn-covid.dropdown-toggle {
+  color: #fff;
+  background-color: #545b62;
+  border-color: #4e555b;
+}
+.btn-covid:not(:disabled):not(.disabled):active:focus, .btn-covid:not(:disabled):not(.disabled).active:focus, .show > .btn-covid.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
 }
 
