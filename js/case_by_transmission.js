@@ -17,7 +17,10 @@ function cumsum(data, colTagList) {
 
 var DC_wrap = {};
 DC_wrap.id = "#case_by_transmission"
-DC_wrap.dataPath = "processed_data/Taiwan_simplified.csv";
+DC_wrap.dataPathList = [
+  "processed_data/case_by_transmission_by_report_day.csv",
+  "processed_data/case_by_transmission_by_onset_day.csv"
+];
 
 function DC_makeCanvas() {
   var totWidth = 800;
@@ -280,8 +283,8 @@ function DC_initialize() {
   
   //-- Legend - total cases
   var Im_sum = d3.sum(DC_wrap.formattedData, function(d){if (d.col == 'imported') return +d.h1;});
-  var IL_sum = d3.sum(DC_wrap.formattedData, function(d){if (d.col == 'indigenous linked') return +d.h2;});
-  var IU_sum = d3.sum(DC_wrap.formattedData, function(d){if (d.col == 'indigenous unlinked') return +d.h3;});
+  var IL_sum = d3.sum(DC_wrap.formattedData, function(d){if (d.col == 'linked') return +d.h2;});
+  var IU_sum = d3.sum(DC_wrap.formattedData, function(d){if (d.col == 'unlinked') return +d.h3;});
   
   DC_wrap.svg.selectAll("sum")
     .data([Im_sum, IL_sum, IU_sum, Im_sum+IL_sum+IU_sum])
@@ -299,7 +302,7 @@ function DC_initialize() {
   var bar = DC_wrap.svg.selectAll('.bar')
     .data(DC_wrap.formattedData)
     .enter();
-        
+  
   bar.append('rect')
     .attr('class', 'bar')
     .attr('fill', function(d){ return color(d.col);})
@@ -340,27 +343,42 @@ function DC_update() {
     .attr('height', function(d) {return y(d.y0)-y(d.y1);});
 }
 
-d3.csv(DC_wrap.dataPath, function(error, data){
+DC_wrap.doCumul = 0;
+DC_wrap.doOnset = 0;
+
+d3.csv(DC_wrap.dataPathList[DC_wrap.doOnset], function(error, data) {
+  if (error) return console.warn(error);
+  
   DC_makeCanvas();
-  DC_formatData(data, 0);
+  DC_formatData(data, DC_wrap.doCumul);
   DC_initialize();
   DC_update();
 })
 
 //-- Button listener
 $(document).on("change", "input:radio[name='case_by_transmission_doCumul']", function(event) {
-  if (this.value == "daily") {
-    doCumul = 0;
-  }
-  else {
-    doCumul = 1;
-  }
+  DC_wrap.doCumul = this.value;
+  dataPath = DC_wrap.dataPathList[DC_wrap.doOnset]
   
-  d3.csv(DC_wrap.dataPath, function(error, data){
-    DC_formatData(data, doCumul);
+  d3.csv(dataPath, function(error, data) {
+    if (error) return console.warn(error);
+    
+    DC_formatData(data, DC_wrap.doCumul);
     DC_update();
   });
 });
 
+$(document).on("change", "input:radio[name='case_by_transmission_doOnset']", function(event) {
+  DC_wrap.doOnset = this.value
+  dataPath = DC_wrap.dataPathList[DC_wrap.doOnset]
   
+  d3.csv(dataPath, function(error, data) {
+    if (error) return console.warn(error);
+    
+    DC_formatData(data, DC_wrap.doCumul);
+    DC_update();
+  });
+});
+
+
 

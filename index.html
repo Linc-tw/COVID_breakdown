@@ -130,25 +130,25 @@ case network
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar mr-1"></i>
-                                        Confirmed Cases by Tranmission Type
+                                        Confirmed Cases by Transmission Type
                                     </div>
                                     <div class="card-img">
                                         <div class="btn-pos"> 
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_transmission_doCumul" value="daily" checked>Daily<br>
+                                                    <input type="radio" name="case_by_transmission_doCumul" value=0 checked>Daily<br>
                                                 </label>
                                                 <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_transmission_doCumul" value="cumul">Cumulative<br>
+                                                    <input type="radio" name="case_by_transmission_doCumul" value=1>Cumulative<br>
                                                 </label>
                                             </div>
                                             <span style="display:inline-block; width: 12px;"></span>
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_transmission_date" value="onset" checked>Onset date<br>
+                                                    <input type="radio" name="case_by_transmission_doOnset" value=0 checked>Report date<br>
                                                 </label>
                                                 <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_transmission_date" value="report">Report date<br>
+                                                    <input type="radio" name="case_by_transmission_doOnset" value=1>Onset date<br>
                                                 </label>
                                             </div>
                                         </div>
@@ -163,8 +163,6 @@ case network
                                         <i class="fas fa-chart-area mr-1"></i>
                                         Confirmed Cases by Detection Channel
                                     </div>
-                                    <input type="checkbox" id="myCheckbox">  View in percentage </p>
-<svg></svg>
                                     <div class="card-body" id="case_by_detection">Under construction</div>
                                 </div>
                             </div>
