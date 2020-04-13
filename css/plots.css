@@ -128,3 +128,42 @@ body {
   box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
 }
 
+
+
+.btn-covid-white {
+  color: #aaa;
+  background-color: #343a40;
+  border-color: rgba(0, 0, 0, 0.175);
+}
+.btn-covid-white:hover {
+  color: #fff;
+  background-color: #545b62;
+  border-color: #545b62;
+}
+.btn-covid-white:focus, .btn-covid-white.focus {
+  color: #fff;
+  background-color: #545b62;
+  border-color: #545b62;
+  box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
+}
+.btn-covid-white.disabled, .btn-covid-white:disabled {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+.btn-covid-white:not(:disabled):not(.disabled):active, .btn-covid-white:not(:disabled):not(.disabled).active, .show > .btn-covid-white.dropdown-toggle {
+  color: #fff;
+  background-color: #545b62;
+  border-color: #4e555b;
+}
+.btn-covid-white:not(:disabled):not(.disabled):active:focus, .btn-covid-white:not(:disabled):not(.disabled).active:focus, .show > .btn-covid-white.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
+}
+
+
+.sb-sidenav-menu-heading-nouppercase {
+  padding: 1.75rem 1rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+/*   text-transform: uppercase; */
+}

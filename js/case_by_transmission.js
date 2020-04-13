@@ -1,8 +1,11 @@
 
-
 //-- Convert date format
 function ISODateToMDDate(ISODate) {
-  var MDDateFormat = d3.timeFormat("%b %d");
+  var fmtStr;
+  if (lang == 'zh-tw') fmtStr = "%-m月%-d日"
+  else fmtStr = "%b %d"
+  
+  var MDDateFormat = d3.timeFormat(fmtStr);
   return MDDateFormat(d3.isoParse(ISODate));
 }
 
@@ -24,8 +27,17 @@ DC_wrap.dataPathList = [
 
 function DC_makeCanvas() {
   var totWidth = 800;
-  var totHeight = 400;
-  var margin = {left: 70, right: 0, bottom: 90, top: 0};
+  var totHeight;
+  if (lang == 'zh-tw') {
+    totHeight = 415;
+    bottom = 105;
+  }
+  else {
+    totHeight = 400;
+    bottom = 90;
+  }
+  
+  var margin = {left: 70, right: 0, bottom: bottom, top: 0};
   var width = totWidth - margin.left - margin.right;
   var height = totHeight - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
@@ -166,8 +178,16 @@ function getTooltipPos(d) {
 
 function mousemove(d) {
   var newPos = getTooltipPos(d3.mouse(this));
+  var tootipText;
+  
+  if (lang == 'zh-tw')
+    tootipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3) + "<br>境外移入 = " + d.h1+ "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3
+  else
+    tootipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Imported = " + d.h1+ "<br>Ind. linked = " + d.h2 + "<br>Ind. unlinked = " + d.h3
+  
+  
   tooltip
-    .html(d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Imported = " + d.h1+ "<br>Ind. linked = " + d.h2 + "<br>Ind. unlinked = " + d.h3)
+    .html(tootipText)
     .style("left", newPos[0] + "px")
     .style("top", newPos[1] + "px")
 }
@@ -239,64 +259,37 @@ function DC_initialize() {
     .call(yAxis2)
     
   //-- ylabel
+  var ylabel;
+  if (lang == 'zh-tw') ylabel = '案例數';
+  else ylabel = 'Number counts';
   DC_wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
     .attr("transform", "translate(" + (-DC_wrap.margin.left*0.75).toString() + ", " + (DC_wrap.height/2).toString() + ")rotate(-90)")
-    .text("Number counts");
+    .text(ylabel);
     
   //-- Color
-  colorList = ['#3366BB', '#CC6677', '#55BB44', '#000000']
+  colorList = ['#3366BB', '#CC6677', '#55BB44']
   var color = d3.scaleOrdinal()
-    .domain([DC_wrap.colTagList[2], DC_wrap.colTagList[1], DC_wrap.colTagList[0], 'none'])
+    .domain([DC_wrap.colTagList[2], DC_wrap.colTagList[1], DC_wrap.colTagList[0]])
     .range(colorList)
-
+    
   //-- Legend
-  var x_legend = 90;
-  var y_legend = 40;
+  var legendPos = {x: 90, y: 40, dx: 20, dy: 25, r: 7};
   
   //-- Legend - circles
-  label = ["Imported", "Indigenous linked to known cases", "Indigenous unlinked"]
   DC_wrap.svg.selectAll("dot")
-    .data(label)
+    .data([0, 1, 2])
     .enter()
     .append("circle")
       .attr("class", "legend")
-      .attr("cx", x_legend)
-      .attr("cy", function(d,i) {return y_legend + i*25})
-      .attr("r", 7)
+      .attr("cx", legendPos.x)
+      .attr("cy", function(d,i) {return legendPos.y + i*legendPos.dy})
+      .attr("r", legendPos.r)
       .style("fill", function(d) {return color(d)})
-      
-  //-- Legend - texts
-  label.push("Total")
-  DC_wrap.svg.selectAll("label")
-    .data(label)
-    .enter()
-    .append("text")
-      .attr("class", "legend")
-      .attr("x", x_legend+20)
-      .attr("y", function(d,i){ return y_legend + i*25 + 7})
-      .style("fill", function(d){ return color(d)})
-      .text(function(d){return d})
-      .attr("text-anchor", "left")
-      .style("alignment-baseline", "middle")
   
-  //-- Legend - total cases
-  var Im_sum = d3.sum(DC_wrap.formattedData, function(d){if (d.col == 'imported') return +d.h1;});
-  var IL_sum = d3.sum(DC_wrap.formattedData, function(d){if (d.col == 'linked') return +d.h2;});
-  var IU_sum = d3.sum(DC_wrap.formattedData, function(d){if (d.col == 'unlinked') return +d.h3;});
-  
-  DC_wrap.svg.selectAll("sum")
-    .data([Im_sum, IL_sum, IU_sum, Im_sum+IL_sum+IU_sum])
-    .enter()
-    .append("text")
-      .attr("class", "legend")
-      .attr("x", x_legend-20)
-      .attr("y", function(d,i){ return y_legend + i*25 + 7})
-      .style("fill", function(d){ return color(d)})
-      .text(function(d){return d})
-      .attr("text-anchor", "end")
-      .style("alignment-baseline", "middle")
+  //-- Legend - calculation for updates
+  var totNb = d3.sum(DC_wrap.formattedData, function(d){return +d.height;});
   
   //-- Bar
   var bar = DC_wrap.svg.selectAll('.bar')
@@ -305,8 +298,8 @@ function DC_initialize() {
   
   bar.append('rect')
     .attr('class', 'bar')
-    .attr('fill', function(d){ return color(d.col);})
-    .attr('x', function(d) { return x(d.x);})
+    .attr('fill', function(d) {return color(d.col);})
+    .attr('x', function(d) {return x(d.x);})
     .attr('y', function(d) {return y(0);})
     .attr('width', x.bandwidth())
     .attr('height', 0)
@@ -314,6 +307,10 @@ function DC_initialize() {
     .on("mousemove", mousemove)
     .on("mouseleave", mouseleave)
 
+  DC_wrap.colorList = colorList;
+  DC_wrap.color = color;
+  DC_wrap.legendPos = legendPos;
+  DC_wrap.totNb = totNb;
   DC_wrap.bar = bar;
 }
 
@@ -341,6 +338,74 @@ function DC_update() {
     .duration(transDuration)
     .attr('y', function(d) {return y(d.y1);})
     .attr('height', function(d) {return y(d.y0)-y(d.y1);});
+    
+  //-- Color
+  colorList = DC_wrap.color.range().slice();
+  colorList.push('#000000');
+  var domain = [-1, -2, -3, -4];
+  
+  if (DC_wrap.doOnset == 1) {
+    colorList.splice(3, 0, '#999999');
+    domain.push(-5);
+  }
+  var color = d3.scaleOrdinal()
+    .domain(domain)
+    .range(colorList);
+  
+  //-- Legend - texts
+  var label;
+  if (lang == 'zh-tw') {
+    label = ["境外移入", "本土感染源已知", "本土感染源未知", "合計"];
+    label_plus = '無資料';
+  }
+  else {
+    label = ["Imported", "Indigenous linked to known cases", "Indigenous unlinked", "Total"];
+    label_plus = 'No data';
+  }
+  if (DC_wrap.doOnset == 1) label.splice(3, 0, label_plus);
+  
+  DC_wrap.svg.selectAll(".legend.label")
+    .remove()
+    .exit()
+    .data(label)
+    .enter()
+    .append("text")
+      .attr("class", "legend label")
+      .attr("x", DC_wrap.legendPos.x+DC_wrap.legendPos.dx)
+      .attr("y", function(d,i) {return DC_wrap.legendPos.y + i*DC_wrap.legendPos.dy + DC_wrap.legendPos.r})
+      .style("fill", function(d) {return color(d)})
+      .text(function(d) {return d})
+      .attr("text-anchor", "left")
+      .style("alignment-baseline", "middle");
+  
+  //-- Legend - total cases
+  var Im_sum, IL_sum, IU_sum;
+  if (DC_wrap.doCumul == 1) {
+    Im_sum = d3.max(DC_wrap.formattedData, function(d){if (d.col == 'imported') return +d.height;});
+    IL_sum = d3.max(DC_wrap.formattedData, function(d){if (d.col == 'linked') return +d.height;});
+    IU_sum = d3.max(DC_wrap.formattedData, function(d){if (d.col == 'unlinked') return +d.height;});
+  }
+  else {
+    Im_sum = d3.sum(DC_wrap.formattedData, function(d){if (d.col == 'imported') return +d.height;});
+    IL_sum = d3.sum(DC_wrap.formattedData, function(d){if (d.col == 'linked') return +d.height;});
+    IU_sum = d3.sum(DC_wrap.formattedData, function(d){if (d.col == 'unlinked') return +d.height;});
+  }
+  var sumData = [Im_sum, IL_sum, IU_sum, DC_wrap.totNb];
+  if (DC_wrap.doOnset == 1) sumData.splice(3, 0, DC_wrap.totNb-(Im_sum+IL_sum+IU_sum))
+  
+  DC_wrap.svg.selectAll(".legend.sum")
+    .remove()
+    .exit()
+    .data(sumData)
+    .enter()
+    .append("text")
+      .attr("class", "legend sum")
+      .attr("x", DC_wrap.legendPos.x-DC_wrap.legendPos.dx)
+      .attr("y", function(d,i) {return DC_wrap.legendPos.y + i*DC_wrap.legendPos.dy + DC_wrap.legendPos.r})
+      .style("fill", function(d) {return color(d)})
+      .text(function(d) {return d})
+      .attr("text-anchor", "end")
+      .style("alignment-baseline", "middle")
 }
 
 DC_wrap.doCumul = 0;
@@ -353,7 +418,7 @@ d3.csv(DC_wrap.dataPathList[DC_wrap.doOnset], function(error, data) {
   DC_formatData(data, DC_wrap.doCumul);
   DC_initialize();
   DC_update();
-})
+});
 
 //-- Button listener
 $(document).on("change", "input:radio[name='case_by_transmission_doCumul']", function(event) {
