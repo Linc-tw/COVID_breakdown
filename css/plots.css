@@ -1,15 +1,5 @@
 @charset "UTF-8";
-/*!
-* Start Bootstrap - SB Admin v6.0.0 (https://startbootstrap.com/templates/sb-admin)
-* Copyright 2013-2020 Start Bootstrap
-* Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-sb-admin/blob/master/LICENSE)
-*/
-/*!
- * Bootstrap v4.4.1 (https://getbootstrap.com/)
- * Copyright 2011-2019 The Bootstrap Authors
- * Copyright 2011-2019 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- */
+
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -18,15 +8,22 @@ body {
 #case_by_transmission .ylabel,
 #case_by_transmission .legend,
 #case_by_transmission .xaxis text,
-#case_by_transmission .yaxis text {
+#case_by_transmission .yaxis text,
+#case_by_detection .ylabel,
+#case_by_detection .legend,
+#case_by_detection .xaxis text,
+#case_by_detection .yaxis text {
   font-family: 'Roboto', sans-serif;
 }
-
 @media (min-width: 20px) {
   #case_by_transmission .ylabel,
   #case_by_transmission .legend,
   #case_by_transmission .xaxis text,
-  #case_by_transmission .yaxis text {
+  #case_by_transmission .yaxis text,
+  #case_by_detection .ylabel,
+  #case_by_detection .legend,
+  #case_by_detection .xaxis text,
+  #case_by_detection .yaxis text {
     font-size: 24px;
   }
 }
@@ -34,7 +31,11 @@ body {
   #case_by_transmission .ylabel,
   #case_by_transmission .legend,
   #case_by_transmission .xaxis text,
-  #case_by_transmission .yaxis text {
+  #case_by_transmission .yaxis text,
+  #case_by_detection .ylabel,
+  #case_by_detection .legend,
+  #case_by_detection .xaxis text,
+  #case_by_detection .yaxis text {
     font-size: 22px;
   }
 }
@@ -42,7 +43,11 @@ body {
   #case_by_transmission .ylabel,
   #case_by_transmission .legend,
   #case_by_transmission .xaxis text,
-  #case_by_transmission .yaxis text {
+  #case_by_transmission .yaxis text,
+  #case_by_detection .ylabel,
+  #case_by_detection .legend,
+  #case_by_detection .xaxis text,
+  #case_by_detection .yaxis text {
     font-size: 18px;
   }
 }
@@ -50,7 +55,11 @@ body {
   #case_by_transmission .ylabel,
   #case_by_transmission .legend,
   #case_by_transmission .xaxis text,
-  #case_by_transmission .yaxis text {
+  #case_by_transmission .yaxis text,
+  #case_by_detection .ylabel,
+  #case_by_detection .legend,
+  #case_by_detection .xaxis text,
+  #case_by_detection .yaxis text {
     font-size: 20px;
   }
 }
@@ -58,45 +67,61 @@ body {
   #case_by_transmission .ylabel,
   #case_by_transmission .legend,
   #case_by_transmission .xaxis text,
-  #case_by_transmission .yaxis text {
+  #case_by_transmission .yaxis text,
+  #case_by_detection .ylabel,
+  #case_by_detection .legend,
+  #case_by_detection .xaxis text,
+  #case_by_detection .yaxis text {
     font-size: 22px;
   }
 }
 
 #case_by_transmission .xaxis line,
-#case_by_transmission .yaxis line {
+#case_by_transmission .yaxis line,
+#case_by_detection .xaxis line,
+#case_by_detection .yaxis line {
   stroke: grey;
   stroke-opacity: 0.5;
   shape-rendering: crispEdges;
 }
 
-.btn-pos,
-#case_by_transmission .btn-pos {
-/*   position: absolute; */
-  float: right;
-  margin-top: 20px;
-  margin-right: 20px;
-}
 
-/* #case_by_transmission { */
-/*   position: absolute; */
-/*   margin-bottom: 0.25rem; 3.125*16 */
-/*   top: 0px; */
-/*   right: 20px; */
-/* } */
+/* Tooltip */
 
-#case_by_transmission .tooltip {
+.tooltip {
   opacity: 0;
   background-color: black;
   color: white;
   border-radius: 5px;
   padding: 5px;
+}
+#case_by_transmission .tooltip {
+  margin-left: -56px;
+  margin-right: -56px;
+  margin-top: -58px;
+  margin-bottom: -58px;
+}
+#case_by_detection .tooltip {
   margin-left: -56px;
   margin-right: -56px;
   margin-top: -58px;
   margin-bottom: -58px;
 }
 
+
+/* Buttons */
+
+.sb-sidenav-menu-heading-nouppercase {
+  padding: 1.75rem 1rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.btn-pos {
+  float: right;
+  margin-top: 20px;
+  margin-right: 20px;
+}
 
 .btn-covid {
   color: #000;
@@ -127,8 +152,6 @@ body {
 .btn-covid:not(:disabled):not(.disabled):active:focus, .btn-covid:not(:disabled):not(.disabled).active:focus, .show > .btn-covid.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
 }
-
-
 
 .btn-covid-white {
   color: #aaa;
@@ -161,9 +184,3 @@ body {
 }
 
 
-.sb-sidenav-menu-heading-nouppercase {
-  padding: 1.75rem 1rem 0.75rem;
-  font-size: 0.75rem;
-  font-weight: bold;
-/*   text-transform: uppercase; */
-}
