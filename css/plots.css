@@ -12,7 +12,11 @@ body {
 #case_by_detection .ylabel,
 #case_by_detection .legend,
 #case_by_detection .xaxis text,
-#case_by_detection .yaxis text {
+#case_by_detection .yaxis text,
+#test_by_criterion .ylabel,
+#test_by_criterion .legend,
+#test_by_criterion .xaxis text,
+#test_by_criterion .yaxis text {
   font-family: 'Roboto', sans-serif;
 }
 @media (min-width: 20px) {
@@ -23,7 +27,11 @@ body {
   #case_by_detection .ylabel,
   #case_by_detection .legend,
   #case_by_detection .xaxis text,
-  #case_by_detection .yaxis text {
+  #case_by_detection .yaxis text,
+  #test_by_criterion .ylabel,
+  #test_by_criterion .legend,
+  #test_by_criterion .xaxis text,
+  #test_by_criterion .yaxis text {
     font-size: 24px;
   }
 }
@@ -35,7 +43,11 @@ body {
   #case_by_detection .ylabel,
   #case_by_detection .legend,
   #case_by_detection .xaxis text,
-  #case_by_detection .yaxis text {
+  #case_by_detection .yaxis text,
+  #test_by_criterion .ylabel,
+  #test_by_criterion .legend,
+  #test_by_criterion .xaxis text,
+  #test_by_criterion .yaxis text {
     font-size: 22px;
   }
 }
@@ -47,7 +59,11 @@ body {
   #case_by_detection .ylabel,
   #case_by_detection .legend,
   #case_by_detection .xaxis text,
-  #case_by_detection .yaxis text {
+  #case_by_detection .yaxis text,
+  #test_by_criterion .ylabel,
+  #test_by_criterion .legend,
+  #test_by_criterion .xaxis text,
+  #test_by_criterion .yaxis text {
     font-size: 18px;
   }
 }
@@ -59,7 +75,11 @@ body {
   #case_by_detection .ylabel,
   #case_by_detection .legend,
   #case_by_detection .xaxis text,
-  #case_by_detection .yaxis text {
+  #case_by_detection .yaxis text,
+  #test_by_criterion .ylabel,
+  #test_by_criterion .legend,
+  #test_by_criterion .xaxis text,
+  #test_by_criterion .yaxis text {
     font-size: 20px;
   }
 }
@@ -71,7 +91,11 @@ body {
   #case_by_detection .ylabel,
   #case_by_detection .legend,
   #case_by_detection .xaxis text,
-  #case_by_detection .yaxis text {
+  #case_by_detection .yaxis text,
+  #test_by_criterion .ylabel,
+  #test_by_criterion .legend,
+  #test_by_criterion .xaxis text,
+  #test_by_criterion .yaxis text {
     font-size: 22px;
   }
 }
@@ -79,7 +103,9 @@ body {
 #case_by_transmission .xaxis line,
 #case_by_transmission .yaxis line,
 #case_by_detection .xaxis line,
-#case_by_detection .yaxis line {
+#case_by_detection .yaxis line,
+#test_by_criterion .xaxis line,
+#test_by_criterion .yaxis line {
   stroke: grey;
   stroke-opacity: 0.5;
   shape-rendering: crispEdges;
@@ -102,10 +128,16 @@ body {
   margin-bottom: -58px;
 }
 #case_by_detection .tooltip {
-  margin-left: -56px;
-  margin-right: -56px;
-  margin-top: -58px;
-  margin-bottom: -58px;
+  margin-left: -50px;
+  margin-right: -50px;
+  margin-top: -72px;
+  margin-bottom: -72px;
+}
+#test_by_criterion .tooltip {
+  margin-left: -55px;
+  margin-right: -52px;
+  margin-top: -55px;
+  margin-bottom: -55px;
 }
 
 

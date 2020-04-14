@@ -198,6 +198,61 @@ case network
                             </div>
                             
                             
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-bar mr-1"></i>
+                                        Number of Tests by Reporting Criterion
+                                    </div>
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active">
+                                                    <input type="radio" name="test_by_criterion_doCumul" value=0 checked>Daily<br>
+                                                </label>
+                                                <label class="btn btn-covid">
+                                                    <input type="radio" name="test_by_criterion_doCumul" value=1>Cumulative<br>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" id="test_by_criterion"></div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-bar mr-1"></i>
+                                        TODO
+                                    </div>
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <!--<div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active">
+                                                    <input type="radio" name="case_by_detection_doCumul" value=0 checked>Daily<br>
+                                                </label>
+                                                <label class="btn btn-covid">
+                                                    <input type="radio" name="case_by_detection_doCumul" value=1>Cumulative<br>
+                                                </label>
+                                            </div>
+                                            <span style="display:inline-block; width: 12px;"></span>
+                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active">
+                                                    <input type="radio" name="case_by_detection_doOnset" value=0 checked>Report date<br>
+                                                </label>
+                                                <label class="btn btn-covid">
+                                                    <input type="radio" name="case_by_detection_doOnset" value=1>Onset date<br>
+                                                </label>
+                                            </div>-->
+                                        </div>
+                                    </div>
+                                    <div class="card-body" id="case_by_ssssss">Under construction</div>
+                                </div>
+                            </div>
+                            
+                            
                         </div>
                     </div>
                 </main>
@@ -227,6 +282,7 @@ case network
         <script src="js/toggle_sidebar.js"></script>
         <script src="js/case_by_transmission.js"></script>
         <script src="js/case_by_detection.js"></script>
+        <script src="js/test_by_criterion.js"></script>
         
         
     </body>

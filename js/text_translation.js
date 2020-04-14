@@ -42,6 +42,15 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
     CBD_initialize();
     CBD_update();
   });
+  
+  d3.csv(TBC_wrap.dataPath, function(error, data) {
+    if (error) return console.warn(error);
+    
+    TBC_makeCanvas();
+    TBC_formatData(data);
+    TBC_initialize();
+    TBC_update();
+  });
 });
 
 

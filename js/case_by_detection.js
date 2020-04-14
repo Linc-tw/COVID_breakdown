@@ -142,6 +142,7 @@ function CBD_getTooltipPos(d) {
   //-- Place the caption somewhere on the longest arm, parametrizaed by xAlpha & yAlpha
   var xAlpha = 0.1;
   var yAlpha = 0.5;
+//   var xAlpha = 1;
 //   var yAlpha = 1;
   var xPos = d[0] * (1-xAlpha) + CBD_wrap.corner[i_max][0] * xAlpha;
   var yPos = d[1] * (1-yAlpha) + CBD_wrap.corner[i_max][1] * yAlpha;
