@@ -1,5 +1,6 @@
 var CBD_wrap = {};
-CBD_wrap.id = "#case_by_detection"
+CBD_wrap.tag = "case_by_detection"
+CBD_wrap.id = '#' + CBD_wrap.tag
 CBD_wrap.dataPathList = [
   "processed_data/case_by_detection_by_report_day.csv",
   "processed_data/case_by_detection_by_onset_day.csv"
@@ -17,7 +18,7 @@ function CBD_makeCanvas() {
     bottom = 90;
   }
   
-  var margin = {left: 70, right: 0, bottom: bottom, top: 0};
+  var margin = {left: 70, right: 2, bottom: bottom, top: 1};
   var width = totWidth - margin.left - margin.right;
   var height = totHeight - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
@@ -393,7 +394,7 @@ d3.csv(CBD_wrap.dataPathList[CBD_wrap.doOnset], function(error, data) {
 });
 
 //-- Button listener
-$(document).on("change", "input:radio[name='case_by_detection_doCumul']", function(event) {
+$(document).on("change", "input:radio[name='" + CBD_wrap.tag + "_doCumul']", function(event) {
   CBD_wrap.doCumul = this.value;
   dataPath = CBD_wrap.dataPathList[CBD_wrap.doOnset]
   
@@ -405,7 +406,7 @@ $(document).on("change", "input:radio[name='case_by_detection_doCumul']", functi
   });
 });
 
-$(document).on("change", "input:radio[name='case_by_detection_doOnset']", function(event) {
+$(document).on("change", "input:radio[name='" + CBD_wrap.tag + "_doOnset']", function(event) {
   CBD_wrap.doOnset = this.value
   dataPath = CBD_wrap.dataPathList[CBD_wrap.doOnset]
   
@@ -417,5 +418,15 @@ $(document).on("change", "input:radio[name='case_by_detection_doOnset']", functi
   });
 });
 
-
+d3.select(CBD_wrap.id + '_button_5').on('click', function(){
+  var tag1, tag2;
+  
+  if (CBD_wrap.doCumul == 1) tag1 = 'cumulative';
+  else tag1 = 'daily';
+  if (CBD_wrap.doOnset == 1) tag2 = 'onset';
+  else tag2 = 'report';
+  
+  name = CBD_wrap.tag + '_' + tag1 + '_' + tag2 + '.png'
+  saveSvgAsPng(d3.select(CBD_wrap.id).select('svg').node(), name);
+});
 

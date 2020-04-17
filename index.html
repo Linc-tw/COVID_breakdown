@@ -75,19 +75,14 @@
                         <a href="https://twitter.com/Linc_tw" target="_blank">
                             <img src="figures/Twitter_Social_Icon_Circle_Color.png" alt="Twitter"></img>
                         </a>
-                        <span style="display:inline-block; width: 12px;"></span>
                     </div>
                 </nav>
             </div>
     
 <!--
 TODO
-github & twitter marker
 license
-data source
-zh- & fr-lize
-javascript origin check
-
+fr-lize
 
 TODO plot
 hist report - onset
@@ -98,7 +93,6 @@ hist symptoms/country/age
 calendar view
 corr country-symptom
 case network
-
 -->
             
             <div id="layoutSidenav_content">
@@ -116,10 +110,6 @@ case network
                                     
                                     <div class="card-img">
                                         <div class="btn-pos"> 
-                                        
-<!--                                         <button id='saveButton'>Save PNG</button> -->
-                                        
-                                        
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
                                                     <input type="radio" name="case_by_transmission_doCumul" value=0 checked>
@@ -130,7 +120,7 @@ case network
                                                     <span id="case_by_transmission_button_2"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 12px;"></span>
+                                            <span style="display:inline-block; width: 8px;"></span>
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
                                                     <input type="radio" name="case_by_transmission_doOnset" value=0 checked>
@@ -141,6 +131,8 @@ case network
                                                     <span id="case_by_transmission_button_4"></span>
                                                 </label>
                                             </div>
+                                            <span style="display:inline-block; width: 8px;"></span>
+                                            <button id='case_by_transmission_button_5' class="btn btn-sm btn-covid">Download</button>
                                         </div>
                                     </div>
                                     
@@ -169,7 +161,7 @@ case network
                                                     <span id="case_by_detection_button_2"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 12px;"></span>
+                                            <span style="display:inline-block; width: 8px;"></span>
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
                                                     <input type="radio" name="case_by_detection_doOnset" value=0 checked>
@@ -180,6 +172,8 @@ case network
                                                     <span id="case_by_detection_button_4"></span>
                                                 </label>
                                             </div>
+                                            <span style="display:inline-block; width: 8px;"></span>
+                                            <button id='case_by_detection_button_5' class="btn btn-sm btn-covid"></button>
                                         </div>
                                     </div>
                                     
@@ -208,6 +202,8 @@ case network
                                                     <span id="test_by_criterion_button_2"></span>
                                                 </label>
                                             </div>
+                                            <span style="display:inline-block; width: 8px;"></span>
+                                            <button id='test_by_criterion_button_3' class="btn btn-sm btn-covid"></button>
                                         </div>
                                     </div>
                                     
@@ -233,7 +229,7 @@ case network
                                                     <input type="radio" name="case_by_detection_doCumul" value=1>Cumulative<br>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 12px;"></span>
+                                            <span style="display:inline-block; width: 8px;"></span>
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
                                                     <input type="radio" name="case_by_detection_doOnset" value=0 checked>Report date<br>
@@ -244,7 +240,7 @@ case network
                                             </div>-->
                                         </div>
                                     </div>
-                                    <div class="card-body" id="case_by_ssssss">Under construction</div>
+                                    <div class="card-body" id="new_id">Under construction</div>
                                 </div>
                             </div>
                             
@@ -252,8 +248,8 @@ case network
                         </div>
                     </div>
                 </main>
-                
-<!--                <footer class="py-4 bg-light mt-auto">
+                <!--
+                <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-between small">
                             <div class="text-muted">Copyright &copy; Your Website 2019</div>
@@ -268,26 +264,19 @@ case network
             </div>
         </div>
         
-        
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://d3js.org/d3.v4.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.19.0/js/canvas-to-blob.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
         
+        <script src="js/saveSvgAsPng.js"></script>
         <script src="js/text_translation.js"></script>
         <script src="js/toggle_sidebar.js"></script>
         <script src="js/case_by_transmission.js"></script>
         <script src="js/case_by_detection.js"></script>
         <script src="js/test_by_criterion.js"></script>
-        
-        
     </body>
-        
-<!--         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" /> -->
-<!--         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script> -->
-<!--         <script src="dist/assets/demo/chart-area-demo.js"></script> -->
-<!--         <script src="dist/assets/demo/chart-bar-demo.js"></script> -->
-<!--         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script> -->
-<!--         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script> -->
-<!--         <script src="dist/assets/demo/datatables-demo.js"></script> -->
 </html>
+

@@ -1,16 +1,30 @@
-
-
-// 'en', 'zh-tw'
-
 //-- Glocal settings
-var lang = 'en';
+var lang = 'en'; // 'en', 'zh-tw'
 var cList = ['#3366BB', '#CC6677', '#55BB44', '#DDAA77', '#AA55AA'];
 
+//-- General functions
+function ISODateToMDDate(ISODate) {
+  var fmtStr;
+  if (lang == 'zh-tw') fmtStr = "%-m月%-d日"
+  else fmtStr = "%b %d"
+  
+  var MDDateFormat = d3.timeFormat(fmtStr);
+  return MDDateFormat(d3.isoParse(ISODate));
+}
+
+function cumsum(data, colTagList) {
+  var i, j;
+  for (i=1; i<data.length; i++) {
+    for (j=0; j<colTagList.length; j++) {
+      data[i][colTagList[j]] = +data[i][colTagList[j]] + +data[i-1][colTagList[j]];
+    }
+  }
+}
 
 //-- Text in html
 var node;
 
-function index_title() {
+function text_translation() {
   if (lang == 'zh-tw') {
     node = document.getElementById("title")
     node.textContent = '';
@@ -23,6 +37,7 @@ function index_title() {
     node = document.getElementById("menu_source")
     node.textContent = '';
     node.appendChild(document.createTextNode("資料來源"));
+    
     
     
     node = document.getElementById("case_by_transmission_title")
@@ -39,11 +54,16 @@ function index_title() {
     
     node = document.getElementById("case_by_transmission_button_3")
     node.textContent = '';
-    node.appendChild(document.createTextNode("確診日期"));
+    node.appendChild(document.createTextNode("確診日"));
     
     node = document.getElementById("case_by_transmission_button_4")
     node.textContent = '';
-    node.appendChild(document.createTextNode("發病日期"));
+    node.appendChild(document.createTextNode("發病日"));
+    
+    node = document.getElementById("case_by_transmission_button_5")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("下載"));
+    
     
     
     node = document.getElementById("case_by_detection_title")
@@ -60,11 +80,16 @@ function index_title() {
     
     node = document.getElementById("case_by_detection_button_3")
     node.textContent = '';
-    node.appendChild(document.createTextNode("確診日期"));
+    node.appendChild(document.createTextNode("確診日"));
     
     node = document.getElementById("case_by_detection_button_4")
     node.textContent = '';
-    node.appendChild(document.createTextNode("發病日期"));
+    node.appendChild(document.createTextNode("發病日"));
+    
+    node = document.getElementById("case_by_detection_button_5")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("下載"));
+    
     
     
     node = document.getElementById("test_by_criterion_title")
@@ -78,9 +103,10 @@ function index_title() {
     node = document.getElementById("test_by_criterion_button_2")
     node.textContent = '';
     node.appendChild(document.createTextNode("累計"));
-    
-    
-    
+  
+    node = document.getElementById("test_by_criterion_button_3")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("下載"));
   }
   else {
     node = document.getElementById("title")
@@ -94,6 +120,7 @@ function index_title() {
     node = document.getElementById("menu_source")
     node.textContent = '';
     node.appendChild(document.createTextNode("Data Source"));
+    
     
     
     node = document.getElementById("case_by_transmission_title")
@@ -116,6 +143,11 @@ function index_title() {
     node.textContent = '';
     node.appendChild(document.createTextNode("Onset date"));
     
+    node = document.getElementById("case_by_transmission_button_5")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Download"));
+    
+    
     
     node = document.getElementById("case_by_detection_title")
     node.textContent = '';
@@ -137,6 +169,11 @@ function index_title() {
     node.textContent = '';
     node.appendChild(document.createTextNode("Onset date"));
     
+    node = document.getElementById("case_by_detection_button_5")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Download"));
+    
+    
     
     node = document.getElementById("test_by_criterion_title")
     node.textContent = '';
@@ -150,11 +187,13 @@ function index_title() {
     node.textContent = '';
     node.appendChild(document.createTextNode("Cumulative"));
     
-    
+    node = document.getElementById("test_by_criterion_button_3")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Download"));
   }
 }
 
-index_title()
+text_translation()
 
 
 //-- Total nb of cases
@@ -179,7 +218,7 @@ d3.csv('processed_data/case_by_transmission_by_report_day.csv', function(error, 
 //-- Button listener
 $(document).on("change", "input:radio[name='index_language']", function(event) {
   lang = this.value;
-  index_title();
+  text_translation();
   
   d3.selectAll('.plot').remove()
   

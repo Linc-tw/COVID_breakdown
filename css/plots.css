@@ -2,114 +2,68 @@
 
 
 body {
-    font-family: 'Roboto', sans-serif;
+/*   font-family: 'Noto Sans TC', sans-serif; */
+/*   font-family: 'Roboto', sans-serif; */
+  font-family: 'Roboto', 'Noto Sans TC', sans-serif;
 }
 
-#case_by_transmission .ylabel,
-#case_by_transmission .legend,
-#case_by_transmission .xaxis text,
-#case_by_transmission .yaxis text,
-#case_by_detection .ylabel,
-#case_by_detection .legend,
-#case_by_detection .xaxis text,
-#case_by_detection .yaxis text,
-#test_by_criterion .ylabel,
-#test_by_criterion .legend,
-#test_by_criterion .xaxis text,
-#test_by_criterion .yaxis text {
-  font-family: 'Roboto', sans-serif;
+.ylabel,
+.legend,
+.xaxis text,
+.yaxis text {
+/*   font-family: 'Noto Sans TC', sans-serif; */
+/*   font-family: 'Roboto', sans-serif; */
+  font-family: 'Roboto', 'Noto Sans TC', sans-serif;
+  font-size: 18px;
 }
 @media (min-width: 20px) {
-  #case_by_transmission .ylabel,
-  #case_by_transmission .legend,
-  #case_by_transmission .xaxis text,
-  #case_by_transmission .yaxis text,
-  #case_by_detection .ylabel,
-  #case_by_detection .legend,
-  #case_by_detection .xaxis text,
-  #case_by_detection .yaxis text,
-  #test_by_criterion .ylabel,
-  #test_by_criterion .legend,
-  #test_by_criterion .xaxis text,
-  #test_by_criterion .yaxis text {
+  .ylabel,
+  .legend,
+  .xaxis text,
+  .yaxis text {
     font-size: 24px;
   }
 }
 @media (min-width: 576px) {
-  #case_by_transmission .ylabel,
-  #case_by_transmission .legend,
-  #case_by_transmission .xaxis text,
-  #case_by_transmission .yaxis text,
-  #case_by_detection .ylabel,
-  #case_by_detection .legend,
-  #case_by_detection .xaxis text,
-  #case_by_detection .yaxis text,
-  #test_by_criterion .ylabel,
-  #test_by_criterion .legend,
-  #test_by_criterion .xaxis text,
-  #test_by_criterion .yaxis text {
+  .ylabel,
+  .legend,
+  .xaxis text,
+  .yaxis text {
     font-size: 22px;
   }
 }
 @media (min-width: 768px) {
-  #case_by_transmission .ylabel,
-  #case_by_transmission .legend,
-  #case_by_transmission .xaxis text,
-  #case_by_transmission .yaxis text,
-  #case_by_detection .ylabel,
-  #case_by_detection .legend,
-  #case_by_detection .xaxis text,
-  #case_by_detection .yaxis text,
-  #test_by_criterion .ylabel,
-  #test_by_criterion .legend,
-  #test_by_criterion .xaxis text,
-  #test_by_criterion .yaxis text {
+  .ylabel,
+  .legend,
+  .xaxis text,
+  .yaxis text {
     font-size: 18px;
   }
 }
 @media (min-width: 992px) {
-  #case_by_transmission .ylabel,
-  #case_by_transmission .legend,
-  #case_by_transmission .xaxis text,
-  #case_by_transmission .yaxis text,
-  #case_by_detection .ylabel,
-  #case_by_detection .legend,
-  #case_by_detection .xaxis text,
-  #case_by_detection .yaxis text,
-  #test_by_criterion .ylabel,
-  #test_by_criterion .legend,
-  #test_by_criterion .xaxis text,
-  #test_by_criterion .yaxis text {
+  .ylabel,
+  .legend,
+  .xaxis text,
+  .yaxis text {
     font-size: 20px;
   }
 }
 @media (min-width: 1200px) {
-  #case_by_transmission .ylabel,
-  #case_by_transmission .legend,
-  #case_by_transmission .xaxis text,
-  #case_by_transmission .yaxis text,
-  #case_by_detection .ylabel,
-  #case_by_detection .legend,
-  #case_by_detection .xaxis text,
-  #case_by_detection .yaxis text,
-  #test_by_criterion .ylabel,
-  #test_by_criterion .legend,
-  #test_by_criterion .xaxis text,
-  #test_by_criterion .yaxis text {
+  .ylabel,
+  .legend,
+  .xaxis text,
+  .yaxis text {
     font-size: 22px;
   }
 }
 
-#case_by_transmission .xaxis line,
-#case_by_transmission .yaxis line,
-#case_by_detection .xaxis line,
-#case_by_detection .yaxis line,
-#test_by_criterion .xaxis line,
-#test_by_criterion .yaxis line {
+.xaxis line,
+.yaxis line {
   stroke: grey;
   stroke-opacity: 0.5;
   shape-rendering: crispEdges;
 }
+
 
 
 /* Tooltip */

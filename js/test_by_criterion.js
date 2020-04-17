@@ -1,5 +1,6 @@
 var TBC_wrap = {};
-TBC_wrap.id = "#test_by_criterion"
+TBC_wrap.tag = "test_by_criterion"
+TBC_wrap.id = '#' + TBC_wrap.tag
 TBC_wrap.dataPath = "processed_data/test_by_criterion.csv";
 
 function TBC_makeCanvas() {
@@ -14,7 +15,7 @@ function TBC_makeCanvas() {
     bottom = 90;
   }
   
-  var margin = {left: 110, right: 0, bottom: bottom, top: 0};
+  var margin = {left: 110, right: 2, bottom: bottom, top: 1};
   var width = totWidth - margin.left - margin.right;
   var height = totHeight - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
@@ -380,7 +381,7 @@ d3.csv(TBC_wrap.dataPath, function(error, data) {
 });
 
 //-- Button listener
-$(document).on("change", "input:radio[name='test_by_criterion_doCumul']", function(event) {
+$(document).on("change", "input:radio[name='" + TBC_wrap.tag + "_doCumul']", function(event) {
   TBC_wrap.doCumul = this.value;
   
   d3.csv(TBC_wrap.dataPath, function(error, data) {
@@ -391,5 +392,13 @@ $(document).on("change", "input:radio[name='test_by_criterion_doCumul']", functi
   });
 });
 
-
+d3.select(TBC_wrap.id + '_button_3').on('click', function(){
+  var tag1;
+  
+  if (TBC_wrap.doCumul == 1) tag1 = 'cumulative';
+  else tag1 = 'daily';
+  
+  name = TBC_wrap.tag + '_' + tag1 + '.png'
+  saveSvgAsPng(d3.select(TBC_wrap.id).select('svg').node(), name);
+});
 
