@@ -2,8 +2,6 @@
 
 
 body {
-/*   font-family: 'Noto Sans TC', sans-serif; */
-/*   font-family: 'Roboto', sans-serif; */
   font-family: 'Roboto', 'Noto Sans TC', sans-serif;
 }
 
@@ -11,8 +9,6 @@ body {
 .legend,
 .xaxis text,
 .yaxis text {
-/*   font-family: 'Noto Sans TC', sans-serif; */
-/*   font-family: 'Roboto', sans-serif; */
   font-family: 'Roboto', 'Noto Sans TC', sans-serif;
   font-size: 18px;
 }
