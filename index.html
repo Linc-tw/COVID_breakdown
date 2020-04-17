@@ -7,7 +7,7 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         
-        <title>COVID-19 in Taiwan</title>
+        <title id="short_title">COVID-19 in Taiwan</title>
         
         <link href="css/template.css" rel="stylesheet" />
         <link href="css/plots.css" rel="stylesheet" />
@@ -35,15 +35,23 @@
                                     </label>
                                 </div>
                             </div>
-                    
+                            
 <!--                             <div class="sb-sidenav-menu-heading">Core</div> -->
+                            
                             <div class="sb-sidenav-menu-heading"></div>
                             <a class="nav-link" href="index.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Summary
+                                <span id="menu_summary"></span>
                             </a>
-<!--                            
-                            <div class="sb-sidenav-menu-heading">Interface</div>
+                            
+                            <a class="nav-link" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-database"></i></div>
+                                <span id="menu_source"></span>
+                            </a>
+                            
+                           
+<!--                            <div class="sb-sidenav-menu-heading">Interface</div>
+                            
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Layouts
@@ -54,58 +62,24 @@
                                     <a class="nav-link" href="dist/layout-static.html">Static Navigation</a>
                                     <a class="nav-link" href="dist/layout-sidenav-light.html">Light Sidenav</a>
                                 </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Pages
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        Authentication
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.html">Login</a>
-                                            <a class="nav-link" href="register.html">Register</a>
-                                            <a class="nav-link" href="password.html">Forgot Password</a>
-                                        </nav>
-                                    </div>
-                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                        Error
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="401.html">401 Page</a>
-                                            <a class="nav-link" href="404.html">404 Page</a>
-                                            <a class="nav-link" href="500.html">500 Page</a>
-                                        </nav>
-                                    </div>
-                                </nav>
                             </div>-->
-<!--                            
-                            <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="dist/charts.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Charts
-                            </a>
-                            <a class="nav-link" href="dist/tables.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Tables
-                            </a>
-                            -->
+                            
                         </div>
                     </div>
                     
-<!--                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        github here, twitter here
-                    </div>-->
+                   <div class="sb-sidenav-footer-covid icon">
+                        <a href="https://github.com/Linc-tw/COVID_breakdown" target="_blank">
+                            <img src="figures/GitHub-Mark-Light-64px.png" alt="GitHub"></img>
+                        </a>
+                        <span style="display:inline-block; width: 24px;"></span>
+                        <a href="https://twitter.com/Linc_tw" target="_blank">
+                            <img src="figures/Twitter_Social_Icon_Circle_Color.png" alt="Twitter"></img>
+                        </a>
+                        <span style="display:inline-block; width: 12px;"></span>
+                    </div>
                 </nav>
             </div>
+    
 <!--
 TODO
 github & twitter marker
@@ -116,9 +90,7 @@ javascript origin check
 
 
 TODO plot
-daily/cum test 
-
-hist detection - symptoms
+hist report - onset
 
 hist breakdown symptom by age, age by symptom
 hist symptoms/country/age
@@ -132,91 +104,115 @@ case network
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">COVID-19 Statistics in Taiwan</h1>
+                        <h1 id="title" class="mt-4"></h1>
+                        
                         <div class="row">
                             <div class="col-xl-6">
                                 <div class="card mb-4">
+                                
                                     <div class="card-header">
-                                        <i class="fas fa-chart-bar mr-1"></i>
-                                        Confirmed Cases by Transmission Type
+                                        <i class="fas fa-chart-bar mr-1"></i> <text id="case_by_transmission_title"></text>
                                     </div>
+                                    
                                     <div class="card-img">
                                         <div class="btn-pos"> 
+                                        
+<!--                                         <button id='saveButton'>Save PNG</button> -->
+                                        
+                                        
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_transmission_doCumul" value=0 checked>Daily<br>
+                                                    <input type="radio" name="case_by_transmission_doCumul" value=0 checked>
+                                                    <span id="case_by_transmission_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_transmission_doCumul" value=1>Cumulative<br>
+                                                    <input type="radio" name="case_by_transmission_doCumul" value=1>
+                                                    <span id="case_by_transmission_button_2"></span>
                                                 </label>
                                             </div>
                                             <span style="display:inline-block; width: 12px;"></span>
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_transmission_doOnset" value=0 checked>Report date<br>
+                                                    <input type="radio" name="case_by_transmission_doOnset" value=0 checked>
+                                                    <span id="case_by_transmission_button_3"></span>
                                                 </label>
                                                 <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_transmission_doOnset" value=1>Onset date<br>
+                                                    <input type="radio" name="case_by_transmission_doOnset" value=1>
+                                                    <span id="case_by_transmission_button_4"></span>
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
+                                    
                                     <div class="card-body" id="case_by_transmission"></div>
+                                    
                                 </div>
                             </div>
                             
                             
                             <div class="col-xl-6">
                                 <div class="card mb-4">
+                                
                                     <div class="card-header">
-                                        <i class="fas fa-chart-bar mr-1"></i>
-                                        Confirmed Cases by Detection Channel
+                                        <i class="fas fa-chart-bar mr-1"></i> <text id="case_by_detection_title"></text>
                                     </div>
+                                    
                                     <div class="card-img">
                                         <div class="btn-pos"> 
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_detection_doCumul" value=0 checked>Daily<br>
+                                                    <input type="radio" name="case_by_detection_doCumul" value=0 checked>
+                                                    <span id="case_by_detection_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_detection_doCumul" value=1>Cumulative<br>
+                                                    <input type="radio" name="case_by_detection_doCumul" value=1>
+                                                    <span id="case_by_detection_button_2"></span>
                                                 </label>
                                             </div>
                                             <span style="display:inline-block; width: 12px;"></span>
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_detection_doOnset" value=0 checked>Report date<br>
+                                                    <input type="radio" name="case_by_detection_doOnset" value=0 checked>
+                                                    <span id="case_by_detection_button_3"></span>
                                                 </label>
                                                 <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_detection_doOnset" value=1>Onset date<br>
+                                                    <input type="radio" name="case_by_detection_doOnset" value=1>
+                                                    <span id="case_by_detection_button_4"></span>
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
+                                    
                                     <div class="card-body" id="case_by_detection"></div>
+                                    
                                 </div>
                             </div>
                             
                             
                             <div class="col-xl-6">
                                 <div class="card mb-4">
+                                
                                     <div class="card-header">
-                                        <i class="fas fa-chart-bar mr-1"></i>
-                                        Number of Tests by Reporting Criterion
+                                        <i class="fas fa-chart-bar mr-1"></i> <text id="test_by_criterion_title"></text>
                                     </div>
+                                    
                                     <div class="card-img">
                                         <div class="btn-pos"> 
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
-                                                    <input type="radio" name="test_by_criterion_doCumul" value=0 checked>Daily<br>
+                                                    <input type="radio" name="test_by_criterion_doCumul" value=0 checked>
+                                                    <span id="test_by_criterion_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid">
-                                                    <input type="radio" name="test_by_criterion_doCumul" value=1>Cumulative<br>
+                                                    <input type="radio" name="test_by_criterion_doCumul" value=1>
+                                                    <span id="test_by_criterion_button_2"></span>
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
+                                    
                                     <div class="card-body" id="test_by_criterion"></div>
+                                    
                                 </div>
                             </div>
                             

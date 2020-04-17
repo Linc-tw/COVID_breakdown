@@ -216,3 +216,18 @@ body {
 }
 
 
+.sb-sidenav .sb-sidenav-footer-covid {
+  padding: 0.75rem;
+  flex-shrink: 0;
+}
+
+.icon {
+/*   font-size: 20px; */
+/*   color: #fff; */
+  background-color: rgba(0, 0, 0, 0);
+  text-align: center;
+}
+
+.icon img {
+  width: 32px;
+}

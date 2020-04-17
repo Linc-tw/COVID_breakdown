@@ -160,7 +160,7 @@ function TBC_mousemove(d) {
   var tootipText;
   
   if (lang == 'zh-tw')
-    tootipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3) + "<br>擴大監測 = " + d.h1+ "<br>居家檢疫 = " + d.h2 + "<br>依定義通報 = " + d.h3
+    tootipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3) + "<br>擴大監測 = " + d.h1+ "<br>居家檢疫 = " + d.h2 + "<br>法定通報 = " + d.h3
   else
     tootipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Extended = " + d.h1+ "<br>Quarantine = " + d.h2 + "<br>Clinical = " + d.h3
   
@@ -322,7 +322,7 @@ function TBC_update() {
   
   //-- Legend - texts
   var label;
-  if (lang == 'zh-tw') label = ["擴大監測", "居家檢疫", "依定義通報", "合計"];
+  if (lang == 'zh-tw') label = ["擴大監測", "居家檢疫", "法定定義通報", "合計"];
   else label = ['Extended', 'Quarantine', 'Clinical', "Total"];
   
   TBC_wrap.svg.selectAll(".legend.label")
