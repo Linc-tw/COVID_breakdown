@@ -158,16 +158,16 @@ function TBC_getTooltipPos(d) {
 
 function TBC_mousemove(d) {
   var newPos = TBC_getTooltipPos(d3.mouse(this));
-  var tootipText;
+  var tooltipText;
   
   if (lang == 'zh-tw')
-    tootipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3) + "<br>擴大監測 = " + d.h1+ "<br>居家檢疫 = " + d.h2 + "<br>法定通報 = " + d.h3
+    tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3) + "<br>擴大監測 = " + d.h1+ "<br>居家檢疫 = " + d.h2 + "<br>法定通報 = " + d.h3
   else
-    tootipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Extended = " + d.h1+ "<br>Quarantine = " + d.h2 + "<br>Clinical = " + d.h3
+    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Community = " + d.h1+ "<br>Quarantine = " + d.h2 + "<br>Clinical = " + d.h3
   
   
   TBC_tooltip
-    .html(tootipText)
+    .html(tooltipText)
     .style("left", newPos[0] + "px")
     .style("top", newPos[1] + "px")
 }
@@ -323,8 +323,8 @@ function TBC_update() {
   
   //-- Legend - texts
   var label;
-  if (lang == 'zh-tw') label = ["擴大監測", "居家檢疫", "法定定義通報", "合計"];
-  else label = ['Extended', 'Quarantine', 'Clinical', "Total"];
+  if (lang == 'zh-tw') label = ["擴大社區監測", "居家檢疫", "法定定義通報", "合計"];
+  else label = ['Risk of community infection', 'Quarantine (merged into clinical)', 'Suspicious clinical cases', "Total"];
   
   TBC_wrap.svg.selectAll(".legend.label")
     .remove()

@@ -160,16 +160,16 @@ function CBT_getTooltipPos(d) {
 
 function CBT_mousemove(d) {
   var newPos = CBT_getTooltipPos(d3.mouse(this));
-  var tootipText;
+  var tooltipText;
   
   if (lang == 'zh-tw')
-    tootipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3) + "<br>境外移入 = " + d.h1+ "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3
+    tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3) + "<br>境外移入 = " + d.h1+ "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3
   else
-    tootipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Imported = " + d.h1+ "<br>Ind. linked = " + d.h2 + "<br>Ind. unlinked = " + d.h3
+    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Imported = " + d.h1+ "<br>Ind. linked = " + d.h2 + "<br>Ind. unlinked = " + d.h3
   
   
   CBT_tooltip
-    .html(tootipText)
+    .html(tooltipText)
     .style("left", newPos[0] + "px")
     .style("top", newPos[1] + "px")
 }
@@ -328,11 +328,11 @@ function CBT_update() {
   var label;
   if (lang == 'zh-tw') {
     label = ["境外移入", "本土感染源已知", "本土感染源未知", "合計"];
-    label_plus = '無資料';
+    label_plus = '無發病日資料';
   }
   else {
     label = ["Imported", "Indigenous linked to known cases", "Indigenous unlinked", "Total"];
-    label_plus = 'No data';
+    label_plus = 'No onset date';
   }
   if (CBT_wrap.doOnset == 1) label.splice(3, 0, label_plus);
   
@@ -391,7 +391,6 @@ d3.csv(CBT_wrap.dataPathList[CBT_wrap.doOnset], function(error, data) {
   CBT_initialize();
   CBT_update();
 });
-
 
 //-- Buttons
 $(document).on("change", "input:radio[name='" + CBT_wrap.tag + "_doCumul']", function(event) {

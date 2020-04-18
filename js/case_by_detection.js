@@ -72,11 +72,12 @@ function CBD_formatData(data) {
         'y0': y,
         'y1': y + height,
         'height': height,
-        'h1': +data[i][colTagList[4]],
-        'h2': +data[i][colTagList[3]],
-        'h3': +data[i][colTagList[2]],
-        'h4': +data[i][colTagList[1]],
-        'h5': +data[i][colTagList[0]],
+        'h1': +data[i][colTagList[5]],
+        'h2': +data[i][colTagList[4]],
+        'h3': +data[i][colTagList[3]],
+        'h4': +data[i][colTagList[2]],
+        'h5': +data[i][colTagList[1]],
+        'h6': +data[i][colTagList[0]],
         'col': colTagList[j]
       };
         
@@ -163,16 +164,16 @@ function CBD_getTooltipPos(d) {
 
 function CBD_mousemove(d) {
   var newPos = CBD_getTooltipPos(d3.mouse(this));
-  var tootipText;
+  var tooltipText;
   
   if (lang == 'zh-tw')
-    tootipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5) + "<br>境外移入 = " + d.h1 + "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + d.h4 + d.h5
+    tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6) + "<br>機場 = " + d.h1 + "<br>居家檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自行就醫 = " + d.h5 + "<br>無檢驗管道資料 = " + d.h6
   else
-    tootipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5) + "<br>Airport = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospital = " + d.h5
+    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6) + "<br>Airport = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospital = " + d.h5 + "<br>Not annonced = " + d.h6
   
   
   CBD_tooltip
-    .html(tootipText)
+    .html(tooltipText)
     .style("left", newPos[0] + "px")
     .style("top", newPos[1] + "px")
 }
@@ -254,9 +255,9 @@ function CBD_initialize() {
     .text(ylabel);
     
   //-- Color
-  var colorList = cList.slice(0, 5);
+  var colorList = cList.slice(0, 6);
   var color = d3.scaleOrdinal()
-    .domain([CBD_wrap.colTagList[4], CBD_wrap.colTagList[3], CBD_wrap.colTagList[2], CBD_wrap.colTagList[1], CBD_wrap.colTagList[0]])
+    .domain([CBD_wrap.colTagList[5], CBD_wrap.colTagList[4], CBD_wrap.colTagList[3], CBD_wrap.colTagList[2], CBD_wrap.colTagList[1], CBD_wrap.colTagList[0]])
     .range(colorList);
     
   //-- Legend
@@ -264,7 +265,7 @@ function CBD_initialize() {
   
   //-- Legend - circles
   CBD_wrap.svg.selectAll("dot")
-    .data([0, 1, 2, 3, 4])
+    .data([0, 1, 2, 3, 4, 5])
     .enter()
     .append("circle")
       .attr("class", "legend")
@@ -324,15 +325,20 @@ function CBD_update() {
     
   //-- Color
   colorList = CBD_wrap.colorList.slice();
-  colorList.push('#999999');
   colorList.push('#000000');
+  if (CBD_wrap.doOnset == 1) colorList.splice(6, 0, '#999999');
   
   //-- Legend - texts
   var label;
-  if (lang == 'zh-tw') 
-    label = ['機場', '居家檢疫', '居家隔離', '自主健康管理', '自行就醫', '無資料', '合計'];
-  else 
-    label = ["Airport", "Quarantine", "Isolation", "Monitoring", "Hospital", 'No data', 'Total'];
+  if (lang == 'zh-tw') {
+    label = ['機場', '居家檢疫', '居家隔離', '自主健康管理', '自行就醫', '無檢驗管道資料', '合計'];
+    label_plus = '無發病日資料';
+  }
+  else {
+    label = ["Airport", "Quarantine", "Isolation", "Monitoring", "Hospital", 'Not annonced', 'Total'];
+    label_plus = 'No onset date';
+  }
+  if (CBD_wrap.doOnset == 1) label.splice(6, 0, label_plus);
   
   CBD_wrap.svg.selectAll(".legend.label")
     .remove()
@@ -342,20 +348,21 @@ function CBD_update() {
     .append("text")
       .attr("class", "legend label")
       .attr("x", CBD_wrap.legendPos.x+CBD_wrap.legendPos.dx)
-      .attr("y", function(d,i) {return CBD_wrap.legendPos.y + i*CBD_wrap.legendPos.dy + CBD_wrap.legendPos.r})
+      .attr("y", function(d, i) {return CBD_wrap.legendPos.y + i*CBD_wrap.legendPos.dy + CBD_wrap.legendPos.r})
       .style("fill", function(d, i) {return colorList[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "left")
       .style("alignment-baseline", "middle");
   
   //-- Legend - total cases
-  var air_sum, QT_sum, iso_sum, mon_sum, hosp_sum;
+  var air_sum, QT_sum, iso_sum, mon_sum, hosp_sum, noData_sum;
   if (CBD_wrap.doCumul == 1) {
     air_sum = d3.max(CBD_wrap.formattedData, function(d){if (d.col == 'airport') return +d.height;});
     QT_sum = d3.max(CBD_wrap.formattedData, function(d){if (d.col == 'quarantine') return +d.height;});
     iso_sum = d3.max(CBD_wrap.formattedData, function(d){if (d.col == 'isolation') return +d.height;});
     mon_sum = d3.max(CBD_wrap.formattedData, function(d){if (d.col == 'monitoring') return +d.height;});
     hosp_sum = d3.max(CBD_wrap.formattedData, function(d){if (d.col == 'hospital') return +d.height;});
+    noData_sum = d3.max(CBD_wrap.formattedData, function(d){if (d.col == 'no_data') return +d.height;});
   }
   else {
     air_sum = d3.sum(CBD_wrap.formattedData, function(d){if (d.col == 'airport') return +d.height;});
@@ -363,8 +370,10 @@ function CBD_update() {
     iso_sum = d3.sum(CBD_wrap.formattedData, function(d){if (d.col == 'isolation') return +d.height;});
     mon_sum = d3.sum(CBD_wrap.formattedData, function(d){if (d.col == 'monitoring') return +d.height;});
     hosp_sum = d3.sum(CBD_wrap.formattedData, function(d){if (d.col == 'hospital') return +d.height;});
+    noData_sum = d3.sum(CBD_wrap.formattedData, function(d){if (d.col == 'no_data') return +d.height;});
   }
-  var sumData = [air_sum, QT_sum, iso_sum, mon_sum, hosp_sum, overallTotNb-(air_sum+QT_sum+iso_sum+mon_sum+hosp_sum), overallTotNb];
+  var sumData = [air_sum, QT_sum, iso_sum, mon_sum, hosp_sum, noData_sum, overallTotNb];
+  if (CBD_wrap.doOnset == 1) sumData.splice(6, 0, overallTotNb-(air_sum+QT_sum+iso_sum+mon_sum+hosp_sum+noData_sum))
   
   CBD_wrap.svg.selectAll(".legend.sum")
     .remove()
@@ -393,7 +402,7 @@ d3.csv(CBD_wrap.dataPathList[CBD_wrap.doOnset], function(error, data) {
   CBD_update();
 });
 
-//-- Button listener
+//-- Buttons
 $(document).on("change", "input:radio[name='" + CBD_wrap.tag + "_doCumul']", function(event) {
   CBD_wrap.doCumul = this.value;
   dataPath = CBD_wrap.dataPathList[CBD_wrap.doOnset]

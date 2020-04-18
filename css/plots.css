@@ -5,6 +5,22 @@ body {
   font-family: 'Roboto', 'Noto Sans TC', sans-serif;
 }
 
+/*@font-face {
+    font-family: custom-sans-serif;
+    src: local("PMingLiU");
+    unicode-range: U+4E00-9FFF;
+}
+
+@font-face {
+    font-family: custom-sans-serif;
+    src: local('Times New Roman');
+    unicode-range: U+00-024F;
+}
+
+.custom-sans-serif {
+  font-family: custom-sans-serif;
+}*/
+
 .ylabel,
 .legend,
 .xaxis text,

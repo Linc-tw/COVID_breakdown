@@ -1,6 +1,6 @@
 //-- Glocal settings
 var lang = 'en'; // 'en', 'zh-tw'
-var cList = ['#3366BB', '#CC6677', '#55BB44', '#DDAA77', '#AA55AA'];
+var cList = ['#3366BB', '#CC6677', '#55BB44', '#DDAA77', '#AA55AA', '#44AA99'];
 
 //-- General functions
 function ISODateToMDDate(ISODate) {
@@ -21,6 +21,53 @@ function cumsum(data, colTagList) {
   }
 }
 
+
+//-- Tooltip
+var copyleft_tooltip = d3.select('#menu_copyleft_2')
+  .append("div")
+  .attr("class", "tooltip")
+
+function copyleft_mouseover(d) {
+  copyleft_tooltip.transition()
+    .duration(200)
+    .style("opacity", 0.9)
+  d3.select(this)
+    .style("opacity", 0.8)
+}
+
+function copyleft_mousemove(d) {
+  var newPos = d3.mouse(this);
+  newPos[1] += 30;
+  
+  var tooltipText;
+  
+  if (lang == 'zh-tw')
+    tooltipText = "版權沒有<br>翻印不究<br>不需署名<br>敬請亂用"
+  else
+    tooltipText = "Yes for all kinds of use<br>No attribution needed"
+  
+  console.log(newPos)
+  
+  copyleft_tooltip
+    .html(tooltipText)
+    .style("left", newPos[0] + "px")
+    .style("top", newPos[1] + "px")
+}
+
+function copyleft_mouseleave(d) {
+  copyleft_tooltip.transition()
+    .duration(10)
+    .style("opacity", 0)
+  d3.select(this)
+    .style("opacity", 1)
+}
+
+d3.select('#menu_copyleft')
+    .on("mouseover", copyleft_mouseover)
+    .on("mousemove", copyleft_mousemove)
+    .on("mouseleave", copyleft_mouseleave)
+
+
 //-- Text in html
 var node;
 
@@ -37,6 +84,10 @@ function text_translation() {
     node = document.getElementById("menu_source")
     node.textContent = '';
     node.appendChild(document.createTextNode("資料來源"));
+    
+    node = document.getElementById("menu_copyleft")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("版權沒有"));
     
     
     
@@ -120,6 +171,10 @@ function text_translation() {
     node = document.getElementById("menu_source")
     node.textContent = '';
     node.appendChild(document.createTextNode("Data Source"));
+    
+    node = document.getElementById("menu_copyleft")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Copyleft"));
     
     
     

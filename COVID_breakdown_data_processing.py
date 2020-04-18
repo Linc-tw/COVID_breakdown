@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.04.15                  ##
+    ##  Version 2020.04.18                  ##
     ##########################################
 
 
@@ -195,7 +195,7 @@ class MainSheet:
     onsetDateList  = self.getOnsetDate()
     chanList       = self.getChannel()
     
-    refOrd = cf.ISODateToOrdinal('2020-02-20')
+    refOrd = cf.ISODateToOrdinal('2020-01-11')
     endOrd = dtt.date.today().toordinal() + 1
     
     date       = [cf.ordinalToISODate(i) for i in range(refOrd, endOrd)]
@@ -205,16 +205,15 @@ class MainSheet:
     iso_r      = np.zeros(nbDays, dtype=int)
     monitor_r  = np.zeros(nbDays, dtype=int)
     hospital_r = np.zeros(nbDays, dtype=int)
+    noData_r   = np.zeros(nbDays, dtype=int)
     airport_o  = np.zeros(nbDays, dtype=int)
     QT_o       = np.zeros(nbDays, dtype=int)
     iso_o      = np.zeros(nbDays, dtype=int)
     monitor_o  = np.zeros(nbDays, dtype=int)
     hospital_o = np.zeros(nbDays, dtype=int)
+    noData_o   = np.zeros(nbDays, dtype=int)
     
     for reportDate, onsetDate, chan in zip(reportDateList, onsetDateList, chanList):
-      if type(chan) == type(0.0):
-        continue
-      
       ind_r = cf.ISODateToOrdinal(reportDate) - refOrd
       if ind_r < 0 or ind_r >= nbDays:
         print('Bad ind_r = %d' % ind_r)
@@ -230,6 +229,8 @@ class MainSheet:
         monitor_r[ind_r] += 1
       elif chan == 'hospital':
         hospital_r[ind_r] += 1
+      elif type(chan) == type(0.0):
+        noData_r[ind_r] += 1
       
       if type(onsetDate) != type(0.0):
         ind_o = cf.ISODateToOrdinal(onsetDate) - refOrd
@@ -247,10 +248,12 @@ class MainSheet:
           monitor_o[ind_o] += 1
         elif chan == 'hospital':
           hospital_o[ind_o] += 1
+        elif type(chan) == type(0.0):
+          noData_o[ind_r] += 1
     
-    data_r = {'date': date, 'hospital': hospital_r, 'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': QT_r, 'airport': airport_r}
+    data_r = {'date': date, 'no_data': noData_r, 'hospital': hospital_r, 'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': QT_r, 'airport': airport_r}
     data_r = pd.DataFrame(data_r)
-    data_o = {'date': date, 'hospital': hospital_o, 'monitoring': monitor_o, 'isolation': iso_o, 'quarantine': QT_o, 'airport': airport_o}
+    data_o = {'date': date, 'no_data': noData_o, 'hospital': hospital_o, 'monitoring': monitor_o, 'isolation': iso_o, 'quarantine': QT_o, 'airport': airport_o}
     data_o = pd.DataFrame(data_o)
     
     name = '%sprocessed_data/case_by_detection_by_report_day.csv' % DATA_PATH

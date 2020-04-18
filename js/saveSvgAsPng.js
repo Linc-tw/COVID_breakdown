@@ -1,3 +1,5 @@
+//-- Taken from https://github.com/exupero/saveSvgAsPng
+
 (function() {
   const out$ = typeof exports != 'undefined' && exports || typeof define != 'undefined' && {} || this || window;
   if (typeof define !== 'undefined') define('save-svg-as-png', [], () => out$);
