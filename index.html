@@ -12,6 +12,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&family=Roboto&display=swap" rel="stylesheet"> 
         <link href="css/template.css" rel="stylesheet" />
         <link href="css/plots.css" rel="stylesheet" />
+        <link href="figures/favicon.png" rel="shortcut icon" />
     </head>
     
     <body class="sb-nav-fixed">
@@ -92,20 +93,14 @@
     
 <!--
 TODO
-license
 fr-lize
 
 TODO plot
-Plot 2: gray rectangle
-Plot 3: legend
-
 hist report - onset
-
 hist breakdown symptom by age, age by symptom
 hist symptoms/country/age
 
 calendar view
-corr country-symptom
 case network
 -->
             
@@ -146,7 +141,7 @@ case network
                                                 </label>
                                             </div>
                                             <span style="display:inline-block; width: 8px;"></span>
-                                            <button id='case_by_transmission_button_5' class="btn btn-sm btn-covid">Download</button>
+                                            <button id='case_by_transmission_button_5' class="btn btn-sm btn-covid"></button>
                                         </div>
                                     </div>
                                     
@@ -230,31 +225,27 @@ case network
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-bar mr-1"></i>
-                                        TODO
+                                        <i class="fas fa-th mr-1"></i> <span id="travel_history_symptom_correlations_title"></span>
                                     </div>
+                                    
                                     <div class="card-img">
                                         <div class="btn-pos"> 
-                                            <!--<div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_detection_doCumul" value=0 checked>Daily<br>
+                                                    <input type="radio" name="travel_history_symptom_correlations_doCount" value=0 checked>
+                                                    <span id="travel_history_symptom_correlations_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_detection_doCumul" value=1>Cumulative<br>
+                                                    <input type="radio" name="travel_history_symptom_correlations_doCount" value=1>
+                                                    <span id="travel_history_symptom_correlations_button_2"></span>
                                                 </label>
                                             </div>
                                             <span style="display:inline-block; width: 8px;"></span>
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_detection_doOnset" value=0 checked>Report date<br>
-                                                </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_detection_doOnset" value=1>Onset date<br>
-                                                </label>
-                                            </div>-->
+                                            <button id='travel_history_symptom_correlations_button_3' class="btn btn-sm btn-covid"></button>
                                         </div>
                                     </div>
-                                    <div class="card-body" id="new_id">Under construction</div>
+                                    
+                                    <div class="card-body" id="travel_history_symptom_correlations"></div>
                                 </div>
                             </div>
                             
@@ -282,6 +273,7 @@ case network
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://d3js.org/d3.v4.js"></script>
+        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.19.0/js/canvas-to-blob.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
         
@@ -291,6 +283,7 @@ case network
         <script src="js/case_by_transmission.js"></script>
         <script src="js/case_by_detection.js"></script>
         <script src="js/test_by_criterion.js"></script>
+        <script src="js/travel_history_symptom_correlations.js"></script>
     </body>
 </html>
 

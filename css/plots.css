@@ -1,71 +1,93 @@
 @charset "UTF-8";
 
 
-body {
+body, 
+.xlabel,
+.ylabel,
+.legend,
+.xaxis text,
+.yaxis text,
+.content.text {
   font-family: 'Roboto', 'Noto Sans TC', sans-serif;
 }
 
-/*@font-face {
-    font-family: custom-sans-serif;
-    src: local("PMingLiU");
-    unicode-range: U+4E00-9FFF;
-}
-
-@font-face {
-    font-family: custom-sans-serif;
-    src: local('Times New Roman');
-    unicode-range: U+00-024F;
-}
-
-.custom-sans-serif {
-  font-family: custom-sans-serif;
-}*/
-
+.xlabel,
 .ylabel,
 .legend,
 .xaxis text,
 .yaxis text {
-  font-family: 'Roboto', 'Noto Sans TC', sans-serif;
-  font-size: 18px;
+  font-size: 1.15rem;
 }
+.content.text {
+  font-size: 0.9rem;
+}
+
 @media (min-width: 20px) {
+  .xlabel,
   .ylabel,
   .legend,
   .xaxis text,
   .yaxis text {
-    font-size: 24px;
+    font-size: 1.4rem;
+  }
+  .content.text {
+    font-size: 1rem;
   }
 }
 @media (min-width: 576px) {
+  .xlabel,
   .ylabel,
   .legend,
   .xaxis text,
   .yaxis text {
-    font-size: 22px;
+    font-size: 1.3rem;
   }
 }
 @media (min-width: 768px) {
+  .xlabel,
   .ylabel,
   .legend,
   .xaxis text,
   .yaxis text {
-    font-size: 18px;
+    font-size: 1.15rem;
+  }
+  .content.text {
+    font-size: 0.9rem;
   }
 }
+/* No sidebar <=> with sidebar */
 @media (min-width: 992px) {
+  .xlabel,
   .ylabel,
   .legend,
   .xaxis text,
   .yaxis text {
-    font-size: 20px;
+    font-size: 1.25rem;
   }
 }
+/* 1 col <=> 2 col */
 @media (min-width: 1200px) {
+  .xlabel,
   .ylabel,
   .legend,
   .xaxis text,
   .yaxis text {
-    font-size: 22px;
+    font-size: 1.35rem;
+  }
+  .content.text {
+    font-size: 1rem;
+  }
+}
+@media (min-width: 1600px) {
+  .xlabel,
+  .ylabel,
+  .legend,
+  .xaxis text,
+  .yaxis text {
+    font-size: 1.35rem;
+  }
+  .content.text {
+    font-size: 0.9rem;
   }
 }
 

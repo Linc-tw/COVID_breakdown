@@ -52,6 +52,7 @@ function CBT_formatData(data) {
   var ymax = 0;
   
   var colTagList = data.columns.slice(1);
+  var nbCol = colTagList.length;
   var dateList = [];
   var formattedData = [];
   var i, j, x, y, height, block;
@@ -65,16 +66,17 @@ function CBT_formatData(data) {
     x = data[i]["date"];
     dateList.push(x);
     
-    for (j=0; j<colTagList.length; j++) {
+    for (j=0; j<nbCol; j++) {
       height = +data[i][colTagList[j]];
       block = {
         'x': x,
         'y0': y,
         'y1': y + height,
         'height': height,
-        'h1': +data[i][colTagList[2]],
-        'h2': +data[i][colTagList[1]],
-        'h3': +data[i][colTagList[0]],
+        'h1': +data[i][colTagList[nbCol-1]],
+        'h2': +data[i][colTagList[nbCol-2]],
+        'h3': +data[i][colTagList[nbCol-3]],
+        'h4': +data[i][colTagList[nbCol-4]],
         'col': colTagList[j]
       };
         
@@ -102,13 +104,33 @@ function CBT_formatData(data) {
   var ytick = [];
   for (i=0; i<ymax; i+=ypath) ytick.push(i)
   
+  //-- Calculate separate sum
+  var imp, IL, IU, fle;
+  
+  if (CBT_wrap.doCumul == 1) {
+    imp = d3.max(formattedData, function(d) {if (d.col == 'imported') return +d.height;});
+    IL = d3.max(formattedData, function(d) {if (d.col == 'linked') return +d.height;});
+    IU = d3.max(formattedData, function(d) {if (d.col == 'unlinked') return +d.height;});
+    fle = d3.max(formattedData, function(d) {if (d.col == 'fleet') return +d.height;});
+  }
+  else {
+    imp = d3.sum(formattedData, function(d) {if (d.col == 'imported') return +d.height;});
+    IL = d3.sum(formattedData, function(d) {if (d.col == 'linked') return +d.height;});
+    IU = d3.sum(formattedData, function(d) {if (d.col == 'unlinked') return +d.height;});
+    fle = d3.sum(formattedData, function(d) {if (d.col == 'fleet') return +d.height;});
+  }
+  var lValue = [imp, IL, IU, fle];
+  
+  
   CBT_wrap.formattedData = formattedData;
   CBT_wrap.dateList = dateList;
   CBT_wrap.colTagList = colTagList;
+  CBT_wrap.nbCol = nbCol;
   CBT_wrap.ymax = ymax;
   CBT_wrap.xtick = xtick;
   CBT_wrap.xticklabel = xticklabel;
   CBT_wrap.ytick = ytick;
+  CBT_wrap.lValue = lValue;
 }
 
 //-- Tooltip
@@ -141,6 +163,7 @@ function CBT_getTooltipPos(d) {
   //-- Place the caption somewhere on the longest arm, parametrizaed by xAlpha & yAlpha
   var xAlpha = 0.1;
   var yAlpha = 0.5;
+//   var xAlpha = 1;
 //   var yAlpha = 1;
   var xPos = d[0] * (1-xAlpha) + CBT_wrap.corner[i_max][0] * xAlpha;
   var yPos = d[1] * (1-yAlpha) + CBT_wrap.corner[i_max][1] * yAlpha;
@@ -163,9 +186,9 @@ function CBT_mousemove(d) {
   var tooltipText;
   
   if (lang == 'zh-tw')
-    tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3) + "<br>境外移入 = " + d.h1+ "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3
+    tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3) + "<br>境外移入 = " + d.h1+ "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>Fleet = " + d.h4
   else
-    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Imported = " + d.h1+ "<br>Ind. linked = " + d.h2 + "<br>Ind. unlinked = " + d.h3
+    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Imported = " + d.h1+ "<br>Ind. linked = " + d.h2 + "<br>Ind. unlinked = " + d.h3 + "<br>Fleet = " + d.h4
   
   
   CBT_tooltip
@@ -251,35 +274,31 @@ function CBT_initialize() {
     .text(ylabel);
     
   //-- Color
-  var colorList = cList.slice(0, 3);
+  var colorList = cList.slice(0, CBT_wrap.nbCol);
+  var colTagList = CBT_wrap.colTagList.slice().reverse();
   var color = d3.scaleOrdinal()
-    .domain([CBT_wrap.colTagList[2], CBT_wrap.colTagList[1], CBT_wrap.colTagList[0]])
+    .domain(colTagList)
     .range(colorList);
     
-  //-- Legend
-  var legendPos = {x: 90, y: 40, dx: 20, dy: 25, r: 7};
-  
-  //-- Legend - circles
+  //-- Legend - circle
+  var lPos = {x: 90, y: 40, dx: 20, dy: 25, r: 7};
   CBT_wrap.svg.selectAll("dot")
-    .data([0, 1, 2])
+    .data(colTagList)
     .enter()
     .append("circle")
-      .attr("class", "legend")
-      .attr("cx", legendPos.x)
-      .attr("cy", function(d,i) {return legendPos.y + i*legendPos.dy})
-      .attr("r", legendPos.r)
+      .attr("class", "legend circle")
+      .attr("cx", lPos.x)
+      .attr("cy", function(d,i) {return lPos.y + i*lPos.dy})
+      .attr("r", lPos.r)
       .style("fill", function(d, i) {return colorList[i]});
   
-  //-- Legend - calculation for updates
-  var totNb = d3.sum(CBT_wrap.formattedData, function(d){return +d.height;});
-  
   //-- Bar
-  var bar = CBT_wrap.svg.selectAll('.bar')
+  var bar = CBT_wrap.svg.selectAll('.content.bar')
     .data(CBT_wrap.formattedData)
     .enter();
   
   bar.append('rect')
-    .attr('class', 'bar')
+    .attr('class', 'content bar')
     .attr('fill', function(d) {return color(d.col);})
     .attr('x', function(d) {return x(d.x);})
     .attr('y', function(d) {return y(0);})
@@ -290,7 +309,7 @@ function CBT_initialize() {
     .on("mouseleave", CBT_mouseleave)
 
   CBT_wrap.colorList = colorList;
-  CBT_wrap.legendPos = legendPos;
+  CBT_wrap.lPos = lPos;
   CBT_wrap.bar = bar;
 }
 
@@ -322,62 +341,51 @@ function CBT_update() {
   //-- Color
   colorList = CBT_wrap.colorList.slice();
   colorList.push('#000000');
-  if (CBT_wrap.doOnset == 1) colorList.splice(3, 0, '#999999');
+  if (CBT_wrap.doOnset == 1) colorList.splice(CBT_wrap.nbCol, 0, '#999999');
   
-  //-- Legend - texts
-  var label;
+  //-- Legend - label
+  var lLabel;
   if (lang == 'zh-tw') {
-    label = ["境外移入", "本土感染源已知", "本土感染源未知", "合計"];
-    label_plus = '無發病日資料';
+    lLabel = ["境外移入", "本土感染源已知", "本土感染源未知", '敦睦艦隊', "合計"];
+    lLabel_plus = '無發病日資料';
   }
   else {
-    label = ["Imported", "Indigenous linked to known cases", "Indigenous unlinked", "Total"];
-    label_plus = 'No onset date';
+    lLabel = ["Imported", "Indigenous linked to known cases", "Indigenous unlinked", 'Fleet', "Total"];
+    lLabel_plus = 'No onset date';
   }
-  if (CBT_wrap.doOnset == 1) label.splice(3, 0, label_plus);
+  if (CBT_wrap.doOnset == 1) lLabel.splice(CBT_wrap.nbCol, 0, lLabel_plus);
   
   CBT_wrap.svg.selectAll(".legend.label")
     .remove()
     .exit()
-    .data(label)
+    .data(lLabel)
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", CBT_wrap.legendPos.x+CBT_wrap.legendPos.dx)
-      .attr("y", function(d, i) {return CBT_wrap.legendPos.y + i*CBT_wrap.legendPos.dy + CBT_wrap.legendPos.r})
+      .attr("x", CBT_wrap.lPos.x+CBT_wrap.lPos.dx)
+      .attr("y", function(d, i) {return CBT_wrap.lPos.y + i*CBT_wrap.lPos.dy + CBT_wrap.lPos.r})
       .style("fill", function(d, i) {return colorList[i]})
       .text(function(d) {return d})
-      .attr("text-anchor", "left")
-      .style("alignment-baseline", "middle")
+      .attr("text-anchor", "start")
   
-  //-- Legend - total cases
-  var Im_sum, IL_sum, IU_sum;
-  if (CBT_wrap.doCumul == 1) {
-    Im_sum = d3.max(CBT_wrap.formattedData, function(d){if (d.col == 'imported') return +d.height;});
-    IL_sum = d3.max(CBT_wrap.formattedData, function(d){if (d.col == 'linked') return +d.height;});
-    IU_sum = d3.max(CBT_wrap.formattedData, function(d){if (d.col == 'unlinked') return +d.height;});
-  }
-  else {
-    Im_sum = d3.sum(CBT_wrap.formattedData, function(d){if (d.col == 'imported') return +d.height;});
-    IL_sum = d3.sum(CBT_wrap.formattedData, function(d){if (d.col == 'linked') return +d.height;});
-    IU_sum = d3.sum(CBT_wrap.formattedData, function(d){if (d.col == 'unlinked') return +d.height;});
-  }
-  var sumData = [Im_sum, IL_sum, IU_sum, overallTotNb];
-  if (CBT_wrap.doOnset == 1) sumData.splice(3, 0, overallTotNb-(Im_sum+IL_sum+IU_sum))
+  //-- Legend - value
+  var lValue = CBT_wrap.lValue.slice();
+  var sum = lValue.reduce((a, b) => a + b, 0);
+  if (CBT_wrap.doOnset == 1) lValue.push(overallTotNb-sum);
+  lValue.push(overallTotNb);
   
-  CBT_wrap.svg.selectAll(".legend.sum")
+  CBT_wrap.svg.selectAll(".legend.value")
     .remove()
     .exit()
-    .data(sumData)
+    .data(lValue)
     .enter()
     .append("text")
-      .attr("class", "legend sum")
-      .attr("x", CBT_wrap.legendPos.x-CBT_wrap.legendPos.dx)
-      .attr("y", function(d,i) {return CBT_wrap.legendPos.y + i*CBT_wrap.legendPos.dy + CBT_wrap.legendPos.r})
+      .attr("class", "legend value")
+      .attr("x", CBT_wrap.lPos.x-CBT_wrap.lPos.dx)
+      .attr("y", function(d,i) {return CBT_wrap.lPos.y + i*CBT_wrap.lPos.dy + CBT_wrap.lPos.r})
       .style("fill", function(d, i) {return colorList[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "end")
-      .style("alignment-baseline", "middle")
 }
 
 CBT_wrap.doCumul = 0;

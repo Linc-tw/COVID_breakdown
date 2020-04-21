@@ -1,0 +1,27 @@
+label,count,label_zh
+N_imported,343,境外移入總數
+N_data,333,有資料案例數
+USA,98,美國
+UK,82,英國
+France,25,法國
+Spain,21,西班牙
+Czech,15,捷克
+Turkey,13,土耳其
+Egypt,12,埃及
+Austria,12,奧地利
+China,11,中國
+Philippines,11,菲律賓
+cough,156,咳嗽
+fever,151,發燒
+throatache,107,喉嚨症狀
+sneezing,102,鼻腔症狀
+fatigue,53,倦怠
+soreness,44,痠痛
+anosmia,42,嗅覺異常
+headache,39,頭痛
+diarrhea,28,腹瀉
+pneumonia,24,肺炎
+ageusia,22,味覺異常
+chest pain,20,胸痛
+dyspnea,16,呼吸困難
+asymptomatic,15,無症狀

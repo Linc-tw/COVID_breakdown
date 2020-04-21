@@ -49,6 +49,7 @@ function TBC_formatData(data) {
   var ymax = 0;
   
   var colTagList = data.columns.slice(1);
+  var nbCol = colTagList.length;
   var dateList = [];
   var formattedData = [];
   var i, j, x, y, height, block;
@@ -62,16 +63,16 @@ function TBC_formatData(data) {
     x = data[i]["date"];
     dateList.push(x);
     
-    for (j=0; j<colTagList.length; j++) {
+    for (j=0; j<nbCol; j++) {
       height = +data[i][colTagList[j]];
       block = {
         'x': x,
         'y0': y,
         'y1': y + height,
         'height': height,
-        'h1': +data[i][colTagList[2]],
-        'h2': +data[i][colTagList[1]],
-        'h3': +data[i][colTagList[0]],
+        'h1': +data[i][colTagList[nbCol-1]],
+        'h2': +data[i][colTagList[nbCol-2]],
+        'h3': +data[i][colTagList[nbCol-3]],
         'col': colTagList[j]
       };
         
@@ -99,13 +100,29 @@ function TBC_formatData(data) {
   var ytick = [];
   for (i=0; i<ymax; i+=ypath) ytick.push(i)
   
+  //-- Calculate seperate sum
+  var ext, QT, clin;
+  if (TBC_wrap.doCumul == 1) {
+    ext = d3.max(formattedData, function(d) {if (d.col == 'extended') return +d.height;});
+    QT = d3.max(formattedData, function(d) {if (d.col == 'quarantine') return +d.height;});
+    clin = d3.max(formattedData, function(d) {if (d.col == 'clinical') return +d.height;});
+  }
+  else {
+    ext = d3.sum(formattedData, function(d) {if (d.col == 'extended') return +d.height;});
+    QT = d3.sum(formattedData, function(d) {if (d.col == 'quarantine') return +d.height;});
+    clin = d3.sum(formattedData, function(d) {if (d.col == 'clinical') return +d.height;});
+  }
+  var lValue = [ext, QT, clin];
+  
   TBC_wrap.formattedData = formattedData;
   TBC_wrap.dateList = dateList;
   TBC_wrap.colTagList = colTagList;
+  TBC_wrap.nbCol = nbCol;
   TBC_wrap.ymax = ymax;
   TBC_wrap.xtick = xtick;
   TBC_wrap.xticklabel = xticklabel;
   TBC_wrap.ytick = ytick;
+  TBC_wrap.lValue = lValue;
 }
 
 //-- Tooltip
@@ -249,35 +266,31 @@ function TBC_initialize() {
     .text(ylabel);
     
   //-- Color
-  var colorList = cList.slice(0, 3);
+  var colorList = cList.slice(0, TBC_wrap.nbCol);
+  var colTagList = TBC_wrap.colTagList.slice().reverse();
   var color = d3.scaleOrdinal()
-    .domain([TBC_wrap.colTagList[2], TBC_wrap.colTagList[1], TBC_wrap.colTagList[0]])
+    .domain(colTagList)
     .range(colorList);
     
-  //-- Legend
-  var legendPos = {x: 115, y: 40, dx: 20, dy: 25, r: 7};
-  
-  //-- Legend - circles
+  //-- Legend - circle
+  var lPos = {x: 115, y: 40, dx: 20, dy: 25, r: 7};
   TBC_wrap.svg.selectAll("dot")
-    .data([0, 1, 2])
+    .data(colTagList)
     .enter()
     .append("circle")
-      .attr("class", "legend")
-      .attr("cx", legendPos.x)
-      .attr("cy", function(d,i) {return legendPos.y + i*legendPos.dy})
-      .attr("r", legendPos.r)
+      .attr("class", "legend circle")
+      .attr("cx", lPos.x)
+      .attr("cy", function(d,i) {return lPos.y + i*lPos.dy})
+      .attr("r", lPos.r)
       .style("fill", function(d, i) {return colorList[i]});
   
-  //-- Legend - calculation for updates
-  var totNb = d3.sum(TBC_wrap.formattedData, function(d){return +d.height;});
-  
   //-- Bar
-  var bar = TBC_wrap.svg.selectAll('.bar')
+  var bar = TBC_wrap.svg.selectAll('.content.bar')
     .data(TBC_wrap.formattedData)
     .enter();
   
   bar.append('rect')
-    .attr('class', 'bar')
+    .attr('class', 'content bar')
     .attr('fill', function(d) {return color(d.col);})
     .attr('x', function(d) {return x(d.x);})
     .attr('y', function(d) {return y(0);})
@@ -288,7 +301,7 @@ function TBC_initialize() {
     .on("mouseleave", TBC_mouseleave)
 
   TBC_wrap.colorList = colorList;
-  TBC_wrap.legendPos = legendPos;
+  TBC_wrap.lPos = lPos;
   TBC_wrap.bar = bar;
 }
 
@@ -321,52 +334,41 @@ function TBC_update() {
   colorList = TBC_wrap.colorList.slice();
   colorList.push('#000000');
   
-  //-- Legend - texts
-  var label;
-  if (lang == 'zh-tw') label = ["擴大社區監測", "居家檢疫", "法定定義通報", "合計"];
-  else label = ['Risk of community infection', 'Quarantine (merged into clinical)', 'Suspicious clinical cases', "Total"];
+  //-- Legend - label
+  var lLabel;
+  if (lang == 'zh-tw') lLabel = ["擴大社區監測", "居家檢疫", "法定定義通報", "合計"];
+  else lLabel = ['Risk of community infection', 'Quarantine (merged into clinical)', 'Suspicious clinical cases', "Total"];
   
   TBC_wrap.svg.selectAll(".legend.label")
     .remove()
     .exit()
-    .data(label)
+    .data(lLabel)
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", TBC_wrap.legendPos.x+TBC_wrap.legendPos.dx)
-      .attr("y", function(d, i) {return TBC_wrap.legendPos.y + i*TBC_wrap.legendPos.dy + TBC_wrap.legendPos.r})
+      .attr("x", TBC_wrap.lPos.x+TBC_wrap.lPos.dx)
+      .attr("y", function(d, i) {return TBC_wrap.lPos.y + i*TBC_wrap.lPos.dy + TBC_wrap.lPos.r})
       .style("fill", function(d, i) {return colorList[i]})
       .text(function(d) {return d})
-      .attr("text-anchor", "left")
-      .style("alignment-baseline", "middle");
+      .attr("text-anchor", "start")
   
-  //-- Legend - total tests
-  var ext_sum, QT_sum, clin_sum;
-  if (TBC_wrap.doCumul == 1) {
-    ext_sum = d3.max(TBC_wrap.formattedData, function(d){if (d.col == 'extended') return +d.height;});
-    QT_sum = d3.max(TBC_wrap.formattedData, function(d){if (d.col == 'quarantine') return +d.height;});
-    clin_sum = d3.max(TBC_wrap.formattedData, function(d){if (d.col == 'clinical') return +d.height;});
-  }
-  else {
-    ext_sum = d3.sum(TBC_wrap.formattedData, function(d){if (d.col == 'extended') return +d.height;});
-    QT_sum = d3.sum(TBC_wrap.formattedData, function(d){if (d.col == 'quarantine') return +d.height;});
-    clin_sum = d3.sum(TBC_wrap.formattedData, function(d){if (d.col == 'clinical') return +d.height;});
-  }
-  var sumData = [ext_sum, QT_sum, clin_sum, ext_sum+QT_sum+clin_sum];
+  //-- Legend - value
+  var lValue = TBC_wrap.lValue.slice();
+  var sum = lValue.reduce((a, b) => a + b, 0);
+  lValue.push(sum);
   
-  TBC_wrap.svg.selectAll(".legend.sum")
+  TBC_wrap.svg.selectAll(".legend.value")
     .remove()
     .exit()
-    .data(sumData)
+    .data(lValue)
     .enter()
     .append("text")
-      .attr("class", "legend sum")
-      .attr("x", TBC_wrap.legendPos.x-TBC_wrap.legendPos.dx)
-      .attr("y", function(d,i) {return TBC_wrap.legendPos.y + i*TBC_wrap.legendPos.dy + TBC_wrap.legendPos.r})
+      .attr("class", "legend value")
+      .attr("x", TBC_wrap.lPos.x-TBC_wrap.lPos.dx)
+      .attr("y", function(d, i) {return TBC_wrap.lPos.y + i*TBC_wrap.lPos.dy + TBC_wrap.lPos.r})
       .style("fill", function(d, i) {return colorList[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "end")
-      .style("alignment-baseline", "middle")
 }
 
 TBC_wrap.doCumul = 0;;

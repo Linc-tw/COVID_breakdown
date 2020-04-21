@@ -2,6 +2,7 @@
 var lang = 'en'; // 'en', 'zh-tw'
 var cList = ['#3366BB', '#CC6677', '#55BB44', '#DDAA77', '#AA55AA', '#44AA99'];
 
+
 //-- General functions
 function ISODateToMDDate(ISODate) {
   var fmtStr;
@@ -68,7 +69,7 @@ d3.select('#menu_copyleft')
     .on("mouseleave", copyleft_mouseleave)
 
 
-//-- Text in html
+    //-- Text in html
 var node;
 
 function text_translation() {
@@ -158,6 +159,25 @@ function text_translation() {
     node = document.getElementById("test_by_criterion_button_3")
     node.textContent = '';
     node.appendChild(document.createTextNode("下載"));
+    
+    
+    
+    node = document.getElementById("travel_history_symptom_correlations_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("境外移入之旅遊史與症狀之相關性"));
+    
+    node = document.getElementById("travel_history_symptom_correlations_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("相關係數"));
+    
+    node = document.getElementById("travel_history_symptom_correlations_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("案例數"));
+    
+    node = document.getElementById("travel_history_symptom_correlations_button_3")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("下載"));
+    
   }
   else {
     node = document.getElementById("title")
@@ -245,6 +265,25 @@ function text_translation() {
     node = document.getElementById("test_by_criterion_button_3")
     node.textContent = '';
     node.appendChild(document.createTextNode("Download"));
+    
+    
+    
+    node = document.getElementById("travel_history_symptom_correlations_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Correlations between Travel History & Symptoms"));
+    
+    node = document.getElementById("travel_history_symptom_correlations_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Coefficient"));
+    
+    node = document.getElementById("travel_history_symptom_correlations_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Counts"));
+    
+    node = document.getElementById("travel_history_symptom_correlations_button_3")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Download"));
+    
   }
 }
 
@@ -266,8 +305,6 @@ d3.csv('processed_data/case_by_transmission_by_report_day.csv', function(error, 
     }
   }
 });
-
-
 
 
 //-- Button listener
@@ -303,7 +340,18 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
     TBC_initialize();
     TBC_update();
   });
+  
+  d3.csv(THSC_wrap.dataPathList[THSC_wrap.doCount], function(error, data) {
+    d3.csv(THSC_wrap.dataPathList[2], function(error2, data2) {
+      if (error) return console.warn(error);
+      if (error2) return console.warn(error2);
+      
+      THSC_makeCanvas();
+      THSC_formatData(data, data2);
+      THSC_initialize();
+      THSC_update();
+    });
+  });
+
 });
-
-
 
