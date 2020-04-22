@@ -3,11 +3,12 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.04.18                  ##
+    ##  Version 2020.04.23                  ##
     ##########################################
 
 
 import os
+import sys
 import collections as clt
 import datetime as dtt
 
@@ -17,6 +18,7 @@ import matplotlib as mpl
 #import matplotlib.pyplot as plt
 import pandas as pd
 
+sys.path.append("../pycommon/")
 import commonFunctions as cf
 import matplotlibFunctions as mplf
 
