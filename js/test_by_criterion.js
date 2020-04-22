@@ -271,18 +271,6 @@ function TBC_initialize() {
   var color = d3.scaleOrdinal()
     .domain(colTagList)
     .range(colorList);
-    
-  //-- Legend - circle
-  var lPos = {x: 115, y: 40, dx: 20, dy: 25, r: 7};
-  TBC_wrap.svg.selectAll("dot")
-    .data(colTagList)
-    .enter()
-    .append("circle")
-      .attr("class", "legend circle")
-      .attr("cx", lPos.x)
-      .attr("cy", function(d,i) {return lPos.y + i*lPos.dy})
-      .attr("r", lPos.r)
-      .style("fill", function(d, i) {return colorList[i]});
   
   //-- Bar
   var bar = TBC_wrap.svg.selectAll('.content.bar')
@@ -301,7 +289,6 @@ function TBC_initialize() {
     .on("mouseleave", TBC_mouseleave)
 
   TBC_wrap.colorList = colorList;
-  TBC_wrap.lPos = lPos;
   TBC_wrap.bar = bar;
 }
 
@@ -334,6 +321,25 @@ function TBC_update() {
   colorList = TBC_wrap.colorList.slice();
   colorList.push('#000000');
   
+  //-- Legend - value
+  var lPos = {x: 95, y: 45, dx: 10, dy: 27};
+  var lValue = TBC_wrap.lValue.slice();
+  var sum = lValue.reduce((a, b) => a + b, 0);
+  lValue.push(sum);
+  
+  TBC_wrap.svg.selectAll(".legend.value")
+    .remove()
+    .exit()
+    .data(lValue)
+    .enter()
+    .append("text")
+      .attr("class", "legend value")
+      .attr("x", lPos.x)
+      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
+      .style("fill", function(d, i) {return colorList[i]})
+      .text(function(d) {return d})
+      .attr("text-anchor", "end")
+      
   //-- Legend - label
   var lLabel;
   if (lang == 'zh-tw') lLabel = ["擴大社區監測", "居家檢疫", "法定定義通報", "合計"];
@@ -346,29 +352,11 @@ function TBC_update() {
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", TBC_wrap.lPos.x+TBC_wrap.lPos.dx)
-      .attr("y", function(d, i) {return TBC_wrap.lPos.y + i*TBC_wrap.lPos.dy + TBC_wrap.lPos.r})
+      .attr("x", lPos.x+lPos.dx)
+      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
       .style("fill", function(d, i) {return colorList[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "start")
-  
-  //-- Legend - value
-  var lValue = TBC_wrap.lValue.slice();
-  var sum = lValue.reduce((a, b) => a + b, 0);
-  lValue.push(sum);
-  
-  TBC_wrap.svg.selectAll(".legend.value")
-    .remove()
-    .exit()
-    .data(lValue)
-    .enter()
-    .append("text")
-      .attr("class", "legend value")
-      .attr("x", TBC_wrap.lPos.x-TBC_wrap.lPos.dx)
-      .attr("y", function(d, i) {return TBC_wrap.lPos.y + i*TBC_wrap.lPos.dy + TBC_wrap.lPos.r})
-      .style("fill", function(d, i) {return colorList[i]})
-      .text(function(d) {return d})
-      .attr("text-anchor", "end")
 }
 
 TBC_wrap.doCumul = 0;;

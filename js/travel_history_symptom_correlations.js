@@ -44,7 +44,7 @@ function THSC_makeCanvas() {
   THSC_wrap.svg = svg;
 }
 
-function THSC_formatData(data, data2) {
+function THSC_formatData(data) {
   var symptomList = [];
   var travHistList = [];
   var i, j, travHist, symptom;
@@ -64,6 +64,16 @@ function THSC_formatData(data, data2) {
     if (j == symptomList.length) symptomList.push(symptom);
   }
   
+  THSC_wrap.formattedData = data;
+  THSC_wrap.travHistList = travHistList;
+  THSC_wrap.symptomList = symptomList;
+}
+
+function THSC_formatData2(data2) {
+  var xticklabel = [];
+  var yticklabel = [];
+  var i, j, N_imported, N_data;
+  
   for (j=0; j<data2.length; j++) {
     if ('N_imported' == data2[j]['label']) {
       N_imported = data2[j]['count'];
@@ -73,23 +83,19 @@ function THSC_formatData(data, data2) {
     }
   }
   
-  var xticklabel = [];
-  var yticklabel = [];
-  var N_imported, N_data;
-  
   if (lang == 'zh-tw') {
-    for (i=0; i<symptomList.length; i++) {
+    for (i=0; i<THSC_wrap.symptomList.length; i++) {
       for (j=0; j<data2.length; j++) {
-        if (symptomList[i] == data2[j]['label']) {
+        if (THSC_wrap.symptomList[i] == data2[j]['label']) {
           xticklabel.push(data2[j]['label_zh'] + ' (' + data2[j]['count'] + ')');
           break;
         }
       }
     }
     
-    for (i=0; i<travHistList.length; i++) {
+    for (i=0; i<THSC_wrap.travHistList.length; i++) {
       for (j=0; j<data2.length; j++) {
-        if (travHistList[i] == data2[j]['label']) {
+        if (THSC_wrap.travHistList[i] == data2[j]['label']) {
           yticklabel.push(data2[j]['label_zh'] + ' (' + data2[j]['count'] + ')');
           break;
         }
@@ -97,28 +103,25 @@ function THSC_formatData(data, data2) {
     }
   }
   else {
-    for (i=0; i<symptomList.length; i++) {
+    for (i=0; i<THSC_wrap.symptomList.length; i++) {
       for (j=0; j<data2.length; j++) {
-        if (symptomList[i] == data2[j]['label']) {
-          xticklabel.push(symptomList[i].charAt(0).toUpperCase() + symptomList[i].slice(1) + ' (' + data2[j]['count'] + ')');
+        if (THSC_wrap.symptomList[i] == data2[j]['label']) {
+          xticklabel.push(THSC_wrap.symptomList[i].charAt(0).toUpperCase() + THSC_wrap.symptomList[i].slice(1) + ' (' + data2[j]['count'] + ')');
           break;
         }
       }
     }
     
-    for (i=0; i<travHistList.length; i++) {
+    for (i=0; i<THSC_wrap.travHistList.length; i++) {
       for (j=0; j<data2.length; j++) {
-        if (travHistList[i] == data2[j]['label']) {
-          yticklabel.push(travHistList[i] + ' (' + data2[j]['count'] + ')');
+        if (THSC_wrap.travHistList[i] == data2[j]['label']) {
+          yticklabel.push(THSC_wrap.travHistList[i] + ' (' + data2[j]['count'] + ')');
           break;
         }
       }
     }
   }
   
-  THSC_wrap.formattedData = data;
-  THSC_wrap.travHistList = travHistList;
-  THSC_wrap.symptomList = symptomList;
   THSC_wrap.N_imported = N_imported;
   THSC_wrap.N_data = N_data;
   THSC_wrap.xticklabel = xticklabel;
@@ -198,6 +201,7 @@ function THSC_initialize() {
   var lPos = {x: 40, y: -120, dx: 10, dy: 25};
   var lColor = [cList[0], '#999999', '#000000'];
   var lValue = [THSC_wrap.N_data, THSC_wrap.N_imported-THSC_wrap.N_data, THSC_wrap.N_imported];
+  
   THSC_wrap.svg.selectAll(".legend.value")
     .remove()
     .exit()
@@ -294,7 +298,8 @@ d3.csv(THSC_wrap.dataPathList[THSC_wrap.doCount], function(error, data) {
     if (error2) return console.warn(error2);
     
     THSC_makeCanvas();
-    THSC_formatData(data, data2);
+    THSC_formatData(data);
+    THSC_formatData2(data2);
     THSC_initialize();
     THSC_update();
   });
@@ -311,7 +316,8 @@ $(document).on("change", "input:radio[name='" + THSC_wrap.tag + "_doCount']", fu
       if (error) return console.warn(error);
       if (error2) return console.warn(error2);
       
-      THSC_formatData(data, data2);
+      THSC_formatData(data);
+      THSC_formatData2(data2);
       THSC_update();
     });
   });

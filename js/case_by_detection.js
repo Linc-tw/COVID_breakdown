@@ -3,7 +3,8 @@ CBD_wrap.tag = "case_by_detection"
 CBD_wrap.id = '#' + CBD_wrap.tag
 CBD_wrap.dataPathList = [
   "processed_data/case_by_detection_by_report_day.csv",
-  "processed_data/case_by_detection_by_onset_day.csv"
+  "processed_data/case_by_detection_by_onset_day.csv",
+  "processed_data/key_numbers.csv"
 ];
 
 function CBD_makeCanvas() {
@@ -135,6 +136,19 @@ function CBD_formatData(data) {
   CBD_wrap.xticklabel = xticklabel;
   CBD_wrap.ytick = ytick;
   CBD_wrap.lValue = lValue;
+}
+
+function CBD_formatData2(data2) {
+  var overallTot = 0;
+  var i;
+  
+  for (i=0; i<data2.length; i++) {
+    if ('overall_total' == data2[i]['key']) {
+      overallTot = +data2[i]['value'];
+    }
+  }
+  
+  CBD_wrap.overallTot = overallTot;
 }
 
 //-- Tooltip
@@ -284,18 +298,6 @@ function CBD_initialize() {
     .domain(colTagList)
     .range(colorList);
     
-  //-- Legend - circle
-  var lPos = {x: 90, y: 40, dx: 20, dy: 25, r: 7};
-  CBD_wrap.svg.selectAll("dot")
-    .data(colTagList)
-    .enter()
-    .append("circle")
-      .attr("class", "legend circle")
-      .attr("cx", lPos.x)
-      .attr("cy", function(d, i) {return lPos.y + i*lPos.dy})
-      .attr("r", lPos.r)
-      .style("fill", function(d, i) {return colorList[i]})
-  
   //-- Bar
   var bar = CBD_wrap.svg.selectAll('.content.bar')
     .data(CBD_wrap.formattedData)
@@ -313,7 +315,6 @@ function CBD_initialize() {
     .on("mouseleave", CBD_mouseleave)
 
   CBD_wrap.colorList = colorList;
-  CBD_wrap.lPos = lPos;
   CBD_wrap.bar = bar;
 }
 
@@ -347,6 +348,28 @@ function CBD_update() {
   colorList.push('#000000');
   if (CBD_wrap.doOnset == 1) colorList.splice(CBD_wrap.nbCol, 0, '#999999');
   
+  //-- Legend - circle
+  
+  //-- Legend - value
+  var lPos = {x: 70, y: 45, dx: 10, dy: 27};
+  var lValue = CBD_wrap.lValue.slice();
+  var sum = lValue.reduce((a, b) => a + b, 0);
+  if (CBD_wrap.doOnset == 1) lValue.push(CBD_wrap.overallTot-sum);
+  lValue.push(CBD_wrap.overallTot);
+  
+  CBD_wrap.svg.selectAll(".legend.value")
+    .remove()
+    .exit()
+    .data(lValue)
+    .enter()
+    .append("text")
+      .attr("class", "legend value")
+      .attr("x", lPos.x)
+      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
+      .style("fill", function(d, i) {return colorList[i]})
+      .text(function(d) {return d})
+      .attr("text-anchor", "end")
+  
   //-- Legend - label
   var lLabel;
   if (lang == 'zh-tw') {
@@ -366,42 +389,27 @@ function CBD_update() {
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", CBD_wrap.lPos.x+CBD_wrap.lPos.dx)
-      .attr("y", function(d, i) {return CBD_wrap.lPos.y + i*CBD_wrap.lPos.dy + CBD_wrap.lPos.r})
+      .attr("x", lPos.x+lPos.dx)
+      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
       .style("fill", function(d, i) {return colorList[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "start")
-  
-  //-- Legend - value
-  var lValue = CBD_wrap.lValue.slice();
-  var sum = lValue.reduce((a, b) => a + b, 0);
-  if (CBD_wrap.doOnset == 1) lValue.push(overallTotNb-sum);
-  lValue.push(overallTotNb);
-  
-  CBD_wrap.svg.selectAll(".legend.value")
-    .remove()
-    .exit()
-    .data(lValue)
-    .enter()
-    .append("text")
-      .attr("class", "legend value")
-      .attr("x", CBD_wrap.lPos.x-CBD_wrap.lPos.dx)
-      .attr("y", function(d, i) {return CBD_wrap.lPos.y + i*CBD_wrap.lPos.dy + CBD_wrap.lPos.r})
-      .style("fill", function(d, i) {return colorList[i]})
-      .text(function(d) {return d})
-      .attr("text-anchor", "end")
 }
 
 CBD_wrap.doCumul = 0;
 CBD_wrap.doOnset = 0;
 
 d3.csv(CBD_wrap.dataPathList[CBD_wrap.doOnset], function(error, data) {
-  if (error) return console.warn(error);
-  
-  CBD_makeCanvas();
-  CBD_formatData(data);
-  CBD_initialize();
-  CBD_update();
+  d3.csv(CBD_wrap.dataPathList[2], function(error2, data2) {
+    if (error) return console.warn(error);
+    if (error2) return console.warn(error2);
+    
+    CBD_makeCanvas();
+    CBD_formatData(data);
+    CBD_formatData2(data2);
+    CBD_initialize();
+    CBD_update();
+  });
 });
 
 //-- Buttons

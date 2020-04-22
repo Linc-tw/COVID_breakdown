@@ -69,7 +69,7 @@ d3.select('#menu_copyleft')
     .on("mouseleave", copyleft_mouseleave)
 
 
-    //-- Text in html
+//-- Text in html
 var node;
 
 function text_translation() {
@@ -112,10 +112,6 @@ function text_translation() {
     node.textContent = '';
     node.appendChild(document.createTextNode("發病日"));
     
-    node = document.getElementById("case_by_transmission_button_5")
-    node.textContent = '';
-    node.appendChild(document.createTextNode("下載"));
-    
     
     
     node = document.getElementById("case_by_detection_title")
@@ -138,10 +134,6 @@ function text_translation() {
     node.textContent = '';
     node.appendChild(document.createTextNode("發病日"));
     
-    node = document.getElementById("case_by_detection_button_5")
-    node.textContent = '';
-    node.appendChild(document.createTextNode("下載"));
-    
     
     
     node = document.getElementById("test_by_criterion_title")
@@ -155,10 +147,6 @@ function text_translation() {
     node = document.getElementById("test_by_criterion_button_2")
     node.textContent = '';
     node.appendChild(document.createTextNode("累計"));
-  
-    node = document.getElementById("test_by_criterion_button_3")
-    node.textContent = '';
-    node.appendChild(document.createTextNode("下載"));
     
     
     
@@ -173,10 +161,6 @@ function text_translation() {
     node = document.getElementById("travel_history_symptom_correlations_button_2")
     node.textContent = '';
     node.appendChild(document.createTextNode("案例數"));
-    
-    node = document.getElementById("travel_history_symptom_correlations_button_3")
-    node.textContent = '';
-    node.appendChild(document.createTextNode("下載"));
     
   }
   else {
@@ -218,10 +202,6 @@ function text_translation() {
     node.textContent = '';
     node.appendChild(document.createTextNode("Onset date"));
     
-    node = document.getElementById("case_by_transmission_button_5")
-    node.textContent = '';
-    node.appendChild(document.createTextNode("Download"));
-    
     
     
     node = document.getElementById("case_by_detection_title")
@@ -244,10 +224,6 @@ function text_translation() {
     node.textContent = '';
     node.appendChild(document.createTextNode("Onset date"));
     
-    node = document.getElementById("case_by_detection_button_5")
-    node.textContent = '';
-    node.appendChild(document.createTextNode("Download"));
-    
     
     
     node = document.getElementById("test_by_criterion_title")
@@ -261,10 +237,6 @@ function text_translation() {
     node = document.getElementById("test_by_criterion_button_2")
     node.textContent = '';
     node.appendChild(document.createTextNode("Cumulative"));
-    
-    node = document.getElementById("test_by_criterion_button_3")
-    node.textContent = '';
-    node.appendChild(document.createTextNode("Download"));
     
     
     
@@ -280,32 +252,10 @@ function text_translation() {
     node.textContent = '';
     node.appendChild(document.createTextNode("Counts"));
     
-    node = document.getElementById("travel_history_symptom_correlations_button_3")
-    node.textContent = '';
-    node.appendChild(document.createTextNode("Download"));
-    
   }
 }
 
 text_translation()
-
-
-//-- Total nb of cases
-var overallTotNb = 0;
-
-d3.csv('processed_data/case_by_transmission_by_report_day.csv', function(error, data) {
-  if (error) return console.warn(error);
-
-  var colTagList = data.columns.slice(1);
-  var i;
-  
-  for (i=0; i<data.length; i++) {
-    for (j=0; j<colTagList.length; j++) {
-      overallTotNb += +data[i][colTagList[j]];
-    }
-  }
-});
-
 
 //-- Button listener
 $(document).on("change", "input:radio[name='index_language']", function(event) {
@@ -315,21 +265,29 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
   d3.selectAll('.plot').remove()
   
   d3.csv(CBT_wrap.dataPathList[CBT_wrap.doOnset], function(error, data) {
-    if (error) return console.warn(error);
-    
-    CBT_makeCanvas();
-    CBT_formatData(data);
-    CBT_initialize();
-    CBT_update();
+    d3.csv(CBT_wrap.dataPathList[2], function(error2, data2) {
+      if (error) return console.warn(error);
+      if (error2) return console.warn(error2);
+      
+      CBT_makeCanvas();
+      CBT_formatData(data);
+      CBT_formatData2(data2);
+      CBT_initialize();
+      CBT_update();
+    });
   });
   
   d3.csv(CBD_wrap.dataPathList[CBD_wrap.doOnset], function(error, data) {
-    if (error) return console.warn(error);
-    
-    CBD_makeCanvas();
-    CBD_formatData(data);
-    CBD_initialize();
-    CBD_update();
+    d3.csv(CBD_wrap.dataPathList[2], function(error2, data2) {
+      if (error) return console.warn(error);
+      if (error2) return console.warn(error2);
+      
+      CBD_makeCanvas();
+      CBD_formatData(data);
+      CBD_formatData2(data2);
+      CBD_initialize();
+      CBD_update();
+    });
   });
   
   d3.csv(TBC_wrap.dataPath, function(error, data) {
@@ -347,7 +305,8 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
       if (error2) return console.warn(error2);
       
       THSC_makeCanvas();
-      THSC_formatData(data, data2);
+      THSC_formatData(data);
+      THSC_formatData2(data2);
       THSC_initialize();
       THSC_update();
     });

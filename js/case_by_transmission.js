@@ -3,7 +3,8 @@ CBT_wrap.tag = 'case_by_transmission'
 CBT_wrap.id = '#' + CBT_wrap.tag
 CBT_wrap.dataPathList = [
   "processed_data/case_by_transmission_by_report_day.csv",
-  "processed_data/case_by_transmission_by_onset_day.csv"
+  "processed_data/case_by_transmission_by_onset_day.csv",
+  "processed_data/key_numbers.csv"
 ];
 
 function CBT_makeCanvas() {
@@ -121,7 +122,6 @@ function CBT_formatData(data) {
   }
   var lValue = [imp, IL, IU, fle];
   
-  
   CBT_wrap.formattedData = formattedData;
   CBT_wrap.dateList = dateList;
   CBT_wrap.colTagList = colTagList;
@@ -131,6 +131,19 @@ function CBT_formatData(data) {
   CBT_wrap.xticklabel = xticklabel;
   CBT_wrap.ytick = ytick;
   CBT_wrap.lValue = lValue;
+}
+
+function CBT_formatData2(data2) {
+  var overallTot = 0;
+  var i;
+  
+  for (i=0; i<data2.length; i++) {
+    if ('overall_total' == data2[i]['key']) {
+      overallTot = +data2[i]['value'];
+    }
+  }
+  
+  CBT_wrap.overallTot = overallTot;
 }
 
 //-- Tooltip
@@ -281,16 +294,16 @@ function CBT_initialize() {
     .range(colorList);
     
   //-- Legend - circle
-  var lPos = {x: 90, y: 40, dx: 20, dy: 25, r: 7};
-  CBT_wrap.svg.selectAll("dot")
-    .data(colTagList)
-    .enter()
-    .append("circle")
-      .attr("class", "legend circle")
-      .attr("cx", lPos.x)
-      .attr("cy", function(d,i) {return lPos.y + i*lPos.dy})
-      .attr("r", lPos.r)
-      .style("fill", function(d, i) {return colorList[i]});
+  var lPos = {x: 70, y: 40, dx: 10, dy: 25, r: 7};
+//   CBT_wrap.svg.selectAll("dot")
+//     .data(colTagList)
+//     .enter()
+//     .append("circle")
+//       .attr("class", "legend circle")
+//       .attr("cx", lPos.x)
+//       .attr("cy", function(d,i) {return lPos.y + i*lPos.dy})
+//       .attr("r", lPos.r)
+//       .style("fill", function(d, i) {return colorList[i]});
   
   //-- Bar
   var bar = CBT_wrap.svg.selectAll('.content.bar')
@@ -309,7 +322,6 @@ function CBT_initialize() {
     .on("mouseleave", CBT_mouseleave)
 
   CBT_wrap.colorList = colorList;
-  CBT_wrap.lPos = lPos;
   CBT_wrap.bar = bar;
 }
 
@@ -343,6 +355,26 @@ function CBT_update() {
   colorList.push('#000000');
   if (CBT_wrap.doOnset == 1) colorList.splice(CBT_wrap.nbCol, 0, '#999999');
   
+  //-- Legend - value
+  var lPos = {x: 70, y: 45, dx: 10, dy: 27};
+  var lValue = CBT_wrap.lValue.slice();
+  var sum = lValue.reduce((a, b) => a + b, 0);
+  if (CBT_wrap.doOnset == 1) lValue.push(CBT_wrap.overallTot-sum);
+  lValue.push(CBT_wrap.overallTot);
+  
+  CBT_wrap.svg.selectAll(".legend.value")
+    .remove()
+    .exit()
+    .data(lValue)
+    .enter()
+    .append("text")
+      .attr("class", "legend value")
+      .attr("x", lPos.x)
+      .attr("y", function(d,i) {return lPos.y + i*lPos.dy})
+      .style("fill", function(d, i) {return colorList[i]})
+      .text(function(d) {return d})
+      .attr("text-anchor", "end")
+  
   //-- Legend - label
   var lLabel;
   if (lang == 'zh-tw') {
@@ -362,42 +394,27 @@ function CBT_update() {
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", CBT_wrap.lPos.x+CBT_wrap.lPos.dx)
-      .attr("y", function(d, i) {return CBT_wrap.lPos.y + i*CBT_wrap.lPos.dy + CBT_wrap.lPos.r})
+      .attr("x", lPos.x+lPos.dx)
+      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
       .style("fill", function(d, i) {return colorList[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "start")
-  
-  //-- Legend - value
-  var lValue = CBT_wrap.lValue.slice();
-  var sum = lValue.reduce((a, b) => a + b, 0);
-  if (CBT_wrap.doOnset == 1) lValue.push(overallTotNb-sum);
-  lValue.push(overallTotNb);
-  
-  CBT_wrap.svg.selectAll(".legend.value")
-    .remove()
-    .exit()
-    .data(lValue)
-    .enter()
-    .append("text")
-      .attr("class", "legend value")
-      .attr("x", CBT_wrap.lPos.x-CBT_wrap.lPos.dx)
-      .attr("y", function(d,i) {return CBT_wrap.lPos.y + i*CBT_wrap.lPos.dy + CBT_wrap.lPos.r})
-      .style("fill", function(d, i) {return colorList[i]})
-      .text(function(d) {return d})
-      .attr("text-anchor", "end")
 }
 
 CBT_wrap.doCumul = 0;
 CBT_wrap.doOnset = 0;
 
 d3.csv(CBT_wrap.dataPathList[CBT_wrap.doOnset], function(error, data) {
-  if (error) return console.warn(error);
-  
-  CBT_makeCanvas();
-  CBT_formatData(data);
-  CBT_initialize();
-  CBT_update();
+  d3.csv(CBT_wrap.dataPathList[2], function(error2, data2) {
+    if (error) return console.warn(error);
+    if (error2) return console.warn(error2);
+    
+    CBT_makeCanvas();
+    CBT_formatData(data);
+    CBT_formatData2(data2);
+    CBT_initialize();
+    CBT_update();
+  });
 });
 
 //-- Buttons

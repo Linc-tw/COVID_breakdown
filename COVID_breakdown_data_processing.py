@@ -97,7 +97,7 @@ TRAVEL_HISTORY_DICT = {
   'Switzerland': '瑞士', 
   'Germany': '德國',
   'Austria': '奧地利', 
-  'Czech': '捷克', 
+  'Czechia': '捷克', 
   'Danmark': '丹麥', 
   'Finland': '芬蘭', 
   'Iceland': '冰島', 
@@ -220,7 +220,7 @@ class MainSheet:
       'Switzerland': ['瑞士'], 
       'Germany': ['德國', '紐倫堡', '慕尼黑'], 
       'Austria': ['奧地利'], 
-      'Czech': ['捷克'], 
+      'Czechia': ['捷克'], 
       'Danmark': ['丹麥'], 
       'Finland': ['芬蘭'], 
       'Iceland': ['冰島'], 
@@ -282,7 +282,7 @@ class MainSheet:
       'North America': ['USA', 'Canada', 'Mexico'], 
       'South America': ['Chile', 'Argentina', 'Peru', 'Bolivia', 'Brazil', 'Latin America'], 
       'Europe': ['Europe', 'Ireland', 'UK', 'France', 'Portugal', 'Spain', 'Italy', 'Belgium', 'Netherlands', 'Luxemburg', 'Switzerland', 
-                 'Germany', 'Austria', 'Czech', 'Danmark', 'Finland', 'Iceland', 'Poland', 'Bugaria', 'Greece'],
+                 'Germany', 'Austria', 'Czechia', 'Danmark', 'Finland', 'Iceland', 'Poland', 'Bugaria', 'Greece'],
       'Middle East': ['Turkey', 'Qatar', 'UAE', 'Egypt'], 
       'Africa': ['Morocco', 'Tunisia', 'South Africa'],
       'Occeania': ['Australia', 'New Zealand', 'Palau'], 
@@ -564,6 +564,19 @@ class MainSheet:
     countMat = travBoolMat.dot(sympBoolMat.T)
     return N_imported, N_data, travHistHist, symptomHist, corrMat, countMat
   
+  def saveCsv_keyNb(self):
+    N_total = len(self.getReportDate())
+    
+    key   = ['overall_total']
+    value = [N_total]
+    
+    data = {'key': key, 'value': value}
+    data = pd.DataFrame(data)
+    
+    name = '%sprocessed_data/key_numbers.csv' % DATA_PATH
+    cf.saveCsv(name, data)
+    return
+    
   def saveCsv_caseByTrans(self):
     reportDateList = self.getReportDate()
     onsetDateList  = self.getOnsetDate()
@@ -741,6 +754,7 @@ class MainSheet:
     return
   
   def saveCsv(self):
+    self.saveCsv_keyNb()
     self.saveCsv_caseByTrans()
     self.saveCsv_caseByDectChan()
     self.saveCsv_travHistSymptomCorr()
@@ -1011,6 +1025,12 @@ def saveCsv_all():
   MainSheet().saveCsv()
   TestSheet().saveCsv()
   return
+
+###############################################################################
+## Main
+
+if __name__ == '__main__':
+  saveCsv_all()
 
 ###############################################################################
 
