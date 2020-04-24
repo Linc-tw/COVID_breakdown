@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.04.23                  ##
+    ##  Version 2020.04.24                  ##
     ##########################################
 
 
@@ -15,19 +15,17 @@ import datetime as dtt
 import numpy as np
 import scipy as sp
 import matplotlib as mpl
-#import matplotlib.pyplot as plt
 import pandas as pd
 
-sys.path.append("../pycommon/")
-import commonFunctions as cf
-import matplotlibFunctions as mplf
+#sys.path.append("../pycommon/")
+#import commonFunctions as cf
+#import matplotlibFunctions as mplf
 
 
 ################################################################################
 ## Parameters
 
 DATA_PATH = '/home/linc/03_Codes/COVID_breakdown/'
-FONT_PATH = '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'
 
 SYMPTOM_DICT = {
   'sneezing': '鼻腔症狀',
@@ -127,6 +125,40 @@ TRAVEL_HISTORY_DICT = {
   'Pan-Shi': '磐石艦', 
   'indigenous': '無'
 }
+
+###############################################################################
+## General functions
+
+def saveCsv(name, data, verbose=True):
+  data.to_csv(name, index=False)
+  if verbose:
+    print('Saved \"%s\"' % name)
+  return
+
+def ISODateToOrdinal(ISODate):
+  ordinal = dtt.date.fromisoformat(ISODate).toordinal()
+  return ordinal
+
+def ordinalToISODate(ordinal):
+  return dtt.date.fromordinal(ordinal).isoformat()
+
+def normalizeBoolArr(boolArr):
+  boolArr  = boolArr.astype(float)
+  mean     = boolArr.mean()
+  boolArr -= mean
+  norm     = np.sqrt(np.sum(boolArr**2))
+  boolArr /= norm
+  return boolArr
+
+def entropy(p):
+  ind0 = p == 0
+  ind1 = p == 1
+  ind2 = ~(ind0 + ind1)
+  p2 = p[ind2]
+  
+  s = np.zeros_like(p, dtype=float)
+  s[ind2] = p2*np.log2(p2) + (1-p2)*np.log2(1-p2)
+  return s
 
 ###############################################################################
 ## Main sheet
@@ -378,7 +410,7 @@ class MainSheet:
     keyDict = {
       'sneezing': ['輕微流鼻水', '打噴嚏', '流鼻水', '流鼻涕', '鼻涕倒流', '輕微鼻塞', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['咳嗽有痰', '喉嚨有痰', '有痰', '輕微咳嗽', '咳嗽症狀', '咳嗽併痰', '咳嗽', '輕微乾咳', '乾咳', '輕咳'],
-      'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '輕微喉嚨痛', '喉嚨痛', '喉嚨癢', '喉嚨不適', '喉嚨乾', '咽喉不適'],
+      'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨痛', '喉嚨癢', '喉嚨不適', '喉嚨乾', '咽喉不適'],
       'dyspnea': ['呼吸不順', '呼吸困難', '呼吸微喘', '微喘', '呼吸喘', '氣喘', '呼吸急促', '走路會喘'],
       'pneumonia': ['X光顯示肺炎', 'X光片顯示肺炎', 'X光顯示肺部輕微浸潤', '診斷為肺炎', '肺炎'], 
       
@@ -568,15 +600,16 @@ class MainSheet:
   
   def saveCsv_keyNb(self):
     N_total = len(self.getReportDate())
+    timestamp = str(dtt.datetime.today())
     
-    key   = ['overall_total']
-    value = [N_total]
+    key   = ['overall_total', 'timestamp']
+    value = [N_total, timestamp]
     
     data = {'key': key, 'value': value}
     data = pd.DataFrame(data)
     
     name = '%sprocessed_data/key_numbers.csv' % DATA_PATH
-    cf.saveCsv(name, data)
+    saveCsv(name, data)
     return
     
   def saveCsv_caseByTrans(self):
@@ -585,10 +618,10 @@ class MainSheet:
     transList      = self.getTransmission()
     linkList       = self.getLink()
     
-    refOrd = cf.ISODateToOrdinal('2020-01-11')
+    refOrd = ISODateToOrdinal('2020-01-11')
     endOrd = dtt.date.today().toordinal() + 1
     
-    date       = [cf.ordinalToISODate(i) for i in range(refOrd, endOrd)]
+    date       = [ordinalToISODate(i) for i in range(refOrd, endOrd)]
     nbDays     = endOrd - refOrd
     imported_r = np.zeros(nbDays, dtype=int)
     linked_r   = np.zeros(nbDays, dtype=int)
@@ -600,7 +633,7 @@ class MainSheet:
     fleet_o    = np.zeros(nbDays, dtype=int)
     
     for reportDate, onsetDate, trans, link in zip(reportDateList, onsetDateList, transList, linkList):
-      ind_r = cf.ISODateToOrdinal(reportDate) - refOrd
+      ind_r = ISODateToOrdinal(reportDate) - refOrd
       if ind_r < 0 or ind_r >= nbDays:
         print('Bad ind_r = %d' % ind_r)
         continue
@@ -615,7 +648,7 @@ class MainSheet:
         linked_r[ind_r] += 1
       
       if type(onsetDate) != type(0.0):
-        ind_o = cf.ISODateToOrdinal(onsetDate) - refOrd
+        ind_o = ISODateToOrdinal(onsetDate) - refOrd
         if ind_o < 0 or ind_o >= nbDays:
           print('Bad ind_o = %d' % ind_o)
           continue
@@ -635,9 +668,9 @@ class MainSheet:
     data_o = pd.DataFrame(data_o)
     
     name = '%sprocessed_data/case_by_transmission_by_report_day.csv' % DATA_PATH
-    cf.saveCsv(name, data_r)
+    saveCsv(name, data_r)
     name = '%sprocessed_data/case_by_transmission_by_onset_day.csv' % DATA_PATH
-    cf.saveCsv(name, data_o)
+    saveCsv(name, data_o)
     return
   
   def saveCsv_caseByDectChan(self):
@@ -645,10 +678,10 @@ class MainSheet:
     onsetDateList  = self.getOnsetDate()
     chanList       = self.getChannel()
     
-    refOrd = cf.ISODateToOrdinal('2020-01-11')
+    refOrd = ISODateToOrdinal('2020-01-11')
     endOrd = dtt.date.today().toordinal() + 1
     
-    date       = [cf.ordinalToISODate(i) for i in range(refOrd, endOrd)]
+    date       = [ordinalToISODate(i) for i in range(refOrd, endOrd)]
     nbDays     = endOrd - refOrd
     airport_r  = np.zeros(nbDays, dtype=int)
     QT_r       = np.zeros(nbDays, dtype=int)
@@ -664,7 +697,7 @@ class MainSheet:
     noData_o   = np.zeros(nbDays, dtype=int)
     
     for reportDate, onsetDate, chan in zip(reportDateList, onsetDateList, chanList):
-      ind_r = cf.ISODateToOrdinal(reportDate) - refOrd
+      ind_r = ISODateToOrdinal(reportDate) - refOrd
       if ind_r < 0 or ind_r >= nbDays:
         print('Bad ind_r = %d' % ind_r)
         continue
@@ -683,7 +716,7 @@ class MainSheet:
         noData_r[ind_r] += 1
       
       if type(onsetDate) != type(0.0):
-        ind_o = cf.ISODateToOrdinal(onsetDate) - refOrd
+        ind_o = ISODateToOrdinal(onsetDate) - refOrd
         if ind_o < 0 or ind_o >= nbDays:
           print('Bad ind_o = %d' % ind_o)
           continue
@@ -707,9 +740,9 @@ class MainSheet:
     data_o = pd.DataFrame(data_o)
     
     name = '%sprocessed_data/case_by_detection_by_report_day.csv' % DATA_PATH
-    cf.saveCsv(name, data_r)
+    saveCsv(name, data_r)
     name = '%sprocessed_data/case_by_detection_by_onset_day.csv' % DATA_PATH
-    cf.saveCsv(name, data_o)
+    saveCsv(name, data_o)
     return
 
   def saveCsv_travHistSymptomCorr(self):
@@ -748,11 +781,11 @@ class MainSheet:
     data3 = pd.DataFrame(data3)
     
     name = '%sprocessed_data/travel_history_symptom_correlations_coefficient.csv' % DATA_PATH
-    cf.saveCsv(name, data)
+    saveCsv(name, data)
     name = '%sprocessed_data/travel_history_symptom_correlations_counts.csv' % DATA_PATH
-    cf.saveCsv(name, data2)
+    saveCsv(name, data2)
     name = '%sprocessed_data/travel_history_symptom_counts.csv' % DATA_PATH
-    cf.saveCsv(name, data3)
+    saveCsv(name, data3)
     return
   
   def saveCsv(self):
@@ -856,7 +889,7 @@ class TestSheet:
     data = pd.DataFrame(data)
     
     name = '%sprocessed_data/test_by_criterion.csv' % DATA_PATH
-    cf.saveCsv(name, data)
+    saveCsv(name, data)
     return
   
   def saveCsv(self):
@@ -866,154 +899,10 @@ class TestSheet:
 ###############################################################################
 ## Sandbox
 
-def normalizeBoolArr(boolArr):
-  boolArr = cf.asFloat(boolArr)
-  mean = boolArr.mean()
-  boolArr -= mean
-  norm = np.sqrt(np.sum(boolArr**2))
-  boolArr /= norm
-  return boolArr
-
-def entropy(p):
-  ind0 = p == 0
-  ind1 = p == 1
-  ind2 = ~(ind0 + ind1)
-  p2 = p[ind2]
-  
-  s = np.zeros_like(p, dtype=float)
-  s[ind2] = p2*np.log2(p2) + (1-p2)*np.log2(1-p2)
-  return s
-
-def plotTravHistSymptomCorr(ax, sheet):
-  pass
-  #N, travHistHist, symptomHist, corrMat = sheet.makeTravHistSymptomCorr1()
-  #N, travHistHist, symptomHist, corrMat = sheet.makeTravHistSymptomCorr2()
-  N, travHistHist, symptomHist, corrMat = sheet.makeTravHistSymptomCorr3()
-  print('N = %d' % N)
-  N_min = N * 0.03
-  print(corrMat.shape)
-  
-  N_trav = sum([1 if travHist[1] > N_min else 0 for travHist in travHistHist])
-  N_symp = sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
-  
-  corrMat = corrMat[:N_trav, :N_symp]
-  travHistHist = travHistHist[:N_trav]
-  symptomHist = symptomHist[:N_symp]
-  
-  vmax = 0.3
-  ax.imshow(corrMat, origin='upper', extent=[0, corrMat.shape[1], corrMat.shape[0], 0], vmin=-vmax, vmax=vmax, cmap='RdBu_r')
-  
-  for j, corrArr in enumerate(corrMat):
-    for i, corr in enumerate(corrArr):
-      ax.annotate('%+.0f%%' % (100*corr), (i+0.5, j+0.5), xycoords='data', ha='center', va='center', size=10)
-  
-  xticklabel = ['%s (%d)' % (symptom[0].capitalize(), symptom[1]) for symptom in symptomHist]
-  yticklabel = ['%s (%d)' % travHist for travHist in travHistHist]
-  
-  xtick = np.arange(0.5, corrMat.shape[1])
-  ytick = np.arange(0.5, corrMat.shape[0])
-  
-  ax.xaxis.set_ticks_position('top')
-  ax.tick_params(axis='x', which='minor', length=0)
-  ax.set_xticks(xtick, minor=True)
-  ax.set_xticks([])
-  ax.set_xticklabels(xticklabel, minor=True, rotation='vertical')
-  
-  ax.tick_params(axis='y', which='minor', length=0)
-  ax.set_yticks(ytick, minor=True)
-  ax.set_yticks([])
-  ax.set_yticklabels(yticklabel, minor=True)
-  return
-
-def showTravHistSymptomCorr(saveFig=0):
-  fig, axArr, axMat = mplf.initializeFigure()
-  ax = axArr[0]
-  
-  sheet = MainSheet()
-  
-  ## Plot
-  plotTravHistSymptomCorr(ax, sheet)
-  
-  ## Text
-  mplf.annotate('Correlations between travel history &\nsymptoms of cases imported to Taiwan', ax, 1, (0.90, 1.45), size=16)
-  mplf.annotate('Until 2020-04-18', ax, 1, (0.0, 1.45), bbox=None, size=12)
-  
-  ## Settings
-  ax.set_aspect('equal')
-  
-  ## Save
-  fig.set_size_inches(8, 7)
-  fig.subplots_adjust(left=0.18, right=0.99, bottom=0.01, top=0.675)
-  mplf.saveFigure(saveFig, fig, 'travHistSymptomCorr', verbose=True)
-  return
-
-def plotTravHistSymptomCorr_zh(ax, sheet):
-  N, travHistHist, symptomHist, corrMat = sheet.makeTravHistSymptomCorr3()
-  N_min = N * 0.03
-  print(corrMat.shape)
-  
-  N_trav = sum([1 if travHist[1] > N_min else 0 for travHist in travHistHist])
-  N_symp = sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
-  
-  corrMat = corrMat[:N_trav, :N_symp]
-  travHistHist = travHistHist[:N_trav]
-  symptomHist = symptomHist[:N_symp]
-  
-  vmax = 0.3
-  ax.imshow(corrMat, origin='upper', extent=[0, corrMat.shape[1], corrMat.shape[0], 0], vmin=-vmax, vmax=vmax, cmap='RdBu_r')
-  
-  for j, corrArr in enumerate(corrMat):
-    for i, corr in enumerate(corrArr):
-      ax.annotate('%+.0f%%' % (100*corr), (i+0.5, j+0.5), xycoords='data', ha='center', va='center', size=10)
-  
-  
-  prop2 = mpl.font_manager.FontProperties(fname=FONT_PATH, size=14)
-  xticklabel = ['%s (%d)' % (SYMPTOM_DICT[symptom[0]], symptom[1]) for symptom in symptomHist]
-  yticklabel = ['%s (%d)' % (TRAVEL_HISTORY_DICT[travHist[0]], travHist[1]) for travHist in travHistHist]
-  
-  xtick = np.arange(0.5, corrMat.shape[1])
-  ytick = np.arange(0.5, corrMat.shape[0])
-  
-  ax.xaxis.set_ticks_position('top')
-  ax.tick_params(axis='x', which='minor', length=0)
-  ax.set_xticks(xtick, minor=True)
-  ax.set_xticks([])
-  ax.set_xticklabels(xticklabel, minor=True, rotation='vertical', font_properties=prop2)
-  
-  ax.tick_params(axis='y', which='minor', length=0)
-  ax.set_yticks(ytick, minor=True)
-  ax.set_yticks([])
-  ax.set_yticklabels(yticklabel, minor=True, font_properties=prop2)
-  return
-
-def showTravHistSymptomCorr_zh(saveFig=0):
-  fig, axArr, axMat = mplf.initializeFigure()
-  ax = axArr[0]
-  
-  prop1 = mpl.font_manager.FontProperties(fname=FONT_PATH, size=18)
-  prop2 = mpl.font_manager.FontProperties(fname=FONT_PATH, size=12)
-  sheet = MainSheet()
-  
-  ## Plot
-  plotTravHistSymptomCorr_zh(ax, sheet)
-  
-  ## Text
-  mplf.annotate('台灣境外移入個案旅遊史與症狀之相關性', ax, 1, (0.97, 1.36), font_properties=prop1)
-  mplf.annotate('截算至2020-04-18', ax, 1, (0.07, 1.36), bbox=None, font_properties=prop2)
-  
-  ## Settings
-  ax.set_aspect('equal')
-  
-  ## Save
-  fig.set_size_inches(8, 7)
-  fig.subplots_adjust(left=0.135, right=0.99, bottom=0.01, top=0.71)
-  mplf.saveFigure(saveFig, fig, 'travHistSymptomCorr_zh', verbose=True)
-  return
-
 def sandbox():
-  sheet = MainSheet()
+  #sheet = MainSheet()
   #print(sheet.getContinent())
-  sheet.saveCsv_travHistSymptomCorr()
+  #sheet.saveCsv_travHistSymptomCorr()
   
   #sheet = TestSheet()
   #print(sheet.getDate())

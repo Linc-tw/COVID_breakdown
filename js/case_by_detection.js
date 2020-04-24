@@ -180,7 +180,7 @@ function CBD_getTooltipPos(d) {
   
   //-- Place the caption somewhere on the longest arm, parametrizaed by xAlpha & yAlpha
   var xAlpha = 0.1;
-  var yAlpha = 0.5;
+  var yAlpha = 0.7;
 //   var xAlpha = 1;
 //   var yAlpha = 1;
   var xPos = d[0] * (1-xAlpha) + CBD_wrap.corner[i_max][0] * xAlpha;
@@ -204,7 +204,7 @@ function CBD_mousemove(d) {
   var tooltipText;
   
   if (lang == 'zh-tw')
-    tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6) + "<br>機場 = " + d.h1 + "<br>居家檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自行就醫 = " + d.h5 + "<br>無檢驗管道資料 = " + d.h6
+    tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6) + "<br>機場 = " + d.h1 + "<br>居家檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自行就醫 = " + d.h5 + "<br>無管道資料 = " + d.h6
   else
     tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6) + "<br>Airport = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospital = " + d.h5 + "<br>Not annonced = " + d.h6
   
