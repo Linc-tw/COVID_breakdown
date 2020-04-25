@@ -1,0 +1,26 @@
+label,count,label_zh
+N_total,429,個案總數
+N_data,419,有資料案例數
+80s,3,八十多歲
+70s,13,七十多歲
+60s,40,六十多歲
+50s,46,五十多歲
+40s,40,四十多歲
+30s,93,三十多歲
+20s,160,二十多歲
+10s,20,十多歲
+0s,4,未滿十歲
+cough,194,咳嗽
+fever,189,發燒
+throatache,131,喉嚨症狀
+sneezing,123,鼻腔症狀
+fatigue,61,倦怠
+anosmia,57,嗅覺異常
+soreness,48,痠痛
+headache,46,頭痛
+pneumonia,34,肺炎
+diarrhea,34,腹瀉
+ageusia,30,味覺異常
+asymptomatic,29,無症狀
+chest pain,21,胸痛
+dyspnea,20,呼吸困難
