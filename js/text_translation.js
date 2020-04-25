@@ -45,7 +45,7 @@ function copyleft_mousemove(d) {
   if (lang == 'zh-tw')
     tooltipText = "版權沒有<br>翻印不究<br>不需署名<br>敬請亂用"
   else
-    tooltipText = "Yes for all kinds of use<br>No attribution needed"
+    tooltipText = "Proudly no right reserved"
   
   console.log(newPos)
   
@@ -150,6 +150,16 @@ function text_translation() {
     
     
     
+    node = document.getElementById("date_difference_by_transmission_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("依感染源之確診日與發病日時間差"));
+    
+    node = document.getElementById("date_difference_by_transmission_text")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("製作中"));
+    
+    
+    
     node = document.getElementById("travel_history_symptom_correlations_title")
     node.textContent = '';
     node.appendChild(document.createTextNode("境外移入之旅遊史與症狀之相關性"));
@@ -159,6 +169,20 @@ function text_translation() {
     node.appendChild(document.createTextNode("相關係數"));
     
     node = document.getElementById("travel_history_symptom_correlations_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("案例數"));
+    
+    
+    
+    node = document.getElementById("age_symptom_correlations_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("個案年齡與症狀之相關性"));
+    
+    node = document.getElementById("age_symptom_correlations_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("相關係數"));
+    
+    node = document.getElementById("age_symptom_correlations_button_2")
     node.textContent = '';
     node.appendChild(document.createTextNode("案例數"));
     
@@ -252,6 +276,30 @@ function text_translation() {
     node.textContent = '';
     node.appendChild(document.createTextNode("Counts"));
     
+    
+    
+    node = document.getElementById("date_difference_by_transmission_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Date Difference by Transmission Type"));
+    
+    node = document.getElementById("date_difference_by_transmission_text")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Under construction"));
+    
+    
+    
+    node = document.getElementById("age_symptom_correlations_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Correlations between Age & Symptoms"));
+    
+    node = document.getElementById("age_symptom_correlations_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Coefficient"));
+    
+    node = document.getElementById("age_symptom_correlations_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Counts"));
+    
   }
 }
 
@@ -309,6 +357,19 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
       THSC_formatData2(data2);
       THSC_initialize();
       THSC_update();
+    });
+  });
+  
+  d3.csv(ASC_wrap.dataPathList[ASC_wrap.doCount], function(error, data) {
+    d3.csv(ASC_wrap.dataPathList[2], function(error2, data2) {
+      if (error) return console.warn(error);
+      if (error2) return console.warn(error2);
+      
+      ASC_makeCanvas();
+      ASC_formatData(data);
+      ASC_formatData2(data2);
+      ASC_initialize();
+      ASC_update();
     });
   });
 

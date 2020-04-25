@@ -382,7 +382,7 @@ function CBT_update() {
     lLabel_plus = '無發病日資料';
   }
   else {
-    lLabel = ["Imported", "Indigenous linked to known cases", "Indigenous unlinked", 'Fleet', "Total"];
+    lLabel = ["Imported", "Indigenous linked to known cases", "Indigenous unlinked", 'Diplomatic fleet cluster', "Total"];
     lLabel_plus = 'No onset date';
   }
   if (CBT_wrap.doOnset == 1) lLabel.splice(CBT_wrap.nbCol, 0, lLabel_plus);

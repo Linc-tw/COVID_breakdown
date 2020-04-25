@@ -126,6 +126,18 @@ TRAVEL_HISTORY_DICT = {
   'indigenous': '無'
 }
 
+AGE_DICT = {
+  '0s': '未滿十歲',
+  '10s': '十多歲',
+  '20s': '二十多歲',
+  '30s': '三十多歲',
+  '40s': '四十多歲',
+  '50s': '五十多歲',
+  '60s': '六十多歲',
+  '70s': '七十多歲',
+  '80s': '八十多歲'
+}
+
 ###############################################################################
 ## General functions
 
@@ -200,7 +212,26 @@ class MainSheet:
     reportDateList = [reportDate.split('日')[0].split('月') for reportDate in reportDateList]
     reportDateList = ['2020-%02s-%02s' % (reportDate[0], reportDate[1]) for reportDate in reportDateList]
     return reportDateList
-
+  
+  def getAge(self):
+    age = []
+    for i, a in enumerate(self.data[self.n_age].values):
+      if a in ['1X', '2X', '3X', '4X', '5X', '6X', '7X', '8X']:
+        age.append(a[0]+'0s')
+      elif a in ['<10', '4', '5']:
+        age.append('0s')
+      elif a in ['11']:
+        age.append('10s')
+      elif a in ['20', '27']:
+        age.append('20s')
+      elif a in ['30']:
+        age.append('30s')
+      elif a in ['2X-6X']:
+        age.append(np.nan)
+      else:
+        print(i, a, type(a))
+    return age
+  
   def getTransmission(self):
     transList = []
     for i, trans in enumerate(self.data[self.n_transmission].values):
@@ -598,6 +629,51 @@ class MainSheet:
     countMat = travBoolMat.dot(sympBoolMat.T)
     return N_imported, N_data, travHistHist, symptomHist, corrMat, countMat
   
+  def makeAgeSymptomMat(self):
+    ageList = self.getAge()
+    symptomList = self.getSymptom()
+    ageList2 = []
+    symptomList2 = []
+    N_total = 0
+    
+    for age, symptom in zip(ageList, symptomList):
+      N_total += 1
+      if type(age) != type(0.0) and type(symptom) != type(0.0):
+        ageList2.append(age)
+        symptomList2.append(symptom)
+    
+    assert len(ageList2) == len(symptomList2)
+    N_data = len(ageList2)
+        
+    ageHist = clt.Counter(ageList2)
+    ageHist = sorted(ageHist.items(), key=lambda x: x[0], reverse=True)
+    symptomHist = clt.Counter([symp for symptom in symptomList2 for symp in symptom])
+    symptomHist = sorted(symptomHist.items(), key=lambda x: x[1], reverse=True)
+    
+    ageBoolMat = []
+    for agePair in ageHist:
+      ageBoolArr = [1 if agePair[0] == ageHist else 0 for ageHist in ageList2]
+      ageBoolMat.append(ageBoolArr)
+    ageBoolMat = np.array(ageBoolMat)
+    
+    sympBoolMat = []
+    for symptomPair in symptomHist:
+      sympBoolArr = [1 if symptomPair[0] in symptom else 0 for symptom in symptomList2]
+      sympBoolMat.append(sympBoolArr)
+    sympBoolMat = np.array(sympBoolMat)
+    
+    return N_total, N_data, ageHist, symptomHist, ageBoolMat, sympBoolMat
+  
+  def makeAgeSymptomCorr3(self):
+    N_total, N_data, ageHist, symptomHist, ageBoolMat, sympBoolMat = self.makeAgeSymptomMat()
+    
+    ageBoolMat_n = np.array([normalizeBoolArr(ageBoolArr) for ageBoolArr in ageBoolMat])
+    sympBoolMat_n = np.array([normalizeBoolArr(sympBoolArr) for sympBoolArr in sympBoolMat])
+    
+    corrMat  = ageBoolMat_n.dot(sympBoolMat_n.T)
+    countMat = ageBoolMat.dot(sympBoolMat.T)
+    return N_total, N_data, ageHist, symptomHist, corrMat, countMat
+  
   def saveCsv_keyNb(self):
     N_total = len(self.getReportDate())
     timestamp = str(dtt.datetime.today())
@@ -788,11 +864,56 @@ class MainSheet:
     saveCsv(name, data3)
     return
   
+  def saveCsv_ageSymptomCorr(self):
+    N_total, N_data, ageHist, symptomHist, corrMat, countMat = self.makeAgeSymptomCorr3()
+    N_min = N_data * 0.033
+    
+    N_age  = corrMat.shape[0]
+    N_symp = sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
+    
+    corrMat = corrMat[:N_age, :N_symp]
+    countMat = countMat[:N_age, :N_symp]
+    ageHist = ageHist[:N_age]
+    symptomHist = symptomHist[:N_symp]
+    
+    ageList = [age[0] for age in ageHist]
+    symptomList = [symp[0] for symp in symptomHist]
+    grid = np.meshgrid(symptomList, ageList)
+    
+    symptom = grid[0].flatten()
+    age     = grid[1].flatten()
+    value_r = corrMat.flatten()
+    label_r = ['%+.0f%%' % (100*v) for v in value_r]
+    label_n = countMat.flatten()
+    
+    data = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_r}
+    data = pd.DataFrame(data)
+    
+    data2 = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_n}
+    data2 = pd.DataFrame(data2)
+    
+    pairList = [('N_total', N_total), ('N_data', N_data)] + ageHist + symptomHist
+    label = [pair[0] for pair in pairList]
+    count = [pair[1] for pair in pairList]
+    
+    label_zh = ['個案總數', '有資料案例數'] + [AGE_DICT[age] for age in ageList] + [SYMPTOM_DICT[symp] for symp in symptomList]
+    data3 = {'label': label, 'count': count, 'label_zh': label_zh}
+    data3 = pd.DataFrame(data3)
+    
+    name = '%sprocessed_data/age_symptom_correlations_coefficient.csv' % DATA_PATH
+    saveCsv(name, data)
+    name = '%sprocessed_data/age_symptom_correlations_counts.csv' % DATA_PATH
+    saveCsv(name, data2)
+    name = '%sprocessed_data/age_symptom_counts.csv' % DATA_PATH
+    saveCsv(name, data3)
+    return
+  
   def saveCsv(self):
     self.saveCsv_keyNb()
     self.saveCsv_caseByTrans()
     self.saveCsv_caseByDectChan()
     self.saveCsv_travHistSymptomCorr()
+    self.saveCsv_ageSymptomCorr()
     return
 
 ###############################################################################
@@ -900,8 +1021,8 @@ class TestSheet:
 ## Sandbox
 
 def sandbox():
-  #sheet = MainSheet()
-  #print(sheet.getContinent())
+  sheet = MainSheet()
+  print(sheet.getAge())
   #sheet.saveCsv_travHistSymptomCorr()
   
   #sheet = TestSheet()

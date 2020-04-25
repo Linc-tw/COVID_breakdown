@@ -226,6 +226,36 @@ case network
                             
                             <div class="col-xl-6">
                                 <div class="card mb-4">
+                                
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-bar mr-1"></i> <span id="date_difference_by_transmission_title"></span>
+                                    </div>
+                                    
+                                    <!--<div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active">
+                                                    <input type="radio" name="test_by_criterion_doCumul" value=0 checked>
+                                                    <span id="test_by_criterion_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid">
+                                                    <input type="radio" name="test_by_criterion_doCumul" value=1>
+                                                    <span id="test_by_criterion_button_2"></span>
+                                                </label>
+                                            </div>
+                                            <span style="display:inline-block; width: 8px;"></span>
+                                            <button id='test_by_criterion_button_3' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>-->
+                                    
+                                    <div class="card-body" id="date_difference_by_transmission"><span id="date_difference_by_transmission_text"></span></div>
+                                    
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-th mr-1"></i> <span id="travel_history_symptom_correlations_title"></span>
                                     </div>
@@ -248,6 +278,34 @@ case network
                                     </div>
                                     
                                     <div class="card-body" id="travel_history_symptom_correlations"></div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-th mr-1"></i> <span id="age_symptom_correlations_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active">
+                                                    <input type="radio" name="age_symptom_correlations_doCount" value=0 checked>
+                                                    <span id="age_symptom_correlations_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid">
+                                                    <input type="radio" name="age_symptom_correlations_doCount" value=1>
+                                                    <span id="age_symptom_correlations_button_2"></span>
+                                                </label>
+                                            </div>
+                                            <span style="display:inline-block; width: 8px;"></span>
+                                            <button id='age_symptom_correlations_button_3' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="age_symptom_correlations"></div>
                                 </div>
                             </div>
                             
@@ -286,6 +344,7 @@ case network
         <script src="js/case_by_detection.js"></script>
         <script src="js/test_by_criterion.js"></script>
         <script src="js/travel_history_symptom_correlations.js"></script>
+        <script src="js/age_symptom_correlations.js"></script>
     </body>
 </html>
 
