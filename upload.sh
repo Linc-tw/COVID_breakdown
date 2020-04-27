@@ -1,5 +1,12 @@
 #!/bin/bash
 
+MODE=${1}
+if [ "${MODE}" = "auto" ]; then
+  MODE="Automatic"
+else
+  MODE="Manual"
+fi
+
 echo "################################################################################"
 echo "## Log - upload.sh"
 date
@@ -23,7 +30,7 @@ echo
 echo "## Push to repo"
 echo
 git add processed_data/*.csv & sleep 1
-git commit -m "Automatic data update" & sleep 1
+git commit -m "${MODE} data update" & sleep 1
 echo
 git push & sleep 10
 echo

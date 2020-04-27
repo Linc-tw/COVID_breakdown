@@ -203,19 +203,27 @@ class MainSheet:
     name = '%sraw_data/武漢肺炎in臺灣相關整理(請看推廣用連結) - 臺灣武漢肺炎病例.csv' % DATA_PATH
     self.data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
+    reportDateList = self.data[self.n_reportDate].values
+    ind = reportDateList == reportDateList
+    self.N_total = ind.sum()
+    
     if verbose:
       print('Loaded \"%s\"' % name)
+      print('N_total = %d' % self.N_total)
     return 
     
   def getReportDate(self):
-    reportDateList = self.data[self.n_reportDate].values
-    reportDateList = [reportDate.split('日')[0].split('月') for reportDate in reportDateList]
-    reportDateList = ['2020-%02s-%02s' % (reportDate[0], reportDate[1]) for reportDate in reportDateList]
+    reportDateList = []
+    
+    for reportDate in self.data[self.n_reportDate].values[:self.N_total]:
+      reportDate = reportDate.split('日')[0].split('月')
+      reportDate = '2020-%02s-%02s' % (reportDate[0], reportDate[1])
+      reportDateList.append(reportDate)
     return reportDateList
   
   def getAge(self):
     age = []
-    for i, a in enumerate(self.data[self.n_age].values):
+    for i, a in enumerate(self.data[self.n_age].values[:self.N_total]):
       if a in ['1X', '2X', '3X', '4X', '5X', '6X', '7X', '8X']:
         age.append(a[0]+'0s')
       elif a in ['<10', '4', '5']:
@@ -229,12 +237,13 @@ class MainSheet:
       elif a in ['2X-6X']:
         age.append(np.nan)
       else:
-        print(i, a, type(a))
+        print('Age, Case %d, %s' % (i+1, a))
+        age.append(np.nan)
     return age
   
   def getTransmission(self):
     transList = []
-    for i, trans in enumerate(self.data[self.n_transmission].values):
+    for i, trans in enumerate(self.data[self.n_transmission].values[:self.N_total]):
       if trans == '境外':
         transList.append('imported')
       
@@ -245,7 +254,7 @@ class MainSheet:
         transList.append('indigenous')
       
       else:
-        print('i = %d, %s' % (i, trans))
+        print('Transmission, Case %d, %s' % (i+1, trans))
         transList.append(np.nan)
     return transList
   
@@ -314,8 +323,8 @@ class MainSheet:
       'indigenous': ['無']
     }
     
-    for i, travHist in enumerate(self.data[self.n_travHist].values):
-      if type(travHist) == type(0.0):
+    for i, travHist in enumerate(self.data[self.n_travHist].values[:self.N_total]):
+      if travHist != travHist: ## Is nan
         travHistList.append([])
         continue
       
@@ -333,7 +342,7 @@ class MainSheet:
       travHist = travHist.lstrip(' 0123456789/-\n月及等()、')
       
       if len(travHist) > 0:
-        print('i = %d, %s' % (i, travHist))
+        print('Travel history, Case %d, %s' % (i+1, travHist))
       
       stock = list(set(stock))
       travHistList.append(stock)
@@ -361,7 +370,7 @@ class MainSheet:
     continentList = []
     
     for travHist in self.getTravHist():
-      if type(travHist) == type(0.0):
+      if travHist != travHist: ## Is nan
         continentList.append([])
         continue
       
@@ -382,17 +391,21 @@ class MainSheet:
   def getOnsetDate(self):
     onsetDateList = []
     
-    for onsetDate in self.data[self.n_onsetDate].values:
+    for i, onsetDate in enumerate(self.data[self.n_onsetDate].values[:self.N_total]):
       if onsetDate in ['2/18-25', 'x']:
         onsetDateList.append(np.nan)
       
-      elif type(onsetDate) == type(0.0):
+      elif onsetDate != onsetDate: ## Is nan
         onsetDateList.append(np.nan)
         
       else:
-        MD = onsetDate.split('/')
-        onsetDate = '2020-%02d-%02d' % (int(MD[0]), int(MD[1]))
-        onsetDateList.append(onsetDate)
+        try:
+          MD = onsetDate.split('/')
+          onsetDate = '2020-%02d-%02d' % (int(MD[0]), int(MD[1]))
+          onsetDateList.append(onsetDate)
+        except:
+          print('Onset date, Case %d, %s' % (i+1, onsetDate))
+          onsetDateList.append(np.nan)
     
     return onsetDateList
   
@@ -400,8 +413,8 @@ class MainSheet:
     chanList = []
     keyList_out = ['採檢']
     
-    for i, chan in enumerate(self.data[self.n_channel].values):
-      if type(chan) == type(0.0):
+    for i, chan in enumerate(self.data[self.n_channel].values[:self.N_total]):
+      if chan != chan: ## Is nan
         chanList.append(np.nan)
       
       elif chan in keyList_out:
@@ -432,8 +445,8 @@ class MainSheet:
         chanList.append('hospital')
         
       else:
-        print('i = %d, %s' % (i, chan))
-        chanList.append(chan)
+        print('Channel, Case %d, %s' % (i+1, chan))
+        chanList.append(np.nan)
     return chanList
   
   def getSymptom(self):
@@ -476,8 +489,8 @@ class MainSheet:
       'asymptomatic': ['首例無症狀', '無症狀']
     }
     
-    for i, symptom in enumerate(self.data[self.n_symptom].values):
-      if type(symptom) == type(0.0):
+    for i, symptom in enumerate(self.data[self.n_symptom].values[:self.N_total]):
+      if symptom != symptom: ## Is nan
         symptomList.append([])
         continue
       
@@ -497,7 +510,7 @@ class MainSheet:
       symptom = symptom.lstrip(' \n  ，、與及')
       
       if len(symptom) > 0:
-        print('i = %d, %s' % (i, symptom))
+        print('Symptom, Case %d, %s' % (i+1, symptom))
       
       stock = list(set(stock))
       symptomList.append(stock)
@@ -507,18 +520,18 @@ class MainSheet:
 
   def getLink(self):
     linkList = []
-    for i, trans in enumerate(self.data[self.n_link].values):
-      if trans == '未知':
+    for i, link in enumerate(self.data[self.n_link].values[:self.N_total]):
+      if link == '未知':
         linkList.append('unlinked')
       
-      elif trans == '軍艦':
+      elif link == '軍艦':
         linkList.append('fleet')
       
-      elif 'O' in trans:
+      elif 'O' in link:
         linkList.append('linked')
       
       else:
-        print('i = %d, %s' % (i, trans))
+        print('Symptom, Case %d, %s' % (i+1, link))
         linkList.append(np.nan)
     return linkList
     
@@ -528,7 +541,7 @@ class MainSheet:
     travHistList2 = []
     
     for trans, travHist in zip(transList, travHistList):
-      if trans == 'imported' and type(travHist) != type(0.0):
+      if trans == 'imported' and travHist == travHist: ## Is not nan
         for trav in travHist:
           travHistList2.append(trav)
     
@@ -541,7 +554,7 @@ class MainSheet:
     symptomList2 = []
     
     for symptom in symptomList:
-      if type(symptom) != type(0.0):
+      if symptom == symptom: ## Is not nan
         for symp in symptom:
           symptomList2.append(symp)
     
@@ -561,7 +574,7 @@ class MainSheet:
     for trans, travHist, symptom in zip(transList, travHistList, symptomList):
       if trans == 'imported':
         N_imported += 1
-        if type(travHist) != type(0.0) and type(symptom) != type(0.0):
+        if travHist == travHist and symptom == symptom: ## Is not nan
           travHistList2.append(travHist)
           symptomList2.append(symptom)
     
@@ -638,7 +651,7 @@ class MainSheet:
     
     for age, symptom in zip(ageList, symptomList):
       N_total += 1
-      if type(age) != type(0.0) and type(symptom) != type(0.0):
+      if age == age and symptom == symptom: ## Is not nan
         ageList2.append(age)
         symptomList2.append(symptom)
     
@@ -675,11 +688,10 @@ class MainSheet:
     return N_total, N_data, ageHist, symptomHist, corrMat, countMat
   
   def saveCsv_keyNb(self):
-    N_total = len(self.getReportDate())
     timestamp = str(dtt.datetime.today())
     
     key   = ['overall_total', 'timestamp']
-    value = [N_total, timestamp]
+    value = [self.N_total, timestamp]
     
     data = {'key': key, 'value': value}
     data = pd.DataFrame(data)
@@ -723,7 +735,7 @@ class MainSheet:
       else:
         linked_r[ind_r] += 1
       
-      if type(onsetDate) != type(0.0):
+      if onsetDate == onsetDate: ## Is not nan
         ind_o = ISODateToOrdinal(onsetDate) - refOrd
         if ind_o < 0 or ind_o >= nbDays:
           print('Bad ind_o = %d' % ind_o)
@@ -788,10 +800,10 @@ class MainSheet:
         monitor_r[ind_r] += 1
       elif chan == 'hospital':
         hospital_r[ind_r] += 1
-      elif type(chan) == type(0.0):
+      elif chan != chan: ## Is nan
         noData_r[ind_r] += 1
       
-      if type(onsetDate) != type(0.0):
+      if onsetDate == onsetDate: ## Is not nan
         ind_o = ISODateToOrdinal(onsetDate) - refOrd
         if ind_o < 0 or ind_o >= nbDays:
           print('Bad ind_o = %d' % ind_o)
@@ -807,7 +819,7 @@ class MainSheet:
           monitor_o[ind_o] += 1
         elif chan == 'hospital':
           hospital_o[ind_o] += 1
-        elif type(chan) == type(0.0):
+        elif chan != chan: ## Is nan
           noData_o[ind_r] += 1
     
     data_r = {'date': date, 'no_data': noData_r, 'hospital': hospital_r, 'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': QT_r, 'airport': airport_r}
@@ -941,18 +953,19 @@ class TestSheet:
     name = '%sraw_data/武漢肺炎in臺灣相關整理(請看推廣用連結) - 檢驗人數.csv' % DATA_PATH
     self.data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
+    dateList = self.data[self.n_date].values
+    ind = dateList == dateList
+    self.N_total = ind.sum()
+    
     if verbose:
       print('Loaded \"%s\"' % name)
+      print('N_total = %d' % self.N_total)
     return 
     
   def getDate(self):
     dateList = []
     
-    for date in self.data[self.n_date].values:
-      if type(date) == type(0.0):
-        dateList.append(np.nan)
-        continue
-      
+    for date in self.data[self.n_date].values[:self.N_total]:
       MD = date.split('/')
       date = '2020-%02d-%02d' % (int(MD[0]), int(MD[1]))
       dateList.append(date)
@@ -960,38 +973,50 @@ class TestSheet:
   
   def getFromExtended(self):
     fromExtList = []
-    for fromExt in self.data[self.n_fromExtended].values:
-      if type(fromExt) == type(0.0):
+    for fromExt in self.data[self.n_fromExtended].values[:self.N_total]:
+      if fromExt != fromExt: ## Is nan
         fromExtList.append(0)
         continue
-        
-      fromExt = fromExt.lstrip('+').split(',')
-      fromExt = int(''.join(fromExt))
-      fromExtList.append(fromExt)
+      
+      try:
+        fromExt = fromExt.lstrip('+').split(',')
+        fromExt = int(''.join(fromExt))
+        fromExtList.append(fromExt)
+      except:
+        print('From extended, %s' % fromExt)
+        fromExtList.append(0)
     return fromExtList
 
   def getFromQT(self):
     fromQTList = []
-    for fromQT in self.data[self.n_fromQT].values:
-      if type(fromQT) == type(0.0):
+    for fromQT in self.data[self.n_fromQT].values[:self.N_total]:
+      if fromQT != fromQT: ## Is nan
         fromQTList.append(0)
         continue
         
-      fromQT = fromQT.lstrip('+').split(',')
-      fromQT = int(''.join(fromQT))
-      fromQTList.append(fromQT)
+      try:
+        fromQT = fromQT.lstrip('+').split(',')
+        fromQT = int(''.join(fromQT))
+        fromQTList.append(fromQT)
+      except:
+        print('From extended, %s' % fromQT)
+        fromQTList.append(0)
     return fromQTList
 
   def getFromClinicalDef(self):
     clinicalDefList = []
-    for clinicalDef in self.data[self.n_fromClinicalDef].values:
-      if type(clinicalDef) == type(0.0):
+    for clinicalDef in self.data[self.n_fromClinicalDef].values[:self.N_total]:
+      if clinicalDef != clinicalDef: ## Is nan
         clinicalDefList.append(np.nan)
         continue
         
-      clinicalDef = clinicalDef.lstrip('+').split(',')
-      clinicalDef = int(''.join(clinicalDef))
-      clinicalDefList.append(clinicalDef)
+      try:
+        clinicalDef = clinicalDef.lstrip('+').split(',')
+        clinicalDef = int(''.join(clinicalDef))
+        clinicalDefList.append(clinicalDef)
+      except:
+        print('Clinical definition, %s' % clinicalDef)
+        clinicalDefList.append(0)
     return clinicalDefList
 
   def saveCsv_testByCriterion(self):
@@ -1000,7 +1025,7 @@ class TestSheet:
     fromQTList  = self.getFromQT()
     fromClinicalDefList = self.getFromClinicalDef()
     
-    if type(dateList[-1]) == type(0.0):
+    if dateList[-1] != dateList[-1]: ## Is nan
       dateList    = dateList[:-1]
       fromExtList = fromExtList[:-1]
       fromQTList  = fromQTList[:-1]
