@@ -18,7 +18,7 @@ function ASC_makeCanvas() {
   else {
     totHeight = 600;
     left = 235;
-    top = 205;
+    top = 215;
   }
   
   var margin = {left: left, right: 2, bottom: 2, top: top};
@@ -198,7 +198,7 @@ function ASC_initialize() {
     .call(yAxis2)
     
   //-- Legend - value
-  var lPos = {x: 40, y: -120, dx: 10, dy: 25};
+  var lPos = {x: 50, y: -120, dx: 10, dy: 25};
   var lColor = [cList[0], '#999999', '#000000'];
   var lValue = [ASC_wrap.N_data, ASC_wrap.N_total-ASC_wrap.N_data, ASC_wrap.N_total];
   
@@ -273,7 +273,7 @@ function ASC_update() {
   
   //-- Legend - label
   var lLabel;
-  if (lang == 'zh-tw') lLabel = ['有資料案例數', '資料不全', '個案總數'];
+  if (lang == 'zh-tw') lLabel = ['有資料案例數', '資料不全', '合計'];
   else lLabel = ['Data complete', 'Data incomplete', 'Total'];
   
   ASC_wrap.svg.selectAll(".legend.label")

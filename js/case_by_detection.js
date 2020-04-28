@@ -19,7 +19,7 @@ function CBD_makeCanvas() {
     bottom = 90;
   }
   
-  var margin = {left: 70, right: 2, bottom: bottom, top: 1};
+  var margin = {left: 70, right: 2, bottom: bottom, top: 2};
   var width = totWidth - margin.left - margin.right;
   var height = totHeight - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
@@ -284,7 +284,7 @@ function CBD_initialize() {
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '案例數';
-  else ylabel = 'Number counts';
+  else ylabel = 'Number of cases';
   CBD_wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
@@ -347,8 +347,6 @@ function CBD_update() {
   colorList = CBD_wrap.colorList.slice();
   colorList.push('#000000');
   if (CBD_wrap.doOnset == 1) colorList.splice(CBD_wrap.nbCol, 0, '#999999');
-  
-  //-- Legend - circle
   
   //-- Legend - value
   var lPos = {x: 70, y: 45, dx: 10, dy: 27};

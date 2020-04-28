@@ -15,7 +15,7 @@ function TBC_makeCanvas() {
     bottom = 90;
   }
   
-  var margin = {left: 110, right: 2, bottom: bottom, top: 1};
+  var margin = {left: 110, right: 2, bottom: bottom, top: 2};
   var width = totWidth - margin.left - margin.right;
   var height = totHeight - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
@@ -92,10 +92,10 @@ function TBC_formatData(data) {
   }
   
   //-- Calculate ymax
-  ymax *= 1.11;
+  ymax *= 1.2;
   var ypath;
-  if (TBC_wrap.doCumul == 1) ypath = 12000;
-  else                       ypath = 600;
+  if (TBC_wrap.doCumul == 1) ypath = 20000;
+  else                       ypath = 500;
   
   var ytick = [];
   for (i=0; i<ymax; i+=ypath) ytick.push(i)
@@ -343,7 +343,7 @@ function TBC_update() {
   //-- Legend - label
   var lLabel;
   if (lang == 'zh-tw') lLabel = ["擴大社區監測", "居家檢疫", "法定定義通報", "合計"];
-  else lLabel = ['Risk of community infection', 'Quarantine (merged into clinical)', 'Suspicious clinical cases', "Total"];
+  else lLabel = ['Possible community transmission', 'Quarantine (merged into clinical)', 'Suspicious clinical cases', "Total"];
   
   TBC_wrap.svg.selectAll(".legend.label")
     .remove()

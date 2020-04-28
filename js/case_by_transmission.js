@@ -19,7 +19,7 @@ function CBT_makeCanvas() {
     bottom = 90;
   }
   
-  var margin = {left: 70, right: 2, bottom: bottom, top: 1};
+  var margin = {left: 70, right: 2, bottom: bottom, top: 2};
   var width = totWidth - margin.left - margin.right;
   var height = totHeight - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
@@ -279,7 +279,7 @@ function CBT_initialize() {
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '案例數';
-  else ylabel = 'Number counts';
+  else ylabel = 'Number of cases';
   CBT_wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
@@ -292,18 +292,6 @@ function CBT_initialize() {
   var color = d3.scaleOrdinal()
     .domain(colTagList)
     .range(colorList);
-    
-  //-- Legend - circle
-  var lPos = {x: 70, y: 40, dx: 10, dy: 25, r: 7};
-//   CBT_wrap.svg.selectAll("dot")
-//     .data(colTagList)
-//     .enter()
-//     .append("circle")
-//       .attr("class", "legend circle")
-//       .attr("cx", lPos.x)
-//       .attr("cy", function(d,i) {return lPos.y + i*lPos.dy})
-//       .attr("r", lPos.r)
-//       .style("fill", function(d, i) {return colorList[i]});
   
   //-- Bar
   var bar = CBT_wrap.svg.selectAll('.content.bar')
@@ -352,8 +340,8 @@ function CBT_update() {
     
   //-- Color
   colorList = CBT_wrap.colorList.slice();
+  if (CBT_wrap.doOnset == 1) colorList.push('#999999');
   colorList.push('#000000');
-  if (CBT_wrap.doOnset == 1) colorList.splice(CBT_wrap.nbCol, 0, '#999999');
   
   //-- Legend - value
   var lPos = {x: 70, y: 45, dx: 10, dy: 27};

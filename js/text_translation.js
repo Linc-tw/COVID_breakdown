@@ -150,13 +150,25 @@ function text_translation() {
     
     
     
-    node = document.getElementById("date_difference_by_transmission_title")
+    node = document.getElementById("difference_by_transmission_title")
     node.textContent = '';
-    node.appendChild(document.createTextNode("依感染源之確診日與發病日時間差"));
+    node.appendChild(document.createTextNode("抓帶原者要花多久？"));
     
-    node = document.getElementById("date_difference_by_transmission_text")
+    node = document.getElementById("difference_by_transmission_button_1")
     node.textContent = '';
-    node.appendChild(document.createTextNode("製作中"));
+    node.appendChild(document.createTextNode("全部"));
+    
+    node = document.getElementById("difference_by_transmission_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("境外移入"));
+    
+    node = document.getElementById("difference_by_transmission_button_3")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("本土"));
+    
+    node = document.getElementById("difference_by_transmission_button_4")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("敦睦艦隊"));
     
     
     
@@ -264,6 +276,28 @@ function text_translation() {
     
     
     
+    node = document.getElementById("difference_by_transmission_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("How many days to identify cases?"));
+    
+    node = document.getElementById("difference_by_transmission_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("All"));
+    
+    node = document.getElementById("difference_by_transmission_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Imported"));
+    
+    node = document.getElementById("difference_by_transmission_button_3")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Indigenous"));
+    
+    node = document.getElementById("difference_by_transmission_button_4")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Fleet"));
+    
+    
+    
     node = document.getElementById("travel_history_symptom_correlations_title")
     node.textContent = '';
     node.appendChild(document.createTextNode("Correlations between Travel History & Symptoms"));
@@ -275,16 +309,6 @@ function text_translation() {
     node = document.getElementById("travel_history_symptom_correlations_button_2")
     node.textContent = '';
     node.appendChild(document.createTextNode("Counts"));
-    
-    
-    
-    node = document.getElementById("date_difference_by_transmission_title")
-    node.textContent = '';
-    node.appendChild(document.createTextNode("Date Difference by Transmission Type"));
-    
-    node = document.getElementById("date_difference_by_transmission_text")
-    node.textContent = '';
-    node.appendChild(document.createTextNode("Under construction"));
     
     
     
@@ -370,6 +394,19 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
       ASC_formatData2(data2);
       ASC_initialize();
       ASC_update();
+    });
+  });
+
+  d3.csv(DBT_wrap.dataPathList[0], function(error, data) {
+    d3.csv(DBT_wrap.dataPathList[1], function(error2, data2) {
+      if (error) return console.warn(error);
+      if (error2) return console.warn(error2);
+      
+      DBT_makeCanvas();
+      DBT_formatData(data);
+      DBT_formatData2(data2);
+      DBT_initialize();
+      DBT_update();
     });
   });
 

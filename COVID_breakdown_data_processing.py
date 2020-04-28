@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.04.24                  ##
+    ##  Version 2020.04.27                  ##
     ##########################################
 
 
@@ -171,6 +171,51 @@ def entropy(p):
   s = np.zeros_like(p, dtype=float)
   s[ind2] = p2*np.log2(p2) + (1-p2)*np.log2(1-p2)
   return s
+
+def asFloat(a, copy=True):
+  if np.isscalar(a):
+    return float(a)
+  if type(a) is list:
+    return np.array(a, dtype=float)
+  return a.astype(float, copy=copy)
+
+def centerOfBins(bins, area=False):
+  bins  = np.array(bins, dtype=float)
+  left  = bins[:-1]
+  right = bins[1:]
+  if area is True:
+    return np.sqrt(0.5 * (left**2 + right**2))
+  return 0.5 * (left + right)
+
+def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
+  """
+  Make the histogram such that the output can be plotted directly
+  
+  Parameters
+  ----------
+  data : array-like
+  bins : (1, N) float array
+    bin edges
+  factor : float, optional
+    rescaling factor for the histogram
+  pdf : bool, optional
+    make the output a pdf, i.e. normalized by the binwidth & the total counts
+  
+  Returns
+  -------
+  n : (1, N) float array
+    number counts, could be rescaled
+  ctrBin : (1, N) float array
+    center of the bins
+    n & ctrBin have the same size.
+  """
+  nArr, bins = np.histogram(data, bins, weights=wgt)
+  ctrBin     = centerOfBins(bins)
+  if pdf == True:
+    nArr = asFloat(nArr) / (float(sum(nArr)) * (bins[1:] - bins[:-1]))
+  else:
+    nArr = asFloat(nArr) * factor
+  return nArr, ctrBin
 
 ###############################################################################
 ## Main sheet
@@ -388,14 +433,35 @@ class MainSheet:
     continentList = [continent if len(continent) > 0 else np.nan for continent in continentList]
     return continentList
   
+  def getEntryDate(self):
+    entryDateList = []
+    
+    for i, entryDate in enumerate(self.data[self.n_entryDate].values[:self.N_total]):
+      if entryDate != entryDate: ## NaN
+        entryDateList.append(np.nan)
+        
+      elif entryDate in ['3/1\n3/8']:
+        entryDateList.append('2020-03-08')
+      
+      else:
+        try:
+          MD = entryDate.split('/')
+          entryDate = '2020-%02d-%02d' % (int(MD[0]), int(MD[1]))
+          entryDateList.append(entryDate)
+        except:
+          print('Entry date, Case %d, %s' % (i+1, entryDate))
+          entryDateList.append(np.nan)
+    
+    return entryDateList
+  
   def getOnsetDate(self):
     onsetDateList = []
     
     for i, onsetDate in enumerate(self.data[self.n_onsetDate].values[:self.N_total]):
-      if onsetDate in ['2/18-25', 'x']:
+      if onsetDate != onsetDate: ## NaN
         onsetDateList.append(np.nan)
       
-      elif onsetDate != onsetDate: ## Is nan
+      elif onsetDate in ['2/18-25', 'x']:
         onsetDateList.append(np.nan)
         
       else:
@@ -761,7 +827,7 @@ class MainSheet:
     saveCsv(name, data_o)
     return
   
-  def saveCsv_caseByDectChan(self):
+  def saveCsv_caseByDetection(self):
     reportDateList = self.getReportDate()
     onsetDateList  = self.getOnsetDate()
     chanList       = self.getChannel()
@@ -832,7 +898,58 @@ class MainSheet:
     name = '%sprocessed_data/case_by_detection_by_onset_day.csv' % DATA_PATH
     saveCsv(name, data_o)
     return
-
+  
+  def saveCsv_diffByTrans(self):
+    reportDateList = self.getReportDate()
+    entryDateList  = self.getEntryDate()
+    onsetDateList  = self.getOnsetDate()
+    transList      = self.getTransmission()
+    
+    stock_imp = []
+    stock_ind = []
+    stock_fle = []
+    max_ = 0
+    
+    for reportDate, entryDate, onsetDate, trans in zip(reportDateList, entryDateList, onsetDateList, transList):
+      if trans == 'imported':
+        stock = stock_imp
+      elif trans == 'indigenous':
+        stock = stock_ind
+      elif trans == 'fleet':
+        stock = stock_fle
+      else:
+        print('diffByTrans, transimission not recognized')
+      
+      repOrd = ISODateToOrdinal(reportDate)
+      entOrd = ISODateToOrdinal(entryDate) if entryDate == entryDate else 0
+      onsOrd = ISODateToOrdinal(onsetDate) if onsetDate == onsetDate else 0
+      
+      if entOrd + onsOrd == 0:
+        continue
+      
+      diff = min(repOrd-entOrd, repOrd-onsOrd)
+      max_ = max(max_, diff)
+      stock.append(diff)
+        
+    bins = np.arange(-0.5, max_+1, 1)
+    stock_imp, ctrBin = makeHist(stock_imp, bins)
+    stock_ind, ctrBin = makeHist(stock_ind, bins)
+    stock_fle, ctrBin = makeHist(stock_fle, bins)
+    total = stock_imp + stock_ind + stock_fle
+    
+    stock_imp   = stock_imp.round(0).astype(int)
+    stock_ind = stock_ind.round(0).astype(int)
+    stock_fle  = stock_fle.round(0).astype(int)
+    total  = total.round(0).astype(int)
+    ctrBin = ctrBin.round(0).astype(int)
+    
+    data = {'difference': ctrBin, 'all': total, 'imported': stock_imp, 'indigenous': stock_ind, 'fleet': stock_fle}
+    data = pd.DataFrame(data)
+    
+    name = '%sprocessed_data/difference_by_transmission.csv' % DATA_PATH
+    saveCsv(name, data)
+    return
+  
   def saveCsv_travHistSymptomCorr(self):
     N_imported, N_data, travHistHist, symptomHist, corrMat, countMat = self.makeTravHistSymptomCorr3()
     N_min = N_data * 0.033
@@ -861,10 +978,10 @@ class MainSheet:
     data2 = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_n}
     data2 = pd.DataFrame(data2)
     
-    pairList = [('N_imported', N_imported), ('N_data', N_data)] + travHistHist + symptomHist
+    pairList = [('N_total', self.N_total), ('N_imported', N_imported), ('N_data', N_data)] + travHistHist + symptomHist
     label = [pair[0] for pair in pairList]
     count = [pair[1] for pair in pairList]
-    label_zh = ['境外移入總數', '有資料案例數'] + [TRAVEL_HISTORY_DICT[trav] for trav in travHistList] + [SYMPTOM_DICT[symp] for symp in symptomList]
+    label_zh = ['合計', '境外移入總數', '有資料案例數'] + [TRAVEL_HISTORY_DICT[trav] for trav in travHistList] + [SYMPTOM_DICT[symp] for symp in symptomList]
     data3 = {'label': label, 'count': count, 'label_zh': label_zh}
     data3 = pd.DataFrame(data3)
     
@@ -908,7 +1025,7 @@ class MainSheet:
     label = [pair[0] for pair in pairList]
     count = [pair[1] for pair in pairList]
     
-    label_zh = ['個案總數', '有資料案例數'] + [AGE_DICT[age] for age in ageList] + [SYMPTOM_DICT[symp] for symp in symptomList]
+    label_zh = ['合計', '有資料案例數'] + [AGE_DICT[age] for age in ageList] + [SYMPTOM_DICT[symp] for symp in symptomList]
     data3 = {'label': label, 'count': count, 'label_zh': label_zh}
     data3 = pd.DataFrame(data3)
     
@@ -923,7 +1040,8 @@ class MainSheet:
   def saveCsv(self):
     self.saveCsv_keyNb()
     self.saveCsv_caseByTrans()
-    self.saveCsv_caseByDectChan()
+    self.saveCsv_caseByDetection()
+    self.saveCsv_diffByTrans()
     self.saveCsv_travHistSymptomCorr()
     self.saveCsv_ageSymptomCorr()
     return
@@ -1047,8 +1165,8 @@ class TestSheet:
 
 def sandbox():
   sheet = MainSheet()
-  print(sheet.getAge())
-  #sheet.saveCsv_travHistSymptomCorr()
+  #print(sheet.getAge())
+  sheet.saveCsv_diffByTrans()
   
   #sheet = TestSheet()
   #print(sheet.getDate())

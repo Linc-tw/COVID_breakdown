@@ -18,7 +18,7 @@ function THSC_makeCanvas() {
   else {
     totHeight = 600;
     left = 235;
-    top = 205;
+    top = 215;
   }
   
   var margin = {left: left, right: 2, bottom: 2, top: top};
@@ -72,10 +72,13 @@ function THSC_formatData(data) {
 function THSC_formatData2(data2) {
   var xticklabel = [];
   var yticklabel = [];
-  var i, j, N_imported, N_data;
+  var i, j, N_total, N_imported, N_data;
   
   for (j=0; j<data2.length; j++) {
-    if ('N_imported' == data2[j]['label']) {
+    if ('N_total' == data2[j]['label']) {
+      N_total = data2[j]['count'];
+    }
+    else if ('N_imported' == data2[j]['label']) {
       N_imported = data2[j]['count'];
     }
     else if ('N_data' == data2[j]['label']) {
@@ -122,6 +125,7 @@ function THSC_formatData2(data2) {
     }
   }
   
+  THSC_wrap.N_total = N_total;
   THSC_wrap.N_imported = N_imported;
   THSC_wrap.N_data = N_data;
   THSC_wrap.xticklabel = xticklabel;
@@ -198,9 +202,9 @@ function THSC_initialize() {
     .call(yAxis2)
     
   //-- Legend - value
-  var lPos = {x: 40, y: -120, dx: 10, dy: 25};
-  var lColor = [cList[0], '#999999', '#000000'];
-  var lValue = [THSC_wrap.N_data, THSC_wrap.N_imported-THSC_wrap.N_data, THSC_wrap.N_imported];
+  var lPos = {x: 50, y: -120, dx: 10, dy: 25};
+  var lColor = [cList[0], '#999999', '#999999', '#000000'];
+  var lValue = [THSC_wrap.N_data, THSC_wrap.N_imported-THSC_wrap.N_data, THSC_wrap.N_total-THSC_wrap.N_imported, THSC_wrap.N_total];
   
   THSC_wrap.svg.selectAll(".legend.value")
     .remove()
@@ -273,8 +277,8 @@ function THSC_update() {
   
   //-- Legend - label
   var lLabel;
-  if (lang == 'zh-tw') lLabel = ['有資料案例數', '資料不全', '境外移入總數'];
-  else lLabel = ['Data complete', 'Data incomplete', 'Total (imported)'];
+  if (lang == 'zh-tw') lLabel = ['有資料案例數', '資料不全', '無旅遊史', '合計'];
+  else lLabel = ['Data complete', 'Data incomplete', 'No travel history', 'Total'];
   
   THSC_wrap.svg.selectAll(".legend.label")
     .remove()

@@ -126,6 +126,12 @@ body,
   margin-top: -55px;
   margin-bottom: -55px;
 }
+#difference_by_transmission .tooltip {
+  margin-left: -90px;
+  margin-right: -90px;
+  margin-top: -25px;
+  margin-bottom: -25px;
+}
 
 
 /* Buttons */
