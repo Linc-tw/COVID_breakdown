@@ -327,7 +327,7 @@ function DBT_update() {
   if (lang == 'zh-tw')
     lLabel = ['有資料案例數', "境外移入", "本土", '敦睦艦隊', '資料不全', '合計'];
   else 
-    lLabel = ['Data complete', 'Imported', 'Indigenous', 'Diplomatic fleet cluster', 'Data incomplete', 'Total'];
+    lLabel = ['Data complete', 'Imported', 'Local', 'Diplomatic fleet cluster', 'Data incomplete', 'Total'];
   var lValue = DBT_wrap.lValue.slice(0);
   var sum = DBT_wrap.lValue.slice(1).reduce((a, b) => a + b, 0);
   lValue.push(DBT_wrap.overallTot-sum);

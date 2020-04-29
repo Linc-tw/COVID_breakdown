@@ -299,7 +299,7 @@ function text_translation() {
     
     node = document.getElementById("difference_by_transmission_button_3")
     node.textContent = '';
-    node.appendChild(document.createTextNode("Indigenous"));
+    node.appendChild(document.createTextNode("Local"));
     
     node = document.getElementById("difference_by_transmission_button_4")
     node.textContent = '';
