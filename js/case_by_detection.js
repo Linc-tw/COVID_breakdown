@@ -292,7 +292,8 @@ function CBD_initialize() {
     .text(ylabel);
     
   //-- Color
-  var colorList = cList.slice(0, CBD_wrap.nbCol);
+  var colorList = cList.slice(0, CBD_wrap.nbCol-1);
+  colorList.push('#99cccc')
   var colTagList = CBD_wrap.colTagList.slice().reverse();
   var color = d3.scaleOrdinal()
     .domain(colTagList)

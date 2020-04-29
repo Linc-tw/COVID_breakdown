@@ -94,7 +94,7 @@ body,
 .xaxis line,
 .yaxis line {
   stroke: grey;
-  stroke-opacity: 0.5;
+  stroke-opacity: 0.2;
   shape-rendering: crispEdges;
 }
 

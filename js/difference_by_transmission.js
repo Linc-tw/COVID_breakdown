@@ -266,34 +266,11 @@ function DBT_initialize() {
     .text(ylabel);
     
   //-- Color
-  var colorList = cList.slice(0, DBT_wrap.nbCol);
+  var colorList = [cList[4], cList[0], cList[1], cList[3], '#999999', '#000000']; 
   var colTagList = DBT_wrap.colTagList.slice();
   var color = d3.scaleOrdinal()
     .domain(colTagList)
     .range(colorList);
-  
-  //-- Legend - value
-  var lPos = {x: 450, y: 45, dx: 10, dy: 27};
-  var lColorList = cList.slice(1, DBT_wrap.nbCol);
-  lColorList.push('#999999');
-  lColorList.push('#000000');
-  var lValue = DBT_wrap.lValue.slice(1);
-  var sum = lValue.reduce((a, b) => a + b, 0);
-  lValue.push(DBT_wrap.overallTot-sum);
-  lValue.push(DBT_wrap.overallTot);
-  
-  DBT_wrap.svg.selectAll(".legend.value")
-    .remove()
-    .exit()
-    .data(lValue)
-    .enter()
-    .append("text")
-      .attr("class", "legend value")
-      .attr("x", lPos.x)
-      .attr("y", function(d,i) {return lPos.y + i*lPos.dy})
-      .style("fill", function(d, i) {return lColorList[i]})
-      .text(function(d) {return d})
-      .attr("text-anchor", "end")
   
   //-- Bar
   var bar = DBT_wrap.svg.selectAll('.content.bar')
@@ -311,9 +288,8 @@ function DBT_initialize() {
     .on("mousemove", DBT_mousemove)
     .on("mouseleave", DBT_mouseleave)
 
+  DBT_wrap.colorList = colorList;
   DBT_wrap.color = color;
-  DBT_wrap.lPos = lPos;
-  DBT_wrap.lColorList = lColorList;
   DBT_wrap.bar = bar;
 }
 
@@ -344,24 +320,55 @@ function DBT_update() {
     .attr('fill', function(d) {return DBT_wrap.color(colTagList[DBT_wrap.colInd]);})
     .attr('y', function(d) {return y(d[colTagList[DBT_wrap.colInd]]);})
     .attr('height', function(d) {return y(0)-y(d[colTagList[DBT_wrap.colInd]]);});
+  
+  //-- Legend
+  var lPos = {x: 450, y: 45, dx: 10, dy: 27};
+  var lColorList, lLabel, lLabel2, lValue2;
+  if (lang == 'zh-tw')
+    lLabel = ['有資料案例數', "境外移入", "本土", '敦睦艦隊', '資料不全', '合計'];
+  else 
+    lLabel = ['Data complete', 'Imported', 'Indigenous', 'Diplomatic fleet cluster', 'Data incomplete', 'Total'];
+  var lValue = DBT_wrap.lValue.slice(0);
+  var sum = DBT_wrap.lValue.slice(1).reduce((a, b) => a + b, 0);
+  lValue.push(DBT_wrap.overallTot-sum);
+  lValue.push(DBT_wrap.overallTot);
+  
+  if (DBT_wrap.colInd == 0) {
+    lColorList = [DBT_wrap.colorList[0], DBT_wrap.colorList[4], DBT_wrap.colorList[5]]
+    lLabel2 = [lLabel[0], lLabel[4], lLabel[5]]
+    lValue2 = [lValue[0], lValue[4], lValue[5]]
+  }
+  else {
+    lColorList = [DBT_wrap.colorList[DBT_wrap.colInd], DBT_wrap.colorList[5]]
+    lLabel2 = [lLabel[DBT_wrap.colInd], lLabel[5]]
+    lValue2 = [lValue[DBT_wrap.colInd], lValue[5]]
+  }
+  
+  //-- Legend - value
+  DBT_wrap.svg.selectAll(".legend.value")
+    .remove()
+    .exit()
+    .data(lValue2)
+    .enter()
+    .append("text")
+      .attr("class", "legend value")
+      .attr("x", lPos.x)
+      .attr("y", function(d,i) {return lPos.y + i*lPos.dy})
+      .style("fill", function(d, i) {return lColorList[i]})
+      .text(function(d) {return d})
+      .attr("text-anchor", "end")
     
   //-- Legend - label
-  var lLabel;
-  if (lang == 'zh-tw')
-    lLabel = ["境外移入", "本土", '敦睦艦隊', '資料不全', '合計'];
-  else 
-    lLabel = ['Imported', 'Indigenous', 'Diplomatic fleet cluster', 'Data incomplete', 'Total'];
-  
   DBT_wrap.svg.selectAll(".legend.label")
     .remove()
     .exit()
-    .data(lLabel)
+    .data(lLabel2)
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", DBT_wrap.lPos.x+DBT_wrap.lPos.dx)
-      .attr("y", function(d, i) {return DBT_wrap.lPos.y + i*DBT_wrap.lPos.dy})
-      .style("fill", function(d, i) {return DBT_wrap.lColorList[i]})
+      .attr("x", lPos.x+lPos.dx)
+      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
+      .style("fill", function(d, i) {return lColorList[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "start")
 }

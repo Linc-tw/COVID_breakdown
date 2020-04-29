@@ -754,7 +754,8 @@ class MainSheet:
     return N_total, N_data, ageHist, symptomHist, corrMat, countMat
   
   def saveCsv_keyNb(self):
-    timestamp = str(dtt.datetime.today())
+    timestamp = dtt.datetime.now().astimezone()
+    timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
     
     key   = ['overall_total', 'timestamp']
     value = [self.N_total, timestamp]

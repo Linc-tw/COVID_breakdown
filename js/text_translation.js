@@ -1,6 +1,7 @@
 //-- Glocal settings
 var lang = 'en'; // 'en', 'zh-tw'
 var cList = ['#3366BB', '#CC6677', '#55BB44', '#DDAA77', '#AA55AA', '#44AA99'];
+var wrap = {};
 
 
 //-- General functions
@@ -87,6 +88,10 @@ function text_translation() {
     node.appendChild(document.createTextNode("資料來源"));
     
     node = document.getElementById("menu_copyleft")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("版權沒有"));
+    
+    node = document.getElementById("last_update")
     node.textContent = '';
     node.appendChild(document.createTextNode("版權沒有"));
     
@@ -216,6 +221,10 @@ function text_translation() {
     node.textContent = '';
     node.appendChild(document.createTextNode("Copyleft"));
     
+    node = document.getElementById("last_update")
+    node.textContent = '';
+    node.appendChild(document.createTextNode(wrap.timestamp));
+    
     
     
     node = document.getElementById("case_by_transmission_title")
@@ -327,7 +336,33 @@ function text_translation() {
   }
 }
 
-text_translation()
+
+//-- Load key nb
+d3.csv("processed_data/key_numbers.csv", function(error, data) {
+  if (error) return console.warn(error);
+  
+  var overallTot = 0;
+  var timestamp;
+  var i;
+  
+  for (i=0; i<data.length; i++) {
+    if ('overall_total' == data[i]['key']) {
+      overallTot = +data[i]['value'];
+    }
+    else if ('timestamp' == data[i]['key']) {
+      timestamp = data[i]['value'];
+    }
+  }
+  
+  wrap.overallTot = overallTot;
+  wrap.timestamp = timestamp;
+//   console.log(wrap.timestamp);
+  console.log(wrap.timestamp);
+
+
+  text_translation()
+});
+
 
 //-- Button listener
 $(document).on("change", "input:radio[name='index_language']", function(event) {
