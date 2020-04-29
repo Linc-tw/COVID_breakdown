@@ -376,7 +376,7 @@ function CBD_update() {
     lLabel_plus = '無發病日資料';
   }
   else {
-    lLabel = ["Airport", "Quarantine", "Isolation", "Monitoring", "Hospital", 'Not annonced', 'Total'];
+    lLabel = ["Airport", "Quarantine", "Isolation", "Monitoring", "Hospital", 'Not announced', 'Total'];
     lLabel_plus = 'No onset date';
   }
   if (CBD_wrap.doOnset == 1) lLabel.splice(CBD_wrap.nbCol, 0, lLabel_plus);
