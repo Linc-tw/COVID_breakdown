@@ -14,6 +14,10 @@ function CBT_makeCanvas() {
     totHeight = 415;
     bottom = 105;
   }
+  else if (lang == 'fr') {
+    totHeight = 400;
+    bottom = 90;
+  }
   else {
     totHeight = 400;
     bottom = 90;
@@ -200,6 +204,8 @@ function CBT_mousemove(d) {
   
   if (lang == 'zh-tw')
     tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4) + "<br>境外移入 = " + d.h1+ "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>敦睦艦隊 = " + d.h4
+  else if (lang == 'fr')
+    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4) + "<br>Importé = " + d.h1+ "<br>Local connue = " + d.h2 + "<br>Local inconnue = " + d.h3 + "<br>Flotte = " + d.h4
   else
     tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4) + "<br>Imported = " + d.h1+ "<br>Local linked = " + d.h2 + "<br>Local unlinked = " + d.h3 + "<br>Fleet = " + d.h4
   
@@ -279,6 +285,7 @@ function CBT_initialize() {
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '案例數';
+  else if (lang == 'fr') ylabel = 'Nombre des cas';
   else ylabel = 'Number of cases';
   CBT_wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -368,6 +375,10 @@ function CBT_update() {
   if (lang == 'zh-tw') {
     lLabel = ["境外移入", "本土感染源已知", "本土感染源未知", '敦睦艦隊', "合計"];
     lLabel_plus = '無發病日資料';
+  }
+  else if (lang == 'fr') {
+    lLabel = ["Importé", "Local & transmission connue", "Local & transmission inconnue", "Flotte diplomatique", "Total"];
+    lLabel_plus = "Sans date début symp.";
   }
   else {
     lLabel = ["Imported", "Local & linked to known cases", "Local & unlinked", 'Diplomatic fleet cluster', "Total"];

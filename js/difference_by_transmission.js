@@ -13,6 +13,10 @@ function DBT_makeCanvas() {
     totHeight = 415;
     bottom = 90;
   }
+  else if (lang == 'fr') {
+    totHeight = 400;
+    bottom = 80;
+  }
   else {
     totHeight = 400;
     bottom = 80;
@@ -43,7 +47,7 @@ function DBT_makeCanvas() {
 
 function DBT_formatData(data) {
   //-- Settings for xticklabels
-  var xlabel_path = 2;
+  var xlabel_path = 3;
   var r = 0;
   var xtick = [];
   var xticklabel = [];
@@ -263,6 +267,7 @@ function DBT_initialize() {
   //-- xlabel
   var xlabel;
   if (lang == 'zh-tw') xlabel = '發病或入境後到確診所需天數';
+  if (lang == 'fr') xlabel = "Jours avant d'être identifié";
   else xlabel = "Days required for each case to be identified";
   DBT_wrap.svg.append("text")
     .attr("class", "xlabel")
@@ -274,6 +279,7 @@ function DBT_initialize() {
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '案例數';
+  else if (lang == 'fr') ylabel = 'Nombre des cas';
   else ylabel = 'Number of cases';
   DBT_wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -342,6 +348,8 @@ function DBT_update() {
   var lColorList, lLabel, lLabel2, lValue2;
   if (lang == 'zh-tw')
     lLabel = ['有資料案例數', "境外移入", "本土", '敦睦艦隊', '資料不全', '合計'];
+  else if (lang == 'fr')
+    lLabel = ['Données complètes', "Importé", "Local", 'Flotte diplomatique', 'Données incomplètes', 'Total'];
   else 
     lLabel = ['Data complete', 'Imported', 'Local', 'Diplomatic fleet cluster', 'Data incomplete', 'Total'];
   var lValue = DBT_wrap.lValue.slice(0);

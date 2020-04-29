@@ -10,6 +10,10 @@ function TBC_makeCanvas() {
     totHeight = 415;
     bottom = 105;
   }
+  else if (lang == 'fr') {
+    totHeight = 400;
+    bottom = 90;
+  }
   else {
     totHeight = 400;
     bottom = 90;
@@ -179,6 +183,8 @@ function TBC_mousemove(d) {
   
   if (lang == 'zh-tw')
     tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3) + "<br>擴大監測 = " + d.h1+ "<br>居家檢疫 = " + d.h2 + "<br>法定通報 = " + d.h3
+  else if (lang == 'fr')
+    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Communauté = " + d.h1+ "<br>Quarantine = " + d.h2 + "<br>Clinique = " + d.h3
   else
     tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Community = " + d.h1+ "<br>Quarantine = " + d.h2 + "<br>Clinical = " + d.h3
   
@@ -258,6 +264,7 @@ function TBC_initialize() {
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '檢驗數';
+  else if (lang == 'fr') ylabel = 'Nombre des tests';
   else ylabel = 'Number of tests';
   TBC_wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -343,6 +350,7 @@ function TBC_update() {
   //-- Legend - label
   var lLabel;
   if (lang == 'zh-tw') lLabel = ["擴大社區監測", "居家檢疫", "法定定義通報", "合計"];
+  else if (lang == 'fr') lLabel = ["Transmission possible en communautés", "Quarantaine (fusionné dans clinique)", "Critères cliniques", "Total"];
   else lLabel = ['Possible community transmission', 'Quarantine (merged into clinical)', 'Suspicious clinical cases', "Total"];
   
   TBC_wrap.svg.selectAll(".legend.label")

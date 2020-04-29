@@ -14,6 +14,10 @@ function CBD_makeCanvas() {
     totHeight = 415;
     bottom = 105;
   }
+  else if (lang == 'fr') {
+    totHeight = 400;
+    bottom = 90;
+  }
   else {
     totHeight = 400;
     bottom = 90;
@@ -205,8 +209,10 @@ function CBD_mousemove(d) {
   
   if (lang == 'zh-tw')
     tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6) + "<br>機場 = " + d.h1 + "<br>居家檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自行就醫 = " + d.h5 + "<br>無管道資料 = " + d.h6
+  else if (lang == 'fr')
+    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6) + "<br>Aéroport = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Auto-contrôle = " + d.h4 + "<br>Hôpital = " + d.h5 + "<br>Pas annoncé = " + d.h6
   else
-    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6) + "<br>Airport = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospital = " + d.h5 + "<br>Not annonced = " + d.h6
+    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6) + "<br>Airport = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospital = " + d.h5 + "<br>Not announced = " + d.h6
   
   
   CBD_tooltip
@@ -284,6 +290,7 @@ function CBD_initialize() {
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '案例數';
+  else if (lang == 'fr') ylabel = 'Nombre des cas';
   else ylabel = 'Number of cases';
   CBD_wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -374,6 +381,10 @@ function CBD_update() {
   if (lang == 'zh-tw') {
     lLabel = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自行就醫', '無檢驗管道資料', '合計'];
     lLabel_plus = '無發病日資料';
+  }
+  else if (lang == 'fr') {
+    lLabel = ['Aéroport', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpital', 'Pas annoncé', 'Total'];
+    lLabel_plus = "Sans date début symp.";
   }
   else {
     lLabel = ["Airport", "Quarantine", "Isolation", "Monitoring", "Hospital", 'Not announced', 'Total'];

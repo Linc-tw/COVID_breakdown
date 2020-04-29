@@ -17,11 +17,13 @@ var wrap = {};
 //-- General functions
 function ISODateToMDDate(ISODate) {
   var fmtStr;
-  if (lang == 'zh-tw') fmtStr = "%-m月%-d日"
-  else fmtStr = "%b %d"
+  var MDDateFormat;
+  if (lang == 'zh-tw')   MDDateFormat = d3.timeFormat("%-m月%-d日");
+  else if (lang == 'fr') MDDateFormat = d3.timeFormat("%d/%m");
+  else MDDateFormat = d3.timeFormat("%b %d");
   
-  var MDDateFormat = d3.timeFormat(fmtStr);
-  return MDDateFormat(d3.isoParse(ISODate));
+  var date = d3.isoParse(ISODate);
+  return MDDateFormat(date);
 }
 
 function cumsum(data, colTagList) {
@@ -255,7 +257,7 @@ function text_translation() {
     
     node = document.getElementById("case_by_transmission_button_4")
     node.textContent = '';
-    node.appendChild(document.createTextNode("Date d'apparition des symptômes"));
+    node.appendChild(document.createTextNode("Date du début des symptômes"));
     
     
     
@@ -277,7 +279,7 @@ function text_translation() {
     
     node = document.getElementById("case_by_detection_button_4")
     node.textContent = '';
-    node.appendChild(document.createTextNode("Date d'apparition des symptômes"));
+    node.appendChild(document.createTextNode("Date du début des symptômes"));
     
     
     
