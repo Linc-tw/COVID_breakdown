@@ -163,13 +163,29 @@ function DBT_getTooltipPos(d) {
 
 function DBT_mousemove(d) {
   var newPos = DBT_getTooltipPos(d3.mouse(this));
-  var colTag, tooltipText;
+  var colTag, colTag2, tooltipText;
   
-  if (lang == 'zh-tw')
-    tooltipText = d.x + "<br>合計 = " + (+d.x + +d.h2 + +d.h3 + +d.h4) + "<br>境外移入 = " + d.h1+ "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>敦睦艦隊 = " + d.h4
+  if (lang == 'zh-tw') {
+    colTag = DBT_wrap.colTagList[DBT_wrap.colInd];
+    if (colTag == 'all') colTag2 = '全部';
+    else if (colTag == 'imported') colTag2 = '境外移入';
+    else if (colTag == 'indigenous') colTag2 = '本土';
+    else if (colTag == 'fleet') colTag2 = '敦睦艦隊';
+    tooltipText = colTag2 + '案例中有' + d[colTag] + '位<br>發病或入境後' + d['difference'] + '日確診';
+  }
+  else if (lang == 'fr') {
+    colTag = DBT_wrap.colTagList[DBT_wrap.colInd];
+    if (colTag == 'all') colTag2 = "de l'ensemble des cas";
+    else if (colTag == 'imported') colTag2 = 'des cas importés';
+    else if (colTag == 'indigenous') colTag2 = 'des cas locaux';
+    else if (colTag == 'fleet') colTag2 = 'des cas en flotte';
+    tooltipText = d[colTag] + ' ' + colTag2 + ' attend(ent)<br>' + d['difference'] + " jour(s) avant d'être identifié(s)";
+  }
   else {
     colTag = DBT_wrap.colTagList[DBT_wrap.colInd];
-    tooltipText = d[colTag] + ' of ' + colTag + ' cases required<br>' + d['difference'] + ' day(s) to be identified'
+    if (colTag == 'imported') colTag2 = 'local';
+    else colTag2 = colTag;
+    tooltipText = d[colTag] + ' of ' + colTag2 + ' cases required<br>' + d['difference'] + ' day(s) to be identified'
   }
   
   DBT_tooltip

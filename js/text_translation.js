@@ -1,15 +1,15 @@
-//-- Glocal settings
-
-var lang = Cookies.get("lang");
+//-- Language settings
+var lang = Cookies.get("lang"); // 'en', 'fr', 'zh-tw'
 if (!lang) {
-  lang = "zh-tw";
+  lang = "en";
   Cookies.set("lang", lang);
-}// 'en', 'zh-tw'
+}
 
-let el = document.getElementById('button-'+lang);
+let el = document.getElementById('lang_'+lang);
 el.classList.add("active");
 
 
+//-- Glocal settings
 var cList = ['#3366BB', '#CC6677', '#55BB44', '#DDAA77', '#AA55AA', '#44AA99'];
 var wrap = {};
 
@@ -103,7 +103,7 @@ function text_translation() {
     
     node = document.getElementById("last_update")
     node.textContent = '';
-    node.appendChild(document.createTextNode("版權沒有"));
+    node.appendChild(document.createTextNode('最後更新：' + wrap.timestamp));
     
     
     
@@ -214,6 +214,136 @@ function text_translation() {
     node.appendChild(document.createTextNode("案例數"));
     
   }
+  else if (lang == 'fr') {
+    node = document.getElementById("title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Statistiques de COVID-19 à Taïwan"));
+    
+    node = document.getElementById("menu_summary")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Résumé"));
+    
+    node = document.getElementById("menu_source")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Source des données"));
+    
+    node = document.getElementById("menu_copyleft")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Gauche d'auteur"));
+    
+    node = document.getElementById("last_update")
+    node.textContent = '';
+    node.appendChild(document.createTextNode('Dernière mise à jour : ' + wrap.timestamp));
+    
+    
+    
+    node = document.getElementById("case_by_transmission_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cas confirmés par moyen de transmission"));
+    
+    node = document.getElementById("case_by_transmission_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Quotidien"));
+    
+    node = document.getElementById("case_by_transmission_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cumulé"));
+    
+    node = document.getElementById("case_by_transmission_button_3")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Date du diagnostic"));
+    
+    node = document.getElementById("case_by_transmission_button_4")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Date d'apparition des symptômes"));
+    
+    
+    
+    node = document.getElementById("case_by_detection_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cas confirmés par canal de détection"));
+    
+    node = document.getElementById("case_by_detection_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Quotidien"));
+    
+    node = document.getElementById("case_by_detection_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cumulé"));
+    
+    node = document.getElementById("case_by_detection_button_3")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Date du diagnostic"));
+    
+    node = document.getElementById("case_by_detection_button_4")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Date d'apparition des symptômes"));
+    
+    
+    
+    node = document.getElementById("test_by_criterion_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Nombre des tests par critère"));
+    
+    node = document.getElementById("test_by_criterion_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Quotidien"));
+    
+    node = document.getElementById("test_by_criterion_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cumulé"));
+    
+    
+    
+    node = document.getElementById("difference_by_transmission_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Combien de temps pour identifier les cas?"));
+    
+    node = document.getElementById("difference_by_transmission_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Tous"));
+    
+    node = document.getElementById("difference_by_transmission_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Importé"));
+    
+    node = document.getElementById("difference_by_transmission_button_3")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Local"));
+    
+    node = document.getElementById("difference_by_transmission_button_4")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Flotte"));
+    
+    
+    
+    node = document.getElementById("travel_history_symptom_correlations_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Corrélations entre antécédents de voyage & symptômes"));
+    
+    node = document.getElementById("travel_history_symptom_correlations_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cœfficient"));
+    
+    node = document.getElementById("travel_history_symptom_correlations_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Comptage"));
+    
+    
+    
+    node = document.getElementById("age_symptom_correlations_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Corrélations entre âge & symptômes"));
+    
+    node = document.getElementById("age_symptom_correlations_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cœfficient"));
+    
+    node = document.getElementById("age_symptom_correlations_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Comptage"));
+    
+  }
   else {
     node = document.getElementById("title")
     node.textContent = '';
@@ -233,7 +363,7 @@ function text_translation() {
     
     node = document.getElementById("last_update")
     node.textContent = '';
-    node.appendChild(document.createTextNode(wrap.timestamp));
+    node.appendChild(document.createTextNode('Last updates: ' + wrap.timestamp));
     
     
     
