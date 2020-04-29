@@ -1,5 +1,15 @@
 //-- Glocal settings
-var lang = 'en'; // 'en', 'zh-tw'
+
+var lang = Cookies.get("lang");
+if (!lang) {
+  lang = "zh-tw";
+  Cookies.set("lang", lang);
+}// 'en', 'zh-tw'
+
+let el = document.getElementById('button-'+lang);
+el.classList.add("active");
+
+
 var cList = ['#3366BB', '#CC6677', '#55BB44', '#DDAA77', '#AA55AA', '#44AA99'];
 var wrap = {};
 
@@ -367,6 +377,7 @@ d3.csv("processed_data/key_numbers.csv", function(error, data) {
 //-- Button listener
 $(document).on("change", "input:radio[name='index_language']", function(event) {
   lang = this.value;
+  Cookies.set("lang", lang);
   text_translation();
   
   d3.selectAll('.plot').remove()
