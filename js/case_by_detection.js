@@ -290,7 +290,7 @@ function CBD_initialize() {
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '案例數';
-  else if (lang == 'fr') ylabel = 'Nombre des cas';
+  else if (lang == 'fr') ylabel = 'Nombre de cas';
   else ylabel = 'Number of cases';
   CBD_wrap.svg.append("text")
     .attr("class", "ylabel")

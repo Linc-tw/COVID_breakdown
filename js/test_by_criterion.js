@@ -264,7 +264,7 @@ function TBC_initialize() {
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '檢驗數';
-  else if (lang == 'fr') ylabel = 'Nombre des tests';
+  else if (lang == 'fr') ylabel = 'Nombre de tests';
   else ylabel = 'Number of tests';
   TBC_wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -350,7 +350,7 @@ function TBC_update() {
   //-- Legend - label
   var lLabel;
   if (lang == 'zh-tw') lLabel = ["擴大社區監測", "居家檢疫", "法定定義通報", "合計"];
-  else if (lang == 'fr') lLabel = ["Transmission possible en communautés", "Quarantaine (fusionné dans clinique)", "Critères cliniques", "Total"];
+  else if (lang == 'fr') lLabel = ["Recherche de cas contacts", "Quarantaine (fusionné dans clinique)", "Critères cliniques", "Total"];
   else lLabel = ['Possible community transmission', 'Quarantine (merged into clinical)', 'Suspicious clinical cases', "Total"];
   
   TBC_wrap.svg.selectAll(".legend.label")
