@@ -57,6 +57,8 @@ function copyleft_mousemove(d) {
   
   if (lang == 'zh-tw')
     tooltipText = "版權沒有<br>翻印不究<br>不需署名<br>敬請亂用"
+  else if (lang == 'fr')
+    tooltipText = "Fièrement sans droit d'auteur"
   else
     tooltipText = "Proudly no right reserved"
   

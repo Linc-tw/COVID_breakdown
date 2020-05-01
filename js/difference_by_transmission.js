@@ -344,7 +344,7 @@ function DBT_update() {
     .attr('height', function(d) {return y(0)-y(d[colTagList[DBT_wrap.colInd]]);});
   
   //-- Legend
-  var lPos = {x: 450, y: 45, dx: 10, dy: 27};
+  var lPos = {x: 450, y: 45, dx: 12, dy: 30};
   var lColorList, lLabel, lLabel2, lValue2;
   if (lang == 'zh-tw')
     lLabel = ['有資料案例數', "境外移入", "本土", '敦睦艦隊', '資料不全', '合計'];

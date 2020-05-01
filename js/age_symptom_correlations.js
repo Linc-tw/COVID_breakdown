@@ -18,7 +18,7 @@ function ASC_makeCanvas() {
   else if (lang == 'fr') {
     totHeight = 600;
     left = 235;
-    top = 215;
+    top = 225;
   }
   else {
     totHeight = 600;
@@ -222,7 +222,7 @@ function ASC_initialize() {
     .call(yAxis2)
     
   //-- Legend - value
-  var lPos = {x: 50, y: -120, dx: 10, dy: 25};
+  var lPos = {x: 50, y: -0.8*ASC_wrap.margin.top, dx: 12, dy: 30};
   var lColor = [cList[0], '#999999', '#000000'];
   var lValue = [ASC_wrap.N_data, ASC_wrap.N_total-ASC_wrap.N_data, ASC_wrap.N_total];
   

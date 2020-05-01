@@ -205,7 +205,7 @@ function CBT_mousemove(d) {
   if (lang == 'zh-tw')
     tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4) + "<br>境外移入 = " + d.h1+ "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>敦睦艦隊 = " + d.h4
   else if (lang == 'fr')
-    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4) + "<br>Importé = " + d.h1+ "<br>Local connue = " + d.h2 + "<br>Local inconnue = " + d.h3 + "<br>Flotte = " + d.h4
+    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4) + "<br>Importé = " + d.h1+ "<br>Local connu = " + d.h2 + "<br>Local inconnu = " + d.h3 + "<br>Flotte = " + d.h4
   else
     tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4) + "<br>Imported = " + d.h1+ "<br>Local linked = " + d.h2 + "<br>Local unlinked = " + d.h3 + "<br>Fleet = " + d.h4
   
@@ -351,7 +351,7 @@ function CBT_update() {
   colorList.push('#000000');
   
   //-- Legend - value
-  var lPos = {x: 70, y: 45, dx: 10, dy: 27};
+  var lPos = {x: 70, y: 45, dx: 12, dy: 30};
   var lValue = CBT_wrap.lValue.slice();
   var sum = lValue.reduce((a, b) => a + b, 0);
   if (CBT_wrap.doOnset == 1) lValue.push(CBT_wrap.overallTot-sum);
@@ -377,7 +377,7 @@ function CBT_update() {
     lLabel_plus = '無發病日資料';
   }
   else if (lang == 'fr') {
-    lLabel = ["Importé", "Local & transmission connue", "Local & transmission inconnue", "Flotte diplomatique", "Total"];
+    lLabel = ["Importé", "Local & lien connu", "Local & lien inconnu", "Flotte diplomatique", "Total"];
     lLabel_plus = "Sans date début symp.";
   }
   else {

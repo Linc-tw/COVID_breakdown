@@ -329,7 +329,7 @@ function TBC_update() {
   colorList.push('#000000');
   
   //-- Legend - value
-  var lPos = {x: 95, y: 45, dx: 10, dy: 27};
+  var lPos = {x: 95, y: 45, dx: 12, dy: 30};
   var lValue = TBC_wrap.lValue.slice();
   var sum = lValue.reduce((a, b) => a + b, 0);
   lValue.push(sum);

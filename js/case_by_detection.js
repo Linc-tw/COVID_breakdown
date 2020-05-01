@@ -357,7 +357,7 @@ function CBD_update() {
   if (CBD_wrap.doOnset == 1) colorList.splice(CBD_wrap.nbCol, 0, '#999999');
   
   //-- Legend - value
-  var lPos = {x: 70, y: 45, dx: 10, dy: 27};
+  var lPos = {x: 70, y: 45, dx: 12, dy: 30};
   var lValue = CBD_wrap.lValue.slice();
   var sum = lValue.reduce((a, b) => a + b, 0);
   if (CBD_wrap.doOnset == 1) lValue.push(CBD_wrap.overallTot-sum);

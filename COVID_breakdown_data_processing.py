@@ -43,7 +43,7 @@ SYMPTOM_DICT = {
   
   'headache': {'zh-tw': '頭痛', 'fr': 'mal de tête'},
   'eyes sore': {'zh-tw': '眼痛', 'fr': 'mal aux yeux'}, 
-  'chest pain': {'zh-tw': '胸痛', 'fr': 'douleur thoracique'}, 
+  'chest pain': {'zh-tw': '胸痛', 'fr': 'mal à la poitrine'}, 
   'stomachache': {'zh-tw': '腹痛', 'fr': 'mal de ventre'},
   'backache': {'zh-tw': '背痛', 'fr': 'mal de dos'}, 
   'toothache': {'zh-tw': '牙痛', 'fr': 'mal de dents'}, 
