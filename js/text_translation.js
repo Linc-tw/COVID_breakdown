@@ -327,11 +327,11 @@ function text_translation() {
     
     node = document.getElementById("travel_history_symptom_correlations_button_1")
     node.textContent = '';
-    node.appendChild(document.createTextNode("Cœfficient"));
+    node.appendChild(document.createTextNode("Coefficient"));
     
     node = document.getElementById("travel_history_symptom_correlations_button_2")
     node.textContent = '';
-    node.appendChild(document.createTextNode("Comptage"));
+    node.appendChild(document.createTextNode("Nombre"));
     
     
     
@@ -341,11 +341,11 @@ function text_translation() {
     
     node = document.getElementById("age_symptom_correlations_button_1")
     node.textContent = '';
-    node.appendChild(document.createTextNode("Cœfficient"));
+    node.appendChild(document.createTextNode("Coefficient"));
     
     node = document.getElementById("age_symptom_correlations_button_2")
     node.textContent = '';
-    node.appendChild(document.createTextNode("Comptage"));
+    node.appendChild(document.createTextNode("Nombre"));
     
   }
   else {

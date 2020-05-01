@@ -267,7 +267,7 @@ function DBT_initialize() {
   //-- xlabel
   var xlabel;
   if (lang == 'zh-tw') xlabel = '發病或入境後到確診所需天數';
-  if (lang == 'fr') xlabel = "Jours avant d'être identifié";
+  if (lang == 'fr') xlabel = "Nombre de jours avant identification";
   else xlabel = "Days required for each case to be identified";
   DBT_wrap.svg.append("text")
     .attr("class", "xlabel")
@@ -279,7 +279,7 @@ function DBT_initialize() {
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '案例數';
-  else if (lang == 'fr') ylabel = 'Nombre des cas';
+  else if (lang == 'fr') ylabel = 'Nombre de cas';
   else ylabel = 'Number of cases';
   DBT_wrap.svg.append("text")
     .attr("class", "ylabel")
