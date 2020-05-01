@@ -28,114 +28,114 @@ import pandas as pd
 DATA_PATH = '/home/linc/03_Codes/COVID_breakdown/'
 
 SYMPTOM_DICT = {
-  'sneezing': '鼻腔症狀',
-  'cough': '咳嗽',
-  'throatache': '喉嚨症狀',
-  'dyspnea': '呼吸困難', 
-  'pneumonia': '肺炎', 
+  'sneezing': {'zh-tw': '鼻腔症狀', 'fr': 'éternuement'},
+  'cough': {'zh-tw': '咳嗽', 'fr': 'toux'},
+  'throatache': {'zh-tw': '喉嚨症狀', 'fr': 'mal de gorge'},
+  'dyspnea': {'zh-tw': '呼吸困難', 'fr': 'dyspnée'}, 
+  'pneumonia': {'zh-tw': '肺炎', 'fr': 'pneumonie'}, 
   
-  'fever': '發燒',
-  'chills': '畏寒', 
+  'fever': {'zh-tw': '發燒', 'fr': 'fièvre'},
+  'chills': {'zh-tw': '畏寒', 'fr': 'frissons'}, 
   
-  'Nausea': '噁心',
-  'vomiting': '嘔吐',
-  'diarrhea': '腹瀉', 
+  'nausea': {'zh-tw': '噁心', 'fr': 'nausée'},
+  'vomiting': {'zh-tw': '嘔吐', 'fr': 'vomissement'},
+  'diarrhea': {'zh-tw': '腹瀉', 'fr': 'diarrhée'}, 
   
-  'headache': '頭痛',
-  'eyes sore': '眼痛', 
-  'chest pain': '胸痛', 
-  'stomachache': '腹痛',
-  'backache': '背痛', 
-  'toothache': '牙痛', 
+  'headache': {'zh-tw': '頭痛', 'fr': 'mal de tête'},
+  'eyes sore': {'zh-tw': '眼痛', 'fr': 'mal aux yeux'}, 
+  'chest pain': {'zh-tw': '胸痛', 'fr': 'mal à la poitrine'}, 
+  'stomachache': {'zh-tw': '腹痛', 'fr': 'mal de ventre'},
+  'backache': {'zh-tw': '背痛', 'fr': 'mal de dos'}, 
+  'toothache': {'zh-tw': '牙痛', 'fr': 'mal de dents'}, 
   
-  'fatigue': '倦怠',
-  'soreness': '痠痛',
+  'fatigue': {'zh-tw': '倦怠', 'fr': 'fatigue'},
+  'soreness': {'zh-tw': '痠痛', 'fr': 'myalgie'},
   
-  'anosmia': '嗅覺異常', 
-  'ageusia': '味覺異常',
+  'anosmia': {'zh-tw': '嗅覺異常', 'fr': 'anosmie'}, 
+  'ageusia': {'zh-tw': '味覺異常', 'fr': 'agueusie'},
   
-  'lymphatic swelling': '淋巴腫脹', 
-  'hypoglycemia': '低血糖', 
-  'poor appetite': '食慾不佳',
-  'arrhythmia': '心律不整',
+  'lymphadenopathy': {'zh-tw': '淋巴腫脹', 'fr': 'adénopathie'}, 
+  'hypoglycemia': {'zh-tw': '低血糖', 'fr': 'hypoglycémie'}, 
+  'anorexia': {'zh-tw': '食慾不佳', 'fr': 'anorexie'},
+  'arrhythmia': {'zh-tw': '心律不整', 'fr': 'arythmie'},
   
-  'symptomatic': '有症狀',
-  'asymptomatic': '無症狀' 
+  'symptomatic': {'zh-tw': '有症狀', 'fr': 'symptomatique'},
+  'asymptomatic': {'zh-tw': '無症狀', 'fr': 'asymptomatique'} 
 }
 
 TRAVEL_HISTORY_DICT = {
-  'China': '中國',
-  'Hong Kong': '香港',
-  'Macao': '澳門',
-  'Japan': '日本',
-  'Thailand': '泰國', 
-  'Malaysia': '馬來西亞', 
-  'Indonesia': '印尼', 
-  'Philippines': '菲律賓', 
-  'Singapore': '新加坡', 
+  'China': {'zh-tw': '中國', 'fr': 'Chine'},
+  'Hong Kong': {'zh-tw': '香港', 'fr': 'Hong Kong'},
+  'Macao': {'zh-tw': '澳門', 'fr': 'Macao'},
+  'Japan': {'zh-tw': '日本', 'fr': 'Japon'},
+  'Thailand': {'zh-tw': '泰國', 'fr': 'Thaïlande'},
+  'Malaysia': {'zh-tw': '馬來西亞', 'fr': 'Malaisie'},
+  'Indonesia': {'zh-tw': '印尼', 'fr': 'Indonésie'},
+  'Philippines': {'zh-tw': '菲律賓', 'fr': 'Philippines'},
+  'Singapore': {'zh-tw': '新加坡', 'fr': 'Singapour'},
   
-  'USA': '美國', 
-  'Canada': '加拿大', 
-  'Mexico': '墨西哥', 
-  'Chile': '智利',
-  'Argentina': '阿根廷', 
-  'Peru': '秘魯',
-  'Bolivia': '玻利維亞', 
-  'Brazil': '巴西',
-  'Latin America': '中南美洲', 
+  'USA': {'zh-tw': '美國', 'fr': 'États-Unis'},
+  'Canada': {'zh-tw': '加拿大', 'fr': 'Canada'},
+  'Mexico': {'zh-tw': '墨西哥', 'fr': 'Mexique'},
+  'Chile': {'zh-tw': '智利', 'fr': 'Chili'},
+  'Argentina': {'zh-tw': '阿根廷', 'fr': 'Argentine'},
+  'Peru': {'zh-tw': '秘魯', 'fr': 'Pérou'},
+  'Bolivia': {'zh-tw': '玻利維亞', 'fr': 'Bolivie'},
+  'Brazil': {'zh-tw': '巴西', 'fr': 'Brésil'},
+  'Latin America': {'zh-tw': '中南美洲', 'fr': 'Amérique latine'},
   
-  'Europe': '歐洲', 
-  'Ireland': '愛爾蘭', 
-  'UK': '英國', 
-  'France': '法國',
-  'Portugal': '葡萄牙', 
-  'Spain': '西班牙', 
-  'Italy': '義大利', 
-  'Belgium': '比利時', 
-  'Netherlands': '荷蘭', 
-  'Luxemburg': '盧森堡', 
-  'Switzerland': '瑞士', 
-  'Germany': '德國',
-  'Austria': '奧地利', 
-  'Czechia': '捷克', 
-  'Danmark': '丹麥', 
-  'Finland': '芬蘭', 
-  'Iceland': '冰島', 
-  'Poland': '波蘭', 
-  'Bugaria': '保加利亞', 
-  'Greece': '希臘',
+  'Europe': {'zh-tw': '歐洲', 'fr': 'Europe'},
+  'Ireland': {'zh-tw': '愛爾蘭', 'fr': 'Irlande'},
+  'UK': {'zh-tw': '英國', 'fr': 'Royaume-Uni'},
+  'France': {'zh-tw': '法國', 'fr': 'France'},
+  'Portugal': {'zh-tw': '葡萄牙', 'fr': 'Portugal'},
+  'Spain': {'zh-tw': '西班牙', 'fr': 'Espagne'},
+  'Italy': {'zh-tw': '義大利', 'fr': 'Italie'},
+  'Belgium': {'zh-tw': '比利時', 'fr': 'Belgique'},
+  'Netherlands': {'zh-tw': '荷蘭', 'fr': 'Pays-Bas'},
+  'Luxemburg': {'zh-tw': '盧森堡', 'fr': 'Luxembourg'},
+  'Switzerland': {'zh-tw': '瑞士', 'fr': 'Suisse'},
+  'Germany': {'zh-tw': '德國', 'fr': 'Allemagne'},
+  'Austria': {'zh-tw': '奧地利', 'fr': 'Autriche'},
+  'Czechia': {'zh-tw': '捷克', 'fr': 'Tchéquie'},
+  'Danmark': {'zh-tw': '丹麥', 'fr': 'Danemark'},
+  'Finland': {'zh-tw': '芬蘭', 'fr': 'Finlande'},
+  'Iceland': {'zh-tw': '冰島', 'fr': 'Islande'},
+  'Poland': {'zh-tw': '波蘭', 'fr': 'Pologne'},
+  'Bulgaria': {'zh-tw': '保加利亞', 'fr': 'Bulgarie'},
+  'Greece': {'zh-tw': '希臘', 'fr': 'Grèce'},
   
-  'Turkey': '土耳其', 
-  'Qatar': '卡達', 
-  'UAE': '阿拉伯聯合大公國', 
-  'Egypt': '埃及', 
+  'Turkey': {'zh-tw': '土耳其', 'fr': 'Turquie'},
+  'Qatar': {'zh-tw': '卡達', 'fr': 'Qatar'},
+  'UAE': {'zh-tw': '阿拉伯聯合大公國', 'fr': 'EAU'},
+  'Egypt': {'zh-tw': '埃及', 'fr': 'Égypte'},
   
-  'Morocco': '摩洛哥', 
-  'Tunisia': '突尼西亞', 
-  'South Africa': '南非', 
+  'Morocco': {'zh-tw': '摩洛哥', 'fr': 'Maroc'},
+  'Tunisia': {'zh-tw': '突尼西亞', 'fr': 'Tunisie'},
+  'South Africa': {'zh-tw': '南非', 'fr': 'Afrique du Sud'},
   
-  'Australia': '澳洲', 
-  'New Zealand': '紐西蘭', 
-  'Palau': '帛琉', 
+  'Australia': {'zh-tw': '澳洲', 'fr': 'Australie'},
+  'New Zealand': {'zh-tw': '紐西蘭', 'fr': 'Nouvelle-Zélande'},
+  'Palau': {'zh-tw': '帛琉', 'fr': 'Palaos'},
   
-  'Antarctica': '南極', 
+  'Antarctica': {'zh-tw': '南極', 'fr': 'Antartique'},
   
-  'Diamond Princess': '鑽石公主號', 
-  'Coral Princess': '珊瑚公主號', 
-  'Pan-Shi': '磐石艦', 
-  'indigenous': '無'
+  'Diamond Princess': {'zh-tw': '鑽石公主號', 'fr': 'Diamond Princess'}, 
+  'Coral Princess': {'zh-tw': '珊瑚公主號', 'fr': 'Coral Princess'},
+  'Pan-Shi': {'zh-tw': '磐石艦', 'fr': 'Pan-Shi'},
+  'indigenous': {'zh-tw': '無', 'fr': 'local'}
 }
 
 AGE_DICT = {
-  '0s': '未滿十歲',
-  '10s': '十多歲',
-  '20s': '二十多歲',
-  '30s': '三十多歲',
-  '40s': '四十多歲',
-  '50s': '五十多歲',
-  '60s': '六十多歲',
-  '70s': '七十多歲',
-  '80s': '八十多歲'
+  '0s': {'zh-tw': '未滿十歲', 'fr': '< 10 ans'},
+  '10s': {'zh-tw': '十多歲', 'fr': '10aine'},
+  '20s': {'zh-tw': '二十多歲', 'fr': '20aine'},
+  '30s': {'zh-tw': '三十多歲', 'fr': '30aine'},
+  '40s': {'zh-tw': '四十多歲', 'fr': '40aine'},
+  '50s': {'zh-tw': '五十多歲', 'fr': '50aine'},
+  '60s': {'zh-tw': '六十多歲', 'fr': '60aine'},
+  '70s': {'zh-tw': '七十多歲', 'fr': '70aine'},
+  '80s': {'zh-tw': '八十多歲', 'fr': '80aine'}
 }
 
 ###############################################################################
@@ -344,7 +344,7 @@ class MainSheet:
       'Finland': ['芬蘭'], 
       'Iceland': ['冰島'], 
       'Poland': ['波蘭'], 
-      'Bugaria': ['保加利亞'], 
+      'Bulgaria': ['保加利亞'], 
       'Greece': ['希臘'],
       
       'Turkey': ['土耳其'], 
@@ -401,7 +401,7 @@ class MainSheet:
       'North America': ['USA', 'Canada', 'Mexico'], 
       'South America': ['Chile', 'Argentina', 'Peru', 'Bolivia', 'Brazil', 'Latin America'], 
       'Europe': ['Europe', 'Ireland', 'UK', 'France', 'Portugal', 'Spain', 'Italy', 'Belgium', 'Netherlands', 'Luxemburg', 'Switzerland', 
-                 'Germany', 'Austria', 'Czechia', 'Danmark', 'Finland', 'Iceland', 'Poland', 'Bugaria', 'Greece'],
+                 'Germany', 'Austria', 'Czechia', 'Danmark', 'Finland', 'Iceland', 'Poland', 'Bulgaria', 'Greece'],
       'Middle East': ['Turkey', 'Qatar', 'UAE', 'Egypt'], 
       'Africa': ['Morocco', 'Tunisia', 'South Africa'],
       'Occeania': ['Australia', 'New Zealand', 'Palau'], 
@@ -527,7 +527,7 @@ class MainSheet:
       'fever': ['微燒(37.5度)', '體溫偏高(37.4度)', '發燒(耳溫量測37.7度)', '微燒', '輕微發燒', '自覺有發燒', '間歇性發燒', '體溫偏高', '自覺發熱', '身體悶熱不適', '發燒', '發熱'],
       'chills': ['畏寒', '冒冷汗', '忽冷忽熱症狀', '發冷', '寒顫'], 
       
-      'Nausea': ['噁心'],
+      'nausea': ['噁心'],
       'vomiting': ['嘔吐'],
       'diarrhea': ['輕微腹瀉', '腹瀉'], 
       
@@ -546,9 +546,9 @@ class MainSheet:
       'anosmia': ['嗅覺異常症狀', '自覺嗅覺喪失', '失去嗅覺', '嗅覺不靈敏', '嗅覺喪失', '喪失嗅覺', '嗅覺遲鈍', '嗅覺異常', '無嗅覺'], 
       'ageusia': ['自覺喪失味覺', '味覺喪失', '味覺異常', '失去味覺', '味覺變差'], 
       
-      'lymphatic swelling': ['淋巴腫脹'], 
+      'lymphadenopathy': ['淋巴腫脹'], 
       'hypoglycemia': ['低血糖'], 
-      'poor appetite': ['食慾不佳'],
+      'anorexia': ['食慾不佳'],
       'arrhythmia': ['心律不整'],
       
       'symptomatic': ['有症狀', '出現症狀', '身體不適'],
@@ -982,8 +982,9 @@ class MainSheet:
     pairList = [('N_total', self.N_total), ('N_imported', N_imported), ('N_data', N_data)] + travHistHist + symptomHist
     label = [pair[0] for pair in pairList]
     count = [pair[1] for pair in pairList]
-    label_zh = ['合計', '境外移入總數', '有資料案例數'] + [TRAVEL_HISTORY_DICT[trav] for trav in travHistList] + [SYMPTOM_DICT[symp] for symp in symptomList]
-    data3 = {'label': label, 'count': count, 'label_zh': label_zh}
+    label_zh = ['合計', '境外移入總數', '有資料案例數'] + [TRAVEL_HISTORY_DICT[trav]['zh-tw'] for trav in travHistList] + [SYMPTOM_DICT[symp]['zh-tw'] for symp in symptomList]
+    label_fr = ['Total', 'Importés', 'Données complètes'] + [TRAVEL_HISTORY_DICT[trav]['fr'] for trav in travHistList] + [SYMPTOM_DICT[symp]['fr'] for symp in symptomList]
+    data3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
     data3 = pd.DataFrame(data3)
     
     name = '%sprocessed_data/travel_history_symptom_correlations_coefficient.csv' % DATA_PATH
@@ -1026,8 +1027,9 @@ class MainSheet:
     label = [pair[0] for pair in pairList]
     count = [pair[1] for pair in pairList]
     
-    label_zh = ['合計', '有資料案例數'] + [AGE_DICT[age] for age in ageList] + [SYMPTOM_DICT[symp] for symp in symptomList]
-    data3 = {'label': label, 'count': count, 'label_zh': label_zh}
+    label_zh = ['合計', '有資料案例數'] + [AGE_DICT[age]['zh-tw'] for age in ageList] + [SYMPTOM_DICT[symp]['zh-tw'] for symp in symptomList]
+    label_fr = ['Total', 'Données complètes'] + [AGE_DICT[age]['fr'] for age in ageList] + [SYMPTOM_DICT[symp]['fr'] for symp in symptomList]
+    data3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
     data3 = pd.DataFrame(data3)
     
     name = '%sprocessed_data/age_symptom_correlations_coefficient.csv' % DATA_PATH

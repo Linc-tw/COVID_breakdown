@@ -15,6 +15,11 @@ function ASC_makeCanvas() {
     left = 200;
     top = 155;
   }
+  else if (lang == 'fr') {
+    totHeight = 600;
+    left = 235;
+    top = 225;
+  }
   else {
     totHeight = 600;
     left = 235;
@@ -97,6 +102,25 @@ function ASC_formatData2(data2) {
       for (j=0; j<data2.length; j++) {
         if (ASC_wrap.ageList[i] == data2[j]['label']) {
           yticklabel.push(data2[j]['label_zh'] + ' (' + data2[j]['count'] + ')');
+          break;
+        }
+      }
+    }
+  }
+  else if (lang == 'fr') {
+    for (i=0; i<ASC_wrap.symptomList.length; i++) {
+      for (j=0; j<data2.length; j++) {
+        if (ASC_wrap.symptomList[i] == data2[j]['label']) {
+          xticklabel.push(data2[j]['label_fr'].charAt(0).toUpperCase() + data2[j]['label_fr'].slice(1) + ' (' + data2[j]['count'] + ')');
+          break;
+        }
+      }
+    }
+    
+    for (i=0; i<ASC_wrap.ageList.length; i++) {
+      for (j=0; j<data2.length; j++) {
+        if (ASC_wrap.ageList[i] == data2[j]['label']) {
+          yticklabel.push(data2[j]['label_fr'] + ' (' + data2[j]['count'] + ')');
           break;
         }
       }
@@ -198,7 +222,7 @@ function ASC_initialize() {
     .call(yAxis2)
     
   //-- Legend - value
-  var lPos = {x: 50, y: -120, dx: 10, dy: 25};
+  var lPos = {x: 50, y: -0.8*ASC_wrap.margin.top, dx: 12, dy: 30};
   var lColor = [cList[0], '#999999', '#000000'];
   var lValue = [ASC_wrap.N_data, ASC_wrap.N_total-ASC_wrap.N_data, ASC_wrap.N_total];
   
@@ -274,6 +298,7 @@ function ASC_update() {
   //-- Legend - label
   var lLabel;
   if (lang == 'zh-tw') lLabel = ['有資料案例數', '資料不全', '合計'];
+  else if (lang == 'fr') lLabel = ['Données complètes', 'Données incomplètes', 'Total'];
   else lLabel = ['Data complete', 'Data incomplete', 'Total'];
   
   ASC_wrap.svg.selectAll(".legend.label")

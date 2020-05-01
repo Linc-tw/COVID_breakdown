@@ -13,6 +13,10 @@ function DBT_makeCanvas() {
     totHeight = 415;
     bottom = 90;
   }
+  else if (lang == 'fr') {
+    totHeight = 400;
+    bottom = 80;
+  }
   else {
     totHeight = 400;
     bottom = 80;
@@ -43,7 +47,7 @@ function DBT_makeCanvas() {
 
 function DBT_formatData(data) {
   //-- Settings for xticklabels
-  var xlabel_path = 2;
+  var xlabel_path = 3;
   var r = 0;
   var xtick = [];
   var xticklabel = [];
@@ -163,13 +167,29 @@ function DBT_getTooltipPos(d) {
 
 function DBT_mousemove(d) {
   var newPos = DBT_getTooltipPos(d3.mouse(this));
-  var colTag, tooltipText;
+  var colTag, colTag2, tooltipText;
   
-  if (lang == 'zh-tw')
-    tooltipText = d.x + "<br>合計 = " + (+d.x + +d.h2 + +d.h3 + +d.h4) + "<br>境外移入 = " + d.h1+ "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>敦睦艦隊 = " + d.h4
+  if (lang == 'zh-tw') {
+    colTag = DBT_wrap.colTagList[DBT_wrap.colInd];
+    if (colTag == 'all') colTag2 = '全部';
+    else if (colTag == 'imported') colTag2 = '境外移入';
+    else if (colTag == 'indigenous') colTag2 = '本土';
+    else if (colTag == 'fleet') colTag2 = '敦睦艦隊';
+    tooltipText = colTag2 + '案例中有' + d[colTag] + '位<br>發病或入境後' + d['difference'] + '日確診';
+  }
+  else if (lang == 'fr') {
+    colTag = DBT_wrap.colTagList[DBT_wrap.colInd];
+    if (colTag == 'all') colTag2 = "de l'ensemble des cas";
+    else if (colTag == 'imported') colTag2 = 'des cas importés';
+    else if (colTag == 'indigenous') colTag2 = 'des cas locaux';
+    else if (colTag == 'fleet') colTag2 = 'des cas en flotte';
+    tooltipText = d[colTag] + ' ' + colTag2 + ' attend(ent)<br>' + d['difference'] + " jour(s) avant d'être identifié(s)";
+  }
   else {
     colTag = DBT_wrap.colTagList[DBT_wrap.colInd];
-    tooltipText = d[colTag] + ' of ' + colTag + ' cases required<br>' + d['difference'] + ' day(s) to be identified'
+    if (colTag == 'imported') colTag2 = 'local';
+    else colTag2 = colTag;
+    tooltipText = d[colTag] + ' of ' + colTag2 + ' cases required<br>' + d['difference'] + ' day(s) to be identified'
   }
   
   DBT_tooltip
@@ -247,6 +267,7 @@ function DBT_initialize() {
   //-- xlabel
   var xlabel;
   if (lang == 'zh-tw') xlabel = '發病或入境後到確診所需天數';
+  if (lang == 'fr') xlabel = "Jours avant d'être identifié";
   else xlabel = "Days required for each case to be identified";
   DBT_wrap.svg.append("text")
     .attr("class", "xlabel")
@@ -258,6 +279,7 @@ function DBT_initialize() {
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '案例數';
+  else if (lang == 'fr') ylabel = 'Nombre des cas';
   else ylabel = 'Number of cases';
   DBT_wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -322,10 +344,12 @@ function DBT_update() {
     .attr('height', function(d) {return y(0)-y(d[colTagList[DBT_wrap.colInd]]);});
   
   //-- Legend
-  var lPos = {x: 450, y: 45, dx: 10, dy: 27};
+  var lPos = {x: 450, y: 45, dx: 12, dy: 30};
   var lColorList, lLabel, lLabel2, lValue2;
   if (lang == 'zh-tw')
     lLabel = ['有資料案例數', "境外移入", "本土", '敦睦艦隊', '資料不全', '合計'];
+  else if (lang == 'fr')
+    lLabel = ['Données complètes', "Importé", "Local", 'Flotte diplomatique', 'Données incomplètes', 'Total'];
   else 
     lLabel = ['Data complete', 'Imported', 'Local', 'Diplomatic fleet cluster', 'Data incomplete', 'Total'];
   var lValue = DBT_wrap.lValue.slice(0);

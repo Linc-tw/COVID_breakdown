@@ -15,9 +15,14 @@ function THSC_makeCanvas() {
     left = 200;
     top = 155;
   }
-  else {
+  else if (lang == 'fr') {
     totHeight = 600;
     left = 235;
+    top = 235;
+  }
+  else {
+    totHeight = 600;
+    left = 225;
     top = 215;
   }
   
@@ -100,6 +105,25 @@ function THSC_formatData2(data2) {
       for (j=0; j<data2.length; j++) {
         if (THSC_wrap.travHistList[i] == data2[j]['label']) {
           yticklabel.push(data2[j]['label_zh'] + ' (' + data2[j]['count'] + ')');
+          break;
+        }
+      }
+    }
+  }
+  else if (lang == 'fr') {
+    for (i=0; i<THSC_wrap.symptomList.length; i++) {
+      for (j=0; j<data2.length; j++) {
+        if (THSC_wrap.symptomList[i] == data2[j]['label']) {
+          xticklabel.push(data2[j]['label_fr'].charAt(0).toUpperCase() + data2[j]['label_fr'].slice(1) + ' (' + data2[j]['count'] + ')');
+          break;
+        }
+      }
+    }
+    
+    for (i=0; i<THSC_wrap.travHistList.length; i++) {
+      for (j=0; j<data2.length; j++) {
+        if (THSC_wrap.travHistList[i] == data2[j]['label']) {
+          yticklabel.push(data2[j]['label_fr'] + ' (' + data2[j]['count'] + ')');
           break;
         }
       }
@@ -202,7 +226,7 @@ function THSC_initialize() {
     .call(yAxis2)
     
   //-- Legend - value
-  var lPos = {x: 50, y: -120, dx: 10, dy: 25};
+  var lPos = {x: 50, y: -0.8*THSC_wrap.margin.top, dx: 12, dy: 30};
   var lColor = [cList[0], '#999999', '#999999', '#000000'];
   var lValue = [THSC_wrap.N_data, THSC_wrap.N_imported-THSC_wrap.N_data, THSC_wrap.N_total-THSC_wrap.N_imported, THSC_wrap.N_total];
   
@@ -278,6 +302,7 @@ function THSC_update() {
   //-- Legend - label
   var lLabel;
   if (lang == 'zh-tw') lLabel = ['有資料案例數', '資料不全', '無旅遊史', '合計'];
+  else if (lang == 'fr') lLabel = ['Données complètes', 'Données incomplètes', 'Sans anté. de voyage', 'Total'];
   else lLabel = ['Data complete', 'Data incomplete', 'No travel history', 'Total'];
   
   THSC_wrap.svg.selectAll(".legend.label")

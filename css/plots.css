@@ -49,7 +49,7 @@ body,
   .legend,
   .xaxis text,
   .yaxis text {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
   }
   .content.text {
     font-size: 0.9rem;
@@ -62,7 +62,7 @@ body,
   .legend,
   .xaxis text,
   .yaxis text {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
   }
 }
 /* 1 col <=> 2 col */
@@ -72,7 +72,7 @@ body,
   .legend,
   .xaxis text,
   .yaxis text {
-    font-size: 1.35rem;
+    font-size: 1.3rem;
   }
   .content.text {
     font-size: 1rem;
@@ -84,7 +84,7 @@ body,
   .legend,
   .xaxis text,
   .yaxis text {
-    font-size: 1.35rem;
+    font-size: 1.3rem;
   }
   .content.text {
     font-size: 0.9rem;

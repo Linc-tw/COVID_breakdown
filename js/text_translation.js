@@ -1,5 +1,15 @@
+//-- Language settings
+var lang = Cookies.get("lang"); // 'en', 'fr', 'zh-tw'
+if (!lang) {
+  lang = "en";
+  Cookies.set("lang", lang);
+}
+
+let el = document.getElementById('lang_'+lang);
+el.classList.add("active");
+
+
 //-- Glocal settings
-var lang = 'en'; // 'en', 'zh-tw'
 var cList = ['#3366BB', '#CC6677', '#55BB44', '#DDAA77', '#AA55AA', '#44AA99'];
 var wrap = {};
 
@@ -7,11 +17,13 @@ var wrap = {};
 //-- General functions
 function ISODateToMDDate(ISODate) {
   var fmtStr;
-  if (lang == 'zh-tw') fmtStr = "%-m月%-d日"
-  else fmtStr = "%b %d"
+  var MDDateFormat;
+  if (lang == 'zh-tw')   MDDateFormat = d3.timeFormat("%-m月%-d日");
+  else if (lang == 'fr') MDDateFormat = d3.timeFormat("%d/%m");
+  else MDDateFormat = d3.timeFormat("%b %d");
   
-  var MDDateFormat = d3.timeFormat(fmtStr);
-  return MDDateFormat(d3.isoParse(ISODate));
+  var date = d3.isoParse(ISODate);
+  return MDDateFormat(date);
 }
 
 function cumsum(data, colTagList) {
@@ -45,6 +57,8 @@ function copyleft_mousemove(d) {
   
   if (lang == 'zh-tw')
     tooltipText = "版權沒有<br>翻印不究<br>不需署名<br>敬請亂用"
+  else if (lang == 'fr')
+    tooltipText = "Fièrement sans droit d'auteur"
   else
     tooltipText = "Proudly no right reserved"
   
@@ -93,7 +107,7 @@ function text_translation() {
     
     node = document.getElementById("last_update")
     node.textContent = '';
-    node.appendChild(document.createTextNode("版權沒有"));
+    node.appendChild(document.createTextNode('最後更新：' + wrap.timestamp));
     
     
     
@@ -204,6 +218,136 @@ function text_translation() {
     node.appendChild(document.createTextNode("案例數"));
     
   }
+  else if (lang == 'fr') {
+    node = document.getElementById("title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Statistiques de COVID-19 à Taïwan"));
+    
+    node = document.getElementById("menu_summary")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Résumé"));
+    
+    node = document.getElementById("menu_source")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Source des données"));
+    
+    node = document.getElementById("menu_copyleft")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Gauche d'auteur"));
+    
+    node = document.getElementById("last_update")
+    node.textContent = '';
+    node.appendChild(document.createTextNode('Dernière mise à jour : ' + wrap.timestamp));
+    
+    
+    
+    node = document.getElementById("case_by_transmission_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cas confirmés par moyen de transmission"));
+    
+    node = document.getElementById("case_by_transmission_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Quotidien"));
+    
+    node = document.getElementById("case_by_transmission_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cumulé"));
+    
+    node = document.getElementById("case_by_transmission_button_3")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Date du diagnostic"));
+    
+    node = document.getElementById("case_by_transmission_button_4")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Date du début des symptômes"));
+    
+    
+    
+    node = document.getElementById("case_by_detection_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cas confirmés par canal de détection"));
+    
+    node = document.getElementById("case_by_detection_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Quotidien"));
+    
+    node = document.getElementById("case_by_detection_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cumulé"));
+    
+    node = document.getElementById("case_by_detection_button_3")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Date du diagnostic"));
+    
+    node = document.getElementById("case_by_detection_button_4")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Date du début des symptômes"));
+    
+    
+    
+    node = document.getElementById("test_by_criterion_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Nombre des tests par critère"));
+    
+    node = document.getElementById("test_by_criterion_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Quotidien"));
+    
+    node = document.getElementById("test_by_criterion_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cumulé"));
+    
+    
+    
+    node = document.getElementById("difference_by_transmission_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Combien de temps pour identifier les cas?"));
+    
+    node = document.getElementById("difference_by_transmission_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Tous"));
+    
+    node = document.getElementById("difference_by_transmission_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Importé"));
+    
+    node = document.getElementById("difference_by_transmission_button_3")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Local"));
+    
+    node = document.getElementById("difference_by_transmission_button_4")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Flotte"));
+    
+    
+    
+    node = document.getElementById("travel_history_symptom_correlations_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Corrélations entre antécédents de voyage & symptômes"));
+    
+    node = document.getElementById("travel_history_symptom_correlations_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cœfficient"));
+    
+    node = document.getElementById("travel_history_symptom_correlations_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Comptage"));
+    
+    
+    
+    node = document.getElementById("age_symptom_correlations_title")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Corrélations entre âge & symptômes"));
+    
+    node = document.getElementById("age_symptom_correlations_button_1")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Cœfficient"));
+    
+    node = document.getElementById("age_symptom_correlations_button_2")
+    node.textContent = '';
+    node.appendChild(document.createTextNode("Comptage"));
+    
+  }
   else {
     node = document.getElementById("title")
     node.textContent = '';
@@ -223,7 +367,7 @@ function text_translation() {
     
     node = document.getElementById("last_update")
     node.textContent = '';
-    node.appendChild(document.createTextNode(wrap.timestamp));
+    node.appendChild(document.createTextNode('Last updates: ' + wrap.timestamp));
     
     
     
@@ -367,6 +511,7 @@ d3.csv("processed_data/key_numbers.csv", function(error, data) {
 //-- Button listener
 $(document).on("change", "input:radio[name='index_language']", function(event) {
   lang = this.value;
+  Cookies.set("lang", lang);
   text_translation();
   
   d3.selectAll('.plot').remove()

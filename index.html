@@ -29,11 +29,14 @@
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading-nouppercase">
                                 <div class="btn-group-vertical btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                    <label class="btn btn-covid-white active">
-                                        <input type="radio" name="index_language" value='en'>English<br>
+                                    <label id="lang_en" class="btn btn-covid-white">
+                                        <input type="radio" name="index_language" value='en' checked>English<br>
                                     </label>
-                                    <label class="btn btn-covid-white">
-                                        <input type="radio" name="index_language" value='zh-tw' checked>正體中文<br>
+                                    <label id="lang_fr" class="btn btn-covid-white">
+                                        <input type="radio" name="index_language" value='fr'>Français<br>
+                                    </label>
+                                    <label id="lang_zh-tw" class="btn btn-covid-white">
+                                        <input type="radio" name="index_language" value='zh-tw'>正體中文<br>
                                     </label>
                                 </div>
                             </div>
@@ -320,7 +323,7 @@ case network
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div>Last update: <span id="last_update"></span></div>
+                            <div id="last_update"></div>
                         </div>
                     </div>
                 </footer>
@@ -334,6 +337,7 @@ case network
         <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.19.0/js/canvas-to-blob.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
         
         <script src="js/saveSvgAsPng.js"></script>
         <script src="js/text_translation.js"></script>
