@@ -287,7 +287,7 @@ function text_translation() {
     
     node = document.getElementById("test_by_criterion_title")
     node.textContent = '';
-    node.appendChild(document.createTextNode("Nombre des tests par critère"));
+    node.appendChild(document.createTextNode("Nombre de tests par critère"));
     
     node = document.getElementById("test_by_criterion_button_1")
     node.textContent = '';

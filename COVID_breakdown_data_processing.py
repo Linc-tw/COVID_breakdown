@@ -1164,15 +1164,75 @@ class TestSheet:
     return
 
 ###############################################################################
+## Test sheet
+
+class TimelineSheet:
+  
+  def __init__(self, verbose=True):
+    self.n_date = '時間'
+    self.n_TWNEvt = '台灣事件'
+    self.n_criteria = '台灣檢驗標準'
+    self.n_globalEvt = '全球事件'
+    self.n_keyEvt = '重點事件'
+    
+    name = '%sraw_data/武漢肺炎in臺灣相關整理(請看推廣用連結) - 時間軸.csv' % DATA_PATH
+    self.data = pd.read_csv(name, dtype=object, skipinitialspace=True)
+    
+    dateList = self.data[self.n_date].values
+    ind = dateList == dateList
+    self.N_total = ind.sum()
+    
+    if verbose:
+      print('Loaded \"%s\"' % name)
+      print('N_total = %d' % self.N_total)
+    return 
+    
+  def getDate(self):
+    dateList = []
+    
+    for date in self.data[self.n_date].values[:self.N_total]:
+      YMDD = date.split('年')
+      Y = int(YMDD[0])
+      MDD = YMDD[1].split('月')
+      M = int(MDD[0])
+      DD = MDD[1].split('日')
+      D = int(DD[0])
+      date = '%04d-%02d-%02d' % (Y, M, D)
+      dateList.append(date)
+    return dateList
+  
+  def getCriteria(self):
+    criteriaList = []
+    
+    for criteria in self.data[self.n_criteria].values[:self.N_total]:
+      criteriaList.append(criteria)
+    return criteriaList
+  
+  def saveCriteria(self):
+    dateList = self.getDate()
+    criteriaList = self.getCriteria()
+    
+    for date, criteria in zip(dateList, criteriaList):
+      if criteria != criteria:
+        continue
+      print(date, criteria)
+      print()
+    return
+  
+###############################################################################
 ## Sandbox
 
 def sandbox():
-  sheet = MainSheet()
+  #sheet = MainSheet()
   #print(sheet.getAge())
-  sheet.saveCsv_diffByTrans()
+  #sheet.saveCsv_diffByTrans()
   
   #sheet = TestSheet()
   #print(sheet.getDate())
+  #sheet.saveCsv_testByCriterion()
+  
+  sheet = TimelineSheet()
+  print(sheet.saveCriteria())
   #sheet.saveCsv()
   return
 
