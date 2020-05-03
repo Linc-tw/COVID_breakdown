@@ -13,7 +13,7 @@ The goal of this project is to inform general public about COVID-19 with data vi
 It allows users to monitor the situation in Taiwan and to ponder over epidemic prevention policies.
 
 This project is driven by 3 key motivations:
-- Taiwan is one of the rare places where the infection is low enough to make detailed case-tracing possible;
+- Taiwan is one of the rare countries where the infection is low enough to make detailed case-tracing possible;
 - the basic information from case-tracing is publicly available; and 
 - the scientific potential of this breakdown dataset has not yet been fully exploited.
 
@@ -37,7 +37,16 @@ Language support
 
 - English
 - French
-- standard Mandarin
+- Mandarin with standard characters
+
+
+Current workflow
+----------------
+
+`upload.sh` is automatically executed everyday around 3:15pm Taipei time. It will:
+- download raw data from the original dataset (a publicly accessible online Google worksheet);
+- execute `python COVID_breakdown_data_processing.py` to generate processed data; and
+- commit & push the data to the repository.
 
 
 Credits

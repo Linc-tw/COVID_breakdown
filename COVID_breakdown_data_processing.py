@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.04.27                  ##
+    ##  Version 2020.05.04                  ##
     ##########################################
 
 
@@ -1174,6 +1174,46 @@ class TestSheet:
     saveCsv(name, data)
     return
   
+  def saveCriteria(self):
+    dateList = self.getDate()
+    criteriaList = self.getCriteria()
+    
+    urlList = {
+      '2020-01-16': 'http://at.cdc.tw/6Jlc8w', 
+      '2020-01-21': 'http://at.cdc.tw/9EM3mV',
+      '2020-01-25': 'http://at.cdc.tw/l99yHG',
+      '2020-02-01': 'http://at.cdc.tw/8wN31W',
+      '2020-02-02': 'http://at.cdc.tw/8wN31W',
+      '2020-02-03': 'http://at.cdc.tw/8IYT56', #
+      '2020-02-05': 'http://at.cdc.tw/th3S0o', #
+      '2020-02-06': 'http://at.cdc.tw/4sU035', #
+      '2020-02-09': 'http://at.cdc.tw/n48e22',
+      '2020-02-10': 'http://at.cdc.tw/4sU035', #
+      '2020-02-12': 'http://at.cdc.tw/73gugZ', #
+      '2020-02-15': 'http://at.cdc.tw/072iKp',
+      '2020-02-16': 'http://at.cdc.tw/275pmA',
+      '2020-02-29': 'http://at.cdc.tw/e7C892',
+      '2020-03-01': 'http://at.cdc.tw/L20G51', #
+      '2020-03-14': 'http://at.cdc.tw/Nh5CL8', #
+      '2020-03-16': 'http://at.cdc.tw/6tK52h', #
+      '2020-03-17': 'http://at.cdc.tw/M24nK2', #
+      '2020-03-18': 'http://at.cdc.tw/Y3Y592', #
+      '2020-03-20': 'http://at.cdc.tw/328jaz', #
+      '2020-03-25': 'https://youtu.be/bVv-u2bcV_g?t=782',
+      '2020-04-01': 'http://at.cdc.tw/zU3557',
+      '2020-04-03': 'http://at.cdc.tw/1vI50K',
+      '2020-04-05': 'http://at.cdc.tw/Q96xrb',
+      '2020-04-24': 'http://at.cdc.tw/R3sI9v'
+    }
+    
+    for date, criteria in zip(dateList, criteriaList):
+      if criteria != criteria:
+        pass
+      else:
+        print(date, criteria, urlList.get(date, np.nan))
+        print()
+    return
+  
   def saveCsv(self):
     self.saveCsv_testByCriterion()
     return
@@ -1246,7 +1286,7 @@ def sandbox():
   #sheet.saveCsv_diffByTrans()
   
   sheet = TestSheet()
-  print(sheet.getCriteria())
+  print(sheet.saveCriteria())
   #sheet.saveCsv_testByCriterion()
   
   #sheet = TimelineSheet()

@@ -36,54 +36,6 @@ function cumsum(data, colTagList) {
 }
 
 
-//-- Tooltip
-var copyleft_tooltip = d3.select('#menu_copyleft_2')
-  .append("div")
-  .attr("class", "tooltip")
-
-function copyleft_mouseover(d) {
-  copyleft_tooltip.transition()
-    .duration(200)
-    .style("opacity", 0.9)
-  d3.select(this)
-    .style("opacity", 0.8)
-}
-
-function copyleft_mousemove(d) {
-  var newPos = d3.mouse(this);
-  newPos[1] += 30;
-  
-  var tooltipText;
-  
-  if (lang == 'zh-tw')
-    tooltipText = "版權沒有<br>翻印不究<br>不需署名<br>敬請亂用"
-  else if (lang == 'fr')
-    tooltipText = "Fièrement sans droit d'auteur"
-  else
-    tooltipText = "Proudly no right reserved"
-  
-  console.log(newPos)
-  
-  copyleft_tooltip
-    .html(tooltipText)
-    .style("left", newPos[0] + "px")
-    .style("top", newPos[1] + "px")
-}
-
-function copyleft_mouseleave(d) {
-  copyleft_tooltip.transition()
-    .duration(10)
-    .style("opacity", 0)
-  d3.select(this)
-    .style("opacity", 1)
-}
-
-d3.select('#menu_copyleft_2')
-    .on("mouseover", copyleft_mouseover)
-    .on("mousemove", copyleft_mousemove)
-    .on("mouseleave", copyleft_mouseleave)
-
-
 //-- Text in html
 var node;
 
@@ -97,7 +49,7 @@ function text_translation() {
     node = document.getElementById("menu_summary")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("摘要"));
+      node.appendChild(document.createTextNode("統計"));
     }
     node = document.getElementById("menu_source")
     if (node !== null) {
@@ -296,7 +248,7 @@ function text_translation() {
     node = document.getElementById("menu_summary")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Résumé"));
+      node.appendChild(document.createTextNode("Statistiques"));
     }
     node = document.getElementById("menu_source")
     if (node !== null) {
@@ -495,7 +447,12 @@ function text_translation() {
     node = document.getElementById("menu_summary")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Plots"));
+      node.appendChild(document.createTextNode("Statistics"));
+    }
+    node = document.getElementById("menu_summary")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Policies"));
     }
     node = document.getElementById("menu_source")
     if (node !== null) {
