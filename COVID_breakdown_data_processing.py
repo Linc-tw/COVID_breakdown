@@ -108,11 +108,12 @@ TRAVEL_HISTORY_DICT = {
   'Turkey': {'zh-tw': '土耳其', 'fr': 'Turquie'},
   'Qatar': {'zh-tw': '卡達', 'fr': 'Qatar'},
   'UAE': {'zh-tw': '阿拉伯聯合大公國', 'fr': 'EAU'},
-  'Egypt': {'zh-tw': '埃及', 'fr': 'Égypte'},
   
+  'Egypt': {'zh-tw': '埃及', 'fr': 'Égypte'},
   'Morocco': {'zh-tw': '摩洛哥', 'fr': 'Maroc'},
   'Tunisia': {'zh-tw': '突尼西亞', 'fr': 'Tunisie'},
   'South Africa': {'zh-tw': '南非', 'fr': 'Afrique du Sud'},
+  'Senegal': {'zh-tw': '塞內加爾', 'fr': 'Sénégal'},
   
   'Australia': {'zh-tw': '澳洲', 'fr': 'Australie'},
   'New Zealand': {'zh-tw': '紐西蘭', 'fr': 'Nouvelle-Zélande'},
@@ -245,7 +246,7 @@ class MainSheet:
     self.n_confPressRel = '疾管署新聞稿'
     self.n_disPressRel = '出院新聞稿'
     
-    name = '%sraw_data/武漢肺炎in臺灣相關整理(請看推廣用連結) - 臺灣武漢肺炎病例.csv' % DATA_PATH
+    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv' % DATA_PATH
     self.data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
     reportDateList = self.data[self.n_reportDate].values
@@ -350,11 +351,12 @@ class MainSheet:
       'Turkey': ['土耳其'], 
       'Qatar': ['阿拉伯－卡達'], 
       'UAE': ['阿拉伯－杜拜'], 
-      'Egypt': ['埃及'], 
       
+      'Egypt': ['埃及'], 
       'Morocco': ['摩洛哥'], 
       'Tunisia': ['突尼西亞'], 
       'South Africa': ['南非'], 
+      'Senegal': ['塞內加爾'],
       
       'Australia': ['澳大利亞', '澳洲'], 
       'New Zealand': ['紐西蘭'], 
@@ -1071,7 +1073,7 @@ class TestSheet:
     self.n_note1 = '擴大之檢驗標準(含擴大監測標準及通報定義)'
     self.n_note2 = '來源：疾管署（每天1am更新）'
     
-    name = '%sraw_data/武漢肺炎in臺灣相關整理(請看推廣用連結) - 檢驗人數.csv' % DATA_PATH
+    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv' % DATA_PATH
     self.data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
     dateList = self.data[self.n_date].values
@@ -1175,7 +1177,7 @@ class TimelineSheet:
     self.n_globalEvt = '全球事件'
     self.n_keyEvt = '重點事件'
     
-    name = '%sraw_data/武漢肺炎in臺灣相關整理(請看推廣用連結) - 時間軸.csv' % DATA_PATH
+    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_timeline.csv' % DATA_PATH
     self.data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
     dateList = self.data[self.n_date].values
@@ -1214,9 +1216,12 @@ class TimelineSheet:
     
     for date, criteria in zip(dateList, criteriaList):
       if criteria != criteria:
-        continue
-      print(date, criteria)
-      print()
+        pass
+      elif '累積檢驗人數' in criteria:
+        pass
+      else:
+        print(date, criteria)
+        print()
     return
   
 ###############################################################################
