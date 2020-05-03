@@ -1,20 +1,20 @@
 label,count,label_zh,label_fr
 N_total,432,合計,Total
 N_imported,346,境外移入總數,Importés
-N_data,334,有資料案例數,Données complètes
+N_data,336,有資料案例數,Données complètes
 USA,98,美國,États-Unis
 UK,82,英國,Royaume-Uni
-France,25,法國,France
+France,27,法國,France
 Spain,21,西班牙,Espagne
 Czechia,15,捷克,Tchéquie
 Turkey,13,土耳其,Turquie
 Egypt,12,埃及,Égypte
 Austria,12,奧地利,Autriche
-cough,157,咳嗽,toux
+cough,159,咳嗽,toux
 fever,152,發燒,fièvre
 throatache,107,喉嚨症狀,mal de gorge
 sneezing,102,鼻腔症狀,éternuement
-fatigue,53,倦怠,fatigue
+fatigue,55,倦怠,fatigue
 soreness,44,痠痛,myalgie
 anosmia,42,嗅覺異常,anosmie
 headache,39,頭痛,mal de tête
