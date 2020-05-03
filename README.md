@@ -43,9 +43,9 @@ Language support
 Credits
 -------
 
-The dataset is maintained by various anonymous users of PTT, often considered as Taiwanese Reddit.
-They collect information from daily press releases and conferences, and sort them into a comprehensive 
-[worksheet](https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#).
+The [original dataset](https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#) 
+is maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit.
+They collect information from daily press releases and conferences, and sort them into comprehensive worksheets.
 
 Obviously this project cannot be done without the goodwill of these volunteers that I am fully grateful to.
 

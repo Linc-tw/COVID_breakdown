@@ -1071,8 +1071,8 @@ class TestSheet:
     self.n_cumConfirmed = '確診人數累計'
     self.n_dailyPosRate = '單日陽性率'
     self.n_totPosRate = '陽性率'
-    self.n_note1 = '擴大之檢驗標準(含擴大監測標準及通報定義)'
-    self.n_note2 = '來源：疾管署（每天1am更新）'
+    self.n_criteria = '擴大之檢驗標準(含擴大監測標準及通報定義)'
+    self.n_note = '來源：疾管署（每天1am更新）'
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv' % DATA_PATH
     self.data = pd.read_csv(name, dtype=object, skipinitialspace=True)
@@ -1143,6 +1143,13 @@ class TestSheet:
         clinicalDefList.append(0)
     return clinicalDefList
 
+  def getCriteria(self):
+    criteriaList = []
+    
+    for criteria in self.data[self.n_criteria].values[:self.N_total]:
+      criteriaList.append(criteria)
+    return criteriaList
+  
   def saveCsv_testByCriterion(self):
     dateList    = self.getDate()
     fromExtList = self.getFromExtended()
@@ -1233,12 +1240,12 @@ def sandbox():
   #print(sheet.getAge())
   #sheet.saveCsv_diffByTrans()
   
-  #sheet = TestSheet()
-  #print(sheet.getDate())
+  sheet = TestSheet()
+  print(sheet.getCriteria())
   #sheet.saveCsv_testByCriterion()
   
-  sheet = TimelineSheet()
-  print(sheet.saveCriteria())
+  #sheet = TimelineSheet()
+  #print(sheet.saveCriteria())
   #sheet.saveCsv()
   return
 
