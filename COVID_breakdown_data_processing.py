@@ -384,6 +384,7 @@ class MainSheet:
             stock.append(key)
       
       travHist = ''.join(travHist.split('自離境前往'))
+      travHist = ''.join(travHist.split('從搭機返國'))
       travHist = ''.join(travHist.split('來台'))
       travHist = ''.join(travHist.split('轉機'))
       travHist = travHist.lstrip(' 0123456789/-\n月及等()、')
