@@ -282,6 +282,8 @@ class MainSheet:
         age.append('30s')
       elif a in ['2X-6X']:
         age.append(np.nan)
+      elif a != a:
+        age.append(np.nan)
       else:
         print('Age, Case %d, %s' % (i+1, a))
         age.append(np.nan)
@@ -596,9 +598,12 @@ class MainSheet:
       elif link == '軍艦':
         linkList.append('fleet')
       
+      elif link != link:
+        linkList.append(np.nan)
+      
       elif 'O' in link:
         linkList.append('linked')
-      
+        
       else:
         print('Symptom, Case %d, %s' % (i+1, link))
         linkList.append(np.nan)
