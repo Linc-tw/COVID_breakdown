@@ -1,8 +1,9 @@
 COVID-19 statistics in Taiwan
 =============================
 
-
 This repository hosts and generates a [dashboard](https://linc-tw.github.io/COVID_breakdown/index.html) for COVID-19 statistics in Taiwan.
+
+![image](figures/screenshot.png)
 
 
 Motivations
@@ -46,17 +47,16 @@ The dataset is maintained by various anonymous users of PTT, often considered as
 They collect information from daily press releases and conferences, and sort them into a comprehensive 
 [worksheet](https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#).
 
-Obviously this project cannot be done without the goodwill of these volunteers.
-I am fully grateful to these good-minded netizens.
+Obviously this project cannot be done without the goodwill of these volunteers that I am fully grateful to.
 
 
 Licenses
 --------
 
-The codes & scripts are released under MIT License @ Chieh-An Lin.
+The codes & scripts are released under MIT License © Chieh-An Lin.
 
 This repository contains a [piece of code](https://github.com/Linc-tw/COVID_breakdown/blob/master/js/saveSvgAsPng.js) 
-taken from [here](https://github.com/exupero/saveSvgAsPng) and is released under MIT License @ Eric Shull.
+taken from [here](https://github.com/exupero/saveSvgAsPng) and is released under MIT License © Eric Shull.
 
 All other texts and plots created by this repository are released under [CC0 1.0 Universal Public Domain Dedication](https://creativecommons.org/publicdomain/zero/1.0/deed.en).
 
