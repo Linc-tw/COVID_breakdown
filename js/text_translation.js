@@ -49,7 +49,12 @@ function text_translation() {
     node = document.getElementById("menu_summary")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("統計"));
+      node.appendChild(document.createTextNode("統計摘要"));
+    }
+    node = document.getElementById("menu_policy")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Policies"));
     }
     node = document.getElementById("menu_source")
     if (node !== null) {
@@ -248,7 +253,12 @@ function text_translation() {
     node = document.getElementById("menu_summary")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Statistiques"));
+      node.appendChild(document.createTextNode("Tableau de bord"));
+    }
+    node = document.getElementById("menu_policy")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Policies"));
     }
     node = document.getElementById("menu_source")
     if (node !== null) {
@@ -447,9 +457,9 @@ function text_translation() {
     node = document.getElementById("menu_summary")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Statistics"));
+      node.appendChild(document.createTextNode("Dashboard"));
     }
-    node = document.getElementById("menu_summary")
+    node = document.getElementById("menu_policy")
     if (node !== null) {
       node.textContent = '';
       node.appendChild(document.createTextNode("Policies"));
