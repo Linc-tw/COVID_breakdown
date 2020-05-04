@@ -27,10 +27,13 @@
         </nav>
         
         <div id="layoutSidenav">
+            <!-- Side bar -->
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
+                        
+                            <!-- Language buttons -->
                             <div class="sb-sidenav-menu-heading-nouppercase">
                                 <div class="btn-group-vertical btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                     <label id="lang_en" class="btn btn-covid-white">
@@ -45,26 +48,27 @@
                                 </div>
                             </div>
                             
-<!--                             <div class="sb-sidenav-menu-heading">Core</div> -->
-                            
+                            <!-- Menu -->
                             <div class="sb-sidenav-menu-heading"></div>
                             <a class="nav-link" href="index.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 <span id="menu_summary"></span>
                             </a>
-                            
+<!--                             <div class="sb-sidenav-menu-heading"></div> -->
+<!--                             <a class="nav-link" href="policies.html"> -->
+<!--                                 <div class="sb-nav-link-icon"><i class="fas fa-vote-yea"></i></div> -->
+<!--                                 <span id="menu_policies"></span> -->
+<!--                             </a> -->
                             <a class="nav-link" href="data_source.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-database"></i></div>
                                 <span id="menu_source"></span>
                             </a>
-                            
                             <a class="nav-link" href="no_right_reserved.html">
                                 <div class="sb-nav-link-icon"><i class="fab fa-creative-commons-zero"></i></div>
                                 <span id="menu_copyleft"></span>
                             </a>
                             
-                           
-<!--                            <div class="sb-sidenav-menu-heading">Interface</div>
+                            <!--<div class="sb-sidenav-menu-heading">Interface</div>
                             
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -77,11 +81,10 @@
                                     <a class="nav-link" href="dist/layout-sidenav-light.html">Light Sidenav</a>
                                 </nav>
                             </div>-->
-                            
-                            
                         </div>
                     </div>
                     
+                    <!-- Social media -->
                    <div class="sb-sidenav-footer-covid icon">
                         <a href="https://github.com/Linc-tw/COVID_breakdown" target="_blank">
                             <img src="figures/GitHub-Mark-Light-64px.png" alt="GitHub"></img>
@@ -95,35 +98,39 @@
             </div>
             
             <div id="layoutSidenav_content">
+                <!-- Main body -->
                 <main>
                     <div class="container-fluid">
                         <h1 id="title" class="mt-4"></h1>
-                        
                         <div class="row">
-                            <div class="col-lg-6 col-xl-4">
+                        
+                            <div class="col-lg-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-database mr-1"></i> 
+                                        <i class="fab fa-creative-commons-zero mr-1"></i> 
                                         <span id="no_right_reserved_title"></span>
                                     </div>
                                     
                                     <div id="no_right_reserved_body" class="card-body" style="text-align: justify;"></div>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </main>
                 
+                <!-- Footer -->
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div id="last_update"></div>
+                            <span id="footer_last_update"></span>
                         </div>
                     </div>
                 </footer>
             </div>
         </div>
         
+        <!-- Scripts -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>

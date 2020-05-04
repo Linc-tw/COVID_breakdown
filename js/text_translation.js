@@ -66,10 +66,11 @@ function text_translation() {
       node.textContent = '';
       node.appendChild(document.createTextNode("版權沒有"));
     }
-    node = document.getElementById("last_update")
+    node = document.getElementById("footer_last_update")
     if (node !== null) {
       node.textContent = '';
       node.appendChild(document.createTextNode('最後更新：' + wrap.timestamp));
+      node.appendChild(document.createTextNode(' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3'));
     }
     
     
@@ -270,10 +271,11 @@ function text_translation() {
       node.textContent = '';
       node.appendChild(document.createTextNode("Sans droit d'auteur"));
     }
-    node = document.getElementById("last_update")
+    node = document.getElementById("footer_last_update")
     if (node !== null) {
       node.textContent = '';
       node.appendChild(document.createTextNode('Dernière mise à jour : ' + wrap.timestamp));
+      node.appendChild(document.createTextNode(' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3'));
     }
     
     
@@ -313,7 +315,7 @@ function text_translation() {
     }
     node = document.getElementById("no_right_reserved_body")
     if (node !== null) {
-      node.innerHTML = "<p>Tous les textes et les graphes créés sur ce site sont distribués sous <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.fr' target='_blank'>CC0 1.0 universel Transfert dans le Domaine Public <i class='fas fa-external-link-alt'></i></a>.</p><p>Cela signifie que vous pouvez en faire presque tout ce que vous voulez : usages personnel et commercial, sans avoir besoin d'autorisation ou d'attribution d'auteur.</p><p>La license pour les codes et les scripts peut se trouver <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>ici <i class='fas fa-external-link-alt'></i></a>.</p>";
+      node.innerHTML = "<p>Tous les textes et les graphes créés sur ce site sont distribués sous <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.fr' target='_blank'>CC0 1.0 universel Transfert dans le Domaine Public <i class='fas fa-external-link-alt'></i></a>.</p><p>Cela signifie que vous pouvez en faire presque tout ce que vous voulez : usages personnel et/ou commercial, sans avoir besoin d'autorisation ou d'attribution d'auteur.</p><p>La license pour les codes et les scripts peut se trouver <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>ici <i class='fas fa-external-link-alt'></i></a>.</p>";
     }
     
     
@@ -474,10 +476,11 @@ function text_translation() {
       node.textContent = '';
       node.appendChild(document.createTextNode("No right reserved"));
     }
-    node = document.getElementById("last_update")
+    node = document.getElementById("footer_last_update")
     if (node !== null) {
       node.textContent = '';
       node.appendChild(document.createTextNode('Last updates: ' + wrap.timestamp));
+      node.appendChild(document.createTextNode(' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3'));
     }
     
     
