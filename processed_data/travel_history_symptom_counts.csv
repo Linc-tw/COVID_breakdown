@@ -1,9 +1,9 @@
 label,count,label_zh,label_fr
-N_total,438,合計,Total
-N_imported,347,境外移入總數,Importés
-N_data,337,有資料案例數,Données complètes
+N_total,439,合計,Total
+N_imported,348,境外移入總數,Importés
+N_data,338,有資料案例數,Données complètes
 USA,99,美國,États-Unis
-UK,82,英國,Royaume-Uni
+UK,83,英國,Royaume-Uni
 France,27,法國,France
 Spain,21,西班牙,Espagne
 Czechia,15,捷克,Tchéquie
@@ -13,14 +13,14 @@ Austria,12,奧地利,Autriche
 cough,159,咳嗽,toux
 fever,152,發燒,fièvre
 throatache,107,喉嚨症狀,mal de gorge
-sneezing,103,鼻腔症狀,éternuement
-fatigue,55,倦怠,fatigue
+sneezing,104,鼻腔症狀,éternuement
+fatigue,56,倦怠,fatigue
 soreness,44,痠痛,myalgie
 anosmia,42,嗅覺異常,anosmie
 headache,39,頭痛,mal de tête
 diarrhea,28,腹瀉,diarrhée
 pneumonia,24,肺炎,pneumonie
-ageusia,22,味覺異常,agueusie
+ageusia,23,味覺異常,agueusie
 chest pain,20,胸痛,mal à la poitrine
 dyspnea,16,呼吸困難,dyspnée
 asymptomatic,15,無症狀,asymptomatique
