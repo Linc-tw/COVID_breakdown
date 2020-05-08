@@ -286,7 +286,7 @@ function text_translation() {
     }
     node = document.getElementById("data_source_original_body")
     if (node !== null) {
-      node.innerHTML = "<p>Les <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>données d'origine <i class='fas fa-external-link-alt'></i></a> sont entretenues par de nombreux internautes anonymes du forum PTT, qui est souvent considéré comme le <i>Reddit</i> taïwanais. Ils ramassent les informations à partir des communiqués et des conférences de presse quotidiens, pour produire des feuilles de calcul bien triées.</p><p>Bien évidemment ce site ne peut pas voir le jour sans les efforts de ces bénévols bienveillant. J'en suis très reconnaissant.</p><p>Ce jeu de données est construit en mandarin.</p>";
+      node.innerHTML = "<p>Les <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>données d'origine <i class='fas fa-external-link-alt'></i></a> sont mises à jour par de nombreux internautes anonymes du forum PTT, qui est souvent considéré comme le <i>Reddit</i> taïwanais. Ils rassemblent les informations à partir des communiqués et des conférences de presse quotidiens, pour produire des feuilles de calcul consolidées.</p><p>Bien évidemment, ce site n'aurait pas pu voir le jour sans le travail de ces bénévoles bienveillants. Je leur en suis très reconnaissant.</p><p>Le jeu de données est en mandarin.</p>";
     }
     node = document.getElementById("data_source_raw_title")
     if (node !== null) {
@@ -295,7 +295,7 @@ function text_translation() {
     }
     node = document.getElementById("data_source_raw_body")
     if (node !== null) {
-      node.innerHTML = "<p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>données brutes <i class='fas fa-external-link-alt'></i></a> sont 2 des feuilles de calcul dans les données d'origine. La première est une liste des cas confirmés avec certains détails ; la seconde est la statistique quotidienne du dépistage.</p><p>Ces données sont en format csv et contient beaucoup de caractères en mandarin.</p>";
+      node.innerHTML = "<p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>données brutes <i class='fas fa-external-link-alt'></i></a> sont 2 feuilles de calcul parmi les données d'origine. La première est une liste des cas confirmés avec certains détails ; la seconde est la statistique quotidienne des dépistages.</p><p>Ces données sont en format csv et contiennent beaucoup de caractères en mandarin.</p>";
     }
     node = document.getElementById("data_source_processed_title")
     if (node !== null) {
@@ -304,7 +304,7 @@ function text_translation() {
     }
     node = document.getElementById("data_source_processed_body")
     if (node !== null) {
-      node.innerHTML = "<p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>données traitées <i class='fas fa-external-link-alt'></i></a> comprennent de nombreux fichiers directement utilisés par Javascript pour dessiner.</p><p>Ces données sont en format csv. La plupart d'entre elles contient seulement les caractères ASCII.</p>";
+      node.innerHTML = "<p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>données traitées <i class='fas fa-external-link-alt'></i></a> comprennent de nombreux fichiers directement utilisés par Javascript pour afficher les figures.</p><p>Ces données sont en format csv. La plupart d'entre elles contient seulement des caractères ASCII.</p>";
     }
     
     
@@ -315,7 +315,7 @@ function text_translation() {
     }
     node = document.getElementById("no_right_reserved_body")
     if (node !== null) {
-      node.innerHTML = "<p>Tous les textes et les graphes créés sur ce site sont distribués sous <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.fr' target='_blank'>CC0 1.0 universel Transfert dans le Domaine Public <i class='fas fa-external-link-alt'></i></a>.</p><p>Cela signifie que vous pouvez en faire presque tout ce que vous voulez : usages personnel et/ou commercial, sans avoir besoin d'autorisation ou d'attribution d'auteur.</p><p>La license pour les codes et les scripts peut se trouver <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>ici <i class='fas fa-external-link-alt'></i></a>.</p>";
+      node.innerHTML = "<p>Tous les textes et les graphes créés sur ce site sont distribués sous <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.fr' target='_blank'>CC0 1.0 universel Transfert dans le Domaine Public <i class='fas fa-external-link-alt'></i></a>.</p><p>Cela signifie que vous pouvez en faire presque tout ce que vous voulez : usages personnel et/ou commercial, sans avoir besoin d'autorisation ou d'attribution d'auteur.</p><p>La license pour les codes et les scripts se trouve <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>ici <i class='fas fa-external-link-alt'></i></a>.</p>";
     }
     
     
