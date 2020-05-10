@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.05.04                  ##
+    ##  Version 2020.05.05                  ##
     ##########################################
 
 
@@ -17,7 +17,6 @@ import scipy as sp
 import matplotlib as mpl
 import pandas as pd
 
-#sys.path.append("../pycommon/")
 #import commonFunctions as cf
 #import matplotlibFunctions as mplf
 
@@ -136,7 +135,9 @@ AGE_DICT = {
   '50s': {'zh-tw': '五十多歲', 'fr': '50aine'},
   '60s': {'zh-tw': '六十多歲', 'fr': '60aine'},
   '70s': {'zh-tw': '七十多歲', 'fr': '70aine'},
-  '80s': {'zh-tw': '八十多歲', 'fr': '80aine'}
+  '80s': {'zh-tw': '八十多歲', 'fr': '80aine'},
+  '90s': {'zh-tw': '九十多歲', 'fr': '90aine'},
+  '100s': {'zh-tw': '一百多歲', 'fr': '100aine'}
 }
 
 ###############################################################################
@@ -270,8 +271,10 @@ class MainSheet:
   def getAge(self):
     age = []
     for i, a in enumerate(self.data[self.n_age].values[:self.N_total]):
-      if a in ['1X', '2X', '3X', '4X', '5X', '6X', '7X', '8X']:
+      if a in ['1X', '2X', '3X', '4X', '5X', '6X', '7X', '8X', '9X']:
         age.append(a[0]+'0s')
+      elif a in ['1XX', '10X', '11X']:
+        age.append('100s')
       elif a in ['<10', '4', '5']:
         age.append('0s')
       elif a in ['11']:
@@ -351,7 +354,7 @@ class MainSheet:
       'Greece': ['希臘'],
       
       'Turkey': ['土耳其'], 
-      'Qatar': ['阿拉伯－卡達'], 
+      'Qatar': ['阿拉伯－卡達', '卡達'], 
       'UAE': ['阿拉伯－杜拜'], 
       
       'Egypt': ['埃及'], 
@@ -389,6 +392,7 @@ class MainSheet:
       travHist = ''.join(travHist.split('從搭機返國'))
       travHist = ''.join(travHist.split('來台'))
       travHist = ''.join(travHist.split('轉機'))
+      travHist = ''.join(travHist.split('下旬'))
       travHist = travHist.lstrip(' 0123456789/-\n月及等()、')
       
       if len(travHist) > 0:
@@ -1174,36 +1178,38 @@ class TestSheet:
     saveCsv(name, data)
     return
   
-  def saveCriteria(self):
+  def printCriteria(self):
     dateList = self.getDate()
     criteriaList = self.getCriteria()
     
     urlList = {
-      '2020-01-16': 'http://at.cdc.tw/6Jlc8w', 
-      '2020-01-21': 'http://at.cdc.tw/9EM3mV',
-      '2020-01-25': 'http://at.cdc.tw/l99yHG',
-      '2020-02-01': 'http://at.cdc.tw/8wN31W',
-      '2020-02-02': 'http://at.cdc.tw/8wN31W',
-      '2020-02-03': 'http://at.cdc.tw/8IYT56', #
-      '2020-02-05': 'http://at.cdc.tw/th3S0o', #
-      '2020-02-06': 'http://at.cdc.tw/4sU035', #
-      '2020-02-09': 'http://at.cdc.tw/n48e22',
-      '2020-02-10': 'http://at.cdc.tw/4sU035', #
-      '2020-02-12': 'http://at.cdc.tw/73gugZ', #
-      '2020-02-15': 'http://at.cdc.tw/072iKp',
-      '2020-02-16': 'http://at.cdc.tw/275pmA',
-      '2020-02-29': 'http://at.cdc.tw/e7C892',
-      '2020-03-01': 'http://at.cdc.tw/L20G51', #
-      '2020-03-14': 'http://at.cdc.tw/Nh5CL8', #
-      '2020-03-16': 'http://at.cdc.tw/6tK52h', #
-      '2020-03-17': 'http://at.cdc.tw/M24nK2', #
-      '2020-03-18': 'http://at.cdc.tw/Y3Y592', #
-      '2020-03-20': 'http://at.cdc.tw/328jaz', #
-      '2020-03-25': 'https://youtu.be/bVv-u2bcV_g?t=782',
-      '2020-04-01': 'http://at.cdc.tw/zU3557',
-      '2020-04-03': 'http://at.cdc.tw/1vI50K',
-      '2020-04-05': 'http://at.cdc.tw/Q96xrb',
-      '2020-04-24': 'http://at.cdc.tw/R3sI9v'
+      '2020-01-16': 'http://at.cdc.tw/6Jlc8w', ##   [((F & R) | P) & Wuhan] | [((F & R) | P) & contact]
+      '2020-01-21': 'http://at.cdc.tw/9EM3mV', ##   [((F & R) | P) & Wuhan] | [((F & R) | P) & contact] | [P & China]
+      '2020-01-25': 'http://at.cdc.tw/l99yHG', ##   [(F | R | P) & (Hubei | Hubei contact F & R)] | [(F | R | P) & contact] | [P & China]
+      '2020-02-01': 'http://at.cdc.tw/8wN31W', ##   [(F | R | P) & (Hubei | Hubei contact F | R)] | [(F | R | P) & contact] | [P & China]
+      '2020-02-02': 'http://at.cdc.tw/8wN31W', ##   [(F | R | P) & (Hubei | Hubei contact F | R)] | [(F | R | P) & contact] | [P & China] + [(F | R | P) & (KM-track | Guangdong)]
+      '2020-02-03': 'http://at.cdc.tw/8IYT56',   ## [(F | R | P) & (Hubei | Hubei contact F | R)] | [(F | R | P) & contact] | [P & China] + [(F | R | P) & (KM-track | Guangdong | Wenzhou)]
+      '2020-02-05': 'http://at.cdc.tw/th3S0o',   ## [(F | R | P) & (Hubei | Hubei contact F | R)] | [(F | R | P) & contact] | [P & China] + [(F | R | P) & (KM-track | Guangdong | Zhejiang)]
+      '2020-02-06': 'http://at.cdc.tw/4sU035',   ## Same as 02/10
+      '2020-02-09': 'http://at.cdc.tw/n48e22',   ## Reminer TOCC
+      '2020-02-10': 'http://at.cdc.tw/4sU035',   ## [(F | R | P) & (Hubei | Hubei contact F | R)] | [(F | R | P) & contact] | [P & China] + [(F | R | P) & (KM-track | Guangdong | Zhejiang | HK | Macao)]
+      '2020-02-12': 'http://at.cdc.tw/73gugZ',   ## 針對全國醫療院所通報流感併發重症且流感檢驗陰性之個案，回溯自1月31日起，進行 COVID-19（武漢肺炎）病毒之檢驗。截至2月15日止，已全數檢驗完成113件檢體，本案係唯一檢驗陽性者。
+      '2020-02-15': 'http://at.cdc.tw/072iKp', ##   [(F | R | P) & (Hubei | Guangdong | Henan | Zhejiang | contact therein F | R)] | [(F | R | P) & contact] | [P & (China | HK | Macao)] + [(F | R | P) & (Singapore | Thailand)]
+      '2020-02-16': 'http://at.cdc.tw/275pmA', ##   [(F | R | P) & (Hubei | Guangdong | Henan | Zhejiang | contact therein F | R)] | [(F | R | P) & contact] | [P & (China | HK | Macao)] + [(F | R | P) & trav hist]
+      '2020-02-29': 'http://at.cdc.tw/e7C892', ##   [(F | R | P) & (China | HK | Macao | Korea | Italy)] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
+      '2020-03-01': 'http://at.cdc.tw/L20G51',   ## [(F | R | P) & (China | HK | Macao | Korea | Italy | Iran)] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
+      '2020-03-14': 'http://at.cdc.tw/Nh5CL8',   ## [(F | R | P) & (China | HK | Macao | Korea | EU | Iran | Dubai)] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
+      '2020-03-16': 'http://at.cdc.tw/6tK52h',   ## [(F | R | P) & (China | HK | Macao | Korea | Europe | Middle East | Central Asia | North Africa)] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
+      '2020-03-17': 'http://at.cdc.tw/M24nK2',   ## Europe look-back test
+      '2020-03-18': 'http://at.cdc.tw/Y3Y592',   ## [(F | R | P) & (China | HK | Macao | Korea | Europe | Middle East | Central Asia | North Africa | US | Canada | Australia | NZ)] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
+     #'2020-03-19': 'http://at.cdc.tw/W9XhV5',   ## [(F | R | P) & (Asia | Europe | North Africa | US | Canada | Australia | NZ)] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
+      '2020-03-20': 'http://at.cdc.tw/328jaz',   ## [(F | R | P) & global] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
+      '2020-03-25': 'https://youtu.be/bVv-u2bcV_g?t=782', 
+                                                 ## [(F | R | P) & global] | [(F | R | P) & contact] + [(F | R | P) & medic] | [P & cluster] | [P & unknown]
+      '2020-04-01': 'http://at.cdc.tw/zU3557', ##   [(F | R | P | Ag | An) & (global | contact therein F | R)] | [(F | R | P | Ag | An) & contact] | [(F | R | P | Ag | An) & cluster] | [P & unknown] + [(F | R) & unknown]
+      '2020-04-03': 'http://at.cdc.tw/1vI50K', ##   [(F | R | P | Ag | An) & (global | contact therein F | R)] | [(F | R | P | Ag | An) & contact] | [(F | R | P | Ag | An) & cluster] | [P & unknown] + [(F | R | Ag | An) & unknown]
+      '2020-04-05': 'http://at.cdc.tw/Q96xrb', ##   [(F | R | D unknown) & (global | contact therein F | R)] | [(F | R | D unknown) & contact] | [(F | R) & cluster] | [P] + [(F | R | Ag | An) & unknown]
+      '2020-04-24': 'http://at.cdc.tw/R3sI9v'  ##   [(F | R | D unknown) & (global | contact therein F | R)] | [(F | R | D unknown) & contact] | [(F | R) & cluster] | [P] + [(F | R | Ag | An) & (cluster | unknown)]
     }
     
     for date, criteria in zip(dateList, criteriaList):
@@ -1212,6 +1218,18 @@ class TestSheet:
       else:
         print(date, criteria, urlList.get(date, np.nan))
         print()
+    return
+  
+  def saveCsv_criteria(self):
+    nList = {
+      '2020-01-16': '[symp & Wuhan TH] + [symp & contact of ppl w Wuhan TH] + [close contact]',
+      '2020-01-21': ' + [P & China TH]',
+      '2020-01-25': 'Wuhan => Hubei',
+      '2020-02-02': '+ Guangdong + Wenzhou + KM-track',
+      '2020-02-05': 'Wenzhou => Zhejiang',
+      '2020-02-06': '+ China',
+      
+    }
     return
   
   def saveCsv(self):
@@ -1286,7 +1304,7 @@ def sandbox():
   #sheet.saveCsv_diffByTrans()
   
   sheet = TestSheet()
-  print(sheet.saveCriteria())
+  print(sheet.printCriteria())
   #sheet.saveCsv_testByCriterion()
   
   #sheet = TimelineSheet()
