@@ -105,7 +105,7 @@ function CBD_formatData(data) {
   //-- Calculate ymax
   ymax *= 1.11;
   var ypath;
-  if (CBD_wrap.doCumul == 1) ypath = 80; //Math.floor(ymax / 5);
+  if (CBD_wrap.doCumul == 1) ypath = 100; //Math.floor(ymax / 5);
   else                       ypath = 5;
   
   var ytick = [];
