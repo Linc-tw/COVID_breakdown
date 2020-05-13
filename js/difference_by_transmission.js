@@ -33,8 +33,13 @@ function DBT_makeCanvas() {
       .attr("viewBox", "0 0 " + totWidth + " " + totHeight)
       .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
-      .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  
+  svg.append("rect")
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("fill", "white")
+      .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
   DBT_wrap.totWidth = totWidth;
   DBT_wrap.totHeight = totHeight;
@@ -335,7 +340,7 @@ function DBT_update() {
   
   //-- Update bars
   var colTagList = DBT_wrap.colTagList.slice();
-  DBT_wrap.bar.selectAll("rect")
+  DBT_wrap.bar.selectAll('.content.bar')
     .data(DBT_wrap.formattedData)
     .transition()
     .duration(transDuration)

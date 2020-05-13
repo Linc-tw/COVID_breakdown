@@ -37,8 +37,13 @@ function THSC_makeCanvas() {
       .attr("viewBox", "0 0 " + totWidth + " " + totHeight)
       .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
-      .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  
+  svg.append("rect")
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("fill", "white")
+      .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
   THSC_wrap.totWidth = totWidth;
   THSC_wrap.totHeight = totHeight;

@@ -34,8 +34,13 @@ function CBT_makeCanvas() {
       .attr("viewBox", "0 0 " + totWidth + " " + totHeight)
       .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
-      .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+  
+  svg.append("rect")
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("fill", "white")
+      .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
   CBT_wrap.totWidth = totWidth;
   CBT_wrap.totHeight = totHeight;
@@ -101,7 +106,7 @@ function CBT_formatData(data) {
   }
   
   //-- Calculate ymax
-  ymax *= 1.11;
+  ymax *= 1.15;
   var ypath;
   if (CBT_wrap.doCumul == 1) ypath = 100; //Math.floor(ymax / 5);
   else                       ypath = 5;
@@ -338,7 +343,7 @@ function CBT_update() {
     .call(yAxis);
   
   //-- Update bars
-  CBT_wrap.bar.selectAll("rect")
+  CBT_wrap.bar.selectAll('.content.bar')
     .data(CBT_wrap.formattedData)
     .transition()
     .duration(transDuration)

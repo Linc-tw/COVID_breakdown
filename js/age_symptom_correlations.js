@@ -37,8 +37,13 @@ function ASC_makeCanvas() {
       .attr("viewBox", "0 0 " + totWidth + " " + totHeight)
       .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
-      .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  
+  svg.append("rect")
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("fill", "white")
+      .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
   ASC_wrap.totWidth = totWidth;
   ASC_wrap.totHeight = totHeight;

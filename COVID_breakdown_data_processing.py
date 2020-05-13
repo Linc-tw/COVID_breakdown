@@ -1183,33 +1183,37 @@ class TestSheet:
     criteriaList = self.getCriteria()
     
     urlList = {
-      '2020-01-16': 'http://at.cdc.tw/6Jlc8w', ##   [((F & R) | P) & Wuhan] | [((F & R) | P) & contact]
-      '2020-01-21': 'http://at.cdc.tw/9EM3mV', ##   [((F & R) | P) & Wuhan] | [((F & R) | P) & contact] | [P & China]
-      '2020-01-25': 'http://at.cdc.tw/l99yHG', ##   [(F | R | P) & (Hubei | Hubei contact F & R)] | [(F | R | P) & contact] | [P & China]
-      '2020-02-01': 'http://at.cdc.tw/8wN31W', ##   [(F | R | P) & (Hubei | Hubei contact F | R)] | [(F | R | P) & contact] | [P & China]
-      '2020-02-02': 'http://at.cdc.tw/8wN31W', ##   [(F | R | P) & (Hubei | Hubei contact F | R)] | [(F | R | P) & contact] | [P & China] + [(F | R | P) & (KM-track | Guangdong)]
-      '2020-02-03': 'http://at.cdc.tw/8IYT56',   ## [(F | R | P) & (Hubei | Hubei contact F | R)] | [(F | R | P) & contact] | [P & China] + [(F | R | P) & (KM-track | Guangdong | Wenzhou)]
-      '2020-02-05': 'http://at.cdc.tw/th3S0o',   ## [(F | R | P) & (Hubei | Hubei contact F | R)] | [(F | R | P) & contact] | [P & China] + [(F | R | P) & (KM-track | Guangdong | Zhejiang)]
-      '2020-02-06': 'http://at.cdc.tw/4sU035',   ## Same as 02/10
+      '2020-01-16': 'http://at.cdc.tw/6Jlc8w', ##   [(F&R)|P & Wuhan] | [(F&R)|P & contact]
+      '2020-01-21': 'http://at.cdc.tw/9EM3mV', ##   [(F&R)|P & Wuhan] | [(F&R)|P & contact] | [P & China]
+      '2020-01-25': 'http://at.cdc.tw/l99yHG', ##   [F|R|P & (Hubei | contact therein F&R)] | [F|R|P & contact] | [P & China]
+      '2020-02-01': 'http://at.cdc.tw/8wN31W', ##   [F|R|P & (Hubei | contact therein F|R)] | [F|R|P & contact] | [P & China]
+      '2020-02-02': 'http://at.cdc.tw/CG90qP', ##   Started QT
+                                               ##   [F|R|P & (Hubei | contact therein F|R)] | [F|R|P & contact] | [P & China] + [F|R|P & (KM-track | Guangdong)]
+      '2020-02-03': 'http://at.cdc.tw/8IYT56',   ## [F|R|P & (Hubei | contact therein F|R)] | [F|R|P & contact] | [P & China] + [F|R|P & (KM-track | Guangdong | Wenzhou)]
+      '2020-02-05': 'http://at.cdc.tw/th3S0o',   ## [F|R|P & (Hubei | contact therein F|R)] | [F|R|P & contact] | [P & China] + [F|R|P & (KM-track | Guangdong | Zhejiang)]
+      '2020-02-06': 'http://at.cdc.tw/4sU035',   ## [F|R|P & (Hubei | contact therein F|R)] | [F|R|P & contact] | [P & China] + [F|R|P & (KM-track | China-HK-MC)]
       '2020-02-09': 'http://at.cdc.tw/n48e22',   ## Reminer TOCC
-      '2020-02-10': 'http://at.cdc.tw/4sU035',   ## [(F | R | P) & (Hubei | Hubei contact F | R)] | [(F | R | P) & contact] | [P & China] + [(F | R | P) & (KM-track | Guangdong | Zhejiang | HK | Macao)]
-      '2020-02-12': 'http://at.cdc.tw/73gugZ',   ## 針對全國醫療院所通報流感併發重症且流感檢驗陰性之個案，回溯自1月31日起，進行 COVID-19（武漢肺炎）病毒之檢驗。截至2月15日止，已全數檢驗完成113件檢體，本案係唯一檢驗陽性者。
-      '2020-02-15': 'http://at.cdc.tw/072iKp', ##   [(F | R | P) & (Hubei | Guangdong | Henan | Zhejiang | contact therein F | R)] | [(F | R | P) & contact] | [P & (China | HK | Macao)] + [(F | R | P) & (Singapore | Thailand)]
-      '2020-02-16': 'http://at.cdc.tw/275pmA', ##   [(F | R | P) & (Hubei | Guangdong | Henan | Zhejiang | contact therein F | R)] | [(F | R | P) & contact] | [P & (China | HK | Macao)] + [(F | R | P) & trav hist]
-      '2020-02-29': 'http://at.cdc.tw/e7C892', ##   [(F | R | P) & (China | HK | Macao | Korea | Italy)] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
-      '2020-03-01': 'http://at.cdc.tw/L20G51',   ## [(F | R | P) & (China | HK | Macao | Korea | Italy | Iran)] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
-      '2020-03-14': 'http://at.cdc.tw/Nh5CL8',   ## [(F | R | P) & (China | HK | Macao | Korea | EU | Iran | Dubai)] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
-      '2020-03-16': 'http://at.cdc.tw/6tK52h',   ## [(F | R | P) & (China | HK | Macao | Korea | Europe | Middle East | Central Asia | North Africa)] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
-      '2020-03-17': 'http://at.cdc.tw/M24nK2',   ## Europe look-back test
-      '2020-03-18': 'http://at.cdc.tw/Y3Y592',   ## [(F | R | P) & (China | HK | Macao | Korea | Europe | Middle East | Central Asia | North Africa | US | Canada | Australia | NZ)] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
-     #'2020-03-19': 'http://at.cdc.tw/W9XhV5',   ## [(F | R | P) & (Asia | Europe | North Africa | US | Canada | Australia | NZ)] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
-      '2020-03-20': 'http://at.cdc.tw/328jaz',   ## [(F | R | P) & global] | [(F | R | P) & contact] + [P & (medic | cluster)] | [P & unknown]
+      '2020-02-10': 'http://at.cdc.tw/4sU035',   ## Reminer 2020-02-06
+      '2020-02-12': 'http://at.cdc.tw/73gugZ',   ## Check-back on flu negative 
+      '2020-02-15': 'http://at.cdc.tw/072iKp', ##   [F|R|P & (Hubei | Guangdong | Henan | Zhejiang] | [F|R|P & contact] | [P & China-HK-MC] + [F|R|P & (Singapore | Thailand)]
+      '2020-02-16': 'http://at.cdc.tw/275pmA', ##   Started community transmission
+                                               ##   [F|R|P & (Hubei | Guangdong | Henan | Zhejiang] | [F|R|P & contact] | [P & China-HK-MC]                   + [F|R|P & other countries] | [F|R & cluster] | [P & (medic | cluster | unknown)]
+      '2020-02-29': 'http://at.cdc.tw/e7C892', ##   Merged QT in clinical case
+                                               ##   [F|R|P & (China-HK-MC | Korea | Italy)]                               | [F|R|P & contact] | [P & unknown] + [F|R & other countries] | [F|R & cluster]
+      '2020-03-01': 'http://at.cdc.tw/L20G51',   ## [F|R|P & (China-HK-MC | Korea | Italy | Iran)]                        | [F|R|P & contact] | [P & unknown] + [F|R & other countries] | [F|R & cluster]
+      '2020-03-14': 'http://at.cdc.tw/Nh5CL8',   ## [F|R|P & (China-HK-MC | Korea | EU | Iran | Dubai)]                   | [F|R|P & contact] | [P & unknown] + [F|R & other countries] | [F|R & cluster]
+      '2020-03-16': 'http://at.cdc.tw/6tK52h',   ## [F|R|P & (China-HK-MC | Korea | Europe | M East | C Asia | N Africa)] | [F|R|P & contact] | [P & unknown] + [F|R & other countries] | [F|R & cluster]
+      '2020-03-17': 'http://at.cdc.tw/M24nK2',   ## Europe check-back
+      '2020-03-18': 'http://at.cdc.tw/Y3Y592',   ## [F|R|P & (China-HK-MC | Korea | Europe | M East | C Asia | N Africa | US | Canada | Aussie | NZ)] 
+                                                 ##                                                                       | [F|R|P & contact] | [P & unknown] + [F|R & other countries] | [F|R & cluster]
+     #'2020-03-19': 'http://at.cdc.tw/W9XhV5',   ## [F|R|P & (Asia | Europe | N Africa | US | Canada | Aussie | NZ)]      | [F|R|P & contact] | [P & unknown] + [F|R & other countries] | [F|R & cluster]
+      '2020-03-20': 'http://at.cdc.tw/328jaz',   ## [F|R|P & global]                                                      | [F|R|P & contact] | [P & unknown] + [F|R & cluster]
       '2020-03-25': 'https://youtu.be/bVv-u2bcV_g?t=782', 
-                                                 ## [(F | R | P) & global] | [(F | R | P) & contact] + [(F | R | P) & medic] | [P & cluster] | [P & unknown]
-      '2020-04-01': 'http://at.cdc.tw/zU3557', ##   [(F | R | P | Ag | An) & (global | contact therein F | R)] | [(F | R | P | Ag | An) & contact] | [(F | R | P | Ag | An) & cluster] | [P & unknown] + [(F | R) & unknown]
-      '2020-04-03': 'http://at.cdc.tw/1vI50K', ##   [(F | R | P | Ag | An) & (global | contact therein F | R)] | [(F | R | P | Ag | An) & contact] | [(F | R | P | Ag | An) & cluster] | [P & unknown] + [(F | R | Ag | An) & unknown]
-      '2020-04-05': 'http://at.cdc.tw/Q96xrb', ##   [(F | R | D unknown) & (global | contact therein F | R)] | [(F | R | D unknown) & contact] | [(F | R) & cluster] | [P] + [(F | R | Ag | An) & unknown]
-      '2020-04-24': 'http://at.cdc.tw/R3sI9v'  ##   [(F | R | D unknown) & (global | contact therein F | R)] | [(F | R | D unknown) & contact] | [(F | R) & cluster] | [P] + [(F | R | Ag | An) & (cluster | unknown)]
+                                                 ## [F|R|P & global] | [F|R|P & contact] | [P & unknown] + [F|R & (medic | cluster)]
+      '2020-04-01': 'http://at.cdc.tw/zU3557', ##   [(F|R|P|Ag|An)   & (global | contact therein F|R)] | [F|R|P|Ag|An & contact] | [F|R|P|Ag|An & cluster] | [P & unknown] + [F|R & unknown]
+      '2020-04-03': 'http://at.cdc.tw/1vI50K', ##   [(F|R|P|Ag|An)   & (global | contact therein F|R)] | [F|R|P|Ag|An & contact] | [F|R|P|Ag|An & cluster] | [P & unknown] + [F|R|Ag|An & unknown]
+      '2020-04-05': 'http://at.cdc.tw/Q96xrb', ##   [(F|R|D-unknown) & (global | contact therein F|R)] | [F|R|D-unknown & contact] | [F|R & cluster] | [P] + [F|R|Ag|An & unknown]
+      '2020-04-24': 'http://at.cdc.tw/R3sI9v'  ##   [(F|R|D-unknown) & (global | contact therein F|R)] | [F|R|D-unknown & contact] | [F|R & cluster] | [P] + [F|R|Ag|An & (cluster | unknown)]
     }
     
     for date, criteria in zip(dateList, criteriaList):
@@ -1220,16 +1224,72 @@ class TestSheet:
         print()
     return
   
-  def saveCsv_criteria(self):
-    nList = {
-      '2020-01-16': '[symp & Wuhan TH] + [symp & contact of ppl w Wuhan TH] + [close contact]',
-      '2020-01-21': ' + [P & China TH]',
-      '2020-01-25': 'Wuhan => Hubei',
-      '2020-02-02': '+ Guangdong + Wenzhou + KM-track',
-      '2020-02-05': 'Wenzhou => Zhejiang',
-      '2020-02-06': '+ China',
-      
+  def saveCsv_criteriaTimeline(self):
+    criteriaDict = {
+      '2020-01-16': {
+        'en': 'Fever, resp. symptoms, or pneumonia & been to Wuhan; close contact of confirmed cases or ppl satisfying prev. cond.'
+      },
+      '2020-01-21': {
+        'en': 'Pneumonia & been to China',
+      },
+      '2020-01-25': {
+        'en': 'Hubei',
+      },
+      '2020-02-02': {
+        'en': 'Started QT category; Guangdong; Kinmen & Mazhu fast tracks',
+      },
+      '2020-02-02': {
+        'en': 'Wenzhou',
+      },
+      '2020-02-05': {
+        'en': 'Zhejiang',
+      },
+      '2020-02-06': {
+        'en': 'China, HK, Macao',
+      },
+      '2020-02-12': {
+        'en': 'Check-back on flu-negative cases',
+      },
+      '2020-02-15': {
+        'en': 'Singapore, Thailand',
+      },
+      '2020-02-16': {
+        'en': 'Started community category; medics & local cluster with pneumonia',
+      },
+      '2020-02-29': {
+        'en': 'Merged QT into clinical; Korea, Italy; all pneumonia; local cluster with resp. symp.',
+      },
+      '2020-03-01': {
+        'en': 'Iran',
+      },
+      '2020-03-17': {
+        'en': 'Whole Europe, Middle East, Central Asia, North Africa',
+      },
+      '2020-03-19': {
+        'en': 'Whole Asia, US, Canada, Australia, NZ',
+      },
+      '2020-03-21': {
+        'en': 'Global',
+      },
+      '2020-03-25': {
+        'en': 'Medics with resp. symp.',
+      },
+      '2020-04-01': {
+        'en': 'Anosmia, ageusia',
+      },
+      '2020-04-05': {
+        'en': 'Diarrhea'
+      }
     }
+    
+    dateList = [key for key, value in criteriaDict.items()]
+    enList = [value['en'] for key, value in criteriaDict.items()]
+    
+    data = {'date': dateList, 'en': enList}
+    data = pd.DataFrame(data)
+    
+    name = '%sprocessed_data/criteria_timeline.csv' % DATA_PATH
+    saveCsv(name, data)
     return
   
   def saveCsv(self):
@@ -1304,8 +1364,8 @@ def sandbox():
   #sheet.saveCsv_diffByTrans()
   
   sheet = TestSheet()
-  print(sheet.printCriteria())
-  #sheet.saveCsv_testByCriterion()
+  #print(sheet.printCriteria())
+  sheet.saveCsv_criteriaTimeline()
   
   #sheet = TimelineSheet()
   #print(sheet.saveCriteria())
