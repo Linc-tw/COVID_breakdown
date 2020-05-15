@@ -1,5 +1,6 @@
 date,en
-2020-01-16,"Fever, resp. symptoms, or pneumonia & been to Wuhan; close contact of confirmed cases or ppl satisfying prev. cond."
+2020-01-16,"Fever, resp. symp., or pneumonia & been to Wuhan
+Close contact of confirmed cases"
 2020-01-21,Pneumonia & been to China
 2020-01-25,Hubei
 2020-02-02,Wenzhou
@@ -7,11 +8,15 @@ date,en
 2020-02-06,"China, HK, Macao"
 2020-02-12,Check-back on flu-negative cases
 2020-02-15,"Singapore, Thailand"
-2020-02-16,Started community category; medics & local cluster with pneumonia
-2020-02-29,"Merged QT into clinical; Korea, Italy; all pneumonia; local cluster with resp. symp."
+2020-02-16,"Started community monitoring
+Medics & local cluster with pneumonia"
+2020-02-29,"Korea, Italy
+All pneumonia
+Local cluster with resp. symp."
 2020-03-01,Iran
-2020-03-17,"Whole Europe, Middle East, Central Asia, North Africa"
-2020-03-19,"Whole Asia, US, Canada, Australia, NZ"
+2020-03-17,"Europe, Middle East,
+Central Asia, North Africa"
+2020-03-19,"Asia, US, Canada, Australia, NZ"
 2020-03-21,Global
 2020-03-25,Medics with resp. symp.
 2020-04-01,"Anosmia, ageusia"
