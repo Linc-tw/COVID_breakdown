@@ -54,7 +54,7 @@ function text_translation() {
     node = document.getElementById("menu_policy")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Policies"));
+      node.appendChild(document.createTextNode("防疫措施"));
     }
     node = document.getElementById("menu_source")
     if (node !== null) {
@@ -244,6 +244,33 @@ function text_translation() {
       node.textContent = '';
       node.appendChild(document.createTextNode("案例數"));
     }
+    
+    node = document.getElementById("criteria_timeline_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Chronology of Testing Criteria (翻譯中)"));
+    }
+    node = document.getElementById("criteria_timeline_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Selected"));
+    }
+    node = document.getElementById("criteria_timeline_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("All"));
+    }
+    node = document.getElementById("criteria_timeline_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Circles"));
+    }
+    node = document.getElementById("criteria_timeline_button_4")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Timeline"));
+    }
+    
   }
   else if (lang == 'fr') {
     node = document.getElementById("title")
@@ -259,7 +286,7 @@ function text_translation() {
     node = document.getElementById("menu_policy")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Policies"));
+      node.appendChild(document.createTextNode("Mesures de prévention"));
     }
     node = document.getElementById("menu_source")
     if (node !== null) {
@@ -449,6 +476,33 @@ function text_translation() {
       node.textContent = '';
       node.appendChild(document.createTextNode("Nombre"));
     }
+    
+    node = document.getElementById("criteria_timeline_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Chronology of Testing Criteria (à traduire)"));
+    }
+    node = document.getElementById("criteria_timeline_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Selected"));
+    }
+    node = document.getElementById("criteria_timeline_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("All"));
+    }
+    node = document.getElementById("criteria_timeline_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Circles"));
+    }
+    node = document.getElementById("criteria_timeline_button_4")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Timeline"));
+    }
+    
   }
   else {
     node = document.getElementById("title")
@@ -464,7 +518,7 @@ function text_translation() {
     node = document.getElementById("menu_policy")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Policies"));
+      node.appendChild(document.createTextNode("Policy"));
     }
     node = document.getElementById("menu_source")
     if (node !== null) {
@@ -654,6 +708,33 @@ function text_translation() {
       node.textContent = '';
       node.appendChild(document.createTextNode("Counts"));
     }
+    
+    node = document.getElementById("criteria_timeline_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Chronology of Testing Criteria"));
+    }
+    node = document.getElementById("criteria_timeline_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Selected"));
+    }
+    node = document.getElementById("criteria_timeline_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("All"));
+    }
+    node = document.getElementById("criteria_timeline_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Circles"));
+    }
+    node = document.getElementById("criteria_timeline_button_4")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Timeline"));
+    }
+    
   }
 }
 
@@ -762,6 +843,24 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
       DBT_initialize();
       DBT_update();
     });
+  });
+
+});
+
+$(document).on("change", "input:radio[name='policy_language']", function(event) {
+  lang = this.value;
+  Cookies.set("lang", lang);
+  text_translation();
+  
+  d3.selectAll('.plot').remove()
+  
+  d3.csv(CT_wrap.dataPathList[0], function(error, data) {
+    if (error) return console.warn(error);
+    
+    CT_makeCanvas();
+    CT_formatData(data);
+    CT_initialize();
+    CT_update();
   });
 
 });

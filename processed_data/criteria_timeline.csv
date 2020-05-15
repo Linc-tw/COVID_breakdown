@@ -1,23 +1,34 @@
-date,en
-2020-01-16,"Fever, resp. symp., or pneumonia & been to Wuhan
+date,en,fr,zh-tw
+2020-01-16,"Wuhan with fever or resp. symp. or pneumonia
+Close contact of confirmed cases","Wuhan with fever or resp. symp. or pneumonia
+Close contact of confirmed cases","Wuhan with fever or resp. symp. or pneumonia
 Close contact of confirmed cases"
-2020-01-21,Pneumonia & been to China
-2020-01-25,Hubei
-2020-02-02,Wenzhou
-2020-02-05,Zhejiang
-2020-02-06,"China, HK, Macao"
-2020-02-12,Check-back on flu-negative cases
-2020-02-15,"Singapore, Thailand"
+2020-01-21,China with pneumonia,China with pneumonia,China with pneumonia
+2020-01-25,Hubei,Hubei,Hubei
+2020-02-02,"Started home quarantine scheme
+Guangdong","Started home quarantine scheme
+Guangdong","Started home quarantine scheme
+Guangdong"
+2020-02-03,Wenzhou,Wenzhou,Wenzhou
+2020-02-05,Zhejiang,Zhejiang,Zhejiang
+2020-02-06,"China, Hong Kong, Macao","China, Hong Kong, Macao","China, Hong Kong, Macao"
+2020-02-12,Check-back on flu-negative cases,Check-back on flu-negative cases,Check-back on flu-negative cases
+2020-02-15,"Singapore, Thailand","Singapore, Thailand","Singapore, Thailand"
 2020-02-16,"Started community monitoring
+Medics & local cluster with pneumonia","Started community monitoring
+Medics & local cluster with pneumonia","Started community monitoring
 Medics & local cluster with pneumonia"
 2020-02-29,"Korea, Italy
 All pneumonia
+Local cluster with resp. symp.","Korea, Italy
+All pneumonia
+Local cluster with resp. symp.","Korea, Italy
+All pneumonia
 Local cluster with resp. symp."
-2020-03-01,Iran
-2020-03-17,"Europe, Middle East,
-Central Asia, North Africa"
-2020-03-19,"Asia, US, Canada, Australia, NZ"
-2020-03-21,Global
-2020-03-25,Medics with resp. symp.
-2020-04-01,"Anosmia, ageusia"
-2020-04-05,Diarrhea
+2020-03-01,Iran,Iran,Iran
+2020-03-17,"Europe, Middle East, Central Asia, North Africa","Europe, Middle East, Central Asia, North Africa","Europe, Middle East, Central Asia, North Africa"
+2020-03-19,"Asia, USA, Canada, Australia, New Zealand","Asia, USA, Canada, Australia, New Zealand","Asia, USA, Canada, Australia, New Zealand"
+2020-03-21,Global,Global,Global
+2020-03-25,Medics with resp. symp.,Medics with resp. symp.,Medics with resp. symp.
+2020-04-01,"Anosmia, ageusia","Anosmia, ageusia","Anosmia, ageusia"
+2020-04-05,Diarrhea,Diarrhea,Diarrhea

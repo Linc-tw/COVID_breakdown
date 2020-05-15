@@ -1227,65 +1227,103 @@ class TestSheet:
   def saveCsv_criteriaTimeline(self):
     criteriaDict = {
       '2020-01-16': {
-        'en': 'Fever, resp. symptoms, or pneumonia & been to Wuhan; close contact of confirmed cases or ppl satisfying prev. cond.'
+        'en': 'Wuhan with fever or resp. symp. or pneumonia\nClose contact of confirmed cases', ## Close contact of confirmed cases or ppl satisfying prev. cond.
+        'fr': 'Wuhan with fever or resp. symp. or pneumonia\nClose contact of confirmed cases',
+        'zh-tw': 'Wuhan with fever or resp. symp. or pneumonia\nClose contact of confirmed cases'
       },
       '2020-01-21': {
-        'en': 'Pneumonia & been to China',
+        'en': 'China with pneumonia',
+        'fr': 'China with pneumonia',
+        'zh-tw': 'China with pneumonia'
       },
       '2020-01-25': {
         'en': 'Hubei',
+        'fr': 'Hubei',
+        'zh-tw': 'Hubei'
       },
       '2020-02-02': {
-        'en': 'Started QT category; Guangdong; Kinmen & Mazhu fast tracks',
+        'en': 'Started home quarantine scheme\nGuangdong', ## Kinmen & Mazhu fast tracks
+        'fr': 'Started home quarantine scheme\nGuangdong',
+        'zh-tw': 'Started home quarantine scheme\nGuangdong'
       },
-      '2020-02-02': {
+      '2020-02-03': {
         'en': 'Wenzhou',
+        'fr': 'Wenzhou',
+        'zh-tw': 'Wenzhou',
       },
       '2020-02-05': {
         'en': 'Zhejiang',
+        'fr': 'Zhejiang',
+        'zh-tw': 'Zhejiang',
       },
       '2020-02-06': {
-        'en': 'China, HK, Macao',
+        'en': 'China, Hong Kong, Macao',
+        'fr': 'China, Hong Kong, Macao',
+        'zh-tw': 'China, Hong Kong, Macao',
       },
       '2020-02-12': {
         'en': 'Check-back on flu-negative cases',
+        'fr': 'Check-back on flu-negative cases',
+        'zh-tw': 'Check-back on flu-negative cases',
       },
       '2020-02-15': {
         'en': 'Singapore, Thailand',
+        'fr': 'Singapore, Thailand',
+        'zh-tw': 'Singapore, Thailand',
       },
       '2020-02-16': {
-        'en': 'Started community category; medics & local cluster with pneumonia',
+        'en': 'Started community monitoring\nMedics & local cluster with pneumonia',
+        'fr': 'Started community monitoring\nMedics & local cluster with pneumonia',
+        'zh-tw': 'Started community monitoring\nMedics & local cluster with pneumonia',
       },
       '2020-02-29': {
-        'en': 'Merged QT into clinical; Korea, Italy; all pneumonia; local cluster with resp. symp.',
+        'en': 'Korea, Italy\nAll pneumonia\nLocal cluster with resp. symp.', ## Merged QT into clinical
+        'fr': 'Korea, Italy\nAll pneumonia\nLocal cluster with resp. symp.', 
+        'zh-tw': 'Korea, Italy\nAll pneumonia\nLocal cluster with resp. symp.'
       },
       '2020-03-01': {
         'en': 'Iran',
+        'fr': 'Iran',
+        'zh-tw': 'Iran',
       },
       '2020-03-17': {
-        'en': 'Whole Europe, Middle East, Central Asia, North Africa',
+        'en': 'Europe, Middle East, Central Asia, North Africa',
+        'fr': 'Europe, Middle East, Central Asia, North Africa',
+        'zh-tw': 'Europe, Middle East, Central Asia, North Africa',
       },
       '2020-03-19': {
-        'en': 'Whole Asia, US, Canada, Australia, NZ',
+        'en': 'Asia, USA, Canada, Australia, New Zealand',
+        'fr': 'Asia, USA, Canada, Australia, New Zealand',
+        'zh-tw': 'Asia, USA, Canada, Australia, New Zealand',
       },
       '2020-03-21': {
         'en': 'Global',
+        'fr': 'Global',
+        'zh-tw': 'Global',
       },
       '2020-03-25': {
         'en': 'Medics with resp. symp.',
+        'fr': 'Medics with resp. symp.',
+        'zh-tw': 'Medics with resp. symp.',
       },
       '2020-04-01': {
         'en': 'Anosmia, ageusia',
+        'fr': 'Anosmia, ageusia',
+        'zh-tw': 'Anosmia, ageusia',
       },
       '2020-04-05': {
-        'en': 'Diarrhea'
+        'en': 'Diarrhea',
+        'fr': 'Diarrhea',
+        'zh-tw': 'Diarrhea'
       }
     }
     
     dateList = [key for key, value in criteriaDict.items()]
     enList = [value['en'] for key, value in criteriaDict.items()]
+    frList = [value['fr'] for key, value in criteriaDict.items()]
+    zhtwList = [value['zh-tw'] for key, value in criteriaDict.items()]
     
-    data = {'date': dateList, 'en': enList}
+    data = {'date': dateList, 'en': enList, 'fr': frList, 'zh-tw': zhtwList}
     data = pd.DataFrame(data)
     
     name = '%sprocessed_data/criteria_timeline.csv' % DATA_PATH
@@ -1294,6 +1332,7 @@ class TestSheet:
   
   def saveCsv(self):
     self.saveCsv_testByCriterion()
+    self.saveCsv_criteriaTimeline()
     return
 
 ###############################################################################
