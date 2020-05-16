@@ -30,8 +30,13 @@ function TBC_makeCanvas() {
       .attr("viewBox", "0 0 " + totWidth + " " + totHeight)
       .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
-      .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  
+  svg.append("rect")
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("fill", "white")
+      .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
   TBC_wrap.totWidth = totWidth;
   TBC_wrap.totHeight = totHeight;
@@ -96,10 +101,10 @@ function TBC_formatData(data) {
   }
   
   //-- Calculate ymax
-  ymax *= 1.2;
+  ymax *= 1.35;
   var ypath;
   if (TBC_wrap.doCumul == 1) ypath = 20000;
-  else                       ypath = 500;
+  else                       ypath = 600;
   
   var ytick = [];
   for (i=0; i<ymax; i+=ypath) ytick.push(i)
@@ -317,7 +322,7 @@ function TBC_update() {
     .call(yAxis);
   
   //-- Update bars
-  TBC_wrap.bar.selectAll("rect")
+  TBC_wrap.bar.selectAll('.content.bar')
     .data(TBC_wrap.formattedData)
     .transition()
     .duration(transDuration)
@@ -351,7 +356,7 @@ function TBC_update() {
   var lLabel;
   if (lang == 'zh-tw') lLabel = ["擴大社區監測", "居家檢疫", "法定定義通報", "合計"];
   else if (lang == 'fr') lLabel = ["Recherche de cas contacts", "Quarantaine (fusionné dans clinique)", "Critères cliniques", "Total"];
-  else lLabel = ['Possible community transmission', 'Quarantine (merged into clinical)', 'Suspicious clinical cases', "Total"];
+  else lLabel = ['Community monitoring', 'Quarantine (merged into clinical)', 'Suspicious clinical cases', "Total"];
   
   TBC_wrap.svg.selectAll(".legend.label")
     .remove()

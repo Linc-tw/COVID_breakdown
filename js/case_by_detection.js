@@ -34,8 +34,13 @@ function CBD_makeCanvas() {
       .attr("viewBox", "0 0 " + totWidth + " " + totHeight)
       .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
-      .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  
+  svg.append("rect")
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("fill", "white")
+      .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
   CBD_wrap.totWidth = totWidth;
   CBD_wrap.totHeight = totHeight;
@@ -103,9 +108,9 @@ function CBD_formatData(data) {
   }
   
   //-- Calculate ymax
-  ymax *= 1.11;
+  ymax *= 1.15;
   var ypath;
-  if (CBD_wrap.doCumul == 1) ypath = 80; //Math.floor(ymax / 5);
+  if (CBD_wrap.doCumul == 1) ypath = 100; //Math.floor(ymax / 5);
   else                       ypath = 5;
   
   var ytick = [];
@@ -344,7 +349,7 @@ function CBD_update() {
     .call(yAxis);
   
   //-- Update bars
-  CBD_wrap.bar.selectAll("rect")
+  CBD_wrap.bar.selectAll('.content.bar')
     .data(CBD_wrap.formattedData)
     .transition()
     .duration(transDuration)

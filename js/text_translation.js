@@ -54,7 +54,7 @@ function text_translation() {
     node = document.getElementById("menu_policy")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Policies"));
+      node.appendChild(document.createTextNode("防疫措施"));
     }
     node = document.getElementById("menu_source")
     if (node !== null) {
@@ -244,6 +244,33 @@ function text_translation() {
       node.textContent = '';
       node.appendChild(document.createTextNode("案例數"));
     }
+    
+    node = document.getElementById("criteria_timeline_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("檢驗通報標準沿革"));
+    }
+    node = document.getElementById("criteria_timeline_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("摘要"));
+    }
+    node = document.getElementById("criteria_timeline_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("全部"));
+    }
+    node = document.getElementById("criteria_timeline_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("碟狀"));
+    }
+    node = document.getElementById("criteria_timeline_button_4")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("軸狀"));
+    }
+    
   }
   else if (lang == 'fr') {
     node = document.getElementById("title")
@@ -259,7 +286,7 @@ function text_translation() {
     node = document.getElementById("menu_policy")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Policies"));
+      node.appendChild(document.createTextNode("Mesures de prévention"));
     }
     node = document.getElementById("menu_source")
     if (node !== null) {
@@ -449,6 +476,33 @@ function text_translation() {
       node.textContent = '';
       node.appendChild(document.createTextNode("Nombre"));
     }
+    
+    node = document.getElementById("criteria_timeline_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Chronologie des dépistages systématiques"));
+    }
+    node = document.getElementById("criteria_timeline_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Selectionnés"));
+    }
+    node = document.getElementById("criteria_timeline_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Tout"));
+    }
+    node = document.getElementById("criteria_timeline_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Disques"));
+    }
+    node = document.getElementById("criteria_timeline_button_4")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Linéaire"));
+    }
+    
   }
   else {
     node = document.getElementById("title")
@@ -464,7 +518,7 @@ function text_translation() {
     node = document.getElementById("menu_policy")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Policies"));
+      node.appendChild(document.createTextNode("Policy"));
     }
     node = document.getElementById("menu_source")
     if (node !== null) {
@@ -654,6 +708,33 @@ function text_translation() {
       node.textContent = '';
       node.appendChild(document.createTextNode("Counts"));
     }
+    
+    node = document.getElementById("criteria_timeline_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Chronology of Systematic Testing"));
+    }
+    node = document.getElementById("criteria_timeline_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Selected"));
+    }
+    node = document.getElementById("criteria_timeline_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("All"));
+    }
+    node = document.getElementById("criteria_timeline_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Disks"));
+    }
+    node = document.getElementById("criteria_timeline_button_4")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Timeline"));
+    }
+    
   }
 }
 
@@ -764,5 +845,35 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
     });
   });
 
+});
+
+$(document).on("change", "input:radio[name='policy_language']", function(event) {
+  lang = this.value;
+  Cookies.set("lang", lang);
+  text_translation();
+  
+  d3.selectAll('.plot').remove()
+  
+  d3.csv(CT_wrap.dataPathList[0], function(error, data) {
+    if (error) return console.warn(error);
+    
+    CT_makeCanvas();
+    CT_formatData(data);
+    CT_initialize();
+    CT_update();
+  });
+
+});
+
+$(document).on("change", "input:radio[name='source_language']", function(event) {
+  lang = this.value;
+  Cookies.set("lang", lang);
+  text_translation();
+});
+
+$(document).on("change", "input:radio[name='copyleft_language']", function(event) {
+  lang = this.value;
+  Cookies.set("lang", lang);
+  text_translation();
 });
 
