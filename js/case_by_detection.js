@@ -53,9 +53,10 @@ function CBD_makeCanvas() {
 
 function CBD_formatData(data) {
   //-- Settings for xticklabels
-  var xlabel_path = 7;
+  var xlabel_path = 10;
   var q = data.length % xlabel_path;
-  var rList = [3, 3, 4, 1, 1, 2, 2];
+//   var rList = [3, 3, 4, 1, 1, 2, 2];
+  var rList = [4, 5, 5, 1, 1, 2, 2, 3, 3, 4];
   var r = rList[q];
   var xtick = [];
   var xticklabel = [];
@@ -362,7 +363,7 @@ function CBD_update() {
   if (CBD_wrap.doOnset == 1) colorList.splice(CBD_wrap.nbCol, 0, '#999999');
   
   //-- Legend - value
-  var lPos = {x: 70, y: 45, dx: 12, dy: 30};
+  var lPos = {x: 70, y: 40, dx: 12, dy: 30};
   var lValue = CBD_wrap.lValue.slice();
   var sum = lValue.reduce((a, b) => a + b, 0);
   if (CBD_wrap.doOnset == 1) lValue.push(CBD_wrap.overallTot-sum);
@@ -389,7 +390,7 @@ function CBD_update() {
   }
   else if (lang == 'fr') {
     lLabel = ['Aéroport', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpital', 'Pas annoncé', 'Total'];
-    lLabel_plus = "Sans date début symp.";
+    lLabel_plus = "Sans date début sympt.";
   }
   else {
     lLabel = ["Airport", "Quarantine", "Isolation", "Monitoring", "Hospital", 'Not announced', 'Total'];

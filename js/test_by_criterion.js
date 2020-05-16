@@ -49,9 +49,10 @@ function TBC_makeCanvas() {
 
 function TBC_formatData(data) {
   //-- Settings for xticklabels
-  var xlabel_path = 7;
+  var xlabel_path = 10;
   var q = data.length % xlabel_path;
-  var rList = [3, 3, 4, 1, 1, 2, 2];
+//   var rList = [3, 3, 4, 1, 1, 2, 2];
+  var rList = [4, 5, 5, 1, 1, 2, 2, 3, 3, 4];
   var r = rList[q];
   var xtick = [];
   var xticklabel = [];
@@ -101,7 +102,7 @@ function TBC_formatData(data) {
   }
   
   //-- Calculate ymax
-  ymax *= 1.35;
+  ymax *= 1.4;
   var ypath;
   if (TBC_wrap.doCumul == 1) ypath = 20000;
   else                       ypath = 600;
@@ -282,7 +283,7 @@ function TBC_initialize() {
   var colTagList = TBC_wrap.colTagList.slice().reverse();
   var color = d3.scaleOrdinal()
     .domain(colTagList)
-    .range(colorList);
+    .range(colorList.slice().reverse());
   
   //-- Bar
   var bar = TBC_wrap.svg.selectAll('.content.bar')
@@ -334,8 +335,8 @@ function TBC_update() {
   colorList.push('#000000');
   
   //-- Legend - value
-  var lPos = {x: 95, y: 45, dx: 12, dy: 30};
-  var lValue = TBC_wrap.lValue.slice();
+  var lPos = {x: 95, y: 40, dx: 12, dy: 30};
+  var lValue = TBC_wrap.lValue.slice().reverse();
   var sum = lValue.reduce((a, b) => a + b, 0);
   lValue.push(sum);
   
@@ -354,9 +355,9 @@ function TBC_update() {
       
   //-- Legend - label
   var lLabel;
-  if (lang == 'zh-tw') lLabel = ["擴大社區監測", "居家檢疫", "法定定義通報", "合計"];
-  else if (lang == 'fr') lLabel = ["Recherche de cas contacts", "Quarantaine (fusionné dans clinique)", "Critères cliniques", "Total"];
-  else lLabel = ['Community monitoring', 'Quarantine (merged into clinical)', 'Suspicious clinical cases', "Total"];
+  if (lang == 'zh-tw') lLabel = ["法定定義通報", "居家檢疫", "擴大社區監測", "合計"];
+  else if (lang == 'fr') lLabel = ["Critères cliniques", "Quarantaine (fusionnée dans clinique)", "Recherche de clusters locaux", "Total"];
+  else lLabel = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', "Total"];
   
   TBC_wrap.svg.selectAll(".legend.label")
     .remove()

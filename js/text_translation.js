@@ -369,7 +369,7 @@ function text_translation() {
     node = document.getElementById("case_by_transmission_button_4")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Date du début des symptômes"));
+      node.appendChild(document.createTextNode("Date du début des sympt."));
     }
     
     
@@ -396,7 +396,7 @@ function text_translation() {
     node = document.getElementById("case_by_detection_button_4")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Date du début des symptômes"));
+      node.appendChild(document.createTextNode("Date du début des sympt."));
     }
     
     

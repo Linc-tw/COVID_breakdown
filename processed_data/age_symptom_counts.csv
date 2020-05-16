@@ -1,15 +1,15 @@
 label,count,label_zh,label_fr
 N_total,440,合計,Total
 N_data,425,有資料案例數,Données complètes
-80s,3,八十多歲,80aine
-70s,13,七十多歲,70aine
-60s,41,六十多歲,60aine
-50s,46,五十多歲,50aine
-40s,41,四十多歲,40aine
-30s,96,三十多歲,30aine
-20s,161,二十多歲,20aine
-10s,20,十多歲,10aine
-0s,4,未滿十歲,< 10 ans
+80s,3,80-89歲,80aine
+70s,13,70-79歲,70aine
+60s,41,60-69歲,60aine
+50s,46,50-59歲,50aine
+40s,41,40-49歲,40aine
+30s,96,30-39歲,30aine
+20s,161,20-29歲,20aine
+10s,20,10-19歲,10aine
+0s,4,<10歲,< 10 ans
 cough,197,咳嗽,toux
 fever,190,發燒,fièvre
 throatache,132,喉嚨症狀,mal de gorge
