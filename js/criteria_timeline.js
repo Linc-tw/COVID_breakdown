@@ -157,7 +157,7 @@ function CT_initialize() {
   //-- Title
   var title;
   if (lang == 'zh-tw') title = ['台灣針對嚴重特殊傳染性肺炎之', '採檢標準暨其生效日期變化圖'];
-  else if (lang == 'fr') title = ['Antécédents de voyage, symptômes & autres', 'conditions avec lesquelles Taïwan dépiste', "systématiquement & leurs dates de l'effet"];
+  else if (lang == 'fr') title = ['Antécédents de voyage, symptômes et autres', 'conditions avec lesquelles Taïwan dépiste', "systématiquement & leurs dates d'effet"];
   else title = ['Travel history, symptoms, & other conditions', 'with which Taiwan test systematically &', 'their starting dates'];
   
   CT_wrap.svg.selectAll(".title")

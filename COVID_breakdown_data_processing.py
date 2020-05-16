@@ -1228,7 +1228,7 @@ class TestSheet:
     criteriaDict = {
       '2020-01-16': {
         'en': 'Wuhan with fever or resp. symp. or pneumonia\nClose contact of confirmed cases', ## Close contact of confirmed cases or ppl satisfying prev. cond.
-        'fr': 'Wuhan avec fièvre ou symp. resp. ou pneumonie\nContact proche des cas confirmés',
+        'fr': 'Wuhan avec fièvre ou sympt. resp. ou pneumonie\nContacts proches des cas confirmés',
         'zh-tw': '武漢旅遊史且有發燒或呼吸道症狀或肺炎\n確診案例之密切接觸者'
       },
       '2020-01-21': {
@@ -1243,7 +1243,7 @@ class TestSheet:
       },
       '2020-02-02': {
         'en': 'Started home quarantine scheme\nGuangdong', ## Kinmen & Mazhu fast tracks
-        'fr': 'Début de la quarantine à domicile\nGuangdong',
+        'fr': 'Début de la quarantaine à domicile\nGuangdong',
         'zh-tw': '啟動居家檢疫與居家隔離\n廣東旅遊史'
       },
       '2020-02-03': {
@@ -1273,12 +1273,12 @@ class TestSheet:
       },
       '2020-02-16': {
         'en': 'Started community monitoring\nMedics or local cluster with pneumonia',
-        'fr': 'Début de la surveillance supp. de la trans. locale\nRegroupement local ou des soignants\navec pneumonie',
+        'fr': 'Surveillance supplémentaire des transmissions locales\Clusters locaux ou de soignants\navec pneumonie',
         'zh-tw': '啟動擴大社區監測\n醫護或本土肺炎群聚',
       },
       '2020-02-29': {
         'en': 'Korea, Italy\nAll pneumonia\nLocal cluster with resp. symp.', ## Merged QT into clinical
-        'fr': 'Corés, Italie\nToute pneumonie\nRegroupement local\navec symp. resp.', 
+        'fr': 'Corée, Italie\nToute pneumonie\nRegroupement local\navec sympt. resp.', 
         'zh-tw': '韓國、義大利旅遊史\n所有肺炎\n本土呼吸道症狀群聚'
       },
       '2020-03-01': {
@@ -1303,7 +1303,7 @@ class TestSheet:
       },
       '2020-03-25': {
         'en': 'Medics with resp. symp.',
-        'fr': 'Soignants avec symp. resp.',
+        'fr': 'Soignants avec sympt. resp.',
         'zh-tw': '有呼吸道症狀之醫護',
       },
       '2020-04-01': {
