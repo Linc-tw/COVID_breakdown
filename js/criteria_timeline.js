@@ -7,7 +7,7 @@ CT_wrap.dataPathList = [
 
 function CT_makeCanvas() {
   var totWidth = 800;
-  var totHeight = 520;
+  var totHeight = 540;
 //   var totHeight, top;
 //   if (lang == 'zh-tw') {
 //     totHeight = 540;
@@ -25,7 +25,7 @@ function CT_makeCanvas() {
 //     top = 215;
 //   }
   
-  var margin = {left: 2, right: 2, bottom: 2, top: 2};
+  var margin = {left: 0, right: 0, bottom: 0, top: 0};
   var width = totWidth - margin.left - margin.right;
   var height = totHeight - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
@@ -58,6 +58,63 @@ function CT_formatData(data) {
   CT_wrap.length = data.length;
 }
 
+//-- Tooltip
+var CT_tooltip = d3.select(CT_wrap.id)
+  .append("div")
+  .attr("class", "tooltip")
+
+function CT_mouseover(d) {
+  CT_tooltip.transition()
+    .duration(200)
+    .style("opacity", 0.9)
+  d3.select(this)
+    .style("opacity", 0.6)
+}
+
+function CT_getTooltipPos(d) {
+  var xPos = d[0];
+  var yPos = d[1];
+  
+  var buffer = 1.25*16; //-- Margin buffer of card-body
+  var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
+  var cardHdr = 3.125*16; //-- Offset caused by card-header
+  var svgDim = d3.select(CT_wrap.id).node().getBoundingClientRect();
+  var xAspect = (svgDim.width - 2*buffer) / CT_wrap.totWidth;
+  var yAspect = (svgDim.height - 2*buffer) / CT_wrap.totHeight;
+  
+  xPos = (xPos + CT_wrap.margin.left) * xAspect + buffer;
+  yPos = (yPos + CT_wrap.margin.top) * yAspect + buffer + cardHdr + button;
+  
+  xPos = xPos + 10;
+  yPos = yPos - 40;
+  return [xPos, yPos];
+}
+
+function CT_mousemove(d) {
+  var newPos = CT_getTooltipPos(d3.mouse(this));
+  var tooltipText;
+  
+  if (lang == 'zh-tw')
+    tooltipText = '點我'
+  else if (lang == 'fr')
+    tooltipText = 'Cliquez'
+  else
+    tooltipText = 'Click me'
+  
+  CT_tooltip
+    .html(tooltipText)
+    .style("left", newPos[0] + "px")
+    .style("top", newPos[1] + "px")
+}
+
+function CT_mouseleave(d) {
+  CT_tooltip.transition()
+    .duration(10)
+    .style("opacity", 0)
+  d3.select(this)
+    .style("opacity", 1)
+}
+
 //-- Click
 function CT_click_circle(d, i) {
   var j = CT_wrap.length - 1 - i;
@@ -65,12 +122,12 @@ function CT_click_circle(d, i) {
   var alpha = 1 - CT_wrap['circle_text_'+j];
   CT_wrap.doAll = 2;
   
-  CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_circle_text_'+j)
+  CT_wrap.svg.selectAll(CT_wrap.id+'_circle_text_'+j)
     .transition()
     .duration(transDuration)
     .attr("opacity", alpha);
   
-  CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_circle_line_'+j)
+  CT_wrap.svg.selectAll(CT_wrap.id+'_circle_line_'+j)
     .transition()
     .duration(transDuration)
     .attr("opacity", CT_wrap.lineAlpha*alpha)
@@ -83,12 +140,12 @@ function CT_click_timeline(d, j) {
   var alpha = 1 - CT_wrap['timeline_text_'+j];
   CT_wrap.doAll = 2;
   
-  CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_timeline_text_'+j)
+  CT_wrap.svg.selectAll(CT_wrap.id+'_timeline_text_'+j)
     .transition()
     .duration(transDuration)
     .attr("opacity", alpha);
   
-  CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_timeline_line_'+j)
+  CT_wrap.svg.selectAll(CT_wrap.id+'_timeline_line_'+j)
     .transition()
     .duration(transDuration)
     .attr("opacity", CT_wrap.lineAlpha*alpha)
@@ -99,20 +156,17 @@ function CT_click_timeline(d, j) {
 function CT_initialize() {
   //-- Title
   var title;
-  if (lang == 'zh-tw') title = ['Travel history, symptoms, & other conditions', 'with which people are systematically tested', 'in Taiwan & their starting dates'];
-  else if (lang == 'fr') title = ['Travel history, symptoms, & other conditions', 'with which people are systematically tested', 'in Taiwan & their starting dates']; //TODO
-  else title = ['Travel history, symptoms, & other conditions', 'with which people are systematically tested', 'in Taiwan & their starting dates'];
-  var tx_c = 10;
-  var ty0_c = 20;
-  var ty1_c = 20;
+  if (lang == 'zh-tw') title = ['台灣針對嚴重特殊傳染性肺炎之', '採檢標準暨其生效日期變化圖'];
+  else if (lang == 'fr') title = ['Antécédents de voyage, symptômes & autres', 'conditions avec lesquelles Taïwan dépiste', "systématiquement & leurs dates de l'effet"];
+  else title = ['Travel history, symptoms, & other conditions', 'with which Taiwan test systematically &', 'their starting dates'];
   
   CT_wrap.svg.selectAll(".title")
     .data(title)
     .enter()
     .append("text")
       .attr("class", "title")
-      .attr("x", tx_c)
-      .attr("y", function(d, i) {return ty0_c + i*ty1_c})
+      .attr("x", 0.5*CT_wrap.width-150)
+      .attr("y", function(d, i) {return 0.5*CT_wrap.height-20 + i*20})
       .attr("fill", 'black')
       .text(function(d) {return d})
       .attr("text-anchor", "start")
@@ -121,162 +175,78 @@ function CT_initialize() {
   //-- Color
   var color = d3.scaleLinear().domain([0, 0.25*(CT_wrap.length-1), 0.5*(CT_wrap.length-1), 0.75*(CT_wrap.length-1), CT_wrap.length-1]).range(['#aa0033', '#bb8866', '#aaaa99', '#5588aa', '#002299']);
   
-  //-- Circle - circle
-  r_c_min = 30;
-  r_c_max = 195;
-  x0_c = 210;
-  y0_c = CT_wrap.height*0.6;
-  dy_c = 0.5;
-  
-  CT_wrap.svg.append("g")
-    .selectAll(".circle")
-    .data(CT_wrap.formattedData)
-    .enter()
-    .append("circle")
-      .attr("class", "circle")
-      .attr("r", 0)
-      .attr("cx", x0_c)
-      .attr("cy", function(d, i) {return y0_c-(r_c_max-r_c_min)*i/(CT_wrap.length-1)+dy_c*i})
-      .attr("fill", function(d, i) {return color(CT_wrap.length-1-i)})
-      .attr("fill-opacity", 1)
-      .attr("stroke", "black")
-      .attr("stroke-width", 0.3)
-      .on("click", CT_click_circle)
-  
-  //-- Timeline - baseline
+  //-- Timeline texts & lines
+  var xList_t;
+  if (lang == 'zh-tw') {
+    xList_t = [
+      0, 
+          300, 120, 0, 180, 240, 
+      0, 
+      0, 
+          300, 
+      0, 
+          300, 120, 
+      0, 
+      0, 
+      0, 
+      0, 
+      0, 
+      0
+    ];
+  }
+  else if (lang == 'fr') {
+    xList_t = [
+      0, 
+          380, 120, 0, 180, 240, 
+      0, 
+      0, 
+          380, 
+      0, 
+          380, 120, 
+      0, 
+      0, 
+      0, 
+      0, 
+      0, 
+      0
+    ];
+  }
+  else {
+    xList_t = [
+      0, 
+          300, 120, 0, 180, 240, 
+      0, 
+      0, 
+          300, 
+      0, 
+          300, 120, 
+      0, 
+      0, 
+      0, 
+      0, 
+      0, 
+      0
+    ];
+  }
+  var yList_t = [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0];
   var x0_t = 130;
-  var dot = CT_wrap.svg.append("g");
+  var dx_t = 20;
   
-  dot.append("line")
-    .attr("x1", x0_t)
-    .attr("y1", CT_wrap.height*0.5/CT_wrap.length)
-    .attr("x2", x0_t)
-    .attr("y2", CT_wrap.height*(CT_wrap.length-0.5)/CT_wrap.length)
-    .attr("opacity", 0)
-    .attr('id', CT_wrap.tag+'_timeline_baseline')
-    .attr("stroke", "black")
-    .attr("stroke-width", 1)
-  
-  //-- Timeline - dot
-  dot.selectAll(".dot")
-    .data(CT_wrap.formattedData)
-    .enter()
-    .append("circle")
-      .attr("class", "dot")
-      .attr("r", 0)
-      .attr("cx", x0_t)
-      .attr("cy", function(d, i) {return CT_wrap.height*(i+0.5)/CT_wrap.length})
-      .attr("fill", function(d, i) {return color(i)})
-      .attr("fill-opacity", 1)
-      .attr("stroke", "black")
-      .attr("stroke-width", 1)
-      .on("click", CT_click_timeline)
-  
-  //-- Circle texts & lines
-  var xList_c = [
-    0, 
-      1, 1, 0, 1, 1, 
-    0, 
-    0, 
-      1, 
-    0, 
-      1, 1, 
-    0, 
-    0, 
-    0, 
-    0, 
-    0, 
-    0
-  ];
-  var yList_c = [
-    0, 
-        10, 20, 
-    -15, 
-        5, 15,
-    -35, 
-    -25, 
-        -20, 
-    -25, 
-        -15, 25, 
-    10, 
-    20, 
-    15, 
-    10, 
-    5, 
-    0
-  ];
-  var lineAlpha = 0.35;
   var text = CT_wrap.svg.append("g");
   var line = CT_wrap.svg.append("g");
-  var i, y1, y2, split, x1, anchor;
-  
-  for (i=0; i<CT_wrap.length; i++) {
-    CT_wrap['circle_text_'+i] = 0; //-- Hide all
-    if (i > 12)
-      split = (CT_wrap.formattedData[i]['date'] + ' ' + CT_wrap.formattedData[i][lang]).split('\n');
-    else
-      split = (CT_wrap.formattedData[i]['date'] + '\n' + CT_wrap.formattedData[i][lang]).split('\n');
-    x1 = xList_c[i] ? CT_wrap.width-10 : 2*x0_c+20;
-    anchor = xList_c[i] ? 'end' : 'start';
-    
-    //-- Circle - text
-    text.selectAll()
-      .data(split)
-      .enter()
-      .append("text")
-        .attr("class", "content text")
-        .attr("x", x1)
-        .attr("y", function(d, j) {return CT_wrap.height*(i+0.5)/CT_wrap.length+j*15+yList_c[i]})
-        .attr("fill", function(d) {return color(i)})
-        .attr("opacity", CT_wrap['circle_text_'+i])
-        .attr("id", function(d, j) {return CT_wrap.tag+'_circle_text_'+i;})
-        .text(function(d) {return d;})
-        .attr("text-anchor", anchor)
-        .attr("dominant-baseline", "middle")
-        
-    //-- Circle - line
-    if (xList_c[i] == 0) {
-      y1 = y0_c+r_c_max - 2*(r_c_max-r_c_min)*(CT_wrap.length-1-(i-0.45))/(CT_wrap.length-1) + dy_c*(CT_wrap.length-1-(i-0.45));
-      y2 = CT_wrap.height*(i+0.5)/CT_wrap.length+yList_c[i];
-      line.append("polyline")
-        .attr("points", x0_c+','+y1+' '+(x1-60)+','+y2+' '+(x1-5)+','+y2)
-        .attr("opacity", lineAlpha*CT_wrap['circle_text_'+i])
-        .attr("id", function(d, j) {return CT_wrap.tag+'_circle_line_'+i;})
-        .attr("stroke", '#bbb')
-        .attr("stroke-width", 1)
-        .attr('fill', 'none')
-    }
-  }
-  
-  //-- Timeline texts & lines
-  var xList_t = [
-    0, 
-        300, 60, 0, 120, 180, 
-    0, 
-    0, 
-        300, 
-    0, 
-        300, 120, 
-    0, 
-    0, 
-    0, 
-    0, 
-    0, 
-    0];
-  var yList_t = [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0];
-  var dx_t = 20;
-  var tx_t = CT_wrap.width-346;
-  var ty0_t = CT_wrap.height-80;
-  var ty1_t = 20;
-  var date;
+  var lineAlpha = 0.35;
+  var i, date, split;
   
   for (i=0; i<CT_wrap.length; i++) {
     CT_wrap['timeline_text_'+i] = 0; //-- Hide all
     date = CT_wrap.formattedData[i]['date'];
     split = CT_wrap.formattedData[i][lang].split('\n');
-    if (date == '2020-01-25') {
+    if (date == '2020-01-25' || date == '2020-03-17' || date == '2020-03-19')
       split = [split.join(' ')]
-    }
+    if (date == '2020-02-16' && lang == 'fr')
+      split = [split[0], split[1]+' '+split[2]]
+    if (date == '2020-02-29' && lang == 'fr')
+      split = [split[0], split[1], split[2]+' '+split[3]]
     
     //-- Timeline - date
     text.append("text")
@@ -319,14 +289,209 @@ function CT_initialize() {
     }
   }
   
+  //-- Timeline - baseline
+  var dot = CT_wrap.svg.append("g");
+  
+  dot.append("line")
+    .attr("x1", x0_t)
+    .attr("y1", CT_wrap.height*0.5/CT_wrap.length)
+    .attr("x2", x0_t)
+    .attr("y2", CT_wrap.height*(CT_wrap.length-0.5)/CT_wrap.length)
+    .attr("opacity", 0)
+    .attr('id', CT_wrap.tag+'_timeline_baseline')
+    .attr("stroke", "black")
+    .attr("stroke-width", 1)
+  
+  //-- Timeline - dot
+  dot.selectAll(".dot")
+    .data(CT_wrap.formattedData)
+    .enter()
+    .append("circle")
+      .attr("class", "dot")
+      .attr("r", 0)
+      .attr("cx", x0_t)
+      .attr("cy", function(d, i) {return CT_wrap.height*(i+0.5)/CT_wrap.length})
+      .attr("fill", function(d, i) {return color(i)})
+      .attr("fill-opacity", 1)
+      .attr("stroke", "black")
+      .attr("stroke-width", 1)
+      .on("click", CT_click_timeline)
+      .on("mouseover", CT_mouseover)
+      .on("mousemove", CT_mousemove)
+      .on("mouseleave", CT_mouseleave)
+  
+  //-- Circle - circle
+  var r_c_min = 30;
+  var r_c_max = 195;
+  var x0_c = 210;
+  var y0_c = CT_wrap.height*0.6;
+  var dy_c = 0.5;
+  
+  CT_wrap.svg.append("g")
+    .selectAll(".circle")
+    .data(CT_wrap.formattedData)
+    .enter()
+    .append("circle")
+      .attr("class", "circle")
+      .attr("r", 0)
+      .attr("cx", x0_c)
+      .attr("cy", function(d, i) {return y0_c-(r_c_max-r_c_min)*i/(CT_wrap.length-1)+dy_c*i})
+      .attr("fill", function(d, i) {return color(CT_wrap.length-1-i)})
+      .attr("fill-opacity", 1)
+      .attr("stroke", "black")
+      .attr("stroke-width", 0.3)
+      .on("click", CT_click_circle)
+      .on("mouseover", CT_mouseover)
+      .on("mousemove", CT_mousemove)
+      .on("mouseleave", CT_mouseleave)
+  
+  //-- Circle texts & lines
+  var xList_c, yList_c;
+  if (lang == 'zh-tw') {
+    xList_c = [
+      0, 
+        1, 1, 0, 1, 1, 
+      0, 
+      0, 
+        1, 
+      0, 
+        1, 1, 
+      0, 
+      0, 
+      0, 
+      0, 
+      0, 
+      0
+    ];
+    yList_c = [
+      0, 
+          10, 20, 
+      -15, 
+          5, 15,
+      -30, 
+      -15, 
+          -5, 
+      -20, 
+          -15, 25, 
+      10, 
+      20, 
+      15, 
+      10, 
+      5, 
+      0
+    ];
+  }
+  else if (lang == 'fr') {
+    xList_c = [
+      0, 
+        1, 1, 0, 1, 1, 
+      0, 
+      0, 
+        1, 
+      0, 
+        1, 1, 
+      0, 
+      0, 
+      0, 
+      0, 
+      0, 
+      0
+    ];
+    yList_c = [
+      0, 
+          10, 20, 
+      -15, 
+          5, 15,
+      -35, 
+      -25, 
+          -20, 
+      -20, 
+          -5, 55, 
+      -20, 
+      5, 
+      15, 
+      10, 
+      5, 
+      0
+    ];
+  }
+  else {
+    xList_c = [
+      0, 
+        1, 1, 0, 1, 1, 
+      0, 
+      0, 
+        1, 
+      0, 
+        1, 1, 
+      0, 
+      0, 
+      0, 
+      0, 
+      0, 
+      0
+    ];
+    yList_c = [
+      0, 
+          10, 20, 
+      -15, 
+          5, 15,
+      -35, 
+      -25, 
+          -20, 
+      -25, 
+          -15, 25, 
+      10, 
+      20, 
+      15, 
+      10, 
+      5, 
+      0
+    ];
+  }
+  var line2 = CT_wrap.svg.append("g");
+  var x1, y1, y2, anchor;
+  
+  for (i=0; i<CT_wrap.length; i++) {
+    CT_wrap['circle_text_'+i] = 0; //-- Hide all
+    if (i > 12)
+      split = (CT_wrap.formattedData[i]['date'] + ' ' + CT_wrap.formattedData[i][lang]).split('\n');
+    else
+      split = (CT_wrap.formattedData[i]['date'] + '\n' + CT_wrap.formattedData[i][lang]).split('\n');
+    x1 = xList_c[i] ? CT_wrap.width-10 : 2*x0_c+20;
+    anchor = xList_c[i] ? 'end' : 'start';
+    
+    //-- Circle - text
+    text.selectAll()
+      .data(split)
+      .enter()
+      .append("text")
+        .attr("class", "content text")
+        .attr("x", x1)
+        .attr("y", function(d, j) {return CT_wrap.height*(i+0.5)/CT_wrap.length+j*15+yList_c[i]})
+        .attr("fill", function(d) {return color(i)})
+        .attr("opacity", CT_wrap['circle_text_'+i])
+        .attr("id", function(d, j) {return CT_wrap.tag+'_circle_text_'+i;})
+        .text(function(d) {return d;})
+        .attr("text-anchor", anchor)
+        .attr("dominant-baseline", "middle")
+        
+    //-- Circle - line
+    if (xList_c[i] == 0) {
+      y1 = y0_c+r_c_max - 2*(r_c_max-r_c_min)*(CT_wrap.length-1-(i-0.45))/(CT_wrap.length-1) + dy_c*(CT_wrap.length-1-(i-0.45));
+      y2 = CT_wrap.height*(i+0.5)/CT_wrap.length+yList_c[i];
+      line2.append("polyline")
+        .attr("points", x0_c+','+y1+' '+(x1-60)+','+y2+' '+(x1-5)+','+y2)
+        .attr("opacity", lineAlpha*CT_wrap['circle_text_'+i])
+        .attr("id", function(d, j) {return CT_wrap.tag+'_circle_line_'+i;})
+        .attr("stroke", '#bbb')
+        .attr("stroke-width", 1)
+        .attr('fill', 'none')
+    }
+  }
+  
   CT_wrap.r_c_min = r_c_min;
   CT_wrap.r_c_max = r_c_max;
-  CT_wrap.tx_c = tx_c;
-  CT_wrap.ty0_c = ty0_c;
-  CT_wrap.ty1_c = ty1_c;
-  CT_wrap.tx_t = tx_t;
-  CT_wrap.ty0_t = ty0_t;
-  CT_wrap.ty1_t = ty1_t;
   CT_wrap.lineAlpha = lineAlpha;
 }
 
@@ -371,37 +536,53 @@ function CT_update() {
       .attr("r", 5)
     
     //-- Update baseline
-    CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_timeline_baseline')
+    CT_wrap.svg.selectAll(CT_wrap.id+'_timeline_baseline')
       .transition()
       .duration(transDuration)
       .attr('opacity', 1)
     
     //-- Title
+    if (lang == 'zh-tw') {
+      tx_t = CT_wrap.width - 270;
+      ty0_t = CT_wrap.height - 100;
+      ty1_t = 20;
+    }
+    else if (lang == 'fr') {
+      tx_t = CT_wrap.width - 346;
+      ty0_t = CT_wrap.height - 80;
+      ty1_t = 20;
+    }
+    else {
+      tx_t = CT_wrap.width - 346;
+      ty0_t = CT_wrap.height - 80;
+      ty1_t = 20;
+    }
+    
     CT_wrap.svg.selectAll('.title')
       .transition()
       .duration(transDuration)
-      .attr("x", CT_wrap.tx_t)
-      .attr("y", function(d, i) {return CT_wrap.ty0_t + i*CT_wrap.ty1_t})
+      .attr("x", tx_t)
+      .attr("y", function(d, i) {return ty0_t + ty1_t*i})
       
     for (i=0; i<CT_wrap.length; i++) {
       //-- Update circle texts
       CT_wrap['circle_text_'+i] = 0;
-      CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_circle_text_'+i)
+      CT_wrap.svg.selectAll(CT_wrap.id+'_circle_text_'+i)
         .transition()
         .duration(transDuration)
         .attr("opacity", 0)
-      CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_circle_line_'+i)
+      CT_wrap.svg.selectAll(CT_wrap.id+'_circle_line_'+i)
         .transition()
         .duration(transDuration)
         .attr("opacity", CT_wrap.lineAlpha*0)
         
       //-- Update timeline texts
       CT_wrap['timeline_text_'+i] = activeList[i];
-      CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_timeline_text_'+i)
+      CT_wrap.svg.selectAll(CT_wrap.id+'_timeline_text_'+i)
         .transition()
         .duration(transDuration)
         .attr("opacity", activeList[i])
-      CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_timeline_line_'+i)
+      CT_wrap.svg.selectAll(CT_wrap.id+'_timeline_line_'+i)
         .transition()
         .duration(transDuration)
         .attr("opacity", CT_wrap.lineAlpha*activeList[i])
@@ -423,7 +604,7 @@ function CT_update() {
       .attr("r", 0)
     
     //-- Update baseline
-    CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_timeline_baseline')
+    CT_wrap.svg.selectAll(CT_wrap.id+'_timeline_baseline')
       .transition()
       .duration(transDuration)
       .attr('opacity', 0)
@@ -432,28 +613,28 @@ function CT_update() {
     CT_wrap.svg.selectAll('.title')
       .transition()
       .duration(transDuration)
-      .attr("x", CT_wrap.tx_c)
-      .attr("y", function(d, i) {return CT_wrap.ty0_c + i*CT_wrap.ty1_c})
+      .attr("x", 10)
+      .attr("y", function(d, i) {return 20 + i*20})
       
     for (i=0; i<CT_wrap.length; i++) {
       //-- Update circle texts
       CT_wrap['circle_text_'+i] = activeList[i];
-      CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_circle_text_'+i)
+      CT_wrap.svg.selectAll(CT_wrap.id+'_circle_text_'+i)
         .transition()
         .duration(transDuration)
         .attr("opacity", activeList[i])
-      CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_circle_line_'+i)
+      CT_wrap.svg.selectAll(CT_wrap.id+'_circle_line_'+i)
         .transition()
         .duration(transDuration)
         .attr("opacity", CT_wrap.lineAlpha*activeList[i])
         
       //-- Update timeline texts
       CT_wrap['timeline_text_'+i] = 0;
-      CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_timeline_text_'+i)
+      CT_wrap.svg.selectAll(CT_wrap.id+'_timeline_text_'+i)
         .transition()
         .duration(transDuration)
         .attr("opacity", 0)
-      CT_wrap.svg.selectAll('#'+CT_wrap.tag+'_timeline_line_'+i)
+      CT_wrap.svg.selectAll(CT_wrap.id+'_timeline_line_'+i)
         .transition()
         .duration(transDuration)
         .attr("opacity", CT_wrap.lineAlpha*0)

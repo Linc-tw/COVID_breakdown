@@ -1228,93 +1228,93 @@ class TestSheet:
     criteriaDict = {
       '2020-01-16': {
         'en': 'Wuhan with fever or resp. symp. or pneumonia\nClose contact of confirmed cases', ## Close contact of confirmed cases or ppl satisfying prev. cond.
-        'fr': 'Wuhan with fever or resp. symp. or pneumonia\nClose contact of confirmed cases',
-        'zh-tw': 'Wuhan with fever or resp. symp. or pneumonia\nClose contact of confirmed cases'
+        'fr': 'Wuhan avec fièvre ou symp. resp. ou pneumonie\nContact proche des cas confirmés',
+        'zh-tw': '武漢旅遊史且有發燒或呼吸道症狀或肺炎\n確診案例之密切接觸者'
       },
       '2020-01-21': {
         'en': 'China with pneumonia',
-        'fr': 'China with pneumonia',
-        'zh-tw': 'China with pneumonia'
+        'fr': 'Chine avec pneumonie',
+        'zh-tw': '中國旅遊史且有肺炎'
       },
       '2020-01-25': {
         'en': 'Hubei',
         'fr': 'Hubei',
-        'zh-tw': 'Hubei'
+        'zh-tw': '湖北旅遊史'
       },
       '2020-02-02': {
         'en': 'Started home quarantine scheme\nGuangdong', ## Kinmen & Mazhu fast tracks
-        'fr': 'Started home quarantine scheme\nGuangdong',
-        'zh-tw': 'Started home quarantine scheme\nGuangdong'
+        'fr': 'Début de la quarantine à domicile\nGuangdong',
+        'zh-tw': '啟動居家檢疫與居家隔離\n廣東旅遊史'
       },
       '2020-02-03': {
         'en': 'Wenzhou',
         'fr': 'Wenzhou',
-        'zh-tw': 'Wenzhou',
+        'zh-tw': '溫州旅遊史',
       },
       '2020-02-05': {
         'en': 'Zhejiang',
         'fr': 'Zhejiang',
-        'zh-tw': 'Zhejiang',
+        'zh-tw': '浙江旅遊史',
       },
       '2020-02-06': {
         'en': 'China, Hong Kong, Macao',
-        'fr': 'China, Hong Kong, Macao',
-        'zh-tw': 'China, Hong Kong, Macao',
+        'fr': 'Chine, Hong Kong, Macao',
+        'zh-tw': '中國、香港、澳門旅遊史',
       },
       '2020-02-12': {
         'en': 'Check-back on flu-negative cases',
-        'fr': 'Check-back on flu-negative cases',
-        'zh-tw': 'Check-back on flu-negative cases',
+        'fr': 'Vérification des cas négatifs de grippe',
+        'zh-tw': '回溯採檢有呼吸道症狀但流感陰性之病患',
       },
       '2020-02-15': {
         'en': 'Singapore, Thailand',
-        'fr': 'Singapore, Thailand',
-        'zh-tw': 'Singapore, Thailand',
+        'fr': 'Singapour, Thaïlande',
+        'zh-tw': '新加坡、泰國旅遊史',
       },
       '2020-02-16': {
-        'en': 'Started community monitoring\nMedics & local cluster with pneumonia',
-        'fr': 'Started community monitoring\nMedics & local cluster with pneumonia',
-        'zh-tw': 'Started community monitoring\nMedics & local cluster with pneumonia',
+        'en': 'Started community monitoring\nMedics or local cluster with pneumonia',
+        'fr': 'Début de la surveillance supp. de la trans. locale\nRegroupement local ou des soignants\navec pneumonie',
+        'zh-tw': '啟動擴大社區監測\n醫護或本土肺炎群聚',
       },
       '2020-02-29': {
         'en': 'Korea, Italy\nAll pneumonia\nLocal cluster with resp. symp.', ## Merged QT into clinical
-        'fr': 'Korea, Italy\nAll pneumonia\nLocal cluster with resp. symp.', 
-        'zh-tw': 'Korea, Italy\nAll pneumonia\nLocal cluster with resp. symp.'
+        'fr': 'Corés, Italie\nToute pneumonie\nRegroupement local\navec symp. resp.', 
+        'zh-tw': '韓國、義大利旅遊史\n所有肺炎\n本土呼吸道症狀群聚'
       },
       '2020-03-01': {
         'en': 'Iran',
         'fr': 'Iran',
-        'zh-tw': 'Iran',
+        'zh-tw': '伊朗旅遊史',
       },
       '2020-03-17': {
         'en': 'Europe, Middle East, Central Asia, North Africa',
-        'fr': 'Europe, Middle East, Central Asia, North Africa',
-        'zh-tw': 'Europe, Middle East, Central Asia, North Africa',
+        'fr': 'Europe, Moyen-Orient,\nAsie centrale, Afrique du Nord',
+        'zh-tw': '歐洲、中東、西亞、北非旅遊史',
       },
       '2020-03-19': {
         'en': 'Asia, USA, Canada, Australia, New Zealand',
-        'fr': 'Asia, USA, Canada, Australia, New Zealand',
-        'zh-tw': 'Asia, USA, Canada, Australia, New Zealand',
+        'fr': 'Asie, États-Unis, Canada,\nAustralie, Nouvelle-Zélande',
+        'zh-tw': '亞洲、美國、加拿大、澳洲、紐西蘭旅遊史',
       },
       '2020-03-21': {
         'en': 'Global',
-        'fr': 'Global',
-        'zh-tw': 'Global',
+        'fr': 'Monde entier',
+        'zh-tw': '所有入境旅客',
       },
       '2020-03-25': {
         'en': 'Medics with resp. symp.',
-        'fr': 'Medics with resp. symp.',
-        'zh-tw': 'Medics with resp. symp.',
+        'fr': 'Soignants avec symp. resp.',
+        'zh-tw': '有呼吸道症狀之醫護',
       },
       '2020-04-01': {
         'en': 'Anosmia, ageusia',
-        'fr': 'Anosmia, ageusia',
-        'zh-tw': 'Anosmia, ageusia',
+        'fr': 'Anosmie, agueusie',
+        'zh-tw': '味嗅覺異常',
       },
       '2020-04-05': {
         'en': 'Diarrhea',
-        'fr': 'Diarrhea',
-        'zh-tw': 'Diarrhea'
+        'fr': 'Diarrhée',
+        'zh-tw': '腹瀉'
       }
     }
     
