@@ -1,12 +1,12 @@
 date,en,fr,zh-tw
 2020-01-16,"Wuhan with fever or resp. symp. or pneumonia
-Close contact of confirmed cases","Wuhan avec fièvre ou symp. resp. ou pneumonie
-Contact proche des cas confirmés","武漢旅遊史且有發燒或呼吸道症狀或肺炎
+Close contact of confirmed cases","Wuhan avec fièvre ou sympt. resp. ou pneumonie
+Contacts proches des cas confirmés","武漢旅遊史且有發燒或呼吸道症狀或肺炎
 確診案例之密切接觸者"
 2020-01-21,China with pneumonia,Chine avec pneumonie,中國旅遊史且有肺炎
 2020-01-25,Hubei,Hubei,湖北旅遊史
 2020-02-02,"Started home quarantine scheme
-Guangdong","Début de la quarantine à domicile
+Guangdong","Début de la quarantaine à domicile
 Guangdong","啟動居家檢疫與居家隔離
 廣東旅遊史"
 2020-02-03,Wenzhou,Wenzhou,溫州旅遊史
@@ -15,16 +15,17 @@ Guangdong","啟動居家檢疫與居家隔離
 2020-02-12,Check-back on flu-negative cases,Vérification des cas négatifs de grippe,回溯採檢有呼吸道症狀但流感陰性之病患
 2020-02-15,"Singapore, Thailand","Singapour, Thaïlande",新加坡、泰國旅遊史
 2020-02-16,"Started community monitoring
-Medics or local cluster with pneumonia","Début de la surveillance supp. de la trans. locale
-Regroupement local ou des soignants
+Medics or local cluster with pneumonia","Surveillance supplémentaire des
+transmissions locales
+Clusters locaux ou de soignants
 avec pneumonie","啟動擴大社區監測
 醫護或本土肺炎群聚"
 2020-02-29,"Korea, Italy
 All pneumonia
-Local cluster with resp. symp.","Corés, Italie
+Local cluster with resp. symp.","Corée, Italie
 Toute pneumonie
 Regroupement local
-avec symp. resp.","韓國、義大利旅遊史
+avec sympt. resp.","韓國、義大利旅遊史
 所有肺炎
 本土呼吸道症狀群聚"
 2020-03-01,Iran,Iran,伊朗旅遊史
@@ -33,6 +34,6 @@ Asie centrale, Afrique du Nord",歐洲、中東、西亞、北非旅遊史
 2020-03-19,"Asia, USA, Canada, Australia, New Zealand","Asie, États-Unis, Canada,
 Australie, Nouvelle-Zélande",亞洲、美國、加拿大、澳洲、紐西蘭旅遊史
 2020-03-21,Global,Monde entier,所有入境旅客
-2020-03-25,Medics with resp. symp.,Soignants avec symp. resp.,有呼吸道症狀之醫護
+2020-03-25,Medics with resp. symp.,Soignants avec sympt. resp.,有呼吸道症狀之醫護
 2020-04-01,"Anosmia, ageusia","Anosmie, agueusie",味嗅覺異常
 2020-04-05,Diarrhea,Diarrhée,腹瀉

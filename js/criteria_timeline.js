@@ -158,7 +158,7 @@ function CT_initialize() {
   var title;
   if (lang == 'zh-tw') title = ['台灣針對嚴重特殊傳染性肺炎之', '採檢標準暨其生效日期變化圖'];
   else if (lang == 'fr') title = ['Antécédents de voyage, symptômes et autres', 'conditions avec lesquelles Taïwan dépiste', "systématiquement & leurs dates d'effet"];
-  else title = ['Travel history, symptoms, & other conditions', 'with which Taiwan test systematically &', 'their starting dates'];
+  else title = ['Travel history, symptoms, & other conditions', 'with which Taiwan tests systematically &', 'their starting dates'];
   
   CT_wrap.svg.selectAll(".title")
     .data(title)
@@ -244,7 +244,7 @@ function CT_initialize() {
     if (date == '2020-01-25' || date == '2020-03-17' || date == '2020-03-19')
       split = [split.join(' ')]
     if (date == '2020-02-16' && lang == 'fr')
-      split = [split[0], split[1]+' '+split[2]]
+      split = [split[0]+' '+split[1], split[2]+' '+split[3]]
     if (date == '2020-02-29' && lang == 'fr')
       split = [split[0], split[1], split[2]+' '+split[3]]
     
@@ -405,7 +405,7 @@ function CT_initialize() {
       -35, 
       -25, 
           -20, 
-      -20, 
+      -25, 
           -5, 55, 
       -20, 
       5, 
@@ -643,7 +643,7 @@ function CT_update() {
 }
 
 CT_wrap.doAll = 0;
-CT_wrap.doTimeline = 0;
+CT_wrap.doTimeline = 1;
 
 d3.csv(CT_wrap.dataPathList[0], function(error, data) {
   if (error) return console.warn(error);

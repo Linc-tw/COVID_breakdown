@@ -1273,7 +1273,7 @@ class TestSheet:
       },
       '2020-02-16': {
         'en': 'Started community monitoring\nMedics or local cluster with pneumonia',
-        'fr': 'Surveillance supplémentaire des transmissions locales\Clusters locaux ou de soignants\navec pneumonie',
+        'fr': 'Surveillance supplémentaire des\ntransmissions locales\nClusters locaux ou de soignants\navec pneumonie',
         'zh-tw': '啟動擴大社區監測\n醫護或本土肺炎群聚',
       },
       '2020-02-29': {
