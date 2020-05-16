@@ -500,7 +500,7 @@ function text_translation() {
     node = document.getElementById("criteria_timeline_button_4")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Linéaire"));
+      node.appendChild(document.createTextNode("Frise"));
     }
     
   }
