@@ -120,7 +120,7 @@ function CT_click_circle(d, i) {
   var j = CT_wrap.length - 1 - i;
   var transDuration = 200;
   var alpha = 1 - CT_wrap['circle_text_'+j];
-  CT_wrap.doAll = 2;
+  CT_wrap.doFull = 2;
   
   CT_wrap.svg.selectAll(CT_wrap.id+'_circle_text_'+j)
     .transition()
@@ -138,7 +138,7 @@ function CT_click_circle(d, i) {
 function CT_click_timeline(d, j) {
   var transDuration = 200;
   var alpha = 1 - CT_wrap['timeline_text_'+j];
-  CT_wrap.doAll = 2;
+  CT_wrap.doFull = 2;
   
   CT_wrap.svg.selectAll(CT_wrap.id+'_timeline_text_'+j)
     .transition()
@@ -499,9 +499,9 @@ function CT_update() {
   var transDuration = 800;
   var i, activeList;
   
-  if (CT_wrap.doAll == 0)
+  if (CT_wrap.doFull == 0)
     activeList = [1,0,0,1,0,  0,1,1,0,1,  0,0,1,1,1,  1,1,1];
-  else if (CT_wrap.doAll == 1)
+  else if (CT_wrap.doFull == 1)
     activeList = [1,1,1,1,1,  1,1,1,1,1,  1,1,1,1,1,  1,1,1];
   
   //-- Custom
@@ -642,7 +642,7 @@ function CT_update() {
   }
 }
 
-CT_wrap.doAll = 0;
+CT_wrap.doFull = 0;
 CT_wrap.doTimeline = 1;
 
 d3.csv(CT_wrap.dataPathList[0], function(error, data) {
@@ -655,8 +655,8 @@ d3.csv(CT_wrap.dataPathList[0], function(error, data) {
 });
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + CT_wrap.tag + "_doAll']", function(event) {
-  CT_wrap.doAll = this.value;
+$(document).on("change", "input:radio[name='" + CT_wrap.tag + "_doFull']", function(event) {
+  CT_wrap.doFull = this.value;
   
   CT_update();
 });
@@ -671,10 +671,10 @@ d3.select(CT_wrap.id + '_button_5').on('click', function(){
   var tag1, tag2;
   
   if (CT_wrap.doTimeline == 1) tag1 = 'timeline';
-  else tag1 = 'circles';
+  else tag1 = 'disks';
   
-  if (CT_wrap.doAll == 1) tag2 = 'all';
-  else if (CT_wrap.doAll == 2) tag2 = 'custom';
+  if (CT_wrap.doFull == 1) tag2 = 'full';
+  else if (CT_wrap.doFull == 2) tag2 = 'custom';
   else tag2 = 'selected';
   
   name = CT_wrap.tag + '_' + tag1 + '_' + tag2 + '.png'

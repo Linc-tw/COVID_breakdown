@@ -253,22 +253,22 @@ function text_translation() {
     node = document.getElementById("criteria_timeline_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("摘要"));
+      node.appendChild(document.createTextNode("精選"));
     }
     node = document.getElementById("criteria_timeline_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("全部"));
+      node.appendChild(document.createTextNode("完整"));
     }
     node = document.getElementById("criteria_timeline_button_3")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("碟狀"));
+      node.appendChild(document.createTextNode("軸狀"));
     }
     node = document.getElementById("criteria_timeline_button_4")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("軸狀"));
+      node.appendChild(document.createTextNode("碟狀"));
     }
     
   }
@@ -485,22 +485,22 @@ function text_translation() {
     node = document.getElementById("criteria_timeline_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Selectionnés"));
+      node.appendChild(document.createTextNode("Selectionnée"));
     }
     node = document.getElementById("criteria_timeline_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Tout"));
+      node.appendChild(document.createTextNode("Complète"));
     }
     node = document.getElementById("criteria_timeline_button_3")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Disques"));
+      node.appendChild(document.createTextNode("Frise"));
     }
     node = document.getElementById("criteria_timeline_button_4")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Frise"));
+      node.appendChild(document.createTextNode("Disques"));
     }
     
   }
@@ -722,17 +722,17 @@ function text_translation() {
     node = document.getElementById("criteria_timeline_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("All"));
+      node.appendChild(document.createTextNode("Full"));
     }
     node = document.getElementById("criteria_timeline_button_3")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Disks"));
+      node.appendChild(document.createTextNode("Timeline"));
     }
     node = document.getElementById("criteria_timeline_button_4")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Timeline"));
+      node.appendChild(document.createTextNode("Disks"));
     }
     
   }
