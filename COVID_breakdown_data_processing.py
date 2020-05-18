@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.05.17                  ##
+    ##  Version 2020.05.18                  ##
     ##########################################
 
 
@@ -1194,7 +1194,7 @@ class TestSheet:
       '2020-02-06': 'http://at.cdc.tw/4sU035',   ## [F|R|P & (Hubei | contact therein F|R)] | [F|R|P & contact] | [P & China] + [F|R|P & (KM-track | China-HK-MC)]
       '2020-02-09': 'http://at.cdc.tw/n48e22',   ## Reminer TOCC
       '2020-02-10': 'http://at.cdc.tw/4sU035',   ## Reminer 2020-02-06
-      '2020-02-12': 'http://at.cdc.tw/73gugZ',   ## Check-back on flu negative 
+      '2020-02-12': 'http://at.cdc.tw/73gugZ',   ## Checked back on flu negative 
       '2020-02-15': 'http://at.cdc.tw/072iKp', ##   [F|R|P & (Hubei | Guangdong | Henan | Zhejiang] | [F|R|P & contact] | [P & China-HK-MC] + [F|R|P & (Singapore | Thailand)]
       '2020-02-16': 'http://at.cdc.tw/275pmA', ##   Started community transmission
                                                ##   [F|R|P & (Hubei | Guangdong | Henan | Zhejiang] | [F|R|P & contact] | [P & China-HK-MC]                   + [F|R|P & other countries] | [F|R & cluster] | [P & (medic | cluster | unknown)]
@@ -1262,7 +1262,7 @@ class TestSheet:
         'zh-tw': '中國、香港、澳門旅遊史',
       },
       '2020-02-12': {
-        'en': 'Check-back on flu-negative cases',
+        'en': 'Checked back on flu-negative cases',
         'fr': 'Vérification des cas négatifs de grippe',
         'zh-tw': '回溯採檢有呼吸道症狀但流感陰性之病患',
       },
