@@ -1,4 +1,4 @@
-COVID-19 statistics in Taiwan
+COVID-19 Statistics in Taiwan
 =============================
 
 This repository hosts and generates a [dashboard](https://linc-tw.github.io/COVID_breakdown/index.html) for COVID-19 statistics in Taiwan.
@@ -6,7 +6,7 @@ This repository hosts and generates a [dashboard](https://linc-tw.github.io/COVI
 ![image](figures/screenshot.png)
 
 
-Motivations
+Description
 -----------
 
 The goal of this project is to inform general public about COVID-19 with data visualization. 
@@ -21,13 +21,14 @@ This project is driven by 3 key motivations:
 Features
 --------
 
-So far, six plots can be found on Dashboard:
+So far, 7 plots can be found on Dashboard:
+- Status Evolution
+- Number of Tests by Reporting Criterion
 - Confirmed Cases by Transmission Type
 - Confirmed Cases by Detection Channel
-- Number of Tests by Reporting Criterion
-- How many days to identify cases? (day difference between report date & entry/onset date)
 - Correlations between Travel History & Symptoms
 - Correlations between Age & Symptoms
+- How many days to identify cases? (day difference between report date & entry/onset date)
 
 And one is on Policy:
 - Chronology of Systematic Testing
