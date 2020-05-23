@@ -222,18 +222,25 @@ def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
 
 def addEmptyRows(data):
   refOrd   = ISODateToOrdinal(REF_ISO_DATE)
-  beginOrd = ISODateToOrdinal(data['date'][0])
+  beginOrd = ISODateToOrdinal(data['date'].values[0])
+  endOrd   = ISODateToOrdinal(data['date'].values[-1]) + 1
+  todayOrd = dtt.date.today().toordinal() + 1
   
-  nbCol = len(data.columns)
-  zero  = [0] * (nbCol-1)
-  stock = []
+  zero   = [0] * (len(data.columns) - 1)
+  stock1 = []
+  stock2 = []
   
   for ord in range(refOrd, beginOrd):
     ISO = ordinalToISODate(ord)
-    stock.append([ISO] + zero)
+    stock1.append([ISO] + zero)
     
-  data2 = pd.DataFrame(stock, columns=data.columns)
-  data  = pd.concat([data2, data])
+  for ord in range(endOrd, todayOrd):
+    ISO = ordinalToISODate(ord)
+    stock2.append([ISO] + zero)
+    
+  data1 = pd.DataFrame(stock1, columns=data.columns)
+  data2 = pd.DataFrame(stock2, columns=data.columns)
+  data  = pd.concat([data1, data, data2])
   return data
 
 ###############################################################################
@@ -803,11 +810,11 @@ class MainSheet:
     transList      = self.getTransmission()
     linkList       = self.getLink()
     
-    refOrd = ISODateToOrdinal(REF_ISO_DATE)
-    endOrd = dtt.date.today().toordinal() + 1
+    refOrd   = ISODateToOrdinal(REF_ISO_DATE)
+    todayOrd = dtt.date.today().toordinal() + 1
     
-    date       = [ordinalToISODate(i) for i in range(refOrd, endOrd)]
-    nbDays     = endOrd - refOrd
+    date       = [ordinalToISODate(i) for i in range(refOrd, todayOrd)]
+    nbDays     = todayOrd - refOrd
     imported_r = np.zeros(nbDays, dtype=int)
     linked_r   = np.zeros(nbDays, dtype=int)
     unlinked_r = np.zeros(nbDays, dtype=int)
@@ -863,11 +870,11 @@ class MainSheet:
     onsetDateList  = self.getOnsetDate()
     chanList       = self.getChannel()
     
-    refOrd = ISODateToOrdinal(REF_ISO_DATE)
-    endOrd = dtt.date.today().toordinal() + 1
+    refOrd   = ISODateToOrdinal(REF_ISO_DATE)
+    todayOrd = dtt.date.today().toordinal() + 1
     
-    date       = [ordinalToISODate(i) for i in range(refOrd, endOrd)]
-    nbDays     = endOrd - refOrd
+    date       = [ordinalToISODate(i) for i in range(refOrd, todayOrd)]
+    nbDays     = todayOrd - refOrd
     airport_r  = np.zeros(nbDays, dtype=int)
     QT_r       = np.zeros(nbDays, dtype=int)
     iso_r      = np.zeros(nbDays, dtype=int)
@@ -1184,12 +1191,6 @@ class TestSheet:
     fromQTList  = self.getFromQT()
     fromClinicalDefList = self.getFromClinicalDef()
     
-    #if dateList[-1] != dateList[-1]: ## Is nan
-      #dateList    = dateList[:-1]
-      #fromExtList = fromExtList[:-1]
-      #fromQTList  = fromQTList[:-1]
-      #fromClinicalDefList = fromClinicalDefList[:-1]
-    
     data = {'date': dateList, 'clinical': fromClinicalDefList, 'quarantine': fromQTList, 'extended': fromExtList}
     data = pd.DataFrame(data)
     data = addEmptyRows(data)
@@ -1433,7 +1434,6 @@ class StatusSheet:
     
   def saveCsv_statusEvolution(self):
     dateList      = self.getDate()
-    #cumCasesList  = self.getCumCases()
     cumDeathsList = self.getCumDeaths()
     cumDisList    = self.getCumDis()
     cumHospList   = self.getCumHosp()
