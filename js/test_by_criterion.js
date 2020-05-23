@@ -102,7 +102,7 @@ function TBC_formatData(data) {
   }
   
   //-- Calculate ymax
-  ymax *= 1.4;
+  ymax *= 1.25;
   var ypath;
   if (TBC_wrap.doCumul == 1) ypath = 20000;
   else                       ypath = 600;

@@ -109,7 +109,7 @@ function CBD_formatData(data) {
   }
   
   //-- Calculate ymax
-  ymax *= 1.15;
+  ymax *= 1.2;
   var ypath;
   if (CBD_wrap.doCumul == 1) ypath = 100; //Math.floor(ymax / 5);
   else                       ypath = 5;
@@ -383,7 +383,7 @@ function CBD_update() {
       .attr("text-anchor", "end")
   
   //-- Legend - label
-  var lLabel;
+  var lLabel, lLabel_plus;
   if (lang == 'zh-tw') {
     lLabel = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自行就醫', '無檢驗管道資料', '合計'];
     lLabel_plus = '無發病日資料';

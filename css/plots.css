@@ -109,6 +109,18 @@ body,
   border-radius: 5px;
   padding: 5px;
 }
+#status_evolution .tooltip {
+  margin-left: -65px;
+  margin-right: -65px;
+  margin-top: -55px;
+  margin-bottom: -55px;
+}
+#test_by_criterion .tooltip {
+  margin-left: -55px;
+  margin-right: -52px;
+  margin-top: -55px;
+  margin-bottom: -55px;
+}
 #case_by_transmission .tooltip {
   margin-left: -56px;
   margin-right: -56px;
@@ -120,12 +132,6 @@ body,
   margin-right: -50px;
   margin-top: -72px;
   margin-bottom: -72px;
-}
-#test_by_criterion .tooltip {
-  margin-left: -55px;
-  margin-right: -52px;
-  margin-top: -55px;
-  margin-bottom: -55px;
 }
 #difference_by_transmission .tooltip {
   margin-left: -90px;

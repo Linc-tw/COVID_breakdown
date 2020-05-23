@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.05.18                  ##
+    ##  Version 2020.05.22                  ##
     ##########################################
 
 
@@ -25,6 +25,7 @@ import pandas as pd
 ## Parameters
 
 DATA_PATH = '/home/linc/03_Codes/COVID_breakdown/'
+REF_ISO_DATE = '2020-01-11'
 
 SYMPTOM_DICT = {
   'sneezing': {'zh-tw': '鼻腔症狀', 'fr': 'éternuement'},
@@ -219,6 +220,22 @@ def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
     nArr = asFloat(nArr) * factor
   return nArr, ctrBin
 
+def addEmptyRows(data):
+  refOrd   = ISODateToOrdinal(REF_ISO_DATE)
+  beginOrd = ISODateToOrdinal(data['date'][0])
+  
+  nbCol = len(data.columns)
+  zero  = [0] * (nbCol-1)
+  stock = []
+  
+  for ord in range(refOrd, beginOrd):
+    ISO = ordinalToISODate(ord)
+    stock.append([ISO] + zero)
+    
+  data2 = pd.DataFrame(stock, columns=data.columns)
+  data  = pd.concat([data2, data])
+  return data
+
 ###############################################################################
 ## Main sheet
 
@@ -248,10 +265,11 @@ class MainSheet:
     self.n_disPressRel = '出院新聞稿'
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv' % DATA_PATH
-    self.data = pd.read_csv(name, dtype=object, skipinitialspace=True)
+    data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
-    reportDateList = self.data[self.n_reportDate].values
+    reportDateList = data[self.n_reportDate].values
     ind = reportDateList == reportDateList
+    self.data = data[ind]
     self.N_total = ind.sum()
     
     if verbose:
@@ -262,7 +280,7 @@ class MainSheet:
   def getReportDate(self):
     reportDateList = []
     
-    for reportDate in self.data[self.n_reportDate].values[:self.N_total]:
+    for reportDate in self.data[self.n_reportDate].values:
       reportDate = reportDate.split('日')[0].split('月')
       reportDate = '2020-%02s-%02s' % (reportDate[0], reportDate[1])
       reportDateList.append(reportDate)
@@ -270,7 +288,7 @@ class MainSheet:
   
   def getAge(self):
     age = []
-    for i, a in enumerate(self.data[self.n_age].values[:self.N_total]):
+    for i, a in enumerate(self.data[self.n_age].values):
       if a in ['1X', '2X', '3X', '4X', '5X', '6X', '7X', '8X', '9X']:
         age.append(a[0]+'0s')
       elif a in ['1XX', '10X', '11X']:
@@ -294,7 +312,7 @@ class MainSheet:
   
   def getTransmission(self):
     transList = []
-    for i, trans in enumerate(self.data[self.n_transmission].values[:self.N_total]):
+    for i, trans in enumerate(self.data[self.n_transmission].values):
       if trans == '境外':
         transList.append('imported')
       
@@ -375,7 +393,7 @@ class MainSheet:
       'indigenous': ['無']
     }
     
-    for i, travHist in enumerate(self.data[self.n_travHist].values[:self.N_total]):
+    for i, travHist in enumerate(self.data[self.n_travHist].values):
       if travHist != travHist: ## Is nan
         travHistList.append([])
         continue
@@ -445,7 +463,7 @@ class MainSheet:
   def getEntryDate(self):
     entryDateList = []
     
-    for i, entryDate in enumerate(self.data[self.n_entryDate].values[:self.N_total]):
+    for i, entryDate in enumerate(self.data[self.n_entryDate].values):
       if entryDate != entryDate: ## NaN
         entryDateList.append(np.nan)
         
@@ -466,7 +484,7 @@ class MainSheet:
   def getOnsetDate(self):
     onsetDateList = []
     
-    for i, onsetDate in enumerate(self.data[self.n_onsetDate].values[:self.N_total]):
+    for i, onsetDate in enumerate(self.data[self.n_onsetDate].values):
       if onsetDate != onsetDate: ## NaN
         onsetDateList.append(np.nan)
       
@@ -488,7 +506,7 @@ class MainSheet:
     chanList = []
     keyList_out = ['採檢']
     
-    for i, chan in enumerate(self.data[self.n_channel].values[:self.N_total]):
+    for i, chan in enumerate(self.data[self.n_channel].values):
       if chan != chan: ## Is nan
         chanList.append(np.nan)
       
@@ -564,7 +582,7 @@ class MainSheet:
       'asymptomatic': ['首例無症狀', '無症狀']
     }
     
-    for i, symptom in enumerate(self.data[self.n_symptom].values[:self.N_total]):
+    for i, symptom in enumerate(self.data[self.n_symptom].values):
       if symptom != symptom: ## Is nan
         symptomList.append([])
         continue
@@ -595,7 +613,7 @@ class MainSheet:
 
   def getLink(self):
     linkList = []
-    for i, link in enumerate(self.data[self.n_link].values[:self.N_total]):
+    for i, link in enumerate(self.data[self.n_link].values):
       if link == '未知':
         linkList.append('unlinked')
       
@@ -785,7 +803,7 @@ class MainSheet:
     transList      = self.getTransmission()
     linkList       = self.getLink()
     
-    refOrd = ISODateToOrdinal('2020-01-11')
+    refOrd = ISODateToOrdinal(REF_ISO_DATE)
     endOrd = dtt.date.today().toordinal() + 1
     
     date       = [ordinalToISODate(i) for i in range(refOrd, endOrd)]
@@ -845,7 +863,7 @@ class MainSheet:
     onsetDateList  = self.getOnsetDate()
     chanList       = self.getChannel()
     
-    refOrd = ISODateToOrdinal('2020-01-11')
+    refOrd = ISODateToOrdinal(REF_ISO_DATE)
     endOrd = dtt.date.today().toordinal() + 1
     
     date       = [ordinalToISODate(i) for i in range(refOrd, endOrd)]
@@ -1084,10 +1102,11 @@ class TestSheet:
     self.n_note = '來源：疾管署（每天1am更新）'
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv' % DATA_PATH
-    self.data = pd.read_csv(name, dtype=object, skipinitialspace=True)
+    data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
-    dateList = self.data[self.n_date].values
+    dateList = data[self.n_date].values
     ind = dateList == dateList
+    self.data    = data[ind]
     self.N_total = ind.sum()
     
     if verbose:
@@ -1098,7 +1117,7 @@ class TestSheet:
   def getDate(self):
     dateList = []
     
-    for date in self.data[self.n_date].values[:self.N_total]:
+    for date in self.data[self.n_date].values:
       MD = date.split('/')
       date = '2020-%02d-%02d' % (int(MD[0]), int(MD[1]))
       dateList.append(date)
@@ -1106,7 +1125,7 @@ class TestSheet:
   
   def getFromExtended(self):
     fromExtList = []
-    for fromExt in self.data[self.n_fromExtended].values[:self.N_total]:
+    for fromExt in self.data[self.n_fromExtended].values:
       if fromExt != fromExt: ## Is nan
         fromExtList.append(0)
         continue
@@ -1122,7 +1141,7 @@ class TestSheet:
 
   def getFromQT(self):
     fromQTList = []
-    for fromQT in self.data[self.n_fromQT].values[:self.N_total]:
+    for fromQT in self.data[self.n_fromQT].values:
       if fromQT != fromQT: ## Is nan
         fromQTList.append(0)
         continue
@@ -1138,7 +1157,7 @@ class TestSheet:
 
   def getFromClinicalDef(self):
     clinicalDefList = []
-    for clinicalDef in self.data[self.n_fromClinicalDef].values[:self.N_total]:
+    for clinicalDef in self.data[self.n_fromClinicalDef].values:
       if clinicalDef != clinicalDef: ## Is nan
         clinicalDefList.append(np.nan)
         continue
@@ -1155,7 +1174,7 @@ class TestSheet:
   def getCriteria(self):
     criteriaList = []
     
-    for criteria in self.data[self.n_criteria].values[:self.N_total]:
+    for criteria in self.data[self.n_criteria].values:
       criteriaList.append(criteria)
     return criteriaList
   
@@ -1165,14 +1184,15 @@ class TestSheet:
     fromQTList  = self.getFromQT()
     fromClinicalDefList = self.getFromClinicalDef()
     
-    if dateList[-1] != dateList[-1]: ## Is nan
-      dateList    = dateList[:-1]
-      fromExtList = fromExtList[:-1]
-      fromQTList  = fromQTList[:-1]
-      fromClinicalDefList = fromClinicalDefList[:-1]
+    #if dateList[-1] != dateList[-1]: ## Is nan
+      #dateList    = dateList[:-1]
+      #fromExtList = fromExtList[:-1]
+      #fromQTList  = fromQTList[:-1]
+      #fromClinicalDefList = fromClinicalDefList[:-1]
     
     data = {'date': dateList, 'clinical': fromClinicalDefList, 'quarantine': fromQTList, 'extended': fromExtList}
     data = pd.DataFrame(data)
+    data = addEmptyRows(data)
     
     name = '%sprocessed_data/test_by_criterion.csv' % DATA_PATH
     saveCsv(name, data)
@@ -1336,7 +1356,102 @@ class TestSheet:
     return
 
 ###############################################################################
-## Test sheet
+## Status sheet
+
+class StatusSheet:
+
+  def __init__(self, verbose=True):
+    self.n_date = '日期'
+    self.n_weekNb = '週次'
+    self.n_newNbCases = '新增確診'
+    self.n_newCasesPerWeek = '每週新增確診'
+    self.n_cumCases = '確診總人數'
+    self.n_newMales = '新增男性'
+    self.n_cumMales = '男性總數'
+    self.n_maleFrac = '確診男性率'
+    self.n_newFemales = '新增女性'
+    self.n_cumFemales = '女性總數'
+    self.n_femaleFrac = '確診女性率'
+    self.n_newSoldiers = '新增軍人'
+    self.n_cumSoldiers = '敦睦總人數'
+    self.n_soldierFrac = '軍隊率'
+    self.n_newImported = '新增境外'
+    self.n_cumImported = '境外總人數'
+    self.n_importedFrac = '境外率'
+    self.n_newLocal = '新增本土'
+    self.n_cumLocal = '本土總人數'
+    self.n_localFrac = '本土率'
+    self.n_newDeaths = '新增死亡'
+    self.n_cumDeaths = '死亡總人數'
+    self.n_deathFrac = '死亡率'
+    self.n_newUnknown = '當日未知感染源數'
+    self.n_cumUnknown = '未知感染源總數'
+    self.n_cumKnown = '已知感染源數'
+    self.n_newDis = '新增解除隔離'
+    self.n_cumDis = '解除隔離數'
+    self.n_cumDisAndDeaths = '解除隔離+死亡'
+    self.n_cumHosp = '未解除隔離數'
+    self.n_notes = '備註'
+    
+    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_status_evolution.csv' % DATA_PATH
+    data = pd.read_csv(name, dtype=object, skipinitialspace=True)
+    
+    dateList = data[self.n_date].values
+    ind = dateList == dateList
+    self.data    = data[ind]
+    self.N_total = ind.sum()
+    
+    if verbose:
+      print('Loaded \"%s\"' % name)
+      print('N_total = %d' % self.N_total)
+    return 
+    
+  def getDate(self):
+    dateList = []
+    Y = 2020
+    
+    for date in self.data[self.n_date].values:
+      MMDD = date.split('月')
+      M = int(MMDD[0])
+      DD = MMDD[1].split('日')
+      D = int(DD[0])
+      date = '%04d-%02d-%02d' % (Y, M, D)
+      dateList.append(date)
+    return dateList
+    
+  def getCumCases(self):
+    return self.data[self.n_cumCases].values.astype(int)
+    
+  def getCumDeaths(self):
+    return self.data[self.n_cumDeaths].values.astype(int)
+    
+  def getCumDis(self):
+    return self.data[self.n_cumDis].values.astype(int)
+    
+  def getCumHosp(self):
+    return self.data[self.n_cumHosp].values.astype(int)
+    
+  def saveCsv_statusEvolution(self):
+    dateList      = self.getDate()
+    #cumCasesList  = self.getCumCases()
+    cumDeathsList = self.getCumDeaths()
+    cumDisList    = self.getCumDis()
+    cumHospList   = self.getCumHosp()
+    
+    data = {'date': dateList, 'death': cumDeathsList, 'hospitalized': cumHospList, 'discharged': cumDisList}
+    data = pd.DataFrame(data)
+    data = addEmptyRows(data)
+    
+    name = '%sprocessed_data/status_evolution.csv' % DATA_PATH
+    saveCsv(name, data)
+    return
+      
+  def saveCsv(self):
+    self.saveCsv_statusEvolution()
+    return
+
+###############################################################################
+## Timeline sheet
 
 class TimelineSheet:
   
@@ -1348,10 +1463,11 @@ class TimelineSheet:
     self.n_keyEvt = '重點事件'
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_timeline.csv' % DATA_PATH
-    self.data = pd.read_csv(name, dtype=object, skipinitialspace=True)
+    data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
-    dateList = self.data[self.n_date].values
+    dateList = data[self.n_date].values
     ind = dateList == dateList
+    self.data    = data[ind]
     self.N_total = ind.sum()
     
     if verbose:
@@ -1362,7 +1478,7 @@ class TimelineSheet:
   def getDate(self):
     dateList = []
     
-    for date in self.data[self.n_date].values[:self.N_total]:
+    for date in self.data[self.n_date].values:
       YMDD = date.split('年')
       Y = int(YMDD[0])
       MDD = YMDD[1].split('月')
@@ -1376,7 +1492,7 @@ class TimelineSheet:
   def getCriteria(self):
     criteriaList = []
     
-    for criteria in self.data[self.n_criteria].values[:self.N_total]:
+    for criteria in self.data[self.n_criteria].values:
       criteriaList.append(criteria)
     return criteriaList
   
@@ -1402,9 +1518,13 @@ def sandbox():
   #print(sheet.getAge())
   #sheet.saveCsv_diffByTrans()
   
-  sheet = TestSheet()
+  #sheet = TestSheet()
   #print(sheet.printCriteria())
-  sheet.saveCsv_criteriaTimeline()
+  #sheet.saveCsv_criteriaTimeline()
+  
+  sheet = StatusSheet()
+  #print(sheet.getCumHosp())
+  sheet.saveCsv_statusEvolution()
   
   #sheet = TimelineSheet()
   #print(sheet.saveCriteria())
@@ -1417,6 +1537,7 @@ def sandbox():
 def saveCsv_all():
   MainSheet().saveCsv()
   TestSheet().saveCsv()
+  StatusSheet().saveCsv()
   return
 
 ###############################################################################

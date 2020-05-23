@@ -354,7 +354,7 @@ function DBT_update() {
   if (lang == 'zh-tw')
     lLabel = ['有資料案例數', "境外移入", "本土", '敦睦艦隊', '資料不全', '合計'];
   else if (lang == 'fr')
-    lLabel = ['Données complètes', "Importé", "Local", 'Flotte diplomatique', 'Données incomplètes', 'Total'];
+    lLabel = ['Données complètes', "Importés", "Locaux", 'Flotte diplomatique', 'Données incomplètes', 'Total'];
   else 
     lLabel = ['Data complete', 'Imported', 'Local', 'Diplomatic fleet cluster', 'Data incomplete', 'Total'];
   var lValue = DBT_wrap.lValue.slice(0);

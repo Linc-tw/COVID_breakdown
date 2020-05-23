@@ -114,6 +114,30 @@ function text_translation() {
     }
     
     
+    node = document.getElementById("status_evolution_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("疫情變化"));
+    }
+    
+    
+    node = document.getElementById("test_by_criterion_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("檢驗數量"));
+    }
+    node = document.getElementById("test_by_criterion_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("逐日"));
+    }
+    node = document.getElementById("test_by_criterion_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("累計"));
+    }
+    
+    
     node = document.getElementById("case_by_transmission_title")
     if (node !== null) {
       node.textContent = '';
@@ -168,50 +192,6 @@ function text_translation() {
     }
     
     
-    node = document.getElementById("test_by_criterion_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("檢驗數量"));
-    }
-    node = document.getElementById("test_by_criterion_button_1")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("逐日"));
-    }
-    node = document.getElementById("test_by_criterion_button_2")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("累計"));
-    }
-    
-    
-    node = document.getElementById("difference_by_transmission_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("抓帶原者要花多久？"));
-    }
-    node = document.getElementById("difference_by_transmission_button_1")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("全部"));
-    }
-    node = document.getElementById("difference_by_transmission_button_2")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("境外移入"));
-    }
-    node = document.getElementById("difference_by_transmission_button_3")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("本土"));
-    }
-    node = document.getElementById("difference_by_transmission_button_4")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("敦睦艦隊"));
-    }
-    
-    
     node = document.getElementById("travel_history_symptom_correlations_title")
     if (node !== null) {
       node.textContent = '';
@@ -244,6 +224,34 @@ function text_translation() {
       node.textContent = '';
       node.appendChild(document.createTextNode("案例數"));
     }
+    
+    
+    node = document.getElementById("difference_by_transmission_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("抓帶原者要花多久？"));
+    }
+    node = document.getElementById("difference_by_transmission_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("全部"));
+    }
+    node = document.getElementById("difference_by_transmission_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("境外移入"));
+    }
+    node = document.getElementById("difference_by_transmission_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("本土"));
+    }
+    node = document.getElementById("difference_by_transmission_button_4")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("敦睦艦隊"));
+    }
+    
     
     node = document.getElementById("criteria_timeline_title")
     if (node !== null) {
@@ -346,6 +354,30 @@ function text_translation() {
     }
     
     
+    node = document.getElementById("status_evolution_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Évolution de la situation"));
+    }
+    
+    
+    node = document.getElementById("test_by_criterion_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Nombre de tests par critère"));
+    }
+    node = document.getElementById("test_by_criterion_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Quotidiens"));
+    }
+    node = document.getElementById("test_by_criterion_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Cumulés"));
+    }
+    
+    
     node = document.getElementById("case_by_transmission_title")
     if (node !== null) {
       node.textContent = '';
@@ -354,12 +386,12 @@ function text_translation() {
     node = document.getElementById("case_by_transmission_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Quotidien"));
+      node.appendChild(document.createTextNode("Quotidiens"));
     }
     node = document.getElementById("case_by_transmission_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Cumulé"));
+      node.appendChild(document.createTextNode("Cumulés"));
     }
     node = document.getElementById("case_by_transmission_button_3")
     if (node !== null) {
@@ -381,12 +413,12 @@ function text_translation() {
     node = document.getElementById("case_by_detection_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Quotidien"));
+      node.appendChild(document.createTextNode("Quotidiens"));
     }
     node = document.getElementById("case_by_detection_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Cumulé"));
+      node.appendChild(document.createTextNode("Cumulés"));
     }
     node = document.getElementById("case_by_detection_button_3")
     if (node !== null) {
@@ -400,20 +432,37 @@ function text_translation() {
     }
     
     
-    node = document.getElementById("test_by_criterion_title")
+    node = document.getElementById("travel_history_symptom_correlations_title")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Nombre de tests par critère"));
+      node.appendChild(document.createTextNode("Corrélations entre antécédents de voyage & symptômes"));
     }
-    node = document.getElementById("test_by_criterion_button_1")
+    node = document.getElementById("travel_history_symptom_correlations_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Quotidien"));
+      node.appendChild(document.createTextNode("Coefficients"));
     }
-    node = document.getElementById("test_by_criterion_button_2")
+    node = document.getElementById("travel_history_symptom_correlations_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Cumulé"));
+      node.appendChild(document.createTextNode("Nombres"));
+    }
+    
+    
+    node = document.getElementById("age_symptom_correlations_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Corrélations entre âge & symptômes"));
+    }
+    node = document.getElementById("age_symptom_correlations_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Coefficients"));
+    }
+    node = document.getElementById("age_symptom_correlations_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Nombres"));
     }
     
     
@@ -430,12 +479,12 @@ function text_translation() {
     node = document.getElementById("difference_by_transmission_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Importé"));
+      node.appendChild(document.createTextNode("Importés"));
     }
     node = document.getElementById("difference_by_transmission_button_3")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Local"));
+      node.appendChild(document.createTextNode("Locaux"));
     }
     node = document.getElementById("difference_by_transmission_button_4")
     if (node !== null) {
@@ -443,39 +492,6 @@ function text_translation() {
       node.appendChild(document.createTextNode("Flotte"));
     }
     
-    
-    node = document.getElementById("travel_history_symptom_correlations_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Corrélations entre antécédents de voyage & symptômes"));
-    }
-    node = document.getElementById("travel_history_symptom_correlations_button_1")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Coefficient"));
-    }
-    node = document.getElementById("travel_history_symptom_correlations_button_2")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Nombre"));
-    }
-    
-    
-    node = document.getElementById("age_symptom_correlations_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Corrélations entre âge & symptômes"));
-    }
-    node = document.getElementById("age_symptom_correlations_button_1")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Coefficient"));
-    }
-    node = document.getElementById("age_symptom_correlations_button_2")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Nombre"));
-    }
     
     node = document.getElementById("criteria_timeline_title")
     if (node !== null) {
@@ -578,6 +594,30 @@ function text_translation() {
     }
     
     
+    node = document.getElementById("status_evolution_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Status Evolution"));
+    }
+    
+    
+    node = document.getElementById("test_by_criterion_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Number of Tests by Reporting Criterion"));
+    }
+    node = document.getElementById("test_by_criterion_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Daily"));
+    }
+    node = document.getElementById("test_by_criterion_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Cumulative"));
+    }
+    
+    
     node = document.getElementById("case_by_transmission_title")
     if (node !== null) {
       node.textContent = '';
@@ -632,20 +672,37 @@ function text_translation() {
     }
     
     
-    node = document.getElementById("test_by_criterion_title")
+    node = document.getElementById("travel_history_symptom_correlations_title")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Number of Tests by Reporting Criterion"));
+      node.appendChild(document.createTextNode("Correlations between Travel History & Symptoms"));
     }
-    node = document.getElementById("test_by_criterion_button_1")
+    node = document.getElementById("travel_history_symptom_correlations_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Daily"));
+      node.appendChild(document.createTextNode("Coefficients"));
     }
-    node = document.getElementById("test_by_criterion_button_2")
+    node = document.getElementById("travel_history_symptom_correlations_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Cumulative"));
+      node.appendChild(document.createTextNode("Counts"));
+    }
+    
+    
+    node = document.getElementById("age_symptom_correlations_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Correlations between Age & Symptoms"));
+    }
+    node = document.getElementById("age_symptom_correlations_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Coefficients"));
+    }
+    node = document.getElementById("age_symptom_correlations_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Counts"));
     }
     
     
@@ -675,39 +732,6 @@ function text_translation() {
       node.appendChild(document.createTextNode("Fleet"));
     }
     
-    
-    node = document.getElementById("travel_history_symptom_correlations_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Correlations between Travel History & Symptoms"));
-    }
-    node = document.getElementById("travel_history_symptom_correlations_button_1")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Coefficient"));
-    }
-    node = document.getElementById("travel_history_symptom_correlations_button_2")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Counts"));
-    }
-    
-    
-    node = document.getElementById("age_symptom_correlations_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Correlations between Age & Symptoms"));
-    }
-    node = document.getElementById("age_symptom_correlations_button_1")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Coefficient"));
-    }
-    node = document.getElementById("age_symptom_correlations_button_2")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Counts"));
-    }
     
     node = document.getElementById("criteria_timeline_title")
     if (node !== null) {
@@ -771,6 +795,24 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
   
   d3.selectAll('.plot').remove()
   
+  d3.csv(SE_wrap.dataPathList[0], function(error, data) {
+    if (error) return console.warn(error);
+    
+    SE_makeCanvas();
+    SE_formatData(data);
+    SE_initialize();
+    SE_update();
+  });
+
+  d3.csv(TBC_wrap.dataPath, function(error, data) {
+    if (error) return console.warn(error);
+    
+    TBC_makeCanvas();
+    TBC_formatData(data);
+    TBC_initialize();
+    TBC_update();
+  });
+  
   d3.csv(CBT_wrap.dataPathList[CBT_wrap.doOnset], function(error, data) {
     d3.csv(CBT_wrap.dataPathList[2], function(error2, data2) {
       if (error) return console.warn(error);
@@ -795,15 +837,6 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
       CBD_initialize();
       CBD_update();
     });
-  });
-  
-  d3.csv(TBC_wrap.dataPath, function(error, data) {
-    if (error) return console.warn(error);
-    
-    TBC_makeCanvas();
-    TBC_formatData(data);
-    TBC_initialize();
-    TBC_update();
   });
   
   d3.csv(THSC_wrap.dataPathList[THSC_wrap.doCount], function(error, data) {
