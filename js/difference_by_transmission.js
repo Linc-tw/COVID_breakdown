@@ -435,10 +435,10 @@ d3.select(DBT_wrap.id + '_button_5').on('click', function(){
   
   if (DBT_wrap.colInd == 0) tag1 = 'all';
   else if (DBT_wrap.colInd == 1) tag1 = 'imported';
-  else if (DBT_wrap.colInd == 2) tag1 = 'indigenous';
+  else if (DBT_wrap.colInd == 2) tag1 = 'local';
   else tag1 = 'fleet';
   
-  name = DBT_wrap.tag + '_' + tag1 + '.png'
+  name = DBT_wrap.tag + '_' + tag1 + '_' + lang + '.png'
   saveSvgAsPng(d3.select(DBT_wrap.id).select('svg').node(), name);
 });
 

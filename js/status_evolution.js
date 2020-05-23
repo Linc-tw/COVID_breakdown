@@ -3,7 +3,6 @@ SE_wrap.tag = 'status_evolution'
 SE_wrap.id = '#' + SE_wrap.tag
 SE_wrap.dataPathList = [
   "processed_data/status_evolution.csv"
-//   "processed_data/key_numbers.csv"
 ];
 
 function SE_makeCanvas() {
@@ -376,14 +375,7 @@ d3.csv(SE_wrap.dataPathList[0], function(error, data) {
 });
 
 d3.select(SE_wrap.id + '_button_1').on('click', function(){
-//   var tag1, tag2;
-//   
-//   if (SE_wrap.doCumul == 1) tag1 = 'cumulative';
-//   else tag1 = 'daily';
-//   if (SE_wrap.doOnset == 1) tag2 = 'onset';
-//   else tag2 = 'report';
-  
-  name = SE_wrap.tag + '.png'
+  name = SE_wrap.tag + '_' + lang + '.png'
   saveSvgAsPng(d3.select(SE_wrap.id).select('svg').node(), name);
 });
 

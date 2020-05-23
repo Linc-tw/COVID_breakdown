@@ -677,7 +677,7 @@ d3.select(CT_wrap.id + '_button_5').on('click', function(){
   else if (CT_wrap.doFull == 2) tag2 = 'custom';
   else tag2 = 'selected';
   
-  name = CT_wrap.tag + '_' + tag1 + '_' + tag2 + '.png'
+  name = CT_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + lang + '.png'
   saveSvgAsPng(d3.select(CT_wrap.id).select('svg').node(), name);
 });
 

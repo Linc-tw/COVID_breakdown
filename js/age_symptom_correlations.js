@@ -359,7 +359,7 @@ d3.select(ASC_wrap.id + '_button_3').on('click', function(){
   if (ASC_wrap.doCount == 1) tag1 = 'count';
   else tag1 = 'coefficient';
   
-  name = ASC_wrap.tag + '_' + tag1 + '.png'
+  name = ASC_wrap.tag + '_' + tag1 + '_' + lang + '.png'
   saveSvgAsPng(d3.select(ASC_wrap.id).select('svg').node(), name);
 });
 

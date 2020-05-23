@@ -455,7 +455,7 @@ d3.select(CBT_wrap.id + '_button_5').on('click', function(){
   if (CBT_wrap.doOnset == 1) tag2 = 'onset';
   else tag2 = 'report';
   
-  name = CBT_wrap.tag + '_' + tag1 + '_' + tag2 + '.png'
+  name = CBT_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + lang + '.png'
   saveSvgAsPng(d3.select(CBT_wrap.id).select('svg').node(), name);
 });
 

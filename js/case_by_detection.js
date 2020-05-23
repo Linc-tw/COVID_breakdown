@@ -461,7 +461,7 @@ d3.select(CBD_wrap.id + '_button_5').on('click', function(){
   if (CBD_wrap.doOnset == 1) tag2 = 'onset';
   else tag2 = 'report';
   
-  name = CBD_wrap.tag + '_' + tag1 + '_' + tag2 + '.png'
+  name = CBD_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + lang + '.png'
   saveSvgAsPng(d3.select(CBD_wrap.id).select('svg').node(), name);
 });
 

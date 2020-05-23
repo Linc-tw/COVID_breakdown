@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.05.22                  ##
+    ##  Version 2020.05.23                  ##
     ##########################################
 
 
@@ -16,9 +16,6 @@ import numpy as np
 import scipy as sp
 import matplotlib as mpl
 import pandas as pd
-
-#import commonFunctions as cf
-#import matplotlibFunctions as mplf
 
 
 ################################################################################

@@ -402,7 +402,7 @@ d3.select(TBC_wrap.id + '_button_3').on('click', function(){
   if (TBC_wrap.doCumul == 1) tag1 = 'cumulative';
   else tag1 = 'daily';
   
-  name = TBC_wrap.tag + '_' + tag1 + '.png'
+  name = TBC_wrap.tag + '_' + tag1 + '_' + lang + '.png'
   saveSvgAsPng(d3.select(TBC_wrap.id).select('svg').node(), name);
 });
 
