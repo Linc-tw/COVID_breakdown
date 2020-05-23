@@ -340,7 +340,7 @@
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58898441-4"></script>
         <script>
           var host = window.location.hostname;
-          if (host != "localhost") {	
+          if (!host in ["localhost", "127.0.0.1"]) {	
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
