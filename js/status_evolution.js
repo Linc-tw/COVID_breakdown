@@ -106,9 +106,15 @@ function SE_formatData(data) {
   for (i=0; i<ymax; i+=ypath) ytick.push(i)
   
   //-- Calculate separate sum
-  var dis    = +data[data.length-1]['discharged'];
-  var hosp   = +data[data.length-1]['hospitalized'];
-  var death  = +data[data.length-1]['death'];
+  var last = data.length - 1;
+  var death = +data[last]['death'];
+  while (death == 0) {
+    last -= 1;
+    death = +data[last]['death'];
+  }
+  
+  var dis    = +data[last]['discharged'];
+  var hosp   = +data[last]['hospitalized'];
   var lValue = [dis, hosp, death];
   
   SE_wrap.formattedData = formattedData;
@@ -175,11 +181,11 @@ function SE_mousemove(d) {
   var tooltipText;
   
   if (lang == 'zh-tw')
-    tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3) + "<br>解隔離 = " + d.h1+ "<br>隔離中 = " + d.h2 + "<br>死亡 = " + d.h3
+    tooltipText = d.x + "<br>解隔離 = " + d.h1+ "<br>隔離中 = " + d.h2 + "<br>死亡 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
   else if (lang == 'fr')
-    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Rétablis = " + d.h1+ "<br>Hospitalisés = " + d.h2 + "<br>Décédés = " + d.h3
+    tooltipText = d.x + "<br>Rétablis = " + d.h1+ "<br>Hospitalisés = " + d.h2 + "<br>Décédés = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
   else
-    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3) + "<br>Discharged = " + d.h1+ "<br>Hospitalized = " + d.h2 + "<br>Deaths = " + d.h3
+    tooltipText = d.x + "<br>Discharged = " + d.h1+ "<br>Hospitalized = " + d.h2 + "<br>Deaths = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
   
   SE_tooltip
     .html(tooltipText)

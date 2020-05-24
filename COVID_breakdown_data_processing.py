@@ -217,7 +217,7 @@ def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
     nArr = asFloat(nArr) * factor
   return nArr, ctrBin
 
-def addEmptyRows(data):
+def alignDates(data):
   refOrd   = ISODateToOrdinal(REF_ISO_DATE)
   beginOrd = ISODateToOrdinal(data['date'].values[0])
   endOrd   = ISODateToOrdinal(data['date'].values[-1]) + 1
@@ -234,7 +234,10 @@ def addEmptyRows(data):
   for ord in range(endOrd, todayOrd):
     ISO = ordinalToISODate(ord)
     stock2.append([ISO] + zero)
-    
+  
+  if refOrd > beginOrd:
+    data = data[refOrd-beginOrd:]
+  
   data1 = pd.DataFrame(stock1, columns=data.columns)
   data2 = pd.DataFrame(stock2, columns=data.columns)
   data  = pd.concat([data1, data, data2])
@@ -1084,6 +1087,100 @@ class MainSheet:
     return
 
 ###############################################################################
+## Status sheet
+
+class StatusSheet:
+
+  def __init__(self, verbose=True):
+    self.n_date = '日期'
+    self.n_weekNb = '週次'
+    self.n_newNbCases = '新增確診'
+    self.n_newCasesPerWeek = '每週新增確診'
+    self.n_cumCases = '確診總人數'
+    self.n_newMales = '新增男性'
+    self.n_cumMales = '男性總數'
+    self.n_maleFrac = '確診男性率'
+    self.n_newFemales = '新增女性'
+    self.n_cumFemales = '女性總數'
+    self.n_femaleFrac = '確診女性率'
+    self.n_newSoldiers = '新增軍人'
+    self.n_cumSoldiers = '敦睦總人數'
+    self.n_soldierFrac = '軍隊率'
+    self.n_newImported = '新增境外'
+    self.n_cumImported = '境外總人數'
+    self.n_importedFrac = '境外率'
+    self.n_newLocal = '新增本土'
+    self.n_cumLocal = '本土總人數'
+    self.n_localFrac = '本土率'
+    self.n_newDeaths = '新增死亡'
+    self.n_cumDeaths = '死亡總人數'
+    self.n_deathFrac = '死亡率'
+    self.n_newUnknown = '當日未知感染源數'
+    self.n_cumUnknown = '未知感染源總數'
+    self.n_cumKnown = '已知感染源數'
+    self.n_newDis = '新增解除隔離'
+    self.n_cumDis = '解除隔離數'
+    self.n_cumDisAndDeaths = '解除隔離+死亡'
+    self.n_cumHosp = '未解除隔離數'
+    self.n_notes = '備註'
+    
+    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_status_evolution.csv' % DATA_PATH
+    data = pd.read_csv(name, dtype=object, skipinitialspace=True)
+    
+    cumDisList = data[self.n_cumDis].values
+    ind = cumDisList == cumDisList
+    self.data    = data[ind]
+    self.N_total = ind.sum()
+    
+    if verbose:
+      print('Loaded \"%s\"' % name)
+      print('N_total = %d' % self.N_total)
+    return 
+    
+  def getDate(self):
+    dateList = []
+    Y = 2020
+    
+    for date in self.data[self.n_date].values:
+      MMDD = date.split('月')
+      M = int(MMDD[0])
+      DD = MMDD[1].split('日')
+      D = int(DD[0])
+      date = '%04d-%02d-%02d' % (Y, M, D)
+      dateList.append(date)
+    return dateList
+    
+  def getCumCases(self):
+    return self.data[self.n_cumCases].values.astype(int)
+    
+  def getCumDeaths(self):
+    return self.data[self.n_cumDeaths].values.astype(int)
+    
+  def getCumDis(self):
+    return self.data[self.n_cumDis].values.astype(int)
+    
+  def getCumHosp(self):
+    return self.data[self.n_cumHosp].values.astype(int)
+    
+  def saveCsv_statusEvolution(self):
+    dateList      = self.getDate()
+    cumDeathsList = self.getCumDeaths()
+    cumDisList    = self.getCumDis()
+    cumHospList   = self.getCumHosp()
+    
+    data = {'date': dateList, 'death': cumDeathsList, 'hospitalized': cumHospList, 'discharged': cumDisList}
+    data = pd.DataFrame(data)
+    data = alignDates(data)
+    
+    name = '%sprocessed_data/status_evolution.csv' % DATA_PATH
+    saveCsv(name, data)
+    return
+      
+  def saveCsv(self):
+    self.saveCsv_statusEvolution()
+    return
+
+###############################################################################
 ## Test sheet
 
 class TestSheet:
@@ -1190,7 +1287,7 @@ class TestSheet:
     
     data = {'date': dateList, 'clinical': fromClinicalDefList, 'quarantine': fromQTList, 'extended': fromExtList}
     data = pd.DataFrame(data)
-    data = addEmptyRows(data)
+    data = alignDates(data)
     
     name = '%sprocessed_data/test_by_criterion.csv' % DATA_PATH
     saveCsv(name, data)
@@ -1354,45 +1451,143 @@ class TestSheet:
     return
 
 ###############################################################################
-## Status sheet
+## Border sheet
 
-class StatusSheet:
+class BorderSheet:
 
   def __init__(self, verbose=True):
-    self.n_date = '日期'
-    self.n_weekNb = '週次'
-    self.n_newNbCases = '新增確診'
-    self.n_newCasesPerWeek = '每週新增確診'
-    self.n_cumCases = '確診總人數'
-    self.n_newMales = '新增男性'
-    self.n_cumMales = '男性總數'
-    self.n_maleFrac = '確診男性率'
-    self.n_newFemales = '新增女性'
-    self.n_cumFemales = '女性總數'
-    self.n_femaleFrac = '確診女性率'
-    self.n_newSoldiers = '新增軍人'
-    self.n_cumSoldiers = '敦睦總人數'
-    self.n_soldierFrac = '軍隊率'
-    self.n_newImported = '新增境外'
-    self.n_cumImported = '境外總人數'
-    self.n_importedFrac = '境外率'
-    self.n_newLocal = '新增本土'
-    self.n_cumLocal = '本土總人數'
-    self.n_localFrac = '本土率'
-    self.n_newDeaths = '新增死亡'
-    self.n_cumDeaths = '死亡總人數'
-    self.n_deathFrac = '死亡率'
-    self.n_newUnknown = '當日未知感染源數'
-    self.n_cumUnknown = '未知感染源總數'
-    self.n_cumKnown = '已知感染源數'
-    self.n_newDis = '新增解除隔離'
-    self.n_cumDis = '解除隔離數'
-    self.n_cumDisAndDeaths = '解除隔離+死亡'
-    self.n_cumHosp = '未解除隔離數'
-    self.n_notes = '備註'
+    self.n_date = '日期 '
+    self.tagDict = {
+      'in': '資料來源：各機場、港口入出境人數統計資料 入境總人數',
+      'out': '資料來源：各機場、港口入出境人數統計資料 出境總人數',
+      'total': '入出境總人數_小計 ',
+      'Taoyuan A1 in': '桃園一期 入境查驗', 
+      'Taoyuan A1 out': '桃園一期 出境查驗', 
+      'Taoyuan A1 total': '桃園一期 小計', 
+      'Taoyuan A2 in': '桃園二期 入境查驗', 
+      'Taoyuan A2 out': '桃園二期 出境查驗', 
+      'Taoyuan A2 total': '桃園二期 小計', 
+      'Taoyuan A total': '桃園一_二期 合計', 
+      'Kaohsiung A in': '高雄機場 入境查驗', 
+      'Kaohsiung A out': '高雄機場 出境查驗', 
+      'Kaohsiung A total': '高雄機場 小計', 
+      'Keelung S in': '基隆港 入境查驗', 
+      'Keelung S out': '基隆港 出境查驗', 
+      'Keelung S total': '基隆港 小計', 
+      'Taichung S in': '台中港 入境查驗', 
+      'Taichung S out': '台中港 出境查驗', 
+      'Taichung S total': '台中港 小計', 
+      'Kaohsiung S in': '高雄港 入境查驗', 
+      'Kaohsiung S out': '高雄港 出境查驗', 
+      'Kaohsiung S total': '高雄港 小計', 
+      'Hualian S in': '花蓮港 入境查驗', 
+      'Hualian S out': '花蓮港 出境查驗', 
+      'Hualian S total': '花蓮港 小計', 
+      'Yilan S in': '蘇澳港 入境查驗', 
+      'Yilan S out': '蘇澳港 出境查驗', 
+      'Yilan S total': '蘇澳港 小計', 
+      'Penghu X in': '澎湖港 入境查驗', 
+      'Penghu X out': '澎湖港 出境查驗', 
+      'Penghu X total': '澎湖港 小計', 
+      'Tainan A in': '台南機場 入境查驗', 
+      'Tainan A out': '台南機場 出境查驗', 
+      'Tainan A total': '台南機場 小計', 
+      'Tainan S in': '安平港 入境查驗', 
+      'Tainan S out': '安平港 出境查驗', 
+      'Tainan S total': '安平港 小計', 
+      'Taipei A in': '松山機場 入境查驗', 
+      'Taipei A out': '松山機場 出境查驗', 
+      'Taipei A total': '松山機場 小計', 
+      'Kinmen SW in': '金門港_水頭 入境查驗', 
+      'Kinmen SW out': '金門港_水頭 出境查驗', 
+      'Kinmen SW total': '金門港_水頭 小計', 
+      'Mazu X in': '馬祖 入境查驗', 
+      'Mazu X out': '馬祖 出境查驗', 
+      'Mazu X total': '馬祖 小計', 
+      'Hualian A in': '花蓮機場 入境查驗', 
+      'Hualian A out': '花蓮機場 出境查驗', 
+      'Hualian A total': '花蓮機場 小計', 
+      'Yunlin S in': '麥寮港 入境查驗', 
+      'Yunlin S out': '麥寮港 出境查驗', 
+      'Yunlin S total': '麥寮港 小計', 
+      'Penghu A in': '馬公機場 入境查驗', 
+      'Penghu A out': '馬公機場 出境查驗', 
+      'Penghu A total': '馬公機場 小計', 
+      'Taichung A in': '台中機場 入境查驗', 
+      'Taichung A out': '台中機場 出境查驗', 
+      'Taichung A total': '台中機場 小計', 
+      'Hualian SN in': '和平港 入境查驗', 
+      'Hualian SN out': '和平港 出境查驗', 
+      'Hualian SN total': '和平港 小計', 
+      'Kinmen A in': '金門機場 入境查驗', 
+      'Kinmen A out': '金門機場 出境查驗', 
+      'Kinmen A total': '金門機場 小計', 
+      'Mazu AS in': '南竿機場 入境查驗', 
+      'Mazu AS out': '南竿機場 出境查驗', 
+      'Mazu AS total': '南竿機場 小計', 
+      'Mazu AN in': '北竿機場 入境查驗', 
+      'Mazu AN out': '北竿機場 出境查驗', 
+      'Mazu AN total': '北竿機場 小計', 
+      'Chiayi A in': '嘉義機場 入境查驗', 
+      'Chiayi A out': '嘉義機場 出境查驗', 
+      'Chiayi A total': '嘉義機場 小計', 
+      'Taipei S in': '台北港 入境查驗', 
+      'Taipei S out': '台北港 出境查驗', 
+      'Taipei S total': '台北港 小計', 
+      'Pintung SN1 in': '東港 入境查驗', 
+      'Pintung SN1 out': '東港 出境查驗', 
+      'Pintung SN1 total': '東港 小計', 
+      'Taitung A in': '台東機場 入境查驗', 
+      'Taitung A out': '台東機場 出境查驗', 
+      'Taitung A total': '台東機場 小計', 
+      'Mazu S in': '北竿白沙港 入境查驗', 
+      'Mazu S out': '北竿白沙港 出境查驗', 
+      'Mazu S total': '北竿白沙港 小計', 
+      'Chiayi S in': '布袋港 入境查驗', 
+      'Chiayi S out': '布袋港 出境查驗', 
+      'Chiayi S total': '布袋港 小計', 
+      'Taoyuan SS in': '大園沙崙港 入境查驗', 
+      'Taoyuan SS out': '大園沙崙港 出境查驗', 
+      'Taoyuan SS total': '大園沙崙港 小計', 
+      'Taitung S in': '台東富岡港 入境查驗', 
+      'Taitung S out': '台東富岡港 出境查驗', 
+      'Taitung S total': '台東富岡港 小計', 
+      'Penghu S in': '馬公港 入境查驗', 
+      'Penghu S out': '馬公港 出境查驗', 
+      'Penghu S total': '馬公港 小計', 
+      'Taoyuan SN in': '桃園竹圍港 入境查驗', 
+      'Taoyuan SN out': '桃園竹圍港 出境查驗', 
+      'Taoyuan SN total': '桃園竹圍港 小計', 
+      'Kinmen SE in': '金門港_料羅 入境查驗', 
+      'Kinmen SE out': '金門港_料羅 出境查驗', 
+      'Kinmen SE total': '金門港_料羅 小計', 
+      'Pintung SS in': '後壁湖遊艇港 入境查驗', 
+      'Pintung SS out': '後壁湖遊艇港 出境查驗', 
+      'Pintung SS total': '後壁湖遊艇港 小計', 
+      'New Taipei S in': '淡水第二漁港遊艇碼頭 入境查驗', 
+      'New Taipei S out': '淡水第二漁港遊艇碼頭 出境查驗', 
+      'New Taipei S total': '淡水第二漁港遊艇碼頭 小計', 
+      'Pintung SN2 in': '屏東大鵬灣遊艇港 入境查驗', 
+      'Pintung SN2 out': '屏東大鵬灣遊艇港 出境查驗', 
+      'Pintung SN2 total': '屏東大鵬灣遊艇港 小計', 
+      'Pintung A in': '屏東機場 入境查驗', 
+      'Pintung A out': '屏東機場 出境查驗', 
+      'Pintung A total': '屏東機場 小計'
+    }
     
-    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_status_evolution.csv' % DATA_PATH
-    data = pd.read_csv(name, dtype=object, skipinitialspace=True)
+    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_border_statistics.csv' % DATA_PATH
+    data = pd.read_csv(name, dtype=object, skipinitialspace=True, header=[0, 1])
+    
+    ## Change header
+    hdr  = []
+    for pair in data.columns:
+      if 'Unnamed:' in pair[0]:
+        hdr.append((hdr[-1][0], pair[1]))
+      elif 'Unnamed:' in pair[1]:
+        hdr.append((pair[0], ''))
+      else:
+        hdr.append(pair)
+    data.columns = [pair[0]+' '+pair[1] for pair in hdr]
     
     dateList = data[self.n_date].values
     ind = dateList == dateList
@@ -1405,30 +1600,131 @@ class StatusSheet:
     return 
     
   def getDate(self):
-    dateList = []
-    Y = 2020
-    
-    for date in self.data[self.n_date].values:
-      MMDD = date.split('月')
-      M = int(MMDD[0])
-      DD = MMDD[1].split('日')
-      D = int(DD[0])
-      date = '%04d-%02d-%02d' % (Y, M, D)
-      dateList.append(date)
+    dateList = ['%s-%s-%s' % (date[:4], date[4:6], date[6:8]) for date in self.data[self.n_date].values]
     return dateList
     
-  def getCumCases(self):
-    return self.data[self.n_cumCases].values.astype(int)
+  def getNumbers(self, tag):
+    nbList = [int(out.replace(',', '')) for out in self.data[self.tagDict[tag]].values]
+    return nbList
     
-  def getCumDeaths(self):
-    return self.data[self.n_cumDeaths].values.astype(int)
+  def getIn(self):
+    return self.getNumbers('in')
     
-  def getCumDis(self):
-    return self.data[self.n_cumDis].values.astype(int)
+  def getOut(self):
+    return self.getNumbers('out')
     
-  def getCumHosp(self):
-    return self.data[self.n_cumHosp].values.astype(int)
+  def getTotal(self):
+    return self.getNumbers('total')
     
+  def getAirportBreakdown(self, tag='total'):
+    labelList = [
+      'Taipei A',
+      'Taoyuan A1',
+      'Taoyuan A2',
+      'Taichung A',
+      'Chiayi A',
+      'Tainan A',
+      'Kaohsiung A',
+      'Pintung A',
+      
+      'Hualian A',
+      'Taitung A',
+      'Penghu A',
+      'Kinmen A',
+      'Mazu AN',
+      'Mazu AS'
+    ]
+    
+    airList_break = []
+    for label in labelList:
+      airList_break.append((label, self.getNumbers(label+' '+tag)))
+    return airList_break
+  
+  def printWestSeaportTot(self):
+    labelList = [
+      'Keelung S',
+      'New Taipei S',
+      'Taipei S',
+      'Taoyuan SN',
+      'Taoyuan SS',
+      'Taichung S',
+      'Yunlin S',
+      'Chiayi S',
+      'Tainan S',
+      'Kaohsiung S',
+      'Pintung SN1',
+      'Pintung SN2',
+      'Pintung SS',
+    ]
+    
+    for label in labelList:
+      print(label, self.getNumbers(label+' total'))
+    return
+    
+  def printEastIslandsSeaportTot(self):
+    labelList = [
+      'Yilan S',
+      'Hualian SN',
+      'Hualian S',
+      'Taitung S',
+      'Penghu S',
+      'Penghu X',
+      'Kinmen SW',
+      'Kinmen SE',
+      'Mazu S',
+      'Mazu X'
+    ]
+    
+    for label in labelList:
+      print(label, self.getNumbers(label+' total'))
+    return
+    
+  def getAirport(self, tag='total'):
+    airList_break = self.getAirportBreakdown(tag=tag)
+    airList_break = [airList[1] for airList in airList_break]
+    airList = np.array(airList_break).sum(axis=0)
+    return airList
+  
+  def getSeaport(self, tag='total'):
+    labelList = [
+      'Keelung S',
+      'New Taipei S',
+      'Taipei S',
+      'Taoyuan SN',
+      'Taoyuan SS',
+      'Taichung S',
+      'Yunlin S',
+      'Chiayi S',
+      'Tainan S',
+      'Kaohsiung S',
+      'Pintung SN1',
+      'Pintung SN2',
+      'Pintung SS',
+      
+      'Yilan S',
+      'Hualian SN',
+      'Hualian S',
+      'Taitung S',
+      'Penghu S',
+      'Kinmen SW',
+      'Kinmen SE',
+      'Mazu S',
+    ]
+    
+    seaList = [self.getNumbers(label+' '+tag) for label in labelList]
+    seaList = np.array(seaList).sum(axis=0)
+    return seaList
+  
+  def getNotSpecified(self, tag='total'):
+    labelList = [
+      'Penghu X',
+      'Mazu X'
+    ]
+    
+    notSpecList = [self.getNumbers(label+' '+tag) for label in labelList]
+    notSpecList = np.array(notSpecList).sum(axis=0)
+    return notSpecList
+  
   def saveCsv_statusEvolution(self):
     dateList      = self.getDate()
     cumDeathsList = self.getCumDeaths()
@@ -1437,7 +1733,7 @@ class StatusSheet:
     
     data = {'date': dateList, 'death': cumDeathsList, 'hospitalized': cumHospList, 'discharged': cumDisList}
     data = pd.DataFrame(data)
-    data = addEmptyRows(data)
+    data = alignDates(data)
     
     name = '%sprocessed_data/status_evolution.csv' % DATA_PATH
     saveCsv(name, data)
@@ -1515,13 +1811,17 @@ def sandbox():
   #print(sheet.getAge())
   #sheet.saveCsv_diffByTrans()
   
+  sheet = StatusSheet()
+  #print(sheet.getCumHosp())
+  sheet.saveCsv_statusEvolution()
+  
   #sheet = TestSheet()
   #print(sheet.printCriteria())
   #sheet.saveCsv_criteriaTimeline()
   
-  sheet = StatusSheet()
-  #print(sheet.getCumHosp())
-  sheet.saveCsv_statusEvolution()
+  #sheet = BorderSheet()
+  #print(sheet.getAirportBreakdown('in'))
+  #sheet.printAirportBreakdown()
   
   #sheet = TimelineSheet()
   #print(sheet.saveCriteria())

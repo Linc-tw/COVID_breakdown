@@ -214,12 +214,11 @@ function CBD_mousemove(d) {
   var tooltipText;
   
   if (lang == 'zh-tw')
-    tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6) + "<br>機場 = " + d.h1 + "<br>居家檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自行就醫 = " + d.h5 + "<br>無管道資料 = " + d.h6
+    tooltipText = d.x + "<br>機場 = " + d.h1 + "<br>居家檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自行就醫 = " + d.h5 + "<br>無管道資料 = " + d.h6 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6)
   else if (lang == 'fr')
-    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6) + "<br>Aéroport = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Auto-contrôle = " + d.h4 + "<br>Hôpital = " + d.h5 + "<br>Pas annoncé = " + d.h6
+    tooltipText = d.x + "<br>Aéroports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Auto-contrôle = " + d.h4 + "<br>Hôpitaux = " + d.h5 + "<br>Pas annoncés = " + d.h6 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6)
   else
-    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6) + "<br>Airport = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospital = " + d.h5 + "<br>Not announced = " + d.h6
-  
+    tooltipText = d.x + "<br>Airports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospitals = " + d.h5 + "<br>Not announced = " + d.h6 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6)
   
   CBD_tooltip
     .html(tooltipText)
@@ -389,11 +388,11 @@ function CBD_update() {
     lLabel_plus = '無發病日資料';
   }
   else if (lang == 'fr') {
-    lLabel = ['Aéroport', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpital', 'Pas annoncé', 'Total'];
+    lLabel = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', 'Pas annoncés', 'Total'];
     lLabel_plus = "Sans date début sympt.";
   }
   else {
-    lLabel = ["Airport", "Quarantine", "Isolation", "Monitoring", "Hospital", 'Not announced', 'Total'];
+    lLabel = ["Airports", "Quarantine", "Isolation", "Monitoring", "Hospitals", 'Not announced', 'Total'];
     lLabel_plus = 'No onset date';
   }
   if (CBD_wrap.doOnset == 1) lLabel.splice(CBD_wrap.nbCol, 0, lLabel_plus);

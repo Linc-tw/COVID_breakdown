@@ -209,12 +209,11 @@ function CBT_mousemove(d) {
   var tooltipText;
   
   if (lang == 'zh-tw')
-    tooltipText = d.x + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4) + "<br>境外移入 = " + d.h1+ "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>敦睦艦隊 = " + d.h4
+    tooltipText = d.x + "<br>境外移入 = " + d.h1 + "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>敦睦艦隊 = " + d.h4 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
   else if (lang == 'fr')
-    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4) + "<br>Importés = " + d.h1+ "<br>Locaux connus = " + d.h2 + "<br>Locaux inconnus = " + d.h3 + "<br>Flotte = " + d.h4
+    tooltipText = d.x + "<br>Importés = " + d.h1 + "<br>Locaux connus = " + d.h2 + "<br>Locaux inconnus = " + d.h3 + "<br>Flotte = " + d.h4 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
   else
-    tooltipText = d.x + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4) + "<br>Imported = " + d.h1+ "<br>Local linked = " + d.h2 + "<br>Local unlinked = " + d.h3 + "<br>Fleet = " + d.h4
-  
+    tooltipText = d.x + "<br>Imported = " + d.h1 + "<br>Local linked = " + d.h2 + "<br>Local unlinked = " + d.h3 + "<br>Fleet = " + d.h4 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
   
   CBT_tooltip
     .html(tooltipText)
@@ -384,7 +383,7 @@ function CBT_update() {
   }
   else if (lang == 'fr') {
     lLabel = ["Importés", "Locaux & lien connu", "Locaux & lien inconnu", "Flotte diplomatique", "Total"];
-    lLabel_plus = "Sans date début symp.";
+    lLabel_plus = "Sans date début sympt.";
   }
   else {
     lLabel = ["Imported", "Local & linked to known cases", "Local & unlinked", 'Diplomatic fleet cluster', "Total"];
