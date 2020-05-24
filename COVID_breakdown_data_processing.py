@@ -1640,7 +1640,7 @@ class BorderSheet:
       airList_break.append((label, self.getNumbers(label+' '+tag)))
     return airList_break
   
-  def printWestSeaportTot(self):
+  def getSeaportBreakdown(self, tag='total'):
     labelList = [
       'Keelung S',
       'New Taipei S',
@@ -1655,30 +1655,33 @@ class BorderSheet:
       'Pintung SN1',
       'Pintung SN2',
       'Pintung SS',
-    ]
-    
-    for label in labelList:
-      print(label, self.getNumbers(label+' total'))
-    return
-    
-  def printEastIslandsSeaportTot(self):
-    labelList = [
+      
       'Yilan S',
       'Hualian SN',
       'Hualian S',
       'Taitung S',
       'Penghu S',
-      'Penghu X',
       'Kinmen SW',
       'Kinmen SE',
       'Mazu S',
+    ]
+    
+    seaList_break = []
+    for label in labelList:
+      seaList_break.append((label, self.getNumbers(label+' '+tag)))
+    return seaList_break
+  
+  def getNotSpecifiedBreakdown(self, tag='total'):
+    labelList = [
+      'Penghu X',
       'Mazu X'
     ]
     
+    notSpecList_break = []
     for label in labelList:
-      print(label, self.getNumbers(label+' total'))
-    return
-    
+      notSpecList_break.append((label, self.getNumbers(label+' '+tag)))
+    return notSpecList_break
+  
   def getAirport(self, tag='total'):
     airList_break = self.getAirportBreakdown(tag=tag)
     airList_break = [airList[1] for airList in airList_break]
@@ -1686,61 +1689,50 @@ class BorderSheet:
     return airList
   
   def getSeaport(self, tag='total'):
-    labelList = [
-      'Keelung S',
-      'New Taipei S',
-      'Taipei S',
-      'Taoyuan SN',
-      'Taoyuan SS',
-      'Taichung S',
-      'Yunlin S',
-      'Chiayi S',
-      'Tainan S',
-      'Kaohsiung S',
-      'Pintung SN1',
-      'Pintung SN2',
-      'Pintung SS',
-      
-      'Yilan S',
-      'Hualian SN',
-      'Hualian S',
-      'Taitung S',
-      'Penghu S',
-      'Kinmen SW',
-      'Kinmen SE',
-      'Mazu S',
-    ]
-    
-    seaList = [self.getNumbers(label+' '+tag) for label in labelList]
-    seaList = np.array(seaList).sum(axis=0)
+    seaList_break = self.getSeaportBreakdown(tag=tag)
+    seaList_break = [airList[1] for airList in seaList_break]
+    seaList = np.array(seaList_break).sum(axis=0)
     return seaList
   
   def getNotSpecified(self, tag='total'):
-    labelList = [
-      'Penghu X',
-      'Mazu X'
-    ]
-    
-    notSpecList = [self.getNumbers(label+' '+tag) for label in labelList]
-    notSpecList = np.array(notSpecList).sum(axis=0)
+    notSpecList_break = self.getNotSpecifiedBreakdown(tag=tag)
+    notSpecList_break = [airList[1] for airList in notSpecList_break]
+    notSpecList = np.array(notSpecList_break).sum(axis=0)
     return notSpecList
   
-  def saveCsv_statusEvolution(self):
-    dateList      = self.getDate()
-    cumDeathsList = self.getCumDeaths()
-    cumDisList    = self.getCumDis()
-    cumHospList   = self.getCumHosp()
+  def saveCsv_borderStats(self):
+    dateList    = self.getDate()
+    airList     = self.getAirport(tag='in')
+    seaList     = self.getSeaport(tag='in')
+    notSpecList = self.getNotSpecified(tag='in')
     
-    data = {'date': dateList, 'death': cumDeathsList, 'hospitalized': cumHospList, 'discharged': cumDisList}
+    data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
     data = pd.DataFrame(data)
-    data = alignDates(data)
+    name = '%sprocessed_data/border_statistics_entry.csv' % DATA_PATH
+    saveCsv(name, data)
     
-    name = '%sprocessed_data/status_evolution.csv' % DATA_PATH
+    airList     = self.getAirport(tag='out')
+    seaList     = self.getSeaport(tag='out')
+    notSpecList = self.getNotSpecified(tag='out')
+    
+    data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
+    data = pd.DataFrame(data)
+    name = '%sprocessed_data/border_statistics_exit.csv' % DATA_PATH
+    saveCsv(name, data)
+    
+    airList     = self.getAirport(tag='total')
+    seaList     = self.getSeaport(tag='total')
+    notSpecList = self.getNotSpecified(tag='total')
+    #data = alignDates(data)
+    
+    data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
+    data = pd.DataFrame(data)
+    name = '%sprocessed_data/border_statistics_both.csv' % DATA_PATH
     saveCsv(name, data)
     return
       
   def saveCsv(self):
-    self.saveCsv_statusEvolution()
+    self.saveCsv_borderStats()
     return
 
 ###############################################################################
@@ -1811,17 +1803,17 @@ def sandbox():
   #print(sheet.getAge())
   #sheet.saveCsv_diffByTrans()
   
-  sheet = StatusSheet()
+  #sheet = StatusSheet()
   #print(sheet.getCumHosp())
-  sheet.saveCsv_statusEvolution()
+  #sheet.saveCsv_statusEvolution()
   
   #sheet = TestSheet()
   #print(sheet.printCriteria())
   #sheet.saveCsv_criteriaTimeline()
   
-  #sheet = BorderSheet()
+  sheet = BorderSheet()
   #print(sheet.getAirportBreakdown('in'))
-  #sheet.printAirportBreakdown()
+  sheet.saveCsv_borderStats()
   
   #sheet = TimelineSheet()
   #print(sheet.saveCriteria())
@@ -1833,8 +1825,9 @@ def sandbox():
 
 def saveCsv_all():
   MainSheet().saveCsv()
-  TestSheet().saveCsv()
   StatusSheet().saveCsv()
+  TestSheet().saveCsv()
+  BorderSheet().saveCsv()
   return
 
 ###############################################################################

@@ -109,7 +109,7 @@ function CBT_formatData(data) {
   //-- Calculate ymax
   ymax *= 1.2;
   var ypath;
-  if (CBT_wrap.doCumul == 1) ypath = 100; //Math.floor(ymax / 5);
+  if (CBT_wrap.doCumul == 1) ypath = 100;
   else                       ypath = 5;
   
   var ytick = [];

@@ -21,16 +21,17 @@ This project is driven by 3 key motivations:
 Features
 --------
 
-So far, 7 plots can be found on Dashboard:
+So far, 6 plots can be found on Dashboard:
 - Status Evolution
-- Number of Tests by Reporting Criterion
+- How many days to identify cases? (day difference between report date & entry/onset date)
 - Confirmed Cases by Transmission Type
 - Confirmed Cases by Detection Channel
 - Correlations between Travel History & Symptoms
 - Correlations between Age & Symptoms
-- How many days to identify cases? (day difference between report date & entry/onset date)
 
-And one is on Policy:
+And 3 are on Policy:
+- Number of Tests by Reporting Criterion
+- Border Crossing
 - Chronology of Systematic Testing
 
 Some other ideas have been proposed at [Issues](https://github.com/Linc-tw/COVID_breakdown/issues).

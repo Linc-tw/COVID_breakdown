@@ -121,20 +121,30 @@ function text_translation() {
     }
     
     
-    node = document.getElementById("test_by_criterion_title")
+    node = document.getElementById("difference_by_transmission_title")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("檢驗數量"));
+      node.appendChild(document.createTextNode("抓帶原者要花多久？"));
     }
-    node = document.getElementById("test_by_criterion_button_1")
+    node = document.getElementById("difference_by_transmission_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("逐日"));
+      node.appendChild(document.createTextNode("全部"));
     }
-    node = document.getElementById("test_by_criterion_button_2")
+    node = document.getElementById("difference_by_transmission_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("累計"));
+      node.appendChild(document.createTextNode("境外移入"));
+    }
+    node = document.getElementById("difference_by_transmission_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("本土"));
+    }
+    node = document.getElementById("difference_by_transmission_button_4")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("敦睦艦隊"));
     }
     
     
@@ -226,30 +236,42 @@ function text_translation() {
     }
     
     
-    node = document.getElementById("difference_by_transmission_title")
+    node = document.getElementById("test_by_criterion_title")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("抓帶原者要花多久？"));
+      node.appendChild(document.createTextNode("檢驗數量"));
     }
-    node = document.getElementById("difference_by_transmission_button_1")
+    node = document.getElementById("test_by_criterion_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("全部"));
+      node.appendChild(document.createTextNode("逐日"));
     }
-    node = document.getElementById("difference_by_transmission_button_2")
+    node = document.getElementById("test_by_criterion_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("境外移入"));
+      node.appendChild(document.createTextNode("累計"));
     }
-    node = document.getElementById("difference_by_transmission_button_3")
+    
+    
+    node = document.getElementById("border_statistics_title")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("本土"));
+      node.appendChild(document.createTextNode("入出境人數統計"));
     }
-    node = document.getElementById("difference_by_transmission_button_4")
+    node = document.getElementById("border_statistics_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("敦睦艦隊"));
+      node.appendChild(document.createTextNode("入境"));
+    }
+    node = document.getElementById("border_statistics_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("出境"));
+    }
+    node = document.getElementById("border_statistics_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("合計"));
     }
     
     
@@ -361,20 +383,30 @@ function text_translation() {
     }
     
     
-    node = document.getElementById("test_by_criterion_title")
+    node = document.getElementById("difference_by_transmission_title")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Nombre de tests par critère"));
+      node.appendChild(document.createTextNode("Combien de temps pour identifier les cas?"));
     }
-    node = document.getElementById("test_by_criterion_button_1")
+    node = document.getElementById("difference_by_transmission_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Quotidiens"));
+      node.appendChild(document.createTextNode("Tous"));
     }
-    node = document.getElementById("test_by_criterion_button_2")
+    node = document.getElementById("difference_by_transmission_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Cumulés"));
+      node.appendChild(document.createTextNode("Importés"));
+    }
+    node = document.getElementById("difference_by_transmission_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Locaux"));
+    }
+    node = document.getElementById("difference_by_transmission_button_4")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Flotte"));
     }
     
     
@@ -466,30 +498,42 @@ function text_translation() {
     }
     
     
-    node = document.getElementById("difference_by_transmission_title")
+    node = document.getElementById("test_by_criterion_title")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Combien de temps pour identifier les cas?"));
+      node.appendChild(document.createTextNode("Nombre de tests par critère"));
     }
-    node = document.getElementById("difference_by_transmission_button_1")
+    node = document.getElementById("test_by_criterion_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Tous"));
+      node.appendChild(document.createTextNode("Quotidiens"));
     }
-    node = document.getElementById("difference_by_transmission_button_2")
+    node = document.getElementById("test_by_criterion_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Importés"));
+      node.appendChild(document.createTextNode("Cumulés"));
     }
-    node = document.getElementById("difference_by_transmission_button_3")
+    
+    
+    node = document.getElementById("border_statistics_title")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Locaux"));
+      node.appendChild(document.createTextNode("Statistiques frontalières"));
     }
-    node = document.getElementById("difference_by_transmission_button_4")
+    node = document.getElementById("border_statistics_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Flotte"));
+      node.appendChild(document.createTextNode("Arrivée"));
+    }
+    node = document.getElementById("border_statistics_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Départ"));
+    }
+    node = document.getElementById("border_statistics_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Total"));
     }
     
     
@@ -601,20 +645,30 @@ function text_translation() {
     }
     
     
-    node = document.getElementById("test_by_criterion_title")
+    node = document.getElementById("difference_by_transmission_title")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Number of Tests by Reporting Criterion"));
+      node.appendChild(document.createTextNode("How many days to identify cases?"));
     }
-    node = document.getElementById("test_by_criterion_button_1")
+    node = document.getElementById("difference_by_transmission_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Daily"));
+      node.appendChild(document.createTextNode("All"));
     }
-    node = document.getElementById("test_by_criterion_button_2")
+    node = document.getElementById("difference_by_transmission_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Cumulative"));
+      node.appendChild(document.createTextNode("Imported"));
+    }
+    node = document.getElementById("difference_by_transmission_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Local"));
+    }
+    node = document.getElementById("difference_by_transmission_button_4")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Fleet"));
     }
     
     
@@ -706,30 +760,42 @@ function text_translation() {
     }
     
     
-    node = document.getElementById("difference_by_transmission_title")
+    node = document.getElementById("test_by_criterion_title")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("How many days to identify cases?"));
+      node.appendChild(document.createTextNode("Number of Tests by Reporting Criterion"));
     }
-    node = document.getElementById("difference_by_transmission_button_1")
+    node = document.getElementById("test_by_criterion_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("All"));
+      node.appendChild(document.createTextNode("Daily"));
     }
-    node = document.getElementById("difference_by_transmission_button_2")
+    node = document.getElementById("test_by_criterion_button_2")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Imported"));
+      node.appendChild(document.createTextNode("Cumulative"));
     }
-    node = document.getElementById("difference_by_transmission_button_3")
+    
+    
+    node = document.getElementById("border_statistics_title")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Local"));
+      node.appendChild(document.createTextNode("Border Crossing"));
     }
-    node = document.getElementById("difference_by_transmission_button_4")
+    node = document.getElementById("border_statistics_button_1")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Fleet"));
+      node.appendChild(document.createTextNode("Arrival"));
+    }
+    node = document.getElementById("border_statistics_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Departure"));
+    }
+    node = document.getElementById("border_statistics_button_3")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Both"));
     }
     
     
@@ -804,13 +870,17 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
     SE_update();
   });
 
-  d3.csv(TBC_wrap.dataPath, function(error, data) {
-    if (error) return console.warn(error);
-    
-    TBC_makeCanvas();
-    TBC_formatData(data);
-    TBC_initialize();
-    TBC_update();
+  d3.csv(DBT_wrap.dataPathList[0], function(error, data) {
+    d3.csv(DBT_wrap.dataPathList[1], function(error2, data2) {
+      if (error) return console.warn(error);
+      if (error2) return console.warn(error2);
+      
+      DBT_makeCanvas();
+      DBT_formatData(data);
+      DBT_formatData2(data2);
+      DBT_initialize();
+      DBT_update();
+    });
   });
   
   d3.csv(CBT_wrap.dataPathList[CBT_wrap.doOnset], function(error, data) {
@@ -865,19 +935,6 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
     });
   });
 
-  d3.csv(DBT_wrap.dataPathList[0], function(error, data) {
-    d3.csv(DBT_wrap.dataPathList[1], function(error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      DBT_makeCanvas();
-      DBT_formatData(data);
-      DBT_formatData2(data2);
-      DBT_initialize();
-      DBT_update();
-    });
-  });
-
 });
 
 $(document).on("change", "input:radio[name='policy_language']", function(event) {
@@ -887,6 +944,24 @@ $(document).on("change", "input:radio[name='policy_language']", function(event) 
   
   d3.selectAll('.plot').remove()
   
+  d3.csv(TBC_wrap.dataPath, function(error, data) {
+    if (error) return console.warn(error);
+    
+    TBC_makeCanvas();
+    TBC_formatData(data);
+    TBC_initialize();
+    TBC_update();
+  });
+
+  d3.csv(BS_wrap.dataPathList[BS_wrap.doExit], function(error, data) {
+    if (error) return console.warn(error);
+    
+    BS_makeCanvas();
+    BS_formatData(data);
+    BS_initialize();
+    BS_update();
+  });
+
   d3.csv(CT_wrap.dataPathList[0], function(error, data) {
     if (error) return console.warn(error);
     
