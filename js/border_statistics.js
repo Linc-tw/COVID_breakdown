@@ -396,8 +396,8 @@ $(document).on("change", "input:radio[name='" + BS_wrap.tag + "_doExit']", funct
 d3.select(BS_wrap.id + '_button_4').on('click', function(){
   var tag1;
   
-  if (BS_wrap.doExit == 0)      tag1 = 'entry';
-  else if (BS_wrap.doExit == 1) tag1 = 'exit';
+  if (BS_wrap.doExit == 0)      tag1 = 'arrival';
+  else if (BS_wrap.doExit == 1) tag1 = 'departure';
   else                          tag1 = 'both';
 
   name = BS_wrap.tag + '_' + tag1 + '_' + lang + '.png'

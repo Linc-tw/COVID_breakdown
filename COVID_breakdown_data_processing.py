@@ -1723,7 +1723,6 @@ class BorderSheet:
     airList     = self.getAirport(tag='total')
     seaList     = self.getSeaport(tag='total')
     notSpecList = self.getNotSpecified(tag='total')
-    #data = alignDates(data)
     
     data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
     data = pd.DataFrame(data)
@@ -1774,25 +1773,29 @@ class TimelineSheet:
       dateList.append(date)
     return dateList
   
-  def getCriteria(self):
-    criteriaList = []
-    
-    for criteria in self.data[self.n_criteria].values:
-      criteriaList.append(criteria)
-    return criteriaList
+  def getTWNEvt(self):
+    return self.data[self.n_TWNEvt].values
   
-  def saveCriteria(self):
+  def getGlobalEvt(self):
+    return self.data[self.n_globalEvt].values
+  
+  def getKeyEvt(self):
+    return self.data[self.n_keyEvt].values
+  
+  def saveCsv_EvtTimeline(self):
     dateList = self.getDate()
-    criteriaList = self.getCriteria()
+    TWNEvtList = self.getTWNEvt()
+    globalEvtList = self.getGlobalEvt()
+    keyEvtList = self.getKeyEvt()
     
-    for date, criteria in zip(dateList, criteriaList):
-      if criteria != criteria:
-        pass
-      elif '累積檢驗人數' in criteria:
-        pass
-      else:
-        print(date, criteria)
-        print()
+    data = {'date': dateList, 'Taiwan_event': TWNEvtList, 'global_event': globalEvtList, 'key_event': keyEvtList}
+    data = pd.DataFrame(data)
+    name = '%sprocessed_data/event_timeline_zh-tw.csv' % DATA_PATH
+    saveCsv(name, data)
+    return
+  
+  def saveCsv(self):
+    self.saveCsv_EvtTimeline()
     return
   
 ###############################################################################
@@ -1811,13 +1814,13 @@ def sandbox():
   #print(sheet.printCriteria())
   #sheet.saveCsv_criteriaTimeline()
   
-  sheet = BorderSheet()
+  #sheet = BorderSheet()
   #print(sheet.getAirportBreakdown('in'))
-  sheet.saveCsv_borderStats()
+  #sheet.saveCsv_borderStats()
   
-  #sheet = TimelineSheet()
+  sheet = TimelineSheet()
   #print(sheet.saveCriteria())
-  #sheet.saveCsv()
+  sheet.saveCsv()
   return
 
 ###############################################################################
@@ -1828,6 +1831,7 @@ def saveCsv_all():
   StatusSheet().saveCsv()
   TestSheet().saveCsv()
   BorderSheet().saveCsv()
+  TimelineSheet().saveCsv()
   return
 
 ###############################################################################

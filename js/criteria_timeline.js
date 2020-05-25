@@ -8,22 +8,6 @@ CT_wrap.dataPathList = [
 function CT_makeCanvas() {
   var totWidth = 800;
   var totHeight = 540;
-//   var totHeight, top;
-//   if (lang == 'zh-tw') {
-//     totHeight = 540;
-//     left = 200;
-//     top = 155;
-//   }
-//   else if (lang == 'fr') {
-//     totHeight = 600;
-//     left = 235;
-//     top = 225;
-//   }
-//   else {
-//     totHeight = 600;
-//     left = 235;
-//     top = 215;
-//   }
   
   var margin = {left: 0, right: 0, bottom: 0, top: 0};
   var width = totWidth - margin.left - margin.right;
