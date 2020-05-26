@@ -111,9 +111,16 @@ function BS_formatData(data) {
   for (i=0; i<ymax; i+=ypath) ytick.push(i)
   
   //-- Calculate separate sum
-  var air = +data[data.length-1]['airport'];
-  var sea = +data[data.length-1]['seaport'];
-  var NS  = +data[data.length-1]['not_specified'];
+  var last = data.length - 1;
+  var air = +data[last]['airport'];
+  while (air == 0) {
+    last -= 1;
+    air   = +data[last]['airport'];
+  }
+  
+  var sea = +data[last]['seaport'];
+  var NS  = +data[last]['not_specified'];
+  var lastDate = data[last]['date'];
   var lValue = [air, sea, NS];
   
   BS_wrap.formattedData = formattedData;
@@ -124,6 +131,7 @@ function BS_formatData(data) {
   BS_wrap.xtick = xtick;
   BS_wrap.xticklabel = xticklabel;
   BS_wrap.ytick = ytick;
+  BS_wrap.lastDate = lastDate;
   BS_wrap.lValue = lValue;
 }
 
@@ -356,16 +364,43 @@ function BS_update() {
     lLabel = ["Airports", "Seaports", "Not specified", 'Total'];
   }
   
-  BS_wrap.svg.selectAll(".legend.label")
+  BS_wrap.svg.selectAll(BS_wrap.id+'_legend_label')
     .remove()
     .exit()
     .data(lLabel)
     .enter()
     .append("text")
+      .attr("id", BS_wrap.tag+"_legend_label")
       .attr("class", "legend label")
       .attr("x", lPos.x+lPos.dx)
       .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
       .style("fill", function(d, i) {return colorList[i]})
+      .text(function(d) {return d})
+      .attr("text-anchor", "start")
+  
+  //-- Legend - title
+  var lTitle;
+  if (lang == 'zh-tw') {
+    lTitle = ['於' + BS_wrap.lastDate];
+  }
+  else if (lang == 'fr') {
+    lTitle = ['Au ' + BS_wrap.lastDate];
+  }
+  else {
+    lTitle = ['On ' + BS_wrap.lastDate];
+  }
+  
+  BS_wrap.svg.selectAll(BS_wrap.id+'_legend_title')
+    .remove()
+    .exit()
+    .data(lTitle)
+    .enter()
+    .append("text")
+      .attr("id", BS_wrap.tag+"_legend_title")
+      .attr("class", "legend label")
+      .attr("x", lPos.x+lPos.dx)
+      .attr("y", lPos.y+4.25*lPos.dy)
+      .style("fill", '#000000')
       .text(function(d) {return d})
       .attr("text-anchor", "start")
 }

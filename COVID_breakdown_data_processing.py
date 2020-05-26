@@ -217,7 +217,7 @@ def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
     nArr = asFloat(nArr) * factor
   return nArr, ctrBin
 
-def alignDates(data):
+def adjustDateRange(data):
   refOrd   = ISODateToOrdinal(REF_ISO_DATE)
   beginOrd = ISODateToOrdinal(data['date'].values[0])
   endOrd   = ISODateToOrdinal(data['date'].values[-1]) + 1
@@ -1170,7 +1170,7 @@ class StatusSheet:
     
     data = {'date': dateList, 'death': cumDeathsList, 'hospitalized': cumHospList, 'discharged': cumDisList}
     data = pd.DataFrame(data)
-    data = alignDates(data)
+    data = adjustDateRange(data)
     
     name = '%sprocessed_data/status_evolution.csv' % DATA_PATH
     saveCsv(name, data)
@@ -1287,7 +1287,7 @@ class TestSheet:
     
     data = {'date': dateList, 'clinical': fromClinicalDefList, 'quarantine': fromQTList, 'extended': fromExtList}
     data = pd.DataFrame(data)
-    data = alignDates(data)
+    data = adjustDateRange(data)
     
     name = '%sprocessed_data/test_by_criterion.csv' % DATA_PATH
     saveCsv(name, data)
@@ -1708,6 +1708,7 @@ class BorderSheet:
     
     data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
     data = pd.DataFrame(data)
+    data = adjustDateRange(data)
     name = '%sprocessed_data/border_statistics_entry.csv' % DATA_PATH
     saveCsv(name, data)
     
@@ -1717,6 +1718,7 @@ class BorderSheet:
     
     data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
     data = pd.DataFrame(data)
+    data = adjustDateRange(data)
     name = '%sprocessed_data/border_statistics_exit.csv' % DATA_PATH
     saveCsv(name, data)
     
@@ -1726,6 +1728,7 @@ class BorderSheet:
     
     data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
     data = pd.DataFrame(data)
+    data = adjustDateRange(data)
     name = '%sprocessed_data/border_statistics_both.csv' % DATA_PATH
     saveCsv(name, data)
     return
@@ -1782,7 +1785,7 @@ class TimelineSheet:
   def getKeyEvt(self):
     return self.data[self.n_keyEvt].values
   
-  def saveCsv_EvtTimeline(self):
+  def saveCsv_evtTimeline(self):
     dateList = self.getDate()
     TWNEvtList = self.getTWNEvt()
     globalEvtList = self.getGlobalEvt()
@@ -1795,7 +1798,7 @@ class TimelineSheet:
     return
   
   def saveCsv(self):
-    self.saveCsv_EvtTimeline()
+    self.saveCsv_evtTimeline()
     return
   
 ###############################################################################
@@ -1814,13 +1817,13 @@ def sandbox():
   #print(sheet.printCriteria())
   #sheet.saveCsv_criteriaTimeline()
   
-  #sheet = BorderSheet()
+  sheet = BorderSheet()
   #print(sheet.getAirportBreakdown('in'))
-  #sheet.saveCsv_borderStats()
+  sheet.saveCsv_borderStats()
   
-  sheet = TimelineSheet()
+  #sheet = TimelineSheet()
   #print(sheet.saveCriteria())
-  sheet.saveCsv()
+  #sheet.saveCsv_evtTimeline()
   return
 
 ###############################################################################
