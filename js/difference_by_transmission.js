@@ -272,7 +272,7 @@ function DBT_initialize() {
   //-- xlabel
   var xlabel;
   if (lang == 'zh-tw') xlabel = '發病或入境後到確診所需天數';
-  if (lang == 'fr') xlabel = "Nombre de jours avant identification";
+  else if (lang == 'fr') xlabel = "Nombre de jours avant identification";
   else xlabel = "Days required for each case to be identified";
   DBT_wrap.svg.append("text")
     .attr("class", "xlabel")
