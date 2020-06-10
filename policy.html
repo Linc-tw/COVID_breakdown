@@ -107,7 +107,7 @@
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-bar mr-1"></i> <span id="test_by_criterion_title"></span>
+                                        <i class="fas fa-vial mr-1"></i> <span id="test_by_criterion_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
@@ -135,7 +135,7 @@
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-bar mr-1"></i> <span id="border_statistics_title"></span>
+                                        <i class="fas fa-plane-slash mr-1"></i> <span id="border_statistics_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
@@ -202,44 +202,33 @@
                                 </div>
                             </div>
                             
-                            <!-- Pending -->
-<!--                            <div class="col-xl-6">
+                            <!-- Event timeline -->
+                            <div class="col-xl-12">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-bar mr-1"></i> <span id="case_by_detection_title"></span>
+                                        <i class="fas fa-calendar-alt mr-1"></i> <span id="event_timeline_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos"> 
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_detection_doCumul" value=0 checked>
-                                                    <span id="case_by_detection_button_1"></span>
+                                                    <input type="radio" name="event_timeline_weekStart" value=0 checked>
+                                                    <span id="event_timeline_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_detection_doCumul" value=1>
-                                                    <span id="case_by_detection_button_2"></span>
+                                                    <input type="radio" name="event_timeline_weekStart" value=1>
+                                                    <span id="event_timeline_button_2"></span>
                                                 </label>
                                             </div>
                                             <span style="display:inline-block; width: 8px;"></span>
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_detection_doOnset" value=0 checked>
-                                                    <span id="case_by_detection_button_3"></span>
-                                                </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_detection_doOnset" value=1>
-                                                    <span id="case_by_detection_button_4"></span>
-                                                </label>
-                                            </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
-                                            <button id='case_by_detection_button_5' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                            <button id='event_timeline_button_3' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
                                     
-                                    <div class="card-body" id="case_by_detection"></div>
+                                    <div class="card-body" id="event_timeline"></div>
                                 </div>
-                            </div>-->
+                            </div>
                             
                         </div>
                     </div>
@@ -259,7 +248,7 @@
         <!-- Scripts -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://d3js.org/d3.v4.js"></script>
         <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.19.0/js/canvas-to-blob.min.js"></script>
@@ -273,6 +262,7 @@
         <script src="js/test_by_criterion.js"></script>
         <script src="js/border_statistics.js"></script>
         <script src="js/criteria_timeline.js"></script>
+        <script src="js/event_timeline.js"></script>
         
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58898441-4"></script>

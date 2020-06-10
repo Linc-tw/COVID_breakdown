@@ -301,6 +301,23 @@ function text_translation() {
       node.appendChild(document.createTextNode("碟狀"));
     }
     
+    
+    node = document.getElementById("event_timeline_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("疫情爆發時間軸"));
+    }
+    node = document.getElementById("event_timeline_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("週日開始"));
+    }
+    node = document.getElementById("event_timeline_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("週一開始"));
+    }
+    
   }
   else if (lang == 'fr') {
     node = document.getElementById("title")
@@ -561,6 +578,23 @@ function text_translation() {
     if (node !== null) {
       node.textContent = '';
       node.appendChild(document.createTextNode("Disques"));
+    }
+    
+    
+    node = document.getElementById("event_timeline_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Chronologie de la pandémie"));
+    }
+    node = document.getElementById("event_timeline_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("1er jour dimanche"));
+    }
+    node = document.getElementById("event_timeline_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("1er jour lundi"));
     }
     
   }
@@ -825,6 +859,23 @@ function text_translation() {
       node.appendChild(document.createTextNode("Disks"));
     }
     
+    
+    node = document.getElementById("event_timeline_title")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("Pandemic Timeline"));
+    }
+    node = document.getElementById("event_timeline_button_1")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("1st day Sunday"));
+    }
+    node = document.getElementById("event_timeline_button_2")
+    if (node !== null) {
+      node.textContent = '';
+      node.appendChild(document.createTextNode("1st day Monday"));
+    }
+    
   }
 }
 
@@ -969,6 +1020,15 @@ $(document).on("change", "input:radio[name='policy_language']", function(event) 
     CT_formatData(data);
     CT_initialize();
     CT_update();
+  });
+  
+  d3.csv(ET_wrap.dataPathList[0], function(error, data) {
+    if (error) return console.warn(error);
+    
+    ET_makeCanvas();
+    ET_formatData(data);
+    ET_initialize();
+    ET_update();
   });
 
 });

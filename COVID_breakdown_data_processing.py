@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.05.23                  ##
+    ##  Version 2020.06.08                  ##
     ##########################################
 
 
@@ -101,6 +101,7 @@ TRAVEL_HISTORY_DICT = {
   'Poland': {'zh-tw': '波蘭', 'fr': 'Pologne'},
   'Bulgaria': {'zh-tw': '保加利亞', 'fr': 'Bulgarie'},
   'Greece': {'zh-tw': '希臘', 'fr': 'Grèce'},
+  'Russia': {'zh-tw': '俄羅斯', 'fr': 'Russie'},
   
   'Turkey': {'zh-tw': '土耳其', 'fr': 'Turquie'},
   'Qatar': {'zh-tw': '卡達', 'fr': 'Qatar'},
@@ -377,6 +378,7 @@ class MainSheet:
       'Poland': ['波蘭'], 
       'Bulgaria': ['保加利亞'], 
       'Greece': ['希臘'],
+      'Russia': ['俄羅斯'],
       
       'Turkey': ['土耳其'], 
       'Qatar': ['阿拉伯－卡達', '卡達'], 
@@ -1777,22 +1779,56 @@ class TimelineSheet:
     return dateList
   
   def getTWNEvt(self):
-    return self.data[self.n_TWNEvt].values
+    TWNEvtList = []
+    for TWNEvt in self.data[self.n_TWNEvt].values:
+      if TWNEvt == TWNEvt:
+        TWNEvt = TWNEvt.rstrip('\n')
+        TWNEvt = '\n'.join(TWNEvt.split('\n\n\n'))
+        TWNEvt = '\n'.join(TWNEvt.split('\n\n'))
+        TWNEvtList.append(TWNEvt)
+      else:
+        TWNEvtList.append(TWNEvt)
+    return TWNEvtList
   
   def getGlobalEvt(self):
-    return self.data[self.n_globalEvt].values
+    globalEvtList = []
+    for globalEvt in self.data[self.n_globalEvt].values:
+      if globalEvt == globalEvt:
+        globalEvt = globalEvt.rstrip('\n')
+        globalEvt = '\n'.join(globalEvt.split('\n\n\n'))
+        globalEvt = '\n'.join(globalEvt.split('\n\n'))
+        globalEvtList.append(globalEvt)
+      else:
+        globalEvtList.append(globalEvt)
+    return globalEvtList
   
   def getKeyEvt(self):
-    return self.data[self.n_keyEvt].values
+    keyEvtList = []
+    for keyEvt in self.data[self.n_keyEvt].values:
+      if keyEvt == keyEvt:
+        keyEvtList.append(keyEvt.rstrip('\n'))
+      else:
+        keyEvtList.append(keyEvt)
+    return keyEvtList
   
   def saveCsv_evtTimeline(self):
-    dateList = self.getDate()
-    TWNEvtList = self.getTWNEvt()
-    globalEvtList = self.getGlobalEvt()
-    keyEvtList = self.getKeyEvt()
+    dateList = []
+    TWNEvtList = []
+    globalEvtList = []
+    keyEvtList = []
+    
+    for date, TWNEvt, globalEvt, keyEvt in zip(self.getDate(), self.getTWNEvt(), self.getGlobalEvt(), self.getKeyEvt()):
+      if TWNEvt != TWNEvt and globalEvt != globalEvt and keyEvt != keyEvt:
+        continue
+      else:
+        dateList.append(date)
+        TWNEvtList.append(TWNEvt)
+        globalEvtList.append(globalEvt)
+        keyEvtList.append(keyEvt)
     
     data = {'date': dateList, 'Taiwan_event': TWNEvtList, 'global_event': globalEvtList, 'key_event': keyEvtList}
     data = pd.DataFrame(data)
+    
     name = '%sprocessed_data/event_timeline_zh-tw.csv' % DATA_PATH
     saveCsv(name, data)
     return
@@ -1817,13 +1853,13 @@ def sandbox():
   #print(sheet.printCriteria())
   #sheet.saveCsv_criteriaTimeline()
   
-  sheet = BorderSheet()
+  #sheet = BorderSheet()
   #print(sheet.getAirportBreakdown('in'))
-  sheet.saveCsv_borderStats()
+  #sheet.saveCsv_borderStats()
   
-  #sheet = TimelineSheet()
+  sheet = TimelineSheet()
   #print(sheet.saveCriteria())
-  #sheet.saveCsv_evtTimeline()
+  sheet.saveCsv_evtTimeline()
   return
 
 ###############################################################################

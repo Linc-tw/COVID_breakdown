@@ -119,16 +119,16 @@ function CBT_formatData(data) {
   var imp, IL, IU, fle;
   
   if (CBT_wrap.doCumul == 1) {
-    imp = d3.max(formattedData, function(d) {if (d.col == 'imported') return +d.height;});
-    IL = d3.max(formattedData, function(d) {if (d.col == 'linked') return +d.height;});
-    IU = d3.max(formattedData, function(d) {if (d.col == 'unlinked') return +d.height;});
-    fle = d3.max(formattedData, function(d) {if (d.col == 'fleet') return +d.height;});
+    imp = d3.max(formattedData, function (d) {if (d.col == 'imported') return +d.height;});
+    IL = d3.max(formattedData, function (d) {if (d.col == 'linked') return +d.height;});
+    IU = d3.max(formattedData, function (d) {if (d.col == 'unlinked') return +d.height;});
+    fle = d3.max(formattedData, function (d) {if (d.col == 'fleet') return +d.height;});
   }
   else {
-    imp = d3.sum(formattedData, function(d) {if (d.col == 'imported') return +d.height;});
-    IL = d3.sum(formattedData, function(d) {if (d.col == 'linked') return +d.height;});
-    IU = d3.sum(formattedData, function(d) {if (d.col == 'unlinked') return +d.height;});
-    fle = d3.sum(formattedData, function(d) {if (d.col == 'fleet') return +d.height;});
+    imp = d3.sum(formattedData, function (d) {if (d.col == 'imported') return +d.height;});
+    IL = d3.sum(formattedData, function (d) {if (d.col == 'linked') return +d.height;});
+    IU = d3.sum(formattedData, function (d) {if (d.col == 'unlinked') return +d.height;});
+    fle = d3.sum(formattedData, function (d) {if (d.col == 'fleet') return +d.height;});
   }
   var lValue = [imp, IL, IU, fle];
   
@@ -238,7 +238,7 @@ function CBT_initialize() {
     
   var xAxis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function(d, i){return CBT_wrap.xticklabel[i]});
+    .tickFormat(function (d, i) {return CBT_wrap.xticklabel[i]});
   
   CBT_wrap.svg.append('g')
     .attr('class', 'xaxis')
@@ -257,7 +257,7 @@ function CBT_initialize() {
     .tickValues(CBT_wrap.xtick)
     .tickSize(10)
     .tickSizeOuter(0)
-    .tickFormat(function(d, i){return ""});
+    .tickFormat(function (d, i) {return ""});
   
   CBT_wrap.svg.append("g")
     .attr("transform", "translate(0," + CBT_wrap.height + ")")
@@ -312,9 +312,9 @@ function CBT_initialize() {
   
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', function(d) {return color(d.col);})
-    .attr('x', function(d) {return x(d.x);})
-    .attr('y', function(d) {return y(0);})
+    .attr('fill', function (d) {return color(d.col);})
+    .attr('x', function (d) {return x(d.x);})
+    .attr('y', function (d) {return y(0);})
     .attr('width', x.bandwidth())
     .attr('height', 0)
     .on("mouseover", CBT_mouseover)
@@ -347,8 +347,8 @@ function CBT_update() {
     .data(CBT_wrap.formattedData)
     .transition()
     .duration(transDuration)
-    .attr('y', function(d) {return y(d.y1);})
-    .attr('height', function(d) {return y(d.y0)-y(d.y1);});
+    .attr('y', function (d) {return y(d.y1);})
+    .attr('height', function (d) {return y(d.y0)-y(d.y1);});
     
   //-- Color
   colorList = CBT_wrap.colorList.slice();
@@ -370,9 +370,9 @@ function CBT_update() {
     .append("text")
       .attr("class", "legend value")
       .attr("x", lPos.x)
-      .attr("y", function(d,i) {return lPos.y + i*lPos.dy})
-      .style("fill", function(d, i) {return colorList[i]})
-      .text(function(d) {return d})
+      .attr("y", function (d,i) {return lPos.y + i*lPos.dy})
+      .style("fill", function (d, i) {return colorList[i]})
+      .text(function (d) {return d})
       .attr("text-anchor", "end")
   
   //-- Legend - label
@@ -399,17 +399,17 @@ function CBT_update() {
     .append("text")
       .attr("class", "legend label")
       .attr("x", lPos.x+lPos.dx)
-      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
-      .style("fill", function(d, i) {return colorList[i]})
-      .text(function(d) {return d})
+      .attr("y", function (d, i) {return lPos.y + i*lPos.dy})
+      .style("fill", function (d, i) {return colorList[i]})
+      .text(function (d) {return d})
       .attr("text-anchor", "start")
 }
 
 CBT_wrap.doCumul = 0;
 CBT_wrap.doOnset = 0;
 
-d3.csv(CBT_wrap.dataPathList[CBT_wrap.doOnset], function(error, data) {
-  d3.csv(CBT_wrap.dataPathList[2], function(error2, data2) {
+d3.csv(CBT_wrap.dataPathList[CBT_wrap.doOnset], function (error, data) {
+  d3.csv(CBT_wrap.dataPathList[2], function (error2, data2) {
     if (error) return console.warn(error);
     if (error2) return console.warn(error2);
     
@@ -422,11 +422,11 @@ d3.csv(CBT_wrap.dataPathList[CBT_wrap.doOnset], function(error, data) {
 });
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + CBT_wrap.tag + "_doCumul']", function(event) {
+$(document).on("change", "input:radio[name='" + CBT_wrap.tag + "_doCumul']", function (event) {
   CBT_wrap.doCumul = this.value;
   dataPath = CBT_wrap.dataPathList[CBT_wrap.doOnset]
   
-  d3.csv(dataPath, function(error, data) {
+  d3.csv(dataPath, function (error, data) {
     if (error) return console.warn(error);
     
     CBT_formatData(data);
@@ -434,11 +434,11 @@ $(document).on("change", "input:radio[name='" + CBT_wrap.tag + "_doCumul']", fun
   });
 });
 
-$(document).on("change", "input:radio[name='" + CBT_wrap.tag + "_doOnset']", function(event) {
+$(document).on("change", "input:radio[name='" + CBT_wrap.tag + "_doOnset']", function (event) {
   CBT_wrap.doOnset = this.value
   dataPath = CBT_wrap.dataPathList[CBT_wrap.doOnset]
   
-  d3.csv(dataPath, function(error, data) {
+  d3.csv(dataPath, function (error, data) {
     if (error) return console.warn(error);
     
     CBT_formatData(data);
@@ -446,7 +446,7 @@ $(document).on("change", "input:radio[name='" + CBT_wrap.tag + "_doOnset']", fun
   });
 });
 
-d3.select(CBT_wrap.id + '_button_5').on('click', function(){
+d3.select(CBT_wrap.id + '_button_5').on('click', function (){
   var tag1, tag2;
   
   if (CBT_wrap.doCumul == 1) tag1 = 'cumulative';
