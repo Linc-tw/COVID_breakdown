@@ -411,9 +411,13 @@ function ET_mouseover(d) {
     .style("opacity", 0.6)
 }
 
-function ET_getTooltipPos(d) {
-  var xPos = d[0];
-  var yPos = d[1];
+function ET_getTooltipPos(pos, d) {
+  var year  = +d.substring(0, 4);
+  var month = +d.substring(5, 7);
+  var ind = 2*(year - 2019) + ~~((month-1) / 6) - 1;
+  
+  var xPos = pos[0];
+  var yPos = pos[1];
   
   var buffer = 1.25*16; //-- Margin buffer of card-body
   var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
@@ -423,7 +427,7 @@ function ET_getTooltipPos(d) {
   var yAspect = (svgDim.height - 2*buffer) / ET_wrap.totHeight;
   
   xPos = (xPos + ET_wrap.margin.left) * xAspect + buffer;
-  yPos = (yPos + ET_wrap.margin.top) * yAspect + buffer + cardHdr + button;
+  yPos = (yPos + ET_wrap.margin.top + ind*(ET_wrap.dy0+ET_wrap.cellSize*7)) * yAspect + buffer + cardHdr + button;
   
   xPos = xPos + 0;
   yPos = yPos - 0;
@@ -431,7 +435,7 @@ function ET_getTooltipPos(d) {
 }
 
 function ET_mousemove(d) {
-  var newPos = ET_getTooltipPos(d3.mouse(this));
+  var newPos = ET_getTooltipPos(d3.mouse(this), d);
   var tooltipText;
   
   if (lang == 'zh-tw')
@@ -440,7 +444,7 @@ function ET_mousemove(d) {
     tooltipText = 'Cliquez'
   else
     tooltipText = 'Click me'
-  
+    
   ET_tooltip
     .html(tooltipText)
     .style("left", newPos[0] + "px")
