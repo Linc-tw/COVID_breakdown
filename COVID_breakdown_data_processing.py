@@ -70,6 +70,7 @@ TRAVEL_HISTORY_DICT = {
   'Indonesia': {'zh-tw': '印尼', 'fr': 'Indonésie'},
   'Philippines': {'zh-tw': '菲律賓', 'fr': 'Philippines'},
   'Singapore': {'zh-tw': '新加坡', 'fr': 'Singapour'},
+  'Bangladesh': {'zh-tw': '孟加拉', 'fr': 'Bangladesh'},
   
   'USA': {'zh-tw': '美國', 'fr': 'États-Unis'},
   'Canada': {'zh-tw': '加拿大', 'fr': 'Canada'},
@@ -347,6 +348,7 @@ class MainSheet:
       'Indonesia': ['印尼'], 
       'Philippines': ['菲律賓'], 
       'Singapore': ['新加坡'], 
+      'Bangladesh': ['孟加拉'],
       
       'USA': ['美國', '加州', '紐約'], 
       'Canada': ['加拿大'], 
@@ -420,6 +422,7 @@ class MainSheet:
       travHist = ''.join(travHist.split('來台'))
       travHist = ''.join(travHist.split('轉機'))
       travHist = ''.join(travHist.split('下旬'))
+      travHist = ''.join(travHist.split('上旬'))
       travHist = travHist.lstrip(' 0123456789/-\n月及等()、')
       
       if len(travHist) > 0:
