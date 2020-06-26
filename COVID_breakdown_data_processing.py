@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.06.10                  ##
+    ##  Version 2020.06.26                  ##
     ##########################################
 
 
@@ -80,6 +80,7 @@ TRAVEL_HISTORY_DICT = {
   'Peru': {'zh-tw': '秘魯', 'fr': 'Pérou'},
   'Bolivia': {'zh-tw': '玻利維亞', 'fr': 'Bolivie'},
   'Brazil': {'zh-tw': '巴西', 'fr': 'Brésil'},
+  'Guatemala': {'zh-tw': '瓜地馬拉', 'fr': 'Guatemala'}, 
   'Latin America': {'zh-tw': '中南美洲', 'fr': 'Amérique latine'},
   
   'Europe': {'zh-tw': '歐洲', 'fr': 'Europe'},
@@ -358,6 +359,7 @@ class MainSheet:
       'Peru': ['秘魯', '祕魯'], 
       'Bolivia': ['玻利維亞'], 
       'Brazil': ['巴西'],
+      'Guatemala': ['瓜地馬拉'], 
       'Latin America': ['中南美洲'], 
       
       'Europe': ['歐洲'], 
@@ -418,7 +420,8 @@ class MainSheet:
             stock.append(key)
       
       travHist = ''.join(travHist.split('自離境前往'))
-      travHist = ''.join(travHist.split('從搭機返國'))
+      travHist = ''.join(travHist.split('從搭機'))
+      travHist = ''.join(travHist.split('返國'))
       travHist = ''.join(travHist.split('來台'))
       travHist = ''.join(travHist.split('轉機'))
       travHist = ''.join(travHist.split('下旬'))
@@ -579,7 +582,7 @@ class MainSheet:
       'toothache': ['牙痛'], 
       
       'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '倦怠', '疲憊', '無力'],
-      'soreness': ['全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉酸痛', '肌肉痠痛', '骨頭痠痛', '關節痠痛', '關節痛', '痠痛'],
+      'soreness': ['全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉酸痛', '肌肉痠痛', '骨頭痠痛', '骨頭酸', '關節痠痛', '關節痛', '痠痛'],
       
       'anosmia+ageusia': ['味覺及嗅覺喪失', '味覺及嗅覺都喪失', '嗅覺和味覺喪失', '嗅味覺異常', '味嗅覺異常'], 
       'anosmia': ['嗅覺異常症狀', '自覺嗅覺喪失', '失去嗅覺', '嗅覺不靈敏', '嗅覺喪失', '喪失嗅覺', '嗅覺遲鈍', '嗅覺異常', '無嗅覺'], 
