@@ -1,8 +1,8 @@
 label,count,label_zh,label_fr
-N_total,449,合計,Total
-N_imported,358,境外移入總數,Importés
-N_data,347,有資料案例數,Données complètes
-USA,100,美國,États-Unis
+N_total,451,合計,Total
+N_imported,360,境外移入總數,Importés
+N_data,348,有資料案例數,Données complètes
+USA,101,美國,États-Unis
 UK,83,英國,Royaume-Uni
 France,27,法國,France
 Spain,21,西班牙,Espagne
@@ -14,8 +14,8 @@ cough,165,咳嗽,toux
 fever,158,發燒,fièvre
 throatache,112,喉嚨症狀,mal de gorge
 sneezing,106,鼻腔症狀,éternuement
-fatigue,59,倦怠,fatigue
-soreness,47,痠痛,myalgie
+fatigue,60,倦怠,fatigue
+soreness,48,痠痛,myalgie
 anosmia,44,嗅覺異常,anosmie
 headache,40,頭痛,mal de tête
 diarrhea,30,腹瀉,diarrhée
