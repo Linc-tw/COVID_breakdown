@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.07.03                  ##
+    ##  Version 2020.07.15                  ##
     ##########################################
 
 
@@ -108,6 +108,7 @@ TRAVEL_HISTORY_DICT = {
   'Turkey': {'zh-tw': '土耳其', 'fr': 'Turquie'},
   'Qatar': {'zh-tw': '卡達', 'fr': 'Qatar'},
   'UAE': {'zh-tw': '阿拉伯聯合大公國', 'fr': 'EAU'},
+  'Oman': {'zh-tw': '阿曼', 'fr': 'Oman'},
   
   'Egypt': {'zh-tw': '埃及', 'fr': 'Égypte'},
   'Morocco': {'zh-tw': '摩洛哥', 'fr': 'Maroc'},
@@ -387,6 +388,7 @@ class MainSheet:
       'Turkey': ['土耳其'], 
       'Qatar': ['阿拉伯－卡達', '卡達'], 
       'UAE': ['阿拉伯－杜拜'], 
+      'Oman': ['阿曼'],
       
       'Egypt': ['埃及'], 
       'Morocco': ['摩洛哥'], 
@@ -439,13 +441,13 @@ class MainSheet:
   
   def getContinent(self):
     keyDict = {
-      'East Asia': ['China', 'Hong Kong', 'Macao', 'Japan', 'Thailand', 'Malaysia', 'Indonesia', 'Philippines', 'Singapore'],
+      'East Asia': ['China', 'Hong Kong', 'Macao', 'Japan', 'Thailand', 'Malaysia', 'Indonesia', 'Philippines', 'Singapore', 'Bangladesh'],
       'North America': ['USA', 'Canada', 'Mexico'], 
-      'South America': ['Chile', 'Argentina', 'Peru', 'Bolivia', 'Brazil', 'Latin America'], 
+      'South America': ['Chile', 'Argentina', 'Peru', 'Bolivia', 'Brazil', 'Guatemala', 'Latin America'], 
       'Europe': ['Europe', 'Ireland', 'UK', 'France', 'Portugal', 'Spain', 'Italy', 'Belgium', 'Netherlands', 'Luxemburg', 'Switzerland', 
-                 'Germany', 'Austria', 'Czechia', 'Danmark', 'Finland', 'Iceland', 'Poland', 'Bulgaria', 'Greece'],
-      'Middle East': ['Turkey', 'Qatar', 'UAE', 'Egypt'], 
-      'Africa': ['Morocco', 'Tunisia', 'South Africa'],
+                 'Germany', 'Austria', 'Czechia', 'Danmark', 'Finland', 'Iceland', 'Poland', 'Bulgaria', 'Greece', 'Russia'],
+      'Middle East': ['Turkey', 'Qatar', 'UAE', 'Egypt', 'Oman'], 
+      'Africa': ['Morocco', 'Tunisia', 'South Africa', 'Senegal'],
       'Occeania': ['Australia', 'New Zealand', 'Palau'], 
       
       'Antarctica': ['Antarctica'], 
