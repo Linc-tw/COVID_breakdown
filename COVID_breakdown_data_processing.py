@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.07.15                  ##
+    ##  Version 2020.07.20                  ##
     ##########################################
 
 
@@ -19,7 +19,7 @@ import pandas as pd
 
 
 ################################################################################
-## Parameters
+## Global variables
 
 DATA_PATH = '/home/linc/03_Codes/COVID_breakdown/'
 REF_ISO_DATE = '2020-01-11'
@@ -248,9 +248,17 @@ def adjustDateRange(data):
   return data
 
 ###############################################################################
+## Template
+
+class Template:
+  
+  def getCol(self, col):
+    return self.data[col].values
+
+###############################################################################
 ## Main sheet
 
-class MainSheet:
+class MainSheet(Template):
   
   def __init__(self, verbose=True):
     self.n_case = '案例'
@@ -291,7 +299,7 @@ class MainSheet:
   def getReportDate(self):
     reportDateList = []
     
-    for reportDate in self.data[self.n_reportDate].values:
+    for reportDate in self.getCol(self.n_reportDate):
       reportDate = reportDate.split('日')[0].split('月')
       reportDate = '2020-%02s-%02s' % (reportDate[0], reportDate[1])
       reportDateList.append(reportDate)
@@ -299,7 +307,7 @@ class MainSheet:
   
   def getAge(self):
     age = []
-    for i, a in enumerate(self.data[self.n_age].values):
+    for i, a in enumerate(self.getCol(self.n_age)):
       if a in ['1X', '2X', '3X', '4X', '5X', '6X', '7X', '8X', '9X']:
         age.append(a[0]+'0s')
       elif a in ['1XX', '10X', '11X']:
@@ -323,7 +331,7 @@ class MainSheet:
   
   def getTransmission(self):
     transList = []
-    for i, trans in enumerate(self.data[self.n_transmission].values):
+    for i, trans in enumerate(self.getCol(self.n_transmission)):
       if trans == '境外':
         transList.append('imported')
       
@@ -408,7 +416,7 @@ class MainSheet:
       'indigenous': ['無']
     }
     
-    for i, travHist in enumerate(self.data[self.n_travHist].values):
+    for i, travHist in enumerate(self.getCol(self.n_travHist)):
       if travHist != travHist: ## Is nan
         travHistList.append([])
         continue
@@ -480,7 +488,7 @@ class MainSheet:
   def getEntryDate(self):
     entryDateList = []
     
-    for i, entryDate in enumerate(self.data[self.n_entryDate].values):
+    for i, entryDate in enumerate(self.getCol(self.n_entryDate)):
       if entryDate != entryDate: ## NaN
         entryDateList.append(np.nan)
         
@@ -501,7 +509,7 @@ class MainSheet:
   def getOnsetDate(self):
     onsetDateList = []
     
-    for i, onsetDate in enumerate(self.data[self.n_onsetDate].values):
+    for i, onsetDate in enumerate(self.getCol(self.n_onsetDate)):
       if onsetDate != onsetDate: ## NaN
         onsetDateList.append(np.nan)
       
@@ -523,7 +531,7 @@ class MainSheet:
     chanList = []
     keyList_out = ['採檢']
     
-    for i, chan in enumerate(self.data[self.n_channel].values):
+    for i, chan in enumerate(self.getCol(self.n_channel)):
       if chan != chan: ## Is nan
         chanList.append(np.nan)
       
@@ -562,7 +570,7 @@ class MainSheet:
   def getSymptom(self):
     symptomList = []
     keyDict = {
-      'sneezing': ['輕微流鼻水', '打噴嚏', '流鼻水', '流鼻涕', '鼻涕倒流', '輕微鼻塞', '鼻塞', '鼻水', '鼻炎', '感冒'],
+      'sneezing': ['伴隨感冒症狀', '輕微流鼻水', '打噴嚏', '流鼻水', '流鼻涕', '鼻涕倒流', '輕微鼻塞', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['咳嗽有痰', '喉嚨有痰', '有痰', '輕微咳嗽', '咳嗽症狀', '咳嗽併痰', '咳嗽', '輕微乾咳', '乾咳', '輕咳'],
       'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨痛', '喉嚨癢', '喉嚨不適', '喉嚨乾', '咽喉不適', '喉嚨有異物感'],
       'dyspnea': ['呼吸不順', '呼吸困難', '呼吸微喘', '微喘', '呼吸喘', '氣喘', '呼吸急促', '走路會喘'],
@@ -599,7 +607,7 @@ class MainSheet:
       'asymptomatic': ['首例無症狀', '無症狀']
     }
     
-    for i, symptom in enumerate(self.data[self.n_symptom].values):
+    for i, symptom in enumerate(self.getCol(self.n_symptom)):
       if symptom != symptom: ## Is nan
         symptomList.append([])
         continue
@@ -630,7 +638,7 @@ class MainSheet:
 
   def getLink(self):
     linkList = []
-    for i, link in enumerate(self.data[self.n_link].values):
+    for i, link in enumerate(self.getCol(self.n_link)):
       if link == '未知':
         linkList.append('unlinked')
       
@@ -1099,7 +1107,7 @@ class MainSheet:
 ###############################################################################
 ## Status sheet
 
-class StatusSheet:
+class StatusSheet(Template):
 
   def __init__(self, verbose=True):
     self.n_date = '日期'
@@ -1146,12 +1154,12 @@ class StatusSheet:
       print('Loaded \"%s\"' % name)
       print('N_total = %d' % self.N_total)
     return 
-    
+  
   def getDate(self):
     dateList = []
     Y = 2020
     
-    for date in self.data[self.n_date].values:
+    for date in self.getCol(self.n_date):
       MMDD = date.split('月')
       M = int(MMDD[0])
       DD = MMDD[1].split('日')
@@ -1161,16 +1169,16 @@ class StatusSheet:
     return dateList
     
   def getCumCases(self):
-    return self.data[self.n_cumCases].values.astype(int)
+    return self.getCol(self.n_cumCases).astype(int)
     
   def getCumDeaths(self):
-    return self.data[self.n_cumDeaths].values.astype(int)
+    return self.getCol(self.n_cumDeaths).astype(int)
     
   def getCumDis(self):
-    return self.data[self.n_cumDis].values.astype(int)
+    return self.getCol(self.n_cumDis).astype(int)
     
   def getCumHosp(self):
-    return self.data[self.n_cumHosp].values.astype(int)
+    return self.getCol(self.n_cumHosp).astype(int)
     
   def saveCsv_statusEvolution(self):
     dateList      = self.getDate()
@@ -1193,7 +1201,7 @@ class StatusSheet:
 ###############################################################################
 ## Test sheet
 
-class TestSheet:
+class TestSheet(Template):
   
   def __init__(self, verbose=True):
     self.n_date = '日期'
@@ -1228,7 +1236,7 @@ class TestSheet:
   def getDate(self):
     dateList = []
     
-    for date in self.data[self.n_date].values:
+    for date in self.getCol(self.n_date):
       MD = date.split('/')
       date = '2020-%02d-%02d' % (int(MD[0]), int(MD[1]))
       dateList.append(date)
@@ -1236,7 +1244,7 @@ class TestSheet:
   
   def getFromExtended(self):
     fromExtList = []
-    for fromExt in self.data[self.n_fromExtended].values:
+    for fromExt in self.getCol(self.n_fromExtended):
       if fromExt != fromExt: ## Is nan
         fromExtList.append(0)
         continue
@@ -1252,7 +1260,7 @@ class TestSheet:
 
   def getFromQT(self):
     fromQTList = []
-    for fromQT in self.data[self.n_fromQT].values:
+    for fromQT in self.getCol(self.n_fromQT):
       if fromQT != fromQT: ## Is nan
         fromQTList.append(0)
         continue
@@ -1268,7 +1276,7 @@ class TestSheet:
 
   def getFromClinicalDef(self):
     clinicalDefList = []
-    for clinicalDef in self.data[self.n_fromClinicalDef].values:
+    for clinicalDef in self.getCol(self.n_fromClinicalDef):
       if clinicalDef != clinicalDef: ## Is nan
         clinicalDefList.append(np.nan)
         continue
@@ -1285,7 +1293,7 @@ class TestSheet:
   def getCriteria(self):
     criteriaList = []
     
-    for criteria in self.data[self.n_criteria].values:
+    for criteria in self.getCol(self.n_criteria):
       criteriaList.append(criteria)
     return criteriaList
   
@@ -1463,7 +1471,7 @@ class TestSheet:
 ###############################################################################
 ## Border sheet
 
-class BorderSheet:
+class BorderSheet(Template):
 
   def __init__(self, verbose=True):
     self.n_date = '日期 '
@@ -1610,11 +1618,11 @@ class BorderSheet:
     return 
     
   def getDate(self):
-    dateList = ['%s-%s-%s' % (date[:4], date[4:6], date[6:8]) for date in self.data[self.n_date].values]
+    dateList = ['%s-%s-%s' % (date[:4], date[4:6], date[6:8]) for date in self.getCol(self.n_date)]
     return dateList
     
   def getNumbers(self, tag):
-    nbList = [int(out.replace(',', '')) for out in self.data[self.tagDict[tag]].values]
+    nbList = [int(out.replace(',', '')) for out in self.getCol(self.tagDict[tag])]
     return nbList
     
   def getIn(self):
@@ -1750,7 +1758,7 @@ class BorderSheet:
 ###############################################################################
 ## Timeline sheet
 
-class TimelineSheet:
+class TimelineSheet(Template):
   
   def __init__(self, verbose=True):
     self.n_date = '時間'
@@ -1775,7 +1783,7 @@ class TimelineSheet:
   def getDate(self):
     dateList = []
     
-    for date in self.data[self.n_date].values:
+    for date in self.getCol(self.n_date):
       YMDD = date.split('年')
       Y = int(YMDD[0])
       MDD = YMDD[1].split('月')
@@ -1788,7 +1796,7 @@ class TimelineSheet:
   
   def getTWNEvt(self):
     TWNEvtList = []
-    for TWNEvt in self.data[self.n_TWNEvt].values:
+    for TWNEvt in self.getCol(self.n_TWNEvt):
       if TWNEvt == TWNEvt:
         TWNEvt = TWNEvt.rstrip('\n')
         TWNEvt = '\n'.join(TWNEvt.split('\n\n\n'))
@@ -1800,7 +1808,7 @@ class TimelineSheet:
   
   def getGlobalEvt(self):
     globalEvtList = []
-    for globalEvt in self.data[self.n_globalEvt].values:
+    for globalEvt in self.(self.n_globalEvt):
       if globalEvt == globalEvt:
         globalEvt = globalEvt.rstrip('\n')
         globalEvt = '\n'.join(globalEvt.split('\n\n\n'))
@@ -1812,7 +1820,7 @@ class TimelineSheet:
   
   def getKeyEvt(self):
     keyEvtList = []
-    for keyEvt in self.data[self.n_keyEvt].values:
+    for keyEvt in self.(self.n_keyEvt):
       if keyEvt == keyEvt:
         keyEvtList.append(keyEvt.rstrip('\n'))
       else:
