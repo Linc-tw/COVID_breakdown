@@ -1808,7 +1808,7 @@ class TimelineSheet(Template):
   
   def getGlobalEvt(self):
     globalEvtList = []
-    for globalEvt in self.(self.n_globalEvt):
+    for globalEvt in self.getCol(self.n_globalEvt):
       if globalEvt == globalEvt:
         globalEvt = globalEvt.rstrip('\n')
         globalEvt = '\n'.join(globalEvt.split('\n\n\n'))
@@ -1820,7 +1820,7 @@ class TimelineSheet(Template):
   
   def getKeyEvt(self):
     keyEvtList = []
-    for keyEvt in self.(self.n_keyEvt):
+    for keyEvt in self.getCol(self.n_keyEvt):
       if keyEvt == keyEvt:
         keyEvtList.append(keyEvt.rstrip('\n'))
       else:
