@@ -53,7 +53,7 @@ function CBD_makeCanvas() {
 
 function CBD_formatData(data) {
   //-- Settings for xticklabels
-  var xlabel_path = 10;
+  var xlabel_path = 15;
   var q = data.length % xlabel_path;
 //   var rList = [3, 3, 4, 1, 1, 2, 2];
   var rList = [4, 5, 5, 1, 1, 2, 2, 3, 3, 4];

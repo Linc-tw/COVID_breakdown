@@ -1012,8 +1012,8 @@ class MainSheet(Template):
     N_imported, N_data, travHistHist, symptomHist, corrMat, countMat = self.makeTravHistSymptomCorr3()
     N_min = N_data * 0.033
     
-    N_trav = sum([1 if travHist[1] > N_min else 0 for travHist in travHistHist])
-    N_symp = sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
+    N_trav = 9 #sum([1 if travHist[1] > N_min else 0 for travHist in travHistHist])
+    N_symp = 14 #sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
     
     corrMat = corrMat[:N_trav, :N_symp]
     countMat = countMat[:N_trav, :N_symp]
@@ -1057,7 +1057,7 @@ class MainSheet(Template):
     N_min = N_data * 0.033
     
     N_age  = corrMat.shape[0]
-    N_symp = sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
+    N_symp = 14 #sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
     
     corrMat = corrMat[:N_age, :N_symp]
     countMat = countMat[:N_age, :N_symp]
