@@ -1,8 +1,8 @@
 label,count,label_zh,label_fr
-N_total,458,合計,Total
-N_imported,367,境外移入總數,Importés
-N_data,356,有資料案例數,Données complètes
-USA,101,美國,États-Unis
+N_total,462,合計,Total
+N_imported,371,境外移入總數,Importés
+N_data,360,有資料案例數,Données complètes
+USA,102,美國,États-Unis
 UK,83,英國,Royaume-Uni
 France,27,法國,France
 Spain,21,西班牙,Espagne
@@ -11,17 +11,17 @@ Czechia,15,捷克,Tchéquie
 Turkey,13,土耳其,Turquie
 Egypt,12,埃及,Égypte
 Austria,12,奧地利,Autriche
-cough,168,咳嗽,toux
+cough,170,咳嗽,toux
 fever,162,發燒,fièvre
-throatache,114,喉嚨症狀,mal de gorge
-sneezing,108,鼻腔症狀,éternuement
-fatigue,62,倦怠,fatigue
-soreness,48,痠痛,myalgie
-anosmia,48,嗅覺異常,anosmie
-headache,41,頭痛,mal de tête
+throatache,116,喉嚨症狀,mal de gorge
+sneezing,111,鼻腔症狀,éternuement
+fatigue,63,倦怠,fatigue
+soreness,49,痠痛,myalgie
+anosmia,49,嗅覺異常,anosmie
+headache,42,頭痛,mal de tête
 diarrhea,31,腹瀉,diarrhée
-ageusia,28,味覺異常,agueusie
+ageusia,29,味覺異常,agueusie
 pneumonia,24,肺炎,pneumonie
 chest pain,20,胸痛,mal à la poitrine
-dyspnea,17,呼吸困難,dyspnée
+dyspnea,18,呼吸困難,dyspnée
 asymptomatic,15,無症狀,asymptomatique

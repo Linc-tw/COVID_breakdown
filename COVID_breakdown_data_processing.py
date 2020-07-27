@@ -115,6 +115,7 @@ TRAVEL_HISTORY_DICT = {
   'Tunisia': {'zh-tw': '突尼西亞', 'fr': 'Tunisie'},
   'South Africa': {'zh-tw': '南非', 'fr': 'Afrique du Sud'},
   'Senegal': {'zh-tw': '塞內加爾', 'fr': 'Sénégal'},
+  'Lesotho': {'zh-tw': '賴索托', 'fr': 'Lesotho'},
   
   'Australia': {'zh-tw': '澳洲', 'fr': 'Australie'},
   'New Zealand': {'zh-tw': '紐西蘭', 'fr': 'Nouvelle-Zélande'},
@@ -403,6 +404,7 @@ class MainSheet(Template):
       'Tunisia': ['突尼西亞'], 
       'South Africa': ['南非'], 
       'Senegal': ['塞內加爾'],
+      'Lesotho': ['賴索托'],
       
       'Australia': ['澳大利亞', '澳洲'], 
       'New Zealand': ['紐西蘭'], 
@@ -572,7 +574,7 @@ class MainSheet(Template):
     keyDict = {
       'sneezing': ['伴隨感冒症狀', '輕微流鼻水', '打噴嚏', '流鼻水', '流鼻涕', '鼻涕倒流', '輕微鼻塞', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['咳嗽有痰', '喉嚨有痰', '有痰', '輕微咳嗽', '咳嗽症狀', '咳嗽併痰', '咳嗽', '輕微乾咳', '乾咳', '輕咳'],
-      'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨痛', '喉嚨癢', '喉嚨不適', '喉嚨乾', '咽喉不適', '喉嚨有異物感'],
+      'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨痛', '喉嚨癢', '喉嚨不適', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨'],
       'dyspnea': ['呼吸不順', '呼吸困難', '呼吸微喘', '微喘', '呼吸喘', '氣喘', '呼吸急促', '走路會喘'],
       'pneumonia': ['X光顯示肺炎', 'X光片顯示肺炎', 'X光顯示肺部輕微浸潤', '診斷為肺炎', '肺炎'], 
       
