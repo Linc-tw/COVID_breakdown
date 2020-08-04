@@ -10,7 +10,7 @@ el.classList.add("active");
 
 
 //-- Glocal settings
-var cList = ['#3366BB', '#CC6677', '#55BB44', '#DDAA77', '#AA55AA', '#44AA99'];
+var cList = ['#3366BB', '#CC6677', '#55BB44', '#DDAA77', '#AA55AA', '#44AA99', '#222288', '#660022'];
 var wrap = {};
 
 

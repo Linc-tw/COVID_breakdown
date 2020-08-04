@@ -53,7 +53,9 @@ function SE_formatData(data) {
   //-- Settings for xticklabels
   var xlabel_path = 15;
   var q = data.length % xlabel_path;
-  var rList = [4, 5, 5, 1, 1, 2, 2, 3, 3, 4];
+//   var rList = [3, 3, 4, 1, 1, 2, 2];
+//   var rList = [4, 5, 5, 1, 1, 2, 2, 3, 3, 4];
+  var rList = [5, 5, 6, 6, 7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4];
   var r = rList[q];
   var xtick = [];
   var xticklabel = [];
@@ -100,7 +102,7 @@ function SE_formatData(data) {
   
   //-- Calculate ymax
   ymax *= 1.2;
-  var ypath = 100;
+  var ypath = 150;
   
   var ytick = [];
   for (i=0; i<ymax; i+=ypath) ytick.push(i)

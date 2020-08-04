@@ -64,7 +64,7 @@ function DBT_formatData(data) {
   var diffList = [];
   var i, j, x, y, height, block;
   
-  for (i=0; i<data.length; i++) {
+  for (i=0; i<31; i++) { //Was data.length; hard-coded now
     x = data[i]["difference"];
     y = data[i][colTag];
     diffList.push(x);

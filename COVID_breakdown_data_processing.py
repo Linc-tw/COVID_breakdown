@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.07.20                  ##
+    ##  Version 2020.08.04                  ##
     ##########################################
 
 
@@ -342,6 +342,9 @@ class MainSheet(Template):
       elif trans == '本土':
         transList.append('indigenous')
       
+      elif trans == '不明':
+        transList.append('imported') #WARNING
+      
       else:
         print('Transmission, Case %d, %s' % (i+1, trans))
         transList.append(np.nan)
@@ -438,6 +441,7 @@ class MainSheet(Template):
       travHist = ''.join(travHist.split('轉機'))
       travHist = ''.join(travHist.split('下旬'))
       travHist = ''.join(travHist.split('上旬'))
+      travHist = ''.join(travHist.split('台灣'))
       travHist = travHist.lstrip(' 0123456789/-\n月及等()、')
       
       if len(travHist) > 0:
@@ -515,7 +519,7 @@ class MainSheet(Template):
       if onsetDate != onsetDate: ## NaN
         onsetDateList.append(np.nan)
       
-      elif onsetDate in ['2/18-25', 'x']:
+      elif onsetDate in ['2/18-25', 'x', 'X']:
         onsetDateList.append(np.nan)
         
       else:
@@ -546,23 +550,20 @@ class MainSheet(Template):
       elif '檢疫' in chan:
         chanList.append('quarantine')
         
-      elif '隔離' in chan:
+      elif '隔離' in chan or '接觸者檢查' in chan:
         chanList.append('isolation')
         
-      elif '接觸者檢查' in chan:
-        chanList.append('isolation')
-        
-      elif '自主健康管理' in chan:
+      elif '自主健康管理' in chan or '加強自主管理' in chan:
         chanList.append('monitoring')
         
-      elif '加強自主管理' in chan:
-        chanList.append('monitoring')
-        
-      elif '自行就醫' in chan:
+      elif '自行就醫' in chan or '自主就醫' in chan:
         chanList.append('hospital')
         
-      elif '自主就醫' in chan:
-        chanList.append('hospital')
+      elif '自費篩檢' in chan:
+        chanList.append('on demand')
+        
+      elif '香港檢驗' in chan:
+        chanList.append('overseas')
         
       else:
         print('Channel, Case %d, %s' % (i+1, chan))
@@ -578,7 +579,7 @@ class MainSheet(Template):
       'dyspnea': ['呼吸不順', '呼吸困難', '呼吸微喘', '微喘', '呼吸喘', '氣喘', '呼吸急促', '走路會喘'],
       'pneumonia': ['X光顯示肺炎', 'X光片顯示肺炎', 'X光顯示肺部輕微浸潤', '診斷為肺炎', '肺炎'], 
       
-      'fever': ['微燒(37.5度)', '體溫偏高(37.4度)', '發燒(耳溫量測37.7度)', '微燒', '輕微發燒', '自覺有發燒', '間歇性發燒', '體溫偏高', '自覺發熱', '身體悶熱不適', '發燒', '發熱'],
+      'fever': ['微燒(37.5度)', '體溫偏高(37.4度)', '發燒(耳溫量測37.7度)', '微燒', '輕微發燒', '自覺有發燒', '間歇性發燒', '體溫偏高', '自覺發熱', '身體悶熱不適', '發燒', '發熱', '盜汗'],
       'chills': ['畏寒', '冒冷汗', '忽冷忽熱症狀', '發冷', '寒顫'], 
       
       'nausea': ['噁心'],
@@ -593,7 +594,7 @@ class MainSheet(Template):
       'backache': ['背痛'], 
       'toothache': ['牙痛'], 
       
-      'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '倦怠', '疲憊', '無力'],
+      'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '走路喘', '倦怠', '疲憊', '無力'],
       'soreness': ['全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉酸痛', '肌肉痠痛', '骨頭痠痛', '骨頭酸', '關節痠痛', '關節痛', '痠痛'],
       
       'anosmia+ageusia': ['味覺及嗅覺喪失', '味覺及嗅覺都喪失', '嗅覺和味覺喪失', '嗅味覺異常', '味嗅覺異常'], 
@@ -900,12 +901,16 @@ class MainSheet(Template):
     iso_r      = np.zeros(nbDays, dtype=int)
     monitor_r  = np.zeros(nbDays, dtype=int)
     hospital_r = np.zeros(nbDays, dtype=int)
+    demand_r   = np.zeros(nbDays, dtype=int)
+    overseas_r = np.zeros(nbDays, dtype=int)
     noData_r   = np.zeros(nbDays, dtype=int)
     airport_o  = np.zeros(nbDays, dtype=int)
     QT_o       = np.zeros(nbDays, dtype=int)
     iso_o      = np.zeros(nbDays, dtype=int)
     monitor_o  = np.zeros(nbDays, dtype=int)
     hospital_o = np.zeros(nbDays, dtype=int)
+    demand_o   = np.zeros(nbDays, dtype=int)
+    overseas_o = np.zeros(nbDays, dtype=int)
     noData_o   = np.zeros(nbDays, dtype=int)
     
     for reportDate, onsetDate, chan in zip(reportDateList, onsetDateList, chanList):
@@ -924,6 +929,10 @@ class MainSheet(Template):
         monitor_r[ind_r] += 1
       elif chan == 'hospital':
         hospital_r[ind_r] += 1
+      elif chan == 'on demand':
+        demand_r[ind_r] += 1
+      elif chan == 'overseas':
+        overseas_r[ind_r] += 1
       elif chan != chan: ## Is nan
         noData_r[ind_r] += 1
       
@@ -943,12 +952,18 @@ class MainSheet(Template):
           monitor_o[ind_o] += 1
         elif chan == 'hospital':
           hospital_o[ind_o] += 1
+        elif chan == 'on demand':
+          demand_o[ind_o] += 1
+        elif chan == 'overseas':
+          overseas_o[ind_o] += 1
         elif chan != chan: ## Is nan
-          noData_o[ind_r] += 1
+          noData_o[ind_o] += 1
     
-    data_r = {'date': date, 'no_data': noData_r, 'hospital': hospital_r, 'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': QT_r, 'airport': airport_r}
+    data_r = {'date': date, 'no_data': noData_r, 'overseas': overseas_r, 'on_demand': demand_r, 'hospital': hospital_r, 
+              'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': QT_r, 'airport': airport_r}
     data_r = pd.DataFrame(data_r)
-    data_o = {'date': date, 'no_data': noData_o, 'hospital': hospital_o, 'monitoring': monitor_o, 'isolation': iso_o, 'quarantine': QT_o, 'airport': airport_o}
+    data_o = {'date': date, 'no_data': noData_o, 'overseas': overseas_o, 'on_demand': demand_o, 'hospital': hospital_o, 
+              'monitoring': monitor_o, 'isolation': iso_o, 'quarantine': QT_o, 'airport': airport_o}
     data_o = pd.DataFrame(data_o)
     
     name = '%sprocessed_data/case_by_detection_by_report_day.csv' % DATA_PATH
@@ -1450,6 +1465,11 @@ class TestSheet(Template):
         'en': 'Diarrhea',
         'fr': 'Diarrhée',
         'zh-tw': '腹瀉'
+      },
+      '2020-07-26': {
+        'en': 'Philippines all passengers',
+        'fr': 'Philippines tous les passagers',
+        'zh-tw': '菲律賓所有旅客'
       }
     }
     

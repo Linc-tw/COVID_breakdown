@@ -56,7 +56,8 @@ function CBT_formatData(data) {
   var xlabel_path = 15;
   var q = data.length % xlabel_path;
 //   var rList = [3, 3, 4, 1, 1, 2, 2];
-  var rList = [4, 5, 5, 1, 1, 2, 2, 3, 3, 4];
+//   var rList = [4, 5, 5, 1, 1, 2, 2, 3, 3, 4];
+  var rList = [5, 5, 6, 6, 7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4];
   var r = rList[q];
   var xtick = [];
   var xticklabel = [];
@@ -109,7 +110,7 @@ function CBT_formatData(data) {
   //-- Calculate ymax
   ymax *= 1.2;
   var ypath;
-  if (CBT_wrap.doCumul == 1) ypath = 100;
+  if (CBT_wrap.doCumul == 1) ypath = 150;
   else                       ypath = 5;
   
   var ytick = [];

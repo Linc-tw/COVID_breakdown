@@ -56,7 +56,8 @@ function CBD_formatData(data) {
   var xlabel_path = 15;
   var q = data.length % xlabel_path;
 //   var rList = [3, 3, 4, 1, 1, 2, 2];
-  var rList = [4, 5, 5, 1, 1, 2, 2, 3, 3, 4];
+//   var rList = [4, 5, 5, 1, 1, 2, 2, 3, 3, 4];
+  var rList = [5, 5, 6, 6, 7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4];
   var r = rList[q];
   var xtick = [];
   var xticklabel = [];
@@ -90,6 +91,8 @@ function CBD_formatData(data) {
         'h4': +data[i][colTagList[nbCol-4]],
         'h5': +data[i][colTagList[nbCol-5]],
         'h6': +data[i][colTagList[nbCol-6]],
+        'h7': +data[i][colTagList[nbCol-7]],
+        'h8': +data[i][colTagList[nbCol-8]],
         'col': colTagList[j]
       };
         
@@ -111,7 +114,7 @@ function CBD_formatData(data) {
   //-- Calculate ymax
   ymax *= 1.2;
   var ypath;
-  if (CBD_wrap.doCumul == 1) ypath = 100; //Math.floor(ymax / 5);
+  if (CBD_wrap.doCumul == 1) ypath = 150; //Math.floor(ymax / 5);
   else                       ypath = 5;
   
   var ytick = [];
@@ -125,6 +128,8 @@ function CBD_formatData(data) {
     iso = d3.max(formattedData, function(d) {if (d.col == 'isolation') return +d.height;});
     moni = d3.max(formattedData, function(d) {if (d.col == 'monitoring') return +d.height;});
     hosp = d3.max(formattedData, function(d) {if (d.col == 'hospital') return +d.height;});
+    demand = d3.max(formattedData, function(d) {if (d.col == 'on_demand') return +d.height;});
+    over = d3.max(formattedData, function(d) {if (d.col == 'overseas') return +d.height;});
     noData = d3.max(formattedData, function(d) {if (d.col == 'no_data') return +d.height;});
   }
   else {
@@ -133,9 +138,11 @@ function CBD_formatData(data) {
     iso = d3.sum(formattedData, function(d) {if (d.col == 'isolation') return +d.height;});
     moni = d3.sum(formattedData, function(d) {if (d.col == 'monitoring') return +d.height;});
     hosp = d3.sum(formattedData, function(d) {if (d.col == 'hospital') return +d.height;});
+    demand = d3.sum(formattedData, function(d) {if (d.col == 'on_demand') return +d.height;});
+    over = d3.sum(formattedData, function(d) {if (d.col == 'overseas') return +d.height;});
     noData = d3.sum(formattedData, function(d) {if (d.col == 'no_data') return +d.height;});
   }
-  var lValue = [air, QT, iso, moni, hosp, noData];
+  var lValue = [air, QT, iso, moni, hosp, demand, over, noData];
   
   CBD_wrap.formattedData = formattedData;
   CBD_wrap.dateList = dateList;
@@ -305,7 +312,7 @@ function CBD_initialize() {
     
   //-- Color
   var colorList = cList.slice(0, CBD_wrap.nbCol-1);
-  colorList.push('#99cccc')
+  colorList.push('#ccaaaa')
   var colTagList = CBD_wrap.colTagList.slice().reverse();
   var color = d3.scaleOrdinal()
     .domain(colTagList)
@@ -362,7 +369,7 @@ function CBD_update() {
   if (CBD_wrap.doOnset == 1) colorList.splice(CBD_wrap.nbCol, 0, '#999999');
   
   //-- Legend - value
-  var lPos = {x: 70, y: 40, dx: 12, dy: 30};
+  var lPos = {x: 70, y: 40, dx: 12, dy: 30, x1: 180};
   var lValue = CBD_wrap.lValue.slice();
   var sum = lValue.reduce((a, b) => a + b, 0);
   if (CBD_wrap.doOnset == 1) lValue.push(CBD_wrap.overallTot-sum);
@@ -375,8 +382,8 @@ function CBD_update() {
     .enter()
     .append("text")
       .attr("class", "legend value")
-      .attr("x", lPos.x)
-      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
+      .attr("x", function(d, i) {return lPos.x + Math.floor(i/7)*lPos.x1;})
+      .attr("y", function(d, i) {return lPos.y + (i%7)*lPos.dy;})
       .style("fill", function(d, i) {return colorList[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "end")
@@ -392,7 +399,7 @@ function CBD_update() {
     lLabel_plus = "Sans date début sympt.";
   }
   else {
-    lLabel = ["Airports", "Quarantine", "Isolation", "Monitoring", "Hospitals", 'Not announced', 'Total'];
+    lLabel = ["Airports", "Quarantine", "Isolation", "Monitoring", "Hospitals", 'On demand', 'Overseas', 'Not announced', 'Total'];
     lLabel_plus = 'No onset date';
   }
   if (CBD_wrap.doOnset == 1) lLabel.splice(CBD_wrap.nbCol, 0, lLabel_plus);
@@ -404,8 +411,8 @@ function CBD_update() {
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", lPos.x+lPos.dx)
-      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
+      .attr("x", function(d, i) {return lPos.x + lPos.dx + Math.floor(i/7)*lPos.x1;})
+      .attr("y", function(d, i) {return lPos.y + (i%7)*lPos.dy;})
       .style("fill", function(d, i) {return colorList[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "start")

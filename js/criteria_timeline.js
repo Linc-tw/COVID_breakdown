@@ -175,6 +175,7 @@ function CT_initialize() {
       0, 
       0, 
       0, 
+      0, 
       0
     ];
   }
@@ -187,6 +188,7 @@ function CT_initialize() {
           380, 
       0, 
           380, 120, 
+      0, 
       0, 
       0, 
       0, 
@@ -209,10 +211,11 @@ function CT_initialize() {
       0, 
       0, 
       0, 
+      0, 
       0
     ];
   }
-  var yList_t = [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,  0, 0, 0, 0, 0,  0, 0, 0];
+  var yList_t = [0,0,0,0,0,  0,0,0,0,0,  0,0,0,0,0,  0,0,0,0];
   var x0_t = 130;
   var dx_t = 20;
   
@@ -345,6 +348,7 @@ function CT_initialize() {
       0, 
       0, 
       0, 
+      0, 
       0
     ];
     yList_c = [
@@ -362,6 +366,7 @@ function CT_initialize() {
       15, 
       10, 
       5, 
+      0, 
       0
     ];
   }
@@ -379,6 +384,7 @@ function CT_initialize() {
       0, 
       0, 
       0, 
+      0, 
       0
     ];
     yList_c = [
@@ -391,8 +397,9 @@ function CT_initialize() {
           -20, 
       -25, 
           -5, 55, 
-      -20, 
-      5, 
+      -15, 
+      10, 
+      20, 
       15, 
       10, 
       5, 
@@ -413,6 +420,7 @@ function CT_initialize() {
       0, 
       0, 
       0, 
+      0, 
       0
     ];
     yList_c = [
@@ -425,7 +433,8 @@ function CT_initialize() {
           -20, 
       -25, 
           -15, 25, 
-      10, 
+      15, 
+      25, 
       20, 
       15, 
       10, 
@@ -484,9 +493,9 @@ function CT_update() {
   var i, activeList;
   
   if (CT_wrap.doFull == 0)
-    activeList = [1,0,0,1,0,  0,1,1,0,1,  0,0,1,1,1,  1,1,1];
+    activeList = [1,0,0,1,0,  0,1,1,0,1,  0,0,1,1,1,  0,1,1,1];
   else if (CT_wrap.doFull == 1)
-    activeList = [1,1,1,1,1,  1,1,1,1,1,  1,1,1,1,1,  1,1,1];
+    activeList = [1,1,1,1,1,  1,1,1,1,1,  1,1,1,1,1,  1,1,1,1];
   
   //-- Custom
   else {
