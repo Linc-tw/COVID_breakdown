@@ -369,7 +369,13 @@ function CBD_update() {
   if (CBD_wrap.doOnset == 1) colorList.splice(CBD_wrap.nbCol, 0, '#999999');
   
   //-- Legend - value
-  var lPos = {x: 70, y: 40, dx: 12, dy: 30, x1: 180};
+  var lPos;
+  if (lang == 'zh-tw') {
+    lPos = {x: 70, y: 40, dx: 12, dy: 30, x1: 220};
+  }
+  else {
+    lPos = {x: 70, y: 40, dx: 12, dy: 30, x1: 190};
+  }
   var lValue = CBD_wrap.lValue.slice();
   var sum = lValue.reduce((a, b) => a + b, 0);
   if (CBD_wrap.doOnset == 1) lValue.push(CBD_wrap.overallTot-sum);
@@ -391,11 +397,11 @@ function CBD_update() {
   //-- Legend - label
   var lLabel, lLabel_plus;
   if (lang == 'zh-tw') {
-    lLabel = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自行就醫', '無檢驗管道資料', '合計'];
+    lLabel = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自行就醫', '自費篩檢', '外國檢驗', '無檢驗管道資料', '合計'];
     lLabel_plus = '無發病日資料';
   }
   else if (lang == 'fr') {
-    lLabel = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', 'Pas annoncés', 'Total'];
+    lLabel = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', 'Sur demande', "À l'étranger", 'Pas annoncés', 'Total'];
     lLabel_plus = "Sans date début sympt.";
   }
   else {
