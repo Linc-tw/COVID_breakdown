@@ -1,9 +1,9 @@
 label,count,label_zh,label_fr
-N_total,485,合計,Total
-N_data,468,有資料案例數,Données complètes
+N_total,486,合計,Total
+N_data,469,有資料案例數,Données complètes
 80s,3,80-89歲,80aine
 70s,15,70-79歲,70aine
-60s,47,60-69歲,60aine
+60s,48,60-69歲,60aine
 50s,57,50-59歲,50aine
 40s,46,40-49歲,40aine
 30s,103,30-39歲,30aine
@@ -11,7 +11,7 @@ N_data,468,有資料案例數,Données complètes
 10s,21,10-19歲,10aine
 0s,4,<10歲,< 10 ans
 cough,219,咳嗽,toux
-fever,207,發燒,fièvre
+fever,208,發燒,fièvre
 throatache,143,喉嚨症狀,mal de gorge
 sneezing,137,鼻腔症狀,éternuement
 fatigue,77,倦怠,fatigue
