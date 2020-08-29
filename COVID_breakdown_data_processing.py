@@ -589,7 +589,7 @@ class MainSheet(Template):
       'headache': ['輕度頭痛', '頭痛', '頭暈', '頭脹'],
       'eyes sore': ['結膜充血', '後眼窩痛', '眼睛癢', '眼睛痛'], 
       'chest pain+backache': ['胸背痛'], 
-      'chest pain': ['胸痛', '輕微胸悶', '胸悶'],
+      'chest pain': ['呼吸時胸痛', '胸痛', '輕微胸悶', '胸悶'],
       'stomachache': ['腹悶痛', '胃痛', '腹痛', '胃脹', '胃部不適', '肚子不適'],
       'backache': ['背痛'], 
       'toothache': ['牙痛'], 
