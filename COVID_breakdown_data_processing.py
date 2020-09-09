@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.08.17                  ##
+    ##  Version 2020.09.09                  ##
     ##########################################
 
 
@@ -71,6 +71,7 @@ TRAVEL_HISTORY_DICT = {
   'Philippines': {'zh-tw': '菲律賓', 'fr': 'Philippines'},
   'Singapore': {'zh-tw': '新加坡', 'fr': 'Singapour'},
   'Bangladesh': {'zh-tw': '孟加拉', 'fr': 'Bangladesh'},
+  'Nepal': {'zh-tw': '尼泊爾', 'fr': 'Népal'},
   
   'USA': {'zh-tw': '美國', 'fr': 'États-Unis'},
   'Canada': {'zh-tw': '加拿大', 'fr': 'Canada'},
@@ -363,6 +364,7 @@ class MainSheet(Template):
       'Philippines': ['菲律賓'], 
       'Singapore': ['新加坡'], 
       'Bangladesh': ['孟加拉'],
+      'Nepal': ['尼泊爾'],
       
       'USA': ['美國', '加州', '紐約'], 
       'Canada': ['加拿大'], 
