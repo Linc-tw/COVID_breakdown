@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.09.09                  ##
+    ##  Version 2020.09.11                  ##
     ##########################################
 
 
@@ -609,7 +609,7 @@ class MainSheet(Template):
       'arrhythmia': ['心律不整'],
       
       'symptomatic': ['有症狀', '出現症狀', '身體不適'],
-      'asymptomatic': ['首例無症狀', '無症狀']
+      'asymptomatic': ['首例無症狀', '無症狀', 'x']
     }
     
     for i, symptom in enumerate(self.getCol(self.n_symptom)):

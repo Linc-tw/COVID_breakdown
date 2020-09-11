@@ -53,11 +53,11 @@ function BS_makeCanvas() {
 
 function BS_formatData(data) {
   //-- Settings for xticklabels
-  var xlabel_path = 15;
+  var xlabel_path = 21;
   var q = data.length % xlabel_path;
 //   var rList = [3, 3, 4, 1, 1, 2, 2];
-//   var rList = [4, 5, 5, 1, 1, 2, 2, 3, 3, 4];
-  var rList = [5, 5, 6, 6, 7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4];
+//   var rList = [3, 4, 4, 1, 1, 2, 2, 3];
+  var rList = [6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6];
   var r = rList[q];
   var xtick = [];
   var xticklabel = [];

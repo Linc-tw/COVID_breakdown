@@ -784,17 +784,17 @@ function ET_update() {
   if (lang == 'zh-tw') monthList = [
     ['', '', '', '', '', '12月'],
     ['1月', '2月', '3月', '4月', '5月', '6月'],
-    ['7月', '8月', '', '', '', '']
+    ['7月', '8月', '9月', '', '', '']
   ];
   else if (lang == 'fr') monthList = [
     ['', '', '', '', '', 'déc'],
     ['janv', 'févr', 'mars', 'avr', 'mai', 'juin'],
-    ['juil', 'août', '', '', '', '']
+    ['juil', 'août', 'sept', '', '', '']
   ];
   else monthList = [
     ['', '', '', '', '', 'Dec'],
     ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    ['Jul', 'Aug', '', '', '', '']
+    ['Jul', 'Aug', 'Sep', '', '', '']
   ];
   var dx1 = ET_wrap.cellSize * 4.417; //-- 53 / 12
   

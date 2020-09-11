@@ -53,11 +53,11 @@ function CBT_makeCanvas() {
 
 function CBT_formatData(data) {
   //-- Settings for xticklabels
-  var xlabel_path = 15;
+  var xlabel_path = 21;
   var q = data.length % xlabel_path;
 //   var rList = [3, 3, 4, 1, 1, 2, 2];
-//   var rList = [4, 5, 5, 1, 1, 2, 2, 3, 3, 4];
-  var rList = [5, 5, 6, 6, 7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4];
+//   var rList = [3, 4, 4, 1, 1, 2, 2, 3];
+  var rList = [6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6];
   var r = rList[q];
   var xtick = [];
   var xticklabel = [];
@@ -358,6 +358,11 @@ function CBT_update() {
   
   //-- Legend - value
   var lPos = {x: 70, y: 45, dx: 12, dy: 30};
+  if (CBT_wrap.doCumul == 0) {
+    if (lang == 'zh-tw') lPos.x = 530;
+    else if (lang == 'fr') lPos.x = 480;
+    else lPos.x = 410;
+  }
   var lValue = CBT_wrap.lValue.slice();
   var sum = lValue.reduce((a, b) => a + b, 0);
   if (CBT_wrap.doOnset == 1) lValue.push(CBT_wrap.overallTot-sum);
@@ -371,7 +376,7 @@ function CBT_update() {
     .append("text")
       .attr("class", "legend value")
       .attr("x", lPos.x)
-      .attr("y", function (d,i) {return lPos.y + i*lPos.dy})
+      .attr("y", function (d, i) {return lPos.y + i*lPos.dy})
       .style("fill", function (d, i) {return colorList[i]})
       .text(function (d) {return d})
       .attr("text-anchor", "end")

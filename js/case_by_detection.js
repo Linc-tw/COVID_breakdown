@@ -53,11 +53,11 @@ function CBD_makeCanvas() {
 
 function CBD_formatData(data) {
   //-- Settings for xticklabels
-  var xlabel_path = 15;
+  var xlabel_path = 21;
   var q = data.length % xlabel_path;
 //   var rList = [3, 3, 4, 1, 1, 2, 2];
-//   var rList = [4, 5, 5, 1, 1, 2, 2, 3, 3, 4];
-  var rList = [5, 5, 6, 6, 7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4];
+//   var rList = [3, 4, 4, 1, 1, 2, 2, 3];
+  var rList = [6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6];
   var r = rList[q];
   var xtick = [];
   var xticklabel = [];
@@ -375,6 +375,11 @@ function CBD_update() {
   }
   else {
     lPos = {x: 70, y: 40, dx: 12, dy: 30, x1: 190};
+  }
+  if (CBD_wrap.doCumul == 0) {
+    if (lang == 'zh-tw') lPos.x = 330;
+    else if (lang == 'fr') lPos.x = 370;
+    else lPos.x = 360;
   }
   var lValue = CBD_wrap.lValue.slice();
   var sum = lValue.reduce((a, b) => a + b, 0);
