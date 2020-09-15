@@ -1,13 +1,13 @@
 label,count,label_zh,label_fr
-N_total,498,合計,Total
-N_data,481,有資料案例數,Données complètes
+N_total,499,合計,Total
+N_data,482,有資料案例數,Données complètes
 80s,3,80-89歲,80aine
 70s,15,70-79歲,70aine
 60s,50,60-69歲,60aine
 50s,57,50-59歲,50aine
 40s,50,40-49歲,40aine
 30s,106,30-39歲,30aine
-20s,175,20-29歲,20aine
+20s,176,20-29歲,20aine
 10s,21,10-19歲,10aine
 0s,4,<10歲,< 10 ans
 cough,221,咳嗽,toux
@@ -20,7 +20,7 @@ soreness,61,痠痛,myalgie
 headache,54,頭痛,mal de tête
 diarrhea,45,腹瀉,diarrhée
 ageusia,41,味覺異常,agueusie
-asymptomatic,35,無症狀,asymptomatique
+asymptomatic,36,無症狀,asymptomatique
 pneumonia,34,肺炎,pneumonie
 dyspnea,23,呼吸困難,dyspnée
 chest pain,23,胸痛,mal à la poitrine
