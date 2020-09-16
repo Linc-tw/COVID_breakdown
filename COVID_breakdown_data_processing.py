@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.09.11                  ##
+    ##  Version 2020.09.15                  ##
     ##########################################
 
 
@@ -344,15 +344,20 @@ class MainSheet(Template):
         transList.append('indigenous')
       
       elif trans == '不明':
-        transList.append('imported') #WARNING
+        transList.append('imported') #WARNING Shortcut
       
       else:
         print('Transmission, Case %d, %s' % (i+1, trans))
         transList.append(np.nan)
     return transList
   
+  def getNationality(self):
+    natList = []
+    for nat in self.getCol(self.n_nationality):
+      natList.append(nat)
+    return natList
+  
   def getTravHist(self):
-    travHistList = []
     keyDict = {
       'China': ['中國', '武漢', '深圳', '廣州', '遼寧'],
       'Hong Kong': ['香港'],
@@ -422,6 +427,8 @@ class MainSheet(Template):
       'Pan-Shi': ['海軍敦睦支隊磐石艦', '整隊登艦', '台灣啟航', '左營靠泊檢疫'],
       'indigenous': ['無']
     }
+    natList = self.getNationality()
+    travHistList = []
     
     for i, travHist in enumerate(self.getCol(self.n_travHist)):
       if travHist != travHist: ## Is nan
@@ -430,12 +437,14 @@ class MainSheet(Template):
       
       stock = []
       
+      ## Scan the content with all keys
       for key, valueList in keyDict.items():
         for value in valueList:
           if value in travHist:
             travHist = ''.join(travHist.split(value))
-            stock.append(key)
+            stock.append(key) ## Put the translation in stock
       
+      ## Remove meaningless words
       travHist = ''.join(travHist.split('自離境前往'))
       travHist = ''.join(travHist.split('從搭機'))
       travHist = ''.join(travHist.split('返國'))
@@ -446,8 +455,17 @@ class MainSheet(Template):
       travHist = ''.join(travHist.split('台灣'))
       travHist = travHist.lstrip(' 0123456789/-\n月及等()、')
       
+      ## Complain if unrecognized texts remain
       if len(travHist) > 0:
         print('Travel history, Case %d, %s' % (i+1, travHist))
+      
+      ## If no travel history but imported, add nationality (only for i >= 460)
+      if i >= 460 and len(stock) == 0:
+        for key, valueList in keyDict.items():
+          for value in valueList:
+            if value in natList[i]:
+              stock.append(key)
+              break
       
       stock = list(set(stock))
       travHistList.append(stock)
@@ -455,6 +473,7 @@ class MainSheet(Template):
     travHistList = [travHist if len(travHist) > 0 else np.nan for travHist in travHistList]
     return travHistList
   
+  ##WARNING require updates
   def getContinent(self):
     keyDict = {
       'East Asia': ['China', 'Hong Kong', 'Macao', 'Japan', 'Thailand', 'Malaysia', 'Indonesia', 'Philippines', 'Singapore', 'Bangladesh'],
@@ -573,7 +592,6 @@ class MainSheet(Template):
     return chanList
   
   def getSymptom(self):
-    symptomList = []
     keyDict = {
       'sneezing': ['伴隨感冒症狀', '輕微流鼻水', '打噴嚏', '流鼻水', '流鼻涕', '鼻涕倒流', '輕微鼻塞', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['咳嗽有痰', '喉嚨有痰', '有痰', '輕微咳嗽', '咳嗽症狀', '咳嗽併痰', '咳嗽加劇', '咳嗽', '輕微乾咳', '乾咳', '輕咳'],
@@ -611,6 +629,7 @@ class MainSheet(Template):
       'symptomatic': ['有症狀', '出現症狀', '身體不適'],
       'asymptomatic': ['首例無症狀', '無症狀', 'x']
     }
+    symptomList = []
     
     for i, symptom in enumerate(self.getCol(self.n_symptom)):
       if symptom != symptom: ## Is nan
@@ -1881,9 +1900,9 @@ class TimelineSheet(Template):
 ## Sandbox
 
 def sandbox():
-  #sheet = MainSheet()
+  sheet = MainSheet()
   #print(sheet.getAge())
-  #sheet.saveCsv_diffByTrans()
+  sheet.getTravHist()
   
   #sheet = StatusSheet()
   #print(sheet.getCumHosp())
@@ -1897,9 +1916,9 @@ def sandbox():
   #print(sheet.getAirportBreakdown('in'))
   #sheet.saveCsv_borderStats()
   
-  sheet = TimelineSheet()
+  #sheet = TimelineSheet()
   #print(sheet.saveCriteria())
-  sheet.saveCsv_evtTimeline()
+  #sheet.saveCsv_evtTimeline()
   return
 
 ###############################################################################
