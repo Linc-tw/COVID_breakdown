@@ -1,10 +1,10 @@
 label,count,label_zh,label_fr
-N_total,509,合計,Total
-N_imported,418,境外移入總數,Importés
-N_data,407,有資料案例數,Données complètes
+N_total,510,合計,Total
+N_imported,419,境外移入總數,Importés
+N_data,408,有資料案例數,Données complètes
 USA,103,美國,États-Unis
 UK,84,英國,Royaume-Uni
-Philippines,44,菲律賓,Philippines
+Philippines,45,菲律賓,Philippines
 France,28,法國,France
 Spain,21,西班牙,Espagne
 Czechia,15,捷克,Tchéquie
@@ -19,7 +19,7 @@ fatigue,69,倦怠,fatigue
 soreness,57,痠痛,myalgie
 anosmia,57,嗅覺異常,anosmie
 headache,47,頭痛,mal de tête
-diarrhea,40,腹瀉,diarrhée
+diarrhea,41,腹瀉,diarrhée
 ageusia,34,味覺異常,agueusie
 asymptomatic,26,無症狀,asymptomatique
 pneumonia,24,肺炎,pneumonie
