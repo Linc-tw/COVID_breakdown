@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.09.22                  ##
+    ##  Version 2020.10.02                  ##
     ##########################################
 
 
@@ -455,7 +455,7 @@ class MainSheet(Template):
       travHist = ''.join(travHist.split('下旬'))
       travHist = ''.join(travHist.split('上旬'))
       travHist = ''.join(travHist.split('台灣'))
-      travHist = travHist.lstrip(' 0123456789/-\n月及等()、')
+      travHist = travHist.lstrip(' 0123456789/-\n月及等()、→ ')
       
       ## Complain if unrecognized texts remain
       if len(travHist) > 0:
@@ -582,7 +582,7 @@ class MainSheet(Template):
       elif '自行就醫' in chan or '自主就醫' in chan:
         chanList.append('hospital')
         
-      elif '自費篩檢' in chan:
+      elif '自費篩檢' in chan or '自費檢驗' in chan:
         chanList.append('on demand')
         
       elif '香港檢驗' in chan:
