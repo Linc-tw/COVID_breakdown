@@ -15,7 +15,7 @@ It allows users to monitor the situation in Taiwan and to ponder over epidemic p
 This project is driven by 3 key motivations:
 - Taiwan is one of the rare countries where the infection is low enough to make detailed case-tracing possible;
 - the basic information from case-tracing is publicly available; and 
-- the scientific potential of this breakdown dataset has not yet been fully exploited.
+- the scientific potential of this breakdown dataset was not fully exploited by other visualization projects.
 
 
 Features
@@ -29,12 +29,13 @@ So far, 6 plots can be found on Dashboard:
 - Correlations between Travel History & Symptoms
 - Correlations between Age & Symptoms
 
-And 3 are on Policy:
+And 4 are on Policy:
 - Number of Tests by Reporting Criterion
 - Border Crossing
 - Chronology of Systematic Testing
+- Pandemic Timeline (text in Mandarin)
 
-Some other ideas have been proposed at [Issues](https://github.com/Linc-tw/COVID_breakdown/issues).
+Other ideas are welcome. To be proposed at [Issues](https://github.com/Linc-tw/COVID_breakdown/issues).
 
 
 Language support
@@ -48,7 +49,9 @@ Language support
 Current workflow
 ----------------
 
-`upload.sh` is automatically executed everyday around 3:15pm Taipei time. It will:
+There used to be daily automatic updates. 
+Now the updates are done manually every several days. 
+This is done by executing `upload.sh`. It will:
 - download raw data from the original dataset (a publicly accessible online Google worksheet);
 - execute `python COVID_breakdown_data_processing.py` to generate processed data; and
 - commit & push the data to the repository.
