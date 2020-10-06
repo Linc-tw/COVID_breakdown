@@ -639,8 +639,8 @@ function ET_initialize() {
   //-- Title
   var title;
   if (lang == 'zh-tw') title = '疫情爆發時間軸';
-  else if (lang == 'fr') title = "Chronologie de la pandémie (en mandarin seulement)";
-  else title = 'Pandemic Timeline (Mandarin only)';
+  else if (lang == 'fr') title = "Chronologie de la pandémie (texte en mandarin)";
+  else title = 'Pandemic Timeline (text in Mandarin)';
   
   ET_wrap.svg.append("text")
       .attr("class", "title")
@@ -784,17 +784,17 @@ function ET_update() {
   if (lang == 'zh-tw') monthList = [
     ['', '', '', '', '', '12月'],
     ['1月', '2月', '3月', '4月', '5月', '6月'],
-    ['7月', '8月', '9月', '', '', '']
+    ['7月', '8月', '9月', '10月', '11月', '12月']
   ];
   else if (lang == 'fr') monthList = [
     ['', '', '', '', '', 'déc'],
     ['janv', 'févr', 'mars', 'avr', 'mai', 'juin'],
-    ['juil', 'août', 'sept', '', '', '']
+    ['juil', 'août', 'sept', 'oct', 'nov', 'déc']
   ];
   else monthList = [
     ['', '', '', '', '', 'Dec'],
     ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    ['Jul', 'Aug', 'Sep', '', '', '']
+    ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   ];
   var dx1 = ET_wrap.cellSize * 4.417; //-- 53 / 12
   
