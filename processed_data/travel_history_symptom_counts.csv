@@ -1,10 +1,10 @@
 label,count,label_zh,label_fr
-N_total,523,合計,Total
-N_imported,432,境外移入總數,Importés
-N_data,421,有資料案例數,Données complètes
+N_total,527,合計,Total
+N_imported,436,境外移入總數,Importés
+N_data,424,有資料案例數,Données complètes
 USA,106,美國,États-Unis
 UK,84,英國,Royaume-Uni
-Philippines,49,菲律賓,Philippines
+Philippines,52,菲律賓,Philippines
 France,30,法國,France
 Spain,21,西班牙,Espagne
 Indonesia,16,印尼,Indonésie
@@ -21,7 +21,7 @@ soreness,59,痠痛,myalgie
 headache,48,頭痛,mal de tête
 diarrhea,45,腹瀉,diarrhée
 ageusia,34,味覺異常,agueusie
-asymptomatic,30,無症狀,asymptomatique
+asymptomatic,33,無症狀,asymptomatique
 pneumonia,24,肺炎,pneumonie
 chest pain,23,胸痛,mal à la poitrine
 dyspnea,19,呼吸困難,dyspnée
