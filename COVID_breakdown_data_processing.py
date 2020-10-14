@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.10.02                  ##
+    ##  Version 2020.10.14                  ##
     ##########################################
 
 
@@ -61,63 +61,65 @@ SYMPTOM_DICT = {
 }
 
 TRAVEL_HISTORY_DICT = {
+  'Bangladesh': {'zh-tw': '孟加拉', 'fr': 'Bangladesh'},
   'China': {'zh-tw': '中國', 'fr': 'Chine'},
   'Hong Kong': {'zh-tw': '香港', 'fr': 'Hong Kong'},
-  'Macao': {'zh-tw': '澳門', 'fr': 'Macao'},
-  'Japan': {'zh-tw': '日本', 'fr': 'Japon'},
-  'Thailand': {'zh-tw': '泰國', 'fr': 'Thaïlande'},
-  'Malaysia': {'zh-tw': '馬來西亞', 'fr': 'Malaisie'},
   'Indonesia': {'zh-tw': '印尼', 'fr': 'Indonésie'},
+  'India': {'zh-tw': '印度', 'fr': 'Inde'},
+  'Japan': {'zh-tw': '日本', 'fr': 'Japon'},
+  'Macao': {'zh-tw': '澳門', 'fr': 'Macao'},
+  'Malaysia': {'zh-tw': '馬來西亞', 'fr': 'Malaisie'},
+  'Myanmar': {'zh-tw': '緬甸', 'fr': 'Myanmar'},
+  'Nepal': {'zh-tw': '尼泊爾', 'fr': 'Népal'},
   'Philippines': {'zh-tw': '菲律賓', 'fr': 'Philippines'},
   'Singapore': {'zh-tw': '新加坡', 'fr': 'Singapour'},
-  'Bangladesh': {'zh-tw': '孟加拉', 'fr': 'Bangladesh'},
-  'Nepal': {'zh-tw': '尼泊爾', 'fr': 'Népal'},
-  'Myanmar': {'zh-tw': '緬甸', 'fr': 'Myanmar'},
+  'Thailand': {'zh-tw': '泰國', 'fr': 'Thaïlande'},
   
-  'USA': {'zh-tw': '美國', 'fr': 'États-Unis'},
-  'Canada': {'zh-tw': '加拿大', 'fr': 'Canada'},
-  'Mexico': {'zh-tw': '墨西哥', 'fr': 'Mexique'},
-  'Chile': {'zh-tw': '智利', 'fr': 'Chili'},
   'Argentina': {'zh-tw': '阿根廷', 'fr': 'Argentine'},
-  'Peru': {'zh-tw': '秘魯', 'fr': 'Pérou'},
   'Bolivia': {'zh-tw': '玻利維亞', 'fr': 'Bolivie'},
   'Brazil': {'zh-tw': '巴西', 'fr': 'Brésil'},
+  'Canada': {'zh-tw': '加拿大', 'fr': 'Canada'},
+  'Chile': {'zh-tw': '智利', 'fr': 'Chili'},
   'Guatemala': {'zh-tw': '瓜地馬拉', 'fr': 'Guatemala'}, 
   'Latin America': {'zh-tw': '中南美洲', 'fr': 'Amérique latine'},
+  'Mexico': {'zh-tw': '墨西哥', 'fr': 'Mexique'},
+  'Peru': {'zh-tw': '秘魯', 'fr': 'Pérou'},
+  'USA': {'zh-tw': '美國', 'fr': 'États-Unis'},
   
   'Europe': {'zh-tw': '歐洲', 'fr': 'Europe'},
-  'Ireland': {'zh-tw': '愛爾蘭', 'fr': 'Irlande'},
-  'UK': {'zh-tw': '英國', 'fr': 'Royaume-Uni'},
-  'France': {'zh-tw': '法國', 'fr': 'France'},
-  'Portugal': {'zh-tw': '葡萄牙', 'fr': 'Portugal'},
-  'Spain': {'zh-tw': '西班牙', 'fr': 'Espagne'},
-  'Italy': {'zh-tw': '義大利', 'fr': 'Italie'},
-  'Belgium': {'zh-tw': '比利時', 'fr': 'Belgique'},
-  'Netherlands': {'zh-tw': '荷蘭', 'fr': 'Pays-Bas'},
-  'Luxemburg': {'zh-tw': '盧森堡', 'fr': 'Luxembourg'},
-  'Switzerland': {'zh-tw': '瑞士', 'fr': 'Suisse'},
-  'Germany': {'zh-tw': '德國', 'fr': 'Allemagne'},
   'Austria': {'zh-tw': '奧地利', 'fr': 'Autriche'},
+  'Belgium': {'zh-tw': '比利時', 'fr': 'Belgique'},
+  'Bulgaria': {'zh-tw': '保加利亞', 'fr': 'Bulgarie'},
   'Czechia': {'zh-tw': '捷克', 'fr': 'Tchéquie'},
   'Danmark': {'zh-tw': '丹麥', 'fr': 'Danemark'},
   'Finland': {'zh-tw': '芬蘭', 'fr': 'Finlande'},
-  'Iceland': {'zh-tw': '冰島', 'fr': 'Islande'},
-  'Poland': {'zh-tw': '波蘭', 'fr': 'Pologne'},
-  'Bulgaria': {'zh-tw': '保加利亞', 'fr': 'Bulgarie'},
+  'France': {'zh-tw': '法國', 'fr': 'France'},
+  'Germany': {'zh-tw': '德國', 'fr': 'Allemagne'},
   'Greece': {'zh-tw': '希臘', 'fr': 'Grèce'},
+  'Iceland': {'zh-tw': '冰島', 'fr': 'Islande'},
+  'Ireland': {'zh-tw': '愛爾蘭', 'fr': 'Irlande'},
+  'Italy': {'zh-tw': '義大利', 'fr': 'Italie'},
+  'Luxemburg': {'zh-tw': '盧森堡', 'fr': 'Luxembourg'},
+  'Netherlands': {'zh-tw': '荷蘭', 'fr': 'Pays-Bas'},
+  'Poland': {'zh-tw': '波蘭', 'fr': 'Pologne'},
+  'Portugal': {'zh-tw': '葡萄牙', 'fr': 'Portugal'},
   'Russia': {'zh-tw': '俄羅斯', 'fr': 'Russie'},
+  'Spain': {'zh-tw': '西班牙', 'fr': 'Espagne'},
+  'Switzerland': {'zh-tw': '瑞士', 'fr': 'Suisse'},
+  'UK': {'zh-tw': '英國', 'fr': 'Royaume-Uni'},
+  'Ukraine': {'zh-tw': '烏克蘭', 'fr': 'Ukraine'},
   
-  'Turkey': {'zh-tw': '土耳其', 'fr': 'Turquie'},
-  'Qatar': {'zh-tw': '卡達', 'fr': 'Qatar'},
-  'UAE': {'zh-tw': '阿拉伯聯合大公國', 'fr': 'EAU'},
   'Oman': {'zh-tw': '阿曼', 'fr': 'Oman'},
+  'Qatar': {'zh-tw': '卡達', 'fr': 'Qatar'},
+  'Turkey': {'zh-tw': '土耳其', 'fr': 'Turquie'},
+  'UAE': {'zh-tw': '阿拉伯聯合大公國', 'fr': 'EAU'},
   
   'Egypt': {'zh-tw': '埃及', 'fr': 'Égypte'},
-  'Morocco': {'zh-tw': '摩洛哥', 'fr': 'Maroc'},
-  'Tunisia': {'zh-tw': '突尼西亞', 'fr': 'Tunisie'},
-  'South Africa': {'zh-tw': '南非', 'fr': 'Afrique du Sud'},
-  'Senegal': {'zh-tw': '塞內加爾', 'fr': 'Sénégal'},
   'Lesotho': {'zh-tw': '賴索托', 'fr': 'Lesotho'},
+  'Morocco': {'zh-tw': '摩洛哥', 'fr': 'Maroc'},
+  'Senegal': {'zh-tw': '塞內加爾', 'fr': 'Sénégal'},
+  'South Africa': {'zh-tw': '南非', 'fr': 'Afrique du Sud'},
+  'Tunisia': {'zh-tw': '突尼西亞', 'fr': 'Tunisie'},
   
   'Australia': {'zh-tw': '澳洲', 'fr': 'Australie'},
   'New Zealand': {'zh-tw': '紐西蘭', 'fr': 'Nouvelle-Zélande'},
@@ -125,8 +127,8 @@ TRAVEL_HISTORY_DICT = {
   
   'Antarctica': {'zh-tw': '南極', 'fr': 'Antartique'},
   
-  'Diamond Princess': {'zh-tw': '鑽石公主號', 'fr': 'Diamond Princess'}, 
   'Coral Princess': {'zh-tw': '珊瑚公主號', 'fr': 'Coral Princess'},
+  'Diamond Princess': {'zh-tw': '鑽石公主號', 'fr': 'Diamond Princess'}, 
   'Pan-Shi': {'zh-tw': '磐石艦', 'fr': 'Pan-Shi'},
   'indigenous': {'zh-tw': '無', 'fr': 'local'}
 }
@@ -360,63 +362,65 @@ class MainSheet(Template):
   
   def getTravHist(self):
     keyDict = {
+      'Bangladesh': ['孟加拉'],
       'China': ['中國', '武漢', '深圳', '廣州', '遼寧'],
       'Hong Kong': ['香港'],
-      'Macao': ['澳門'],
-      'Japan': ['日本', '東京', '大阪', '北海道'],
-      'Thailand': ['泰國'], 
-      'Malaysia': ['馬來西亞'], 
+      'India': ['印度'], 
       'Indonesia': ['印尼'], 
+      'Japan': ['日本', '東京', '大阪', '北海道'],
+      'Macao': ['澳門'],
+      'Malaysia': ['馬來西亞'], 
+      'Myanmar' : ['緬甸'],
+      'Nepal': ['尼泊爾'],
       'Philippines': ['菲律賓'], 
       'Singapore': ['新加坡'], 
-      'Bangladesh': ['孟加拉'],
-      'Nepal': ['尼泊爾'],
-      'Myanmar' : ['緬甸'],
+      'Thailand': ['泰國'], 
       
-      'USA': ['美國', '加州', '紐約'], 
-      'Canada': ['加拿大'], 
-      'Mexico': ['墨西哥'], 
-      'Chile': ['智利', '聖地牙哥'], 
       'Argentina': ['阿根廷'], 
-      'Peru': ['秘魯', '祕魯'], 
       'Bolivia': ['玻利維亞'], 
       'Brazil': ['巴西'],
+      'Canada': ['加拿大'], 
+      'Chile': ['智利', '聖地牙哥'], 
       'Guatemala': ['瓜地馬拉'], 
       'Latin America': ['中南美洲'], 
+      'Mexico': ['墨西哥'], 
+      'Peru': ['秘魯', '祕魯'], 
+      'USA': ['美國', '加州', '紐約'], 
       
       'Europe': ['歐洲'], 
-      'Ireland': ['愛爾蘭'], 
-      'UK': ['英國', '倫敦'], 
-      'France': ['法國', '巴黎'], 
-      'Portugal': ['葡萄牙'], 
-      'Spain': ['西班牙'], 
-      'Italy': ['義大利'], 
-      'Belgium': ['比利時'], 
-      'Netherlands': ['荷蘭'], 
-      'Luxemburg': ['盧森堡'], 
-      'Switzerland': ['瑞士'], 
-      'Germany': ['德國', '紐倫堡', '慕尼黑'], 
       'Austria': ['奧地利'], 
+      'Belgium': ['比利時'], 
+      'Bulgaria': ['保加利亞'], 
       'Czechia': ['捷克'], 
       'Danmark': ['丹麥'], 
       'Finland': ['芬蘭'], 
-      'Iceland': ['冰島'], 
-      'Poland': ['波蘭'], 
-      'Bulgaria': ['保加利亞'], 
+      'France': ['法國', '巴黎'], 
+      'Germany': ['德國', '紐倫堡', '慕尼黑'], 
       'Greece': ['希臘'],
+      'Iceland': ['冰島'], 
+      'Ireland': ['愛爾蘭'], 
+      'Italy': ['義大利'], 
+      'Luxemburg': ['盧森堡'], 
+      'Netherlands': ['荷蘭'], 
+      'Poland': ['波蘭'], 
+      'Portugal': ['葡萄牙'], 
       'Russia': ['俄羅斯'],
+      'Spain': ['西班牙'], 
+      'Switzerland': ['瑞士'], 
+      'UK': ['英國', '倫敦'], 
+      'Ukraine': ['烏克蘭'],
       
-      'Turkey': ['土耳其'], 
-      'Qatar': ['阿拉伯－卡達', '卡達'], 
-      'UAE': ['阿拉伯－杜拜'], 
       'Oman': ['阿曼'],
+      'Qatar': ['阿拉伯－卡達', '卡達'], 
+      'Turkey': ['土耳其'], 
+      'UAE': ['阿拉伯－杜拜'], 
       
       'Egypt': ['埃及'], 
-      'Morocco': ['摩洛哥'], 
-      'Tunisia': ['突尼西亞'], 
-      'South Africa': ['南非'], 
-      'Senegal': ['塞內加爾'],
       'Lesotho': ['賴索托'],
+      'Morocco': ['摩洛哥'], 
+      'Senegal': ['塞內加爾'],
+      'South Africa': ['南非'], 
+      'Tunisia': ['突尼西亞'], 
       
       'Australia': ['澳大利亞', '澳洲'], 
       'New Zealand': ['紐西蘭'], 
@@ -424,8 +428,8 @@ class MainSheet(Template):
       
       'Antarctica': ['南極'], 
       
-      'Diamond Princess': ['鑽石公主號'], 
       'Coral Princess': ['珊瑚公主號'], 
+      'Diamond Princess': ['鑽石公主號'], 
       'Pan-Shi': ['海軍敦睦支隊磐石艦', '整隊登艦', '台灣啟航', '左營靠泊檢疫'],
       'indigenous': ['無']
     }
@@ -454,6 +458,7 @@ class MainSheet(Template):
       travHist = ''.join(travHist.split('轉機'))
       travHist = ''.join(travHist.split('下旬'))
       travHist = ''.join(travHist.split('上旬'))
+      travHist = ''.join(travHist.split('中旬'))
       travHist = ''.join(travHist.split('台灣'))
       travHist = travHist.lstrip(' 0123456789/-\n月及等()、→ ')
       
@@ -597,7 +602,7 @@ class MainSheet(Template):
     keyDict = {
       'sneezing': ['伴隨感冒症狀', '輕微流鼻水', '打噴嚏', '流鼻水', '流鼻涕', '鼻涕倒流', '輕微鼻塞', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['咳嗽有痰', '喉嚨有痰', '有痰', '輕微咳嗽', '咳嗽症狀', '咳嗽併痰', '咳嗽加劇', '咳嗽', '輕微乾咳', '乾咳', '輕咳'],
-      'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨乾癢', '喉嚨痛', '喉嚨癢', '喉嚨不適', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨'],
+      'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨乾癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', '喉嚨不適', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨'],
       'dyspnea': ['呼吸不順', '呼吸困難', '呼吸微喘', '微喘', '呼吸喘', '氣喘', '呼吸急促', '走路會喘'],
       'pneumonia': ['X光顯示肺炎', 'X光片顯示肺炎', 'X光顯示肺部輕微浸潤', '診斷為肺炎', '肺炎'], 
       
@@ -617,7 +622,7 @@ class MainSheet(Template):
       'toothache': ['牙痛'], 
       
       'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '走路喘', '倦怠', '疲憊', '無力'],
-      'soreness': ['全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉酸痛', '肌肉痠痛', '肌肉 痠痛', '骨頭痠痛', '骨頭酸', '關節痠痛', '關節痛', '痠痛'],
+      'soreness': ['全身肌肉痠痛', '全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉酸痛', '肌肉痠痛', '肌肉 痠痛', '骨頭痠痛', '骨頭酸', '關節痠痛', '關節痛', '痠痛'],
       
       'anosmia+ageusia': ['味覺及嗅覺喪失', '味覺及嗅覺都喪失', '嗅覺和味覺喪失', '嗅味覺異常', '味嗅覺異常'], 
       'anosmia': ['嗅覺異常症狀', '自覺嗅覺喪失', '失去嗅覺', '嗅覺不靈敏', '嗅覺喪失', '嗅覺變差', '喪失嗅覺', '嗅覺遲鈍', '嗅覺異常', '無嗅覺'], 
