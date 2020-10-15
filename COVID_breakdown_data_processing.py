@@ -363,7 +363,7 @@ class MainSheet(Template):
   def getTravHist(self):
     keyDict = {
       'Bangladesh': ['孟加拉'],
-      'China': ['中國', '武漢', '深圳', '廣州', '遼寧'],
+      'China': ['中國', '武漢', '深圳', '廣州', '遼寧', '江蘇'],
       'Hong Kong': ['香港'],
       'India': ['印度'], 
       'Indonesia': ['印尼'], 
@@ -413,7 +413,7 @@ class MainSheet(Template):
       'Oman': ['阿曼'],
       'Qatar': ['阿拉伯－卡達', '卡達'], 
       'Turkey': ['土耳其'], 
-      'UAE': ['阿拉伯－杜拜'], 
+      'UAE': ['阿拉伯－杜拜', '杜拜'], 
       
       'Egypt': ['埃及'], 
       'Lesotho': ['賴索托'],
