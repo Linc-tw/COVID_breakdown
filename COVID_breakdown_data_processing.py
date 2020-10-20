@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.10.14                  ##
+    ##  Version 2020.10.20                  ##
     ##########################################
 
 
@@ -325,7 +325,7 @@ class MainSheet(Template):
         age.append('20s')
       elif a in ['30']:
         age.append('30s')
-      elif a in ['2X-6X']:
+      elif a in ['2X-6X', '1X-2X']:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
