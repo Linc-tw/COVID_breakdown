@@ -1,27 +1,27 @@
 label,count,label_zh,label_fr
-N_total,551,合計,Total
-N_imported,460,境外移入總數,Importés
-N_data,448,有資料案例數,Données complètes
-USA,107,美國,États-Unis
+N_total,554,合計,Total
+N_imported,463,境外移入總數,Importés
+N_data,451,有資料案例數,Données complètes
+USA,108,美國,États-Unis
 UK,84,英國,Royaume-Uni
-Philippines,60,菲律賓,Philippines
+Philippines,61,菲律賓,Philippines
 France,32,法國,France
-Indonesia,25,印尼,Indonésie
+Indonesia,26,印尼,Indonésie
 Spain,21,西班牙,Espagne
 Czechia,15,捷克,Tchéquie
 Turkey,14,土耳其,Turquie
 China,12,中國,Chine
-cough,196,咳嗽,toux
+cough,198,咳嗽,toux
 fever,184,發燒,fièvre
-throatache,132,喉嚨症狀,mal de gorge
-sneezing,129,鼻腔症狀,éternuement
-fatigue,74,倦怠,fatigue
+throatache,133,喉嚨症狀,mal de gorge
+sneezing,131,鼻腔症狀,éternuement
+fatigue,75,倦怠,fatigue
+soreness,63,痠痛,myalgie
 anosmia,63,嗅覺異常,anosmie
-soreness,62,痠痛,myalgie
 headache,49,頭痛,mal de tête
-asymptomatic,46,無症狀,asymptomatique
-diarrhea,46,腹瀉,diarrhée
+asymptomatic,47,無症狀,asymptomatique
+diarrhea,47,腹瀉,diarrhée
 ageusia,37,味覺異常,agueusie
-pneumonia,25,肺炎,pneumonie
-chest pain,23,胸痛,mal à la poitrine
+pneumonia,26,肺炎,pneumonie
+chest pain,24,胸痛,mal à la poitrine
 dyspnea,21,呼吸困難,dyspnée
