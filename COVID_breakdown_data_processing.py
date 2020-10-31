@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.10.26                  ##
+    ##  Version 2020.10.29                  ##
     ##########################################
 
 
@@ -656,6 +656,7 @@ class MainSheet(Template):
       
       symptom = ''.join(symptom.split('首例本土'))
       symptom = ''.join(symptom.split('入境前有'))
+      symptom = ''.join(symptom.split('伴隨'))
       symptom = symptom.lstrip(' \n  ，、與及')
       
       if len(symptom) > 0:
