@@ -1,26 +1,26 @@
 label,count,label_zh,label_fr
-N_total,556,合計,Total
-N_data,534,有資料案例數,Données complètes
+N_total,564,合計,Total
+N_data,543,有資料案例數,Données complètes
 80s,3,80-89歲,80aine
 70s,16,70-79歲,70aine
-60s,51,60-69歲,60aine
-50s,61,50-59歲,50aine
+60s,52,60-69歲,60aine
+50s,62,50-59歲,50aine
 40s,57,40-49歲,40aine
-30s,127,30-39歲,30aine
-20s,190,20-29歲,20aine
-10s,25,10-19歲,10aine
+30s,131,30-39歲,30aine
+20s,192,20-29歲,20aine
+10s,26,10-19歲,10aine
 0s,4,<10歲,< 10 ans
-cough,237,咳嗽,toux
-fever,222,發燒,fièvre
-throatache,157,喉嚨症狀,mal de gorge
-sneezing,152,鼻腔症狀,éternuement
+cough,240,咳嗽,toux
+fever,224,發燒,fièvre
+throatache,158,喉嚨症狀,mal de gorge
+sneezing,153,鼻腔症狀,éternuement
 fatigue,83,倦怠,fatigue
-anosmia,78,嗅覺異常,anosmie
-soreness,67,痠痛,myalgie
-asymptomatic,57,無症狀,asymptomatique
+anosmia,79,嗅覺異常,anosmie
+soreness,68,痠痛,myalgie
+asymptomatic,61,無症狀,asymptomatique
 headache,56,頭痛,mal de tête
 diarrhea,53,腹瀉,diarrhée
 ageusia,45,味覺異常,agueusie
 pneumonia,36,肺炎,pneumonie
-dyspnea,26,呼吸困難,dyspnée
+dyspnea,27,呼吸困難,dyspnée
 chest pain,25,胸痛,mal à la poitrine
