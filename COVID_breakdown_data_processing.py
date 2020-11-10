@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.10.29                  ##
+    ##  Version 2020.11.10                  ##
     ##########################################
 
 
@@ -325,7 +325,7 @@ class MainSheet(Template):
         age.append('20s')
       elif a in ['30']:
         age.append('30s')
-      elif a in ['2X-6X', '1X-2X']:
+      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X']:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
@@ -374,7 +374,7 @@ class MainSheet(Template):
       'Nepal': ['尼泊爾'],
       'Philippines': ['菲律賓'], 
       'Singapore': ['新加坡'], 
-      'Thailand': ['泰國'], 
+      'Thailand': ['泰國', '曼谷'], 
       
       'Argentina': ['阿根廷'], 
       'Bolivia': ['玻利維亞'], 
@@ -460,7 +460,7 @@ class MainSheet(Template):
       travHist = ''.join(travHist.split('上旬'))
       travHist = ''.join(travHist.split('中旬'))
       travHist = ''.join(travHist.split('台灣'))
-      travHist = travHist.lstrip(' 0123456789/-\n月及等()、→ ')
+      travHist = travHist.lstrip(' 0123456789/-\n月及等經()、→ ')
       
       ## Complain if unrecognized texts remain
       if len(travHist) > 0:
@@ -547,7 +547,7 @@ class MainSheet(Template):
       if onsetDate != onsetDate: ## NaN
         onsetDateList.append(np.nan)
       
-      elif onsetDate in ['2/18-25', 'x', 'X']:
+      elif onsetDate in ['2/18-25', '10月中旬', 'x', 'X']:
         onsetDateList.append(np.nan)
         
       else:
@@ -634,7 +634,7 @@ class MainSheet(Template):
       'arrhythmia': ['心律不整'],
       
       'symptomatic': ['有症狀', '出現症狀', '身體不適'],
-      'asymptomatic': ['首例無症狀', '無症狀', 'x']
+      'asymptomatic': ['首例無症狀', '無症狀', 'x', 'X']
     }
     symptomList = []
     
