@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.11.10                  ##
+    ##  Version 2020.11.14                  ##
     ##########################################
 
 
@@ -90,6 +90,7 @@ TRAVEL_HISTORY_DICT = {
   'Austria': {'zh-tw': '奧地利', 'fr': 'Autriche'},
   'Belgium': {'zh-tw': '比利時', 'fr': 'Belgique'},
   'Bulgaria': {'zh-tw': '保加利亞', 'fr': 'Bulgarie'},
+  'Croatia': {'zh-tw': '克羅埃西亞', 'fr': 'Croatie'},
   'Czechia': {'zh-tw': '捷克', 'fr': 'Tchéquie'},
   'Danmark': {'zh-tw': '丹麥', 'fr': 'Danemark'},
   'Finland': {'zh-tw': '芬蘭', 'fr': 'Finlande'},
@@ -325,7 +326,7 @@ class MainSheet(Template):
         age.append('20s')
       elif a in ['30']:
         age.append('30s')
-      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X']:
+      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X']:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
@@ -391,6 +392,7 @@ class MainSheet(Template):
       'Austria': ['奧地利'], 
       'Belgium': ['比利時'], 
       'Bulgaria': ['保加利亞'], 
+      'Croatia': ['克羅埃西亞'],
       'Czechia': ['捷克'], 
       'Danmark': ['丹麥'], 
       'Finland': ['芬蘭'], 
@@ -528,6 +530,9 @@ class MainSheet(Template):
         
       elif entryDate in ['3/1\n3/8']:
         entryDateList.append('2020-03-08')
+      
+      elif entryDate in ['10/28(29)']:
+        entryDateList.append('2020-10-28')
       
       else:
         try:

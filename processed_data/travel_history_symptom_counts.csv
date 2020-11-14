@@ -1,23 +1,23 @@
 label,count,label_zh,label_fr
-N_total,589,合計,Total
-N_imported,498,境外移入總數,Importés
-N_data,486,有資料案例數,Données complètes
+N_total,600,合計,Total
+N_imported,509,境外移入總數,Importés
+N_data,497,有資料案例數,Données complètes
 USA,109,美國,États-Unis
 UK,85,英國,Royaume-Uni
-Philippines,66,菲律賓,Philippines
-Indonesia,47,印尼,Indonésie
+Philippines,72,菲律賓,Philippines
+Indonesia,50,印尼,Indonésie
 France,33,法國,France
 Spain,21,西班牙,Espagne
 Czechia,16,捷克,Tchéquie
 Turkey,14,土耳其,Turquie
 Egypt,12,埃及,Égypte
-cough,204,咳嗽,toux
-fever,188,發燒,fièvre
-sneezing,138,鼻腔症狀,éternuement
-throatache,136,喉嚨症狀,mal de gorge
+cough,205,咳嗽,toux
+fever,189,發燒,fièvre
+sneezing,141,鼻腔症狀,éternuement
+throatache,139,喉嚨症狀,mal de gorge
 fatigue,76,倦怠,fatigue
-anosmia,69,嗅覺異常,anosmie
-asymptomatic,68,無症狀,asymptomatique
+asymptomatic,74,無症狀,asymptomatique
+anosmia,71,嗅覺異常,anosmie
 soreness,65,痠痛,myalgie
 headache,51,頭痛,mal de tête
 diarrhea,47,腹瀉,diarrhée
