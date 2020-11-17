@@ -552,8 +552,11 @@ class MainSheet(Template):
       if onsetDate != onsetDate: ## NaN
         onsetDateList.append(np.nan)
       
-      elif onsetDate in ['2/18-25', '10月中旬', 'x', 'X']:
+      elif onsetDate in ['2/18-25', '10月中旬', '11月初', 'x', 'X']:
         onsetDateList.append(np.nan)
+        
+      elif onsetDate in ['7月、11/1']:
+        onsetDateList.append('2020-11-01')
         
       else:
         try:
