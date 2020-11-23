@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.11.14                  ##
+    ##  Version 2020.11.18                  ##
     ##########################################
 
 
@@ -47,6 +47,7 @@ SYMPTOM_DICT = {
   
   'fatigue': {'zh-tw': '倦怠', 'fr': 'fatigue'},
   'soreness': {'zh-tw': '痠痛', 'fr': 'myalgie'},
+  'hypersomnia': {'zh-tw': '嗜睡', 'fr': 'hypersomnie'},
   
   'anosmia': {'zh-tw': '嗅覺異常', 'fr': 'anosmie'}, 
   'ageusia': {'zh-tw': '味覺異常', 'fr': 'agueusie'},
@@ -534,6 +535,9 @@ class MainSheet(Template):
       elif entryDate in ['10/28(29)']:
         entryDateList.append('2020-10-28')
       
+      elif entryDate in ['11/7(8)']:
+        entryDateList.append('2020-11-07')
+      
       else:
         try:
           MD = entryDate.split('/')
@@ -552,7 +556,7 @@ class MainSheet(Template):
       if onsetDate != onsetDate: ## NaN
         onsetDateList.append(np.nan)
       
-      elif onsetDate in ['2/18-25', '10月中旬', '11月初', 'x', 'X']:
+      elif onsetDate in ['2/18-25', '9月下旬', '10月中旬', '11月初', 'x', 'X']:
         onsetDateList.append(np.nan)
         
       elif onsetDate in ['7月、11/1']:
@@ -631,6 +635,7 @@ class MainSheet(Template):
       
       'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '走路喘', '倦怠', '疲憊', '無力'],
       'soreness': ['全身肌肉痠痛', '上半身骨頭刺痛', '全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉酸痛', '肌肉痠痛', '肌肉 痠痛', '骨頭痠痛', '骨頭酸', '關節痠痛', '關節痛', '痠痛'],
+      'hypersomnia': ['嗜睡'],
       
       'anosmia+ageusia': ['味覺及嗅覺喪失', '味覺及嗅覺都喪失', '嗅覺和味覺喪失', '嗅味覺異常', '味嗅覺異常'], 
       'anosmia': ['嗅覺異常症狀', '自覺嗅覺喪失', '失去嗅覺', '嗅覺不靈敏', '嗅覺喪失', '嗅覺變差', '喪失嗅覺', '嗅覺遲鈍', '嗅覺異常', '無嗅覺'], 
