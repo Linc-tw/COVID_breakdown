@@ -228,7 +228,7 @@ function ASC_initialize() {
     
   //-- Legend - value
   var lPos = {x: 50, y: -0.8*ASC_wrap.margin.top, dx: 12, dy: 30};
-  var lColor = [cList[0], '#999999', '#000000'];
+  var lColor = [global_var.cList[0], '#999999', '#000000'];
   var lValue = [ASC_wrap.N_data, ASC_wrap.N_total-ASC_wrap.N_data, ASC_wrap.N_total];
   
   ASC_wrap.svg.selectAll(".legend.value")

@@ -232,7 +232,7 @@ function THSC_initialize() {
     
   //-- Legend - value
   var lPos = {x: 50, y: -0.8*THSC_wrap.margin.top, dx: 12, dy: 30};
-  var lColor = [cList[0], '#999999', '#999999', '#000000'];
+  var lColor = [global_var.cList[0], '#999999', '#999999', '#000000'];
   var lValue = [THSC_wrap.N_data, THSC_wrap.N_imported-THSC_wrap.N_data, THSC_wrap.N_total-THSC_wrap.N_imported, THSC_wrap.N_total];
   
   THSC_wrap.svg.selectAll(".legend.value")

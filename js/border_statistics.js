@@ -53,12 +53,8 @@ function BS_makeCanvas() {
 
 function BS_formatData(data) {
   //-- Settings for xticklabels
-  var xlabel_path = 21;
-  var q = data.length % xlabel_path;
-//   var rList = [3, 3, 4, 1, 1, 2, 2];
-//   var rList = [3, 4, 4, 1, 1, 2, 2, 3];
-  var rList = [6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6];
-  var r = rList[q];
+  var q = data.length % global_var.xlabel_path;
+  var r = global_var.rList[q];
   var xtick = [];
   var xticklabel = [];
   var ymax = 0;
@@ -93,7 +89,7 @@ function BS_formatData(data) {
     
     ymax = Math.max(ymax, y);
     
-    if (i % xlabel_path == r) {
+    if (i % global_var.xlabel_path == r) {
       xtick.push(i+0.5)
       xticklabel.push(ISODateToMDDate(x));
     }
@@ -280,7 +276,7 @@ function BS_initialize() {
     .text(ylabel);
     
   //-- Color
-  var colorList = cList.slice(0, BS_wrap.nbCol);
+  var colorList = global_var.cList.slice(0, BS_wrap.nbCol);
   var colTagList = BS_wrap.colTagList.slice().reverse();
   var color = d3.scaleOrdinal()
     .domain(colTagList)

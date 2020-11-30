@@ -7,7 +7,7 @@ ET_wrap.dataPathList = [
 
 function ET_makeCanvas() {
   var totWidth = 1200;
-  var totHeight = 540;
+  var totHeight = 720;
   var cellSize = 20; //-- Cell size
   
   var margin = {left: 0, right: 0, bottom: 0, top: 0};
@@ -591,13 +591,13 @@ function ET_click(d, i) {
   var j;
   
   for (j=0; j<split[1].length; j++) {
-    colorList.push(cList[0]);
+    colorList.push(global_var.cList[0]);
   }
   for (j=0; j<split[2].length; j++) {
-    colorList.push(cList[1]);
+    colorList.push(global_var.cList[1]);
   }
   for (j=0; j<split[3].length; j++) {
-    colorList.push(cList[2]);
+    colorList.push(global_var.cList[2]);
   }
   
   var text = split[0].concat(split[1]).concat(split[2]).concat(split[3]);
@@ -784,17 +784,20 @@ function ET_update() {
   if (lang == 'zh-tw') monthList = [
     ['', '', '', '', '', '12月'],
     ['1月', '2月', '3月', '4月', '5月', '6月'],
-    ['7月', '8月', '9月', '10月', '11月', '12月']
+    ['7月', '8月', '9月', '10月', '11月', '12月'],
+    ['1月', '2月', '3月', '4月', '5月', '6月']
   ];
   else if (lang == 'fr') monthList = [
     ['', '', '', '', '', 'déc'],
     ['janv', 'févr', 'mars', 'avr', 'mai', 'juin'],
-    ['juil', 'août', 'sept', 'oct', 'nov', 'déc']
+    ['juil', 'août', 'sept', 'oct', 'nov', 'déc'],
+    ['janv', 'févr', 'mars', 'avr', 'mai', 'juin']
   ];
   else monthList = [
     ['', '', '', '', '', 'Dec'],
     ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
   ];
   var dx1 = ET_wrap.cellSize * 4.417; //-- 53 / 12
   

@@ -53,12 +53,8 @@ function CBD_makeCanvas() {
 
 function CBD_formatData(data) {
   //-- Settings for xticklabels
-  var xlabel_path = 21;
-  var q = data.length % xlabel_path;
-//   var rList = [3, 3, 4, 1, 1, 2, 2];
-//   var rList = [3, 4, 4, 1, 1, 2, 2, 3];
-  var rList = [6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6];
-  var r = rList[q];
+  var q = data.length % global_var.xlabel_path;
+  var r = global_var.rList[q];
   var xtick = [];
   var xticklabel = [];
   var ymax = 0;
@@ -92,7 +88,6 @@ function CBD_formatData(data) {
         'h5': +data[i][colTagList[nbCol-5]],
         'h6': +data[i][colTagList[nbCol-6]],
         'h7': +data[i][colTagList[nbCol-7]],
-        'h8': +data[i][colTagList[nbCol-8]],
         'col': colTagList[j]
       };
         
@@ -102,7 +97,7 @@ function CBD_formatData(data) {
     
     ymax = Math.max(ymax, y);
     
-    if (i % xlabel_path == r) {
+    if (i % global_var.xlabel_path == r) {
       xtick.push(i+0.5)
       xticklabel.push(ISODateToMDDate(x));
     }
@@ -128,7 +123,6 @@ function CBD_formatData(data) {
     iso = d3.max(formattedData, function(d) {if (d.col == 'isolation') return +d.height;});
     moni = d3.max(formattedData, function(d) {if (d.col == 'monitoring') return +d.height;});
     hosp = d3.max(formattedData, function(d) {if (d.col == 'hospital') return +d.height;});
-    demand = d3.max(formattedData, function(d) {if (d.col == 'on_demand') return +d.height;});
     over = d3.max(formattedData, function(d) {if (d.col == 'overseas') return +d.height;});
     noData = d3.max(formattedData, function(d) {if (d.col == 'no_data') return +d.height;});
   }
@@ -138,11 +132,10 @@ function CBD_formatData(data) {
     iso = d3.sum(formattedData, function(d) {if (d.col == 'isolation') return +d.height;});
     moni = d3.sum(formattedData, function(d) {if (d.col == 'monitoring') return +d.height;});
     hosp = d3.sum(formattedData, function(d) {if (d.col == 'hospital') return +d.height;});
-    demand = d3.sum(formattedData, function(d) {if (d.col == 'on_demand') return +d.height;});
     over = d3.sum(formattedData, function(d) {if (d.col == 'overseas') return +d.height;});
     noData = d3.sum(formattedData, function(d) {if (d.col == 'no_data') return +d.height;});
   }
-  var lValue = [air, QT, iso, moni, hosp, demand, over, noData];
+  var lValue = [air, QT, iso, moni, hosp, over, noData];
   
   CBD_wrap.formattedData = formattedData;
   CBD_wrap.dateList = dateList;
@@ -221,11 +214,11 @@ function CBD_mousemove(d) {
   var tooltipText;
   
   if (lang == 'zh-tw')
-    tooltipText = d.x + "<br>機場 = " + d.h1 + "<br>居家檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自行就醫 = " + d.h5 + "<br>無管道資料 = " + d.h6 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6)
+    tooltipText = d.x + "<br>機場 = " + d.h1 + "<br>居家或集中檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自費或自行就醫 = " + d.h5 + "<br>外國檢驗 = " + d.h6 + "<br>無管道資料 = " + d.h7 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
   else if (lang == 'fr')
-    tooltipText = d.x + "<br>Aéroports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Auto-contrôle = " + d.h4 + "<br>Hôpitaux = " + d.h5 + "<br>Pas annoncés = " + d.h6 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6)
+    tooltipText = d.x + "<br>Aéroports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Auto-contrôle = " + d.h4 + "<br>Hôpitaux = " + d.h5 + "<br>À l'étranger = " + d.h6 + "<br>Pas annoncés = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
   else
-    tooltipText = d.x + "<br>Airports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospitals = " + d.h5 + "<br>Not announced = " + d.h6 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6)
+    tooltipText = d.x + "<br>Airports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospitals = " + d.h5 + "<br>Overseas = " + d.h6 + "<br>Not announced = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
   
   CBD_tooltip
     .html(tooltipText)
@@ -311,7 +304,7 @@ function CBD_initialize() {
     .text(ylabel);
     
   //-- Color
-  var colorList = cList.slice(0, CBD_wrap.nbCol-1);
+  var colorList = global_var.cList.slice(0, CBD_wrap.nbCol-1);
   colorList.push('#ccaaaa')
   var colTagList = CBD_wrap.colTagList.slice().reverse();
   var color = d3.scaleOrdinal()
@@ -393,8 +386,8 @@ function CBD_update() {
     .enter()
     .append("text")
       .attr("class", "legend value")
-      .attr("x", function(d, i) {return lPos.x + Math.floor(i/7)*lPos.x1;})
-      .attr("y", function(d, i) {return lPos.y + (i%7)*lPos.dy;})
+      .attr("x", function(d, i) {return lPos.x + Math.floor(i/6)*lPos.x1;})
+      .attr("y", function(d, i) {return lPos.y + (i%6)*lPos.dy;})
       .style("fill", function(d, i) {return colorList[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "end")
@@ -402,15 +395,15 @@ function CBD_update() {
   //-- Legend - label
   var lLabel, lLabel_plus;
   if (lang == 'zh-tw') {
-    lLabel = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自行就醫', '自費篩檢', '外國檢驗', '無檢驗管道資料', '合計'];
+    lLabel = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自費或自行就醫', '外國檢驗', '無檢驗管道資料', '合計'];
     lLabel_plus = '無發病日資料';
   }
   else if (lang == 'fr') {
-    lLabel = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', 'Sur demande', "À l'étranger", 'Pas annoncés', 'Total'];
+    lLabel = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', "À l'étranger", 'Pas annoncés', 'Total'];
     lLabel_plus = "Sans date début sympt.";
   }
   else {
-    lLabel = ["Airports", "Quarantine", "Isolation", "Monitoring", "Hospitals", 'On demand', 'Overseas', 'Not announced', 'Total'];
+    lLabel = ["Airports", "Quarantine", "Isolation", "Monitoring", "Hospitals", 'Overseas', 'Not announced', 'Total'];
     lLabel_plus = 'No onset date';
   }
   if (CBD_wrap.doOnset == 1) lLabel.splice(CBD_wrap.nbCol, 0, lLabel_plus);
@@ -422,8 +415,8 @@ function CBD_update() {
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", function(d, i) {return lPos.x + lPos.dx + Math.floor(i/7)*lPos.x1;})
-      .attr("y", function(d, i) {return lPos.y + (i%7)*lPos.dy;})
+      .attr("x", function(d, i) {return lPos.x + lPos.dx + Math.floor(i/6)*lPos.x1;})
+      .attr("y", function(d, i) {return lPos.y + (i%6)*lPos.dy;})
       .style("fill", function(d, i) {return colorList[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "start")

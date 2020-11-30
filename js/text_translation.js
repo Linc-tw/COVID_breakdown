@@ -9,9 +9,26 @@ let el = document.getElementById('lang_'+lang);
 el.classList.add("active");
 
 
-//-- Glocal settings
-var cList = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022'];
+//-- Global variables
+var global_var = {};
+global_var.xlabel_path = 25;
+global_var.rList = [7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7];
+global_var.cList = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022'];
+
 var wrap = {};
+
+
+
+
+
+
+//TODO
+//Taux de positivité
+//2020 page
+//Last 3 months
+
+
+
 
 
 //-- General functions

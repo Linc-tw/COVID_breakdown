@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.11.18                  ##
+    ##  Version 2020.11.27                  ##
     ##########################################
 
 
@@ -540,6 +540,9 @@ class MainSheet(Template):
       elif entryDate in ['11/7(8)']:
         entryDateList.append('2020-11-07')
       
+      elif entryDate in ['11/20(-27)']:
+        entryDateList.append(np.nan)
+      
       else:
         try:
           MD = entryDate.split('/')
@@ -589,7 +592,7 @@ class MainSheet(Template):
       elif '機場' in chan:
         chanList.append('airport')
         
-      elif '檢疫' in chan:
+      elif '檢疫' in chan or '回溯性採檢' in chan:
         chanList.append('quarantine')
         
       elif '隔離' in chan or '接觸者檢查' in chan:
@@ -598,11 +601,8 @@ class MainSheet(Template):
       elif '自主健康管理' in chan or '加強自主管理' in chan:
         chanList.append('monitoring')
         
-      elif '自行就醫' in chan or '自主就醫' in chan:
+      elif '自行就醫' in chan or '自主就醫' in chan or '自費篩檢' in chan or '自費檢驗' in chan:
         chanList.append('hospital')
-        
-      elif '自費篩檢' in chan or '自費檢驗' in chan:
-        chanList.append('on demand')
         
       elif '香港檢驗' in chan:
         chanList.append('overseas')
@@ -616,7 +616,7 @@ class MainSheet(Template):
     keyDict = {
       'sneezing': ['伴隨感冒症狀', '輕微流鼻水', '打噴嚏', '流鼻水', '流鼻涕', '鼻涕倒流', '輕微鼻塞', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['咳嗽有痰', '喉嚨有痰', '有痰', '輕微咳嗽', '咳嗽症狀', '咳嗽併痰', '咳嗽加劇', '咳嗽', '輕微乾咳', '乾咳', '輕咳'],
-      'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨乾癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', '喉嚨不適', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨'],
+      'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '聲音沙啞', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨乾癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', '喉嚨不適', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨'],
       'dyspnea': ['呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '微喘', '呼吸喘', '氣喘', '走路會喘'],
       'pneumonia': ['X光顯示肺炎', 'X光片顯示肺炎', 'X光顯示肺部輕微浸潤', '診斷為肺炎', '肺炎'], 
       
@@ -627,7 +627,7 @@ class MainSheet(Template):
       'vomiting': ['嘔吐'],
       'diarrhea': ['輕微腹瀉', '腹瀉'], 
       
-      'headache': ['輕度頭痛', '頭痛', '頭暈', '頭脹'],
+      'headache': ['輕微頭痛', '輕度頭痛', '頭痛', '頭暈', '頭脹'],
       'eyes sore': ['結膜充血', '後眼窩痛', '眼睛癢', '眼睛痛'], 
       'chest pain+backache': ['胸背痛'], 
       'chest pain': ['呼吸時胸痛', '胸痛', '輕微胸悶', '胸悶'],
@@ -635,7 +635,7 @@ class MainSheet(Template):
       'backache': ['背痛'], 
       'toothache': ['牙痛'], 
       
-      'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '走路喘', '倦怠', '疲憊', '無力'],
+      'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '走路喘', '倦怠', '疲憊', '疲倦', '無力'],
       'soreness': ['全身肌肉痠痛', '上半身骨頭刺痛', '全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉酸痛', '肌肉痠痛', '肌肉 痠痛', '骨頭痠痛', '骨頭酸', '關節痠痛', '關節痛', '痠痛'],
       'hypersomnia': ['嗜睡'],
       
@@ -945,7 +945,6 @@ class MainSheet(Template):
     iso_r      = np.zeros(nbDays, dtype=int)
     monitor_r  = np.zeros(nbDays, dtype=int)
     hospital_r = np.zeros(nbDays, dtype=int)
-    demand_r   = np.zeros(nbDays, dtype=int)
     overseas_r = np.zeros(nbDays, dtype=int)
     noData_r   = np.zeros(nbDays, dtype=int)
     airport_o  = np.zeros(nbDays, dtype=int)
@@ -953,7 +952,6 @@ class MainSheet(Template):
     iso_o      = np.zeros(nbDays, dtype=int)
     monitor_o  = np.zeros(nbDays, dtype=int)
     hospital_o = np.zeros(nbDays, dtype=int)
-    demand_o   = np.zeros(nbDays, dtype=int)
     overseas_o = np.zeros(nbDays, dtype=int)
     noData_o   = np.zeros(nbDays, dtype=int)
     
@@ -973,8 +971,6 @@ class MainSheet(Template):
         monitor_r[ind_r] += 1
       elif chan == 'hospital':
         hospital_r[ind_r] += 1
-      elif chan == 'on demand':
-        demand_r[ind_r] += 1
       elif chan == 'overseas':
         overseas_r[ind_r] += 1
       elif chan != chan: ## Is nan
@@ -996,17 +992,15 @@ class MainSheet(Template):
           monitor_o[ind_o] += 1
         elif chan == 'hospital':
           hospital_o[ind_o] += 1
-        elif chan == 'on demand':
-          demand_o[ind_o] += 1
         elif chan == 'overseas':
           overseas_o[ind_o] += 1
         elif chan != chan: ## Is nan
           noData_o[ind_o] += 1
     
-    data_r = {'date': date, 'no_data': noData_r, 'overseas': overseas_r, 'on_demand': demand_r, 'hospital': hospital_r, 
+    data_r = {'date': date, 'no_data': noData_r, 'overseas': overseas_r, 'hospital': hospital_r, 
               'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': QT_r, 'airport': airport_r}
     data_r = pd.DataFrame(data_r)
-    data_o = {'date': date, 'no_data': noData_o, 'overseas': overseas_o, 'on_demand': demand_o, 'hospital': hospital_o, 
+    data_o = {'date': date, 'no_data': noData_o, 'overseas': overseas_o, 'hospital': hospital_o, 
               'monitoring': monitor_o, 'isolation': iso_o, 'quarantine': QT_o, 'airport': airport_o}
     data_o = pd.DataFrame(data_o)
     

@@ -293,7 +293,7 @@ function DBT_initialize() {
     .text(ylabel);
     
   //-- Color
-  var colorList = [cList[4], cList[0], cList[1], cList[3], '#999999', '#000000']; 
+  var colorList = [global_var.cList[4], global_var.cList[0], global_var.cList[1], global_var.cList[3], '#999999', '#000000']; 
   var colTagList = DBT_wrap.colTagList.slice();
   var color = d3.scaleOrdinal()
     .domain(colTagList)
