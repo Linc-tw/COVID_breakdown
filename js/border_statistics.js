@@ -99,11 +99,11 @@ function BS_formatData(data) {
   }
   
   //-- Calculate ymax
-  ymax *= 1.2;
+  ymax *= 1.5;
   var ypath;
-  if (BS_wrap.doExit == 0) ypath = 25000;
-  else if (BS_wrap.doExit == 1) ypath = 25000;
-  else                       ypath = 50000;
+  if (BS_wrap.doExit == 0)      ypath = 1200;
+  else if (BS_wrap.doExit == 1) ypath = 1200;
+  else                          ypath = 2000;
   
   var ytick = [];
   for (i=0; i<ymax; i+=ypath) ytick.push(i)

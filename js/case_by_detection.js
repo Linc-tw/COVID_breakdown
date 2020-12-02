@@ -109,8 +109,17 @@ function CBD_formatData(data) {
   //-- Calculate ymax
   ymax *= 1.2;
   var ypath;
-  if (CBD_wrap.doCumul == 1) ypath = 150; //Math.floor(ymax / 5);
-  else                       ypath = 5;
+  if (CBD_wrap.doCumul == 1) {
+    if (CBD_wrap.doOnset == 1) ypath = 20;
+    else                       ypath = 50;
+  }
+  else {
+    if (CBD_wrap.doOnset == 1) {
+                               ypath = 2;
+                               ymax = 7.5;
+    }
+    else                       ypath = 5;
+  }
   
   var ytick = [];
   for (i=0; i<ymax; i+=ypath) ytick.push(i)
@@ -150,15 +159,20 @@ function CBD_formatData(data) {
 
 function CBD_formatData2(data2) {
   var overallTot = 0;
+  var latestTot = 0;
   var i;
   
   for (i=0; i<data2.length; i++) {
     if ('overall_total' == data2[i]['key']) {
       overallTot = +data2[i]['value'];
     }
+    else if ('latest_total' == data2[i]['key']) {
+      latestTot = +data2[i]['value'];
+    }
   }
   
   CBD_wrap.overallTot = overallTot;
+  CBD_wrap.latestTot = latestTot;
 }
 
 //-- Tooltip
@@ -369,15 +383,15 @@ function CBD_update() {
   else {
     lPos = {x: 70, y: 40, dx: 12, dy: 30, x1: 190};
   }
-  if (CBD_wrap.doCumul == 0) {
-    if (lang == 'zh-tw') lPos.x = 330;
-    else if (lang == 'fr') lPos.x = 370;
-    else lPos.x = 360;
-  }
+//   if (CBD_wrap.doCumul == 0) {
+//     if (lang == 'zh-tw') lPos.x = 330;
+//     else if (lang == 'fr') lPos.x = 370;
+//     else lPos.x = 360;
+//   }
   var lValue = CBD_wrap.lValue.slice();
   var sum = lValue.reduce((a, b) => a + b, 0);
-  if (CBD_wrap.doOnset == 1) lValue.push(CBD_wrap.overallTot-sum);
-  lValue.push(CBD_wrap.overallTot);
+  if (CBD_wrap.doOnset == 1) lValue.push(CBD_wrap.latestTot-sum);
+  lValue.push(CBD_wrap.latestTot);
   
   CBD_wrap.svg.selectAll(".legend.value")
     .remove()

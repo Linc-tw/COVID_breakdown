@@ -246,7 +246,7 @@ function ASC_initialize() {
   
   //-- Color
   var color = d3.scaleSequential()
-    .domain([-0.3, 0.3])
+    .domain([-0.42, 0.42])
     .interpolator(t => d3.interpolateRdBu(1-t));
   
   //-- Squares

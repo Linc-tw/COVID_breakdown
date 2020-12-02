@@ -11,8 +11,10 @@ el.classList.add("active");
 
 //-- Global variables
 var global_var = {};
-global_var.xlabel_path = 25;
-global_var.rList = [7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7];
+// global_var.xlabel_path = 25;
+// global_var.rList = [7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7];
+global_var.xlabel_path = 7;
+global_var.rList = [3, 3, 4, 1, 1, 2, 2];
 global_var.cList = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022'];
 
 var wrap = {};
@@ -66,7 +68,7 @@ function text_translation() {
     node = document.getElementById("menu_summary")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("統計摘要"));
+      node.appendChild(document.createTextNode("近90日統計摘要"));
     }
     node = document.getElementById("menu_policy")
     if (node !== null) {
@@ -345,7 +347,7 @@ function text_translation() {
     node = document.getElementById("menu_summary")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Tableau de bord"));
+      node.appendChild(document.createTextNode("Derniers 90 jours"));
     }
     node = document.getElementById("menu_policy")
     if (node !== null) {
@@ -624,7 +626,7 @@ function text_translation() {
     node = document.getElementById("menu_summary")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode("Dashboard"));
+      node.appendChild(document.createTextNode("90-day dashboard"));
     }
     node = document.getElementById("menu_policy")
     if (node !== null) {

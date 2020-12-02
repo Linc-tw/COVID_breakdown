@@ -1,27 +1,22 @@
 label,count,label_zh,label_fr
-N_total,679,合計,Total
-N_imported,588,境外移入總數,Importés
-N_data,554,有資料案例數,Données complètes
-USA,117,美國,États-Unis
-UK,87,英國,Royaume-Uni
-Indonesia,87,印尼,Indonésie
-Philippines,77,菲律賓,Philippines
-France,33,法國,France
-Spain,21,西班牙,Espagne
-Czechia,16,捷克,Tchéquie
-Turkey,15,土耳其,Turquie
-Egypt,12,埃及,Égypte
-cough,214,咳嗽,toux
-fever,196,發燒,fièvre
-sneezing,151,鼻腔症狀,éternuement
-throatache,147,喉嚨症狀,mal de gorge
-asymptomatic,108,無症狀,asymptomatique
-fatigue,79,倦怠,fatigue
-anosmia,79,嗅覺異常,anosmie
-soreness,71,痠痛,myalgie
-headache,57,頭痛,mal de tête
-ageusia,49,味覺異常,agueusie
-diarrhea,48,腹瀉,diarrhée
-pneumonia,26,肺炎,pneumonie
-dyspnea,25,呼吸困難,dyspnée
-chest pain,25,胸痛,mal à la poitrine
+N_total,189,合計,Total
+N_imported,189,境外移入總數,Importés
+N_data,166,有資料案例數,Données complètes
+Indonesia,76,印尼,Indonésie
+Philippines,41,菲律賓,Philippines
+USA,14,美國,États-Unis
+France,6,法國,France
+Myanmar,4,緬甸,Myanmar
+UK,4,英國,Royaume-Uni
+Japan,3,日本,Japon
+India,2,印度,Inde
+Turkey,2,土耳其,Turquie
+asymptomatic,88,無症狀,asymptomatique
+sneezing,34,鼻腔症狀,éternuement
+cough,33,咳嗽,toux
+fever,26,發燒,fièvre
+throatache,26,喉嚨症狀,mal de gorge
+anosmia,25,嗅覺異常,anosmie
+ageusia,17,味覺異常,agueusie
+soreness,17,痠痛,myalgie
+headache,12,頭痛,mal de tête

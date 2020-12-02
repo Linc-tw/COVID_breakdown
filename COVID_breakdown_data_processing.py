@@ -22,7 +22,8 @@ import pandas as pd
 ## Global variables
 
 DATA_PATH = '/home/linc/03_Codes/COVID_breakdown/'
-REF_ISO_DATE = '2020-01-11'
+REF_ISO_DATE = '2020-01-01'
+NB_LOOKBACK_DAYS = 90
 
 SYMPTOM_DICT = {
   'sneezing': {'zh-tw': '鼻腔症狀', 'fr': 'éternuement'},
@@ -89,6 +90,7 @@ TRAVEL_HISTORY_DICT = {
   
   'Europe': {'zh-tw': '歐洲', 'fr': 'Europe'},
   'Austria': {'zh-tw': '奧地利', 'fr': 'Autriche'},
+  'Belarus': {'zh-tw': '白俄羅斯', 'fr': 'Biélorussie'},
   'Belgium': {'zh-tw': '比利時', 'fr': 'Belgique'},
   'Bulgaria': {'zh-tw': '保加利亞', 'fr': 'Bulgarie'},
   'Croatia': {'zh-tw': '克羅埃西亞', 'fr': 'Croatie'},
@@ -146,8 +148,8 @@ AGE_DICT = {
   '60s': {'zh-tw': '60-69歲', 'fr': '60aine'},
   '70s': {'zh-tw': '70-79歲', 'fr': '70aine'},
   '80s': {'zh-tw': '80-89歲', 'fr': '80aine'},
-  '90s': {'zh-tw': '90-99歲', 'fr': '90aine'},
-  '100s': {'zh-tw': '>100歲', 'fr': '100aine'}
+  #'90s': {'zh-tw': '90-99歲', 'fr': '90aine'},
+  #'100s': {'zh-tw': '>100歲', 'fr': '100aine'}
 }
 
 ###############################################################################
@@ -311,6 +313,14 @@ class MainSheet(Template):
       reportDate = reportDate.split('日')[0].split('月')
       reportDate = '2020-%02s-%02s' % (reportDate[0], reportDate[1])
       reportDateList.append(reportDate)
+      
+    todayOrd = dtt.date.today().toordinal() + 1
+    ind = [ISODateToOrdinal(reportDate) + NB_LOOKBACK_DAYS >= todayOrd for reportDate in reportDateList]
+    self.N_latest = sum(ind)
+    
+    ind = ['2020' in reportDate for reportDate in reportDateList]
+    self.N_2020 = sum(ind)
+    
     return reportDateList
   
   def getAge(self):
@@ -392,6 +402,7 @@ class MainSheet(Template):
       
       'Europe': ['歐洲'], 
       'Austria': ['奧地利'], 
+      'Belarus': ['白俄羅斯'],
       'Belgium': ['比利時'], 
       'Bulgaria': ['保加利亞'], 
       'Croatia': ['克羅埃西亞'],
@@ -731,15 +742,25 @@ class MainSheet(Template):
     return hist
   
   def makeTravHistSymptomMat(self):
+    reportDateList = self.getReportDate()
     transList = self.getTransmission()
     travHistList = self.getTravHist()
     #travHistList = self.getContinent()
     symptomList = self.getSymptom()
+    
+    todayOrd = dtt.date.today().toordinal() + 1
     travHistList2 = []
     symptomList2 = []
+    N_total = 0
     N_imported = 0
     
-    for trans, travHist, symptom in zip(transList, travHistList, symptomList):
+    for reportDate, trans, travHist, symptom in zip(reportDateList, transList, travHistList, symptomList):
+      repOrd = ISODateToOrdinal(reportDate)
+      
+      if repOrd + NB_LOOKBACK_DAYS <= todayOrd:
+        continue
+      
+      N_total += 1
       if trans == 'imported':
         N_imported += 1
         if travHist == travHist and symptom == symptom: ## Is not nan
@@ -766,7 +787,7 @@ class MainSheet(Template):
       sympBoolMat.append(sympBoolArr)
     sympBoolMat = np.array(sympBoolMat)
     
-    return N_imported, N_data, travHistHist, symptomHist, travBoolMat, sympBoolMat
+    return N_total, N_imported, N_data, travHistHist, symptomHist, travBoolMat, sympBoolMat
   
   def makeTravHistSymptomCorr1(self):
     N_imported, N_data, travHistHist, symptomHist, travBoolMat, sympBoolMat = self.makeTravHistSymptomMat()
@@ -801,23 +822,31 @@ class MainSheet(Template):
     return N_imported, N_data, travHistHist, symptomHist, corrMat, countMat
     
   def makeTravHistSymptomCorr3(self):
-    N_imported, N_data, travHistHist, symptomHist, travBoolMat, sympBoolMat = self.makeTravHistSymptomMat()
+    N_total, N_imported, N_data, travHistHist, symptomHist, travBoolMat, sympBoolMat = self.makeTravHistSymptomMat()
     
     travBoolMat_n = np.array([normalizeBoolArr(travBoolArr) for travBoolArr in travBoolMat])
     sympBoolMat_n = np.array([normalizeBoolArr(sympBoolArr) for sympBoolArr in sympBoolMat])
     
     corrMat  = travBoolMat_n.dot(sympBoolMat_n.T)
     countMat = travBoolMat.dot(sympBoolMat.T)
-    return N_imported, N_data, travHistHist, symptomHist, corrMat, countMat
+    return N_total, N_imported, N_data, travHistHist, symptomHist, corrMat, countMat
   
   def makeAgeSymptomMat(self):
+    reportDateList = self.getReportDate()
     ageList = self.getAge()
     symptomList = self.getSymptom()
+    
+    todayOrd = dtt.date.today().toordinal() + 1
     ageList2 = []
     symptomList2 = []
     N_total = 0
     
-    for age, symptom in zip(ageList, symptomList):
+    for reportDate, age, symptom in zip(reportDateList, ageList, symptomList):
+      repOrd = ISODateToOrdinal(reportDate)
+      
+      if repOrd + NB_LOOKBACK_DAYS <= todayOrd:
+        continue
+      
       N_total += 1
       if age == age and symptom == symptom: ## Is not nan
         ageList2.append(age)
@@ -827,6 +856,8 @@ class MainSheet(Template):
     N_data = len(ageList2)
         
     ageHist = clt.Counter(ageList2)
+    for age in AGE_DICT:
+      ageHist[age] = ageHist.get(age, 0)
     ageHist = sorted(ageHist.items(), key=lambda x: x[0], reverse=True)
     symptomHist = clt.Counter([symp for symptom in symptomList2 for symp in symptom])
     symptomHist = sorted(symptomHist.items(), key=lambda x: x[1], reverse=True)
@@ -856,11 +887,12 @@ class MainSheet(Template):
     return N_total, N_data, ageHist, symptomHist, corrMat, countMat
   
   def saveCsv_keyNb(self):
+    self.getReportDate()
     timestamp = dtt.datetime.now().astimezone()
     timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
     
-    key   = ['overall_total', 'timestamp']
-    value = [self.N_total, timestamp]
+    key   = ['overall_total', 'latest_total', 'timestamp']
+    value = [self.N_total, self.N_latest, timestamp]
     
     data = {'key': key, 'value': value}
     data = pd.DataFrame(data)
@@ -919,15 +951,20 @@ class MainSheet(Template):
         else:
           linked_o[ind_o] += 1
     
-    data_r = {'date': date, 'fleet': fleet_r, 'unlinked': unlinked_r, 'linked': linked_r, 'imported': imported_r}
-    data_r = pd.DataFrame(data_r)
-    data_o = {'date': date, 'fleet': fleet_o, 'unlinked': unlinked_o, 'linked': linked_o, 'imported': imported_o}
-    data_o = pd.DataFrame(data_o)
+    data_full_r = {'date': date, 'fleet': fleet_r, 'unlinked': unlinked_r, 'linked': linked_r, 'imported': imported_r}
+    data_full_r = pd.DataFrame(data_full_r)
+    data_last_r = data_full_r.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020_r = data_full_r.iloc[:366]
+    
+    data_full_o = {'date': date, 'fleet': fleet_o, 'unlinked': unlinked_o, 'linked': linked_o, 'imported': imported_o}
+    data_full_o = pd.DataFrame(data_full_o)
+    data_last_o = data_full_o.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020_o = data_full_o.iloc[:366]
     
     name = '%sprocessed_data/case_by_transmission_by_report_day.csv' % DATA_PATH
-    saveCsv(name, data_r)
+    saveCsv(name, data_last_r)
     name = '%sprocessed_data/case_by_transmission_by_onset_day.csv' % DATA_PATH
-    saveCsv(name, data_o)
+    saveCsv(name, data_last_o)
     return
   
   def saveCsv_caseByDetection(self):
@@ -997,17 +1034,22 @@ class MainSheet(Template):
         elif chan != chan: ## Is nan
           noData_o[ind_o] += 1
     
-    data_r = {'date': date, 'no_data': noData_r, 'overseas': overseas_r, 'hospital': hospital_r, 
-              'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': QT_r, 'airport': airport_r}
-    data_r = pd.DataFrame(data_r)
-    data_o = {'date': date, 'no_data': noData_o, 'overseas': overseas_o, 'hospital': hospital_o, 
-              'monitoring': monitor_o, 'isolation': iso_o, 'quarantine': QT_o, 'airport': airport_o}
-    data_o = pd.DataFrame(data_o)
+    data_full_r = {'date': date, 'no_data': noData_r, 'overseas': overseas_r, 'hospital': hospital_r, 
+                   'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': QT_r, 'airport': airport_r}
+    data_full_r = pd.DataFrame(data_full_r)
+    data_last_r = data_full_r.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020_r = data_full_r.iloc[:366]
+    
+    data_full_o = {'date': date, 'no_data': noData_o, 'overseas': overseas_o, 'hospital': hospital_o, 
+                   'monitoring': monitor_o, 'isolation': iso_o, 'quarantine': QT_o, 'airport': airport_o}
+    data_full_o = pd.DataFrame(data_full_o).iloc[-NB_LOOKBACK_DAYS:]
+    data_last_o = data_full_o.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020_o = data_full_o.iloc[:366]
     
     name = '%sprocessed_data/case_by_detection_by_report_day.csv' % DATA_PATH
-    saveCsv(name, data_r)
+    saveCsv(name, data_last_r)
     name = '%sprocessed_data/case_by_detection_by_onset_day.csv' % DATA_PATH
-    saveCsv(name, data_o)
+    saveCsv(name, data_last_o)
     return
   
   def saveCsv_diffByTrans(self):
@@ -1016,10 +1058,11 @@ class MainSheet(Template):
     onsetDateList  = self.getOnsetDate()
     transList      = self.getTransmission()
     
+    todayOrd = dtt.date.today().toordinal() + 1
     stock_imp = []
     stock_ind = []
     stock_fle = []
-    max_ = 0
+    max_ = 30
     
     for reportDate, entryDate, onsetDate, trans in zip(reportDateList, entryDateList, onsetDateList, transList):
       if trans == 'imported':
@@ -1036,6 +1079,9 @@ class MainSheet(Template):
       onsOrd = ISODateToOrdinal(onsetDate) if onsetDate == onsetDate else 0
       
       if entOrd + onsOrd == 0:
+        continue
+      
+      if repOrd + NB_LOOKBACK_DAYS <= todayOrd:
         continue
       
       diff = min(repOrd-entOrd, repOrd-onsOrd)
@@ -1062,11 +1108,11 @@ class MainSheet(Template):
     return
   
   def saveCsv_travHistSymptomCorr(self):
-    N_imported, N_data, travHistHist, symptomHist, corrMat, countMat = self.makeTravHistSymptomCorr3()
+    N_total, N_imported, N_data, travHistHist, symptomHist, corrMat, countMat = self.makeTravHistSymptomCorr3()
     N_min = N_data * 0.033
     
     N_trav = 9 #sum([1 if travHist[1] > N_min else 0 for travHist in travHistHist])
-    N_symp = 14 #sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
+    N_symp = 9 #sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
     
     corrMat = corrMat[:N_trav, :N_symp]
     countMat = countMat[:N_trav, :N_symp]
@@ -1080,29 +1126,30 @@ class MainSheet(Template):
     symptom   = grid[0].flatten()
     trav_hist = grid[1].flatten()
     value_r   = corrMat.flatten()
-    label_r   = ['%+.0f%%' % (100*v) for v in value_r]
+    label_r   = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_r]
     label_n   = countMat.flatten()
     
-    data = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_r}
-    data = pd.DataFrame(data)
+    data_1 = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_r}
+    data_1 = pd.DataFrame(data_1)
     
-    data2 = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_n}
-    data2 = pd.DataFrame(data2)
+    data_2 = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_n}
+    data_2 = pd.DataFrame(data_2)
     
-    pairList = [('N_total', self.N_total), ('N_imported', N_imported), ('N_data', N_data)] + travHistHist + symptomHist
+    pairList = [('N_total', N_total), ('N_imported', N_imported), ('N_data', N_data)] + travHistHist + symptomHist
     label = [pair[0] for pair in pairList]
     count = [pair[1] for pair in pairList]
     label_zh = ['合計', '境外移入總數', '有資料案例數'] + [TRAVEL_HISTORY_DICT[trav]['zh-tw'] for trav in travHistList] + [SYMPTOM_DICT[symp]['zh-tw'] for symp in symptomList]
     label_fr = ['Total', 'Importés', 'Données complètes'] + [TRAVEL_HISTORY_DICT[trav]['fr'] for trav in travHistList] + [SYMPTOM_DICT[symp]['fr'] for symp in symptomList]
-    data3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
-    data3 = pd.DataFrame(data3)
+    
+    data_3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
+    data_3 = pd.DataFrame(data_3)
     
     name = '%sprocessed_data/travel_history_symptom_correlations_coefficient.csv' % DATA_PATH
-    saveCsv(name, data)
+    saveCsv(name, data_1)
     name = '%sprocessed_data/travel_history_symptom_correlations_counts.csv' % DATA_PATH
-    saveCsv(name, data2)
+    saveCsv(name, data_2)
     name = '%sprocessed_data/travel_history_symptom_counts.csv' % DATA_PATH
-    saveCsv(name, data3)
+    saveCsv(name, data_3)
     return
   
   def saveCsv_ageSymptomCorr(self):
@@ -1110,7 +1157,7 @@ class MainSheet(Template):
     N_min = N_data * 0.033
     
     N_age  = corrMat.shape[0]
-    N_symp = 14 #sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
+    N_symp = 9 #sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
     
     corrMat = corrMat[:N_age, :N_symp]
     countMat = countMat[:N_age, :N_symp]
@@ -1124,30 +1171,30 @@ class MainSheet(Template):
     symptom = grid[0].flatten()
     age     = grid[1].flatten()
     value_r = corrMat.flatten()
-    label_r = ['%+.0f%%' % (100*v) for v in value_r]
-    label_n = countMat.flatten()
+    label_r = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_r]
+    label_n = countMat.flatten() #['%d' % n if v == v else '' for v, n in zip(value_r, countMat.flatten())]
     
-    data = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_r}
-    data = pd.DataFrame(data)
+    data_1 = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_r}
+    data_1 = pd.DataFrame(data_1)
     
-    data2 = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_n}
-    data2 = pd.DataFrame(data2)
+    data_2 = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_n}
+    data_2 = pd.DataFrame(data_2)
     
     pairList = [('N_total', N_total), ('N_data', N_data)] + ageHist + symptomHist
     label = [pair[0] for pair in pairList]
     count = [pair[1] for pair in pairList]
-    
     label_zh = ['合計', '有資料案例數'] + [AGE_DICT[age]['zh-tw'] for age in ageList] + [SYMPTOM_DICT[symp]['zh-tw'] for symp in symptomList]
     label_fr = ['Total', 'Données complètes'] + [AGE_DICT[age]['fr'] for age in ageList] + [SYMPTOM_DICT[symp]['fr'] for symp in symptomList]
-    data3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
-    data3 = pd.DataFrame(data3)
+    
+    data_3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
+    data_3 = pd.DataFrame(data_3)
     
     name = '%sprocessed_data/age_symptom_correlations_coefficient.csv' % DATA_PATH
-    saveCsv(name, data)
+    saveCsv(name, data_1)
     name = '%sprocessed_data/age_symptom_correlations_counts.csv' % DATA_PATH
-    saveCsv(name, data2)
+    saveCsv(name, data_2)
     name = '%sprocessed_data/age_symptom_counts.csv' % DATA_PATH
-    saveCsv(name, data3)
+    saveCsv(name, data_3)
     return
   
   def saveCsv(self):
@@ -1212,7 +1259,7 @@ class StatusSheet(Template):
   
   def getDate(self):
     dateList = []
-    Y = 2020
+    Y = 2020 #WARNING
     
     for date in self.getCol(self.n_date):
       MMDD = date.split('月')
@@ -1241,12 +1288,14 @@ class StatusSheet(Template):
     cumDisList    = self.getCumDis()
     cumHospList   = self.getCumHosp()
     
-    data = {'date': dateList, 'death': cumDeathsList, 'hospitalized': cumHospList, 'discharged': cumDisList}
-    data = pd.DataFrame(data)
-    data = adjustDateRange(data)
+    data_full = {'date': dateList, 'death': cumDeathsList, 'hospitalized': cumHospList, 'discharged': cumDisList}
+    data_full = pd.DataFrame(data_full)
+    data_full = adjustDateRange(data_full)
+    data_last = data_full.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020 = data_full.iloc[:366]
     
     name = '%sprocessed_data/status_evolution.csv' % DATA_PATH
-    saveCsv(name, data)
+    saveCsv(name, data_last)
     return
       
   def saveCsv(self):
@@ -1358,12 +1407,14 @@ class TestSheet(Template):
     fromQTList  = self.getFromQT()
     fromClinicalDefList = self.getFromClinicalDef()
     
-    data = {'date': dateList, 'clinical': fromClinicalDefList, 'quarantine': fromQTList, 'extended': fromExtList}
-    data = pd.DataFrame(data)
-    data = adjustDateRange(data)
+    data_full = {'date': dateList, 'clinical': fromClinicalDefList, 'quarantine': fromQTList, 'extended': fromExtList}
+    data_full = pd.DataFrame(data_full)
+    data_full = adjustDateRange(data_full)
+    data_last = data_full.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020 = data_full.iloc[:366]
     
     name = '%sprocessed_data/test_by_criterion.csv' % DATA_PATH
-    saveCsv(name, data)
+    saveCsv(name, data_last)
     return
   
   def printCriteria(self):
@@ -1784,31 +1835,40 @@ class BorderSheet(Template):
     seaList     = self.getSeaport(tag='in')
     notSpecList = self.getNotSpecified(tag='in')
     
-    data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
-    data = pd.DataFrame(data)
-    data = adjustDateRange(data)
+    data_full = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
+    data_full = pd.DataFrame(data_full)
+    data_full = adjustDateRange(data_full)
+    data_last = data_full.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020 = data_full.iloc[:366]
+    
     name = '%sprocessed_data/border_statistics_entry.csv' % DATA_PATH
-    saveCsv(name, data)
+    saveCsv(name, data_last)
     
     airList     = self.getAirport(tag='out')
     seaList     = self.getSeaport(tag='out')
     notSpecList = self.getNotSpecified(tag='out')
     
-    data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
-    data = pd.DataFrame(data)
-    data = adjustDateRange(data)
+    data_full = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
+    data_full = pd.DataFrame(data_full)
+    data_full = adjustDateRange(data_full)
+    data_last = data_full.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020 = data_full.iloc[:366]
+    
     name = '%sprocessed_data/border_statistics_exit.csv' % DATA_PATH
-    saveCsv(name, data)
+    saveCsv(name, data_last)
     
     airList     = self.getAirport(tag='total')
     seaList     = self.getSeaport(tag='total')
     notSpecList = self.getNotSpecified(tag='total')
     
-    data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
-    data = pd.DataFrame(data)
-    data = adjustDateRange(data)
+    data_full = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
+    data_full = pd.DataFrame(data_full)
+    data_full = adjustDateRange(data_full)
+    data_last = data_full.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020 = data_full.iloc[:366]
+    
     name = '%sprocessed_data/border_statistics_both.csv' % DATA_PATH
-    saveCsv(name, data)
+    saveCsv(name, data_last)
     return
       
   def saveCsv(self):
@@ -1919,7 +1979,7 @@ class TimelineSheet(Template):
 def sandbox():
   sheet = MainSheet()
   #print(sheet.getAge())
-  sheet.getTravHist()
+  sheet.saveCsv_diffByTrans()
   
   #sheet = StatusSheet()
   #print(sheet.getCumHosp())

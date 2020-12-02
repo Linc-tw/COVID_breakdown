@@ -106,8 +106,17 @@ function CBT_formatData(data) {
   //-- Calculate ymax
   ymax *= 1.2;
   var ypath;
-  if (CBT_wrap.doCumul == 1) ypath = 150;
-  else                       ypath = 5;
+  if (CBT_wrap.doCumul == 1) {
+    if (CBT_wrap.doOnset == 1) ypath = 20;
+    else                       ypath = 50;
+  }
+  else {
+    if (CBT_wrap.doOnset == 1) {
+                               ypath = 2;
+                               ymax = 7.5;
+    }
+    else                       ypath = 5;
+  }
   
   var ytick = [];
   for (i=0; i<ymax; i+=ypath) ytick.push(i)
@@ -142,15 +151,20 @@ function CBT_formatData(data) {
 
 function CBT_formatData2(data2) {
   var overallTot = 0;
+  var latestTot = 0;
   var i;
   
   for (i=0; i<data2.length; i++) {
     if ('overall_total' == data2[i]['key']) {
       overallTot = +data2[i]['value'];
     }
+    else if ('latest_total' == data2[i]['key']) {
+      latestTot = +data2[i]['value'];
+    }
   }
   
   CBT_wrap.overallTot = overallTot;
+  CBT_wrap.latestTot = latestTot;
 }
 
 //-- Tooltip
@@ -354,15 +368,15 @@ function CBT_update() {
   
   //-- Legend - value
   var lPos = {x: 70, y: 45, dx: 12, dy: 30};
-  if (CBT_wrap.doCumul == 0) {
-    if (lang == 'zh-tw') lPos.x = 530;
-    else if (lang == 'fr') lPos.x = 480;
-    else lPos.x = 410;
-  }
+//   if (CBT_wrap.doCumul == 0) {
+//     if (lang == 'zh-tw') lPos.x = 530;
+//     else if (lang == 'fr') lPos.x = 480;
+//     else lPos.x = 410;
+//   }
   var lValue = CBT_wrap.lValue.slice();
   var sum = lValue.reduce((a, b) => a + b, 0);
-  if (CBT_wrap.doOnset == 1) lValue.push(CBT_wrap.overallTot-sum);
-  lValue.push(CBT_wrap.overallTot);
+  if (CBT_wrap.doOnset == 1) lValue.push(CBT_wrap.latestTot-sum);
+  lValue.push(CBT_wrap.latestTot);
   
   CBT_wrap.svg.selectAll(".legend.value")
     .remove()

@@ -99,10 +99,10 @@ function TBC_formatData(data) {
   }
   
   //-- Calculate ymax
-  ymax *= 1.22;
+  ymax *= 1.3;
   var ypath;
-  if (TBC_wrap.doCumul == 1) ypath = 30000;
-  else                       ypath = 600;
+  if (TBC_wrap.doCumul == 1) ypath = 6000;
+  else                       ypath = 250;
   
   var ytick = [];
   for (i=0; i<ymax; i+=ypath) ytick.push(i)

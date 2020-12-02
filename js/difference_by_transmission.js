@@ -56,7 +56,7 @@ function DBT_formatData(data) {
   var r = 0;
   var xtick = [];
   var xticklabel = [];
-  var ymax = 0;
+  var ymax = 3;
   
   var colTagList = data.columns.slice(1);
   var colTag = colTagList[DBT_wrap.colInd];
@@ -83,10 +83,10 @@ function DBT_formatData(data) {
   //-- Calculate ymax
   ymax *= 1.11;
   var ypath;
-  if      (DBT_wrap.colInd == 0) ypath = 30;
-  else if (DBT_wrap.colInd == 1) ypath = 30;
+  if      (DBT_wrap.colInd == 0) ypath = 15;
+  else if (DBT_wrap.colInd == 1) ypath = 15;
   else if (DBT_wrap.colInd == 2) ypath = 1;
-  else                           ypath = 4;
+  else                           ypath = 1;
   
   var ytick = [];
   for (i=0; i<ymax; i+=ypath) ytick.push(i)
@@ -111,15 +111,20 @@ function DBT_formatData(data) {
 
 function DBT_formatData2(data2) {
   var overallTot = 0;
+  var latestTot = 0;
   var i;
   
   for (i=0; i<data2.length; i++) {
     if ('overall_total' == data2[i]['key']) {
       overallTot = +data2[i]['value'];
     }
+    else if ('latest_total' == data2[i]['key']) {
+      latestTot = +data2[i]['value'];
+    }
   }
   
   DBT_wrap.overallTot = overallTot;
+  DBT_wrap.latestTot = latestTot;
 }
 
 //-- Tooltip
@@ -359,8 +364,8 @@ function DBT_update() {
     lLabel = ['Data complete', 'Imported', 'Local', 'Diplomatic fleet cluster', 'Data incomplete', 'Total'];
   var lValue = DBT_wrap.lValue.slice(0);
   var sum = DBT_wrap.lValue.slice(1).reduce((a, b) => a + b, 0);
-  lValue.push(DBT_wrap.overallTot-sum);
-  lValue.push(DBT_wrap.overallTot);
+  lValue.push(DBT_wrap.latestTot-sum);
+  lValue.push(DBT_wrap.latestTot);
   
   if (DBT_wrap.colInd == 0) {
     lColorList = [DBT_wrap.colorList[0], DBT_wrap.colorList[4], DBT_wrap.colorList[5]]

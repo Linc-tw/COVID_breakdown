@@ -97,8 +97,8 @@ function SE_formatData(data) {
   }
   
   //-- Calculate ymax
-  ymax *= 1.2;
-  var ypath = 150;
+  ymax *= 1.6;
+  var ypath = 250;
   
   var ytick = [];
   for (i=0; i<ymax; i+=ypath) ytick.push(i)
