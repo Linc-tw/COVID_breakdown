@@ -109,7 +109,7 @@ body,
   border-radius: 5px;
   padding: 5px;
 }
-#status_evolution .tooltip {
+#status_evolution_latest .tooltip, #status_evolution_2020 .tooltip {
   margin-left: -65px;
   margin-right: -65px;
   margin-top: -55px;

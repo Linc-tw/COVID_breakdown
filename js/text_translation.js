@@ -17,7 +17,14 @@ global_var.xlabel_path = 7;
 global_var.rList = [3, 3, 4, 1, 1, 2, 2];
 global_var.cList = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022'];
 
-var wrap = {};
+var GLOBAL_VAR = {};
+GLOBAL_VAR.xlabel_path_latest = 7;
+GLOBAL_VAR.r_list_latest = [3, 3, 4, 1, 1, 2, 2];
+GLOBAL_VAR.xlabel_path_2020 = 25;
+GLOBAL_VAR.r_list_2020 = [7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7];
+GLOBAL_VAR.c_list = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022'];
+
+var KN_wrap = {};
 
 
 
@@ -43,6 +50,16 @@ function ISODateToMDDate(ISODate) {
   
   var date = d3.isoParse(ISODate);
   return MDDateFormat(date);
+}
+
+function TT_ISO_Date_To_MD_Date(iso_date) {
+  var md_date_format;
+  if (lang == 'zh-tw')   md_date_format = d3.timeFormat("%-m月%-d日");
+  else if (lang == 'fr') md_date_format = d3.timeFormat("%d/%m");
+  else md_date_format = d3.timeFormat("%b %d");
+  
+  var date = d3.isoParse(iso_date);
+  return md_date_format(date);
 }
 
 function cumsum(data, colTagList) {
@@ -88,7 +105,7 @@ function text_translation() {
     node = document.getElementById("footer_last_update")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode('最後更新：' + wrap.timestamp));
+      node.appendChild(document.createTextNode('最後更新：' + KN_wrap.timestamp));
       node.appendChild(document.createTextNode(' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3'));
     }
     
@@ -367,7 +384,7 @@ function text_translation() {
     node = document.getElementById("footer_last_update")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode('Dernière mise à jour : ' + wrap.timestamp));
+      node.appendChild(document.createTextNode('Dernière mise à jour : ' + KN_wrap.timestamp));
       node.appendChild(document.createTextNode(' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3'));
     }
     
@@ -646,7 +663,7 @@ function text_translation() {
     node = document.getElementById("footer_last_update")
     if (node !== null) {
       node.textContent = '';
-      node.appendChild(document.createTextNode('Last updates: ' + wrap.timestamp));
+      node.appendChild(document.createTextNode('Last updates: ' + KN_wrap.timestamp));
       node.appendChild(document.createTextNode(' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3'));
     }
     
@@ -916,8 +933,8 @@ d3.csv("processed_data/key_numbers.csv", function(error, data) {
     }
   }
   
-  wrap.overallTot = overallTot;
-  wrap.timestamp = timestamp;
+  KN_wrap.overallTot = overallTot;
+  KN_wrap.timestamp = timestamp;
 
   text_translation()
 });

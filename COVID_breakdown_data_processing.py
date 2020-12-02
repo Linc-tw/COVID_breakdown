@@ -1288,14 +1288,18 @@ class StatusSheet(Template):
     cumDisList    = self.getCumDis()
     cumHospList   = self.getCumHosp()
     
-    data_full = {'date': dateList, 'death': cumDeathsList, 'hospitalized': cumHospList, 'discharged': cumDisList}
-    data_full = pd.DataFrame(data_full)
-    data_full = adjustDateRange(data_full)
-    data_last = data_full.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020 = data_full.iloc[:366]
+    data = {'date': dateList, 'death': cumDeathsList, 'hospitalized': cumHospList, 'discharged': cumDisList}
+    data = pd.DataFrame(data)
+    data = adjustDateRange(data)
     
-    name = '%sprocessed_data/status_evolution.csv' % DATA_PATH
-    saveCsv(name, data_last)
+    data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020 = data.iloc[:366]
+    
+    name = '%sprocessed_data/latest/status_evolution.csv' % DATA_PATH
+    saveCsv(name, data_latest)
+    
+    name = '%sprocessed_data/2020/status_evolution.csv' % DATA_PATH
+    saveCsv(name, data_2020)
     return
       
   def saveCsv(self):
@@ -1977,13 +1981,13 @@ class TimelineSheet(Template):
 ## Sandbox
 
 def sandbox():
-  sheet = MainSheet()
+  #sheet = MainSheet()
   #print(sheet.getAge())
-  sheet.saveCsv_diffByTrans()
+  #sheet.saveCsv_diffByTrans()
   
-  #sheet = StatusSheet()
+  sheet = StatusSheet()
   #print(sheet.getCumHosp())
-  #sheet.saveCsv_statusEvolution()
+  sheet.saveCsv_statusEvolution()
   
   #sheet = TestSheet()
   #print(sheet.printCriteria())

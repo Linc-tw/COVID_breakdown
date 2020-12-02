@@ -1,35 +1,35 @@
-var SE_wrap = {};
-SE_wrap.tag = 'status_evolution'
-SE_wrap.id = '#' + SE_wrap.tag
-SE_wrap.dataPathList = [
-  "processed_data/status_evolution.csv"
-];
 
-function SE_makeCanvas() {
-  var totWidth = 800;
-  var totHeight;
+//-- File:
+//--   status_evolution.js
+//--
+//-- Author:
+//--   Chieh-An Lin
+
+function SE_Make_Canvas(wrap) {
+  var tot_width = 800;
+  var tot_height;
   if (lang == 'zh-tw') {
-    totHeight = 415;
+    tot_height = 415;
     bottom = 105;
   }
   else if (lang == 'fr') {
-    totHeight = 400;
+    tot_height = 400;
     bottom = 90;
   }
   else {
-    totHeight = 400;
+    tot_height = 400;
     bottom = 90;
   }
   
   var margin = {left: 70, right: 2, bottom: bottom, top: 2};
-  var width = totWidth - margin.left - margin.right;
-  var height = totHeight - margin.top - margin.bottom;
+  var width = tot_width - margin.left - margin.right;
+  var height = tot_height - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
   
-  var svg = d3.select(SE_wrap.id)
+  var svg = d3.select(wrap.id)
     .append("svg")
       .attr('class', 'plot')
-      .attr("viewBox", "0 0 " + totWidth + " " + totHeight)
+      .attr("viewBox", "0 0 " + tot_width + " " + tot_height)
       .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
@@ -40,68 +40,67 @@ function SE_makeCanvas() {
       .attr("fill", "white")
       .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
-  SE_wrap.totWidth = totWidth;
-  SE_wrap.totHeight = totHeight;
-  SE_wrap.margin = margin;
-  SE_wrap.width = width;
-  SE_wrap.height = height;
-  SE_wrap.corner = corner;
-  SE_wrap.svg = svg;
+  wrap.tot_width = tot_width;
+  wrap.tot_height = tot_height;
+  wrap.margin = margin;
+  wrap.width = width;
+  wrap.height = height;
+  wrap.corner = corner;
+  wrap.svg = svg;
 }
 
-function SE_formatData(data) {
+function SE_Format_Data(wrap, data) {
   //-- Settings for xticklabels
-  var q = data.length % global_var.xlabel_path;
-  var r = global_var.rList[q];
+  var q = data.length % wrap.xlabel_path;
+  var r = wrap.r_list[q];
   var xtick = [];
   var xticklabel = [];
-  var ymax = 0;
+  var y_max = 0;
   
-  var colTagList = data.columns.slice(1);
-  var nbCol = colTagList.length;
-  var dateList = [];
-  var formattedData = [];
+  var col_tag_list = data.columns.slice(1);
+  var nb_col = col_tag_list.length;
+  var date_list = [];
+  var formatted_data = [];
   var i, j, x, y, height, block;
   
   for (i=0; i<data.length; i++) {
     y = 0;
     x = data[i]["date"];
-    dateList.push(x);
+    date_list.push(x);
     
-    for (j=0; j<nbCol; j++) {
-      height = +data[i][colTagList[j]];
+    for (j=0; j<nb_col; j++) {
+      height = +data[i][col_tag_list[j]];
       block = {
         'x': x,
         'y0': y,
         'y1': y + height,
         'height': height,
-        'h1': +data[i][colTagList[nbCol-1]],
-        'h2': +data[i][colTagList[nbCol-2]],
-        'h3': +data[i][colTagList[nbCol-3]],
-        'col': colTagList[j]
+        'h1': +data[i][col_tag_list[nb_col-1]],
+        'h2': +data[i][col_tag_list[nb_col-2]],
+        'h3': +data[i][col_tag_list[nb_col-3]],
+        'col': col_tag_list[j]
       };
         
       y += height;
-      formattedData.push(block);
+      formatted_data.push(block);
     }
     
-    ymax = Math.max(ymax, y);
+    y_max = Math.max(y_max, y);
     
-    if (i % global_var.xlabel_path == r) {
+    if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
-      xticklabel.push(ISODateToMDDate(x));
+      xticklabel.push(TT_ISO_Date_To_MD_Date(x));
     }
     else {
       xticklabel.push("");
     }
   }
   
-  //-- Calculate ymax
-  ymax *= 1.6;
-  var ypath = 250;
+  //-- Calculate y_max
+  y_max *= wrap.y_max_factor;
   
   var ytick = [];
-  for (i=0; i<ymax; i+=ypath) ytick.push(i)
+  for (i=0; i<y_max; i+=wrap.y_path) ytick.push(i)
   
   //-- Calculate separate sum
   var last = data.length - 1;
@@ -111,173 +110,167 @@ function SE_formatData(data) {
     death = +data[last]['death'];
   }
   
-  var dis    = +data[last]['discharged'];
-  var hosp   = +data[last]['hospitalized'];
-  var lValue = [dis, hosp, death];
+  var dis  = +data[last]['discharged'];
+  var hosp = +data[last]['hospitalized'];
+  var legend_value = [dis, hosp, death];
   
-  SE_wrap.formattedData = formattedData;
-  SE_wrap.dateList = dateList;
-  SE_wrap.colTagList = colTagList;
-  SE_wrap.nbCol = nbCol;
-  SE_wrap.ymax = ymax;
-  SE_wrap.xtick = xtick;
-  SE_wrap.xticklabel = xticklabel;
-  SE_wrap.ytick = ytick;
-  SE_wrap.lValue = lValue;
+  wrap.formatted_data = formatted_data;
+  wrap.date_list = date_list;
+  wrap.col_tag_list = col_tag_list;
+  wrap.nb_col = nb_col;
+  wrap.y_max = y_max;
+  wrap.xtick = xtick;
+  wrap.xticklabel = xticklabel;
+  wrap.ytick = ytick;
+  wrap.legend_value = legend_value;
 }
 
 //-- Tooltip
-var SE_tooltip = d3.select(SE_wrap.id)
-  .append("div")
-  .attr("class", "tooltip")
-
-function SE_mouseover(d) {
-  SE_tooltip.transition()
+function SE_Mouse_Over(wrap, d) {
+  wrap.tooltip.transition()
     .duration(200)
     .style("opacity", 0.9)
-  d3.select(this)
+  d3.select(d3.event.target)
     .style("opacity", 0.8)
 }
 
-function SE_getTooltipPos(d) {
+function SE_Get_Tooltip_Pos(wrap, d) {
   var l_max = 0;
   var i_max = -1;
   var i, l;
   
   //-- Look for the furthest vertex
   for (i=0; i<4; i++) {
-    l = (d[0] - SE_wrap.corner[i][0])**2 + (d[1] - SE_wrap.corner[i][1])**2;
+    l = (d[0] - wrap.corner[i][0])**2 + (d[1] - wrap.corner[i][1])**2;
     if (l > l_max) {
       l_max = l;
       i_max = i;
     }
   }
   
-  //-- Place the caption somewhere on the longest arm, parametrizaed by xAlpha & yAlpha
-  var xAlpha = 0.1;
-  var yAlpha = 0.5;
-//   var xAlpha = 1;
-//   var yAlpha = 1;
-  var xPos = d[0] * (1-xAlpha) + SE_wrap.corner[i_max][0] * xAlpha;
-  var yPos = d[1] * (1-yAlpha) + SE_wrap.corner[i_max][1] * yAlpha;
+  //-- Place the caption somewhere on the longest arm, parametrizaed by x_alpha & y_alpha
+  var x_alpha = 0.1;
+  var y_alpha = 0.5;
+  var x_pos = d[0] * (1-x_alpha) + wrap.corner[i_max][0] * x_alpha;
+  var y_pos = d[1] * (1-y_alpha) + wrap.corner[i_max][1] * y_alpha;
   
   var buffer = 1.25*16; //-- Margin buffer of card-body
   var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
-  var cardHdr = 3.125*16; //-- Offset caused by card-header
-  var svgDim = d3.select(SE_wrap.id).node().getBoundingClientRect();
-  var xAspect = (svgDim.width - 2*buffer) / SE_wrap.totWidth;
-  var yAspect = (svgDim.height - 2*buffer) / SE_wrap.totHeight;
+  var card_hdr = 3.125*16; //-- Offset caused by card-header
+  var svg_dim = d3.select(wrap.id).node().getBoundingClientRect();
+  var x_aspect = (svg_dim.width - 2*buffer) / wrap.tot_width;
+  var y_aspect = (svg_dim.height - 2*buffer) / wrap.tot_height;
   
-  xPos = (xPos + SE_wrap.margin.left) * xAspect + buffer;
-  yPos = (yPos + SE_wrap.margin.top) * yAspect + buffer + cardHdr + button;
+  x_pos = (x_pos + wrap.margin.left) * x_aspect + buffer;
+  y_pos = (y_pos + wrap.margin.top) * y_aspect + buffer + card_hdr + button;
   
-  return [xPos, yPos];
+  return [x_pos, y_pos];
 }
 
-function SE_mousemove(d) {
-  var newPos = SE_getTooltipPos(d3.mouse(this));
-  var tooltipText;
+function SE_Mouse_Move(wrap, d) {
+  var new_pos = SE_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
+  var tooltip_text;
   
   if (lang == 'zh-tw')
-    tooltipText = d.x + "<br>解隔離 = " + d.h1+ "<br>隔離中 = " + d.h2 + "<br>死亡 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
+    tooltip_text = d.x + "<br>解隔離 = " + d.h1+ "<br>隔離中 = " + d.h2 + "<br>死亡 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
   else if (lang == 'fr')
-    tooltipText = d.x + "<br>Rétablis = " + d.h1+ "<br>Hospitalisés = " + d.h2 + "<br>Décédés = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+    tooltip_text = d.x + "<br>Rétablis = " + d.h1+ "<br>Hospitalisés = " + d.h2 + "<br>Décédés = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
   else
-    tooltipText = d.x + "<br>Discharged = " + d.h1+ "<br>Hospitalized = " + d.h2 + "<br>Deaths = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+    tooltip_text = d.x + "<br>Discharged = " + d.h1+ "<br>Hospitalized = " + d.h2 + "<br>Deaths = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
   
-  SE_tooltip
-    .html(tooltipText)
-    .style("left", newPos[0] + "px")
-    .style("top", newPos[1] + "px")
+  wrap.tooltip
+    .html(tooltip_text)
+    .style("left", new_pos[0] + "px")
+    .style("top", new_pos[1] + "px")
 }
 
-function SE_mouseleave(d) {
-  SE_tooltip.transition()
+function SE_Mouse_Leave(wrap, d) {
+  wrap.tooltip.transition()
     .duration(10)
     .style("opacity", 0)
-  d3.select(this)
+  d3.select(d3.event.target)
     .style("opacity", 1)
 }
 
-function SE_initialize() {
+function SE_Initialize(wrap) {
   //-- Add x-axis
   var x = d3.scaleBand()
-    .range([0, SE_wrap.width])
-    .domain(SE_wrap.dateList)
+    .range([0, wrap.width])
+    .domain(wrap.date_list)
     .padding(0.2);
     
-  var xAxis = d3.axisBottom(x)
+  var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function(d, i){return SE_wrap.xticklabel[i]});
+    .tickFormat(function(d, i) {return wrap.xticklabel[i]});
   
-  SE_wrap.svg.append('g')
+  wrap.svg.append('g')
     .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + SE_wrap.height + ')')
-    .call(xAxis)
+    .attr('transform', 'translate(0,' + wrap.height + ')')
+    .call(x_axis)
     .selectAll("text")
       .attr("transform", "translate(-8,15) rotate(-90)")
       .style("text-anchor", "end")
     
   //-- Add a 2nd x-axis for ticks
-  var x2 = d3.scaleLinear()
-    .domain([0, SE_wrap.dateList.length])
-    .range([0, SE_wrap.width])
+  var x_2 = d3.scaleLinear()
+    .domain([0, wrap.date_list.length])
+    .range([0, wrap.width])
   
-  var xAxis2 = d3.axisBottom(x2)
-    .tickValues(SE_wrap.xtick)
+  var x_axis_2 = d3.axisBottom(x_2)
+    .tickValues(wrap.xtick)
     .tickSize(10)
     .tickSizeOuter(0)
-    .tickFormat(function(d, i){return ""});
+    .tickFormat(function(d, i) {return ""});
   
-  SE_wrap.svg.append("g")
-    .attr("transform", "translate(0," + SE_wrap.height + ")")
+  wrap.svg.append("g")
+    .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
-    .call(xAxis2)
+    .call(x_axis_2)
   
   //-- Add y-axis
   var y = d3.scaleLinear()
-    .domain([0, SE_wrap.ymax])
-    .range([SE_wrap.height, 0]);
+    .domain([0, wrap.y_max])
+    .range([wrap.height, 0]);
   
-  var yAxis = d3.axisLeft(y)
-    .tickSize(-SE_wrap.width)
-    .tickValues(SE_wrap.ytick)
+  var y_axis = d3.axisLeft(y)
+    .tickSize(-wrap.width)
+    .tickValues(wrap.ytick)
   
-  SE_wrap.svg.append("g")
+  wrap.svg.append("g")
     .attr("class", "yaxis")
-    .call(yAxis)
+    .call(y_axis)
 
   //-- Add a 2nd y-axis for the frameline at right
-  var yAxis2 = d3.axisRight(y)
+  var y_axis_2 = d3.axisRight(y)
     .ticks(0)
     .tickSize(0)
   
-  SE_wrap.svg.append("g")
+  wrap.svg.append("g")
     .attr("class", "yaxis")
-    .attr("transform", "translate(" + SE_wrap.width + ",0)")
-    .call(yAxis2)
+    .attr("transform", "translate(" + wrap.width + ",0)")
+    .call(y_axis_2)
     
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '案例數';
   else if (lang == 'fr') ylabel = 'Nombre de cas';
   else ylabel = 'Number of cases';
-  SE_wrap.svg.append("text")
+  wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-SE_wrap.margin.left*0.75).toString() + ", " + (SE_wrap.height/2).toString() + ")rotate(-90)")
+    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)")
     .text(ylabel);
     
   //-- Color
-  var colorList = global_var.cList.slice(0, SE_wrap.nbCol);
-  var colTagList = SE_wrap.colTagList.slice().reverse();
+  var color_list = GLOBAL_VAR.c_list.slice(0, wrap.nb_col);
+  var col_tag_list = wrap.col_tag_list.slice().reverse();
   var color = d3.scaleOrdinal()
-    .domain(colTagList)
-    .range(colorList);
+    .domain(col_tag_list)
+    .range(color_list);
   
   //-- Bar
-  var bar = SE_wrap.svg.selectAll('.content.bar')
-    .data(SE_wrap.formattedData)
+  var bar = wrap.svg.selectAll('.content.bar')
+    .data(wrap.formatted_data)
     .enter();
   
   bar.append('rect')
@@ -287,99 +280,84 @@ function SE_initialize() {
     .attr('y', function(d) {return y(0);})
     .attr('width', x.bandwidth())
     .attr('height', 0)
-    .on("mouseover", SE_mouseover)
-    .on("mousemove", SE_mousemove)
-    .on("mouseleave", SE_mouseleave)
+    .on("mouseover", function(d) {SE_Mouse_Over(wrap, d);})
+    .on("mousemove", function(d) {SE_Mouse_Move(wrap, d);})
+    .on("mouseleave", function(d) {SE_Mouse_Leave(wrap, d);})
 
-  SE_wrap.colorList = colorList;
-  SE_wrap.bar = bar;
+  wrap.color_list = color_list;
+  wrap.bar = bar;
 }
 
-function SE_update() {
-  var transDuration = 800;
+function SE_Update(wrap) {
+  var trans_duration = 800;
 
   //-- Add y-axis
   var y = d3.scaleLinear()
-    .domain([0, SE_wrap.ymax])
-    .range([SE_wrap.height, 0]);
+    .domain([0, wrap.y_max])
+    .range([wrap.height, 0]);
   
-  var yAxis = d3.axisLeft(y)
-    .tickSize(-SE_wrap.width)
-    .tickValues(SE_wrap.ytick)
+  var y_axis = d3.axisLeft(y)
+    .tickSize(-wrap.width)
+    .tickValues(wrap.ytick)
   
-  SE_wrap.svg.select('.yaxis')
+  wrap.svg.select('.yaxis')
     .transition()
-    .duration(transDuration)
-    .call(yAxis);
+    .duration(trans_duration)
+    .call(y_axis);
   
   //-- Update bars
-  SE_wrap.bar.selectAll('.content.bar')
-    .data(SE_wrap.formattedData)
+  wrap.bar.selectAll('.content.bar')
+    .data(wrap.formatted_data)
     .transition()
-    .duration(transDuration)
+    .duration(trans_duration)
     .attr('y', function(d) {return y(d.y1);})
     .attr('height', function(d) {return y(d.y0)-y(d.y1);});
     
   //-- Color
-  colorList = SE_wrap.colorList.slice();
-  colorList.push('#000000');
+  color_list = wrap.color_list.slice();
+  color_list.push('#000000');
   
   //-- Legend - value
-  var lPos = {x: 70, y: 45, dx: 12, dy: 30};
-  var lValue = SE_wrap.lValue.slice();
-  var sum = lValue.reduce((a, b) => a + b, 0);
-  lValue.push(sum);
+  var legend_pos = {x: 70, y: 45, dx: 12, dy: 30};
+  var legend_value = wrap.legend_value.slice();
+  var sum = legend_value.reduce((a, b) => a + b, 0);
+  legend_value.push(sum);
   
-  SE_wrap.svg.selectAll(".legend.value")
+  wrap.svg.selectAll(".legend.value")
     .remove()
     .exit()
-    .data(lValue)
+    .data(legend_value)
     .enter()
     .append("text")
       .attr("class", "legend value")
-      .attr("x", lPos.x)
-      .attr("y", function(d,i) {return lPos.y + i*lPos.dy})
-      .style("fill", function(d, i) {return colorList[i]})
+      .attr("x", legend_pos.x)
+      .attr("y", function(d,i) {return legend_pos.y + i*legend_pos.dy})
+      .style("fill", function(d, i) {return color_list[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "end")
   
   //-- Legend - label
-  var lLabel;
+  var legend_label;
   if (lang == 'zh-tw') {
-    lLabel = ["解隔離", "隔離中", "死亡", "合計"];
+    legend_label = ["解隔離", "隔離中", "死亡", "合計"];
   }
   else if (lang == 'fr') {
-    lLabel = ["Rétablis", "Hospitalisés", "Décédés", "Total"];
+    legend_label = ["Rétablis", "Hospitalisés", "Décédés", "Total"];
   }
   else {
-    lLabel = ["Discharged", "Hospitalized", "Deaths", 'Total'];
+    legend_label = ["Discharged", "Hospitalized", "Deaths", 'Total'];
   }
   
-  SE_wrap.svg.selectAll(".legend.label")
+  wrap.svg.selectAll(".legend.label")
     .remove()
     .exit()
-    .data(lLabel)
+    .data(legend_label)
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", lPos.x+lPos.dx)
-      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
-      .style("fill", function(d, i) {return colorList[i]})
+      .attr("x", legend_pos.x+legend_pos.dx)
+      .attr("y", function(d, i) {return legend_pos.y + i*legend_pos.dy})
+      .style("fill", function(d, i) {return color_list[i]})
       .text(function(d) {return d})
       .attr("text-anchor", "start")
 }
-
-d3.csv(SE_wrap.dataPathList[0], function(error, data) {
-  if (error) return console.warn(error);
-  
-  SE_makeCanvas();
-  SE_formatData(data);
-  SE_initialize();
-  SE_update();
-});
-
-d3.select(SE_wrap.id + '_button_1').on('click', function(){
-  name = SE_wrap.tag + '_' + lang + '.png'
-  saveSvgAsPng(d3.select(SE_wrap.id).select('svg').node(), name);
-});
-
