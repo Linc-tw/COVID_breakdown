@@ -314,11 +314,13 @@ class MainSheet(Template):
       reportDate = '2020-%02s-%02s' % (reportDate[0], reportDate[1])
       reportDateList.append(reportDate)
       
+    reportOrdList = [ISODateToOrdinal(reportDate) for reportDate in reportDateList]
     todayOrd = dtt.date.today().toordinal() + 1
-    ind = [ISODateToOrdinal(reportDate) + NB_LOOKBACK_DAYS >= todayOrd for reportDate in reportDateList]
+    ind = [reportOrd + NB_LOOKBACK_DAYS >= todayOrd for reportOrd in reportOrdList]
     self.N_latest = sum(ind)
     
-    ind = ['2020' in reportDate for reportDate in reportDateList]
+    end2020Ord = dtt.date(2020, 12, 31).toordinal() + 1
+    ind = [reportOrd < end2020Ord for reportOrd in reportOrdList]
     self.N_2020 = sum(ind)
     
     return reportDateList
@@ -891,8 +893,8 @@ class MainSheet(Template):
     timestamp = dtt.datetime.now().astimezone()
     timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
     
-    key   = ['overall_total', 'latest_total', 'timestamp']
-    value = [self.N_total, self.N_latest, timestamp]
+    key   = ['overall_total', 'latest_total', '2020_total', 'timestamp']
+    value = [self.N_total, self.N_latest, self.N_2020, timestamp]
     
     data = {'key': key, 'value': value}
     data = pd.DataFrame(data)
@@ -1059,18 +1061,26 @@ class MainSheet(Template):
     transList      = self.getTransmission()
     
     todayOrd = dtt.date.today().toordinal() + 1
-    stock_imp = []
-    stock_ind = []
-    stock_fle = []
-    max_ = 30
+    end2020Ord = dtt.date(2020, 12, 31).toordinal() + 1
+    stock_latest_imp = []
+    stock_latest_ind = []
+    stock_latest_fle = []
+    stock_2020_imp = []
+    stock_2020_ind = []
+    stock_2020_fle = []
+    max_latest = 30
+    max_2020 = 30
     
     for reportDate, entryDate, onsetDate, trans in zip(reportDateList, entryDateList, onsetDateList, transList):
       if trans == 'imported':
-        stock = stock_imp
+        stock_latest = stock_latest_imp
+        stock_2020 = stock_2020_imp
       elif trans == 'indigenous':
-        stock = stock_ind
+        stock_latest = stock_latest_ind
+        stock_2020 = stock_2020_ind
       elif trans == 'fleet':
-        stock = stock_fle
+        stock_latest = stock_latest_fle
+        stock_2020 = stock_2020_fle
       else:
         print('diffByTrans, transimission not recognized')
       
@@ -1081,29 +1091,52 @@ class MainSheet(Template):
       if entOrd + onsOrd == 0:
         continue
       
-      if repOrd + NB_LOOKBACK_DAYS <= todayOrd:
-        continue
-      
       diff = min(repOrd-entOrd, repOrd-onsOrd)
-      max_ = max(max_, diff)
-      stock.append(diff)
-        
-    bins = np.arange(-0.5, max_+1, 1)
-    stock_imp, ctrBin = makeHist(stock_imp, bins)
-    stock_ind, ctrBin = makeHist(stock_ind, bins)
-    stock_fle, ctrBin = makeHist(stock_fle, bins)
-    total = stock_imp + stock_ind + stock_fle
+      
+      if repOrd + NB_LOOKBACK_DAYS > todayOrd:
+        stock_latest.append(diff)
+        max_latest = max(max_latest, diff)
+      
+      if repOrd < end2020Ord:
+        stock_2020.append(diff)
+        max_2020 = max(max_2020, diff)
     
-    stock_imp   = stock_imp.round(0).astype(int)
-    stock_ind = stock_ind.round(0).astype(int)
-    stock_fle  = stock_fle.round(0).astype(int)
-    total  = total.round(0).astype(int)
+    ## Latest
+    bins = np.arange(-0.5, max_latest+1, 1)
+    n_imp, ctrBin = makeHist(stock_latest_imp, bins)
+    n_ind, ctrBin = makeHist(stock_latest_ind, bins)
+    n_fle, ctrBin = makeHist(stock_latest_fle, bins)
+    n_tot = n_imp + n_ind + n_fle
+    
+    n_imp = n_imp.round(0).astype(int)
+    n_ind = n_ind.round(0).astype(int)
+    n_fle = n_fle.round(0).astype(int)
+    n_tot = n_tot.round(0).astype(int)
     ctrBin = ctrBin.round(0).astype(int)
     
-    data = {'difference': ctrBin, 'all': total, 'imported': stock_imp, 'indigenous': stock_ind, 'fleet': stock_fle}
+    data = {'difference': ctrBin, 'all': n_tot, 'imported': n_imp, 'indigenous': n_ind, 'fleet': n_fle}
     data = pd.DataFrame(data)
     
-    name = '%sprocessed_data/difference_by_transmission.csv' % DATA_PATH
+    name = '%sprocessed_data/latest/difference_by_transmission.csv' % DATA_PATH
+    saveCsv(name, data)
+    
+    ## 2020
+    bins = np.arange(-0.5, max_2020+1, 1)
+    n_imp, ctrBin = makeHist(stock_2020_imp, bins)
+    n_ind, ctrBin = makeHist(stock_2020_ind, bins)
+    n_fle, ctrBin = makeHist(stock_2020_fle, bins)
+    n_tot = n_imp + n_ind + n_fle
+    
+    n_imp = n_imp.round(0).astype(int)
+    n_ind = n_ind.round(0).astype(int)
+    n_fle = n_fle.round(0).astype(int)
+    n_tot = n_tot.round(0).astype(int)
+    ctrBin = ctrBin.round(0).astype(int)
+    
+    data = {'difference': ctrBin, 'all': n_tot, 'imported': n_imp, 'indigenous': n_ind, 'fleet': n_fle}
+    data = pd.DataFrame(data)
+    
+    name = '%sprocessed_data/2020/difference_by_transmission.csv' % DATA_PATH
     saveCsv(name, data)
     return
   
@@ -1981,13 +2014,13 @@ class TimelineSheet(Template):
 ## Sandbox
 
 def sandbox():
-  #sheet = MainSheet()
+  sheet = MainSheet()
   #print(sheet.getAge())
-  #sheet.saveCsv_diffByTrans()
+  sheet.saveCsv_keyNb()
   
-  sheet = StatusSheet()
+  #sheet = StatusSheet()
   #print(sheet.getCumHosp())
-  sheet.saveCsv_statusEvolution()
+  #sheet.saveCsv_statusEvolution()
   
   #sheet = TestSheet()
   #print(sheet.printCriteria())

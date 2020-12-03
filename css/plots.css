@@ -115,6 +115,12 @@ body,
   margin-top: -55px;
   margin-bottom: -55px;
 }
+#difference_by_transmission_latest .tooltip, #difference_by_transmission_2020 .tooltip {
+  margin-left: -90px;
+  margin-right: -90px;
+  margin-top: -25px;
+  margin-bottom: -25px;
+}
 #test_by_criterion .tooltip {
   margin-left: -75px;
   margin-right: -75px;
@@ -132,12 +138,6 @@ body,
   margin-right: -50px;
   margin-top: -72px;
   margin-bottom: -72px;
-}
-#difference_by_transmission .tooltip {
-  margin-left: -90px;
-  margin-right: -90px;
-  margin-top: -25px;
-  margin-bottom: -25px;
 }
 
 

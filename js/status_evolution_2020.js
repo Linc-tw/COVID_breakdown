@@ -1,5 +1,5 @@
 
-//-- File:
+//-- Filename:
 //--   status_evolution_2020.js
 //--
 //-- Author:
@@ -36,8 +36,8 @@ d3.csv(SE_20_WRAP.data_path_list[0], function(error, data) {
   SE_Update(SE_20_WRAP);
 });
 
-//-- Button
-d3.select(SE_20_WRAP.id + '_button_1').on('click', function(){
+//-- Save
+d3.select(SE_20_WRAP.id + '_save').on('click', function() {
   name = SE_20_WRAP.tag + '_' + lang + '.png';
   saveSvgAsPng(d3.select(SE_20_WRAP.id).select('svg').node(), name);
 });

@@ -73,6 +73,22 @@ function cumsum(data, colTagList) {
 
 
 //-- Text in html
+function TT_Add_Str(id, string) {
+  var node = document.getElementById(id)
+  if (null !== node) {
+    node.textContent = '';
+    node.appendChild(document.createTextNode(string));
+  }
+}
+
+function TT_Add_Html(id, string) {
+  var node = document.getElementById(id)
+  if (null !== node) {
+    node.textContent = '';
+    node.innerHTML = string;
+  }
+}
+
 var node;
 
 function text_translation() {
@@ -157,31 +173,13 @@ function text_translation() {
     }
     
     
-    node = document.getElementById("difference_by_transmission_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("抓帶原者要花多久？"));
-    }
-    node = document.getElementById("difference_by_transmission_button_1")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("全部"));
-    }
-    node = document.getElementById("difference_by_transmission_button_2")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("境外移入"));
-    }
-    node = document.getElementById("difference_by_transmission_button_3")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("本土"));
-    }
-    node = document.getElementById("difference_by_transmission_button_4")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("敦睦艦隊"));
-    }
+    TT_Add_Str("status_evolution_title", "Évolution de la situation");
+    
+    TT_Add_Str("difference_by_transmission_title", "多久抓到帶原者？");
+    TT_Add_Str("difference_by_transmission_button_1", "全部");
+    TT_Add_Str("difference_by_transmission_button_2", "境外移入");
+    TT_Add_Str("difference_by_transmission_button_3", "本土");
+    TT_Add_Str("difference_by_transmission_button_4", "敦睦艦隊");
     
     
     node = document.getElementById("case_by_transmission_title")
@@ -417,50 +415,17 @@ function text_translation() {
       node.innerHTML = "<p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>données traitées <i class='fas fa-external-link-alt'></i></a> comprennent de nombreux fichiers directement utilisés par Javascript pour afficher les figures.</p><p>Ces données sont en format csv. La plupart d'entre elles contient seulement des caractères ASCII.</p>";
     }
     
+    TT_Add_Str("no_right_reserved_title", "Fièrement sans droit d'auteur");
+    TT_Add_Html("no_right_reserved_body", "<p>Tous les textes et les graphes créés sur ce site sont distribués sous <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.fr' target='_blank'>CC0 1.0 universel Transfert dans le Domaine Public <i class='fas fa-external-link-alt'></i></a>.</p><p>Cela signifie que vous pouvez en faire presque tout ce que vous voulez : usages personnel et/ou commercial, sans avoir besoin d'autorisation ou d'attribution d'auteur.</p><p>La license pour les codes et les scripts se trouve <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>ici <i class='fas fa-external-link-alt'></i></a>.</p>");
     
-    node = document.getElementById("no_right_reserved_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Fièrement sans droit d'auteur"));
-    }
-    node = document.getElementById("no_right_reserved_body")
-    if (node !== null) {
-      node.innerHTML = "<p>Tous les textes et les graphes créés sur ce site sont distribués sous <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.fr' target='_blank'>CC0 1.0 universel Transfert dans le Domaine Public <i class='fas fa-external-link-alt'></i></a>.</p><p>Cela signifie que vous pouvez en faire presque tout ce que vous voulez : usages personnel et/ou commercial, sans avoir besoin d'autorisation ou d'attribution d'auteur.</p><p>La license pour les codes et les scripts se trouve <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>ici <i class='fas fa-external-link-alt'></i></a>.</p>";
-    }
+    //-- Plots
+    TT_Add_Str("status_evolution_title", "Évolution de la situation");
     
-    
-    node = document.getElementById("status_evolution_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Évolution de la situation"));
-    }
-    
-    
-    node = document.getElementById("difference_by_transmission_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Combien de temps pour identifier les cas?"));
-    }
-    node = document.getElementById("difference_by_transmission_button_1")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Tous"));
-    }
-    node = document.getElementById("difference_by_transmission_button_2")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Importés"));
-    }
-    node = document.getElementById("difference_by_transmission_button_3")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Locaux"));
-    }
-    node = document.getElementById("difference_by_transmission_button_4")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Flotte"));
-    }
+    TT_Add_Str("difference_by_transmission_title", "Combien de temps pour identifier un cas ?");
+    TT_Add_Str("difference_by_transmission_button_1", "Tous");
+    TT_Add_Str("difference_by_transmission_button_2", "Importés");
+    TT_Add_Str("difference_by_transmission_button_3", "Locaux");
+    TT_Add_Str("difference_by_transmission_button_4", "Flotte");
     
     
     node = document.getElementById("case_by_transmission_title")
@@ -697,49 +662,17 @@ function text_translation() {
     }
     
     
-    node = document.getElementById("no_right_reserved_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode('Proudly No Right Reserved'));
-    }
-    node = document.getElementById("no_right_reserved_body")
-    if (node !== null) {
-      node.innerHTML = "<p>All texts and plots created by this site are released under <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en' target='_blank'>CC0 1.0 Universal Public Domain Dedication <i class='fas fa-external-link-alt'></i></a>.</p><p>That basically means you can do almost whatever you want with them: personal and commercial use, no permission or attribution needed.</p><p>The license for codes and scripts can be found <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>here <i class='fas fa-external-link-alt'></i></a>.</p>";
-    }
+    TT_Add_Str("no_right_reserved_title", "Proudly No Right Reserved");
+    TT_Add_Html("no_right_reserved_body", "<p>All texts and plots created by this site are released under <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en' target='_blank'>CC0 1.0 Universal Public Domain Dedication <i class='fas fa-external-link-alt'></i></a>.</p><p>That basically means you can do almost whatever you want with them: personal and commercial use, no permission or attribution needed.</p><p>The license for codes and scripts can be found <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>here <i class='fas fa-external-link-alt'></i></a>.</p>");
     
     
-    node = document.getElementById("status_evolution_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Status Evolution"));
-    }
+    TT_Add_Str("status_evolution_title", "Status Evolution");
     
-    
-    node = document.getElementById("difference_by_transmission_title")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("How many days to identify cases?"));
-    }
-    node = document.getElementById("difference_by_transmission_button_1")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("All"));
-    }
-    node = document.getElementById("difference_by_transmission_button_2")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Imported"));
-    }
-    node = document.getElementById("difference_by_transmission_button_3")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Local"));
-    }
-    node = document.getElementById("difference_by_transmission_button_4")
-    if (node !== null) {
-      node.textContent = '';
-      node.appendChild(document.createTextNode("Fleet"));
-    }
+    TT_Add_Str("difference_by_transmission_title", "How many days to identify cases?");
+    TT_Add_Str("difference_by_transmission_button_1", "All");
+    TT_Add_Str("difference_by_transmission_button_2", "Imported");
+    TT_Add_Str("difference_by_transmission_button_3", "Local");
+    TT_Add_Str("difference_by_transmission_button_4", "Fleet");
     
     
     node = document.getElementById("case_by_transmission_title")
