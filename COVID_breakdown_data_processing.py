@@ -319,7 +319,7 @@ class MainSheet(Template):
     ind = [reportOrd + NB_LOOKBACK_DAYS >= todayOrd for reportOrd in reportOrdList]
     self.N_latest = sum(ind)
     
-    end2020Ord = dtt.date(2020, 12, 31).toordinal() + 1
+    end2020Ord = ISODateToOrdinal('2020-12-31') + 1
     ind = [reportOrd < end2020Ord for reportOrd in reportOrdList]
     self.N_2020 = sum(ind)
     
@@ -1061,7 +1061,7 @@ class MainSheet(Template):
     transList      = self.getTransmission()
     
     todayOrd = dtt.date.today().toordinal() + 1
-    end2020Ord = dtt.date(2020, 12, 31).toordinal() + 1
+    end2020Ord = ISODateToOrdinal('2020-12-31') + 1
     stock_latest_imp = []
     stock_latest_ind = []
     stock_latest_fle = []

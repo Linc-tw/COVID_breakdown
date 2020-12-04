@@ -36,8 +36,8 @@ DBT_2020_wrap.col_ind = 0;
 
 //-- Plot
 function DBT_2020_Plot() {
-  d3.csv(DBT_2020_wrap.data_path_list[0], function(error, data) {
-    d3.csv(DBT_2020_wrap.data_path_list[1], function(error2, data2) {
+  d3.csv(DBT_2020_wrap.data_path_list[0], function (error, data) {
+    d3.csv(DBT_2020_wrap.data_path_list[1], function (error2, data2) {
       if (error) return console.warn(error);
       if (error2) return console.warn(error2);
       
@@ -53,11 +53,11 @@ function DBT_2020_Plot() {
 DBT_2020_Plot();
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + DBT_2020_wrap.tag + "_colInd']", function(event) {
+$(document).on("change", "input:radio[name='" + DBT_2020_wrap.tag + "_colInd']", function (event) {
   DBT_2020_wrap.col_ind = this.value;
   data_path = DBT_2020_wrap.data_path_list[0]
   
-  d3.csv(data_path, function(error, data) {
+  d3.csv(data_path, function (error, data) {
     if (error) return console.warn(error);
     
     DBT_Format_Data(DBT_2020_wrap, data);
@@ -66,7 +66,7 @@ $(document).on("change", "input:radio[name='" + DBT_2020_wrap.tag + "_colInd']",
 });
 
 //-- Save button
-d3.select(DBT_2020_wrap.id + '_save').on('click', function() {
+d3.select(DBT_2020_wrap.id + '_save').on('click', function () {
   var tag1;
   
   if (DBT_2020_wrap.col_ind == 0) tag1 = 'all';
@@ -79,12 +79,13 @@ d3.select(DBT_2020_wrap.id + '_save').on('click', function() {
 });
 
 //-- Language button
-$(document).on("change", "input:radio[name='2020_language']", function(event) {
+$(document).on("change", "input:radio[name='2020_language']", function (event) {
   lang = this.value;
   Cookies.set("lang", lang);
-  text_translation();
   
+  //-- Remove
   d3.selectAll(DBT_2020_wrap.id+' .plot').remove()
-
+  
+  //-- Replot
   DBT_2020_Plot();
 });

@@ -267,7 +267,7 @@ function text_translation() {
 }
 
 //-- Load key nb & print texts
-d3.csv("processed_data/key_numbers.csv", function(error, data) {
+d3.csv("processed_data/key_numbers.csv", function (error, data) {
   if (error) return console.warn(error);
   
   var timestamp;
@@ -281,62 +281,20 @@ d3.csv("processed_data/key_numbers.csv", function(error, data) {
   
   TT_wrap.timestamp = timestamp;
 
-  text_translation()
+  text_translation();
 });
 
 
 //-- Button listener
-$(document).on("change", "input:radio[name='index_language']", function(event) {
+$(document).on("change", "input:radio[name='index_language']", function (event) {
   lang = this.value;
   Cookies.set("lang", lang);
   text_translation();
   
-  d3.selectAll(CBT_wrap.id+' .plot').remove()
-  d3.selectAll(CBD_wrap.id+' .plot').remove()
-  d3.selectAll(THSC_wrap.id+' .plot').remove()
   d3.selectAll(ASC_wrap.id+' .plot').remove()
   
-  d3.csv(CBT_wrap.dataPathList[CBT_wrap.doOnset], function(error, data) {
-    d3.csv(CBT_wrap.dataPathList[2], function(error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      CBT_makeCanvas();
-      CBT_formatData(data);
-      CBT_formatData2(data2);
-      CBT_initialize();
-      CBT_update();
-    });
-  });
-  
-  d3.csv(CBD_wrap.dataPathList[CBD_wrap.doOnset], function(error, data) {
-    d3.csv(CBD_wrap.dataPathList[2], function(error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      CBD_makeCanvas();
-      CBD_formatData(data);
-      CBD_formatData2(data2);
-      CBD_initialize();
-      CBD_update();
-    });
-  });
-  
-  d3.csv(THSC_wrap.dataPathList[THSC_wrap.doCount], function(error, data) {
-    d3.csv(THSC_wrap.dataPathList[2], function(error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      THSC_makeCanvas();
-      THSC_formatData(data);
-      THSC_formatData2(data2);
-      THSC_initialize();
-      THSC_update();
-    });
-  });
-  
-  d3.csv(ASC_wrap.dataPathList[ASC_wrap.doCount], function(error, data) {
-    d3.csv(ASC_wrap.dataPathList[2], function(error2, data2) {
+  d3.csv(ASC_wrap.dataPathList[ASC_wrap.doCount], function (error, data) {
+    d3.csv(ASC_wrap.dataPathList[2], function (error2, data2) {
       if (error) return console.warn(error);
       if (error2) return console.warn(error2);
       
@@ -350,20 +308,20 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
 
 });
 
-$(document).on("change", "input:radio[name='2020_language']", function(event) {
+$(document).on("change", "input:radio[name='2020_language']", function (event) {
   lang = this.value;
   Cookies.set("lang", lang);
   text_translation();
 });
 
-$(document).on("change", "input:radio[name='policy_language']", function(event) {
+$(document).on("change", "input:radio[name='policy_language']", function (event) {
   lang = this.value;
   Cookies.set("lang", lang);
   text_translation();
   
   d3.selectAll('.plot').remove()
   
-  d3.csv(TBC_wrap.dataPath, function(error, data) {
+  d3.csv(TBC_wrap.dataPath, function (error, data) {
     if (error) return console.warn(error);
     
     TBC_makeCanvas();
@@ -372,7 +330,7 @@ $(document).on("change", "input:radio[name='policy_language']", function(event) 
     TBC_update();
   });
 
-  d3.csv(BS_wrap.dataPathList[BS_wrap.doExit], function(error, data) {
+  d3.csv(BS_wrap.dataPathList[BS_wrap.doExit], function (error, data) {
     if (error) return console.warn(error);
     
     BS_makeCanvas();
@@ -381,7 +339,7 @@ $(document).on("change", "input:radio[name='policy_language']", function(event) 
     BS_update();
   });
 
-  d3.csv(CT_wrap.dataPathList[0], function(error, data) {
+  d3.csv(CT_wrap.dataPathList[0], function (error, data) {
     if (error) return console.warn(error);
     
     CT_makeCanvas();
@@ -390,7 +348,7 @@ $(document).on("change", "input:radio[name='policy_language']", function(event) 
     CT_update();
   });
   
-  d3.csv(ET_wrap.dataPathList[0], function(error, data) {
+  d3.csv(ET_wrap.dataPathList[0], function (error, data) {
     if (error) return console.warn(error);
     
     ET_makeCanvas();
@@ -401,13 +359,13 @@ $(document).on("change", "input:radio[name='policy_language']", function(event) 
 
 });
 
-$(document).on("change", "input:radio[name='source_language']", function(event) {
+$(document).on("change", "input:radio[name='source_language']", function (event) {
   lang = this.value;
   Cookies.set("lang", lang);
   text_translation();
 });
 
-$(document).on("change", "input:radio[name='copyleft_language']", function(event) {
+$(document).on("change", "input:radio[name='copyleft_language']", function (event) {
   lang = this.value;
   Cookies.set("lang", lang);
   text_translation();

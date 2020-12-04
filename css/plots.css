@@ -121,13 +121,13 @@ body,
   margin-top: -25px;
   margin-bottom: -25px;
 }
-#case_by_transmission .tooltip {
+#case_by_transmission_latest .tooltip, #case_by_transmission_2020 .tooltip {
   margin-left: -56px;
   margin-right: -56px;
   margin-top: -58px;
   margin-bottom: -58px;
 }
-#case_by_detection .tooltip {
+#case_by_detection_latest .tooltip, #case_by_detection_2020 .tooltip {
   margin-left: -50px;
   margin-right: -50px;
   margin-top: -72px;

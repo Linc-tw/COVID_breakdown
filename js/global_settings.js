@@ -51,7 +51,7 @@ function GS_CumSum(data, colTagList) {
 //test
 //border
 //Taux de positivité
-
+//lang
 
 
 

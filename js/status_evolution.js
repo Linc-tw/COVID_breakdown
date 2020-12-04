@@ -201,7 +201,7 @@ function SE_Initialize(wrap) {
     
   var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function(d, i) {return wrap.xticklabel[i]});
+    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
   
   wrap.svg.append('g')
     .attr('class', 'xaxis')
@@ -220,7 +220,7 @@ function SE_Initialize(wrap) {
     .tickValues(wrap.xtick)
     .tickSize(10)
     .tickSizeOuter(0)
-    .tickFormat(function(d, i) {return ""});
+    .tickFormat(function (d, i) {return ""});
   
   wrap.svg.append("g")
     .attr("transform", "translate(0," + wrap.height + ")")
@@ -275,14 +275,14 @@ function SE_Initialize(wrap) {
   
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', function(d) {return color(d.col);})
-    .attr('x', function(d) {return x(d.x);})
-    .attr('y', function(d) {return y(0);})
+    .attr('fill', function (d) {return color(d.col);})
+    .attr('x', function (d) {return x(d.x);})
+    .attr('y', function (d) {return y(0);})
     .attr('width', x.bandwidth())
     .attr('height', 0)
-    .on("mouseover", function(d) {SE_Mouse_Over(wrap, d);})
-    .on("mousemove", function(d) {SE_Mouse_Move(wrap, d);})
-    .on("mouseleave", function(d) {SE_Mouse_Leave(wrap, d);})
+    .on("mouseover", function (d) {SE_Mouse_Over(wrap, d);})
+    .on("mousemove", function (d) {SE_Mouse_Move(wrap, d);})
+    .on("mouseleave", function (d) {SE_Mouse_Leave(wrap, d);})
 
   wrap.color_list = color_list;
   wrap.bar = bar;
@@ -310,8 +310,8 @@ function SE_Update(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(trans_duration)
-    .attr('y', function(d) {return y(d.y1);})
-    .attr('height', function(d) {return y(d.y0)-y(d.y1);});
+    .attr('y', function (d) {return y(d.y1);})
+    .attr('height', function (d) {return y(d.y0)-y(d.y1);});
     
   //-- Color
   color_list = wrap.color_list.slice();
@@ -331,9 +331,9 @@ function SE_Update(wrap) {
     .append("text")
       .attr("class", "legend value")
       .attr("x", legend_pos.x)
-      .attr("y", function(d,i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function(d, i) {return color_list[i]})
-      .text(function(d) {return d})
+      .attr("y", function (d,i) {return legend_pos.y + i*legend_pos.dy})
+      .style("fill", function (d, i) {return color_list[i]})
+      .text(function (d) {return d})
       .attr("text-anchor", "end")
   
   //-- Legend - label
@@ -356,8 +356,8 @@ function SE_Update(wrap) {
     .append("text")
       .attr("class", "legend label")
       .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", function(d, i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function(d, i) {return color_list[i]})
-      .text(function(d) {return d})
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
+      .style("fill", function (d, i) {return color_list[i]})
+      .text(function (d) {return d})
       .attr("text-anchor", "start")
 }

@@ -91,10 +91,10 @@ function DBT_Format_Data(wrap, data) {
   for (i=0; i<y_max; i+=y_path) ytick.push(i)
   
   //-- Calculate separate sum
-  var all = d3.sum(data, function(d) {return d['all'];});
-  var imp = d3.sum(data, function(d) {return d['imported'];});
-  var ind = d3.sum(data, function(d) {return d['indigenous'];});
-  var fle = d3.sum(data, function(d) {return d['fleet'];});
+  var all = d3.sum(data, function (d) {return d['all'];});
+  var imp = d3.sum(data, function (d) {return d['imported'];});
+  var ind = d3.sum(data, function (d) {return d['indigenous'];});
+  var fle = d3.sum(data, function (d) {return d['fleet'];});
   var legend_value = [all, imp, ind, fle];
   
   wrap.formatted_data = data;
@@ -213,7 +213,7 @@ function DBT_Initialize(wrap) {
     
   var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function(d, i) {return wrap.xticklabel[i]});
+    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
   
   wrap.svg.append('g')
     .attr('class', 'xaxis')
@@ -232,7 +232,7 @@ function DBT_Initialize(wrap) {
     .tickValues(wrap.xtick)
     .tickSize(10)
     .tickSizeOuter(0)
-    .tickFormat(function(d, i) {return ""});
+    .tickFormat(function (d, i) {return ""});
   
   wrap.svg.append("g")
     .attr("transform", "translate(0," + wrap.height + ")")
@@ -299,14 +299,14 @@ function DBT_Initialize(wrap) {
   
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', function(d) {return color(col_tag_list[wrap.col_ind]);})
-    .attr('x', function(d) {return x(d['difference']);})
-    .attr('y', function(d) {return y(0);})
+    .attr('fill', function (d) {return color(col_tag_list[wrap.col_ind]);})
+    .attr('x', function (d) {return x(d['difference']);})
+    .attr('y', function (d) {return y(0);})
     .attr('width', x.bandwidth())
-    .attr('height', function(d) {return 0;})
-    .on("mouseover", function(d) {DBT_Mouse_Over(wrap, d);})
-    .on("mousemove", function(d) {DBT_Mouse_Move(wrap, d);})
-    .on("mouseleave", function(d) {DBT_Mouse_Leave(wrap, d);})
+    .attr('height', function (d) {return 0;})
+    .on("mouseover", function (d) {DBT_Mouse_Over(wrap, d);})
+    .on("mousemove", function (d) {DBT_Mouse_Move(wrap, d);})
+    .on("mouseleave", function (d) {DBT_Mouse_Leave(wrap, d);})
 
   wrap.color_list = color_list;
   wrap.color = color;
@@ -337,9 +337,9 @@ function DBT_Update(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(trans_duration)
-    .attr('fill', function(d) {return wrap.color(col_tag_list[wrap.col_ind]);})
-    .attr('y', function(d) {return y(d[col_tag_list[wrap.col_ind]]);})
-    .attr('height', function(d) {return y(0)-y(d[col_tag_list[wrap.col_ind]]);});
+    .attr('fill', function (d) {return wrap.color(col_tag_list[wrap.col_ind]);})
+    .attr('y', function (d) {return y(d[col_tag_list[wrap.col_ind]]);})
+    .attr('height', function (d) {return y(0)-y(d[col_tag_list[wrap.col_ind]]);});
   
   //-- Legend
   var legend_pos = {x: 450, y: 45, dx: 12, dy: 30};
@@ -375,9 +375,9 @@ function DBT_Update(wrap) {
     .append("text")
       .attr("class", "legend value")
       .attr("x", legend_pos.x)
-      .attr("y", function(d,i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function(d, i) {return legend_color_list[i]})
-      .text(function(d) {return d})
+      .attr("y", function (d,i) {return legend_pos.y + i*legend_pos.dy})
+      .style("fill", function (d, i) {return legend_color_list[i]})
+      .text(function (d) {return d})
       .attr("text-anchor", "end")
     
   //-- Legend - label
@@ -389,8 +389,8 @@ function DBT_Update(wrap) {
     .append("text")
       .attr("class", "legend label")
       .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", function(d, i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function(d, i) {return legend_color_list[i]})
-      .text(function(d) {return d})
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
+      .style("fill", function (d, i) {return legend_color_list[i]})
+      .text(function (d) {return d})
       .attr("text-anchor", "start")
 }

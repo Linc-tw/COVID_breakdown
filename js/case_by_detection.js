@@ -1,37 +1,35 @@
-var CBD_wrap = {};
-CBD_wrap.tag = "case_by_detection"
-CBD_wrap.id = '#' + CBD_wrap.tag
-CBD_wrap.dataPathList = [
-  "processed_data/case_by_detection_by_report_day.csv",
-  "processed_data/case_by_detection_by_onset_day.csv",
-  "processed_data/key_numbers.csv"
-];
 
-function CBD_makeCanvas() {
-  var totWidth = 800;
-  var totHeight;
+//-- Filename:
+//--   case_by_detection.js
+//--
+//-- Author:
+//--   Chieh-An Lin
+
+function CBD_Make_Canvas(wrap) {
+  var tot_width = 800;
+  var tot_height;
   if (lang == 'zh-tw') {
-    totHeight = 415;
+    tot_height = 415;
     bottom = 105;
   }
   else if (lang == 'fr') {
-    totHeight = 400;
+    tot_height = 400;
     bottom = 90;
   }
   else {
-    totHeight = 400;
+    tot_height = 400;
     bottom = 90;
   }
   
   var margin = {left: 70, right: 2, bottom: bottom, top: 2};
-  var width = totWidth - margin.left - margin.right;
-  var height = totHeight - margin.top - margin.bottom;
+  var width = tot_width - margin.left - margin.right;
+  var height = tot_height - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
   
-  var svg = d3.select(CBD_wrap.id)
+  var svg = d3.select(wrap.id)
     .append("svg")
       .attr('class', 'plot')
-      .attr("viewBox", "0 0 " + totWidth + " " + totHeight)
+      .attr("viewBox", "0 0 " + tot_width + " " + tot_height)
       .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -42,450 +40,500 @@ function CBD_makeCanvas() {
       .attr("fill", "white")
       .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
-  CBD_wrap.totWidth = totWidth;
-  CBD_wrap.totHeight = totHeight;
-  CBD_wrap.margin = margin;
-  CBD_wrap.width = width;
-  CBD_wrap.height = height;
-  CBD_wrap.corner = corner;
-  CBD_wrap.svg = svg;
+  wrap.tot_width = tot_width;
+  wrap.tot_height = tot_height;
+  wrap.margin = margin;
+  wrap.width = width;
+  wrap.height = height;
+  wrap.corner = corner;
+  wrap.svg = svg;
 }
 
-function CBD_formatData(data) {
+function CBD_Format_Data(wrap, data) {
   //-- Settings for xticklabels
-  var q = data.length % global_var.xlabel_path;
-  var r = global_var.rList[q];
+  var q = data.length % wrap.xlabel_path;
+  var r = wrap.r_list[q];
   var xtick = [];
   var xticklabel = [];
-  var ymax = 0;
+  var y_max = 0;
   
-  var colTagList = data.columns.slice(1);
-  var nbCol = colTagList.length;
-  var dateList = [];
-  var formattedData = [];
+  var col_tag_list = data.columns.slice(1);
+  var nb_col = col_tag_list.length;
+  var date_list = [];
+  var formatted_data = [];
   var i, j, x, y, height, block;
   
-  if (CBD_wrap.doCumul == 1) {
-    cumsum(data, colTagList);
+  if (wrap.do_cumul == 1) {
+    GS_CumSum(data, col_tag_list);
   }
   
   for (i=0; i<data.length; i++) {
     y = 0;
     x = data[i]["date"];
-    dateList.push(x);
+    date_list.push(x);
     
-    for (j=0; j<nbCol; j++) {
-      height = +data[i][colTagList[j]];
+    for (j=0; j<nb_col; j++) {
+      height = +data[i][col_tag_list[j]];
       block = {
         'x': x,
         'y0': y,
         'y1': y + height,
         'height': height,
-        'h1': +data[i][colTagList[nbCol-1]],
-        'h2': +data[i][colTagList[nbCol-2]],
-        'h3': +data[i][colTagList[nbCol-3]],
-        'h4': +data[i][colTagList[nbCol-4]],
-        'h5': +data[i][colTagList[nbCol-5]],
-        'h6': +data[i][colTagList[nbCol-6]],
-        'h7': +data[i][colTagList[nbCol-7]],
-        'col': colTagList[j]
+        'h1': +data[i][col_tag_list[nb_col-1]],
+        'h2': +data[i][col_tag_list[nb_col-2]],
+        'h3': +data[i][col_tag_list[nb_col-3]],
+        'h4': +data[i][col_tag_list[nb_col-4]],
+        'h5': +data[i][col_tag_list[nb_col-5]],
+        'h6': +data[i][col_tag_list[nb_col-6]],
+        'h7': +data[i][col_tag_list[nb_col-7]],
+        'col': col_tag_list[j]
       };
         
       y += height;
-      formattedData.push(block);
+      formatted_data.push(block);
     }
     
-    ymax = Math.max(ymax, y);
+    y_max = Math.max(y_max, y);
     
-    if (i % global_var.xlabel_path == r) {
+    if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
-      xticklabel.push(ISODateToMDDate(x));
+      xticklabel.push(GS_ISO_Date_To_MD_Date(x));
     }
     else {
       xticklabel.push("");
     }
   }
   
-  //-- Calculate ymax
-  ymax *= 1.2;
-  var ypath;
-  if (CBD_wrap.doCumul == 1) {
-    if (CBD_wrap.doOnset == 1) ypath = 20;
-    else                       ypath = 50;
+  //-- Calculate y_max
+  y_max *= wrap.y_max_factor;
+  
+  var y_path;
+  if (wrap.do_cumul == 1) {
+    if (wrap.do_onset == 1) {
+      if (wrap.y_max_fix_1_1 > 0) y_max = wrap.y_max_fix_1_1;
+      y_path = wrap.y_path_1_1;
+    }
+    else {
+      if (wrap.y_max_fix_1_0 > 0) y_max = wrap.y_max_fix_1_0;
+      y_path = wrap.y_path_1_0;
+    }
   }
   else {
-    if (CBD_wrap.doOnset == 1) {
-                               ypath = 2;
-                               ymax = 7.5;
+    if (wrap.do_onset == 1) {
+      if (wrap.y_max_fix_0_1 > 0) y_max = wrap.y_max_fix_0_1;
+      y_path = wrap.y_path_0_1;
     }
-    else                       ypath = 5;
+    else {
+      if (wrap.y_max_fix_0_0 > 0) y_max = wrap.y_max_fix_0_0;
+      y_path = wrap.y_path_0_0;
+    }
   }
   
   var ytick = [];
-  for (i=0; i<ymax; i+=ypath) ytick.push(i)
+  for (i=0; i<y_max; i+=y_path) ytick.push(i)
   
   //-- Calculate separate sum
-  var air, QT, iso, moni, hosp, noData;
-  if (CBD_wrap.doCumul == 1) {
-    air = d3.max(formattedData, function(d) {if (d.col == 'airport') return +d.height;});
-    QT = d3.max(formattedData, function(d) {if (d.col == 'quarantine') return +d.height;});
-    iso = d3.max(formattedData, function(d) {if (d.col == 'isolation') return +d.height;});
-    moni = d3.max(formattedData, function(d) {if (d.col == 'monitoring') return +d.height;});
-    hosp = d3.max(formattedData, function(d) {if (d.col == 'hospital') return +d.height;});
-    over = d3.max(formattedData, function(d) {if (d.col == 'overseas') return +d.height;});
-    noData = d3.max(formattedData, function(d) {if (d.col == 'no_data') return +d.height;});
+  var air, qt, iso, moni, hosp, no_data;
+  if (wrap.do_cumul == 1) {
+    air = d3.max(formatted_data, function (d) {if (d.col == 'airport') return +d.height;});
+    qt = d3.max(formatted_data, function (d) {if (d.col == 'quarantine') return +d.height;});
+    iso = d3.max(formatted_data, function (d) {if (d.col == 'isolation') return +d.height;});
+    moni = d3.max(formatted_data, function (d) {if (d.col == 'monitoring') return +d.height;});
+    hosp = d3.max(formatted_data, function (d) {if (d.col == 'hospital') return +d.height;});
+    over = d3.max(formatted_data, function (d) {if (d.col == 'overseas') return +d.height;});
+    no_data = d3.max(formatted_data, function (d) {if (d.col == 'no_data') return +d.height;});
   }
   else {
-    air = d3.sum(formattedData, function(d) {if (d.col == 'airport') return +d.height;});
-    QT = d3.sum(formattedData, function(d) {if (d.col == 'quarantine') return +d.height;});
-    iso = d3.sum(formattedData, function(d) {if (d.col == 'isolation') return +d.height;});
-    moni = d3.sum(formattedData, function(d) {if (d.col == 'monitoring') return +d.height;});
-    hosp = d3.sum(formattedData, function(d) {if (d.col == 'hospital') return +d.height;});
-    over = d3.sum(formattedData, function(d) {if (d.col == 'overseas') return +d.height;});
-    noData = d3.sum(formattedData, function(d) {if (d.col == 'no_data') return +d.height;});
+    air = d3.sum(formatted_data, function (d) {if (d.col == 'airport') return +d.height;});
+    qt = d3.sum(formatted_data, function (d) {if (d.col == 'quarantine') return +d.height;});
+    iso = d3.sum(formatted_data, function (d) {if (d.col == 'isolation') return +d.height;});
+    moni = d3.sum(formatted_data, function (d) {if (d.col == 'monitoring') return +d.height;});
+    hosp = d3.sum(formatted_data, function (d) {if (d.col == 'hospital') return +d.height;});
+    over = d3.sum(formatted_data, function (d) {if (d.col == 'overseas') return +d.height;});
+    no_data = d3.sum(formatted_data, function (d) {if (d.col == 'no_data') return +d.height;});
   }
-  var lValue = [air, QT, iso, moni, hosp, over, noData];
+  var legend_value = [air, qt, iso, moni, hosp, over, no_data];
   
-  CBD_wrap.formattedData = formattedData;
-  CBD_wrap.dateList = dateList;
-  CBD_wrap.colTagList = colTagList;
-  CBD_wrap.nbCol = nbCol;
-  CBD_wrap.ymax = ymax;
-  CBD_wrap.xtick = xtick;
-  CBD_wrap.xticklabel = xticklabel;
-  CBD_wrap.ytick = ytick;
-  CBD_wrap.lValue = lValue;
+  wrap.formatted_data = formatted_data;
+  wrap.date_list = date_list;
+  wrap.col_tag_list = col_tag_list;
+  wrap.nb_col = nb_col;
+  wrap.y_max = y_max;
+  wrap.xtick = xtick;
+  wrap.xticklabel = xticklabel;
+  wrap.ytick = ytick;
+  wrap.legend_value = legend_value;
 }
 
-function CBD_formatData2(data2) {
-  var overallTot = 0;
-  var latestTot = 0;
+function CBD_Format_Data_2(wrap, data2) {
+  var n_tot = 0;
   var i;
   
   for (i=0; i<data2.length; i++) {
-    if ('overall_total' == data2[i]['key']) {
-      overallTot = +data2[i]['value'];
-    }
-    else if ('latest_total' == data2[i]['key']) {
-      latestTot = +data2[i]['value'];
+    if (wrap.n_tot_key == data2[i]['key']) {
+      n_tot = +data2[i]['value'];
+      break;
     }
   }
   
-  CBD_wrap.overallTot = overallTot;
-  CBD_wrap.latestTot = latestTot;
+  wrap.n_tot = n_tot;
 }
 
-//-- Tooltip
-var CBD_tooltip = d3.select(CBD_wrap.id)
-  .append("div")
-  .attr("class", "tooltip")
-
-function CBD_mouseover(d) {
-  CBD_tooltip.transition()
+function CBD_Mouse_Over(wrap, d) {
+  wrap.tooltip.transition()
     .duration(200)
     .style("opacity", 0.9)
-  d3.select(this)
+  d3.select(d3.event.target)
     .style("opacity", 0.8)
 }
 
-function CBD_getTooltipPos(d) {
+function CBD_Get_Tooltip_Pos(wrap, d) {
   var l_max = 0;
   var i_max = -1;
   var i, l;
   
   //-- Look for the furthest vertex
   for (i=0; i<4; i++) {
-    l = (d[0] - CBD_wrap.corner[i][0])**2 + (d[1] - CBD_wrap.corner[i][1])**2;
+    l = (d[0] - wrap.corner[i][0])**2 + (d[1] - wrap.corner[i][1])**2;
     if (l > l_max) {
       l_max = l;
       i_max = i;
     }
   }
   
-  //-- Place the caption somewhere on the longest arm, parametrizaed by xAlpha & yAlpha
-  var xAlpha = 0.1;
-  var yAlpha = 0.7;
-//   var xAlpha = 1;
-//   var yAlpha = 1;
-  var xPos = d[0] * (1-xAlpha) + CBD_wrap.corner[i_max][0] * xAlpha;
-  var yPos = d[1] * (1-yAlpha) + CBD_wrap.corner[i_max][1] * yAlpha;
+  //-- Place the caption somewhere on the longest arm, parametrizaed by x_alpha & y_alpha
+  var x_alpha = 0.1;
+  var y_alpha = 0.7;
+  var x_pos = d[0] * (1-x_alpha) + wrap.corner[i_max][0] * x_alpha;
+  var y_pos = d[1] * (1-y_alpha) + wrap.corner[i_max][1] * y_alpha;
   
   var buffer = 1.25*16; //-- Margin buffer of card-body
   var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
-  var cardHdr = 3.125*16; //-- Offset caused by card-header
-  var svgDim = d3.select(CBD_wrap.id).node().getBoundingClientRect();
-  var xAspect = (svgDim.width - 2*buffer) / CBD_wrap.totWidth;
-  var yAspect = (svgDim.height - 2*buffer) / CBD_wrap.totHeight;
+  var card_hdr = 3.125*16; //-- Offset caused by card-header
+  var svg_dim = d3.select(wrap.id).node().getBoundingClientRect();
+  var x_aspect = (svg_dim.width - 2*buffer) / wrap.tot_width;
+  var y_aspect = (svg_dim.height - 2*buffer) / wrap.tot_height;
   
-  xPos = (xPos + CBD_wrap.margin.left) * xAspect + buffer;
-  yPos = (yPos + CBD_wrap.margin.top) * yAspect + buffer + cardHdr + button;
+  x_pos = (x_pos + wrap.margin.left) * x_aspect + buffer;
+  y_pos = (y_pos + wrap.margin.top) * y_aspect + buffer + card_hdr + button;
   
-  return [xPos, yPos];
+  return [x_pos, y_pos];
 }
 
-function CBD_mousemove(d) {
-  var newPos = CBD_getTooltipPos(d3.mouse(this));
-  var tooltipText;
+function CBD_Mouse_Move(wrap, d) {
+  var new_pos = CBD_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
+  var tooltip_text;
   
   if (lang == 'zh-tw')
-    tooltipText = d.x + "<br>機場 = " + d.h1 + "<br>居家或集中檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自費或自行就醫 = " + d.h5 + "<br>外國檢驗 = " + d.h6 + "<br>無管道資料 = " + d.h7 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
+    tooltip_text = d.x + "<br>機場 = " + d.h1 + "<br>居家或集中檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自費或自行就醫 = " + d.h5 + "<br>外國檢驗 = " + d.h6 + "<br>無管道資料 = " + d.h7 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
   else if (lang == 'fr')
-    tooltipText = d.x + "<br>Aéroports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Auto-contrôle = " + d.h4 + "<br>Hôpitaux = " + d.h5 + "<br>À l'étranger = " + d.h6 + "<br>Pas annoncés = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
+    tooltip_text = d.x + "<br>Aéroports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Auto-contrôle = " + d.h4 + "<br>Hôpitaux = " + d.h5 + "<br>À l'étranger = " + d.h6 + "<br>Pas annoncés = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
   else
-    tooltipText = d.x + "<br>Airports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospitals = " + d.h5 + "<br>Overseas = " + d.h6 + "<br>Not announced = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
+    tooltip_text = d.x + "<br>Airports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospitals = " + d.h5 + "<br>Overseas = " + d.h6 + "<br>Not announced = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
   
-  CBD_tooltip
-    .html(tooltipText)
-    .style("left", newPos[0] + "px")
-    .style("top", newPos[1] + "px")
+  wrap.tooltip
+    .html(tooltip_text)
+    .style("left", new_pos[0] + "px")
+    .style("top", new_pos[1] + "px")
 }
 
-function CBD_mouseleave(d) {
-  CBD_tooltip.transition()
+function CBD_Mouse_Leave(wrap, d) {
+  wrap.tooltip.transition()
     .duration(10)
     .style("opacity", 0)
-  d3.select(this)
+  d3.select(d3.event.target)
     .style("opacity", 1)
 }
 
-function CBD_initialize() {
+function CBD_Initialize(wrap) {
   //-- Add x-axis
   var x = d3.scaleBand()
-    .range([0, CBD_wrap.width])
-    .domain(CBD_wrap.dateList)
+    .range([0, wrap.width])
+    .domain(wrap.date_list)
     .padding(0.2);
     
-  var xAxis = d3.axisBottom(x)
+  var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function(d, i){return CBD_wrap.xticklabel[i]});
+    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
   
-  CBD_wrap.svg.append('g')
+  wrap.svg.append('g')
     .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + CBD_wrap.height + ')')
-    .call(xAxis)
+    .attr('transform', 'translate(0,' + wrap.height + ')')
+    .call(x_axis)
     .selectAll("text")
       .attr("transform", "translate(-8,15) rotate(-90)")
       .style("text-anchor", "end")
     
   //-- Add a 2nd x-axis for ticks
-  var x2 = d3.scaleLinear()
-    .domain([0, CBD_wrap.dateList.length])
-    .range([0, CBD_wrap.width])
+  var x_2 = d3.scaleLinear()
+    .domain([0, wrap.date_list.length])
+    .range([0, wrap.width])
   
-  var xAxis2 = d3.axisBottom(x2)
-    .tickValues(CBD_wrap.xtick)
+  var x_axis_2 = d3.axisBottom(x_2)
+    .tickValues(wrap.xtick)
     .tickSize(10)
     .tickSizeOuter(0)
-    .tickFormat(function(d, i){return ""});
+    .tickFormat(function (d, i) {return ""});
   
-  CBD_wrap.svg.append("g")
-    .attr("transform", "translate(0," + CBD_wrap.height + ")")
+  wrap.svg.append("g")
+    .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
-    .call(xAxis2)
+    .call(x_axis_2)
   
   //-- Add y-axis
   var y = d3.scaleLinear()
-    .domain([0, CBD_wrap.ymax])
-    .range([CBD_wrap.height, 0]);
+    .domain([0, wrap.y_max])
+    .range([wrap.height, 0]);
   
-  var yAxis = d3.axisLeft(y)
-    .tickSize(-CBD_wrap.width)
-    .tickValues(CBD_wrap.ytick)
+  var y_axis = d3.axisLeft(y)
+    .tickSize(-wrap.width)
+    .tickValues(wrap.ytick)
   
-  CBD_wrap.svg.append("g")
+  wrap.svg.append("g")
     .attr("class", "yaxis")
-    .call(yAxis)
+    .call(y_axis)
 
   //-- Add a 2nd y-axis for the frameline at right
-  var yAxis2 = d3.axisRight(y)
+  var y_axis_2 = d3.axisRight(y)
     .ticks(0)
     .tickSize(0)
   
-  CBD_wrap.svg.append("g")
+  wrap.svg.append("g")
     .attr("class", "yaxis")
-    .attr("transform", "translate(" + CBD_wrap.width + ",0)")
-    .call(yAxis2)
+    .attr("transform", "translate(" + wrap.width + ",0)")
+    .call(y_axis_2)
     
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '案例數';
   else if (lang == 'fr') ylabel = 'Nombre de cas';
   else ylabel = 'Number of cases';
-  CBD_wrap.svg.append("text")
+  wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-CBD_wrap.margin.left*0.75).toString() + ", " + (CBD_wrap.height/2).toString() + ")rotate(-90)")
+    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)")
     .text(ylabel);
     
   //-- Color
-  var colorList = global_var.cList.slice(0, CBD_wrap.nbCol-1);
-  colorList.push('#ccaaaa')
-  var colTagList = CBD_wrap.colTagList.slice().reverse();
+  var color_list = global_var.cList.slice(0, wrap.nb_col-1);
+  color_list.push('#ccaaaa')
+  var col_tag_list = wrap.col_tag_list.slice().reverse();
   var color = d3.scaleOrdinal()
-    .domain(colTagList)
-    .range(colorList);
+    .domain(col_tag_list)
+    .range(color_list);
     
   //-- Bar
-  var bar = CBD_wrap.svg.selectAll('.content.bar')
-    .data(CBD_wrap.formattedData)
+  var bar = wrap.svg.selectAll('.content.bar')
+    .data(wrap.formatted_data)
     .enter();
   
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', function(d) {return color(d.col);})
-    .attr('x', function(d) {return x(d.x);})
-    .attr('y', function(d) {return y(0);})
+    .attr('fill', function (d) {return color(d.col);})
+    .attr('x', function (d) {return x(d.x);})
+    .attr('y', function (d) {return y(0);})
     .attr('width', x.bandwidth())
     .attr('height', 0)
-    .on("mouseover", CBD_mouseover)
-    .on("mousemove", CBD_mousemove)
-    .on("mouseleave", CBD_mouseleave)
+    .on("mouseover", function (d) {CBD_Mouse_Over(wrap, d);})
+    .on("mousemove", function (d) {CBD_Mouse_Move(wrap, d);})
+    .on("mouseleave", function (d) {CBD_Mouse_Leave(wrap, d);})
 
-  CBD_wrap.colorList = colorList;
-  CBD_wrap.bar = bar;
+  wrap.color_list = color_list;
+  wrap.bar = bar;
 }
 
-function CBD_update() {
-  var transDuration = 800;
+function CBD_Update(wrap) {
+  var trans_duration = 800;
 
   //-- Add y-axis
   var y = d3.scaleLinear()
-    .domain([0, CBD_wrap.ymax])
-    .range([CBD_wrap.height, 0]);
+    .domain([0, wrap.y_max])
+    .range([wrap.height, 0]);
   
-  var yAxis = d3.axisLeft(y)
-    .tickSize(-CBD_wrap.width)
-    .tickValues(CBD_wrap.ytick)
+  var y_axis = d3.axisLeft(y)
+    .tickSize(-wrap.width)
+    .tickValues(wrap.ytick)
   
-  CBD_wrap.svg.select('.yaxis')
+  wrap.svg.select('.yaxis')
     .transition()
-    .duration(transDuration)
-    .call(yAxis);
+    .duration(trans_duration)
+    .call(y_axis);
   
   //-- Update bars
-  CBD_wrap.bar.selectAll('.content.bar')
-    .data(CBD_wrap.formattedData)
+  wrap.bar.selectAll('.content.bar')
+    .data(wrap.formatted_data)
     .transition()
-    .duration(transDuration)
-    .attr('y', function(d) {return y(d.y1);})
-    .attr('height', function(d) {return y(d.y0)-y(d.y1);});
+    .duration(trans_duration)
+    .attr('y', function (d) {return y(d.y1);})
+    .attr('height', function (d) {return y(d.y0)-y(d.y1);});
     
   //-- Color
-  colorList = CBD_wrap.colorList.slice();
-  colorList.push('#000000');
-  if (CBD_wrap.doOnset == 1) colorList.splice(CBD_wrap.nbCol, 0, '#999999');
+  color_list = wrap.color_list.slice();
+  color_list.push('#000000');
+  if (wrap.do_onset == 1) color_list.splice(wrap.nb_col, 0, '#999999');
   
   //-- Legend - value
-  var lPos;
+  var legend_pos;
   if (lang == 'zh-tw') {
-    lPos = {x: 70, y: 40, dx: 12, dy: 30, x1: 220};
+    legend_pos = {x: 70, y: 40, dx: 12, dy: 30, x1: 220};
   }
   else {
-    lPos = {x: 70, y: 40, dx: 12, dy: 30, x1: 190};
+    legend_pos = {x: 70, y: 40, dx: 12, dy: 30, x1: 190};
   }
-//   if (CBD_wrap.doCumul == 0) {
-//     if (lang == 'zh-tw') lPos.x = 330;
-//     else if (lang == 'fr') lPos.x = 370;
-//     else lPos.x = 360;
+//   if (wrap.do_cumul == 0) {
+//     if (lang == 'zh-tw') legend_pos.x = 330;
+//     else if (lang == 'fr') legend_pos.x = 370;
+//     else legend_pos.x = 360;
 //   }
-  var lValue = CBD_wrap.lValue.slice();
-  var sum = lValue.reduce((a, b) => a + b, 0);
-  if (CBD_wrap.doOnset == 1) lValue.push(CBD_wrap.latestTot-sum);
-  lValue.push(CBD_wrap.latestTot);
+  var legend_value = wrap.legend_value.slice();
+  var sum = legend_value.reduce((a, b) => a + b, 0);
+  if (wrap.do_onset == 1) legend_value.push(wrap.n_tot-sum);
+  legend_value.push(wrap.n_tot);
   
-  CBD_wrap.svg.selectAll(".legend.value")
+  wrap.svg.selectAll(".legend.value")
     .remove()
     .exit()
-    .data(lValue)
+    .data(legend_value)
     .enter()
     .append("text")
       .attr("class", "legend value")
-      .attr("x", function(d, i) {return lPos.x + Math.floor(i/6)*lPos.x1;})
-      .attr("y", function(d, i) {return lPos.y + (i%6)*lPos.dy;})
-      .style("fill", function(d, i) {return colorList[i]})
-      .text(function(d) {return d})
+      .attr("x", function (d, i) {return legend_pos.x + Math.floor(i/6)*legend_pos.x1;})
+      .attr("y", function (d, i) {return legend_pos.y + (i%6)*legend_pos.dy;})
+      .style("fill", function (d, i) {return color_list[i]})
+      .text(function (d) {return d})
       .attr("text-anchor", "end")
   
   //-- Legend - label
-  var lLabel, lLabel_plus;
+  var legend_label, legend_label_plus;
   if (lang == 'zh-tw') {
-    lLabel = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自費或自行就醫', '外國檢驗', '無檢驗管道資料', '合計'];
-    lLabel_plus = '無發病日資料';
+    legend_label = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自費或自行就醫', '外國檢驗', '無檢驗管道資料', '合計'];
+    legend_label_plus = '無發病日資料';
   }
   else if (lang == 'fr') {
-    lLabel = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', "À l'étranger", 'Pas annoncés', 'Total'];
-    lLabel_plus = "Sans date début sympt.";
+    legend_label = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', "À l'étranger", 'Pas annoncés', 'Total'];
+    legend_label_plus = "Sans date début sympt.";
   }
   else {
-    lLabel = ["Airports", "Quarantine", "Isolation", "Monitoring", "Hospitals", 'Overseas', 'Not announced', 'Total'];
-    lLabel_plus = 'No onset date';
+    legend_label = ["Airports", "Quarantine", "Isolation", "Monitoring", "Hospitals", 'Overseas', 'Not announced', 'Total'];
+    legend_label_plus = 'No onset date';
   }
-  if (CBD_wrap.doOnset == 1) lLabel.splice(CBD_wrap.nbCol, 0, lLabel_plus);
+  if (wrap.do_onset == 1) legend_label.splice(wrap.nb_col, 0, legend_label_plus);
   
-  CBD_wrap.svg.selectAll(".legend.label")
+  wrap.svg.selectAll(".legend.label")
     .remove()
     .exit()
-    .data(lLabel)
+    .data(legend_label)
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", function(d, i) {return lPos.x + lPos.dx + Math.floor(i/6)*lPos.x1;})
-      .attr("y", function(d, i) {return lPos.y + (i%6)*lPos.dy;})
-      .style("fill", function(d, i) {return colorList[i]})
-      .text(function(d) {return d})
+      .attr("x", function (d, i) {return legend_pos.x + legend_pos.dx + Math.floor(i/6)*legend_pos.x1;})
+      .attr("y", function (d, i) {return legend_pos.y + (i%6)*legend_pos.dy;})
+      .style("fill", function (d, i) {return color_list[i]})
+      .text(function (d) {return d})
       .attr("text-anchor", "start")
 }
 
-CBD_wrap.doCumul = 0;
-CBD_wrap.doOnset = 0;
+//-- Global variable
+var CBD_latest_wrap = {};
 
-d3.csv(CBD_wrap.dataPathList[CBD_wrap.doOnset], function(error, data) {
-  d3.csv(CBD_wrap.dataPathList[2], function(error2, data2) {
-    if (error) return console.warn(error);
-    if (error2) return console.warn(error2);
-    
-    CBD_makeCanvas();
-    CBD_formatData(data);
-    CBD_formatData2(data2);
-    CBD_initialize();
-    CBD_update();
+//-- ID
+CBD_latest_wrap.tag = "case_by_detection_latest"
+CBD_latest_wrap.id = '#' + CBD_latest_wrap.tag
+
+//-- Data path
+CBD_latest_wrap.data_path_list = [
+  "processed_data/case_by_detection_by_report_day.csv",
+  "processed_data/case_by_detection_by_onset_day.csv",
+  "processed_data/key_numbers.csv"
+];
+
+//-- Tooltip
+CBD_latest_wrap.tooltip = d3.select(CBD_latest_wrap.id)
+  .append("div")
+  .attr("class", "tooltip")
+
+//-- Parameters
+CBD_latest_wrap.n_tot_key = 'latest_total';
+CBD_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
+CBD_latest_wrap.r_list = GS_var.r_list_latest;
+CBD_latest_wrap.y_max_factor = 1.2;
+CBD_latest_wrap.y_max_fix_1_1 = 0;
+CBD_latest_wrap.y_max_fix_1_0 = 0;
+CBD_latest_wrap.y_max_fix_0_1 = 7.5;
+CBD_latest_wrap.y_max_fix_0_0 = 0;
+CBD_latest_wrap.y_path_1_1 = 20;
+CBD_latest_wrap.y_path_1_0 = 50;
+CBD_latest_wrap.y_path_0_1 = 2;
+CBD_latest_wrap.y_path_0_0 = 5;
+
+//-- Variables
+CBD_latest_wrap.do_cumul = 0;
+CBD_latest_wrap.do_onset = 0;
+
+//-- Plot
+function CBD_Latest_Plot() {
+  d3.csv(CBD_latest_wrap.data_path_list[CBD_latest_wrap.do_onset], function (error, data) {
+    d3.csv(CBD_latest_wrap.data_path_list[2], function (error2, data2) {
+      if (error) return console.warn(error);
+      if (error2) return console.warn(error2);
+      
+      CBD_Make_Canvas(CBD_latest_wrap);
+      CBD_Format_Data(CBD_latest_wrap, data);
+      CBD_Format_Data_2(CBD_latest_wrap, data2);
+      CBD_Initialize(CBD_latest_wrap);
+      CBD_Update(CBD_latest_wrap);
+    });
   });
-});
+}
+
+CBD_Latest_Plot();
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + CBD_wrap.tag + "_doCumul']", function(event) {
-  CBD_wrap.doCumul = this.value;
-  dataPath = CBD_wrap.dataPathList[CBD_wrap.doOnset]
+$(document).on("change", "input:radio[name='" + CBD_latest_wrap.tag + "_doCumul']", function (event) {
+  CBD_latest_wrap.do_cumul = this.value;
+  dataPath = CBD_latest_wrap.data_path_list[CBD_latest_wrap.do_onset]
   
-  d3.csv(dataPath, function(error, data) {
+  d3.csv(dataPath, function (error, data) {
     if (error) return console.warn(error);
     
-    CBD_formatData(data);
-    CBD_update();
+    CBD_Format_Data(CBD_latest_wrap, data);
+    CBD_Update(CBD_latest_wrap);
   });
 });
 
-$(document).on("change", "input:radio[name='" + CBD_wrap.tag + "_doOnset']", function(event) {
-  CBD_wrap.doOnset = this.value
-  dataPath = CBD_wrap.dataPathList[CBD_wrap.doOnset]
+$(document).on("change", "input:radio[name='" + CBD_latest_wrap.tag + "_doOnset']", function (event) {
+  CBD_latest_wrap.do_onset = this.value
+  dataPath = CBD_latest_wrap.data_path_list[CBD_latest_wrap.do_onset]
   
-  d3.csv(dataPath, function(error, data) {
+  d3.csv(dataPath, function (error, data) {
     if (error) return console.warn(error);
     
-    CBD_formatData(data);
-    CBD_update();
+    CBD_Format_Data(CBD_latest_wrap, data);
+    CBD_Update(CBD_latest_wrap);
   });
 });
 
-d3.select(CBD_wrap.id + '_button_5').on('click', function(){
+//-- Save
+d3.select(CBD_latest_wrap.id + '_save').on('click', function (){
   var tag1, tag2;
   
-  if (CBD_wrap.doCumul == 1) tag1 = 'cumulative';
+  if (CBD_latest_wrap.do_cumul == 1) tag1 = 'cumulative';
   else tag1 = 'daily';
-  if (CBD_wrap.doOnset == 1) tag2 = 'onset';
+  if (CBD_latest_wrap.do_onset == 1) tag2 = 'onset';
   else tag2 = 'report';
   
-  name = CBD_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + lang + '.png'
-  saveSvgAsPng(d3.select(CBD_wrap.id).select('svg').node(), name);
+  name = CBD_latest_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + lang + '.png'
+  saveSvgAsPng(d3.select(CBD_latest_wrap.id).select('svg').node(), name);
 });
 
+//-- Language button
+$(document).on("change", "input:radio[name='index_language']", function (event) {
+  lang = this.value;
+  Cookies.set("lang", lang);
+  
+  //-- Remove
+  d3.selectAll(CBD_latest_wrap.id+' .plot').remove()
+  
+  //-- Replot
+  CBD_Latest_Plot();
+});

@@ -36,8 +36,8 @@ DBT_latest_wrap.col_ind = 0;
 
 //-- Plot
 function DBT_Latest_Plot() {
-  d3.csv(DBT_latest_wrap.data_path_list[0], function(error, data) {
-    d3.csv(DBT_latest_wrap.data_path_list[1], function(error2, data2) {
+  d3.csv(DBT_latest_wrap.data_path_list[0], function (error, data) {
+    d3.csv(DBT_latest_wrap.data_path_list[1], function (error2, data2) {
       if (error) return console.warn(error);
       if (error2) return console.warn(error2);
       
@@ -53,11 +53,11 @@ function DBT_Latest_Plot() {
 DBT_Latest_Plot();
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + DBT_latest_wrap.tag + "_colInd']", function(event) {
+$(document).on("change", "input:radio[name='" + DBT_latest_wrap.tag + "_colInd']", function (event) {
   DBT_latest_wrap.col_ind = this.value;
   data_path = DBT_latest_wrap.data_path_list[0]
   
-  d3.csv(data_path, function(error, data) {
+  d3.csv(data_path, function (error, data) {
     if (error) return console.warn(error);
     
     DBT_Format_Data(DBT_latest_wrap, data);
@@ -66,7 +66,7 @@ $(document).on("change", "input:radio[name='" + DBT_latest_wrap.tag + "_colInd']
 });
 
 //-- Save button
-d3.select(DBT_latest_wrap.id + '_save').on('click', function() {
+d3.select(DBT_latest_wrap.id + '_save').on('click', function () {
   var tag1;
   
   if (DBT_latest_wrap.col_ind == 0) tag1 = 'all';
@@ -79,7 +79,7 @@ d3.select(DBT_latest_wrap.id + '_save').on('click', function() {
 });
 
 //-- Language button
-$(document).on("change", "input:radio[name='index_language']", function(event) {
+$(document).on("change", "input:radio[name='index_language']", function (event) {
   lang = this.value;
   Cookies.set("lang", lang);
   

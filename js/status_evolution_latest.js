@@ -30,7 +30,7 @@ SE_latest_wrap.r_list = GS_var.r_list_latest;
 
 //-- Plot
 function SE_Latest_Plot() {
-  d3.csv(SE_latest_wrap.data_path_list[0], function(error, data) {
+  d3.csv(SE_latest_wrap.data_path_list[0], function (error, data) {
     if (error) return console.warn(error);
     
     SE_Make_Canvas(SE_latest_wrap);
@@ -43,13 +43,13 @@ function SE_Latest_Plot() {
 SE_Latest_Plot();
 
 //-- Save button
-d3.select(SE_latest_wrap.id + '_save').on('click', function() {
+d3.select(SE_latest_wrap.id + '_save').on('click', function () {
   name = SE_latest_wrap.tag + '_' + lang + '.png';
   saveSvgAsPng(d3.select(SE_latest_wrap.id).select('svg').node(), name);
 });
 
 //-- Language button
-$(document).on("change", "input:radio[name='index_language']", function(event) {
+$(document).on("change", "input:radio[name='index_language']", function (event) {
   lang = this.value;
   Cookies.set("lang", lang);
   
