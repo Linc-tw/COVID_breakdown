@@ -1,76 +1,14 @@
-//-- Language settings
-var lang = Cookies.get("lang"); // 'en', 'fr', 'zh-tw'
-if (!lang) {
-  lang = "en";
-  Cookies.set("lang", lang);
-}
 
-let el = document.getElementById('lang_'+lang);
-el.classList.add("active");
+//-- Filename:
+//--   text_translation.js
+//--
+//-- Author:
+//--   Chieh-An Lin
 
+//-- Global variable
+var TT_wrap = {};
 
-//-- Global variables
-var global_var = {};
-global_var.xlabel_path = 7;
-global_var.rList = [3, 3, 4, 1, 1, 2, 2];
-global_var.cList = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022'];
-
-var GLOBAL_VAR = {};
-GLOBAL_VAR.xlabel_path_latest = 7;
-GLOBAL_VAR.r_list_latest = [3, 3, 4, 1, 1, 2, 2];
-GLOBAL_VAR.xlabel_path_2020 = 25;
-GLOBAL_VAR.r_list_2020 = [7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7];
-GLOBAL_VAR.c_list = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022'];
-
-var KN_wrap = {};
-
-
-
-
-
-
-//TODO
-//Taux de positivité
-//2020 page
-//Last 3 months
-
-
-
-
-
-//-- General functions
-function ISODateToMDDate(ISODate) {
-  var fmtStr;
-  var MDDateFormat;
-  if (lang == 'zh-tw')   MDDateFormat = d3.timeFormat("%-m月%-d日");
-  else if (lang == 'fr') MDDateFormat = d3.timeFormat("%d/%m");
-  else MDDateFormat = d3.timeFormat("%b %d");
-  
-  var date = d3.isoParse(ISODate);
-  return MDDateFormat(date);
-}
-
-function TT_ISO_Date_To_MD_Date(iso_date) {
-  var md_date_format;
-  if (lang == 'zh-tw')   md_date_format = d3.timeFormat("%-m月%-d日");
-  else if (lang == 'fr') md_date_format = d3.timeFormat("%d/%m");
-  else md_date_format = d3.timeFormat("%b %d");
-  
-  var date = d3.isoParse(iso_date);
-  return md_date_format(date);
-}
-
-function cumsum(data, colTagList) {
-  var i, j;
-  for (i=1; i<data.length; i++) {
-    for (j=0; j<colTagList.length; j++) {
-      data[i][colTagList[j]] = +data[i][colTagList[j]] + +data[i-1][colTagList[j]];
-    }
-  }
-}
-
-
-//-- Text in html
+//-- Insert plain text
 function TT_Add_Str(id, string) {
   var node = document.getElementById(id)
   if (null !== node) {
@@ -79,6 +17,7 @@ function TT_Add_Str(id, string) {
   }
 }
 
+//-- Insert html
 function TT_Add_Html(id, string) {
   var node = document.getElementById(id)
   if (null !== node) {
@@ -87,7 +26,7 @@ function TT_Add_Html(id, string) {
   }
 }
 
-
+//-- Text content
 function text_translation() {
   if (lang == 'zh-tw') {
     //-- Header + menu + footer
@@ -96,7 +35,7 @@ function text_translation() {
     TT_Add_Str("menu_policy", "防疫措施");
     TT_Add_Str("menu_source", "資料來源");
     TT_Add_Str("menu_copyleft", "版權沒有");
-    TT_Add_Str("footer_last_update", '最後更新：' + KN_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3');
+    TT_Add_Str("footer_last_update", '最後更新：' + TT_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3');
     
     //-- Data source page
     TT_Add_Str("data_source_original_title", "原始資料");
@@ -175,7 +114,7 @@ function text_translation() {
     TT_Add_Str("menu_policy", "Mesures de prévention");
     TT_Add_Str("menu_source", "Source des données");
     TT_Add_Str("menu_copyleft", "Sans droit d'auteur");
-    TT_Add_Str("footer_last_update", 'Dernière mise à jour : ' + KN_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3');
+    TT_Add_Str("footer_last_update", 'Dernière mise à jour : ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3');
     
     //-- Data source page
     TT_Add_Str("data_source_original_title", "Données d'origine");
@@ -254,7 +193,7 @@ function text_translation() {
     TT_Add_Str("menu_policy", "Policy");
     TT_Add_Str("menu_source", "Data Source");
     TT_Add_Str("menu_copyleft", "No right reserved");
-    TT_Add_Str("footer_last_update", 'Last updates: ' + KN_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3');
+    TT_Add_Str("footer_last_update", 'Last updates: ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3');
     
     //-- Data source page
     TT_Add_Str("data_source_original_title", "Original dataset");
@@ -327,26 +266,20 @@ function text_translation() {
   }
 }
 
-
-//-- Load key nb
+//-- Load key nb & print texts
 d3.csv("processed_data/key_numbers.csv", function(error, data) {
   if (error) return console.warn(error);
   
-  var overallTot = 0;
   var timestamp;
   var i;
   
   for (i=0; i<data.length; i++) {
-    if ('overall_total' == data[i]['key']) {
-      overallTot = +data[i]['value'];
-    }
-    else if ('timestamp' == data[i]['key']) {
+    if ('timestamp' == data[i]['key']) {
       timestamp = data[i]['value'];
     }
   }
   
-  KN_wrap.overallTot = overallTot;
-  KN_wrap.timestamp = timestamp;
+  TT_wrap.timestamp = timestamp;
 
   text_translation()
 });
@@ -358,29 +291,10 @@ $(document).on("change", "input:radio[name='index_language']", function(event) {
   Cookies.set("lang", lang);
   text_translation();
   
-  d3.selectAll('.plot').remove()
-  
-  d3.csv(SE_LATEST_WRAP.data_path_list[0], function(error, data) {
-    if (error) return console.warn(error);
-    
-    SE_Make_Canvas(SE_LATEST_WRAP);
-    SE_Format_Data(SE_LATEST_WRAP, data);
-    SE_Initialize(SE_LATEST_WRAP);
-    SE_Update(SE_LATEST_WRAP);
-  });
-
-  d3.csv(DBT_LATEST_WRAP.data_path_list[0], function(error, data) {
-    d3.csv(DBT_LATEST_WRAP.data_path_list[1], function(error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      DBT_Make_Canvas(DBT_LATEST_WRAP);
-      DBT_Format_Data(DBT_LATEST_WRAP, data);
-      DBT_Format_Data_2(DBT_LATEST_WRAP, data2);
-      DBT_Initialize(DBT_LATEST_WRAP);
-      DBT_Update(DBT_LATEST_WRAP);
-    });
-  });
+  d3.selectAll(CBT_wrap.id+' .plot').remove()
+  d3.selectAll(CBD_wrap.id+' .plot').remove()
+  d3.selectAll(THSC_wrap.id+' .plot').remove()
+  d3.selectAll(ASC_wrap.id+' .plot').remove()
   
   d3.csv(CBT_wrap.dataPathList[CBT_wrap.doOnset], function(error, data) {
     d3.csv(CBT_wrap.dataPathList[2], function(error2, data2) {
@@ -440,31 +354,6 @@ $(document).on("change", "input:radio[name='2020_language']", function(event) {
   lang = this.value;
   Cookies.set("lang", lang);
   text_translation();
-  
-  d3.selectAll('.plot').remove()
-  
-  d3.csv(SE_2020_WRAP.data_path_list[0], function(error, data) {
-    if (error) return console.warn(error);
-    
-    SE_Make_Canvas(SE_2020_WRAP);
-    SE_Format_Data(SE_2020_WRAP, data);
-    SE_Initialize(SE_2020_WRAP);
-    SE_Update(SE_2020_WRAP);
-  });
-
-  d3.csv(DBT_2020_WRAP.data_path_list[0], function(error, data) {
-    d3.csv(DBT_2020_WRAP.data_path_list[1], function(error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      DBT_Make_Canvas(DBT_2020_WRAP);
-      DBT_Format_Data(DBT_2020_WRAP, data);
-      DBT_Format_Data_2(DBT_2020_WRAP, data2);
-      DBT_Initialize(DBT_2020_WRAP);
-      DBT_Update(DBT_2020_WRAP);
-    });
-  });
-
 });
 
 $(document).on("change", "input:radio[name='policy_language']", function(event) {

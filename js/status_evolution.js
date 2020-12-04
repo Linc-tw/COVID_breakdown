@@ -89,7 +89,7 @@ function SE_Format_Data(wrap, data) {
     
     if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
-      xticklabel.push(TT_ISO_Date_To_MD_Date(x));
+      xticklabel.push(GS_ISO_Date_To_MD_Date(x));
     }
     else {
       xticklabel.push("");
@@ -262,7 +262,7 @@ function SE_Initialize(wrap) {
     .text(ylabel);
     
   //-- Color
-  var color_list = GLOBAL_VAR.c_list.slice(0, wrap.nb_col);
+  var color_list = GS_var.c_list.slice(0, wrap.nb_col);
   var col_tag_list = wrap.col_tag_list.slice().reverse();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
