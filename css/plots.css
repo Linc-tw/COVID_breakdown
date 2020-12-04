@@ -121,12 +121,6 @@ body,
   margin-top: -25px;
   margin-bottom: -25px;
 }
-#test_by_criterion .tooltip {
-  margin-left: -75px;
-  margin-right: -75px;
-  margin-top: -55px;
-  margin-bottom: -55px;
-}
 #case_by_transmission .tooltip {
   margin-left: -56px;
   margin-right: -56px;
@@ -138,6 +132,12 @@ body,
   margin-right: -50px;
   margin-top: -72px;
   margin-bottom: -72px;
+}
+#test_by_criterion .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
+  margin-top: -55px;
+  margin-bottom: -55px;
 }
 
 
