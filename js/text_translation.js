@@ -285,29 +285,6 @@ d3.csv("processed_data/key_numbers.csv", function (error, data) {
 });
 
 
-//-- Button listener
-$(document).on("change", "input:radio[name='index_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
-  text_translation();
-  
-  d3.selectAll(ASC_wrap.id+' .plot').remove()
-  
-  d3.csv(ASC_wrap.dataPathList[ASC_wrap.doCount], function (error, data) {
-    d3.csv(ASC_wrap.dataPathList[2], function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      ASC_makeCanvas();
-      ASC_formatData(data);
-      ASC_formatData2(data2);
-      ASC_initialize();
-      ASC_update();
-    });
-  });
-
-});
-
 $(document).on("change", "input:radio[name='2020_language']", function (event) {
   lang = this.value;
   Cookies.set("lang", lang);

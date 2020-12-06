@@ -1,33 +1,35 @@
-var TBC_wrap = {};
-TBC_wrap.tag = "test_by_criterion"
-TBC_wrap.id = '#' + TBC_wrap.tag
-TBC_wrap.dataPath = "processed_data/test_by_criterion.csv";
 
-function TBC_makeCanvas() {
-  var totWidth = 800;
-  var totHeight;
+//-- Filename:
+//--   test_by_criterion.js
+//--
+//-- Author:
+//--   Chieh-An Lin
+
+function TBC_Make_Canvas(wrap) {
+  var tot_width = 800;
+  var tot_height;
   if (lang == 'zh-tw') {
-    totHeight = 415;
+    tot_height = 415;
     bottom = 105;
   }
   else if (lang == 'fr') {
-    totHeight = 400;
+    tot_height = 400;
     bottom = 90;
   }
   else {
-    totHeight = 400;
+    tot_height = 400;
     bottom = 90;
   }
   
   var margin = {left: 110, right: 2, bottom: bottom, top: 2};
-  var width = totWidth - margin.left - margin.right;
-  var height = totHeight - margin.top - margin.bottom;
+  var width = tot_width - margin.left - margin.right;
+  var height = tot_height - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
   
-  var svg = d3.select(TBC_wrap.id)
+  var svg = d3.select(TBC_latest_wrap.id)
     .append("svg")
       .attr('class', 'plot')
-      .attr("viewBox", "0 0 " + totWidth + " " + totHeight)
+      .attr("viewBox", "0 0 " + tot_width + " " + tot_height)
       .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -38,58 +40,58 @@ function TBC_makeCanvas() {
       .attr("fill", "white")
       .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
-  TBC_wrap.totWidth = totWidth;
-  TBC_wrap.totHeight = totHeight;
-  TBC_wrap.margin = margin;
-  TBC_wrap.width = width;
-  TBC_wrap.height = height;
-  TBC_wrap.corner = corner;
-  TBC_wrap.svg = svg;
+  TBC_latest_wrap.tot_width = tot_width;
+  TBC_latest_wrap.tot_height = tot_height;
+  TBC_latest_wrap.margin = margin;
+  TBC_latest_wrap.width = width;
+  TBC_latest_wrap.height = height;
+  TBC_latest_wrap.corner = corner;
+  TBC_latest_wrap.svg = svg;
 }
 
-function TBC_formatData(data) {
+function TBC_Format_Data(wrap, data) {
   //-- Settings for xticklabels
-  var q = data.length % global_var.xlabel_path;
-  var r = global_var.rList[q];
+  var q = data.length % wrap.xlabel_path;
+  var r = wrap.r_list[q];
   var xtick = [];
   var xticklabel = [];
-  var ymax = 0;
+  var y_max = 0;
   
-  var colTagList = data.columns.slice(1);
-  var nbCol = colTagList.length;
-  var dateList = [];
-  var formattedData = [];
+  var col_tag_list = data.columns.slice(1);
+  var nb_col = col_tag_list.length;
+  var date_list = [];
+  var formatted_data = [];
   var i, j, x, y, height, block;
 
-  if (TBC_wrap.doCumul == 1) {
-    cumsum(data, colTagList);
+  if (TBC_latest_wrap.doCumul == 1) {
+    GS_CumSum(data, col_tag_list);
   }
   
   for (i=0; i<data.length; i++) {
     y = 0;
     x = data[i]["date"];
-    dateList.push(x);
+    date_list.push(x);
     
-    for (j=0; j<nbCol; j++) {
-      height = +data[i][colTagList[j]];
+    for (j=0; j<nb_col; j++) {
+      height = +data[i][col_tag_list[j]];
       block = {
         'x': x,
         'y0': y,
         'y1': y + height,
         'height': height,
-        'h1': +data[i][colTagList[nbCol-1]],
-        'h2': +data[i][colTagList[nbCol-2]],
-        'h3': +data[i][colTagList[nbCol-3]],
-        'col': colTagList[j]
+        'h1': +data[i][col_tag_list[nb_col-1]],
+        'h2': +data[i][col_tag_list[nb_col-2]],
+        'h3': +data[i][col_tag_list[nb_col-3]],
+        'col': col_tag_list[j]
       };
         
       y += height;
-      formattedData.push(block);
+      formatted_data.push(block);
     }
     
-    ymax = Math.max(ymax, y);
+    y_max = Math.max(y_max, y);
     
-    if (i % global_var.xlabel_path == r) {
+    if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
       xticklabel.push(ISODateToMDDate(x));
     }
@@ -98,312 +100,345 @@ function TBC_formatData(data) {
     }
   }
   
-  //-- Calculate ymax
-  ymax *= 1.3;
-  var ypath;
-  if (TBC_wrap.doCumul == 1) ypath = 6000;
-  else                       ypath = 250;
+  //-- Calculate y_max
+  y_max *= wrap.y_max_factor;
+  var y_path;
+  if (TBC_latest_wrap.doCumul == 1) y_path = wrap.y_path_1;
+  else                              y_path = wrap.y_path_0;
   
   var ytick = [];
-  for (i=0; i<ymax; i+=ypath) ytick.push(i)
+  for (i=0; i<y_max; i+=y_path) ytick.push(i)
   
   //-- Calculate seperate sum
-  var ext, QT, clin;
-  if (TBC_wrap.doCumul == 1) {
-    ext = d3.max(formattedData, function(d) {if (d.col == 'extended') return +d.height;});
-    QT = d3.max(formattedData, function(d) {if (d.col == 'quarantine') return +d.height;});
-    clin = d3.max(formattedData, function(d) {if (d.col == 'clinical') return +d.height;});
+  var ext, qt, clin;
+  if (TBC_latest_wrap.doCumul == 1) {
+    ext = d3.max(formatted_data, function (d) {if (d.col == 'extended') return +d.height;});
+    qt = d3.max(formatted_data, function (d) {if (d.col == 'quarantine') return +d.height;});
+    clin = d3.max(formatted_data, function (d) {if (d.col == 'clinical') return +d.height;});
   }
   else {
-    ext = d3.sum(formattedData, function(d) {if (d.col == 'extended') return +d.height;});
-    QT = d3.sum(formattedData, function(d) {if (d.col == 'quarantine') return +d.height;});
-    clin = d3.sum(formattedData, function(d) {if (d.col == 'clinical') return +d.height;});
+    ext = d3.sum(formatted_data, function (d) {if (d.col == 'extended') return +d.height;});
+    qt = d3.sum(formatted_data, function (d) {if (d.col == 'quarantine') return +d.height;});
+    clin = d3.sum(formatted_data, function (d) {if (d.col == 'clinical') return +d.height;});
   }
-  var lValue = [ext, QT, clin];
+  var legend_value = [ext, qt, clin];
   
-  TBC_wrap.formattedData = formattedData;
-  TBC_wrap.dateList = dateList;
-  TBC_wrap.colTagList = colTagList;
-  TBC_wrap.nbCol = nbCol;
-  TBC_wrap.ymax = ymax;
-  TBC_wrap.xtick = xtick;
-  TBC_wrap.xticklabel = xticklabel;
-  TBC_wrap.ytick = ytick;
-  TBC_wrap.lValue = lValue;
+  TBC_latest_wrap.formatted_data = formatted_data;
+  TBC_latest_wrap.date_list = date_list;
+  TBC_latest_wrap.col_tag_list = col_tag_list;
+  TBC_latest_wrap.nb_col = nb_col;
+  TBC_latest_wrap.y_max = y_max;
+  TBC_latest_wrap.xtick = xtick;
+  TBC_latest_wrap.xticklabel = xticklabel;
+  TBC_latest_wrap.ytick = ytick;
+  TBC_latest_wrap.legend_value = legend_value;
 }
 
-//-- Tooltip
-var TBC_tooltip = d3.select(TBC_wrap.id)
-  .append("div")
-  .attr("class", "tooltip")
-
-function TBC_mouseover(d) {
-  TBC_tooltip.transition()
+function TBC_Mouse_Over(wrap, d) {
+  wrap.tooltip.transition()
     .duration(200)
     .style("opacity", 0.9)
-  d3.select(this)
+  d3.select(d3.event.target)
     .style("opacity", 0.8)
 }
 
-function TBC_getTooltipPos(d) {
+function TBC_Get_Tooltip_Pos(wrap, d) {
   var l_max = 0;
   var i_max = -1;
   var i, l;
   
   //-- Look for the furthest vertex
   for (i=0; i<4; i++) {
-    l = (d[0] - TBC_wrap.corner[i][0])**2 + (d[1] - TBC_wrap.corner[i][1])**2;
+    l = (d[0] - TBC_latest_wrap.corner[i][0])**2 + (d[1] - TBC_latest_wrap.corner[i][1])**2;
     if (l > l_max) {
       l_max = l;
       i_max = i;
     }
   }
   
-  //-- Place the caption somewhere on the longest arm, parametrizaed by xAlpha & yAlpha
-  var xAlpha = 0.1;
-  var yAlpha = 0.5;
-//   var xAlpha = 1;
-//   var yAlpha = 1;
-  var xPos = d[0] * (1-xAlpha) + TBC_wrap.corner[i_max][0] * xAlpha;
-  var yPos = d[1] * (1-yAlpha) + TBC_wrap.corner[i_max][1] * yAlpha;
+  //-- Place the caption somewhere on the longest arm, parametrizaed by x_alpha & y_alpha
+  var x_alpha = 0.1;
+  var y_alpha = 0.5;
+  var x_pos = d[0] * (1-x_alpha) + TBC_latest_wrap.corner[i_max][0] * x_alpha;
+  var y_pos = d[1] * (1-y_alpha) + TBC_latest_wrap.corner[i_max][1] * y_alpha;
   
   var buffer = 1.25*16; //-- Margin buffer of card-body
   var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
-  var cardHdr = 3.125*16; //-- Offset caused by card-header
-  var svgDim = d3.select(TBC_wrap.id).node().getBoundingClientRect();
-  var xAspect = (svgDim.width - 2*buffer) / TBC_wrap.totWidth;
-  var yAspect = (svgDim.height - 2*buffer) / TBC_wrap.totHeight;
+  var card_hdr = 3.125*16; //-- Offset caused by card-header
+  var svg_dim = d3.select(TBC_latest_wrap.id).node().getBoundingClientRect();
+  var x_aspect = (svg_dim.width - 2*buffer) / TBC_latest_wrap.tot_width;
+  var y_aspect = (svg_dim.height - 2*buffer) / TBC_latest_wrap.tot_height;
   
-  xPos = (xPos + TBC_wrap.margin.left) * xAspect + buffer;
-  yPos = (yPos + TBC_wrap.margin.top) * yAspect + buffer + cardHdr + button;
+  x_pos = (x_pos + TBC_latest_wrap.margin.left) * x_aspect + buffer;
+  y_pos = (y_pos + TBC_latest_wrap.margin.top) * y_aspect + buffer + card_hdr + button;
   
-  return [xPos, yPos];
+  return [x_pos, y_pos];
 }
 
-function TBC_mousemove(d) {
-  var newPos = TBC_getTooltipPos(d3.mouse(this));
-  var tooltipText;
+function TBC_Mouse_Move(wrap, d) {
+  var new_pos = TBC_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
+  var tooltip_text;
   
   if (lang == 'zh-tw')
-    tooltipText = d.x + "<br>法定通報 = " + d.h3 + "<br>居家檢疫 = " + d.h2 + "<br>擴大監測 = " + d.h1 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
+    tooltip_text = d.x + "<br>法定通報 = " + d.h3 + "<br>居家檢疫 = " + d.h2 + "<br>擴大監測 = " + d.h1 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
   else if (lang == 'fr')
-    tooltipText = d.x + "<br>Clinique = " + d.h3 + "<br>Quarantine = " + d.h2 + "<br>Clusters locaux = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+    tooltip_text = d.x + "<br>Clinique = " + d.h3 + "<br>Quarantine = " + d.h2 + "<br>Clusters locaux = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
   else
-    tooltipText = d.x + "<br>Clinical = " + d.h3 + "<br>Quarantine = " + d.h2 + "<br>Community = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+    tooltip_text = d.x + "<br>Clinical = " + d.h3 + "<br>Quarantine = " + d.h2 + "<br>Community = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
   
-  TBC_tooltip
-    .html(tooltipText)
-    .style("left", newPos[0] + "px")
-    .style("top", newPos[1] + "px")
+  wrap.tooltip
+    .html(tooltip_text)
+    .style("left", new_pos[0] + "px")
+    .style("top", new_pos[1] + "px")
 }
 
-function TBC_mouseleave(d) {
-  TBC_tooltip.transition()
+function TBC_Mouse_Leave(wrap, d) {
+  wrap.tooltip.transition()
     .duration(10)
     .style("opacity", 0)
-  d3.select(this)
+  d3.select(d3.event.target)
     .style("opacity", 1)
 }
 
-function TBC_initialize() {
+function TBC_Initialize(wrap) {
   //-- Add x-axis
   var x = d3.scaleBand()
-    .range([0, TBC_wrap.width])
-    .domain(TBC_wrap.dateList)
+    .range([0, TBC_latest_wrap.width])
+    .domain(TBC_latest_wrap.date_list)
     .padding(0.2);
     
-  var xAxis = d3.axisBottom(x)
+  var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function(d, i){return TBC_wrap.xticklabel[i]});
+    .tickFormat(function (d, i) {return TBC_latest_wrap.xticklabel[i]});
   
-  TBC_wrap.svg.append('g')
+  TBC_latest_wrap.svg.append('g')
     .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + TBC_wrap.height + ')')
-    .call(xAxis)
+    .attr('transform', 'translate(0,' + TBC_latest_wrap.height + ')')
+    .call(x_axis)
     .selectAll("text")
       .attr("transform", "translate(-8,15) rotate(-90)")
       .style("text-anchor", "end")
     
   //-- Add a 2nd x-axis for ticks
-  var x2 = d3.scaleLinear()
-    .domain([0, TBC_wrap.dateList.length])
-    .range([0, TBC_wrap.width])
+  var x_2 = d3.scaleLinear()
+    .domain([0, TBC_latest_wrap.date_list.length])
+    .range([0, TBC_latest_wrap.width])
   
-  var xAxis2 = d3.axisBottom(x2)
-    .tickValues(TBC_wrap.xtick)
+  var x_axis_2 = d3.axisBottom(x_2)
+    .tickValues(TBC_latest_wrap.xtick)
     .tickSize(10)
     .tickSizeOuter(0)
-    .tickFormat(function(d, i){return ""});
+    .tickFormat(function (d, i) {return ""});
   
-  TBC_wrap.svg.append("g")
-    .attr("transform", "translate(0," + TBC_wrap.height + ")")
+  TBC_latest_wrap.svg.append("g")
+    .attr("transform", "translate(0," + TBC_latest_wrap.height + ")")
     .attr("class", "xaxis")
-    .call(xAxis2)
+    .call(x_axis_2)
   
   //-- Add y-axis
   var y = d3.scaleLinear()
-    .domain([0, TBC_wrap.ymax])
-    .range([TBC_wrap.height, 0]);
+    .domain([0, TBC_latest_wrap.y_max])
+    .range([TBC_latest_wrap.height, 0]);
   
-  var yAxis = d3.axisLeft(y)
-    .tickSize(-TBC_wrap.width)
-    .tickValues(TBC_wrap.ytick)
+  var y_axis = d3.axisLeft(y)
+    .tickSize(-TBC_latest_wrap.width)
+    .tickValues(TBC_latest_wrap.ytick)
   
-  TBC_wrap.svg.append("g")
+  TBC_latest_wrap.svg.append("g")
     .attr("class", "yaxis")
-    .call(yAxis)
+    .call(y_axis)
 
   //-- Add a 2nd y-axis for the frameline at right
-  var yAxis2 = d3.axisRight(y)
+  var y_axis_2 = d3.axisRight(y)
     .ticks(0)
     .tickSize(0)
   
-  TBC_wrap.svg.append("g")
+  TBC_latest_wrap.svg.append("g")
     .attr("class", "yaxis")
-    .attr("transform", "translate(" + TBC_wrap.width + ",0)")
-    .call(yAxis2)
+    .attr("transform", "translate(" + TBC_latest_wrap.width + ",0)")
+    .call(y_axis_2)
     
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '檢驗數';
   else if (lang == 'fr') ylabel = 'Nombre de tests';
   else ylabel = 'Number of tests';
-  TBC_wrap.svg.append("text")
+  TBC_latest_wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-TBC_wrap.margin.left*0.75).toString() + ", " + (TBC_wrap.height/2).toString() + ")rotate(-90)")
+    .attr("transform", "translate(" + (-TBC_latest_wrap.margin.left*0.75).toString() + ", " + (TBC_latest_wrap.height/2).toString() + ")rotate(-90)")
     .text(ylabel);
     
   //-- Color
-  var colorList = global_var.cList.slice(0, TBC_wrap.nbCol);
-  var colTagList = TBC_wrap.colTagList.slice().reverse();
+  var color_list = GS_var.c_list.slice(0, TBC_latest_wrap.nb_col);
+  var col_tag_list = TBC_latest_wrap.col_tag_list.slice().reverse();
   var color = d3.scaleOrdinal()
-    .domain(colTagList)
-    .range(colorList.slice().reverse());
+    .domain(col_tag_list)
+    .range(color_list.slice().reverse());
   
   //-- Bar
-  var bar = TBC_wrap.svg.selectAll('.content.bar')
-    .data(TBC_wrap.formattedData)
+  var bar = TBC_latest_wrap.svg.selectAll('.content.bar')
+    .data(TBC_latest_wrap.formatted_data)
     .enter();
   
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', function(d) {return color(d.col);})
-    .attr('x', function(d) {return x(d.x);})
-    .attr('y', function(d) {return y(0);})
+    .attr('fill', function (d) {return color(d.col);})
+    .attr('x', function (d) {return x(d.x);})
+    .attr('y', function (d) {return y(0);})
     .attr('width', x.bandwidth())
     .attr('height', 0)
-    .on("mouseover", TBC_mouseover)
-    .on("mousemove", TBC_mousemove)
-    .on("mouseleave", TBC_mouseleave)
+    .on("mouseover", function (d) {TBC_Mouse_Over(wrap, d);})
+    .on("mousemove", function (d) {TBC_Mouse_Move(wrap, d);})
+    .on("mouseleave", function (d) {TBC_Mouse_Leave(wrap, d);})
 
-  TBC_wrap.colorList = colorList;
-  TBC_wrap.bar = bar;
+  TBC_latest_wrap.color_list = color_list;
+  TBC_latest_wrap.bar = bar;
 }
 
-function TBC_update() {
-  var transDuration = 800;
+function TBC_Update(wrap) {
+  var trans_duration = 800;
 
   //-- Add y-axis
   var y = d3.scaleLinear()
-    .domain([0, TBC_wrap.ymax])
-    .range([TBC_wrap.height, 0]);
+    .domain([0, TBC_latest_wrap.y_max])
+    .range([TBC_latest_wrap.height, 0]);
   
-  var yAxis = d3.axisLeft(y)
-    .tickSize(-TBC_wrap.width)
-    .tickValues(TBC_wrap.ytick)
+  var y_axis = d3.axisLeft(y)
+    .tickSize(-TBC_latest_wrap.width)
+    .tickValues(TBC_latest_wrap.ytick)
   
-  TBC_wrap.svg.select('.yaxis')
+  TBC_latest_wrap.svg.select('.yaxis')
     .transition()
-    .duration(transDuration)
-    .call(yAxis);
+    .duration(trans_duration)
+    .call(y_axis);
   
   //-- Update bars
-  TBC_wrap.bar.selectAll('.content.bar')
-    .data(TBC_wrap.formattedData)
+  TBC_latest_wrap.bar.selectAll('.content.bar')
+    .data(TBC_latest_wrap.formatted_data)
     .transition()
-    .duration(transDuration)
-    .attr('y', function(d) {return y(d.y1);})
-    .attr('height', function(d) {return y(d.y0)-y(d.y1);});
+    .duration(trans_duration)
+    .attr('y', function (d) {return y(d.y1);})
+    .attr('height', function (d) {return y(d.y0)-y(d.y1);});
     
   //-- Color
-  colorList = TBC_wrap.colorList.slice();
-  colorList.push('#000000');
+  color_list = TBC_latest_wrap.color_list.slice();
+  color_list.push('#000000');
   
   //-- Legend - value
-  var lPos = {x: 95, y: 40, dx: 12, dy: 30};
-  if (TBC_wrap.doCumul == 0) {
-    if (lang == 'zh-tw') lPos.x = 510;
-    else if (lang == 'fr') lPos.x = 95; //300
-    else lPos.x = 350;
+  var legend_pos = {x: 95, y: 40, dx: 12, dy: 30};
+  if (TBC_latest_wrap.doCumul == 0) {
+    if (lang == 'zh-tw') legend_pos.x = 510;
+    else if (lang == 'fr') legend_pos.x = 95; //300
+    else legend_pos.x = 350;
   }
-  var lValue = TBC_wrap.lValue.slice().reverse();
-  var sum = lValue.reduce((a, b) => a + b, 0);
-  lValue.push(sum);
+  var legend_value = TBC_latest_wrap.legend_value.slice().reverse();
+  var sum = legend_value.reduce((a, b) => a + b, 0);
+  legend_value.push(sum);
   
-  TBC_wrap.svg.selectAll(".legend.value")
+  TBC_latest_wrap.svg.selectAll(".legend.value")
     .remove()
     .exit()
-    .data(lValue)
+    .data(legend_value)
     .enter()
     .append("text")
       .attr("class", "legend value")
-      .attr("x", lPos.x)
-      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
-      .style("fill", function(d, i) {return colorList[i]})
-      .text(function(d) {return d})
+      .attr("x", legend_pos.x)
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
+      .style("fill", function (d, i) {return color_list[i]})
+      .text(function (d) {return d})
       .attr("text-anchor", "end")
       
   //-- Legend - label
-  var lLabel;
-  if (lang == 'zh-tw') lLabel = ["法定定義通報", "居家檢疫", "擴大社區監測", "合計"];
-  else if (lang == 'fr') lLabel = ["Critères cliniques", "Quarantaine (fusionnée dans clinique)", "Recherche de clusters locaux", "Total"];
-  else lLabel = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', "Total"];
+  var legend_label;
+  if (lang == 'zh-tw') legend_label = ["法定定義通報", "居家檢疫", "擴大社區監測", "合計"];
+  else if (lang == 'fr') legend_label = ["Critères cliniques", "Quarantaine (fusionnée dans clinique)", "Recherche de clusters locaux", "Total"];
+  else legend_label = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', "Total"];
   
-  TBC_wrap.svg.selectAll(".legend.label")
+  TBC_latest_wrap.svg.selectAll(".legend.label")
     .remove()
     .exit()
-    .data(lLabel)
+    .data(legend_label)
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", lPos.x+lPos.dx)
-      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
-      .style("fill", function(d, i) {return colorList[i]})
-      .text(function(d) {return d})
+      .attr("x", legend_pos.x+legend_pos.dx)
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
+      .style("fill", function (d, i) {return color_list[i]})
+      .text(function (d) {return d})
       .attr("text-anchor", "start")
 }
 
-TBC_wrap.doCumul = 0;;
+//-- Global variable
+var TBC_latest_wrap = {};
 
-d3.csv(TBC_wrap.dataPath, function(error, data) {
-  if (error) return console.warn(error);
-  
-  TBC_makeCanvas();
-  TBC_formatData(data);
-  TBC_initialize();
-  TBC_update();
-});
+//-- ID
+TBC_latest_wrap.tag = "test_by_criterion"
+TBC_latest_wrap.id = '#' + TBC_latest_wrap.tag
 
-//-- Button listener
-$(document).on("change", "input:radio[name='" + TBC_wrap.tag + "_doCumul']", function(event) {
-  TBC_wrap.doCumul = this.value;
-  
-  d3.csv(TBC_wrap.dataPath, function(error, data) {
+//-- File path
+TBC_latest_wrap.dataPath = "processed_data/test_by_criterion.csv";
+
+//-- Tooltip
+TBC_latest_wrap.tooltip = d3.select(TBC_latest_wrap.id)
+  .append("div")
+  .attr("class", "tooltip")
+
+//-- Parameters
+TBC_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
+TBC_latest_wrap.r_list = GS_var.r_list_latest;
+TBC_latest_wrap.y_max_factor = 1.3;
+TBC_latest_wrap.y_path_1 = 6000;
+TBC_latest_wrap.y_path_0 = 250;
+
+//-- Variables
+TBC_latest_wrap.doCumul = 0;;
+
+//-- Plot
+function TBC_Latest_Plot() {
+  d3.csv(TBC_latest_wrap.dataPath, function (error, data) {
     if (error) return console.warn(error);
     
-    TBC_formatData(data);
-    TBC_update();
+    TBC_Make_Canvas(TBC_latest_wrap);
+    TBC_Format_Data(TBC_latest_wrap, data);
+    TBC_Initialize(TBC_latest_wrap);
+    TBC_Update(TBC_latest_wrap);
+  });
+}
+
+TBC_Latest_Plot();
+
+//-- Buttons
+$(document).on("change", "input:radio[name='" + TBC_latest_wrap.tag + "_doCumul']", function (event) {
+  TBC_latest_wrap.doCumul = this.value;
+  
+  d3.csv(TBC_latest_wrap.dataPath, function (error, data) {
+    if (error) return console.warn(error);
+    
+    TBC_Format_Data(TBC_latest_wrap, data);
+    TBC_Update(TBC_latest_wrap);
   });
 });
 
-d3.select(TBC_wrap.id + '_button_3').on('click', function(){
+//-- Save button
+d3.select(TBC_latest_wrap.id + '_save').on('click', function(){
   var tag1;
   
-  if (TBC_wrap.doCumul == 1) tag1 = 'cumulative';
+  if (TBC_latest_wrap.doCumul == 1) tag1 = 'cumulative';
   else tag1 = 'daily';
   
-  name = TBC_wrap.tag + '_' + tag1 + '_' + lang + '.png'
-  saveSvgAsPng(d3.select(TBC_wrap.id).select('svg').node(), name);
+  name = TBC_latest_wrap.tag + '_' + tag1 + '_' + lang + '.png'
+  saveSvgAsPng(d3.select(TBC_latest_wrap.id).select('svg').node(), name);
 });
 
+//-- Language button
+$(document).on("change", "input:radio[name='policy_language']", function (event) {
+  lang = this.value;
+  Cookies.set("lang", lang);
+  
+  //-- Remove
+  d3.selectAll(TBC_latest_wrap.id+' .plot').remove();
+  
+  //-- Replot
+  TBC_Latest_Plot();
+});

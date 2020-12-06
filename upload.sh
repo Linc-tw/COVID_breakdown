@@ -39,6 +39,7 @@ echo
 echo "## Push to repo"
 echo
 git add raw_data/*.csv & sleep 1
+git add processed_data/*.csv & sleep 1
 git add processed_data/latest/*.csv & sleep 1
 git add processed_data/2020/*.csv & sleep 1
 git commit -m "${MODE} data update" & sleep 1
