@@ -29,7 +29,7 @@ function ASC_Make_Canvas(wrap) {
   var height = tot_height - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
   
-  var svg = d3.select(ASC_latest_wrap.id)
+  var svg = d3.select(wrap.id)
     .append("svg")
       .attr('class', 'plot')
       .attr("viewBox", "0 0 " + tot_width + " " + tot_height)
@@ -43,13 +43,13 @@ function ASC_Make_Canvas(wrap) {
       .attr("fill", "white")
       .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
-  ASC_latest_wrap.tot_width = tot_width;
-  ASC_latest_wrap.tot_height = tot_height;
-  ASC_latest_wrap.margin = margin;
-  ASC_latest_wrap.width = width;
-  ASC_latest_wrap.height = height;
-  ASC_latest_wrap.corner = corner;
-  ASC_latest_wrap.svg = svg;
+  wrap.tot_width = tot_width;
+  wrap.tot_height = tot_height;
+  wrap.margin = margin;
+  wrap.width = width;
+  wrap.height = height;
+  wrap.corner = corner;
+  wrap.svg = svg;
 }
 
 function ASC_Format_Data(wrap, data) {
@@ -72,9 +72,9 @@ function ASC_Format_Data(wrap, data) {
     if (j == symptom_list.length) symptom_list.push(symptom);
   }
   
-  ASC_latest_wrap.formatted_data = data;
-  ASC_latest_wrap.age_list = age_list;
-  ASC_latest_wrap.symptom_list = symptom_list;
+  wrap.formatted_data = data;
+  wrap.age_list = age_list;
+  wrap.symptom_list = symptom_list;
 }
 
 function ASC_FormatData_2(wrap, data2) {
@@ -92,18 +92,18 @@ function ASC_FormatData_2(wrap, data2) {
   }
   
   if (lang == 'zh-tw') {
-    for (i=0; i<ASC_latest_wrap.symptom_list.length; i++) {
+    for (i=0; i<wrap.symptom_list.length; i++) {
       for (j=0; j<data2.length; j++) {
-        if (ASC_latest_wrap.symptom_list[i] == data2[j]['label']) {
+        if (wrap.symptom_list[i] == data2[j]['label']) {
           xticklabel.push(data2[j]['label_zh'] + ' (' + data2[j]['count'] + ')');
           break;
         }
       }
     }
     
-    for (i=0; i<ASC_latest_wrap.age_list.length; i++) {
+    for (i=0; i<wrap.age_list.length; i++) {
       for (j=0; j<data2.length; j++) {
-        if (ASC_latest_wrap.age_list[i] == data2[j]['label']) {
+        if (wrap.age_list[i] == data2[j]['label']) {
           yticklabel.push(data2[j]['label_zh'] + ' (' + data2[j]['count'] + ')');
           break;
         }
@@ -111,18 +111,18 @@ function ASC_FormatData_2(wrap, data2) {
     }
   }
   else if (lang == 'fr') {
-    for (i=0; i<ASC_latest_wrap.symptom_list.length; i++) {
+    for (i=0; i<wrap.symptom_list.length; i++) {
       for (j=0; j<data2.length; j++) {
-        if (ASC_latest_wrap.symptom_list[i] == data2[j]['label']) {
+        if (wrap.symptom_list[i] == data2[j]['label']) {
           xticklabel.push(data2[j]['label_fr'].charAt(0).toUpperCase() + data2[j]['label_fr'].slice(1) + ' (' + data2[j]['count'] + ')');
           break;
         }
       }
     }
     
-    for (i=0; i<ASC_latest_wrap.age_list.length; i++) {
+    for (i=0; i<wrap.age_list.length; i++) {
       for (j=0; j<data2.length; j++) {
-        if (ASC_latest_wrap.age_list[i] == data2[j]['label']) {
+        if (wrap.age_list[i] == data2[j]['label']) {
           yticklabel.push(data2[j]['label_fr'] + ' (' + data2[j]['count'] + ')');
           break;
         }
@@ -130,29 +130,29 @@ function ASC_FormatData_2(wrap, data2) {
     }
   }
   else {
-    for (i=0; i<ASC_latest_wrap.symptom_list.length; i++) {
+    for (i=0; i<wrap.symptom_list.length; i++) {
       for (j=0; j<data2.length; j++) {
-        if (ASC_latest_wrap.symptom_list[i] == data2[j]['label']) {
-          xticklabel.push(ASC_latest_wrap.symptom_list[i].charAt(0).toUpperCase() + ASC_latest_wrap.symptom_list[i].slice(1) + ' (' + data2[j]['count'] + ')');
+        if (wrap.symptom_list[i] == data2[j]['label']) {
+          xticklabel.push(wrap.symptom_list[i].charAt(0).toUpperCase() + wrap.symptom_list[i].slice(1) + ' (' + data2[j]['count'] + ')');
           break;
         }
       }
     }
     
-    for (i=0; i<ASC_latest_wrap.age_list.length; i++) {
+    for (i=0; i<wrap.age_list.length; i++) {
       for (j=0; j<data2.length; j++) {
-        if (ASC_latest_wrap.age_list[i] == data2[j]['label']) {
-          yticklabel.push(ASC_latest_wrap.age_list[i] + ' (' + data2[j]['count'] + ')');
+        if (wrap.age_list[i] == data2[j]['label']) {
+          yticklabel.push(wrap.age_list[i] + ' (' + data2[j]['count'] + ')');
           break;
         }
       }
     }
   }
   
-  ASC_latest_wrap.n_total = n_total;
-  ASC_latest_wrap.n_data = n_data;
-  ASC_latest_wrap.xticklabel = xticklabel;
-  ASC_latest_wrap.yticklabel = yticklabel;
+  wrap.n_total = n_total;
+  wrap.n_data = n_data;
+  wrap.xticklabel = xticklabel;
+  wrap.yticklabel = yticklabel;
 }
 
 //-- Hoover
@@ -169,15 +169,15 @@ function ASC_mouseleave(wrap, d) {
 function ASC_initialize(wrap) {
   //-- Add x-axis
   var x = d3.scaleBand()
-    .range([0, ASC_latest_wrap.width])
-    .domain(ASC_latest_wrap.symptom_list)
+    .range([0, wrap.width])
+    .domain(wrap.symptom_list)
     .padding(0.04);
     
   var x_axis = d3.axisTop(x)
-    .tickFormat(function (d, i) {return ASC_latest_wrap.xticklabel[i]})
+    .tickFormat(function (d, i) {return wrap.xticklabel[i]})
     .tickSize(0)
   
-  ASC_latest_wrap.svg.append('g')
+  wrap.svg.append('g')
     .attr('class', 'xaxis')
     .call(x_axis)
     .selectAll("text")
@@ -186,29 +186,29 @@ function ASC_initialize(wrap) {
     
   //-- Add a 2nd x-axis for ticks
   var x_2 = d3.scaleLinear()
-    .domain([0, ASC_latest_wrap.symptom_list.length])
-    .range([0, ASC_latest_wrap.width])
+    .domain([0, wrap.symptom_list.length])
+    .range([0, wrap.width])
   
   var x_axis_2 = d3.axisBottom(x_2)
     .tickSize(0)
     .tickFormat(function (d, i) {return ""});
   
-  ASC_latest_wrap.svg.append("g")
-    .attr("transform", "translate(0," + ASC_latest_wrap.height + ")")
+  wrap.svg.append("g")
+    .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
     .call(x_axis_2)
   
   //-- Add y-axis
   var y = d3.scaleBand()
-    .domain(ASC_latest_wrap.age_list)
-    .range([0, ASC_latest_wrap.height])
+    .domain(wrap.age_list)
+    .range([0, wrap.height])
     .padding(0.04);
   
   var y_axis = d3.axisLeft(y)
-    .tickFormat(function (d, i) {return ASC_latest_wrap.yticklabel[i]})
+    .tickFormat(function (d, i) {return wrap.yticklabel[i]})
     .tickSize(0)
   
-  ASC_latest_wrap.svg.append("g")
+  wrap.svg.append("g")
     .attr("class", "yaxis")
     .call(y_axis)
     .selectAll("text")
@@ -219,24 +219,24 @@ function ASC_initialize(wrap) {
     .ticks(0)
     .tickSize(0)
   
-  ASC_latest_wrap.svg.append("g")
+  wrap.svg.append("g")
     .attr("class", "yaxis")
-    .attr("transform", "translate(" + ASC_latest_wrap.width + ",0)")
+    .attr("transform", "translate(" + wrap.width + ",0)")
     .call(y_axis_2)
     
   //-- Legend - value
-  var legend_pos = {x: 50, y: -0.8*ASC_latest_wrap.margin.top, dx: 12, dy: 30};
+  var legend_pos = {x: 50, y: -0.8*wrap.margin.top, dx: 12, dy: 30};
   var legend_color = [GS_var.c_list[0], '#999999', '#000000'];
-  var legend_value = [ASC_latest_wrap.n_data, ASC_latest_wrap.n_total-ASC_latest_wrap.n_data, ASC_latest_wrap.n_total];
+  var legend_value = [wrap.n_data, wrap.n_total-wrap.n_data, wrap.n_total];
   
-  ASC_latest_wrap.svg.selectAll(".legend.value")
+  wrap.svg.selectAll(".legend.value")
     .remove()
     .exit()
     .data(legend_value)
     .enter()
     .append("text")
       .attr("class", "legend value")
-      .attr("x", -ASC_latest_wrap.margin.left + legend_pos.x)
+      .attr("x", -wrap.margin.left + legend_pos.x)
       .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
       .style("fill", function (d, i) {return legend_color[i]})
       .text(function (d) {return d})
@@ -248,8 +248,8 @@ function ASC_initialize(wrap) {
     .interpolator(t => d3.interpolateRdBu(1-t));
   
   //-- Squares
-  ASC_latest_wrap.svg.selectAll()
-    .data(ASC_latest_wrap.formatted_data)
+  wrap.svg.selectAll()
+    .data(wrap.formatted_data)
     .enter()
     .append("rect")
       .attr("class", "content square")
@@ -264,8 +264,8 @@ function ASC_initialize(wrap) {
       .on("mouseleave", function (d) {ASC_mouseleave(wrap, d);})
     
   //-- Texts
-  ASC_latest_wrap.svg.selectAll()
-    .data(ASC_latest_wrap.formatted_data)
+  wrap.svg.selectAll()
+    .data(wrap.formatted_data)
     .enter()
     .append("text")
       .attr("class", "content text")
@@ -276,23 +276,23 @@ function ASC_initialize(wrap) {
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "central")
   
-  ASC_latest_wrap.x = x;
-  ASC_latest_wrap.y = y;
-  ASC_latest_wrap.legend_color = legend_color;
-  ASC_latest_wrap.legend_pos = legend_pos;
+  wrap.x = x;
+  wrap.y = y;
+  wrap.legend_color = legend_color;
+  wrap.legend_pos = legend_pos;
 }
 
 function ASC_update(wrap) {
   //-- Texts
-  ASC_latest_wrap.svg.selectAll(".content.text")
+  wrap.svg.selectAll(".content.text")
     .remove()
     .exit()
-    .data(ASC_latest_wrap.formatted_data)
+    .data(wrap.formatted_data)
     .enter()
     .append("text")
       .attr("class", "content text")
-      .attr("x", function (d) {return ASC_latest_wrap.x(d['symptom']) + 0.5*+ASC_latest_wrap.x.bandwidth();})
-      .attr("y", function (d) {return ASC_latest_wrap.y(d['age']) + 0.5*+ASC_latest_wrap.y.bandwidth();})
+      .attr("x", function (d) {return wrap.x(d['symptom']) + 0.5*+wrap.x.bandwidth();})
+      .attr("y", function (d) {return wrap.y(d['age']) + 0.5*+wrap.y.bandwidth();})
       .style("fill", '#000')
       .text(function (d) {return d['label'];})
       .attr("text-anchor", "middle")
@@ -304,16 +304,16 @@ function ASC_update(wrap) {
   else if (lang == 'fr') legend_label = ['Données complètes', 'Données incomplètes', 'Total'];
   else legend_label = ['Data complete', 'Data incomplete', 'Total'];
   
-  ASC_latest_wrap.svg.selectAll(".legend.label")
+  wrap.svg.selectAll(".legend.label")
     .remove()
     .exit()
     .data(legend_label)
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", -ASC_latest_wrap.margin.left + ASC_latest_wrap.legend_pos.x + ASC_latest_wrap.legend_pos.dx)
-      .attr("y", function (d, i) {return ASC_latest_wrap.legend_pos.y + i*ASC_latest_wrap.legend_pos.dy})
-      .style("fill", function (d, i) {return ASC_latest_wrap.legend_color[i]})
+      .attr("x", -wrap.margin.left + wrap.legend_pos.x + wrap.legend_pos.dx)
+      .attr("y", function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy})
+      .style("fill", function (d, i) {return wrap.legend_color[i]})
       .text(function (d) {return d})
       .attr("text-anchor", "start")
 }
@@ -322,7 +322,7 @@ function ASC_update(wrap) {
 var ASC_latest_wrap = {};
 
 //-- ID
-ASC_latest_wrap.tag = 'age_symptom_correlations'
+ASC_latest_wrap.tag = 'age_symptom_correlations_latest'
 ASC_latest_wrap.id = '#' + ASC_latest_wrap.tag
 
 //-- File path

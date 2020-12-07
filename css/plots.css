@@ -133,7 +133,13 @@ body,
   margin-top: -72px;
   margin-bottom: -72px;
 }
-#test_by_criterion .tooltip {
+#test_by_criterion_latest .tooltip, #test_by_criterion_2020 .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
+  margin-top: -55px;
+  margin-bottom: -55px;
+}
+#border_statistics_latest .tooltip, #border_statistics_2020 .tooltip {
   margin-left: -75px;
   margin-right: -75px;
   margin-top: -55px;

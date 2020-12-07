@@ -44,11 +44,6 @@ function GS_CumSum(data, colTagList) {
 }
 
 //TODO
-//case by transmission
-//case by detection
-//th-symp corr
-//age-symp corr
-//test
 //border
 //Taux de positivité
 //lang

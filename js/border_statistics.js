@@ -1,37 +1,35 @@
-var BS_wrap = {};
-BS_wrap.tag = 'border_statistics'
-BS_wrap.id = '#' + BS_wrap.tag
-BS_wrap.dataPathList = [
-  "processed_data/border_statistics_entry.csv",
-  "processed_data/border_statistics_exit.csv",
-  "processed_data/border_statistics_both.csv"
-];
 
-function BS_makeCanvas() {
-  var totWidth = 800;
-  var totHeight;
+//-- Filename:
+//--   border_statistics.js
+//--
+//-- Author:
+//--   Chieh-An Lin
+
+function BS_Make_Canvas(wrap) {
+  var tot_width = 800;
+  var tot_height;
   if (lang == 'zh-tw') {
-    totHeight = 415;
+    tot_height = 415;
     bottom = 105;
   }
   else if (lang == 'fr') {
-    totHeight = 400;
+    tot_height = 400;
     bottom = 90;
   }
   else {
-    totHeight = 400;
+    tot_height = 400;
     bottom = 90;
   }
   
   var margin = {left: 120, right: 2, bottom: bottom, top: 2};
-  var width = totWidth - margin.left - margin.right;
-  var height = totHeight - margin.top - margin.bottom;
+  var width = tot_width - margin.left - margin.right;
+  var height = tot_height - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
   
-  var svg = d3.select(BS_wrap.id)
+  var svg = d3.select(wrap.id)
     .append("svg")
       .attr('class', 'plot')
-      .attr("viewBox", "0 0 " + totWidth + " " + totHeight)
+      .attr("viewBox", "0 0 " + tot_width + " " + tot_height)
       .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
@@ -42,71 +40,71 @@ function BS_makeCanvas() {
       .attr("fill", "white")
       .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
-  BS_wrap.totWidth = totWidth;
-  BS_wrap.totHeight = totHeight;
-  BS_wrap.margin = margin;
-  BS_wrap.width = width;
-  BS_wrap.height = height;
-  BS_wrap.corner = corner;
-  BS_wrap.svg = svg;
+  wrap.tot_width = tot_width;
+  wrap.tot_height = tot_height;
+  wrap.margin = margin;
+  wrap.width = width;
+  wrap.height = height;
+  wrap.corner = corner;
+  wrap.svg = svg;
 }
 
-function BS_formatData(data) {
+function BS_Format_Data(wrap, data) {
   //-- Settings for xticklabels
-  var q = data.length % global_var.xlabel_path;
-  var r = global_var.rList[q];
+  var q = data.length % wrap.xlabel_path;
+  var r = wrap.r_list[q];
   var xtick = [];
   var xticklabel = [];
-  var ymax = 0;
+  var y_max = 0;
   
-  var colTagList = data.columns.slice(1);
-  var nbCol = colTagList.length;
-  var dateList = [];
-  var formattedData = [];
+  var col_tag_list = data.columns.slice(1);
+  var nb_col = col_tag_list.length;
+  var date_list = [];
+  var formatted_data = [];
   var i, j, x, y, height, block;
   
   for (i=0; i<data.length; i++) {
     y = 0;
     x = data[i]["date"];
-    dateList.push(x);
+    date_list.push(x);
     
-    for (j=0; j<nbCol; j++) {
-      height = +data[i][colTagList[j]];
+    for (j=0; j<nb_col; j++) {
+      height = +data[i][col_tag_list[j]];
       block = {
         'x': x,
         'y0': y,
         'y1': y + height,
         'height': height,
-        'h1': +data[i][colTagList[nbCol-1]],
-        'h2': +data[i][colTagList[nbCol-2]],
-        'h3': +data[i][colTagList[nbCol-3]],
-        'col': colTagList[j]
+        'h1': +data[i][col_tag_list[nb_col-1]],
+        'h2': +data[i][col_tag_list[nb_col-2]],
+        'h3': +data[i][col_tag_list[nb_col-3]],
+        'col': col_tag_list[j]
       };
         
       y += height;
-      formattedData.push(block);
+      formatted_data.push(block);
     }
     
-    ymax = Math.max(ymax, y);
+    y_max = Math.max(y_max, y);
     
-    if (i % global_var.xlabel_path == r) {
+    if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
-      xticklabel.push(ISODateToMDDate(x));
+      xticklabel.push(GS_ISO_Date_To_MD_Date(x));
     }
     else {
       xticklabel.push("");
     }
   }
   
-  //-- Calculate ymax
-  ymax *= 1.5;
-  var ypath;
-  if (BS_wrap.doExit == 0)      ypath = 1200;
-  else if (BS_wrap.doExit == 1) ypath = 1200;
-  else                          ypath = 2000;
+  //-- Calculate y_max
+  y_max *= wrap.y_max_factor;
+  var y_path;
+  if (wrap.doExit == 0)      y_path = wrap.y_path_0;
+  else if (wrap.doExit == 1) y_path = wrap.y_path_1;
+  else                          y_path = wrap.y_path_2;
   
   var ytick = [];
-  for (i=0; i<ymax; i+=ypath) ytick.push(i)
+  for (i=0; i<y_max; i+=y_path) ytick.push(i)
   
   //-- Calculate separate sum
   var last = data.length - 1;
@@ -117,237 +115,230 @@ function BS_formatData(data) {
   }
   
   var sea = +data[last]['seaport'];
-  var NS  = +data[last]['not_specified'];
-  var lastDate = data[last]['date'];
-  var lValue = [air, sea, NS];
+  var ns  = +data[last]['not_specified'];
+  var last_date = data[last]['date'];
+  var legend_value = [air, sea, ns];
   
-  BS_wrap.formattedData = formattedData;
-  BS_wrap.dateList = dateList;
-  BS_wrap.colTagList = colTagList;
-  BS_wrap.nbCol = nbCol;
-  BS_wrap.ymax = ymax;
-  BS_wrap.xtick = xtick;
-  BS_wrap.xticklabel = xticklabel;
-  BS_wrap.ytick = ytick;
-  BS_wrap.lastDate = lastDate;
-  BS_wrap.lValue = lValue;
+  wrap.formatted_data = formatted_data;
+  wrap.date_list = date_list;
+  wrap.col_tag_list = col_tag_list;
+  wrap.nb_col = nb_col;
+  wrap.y_max = y_max;
+  wrap.xtick = xtick;
+  wrap.xticklabel = xticklabel;
+  wrap.ytick = ytick;
+  wrap.last_date = last_date;
+  wrap.legend_value = legend_value;
 }
 
-//-- Tooltip
-var BS_tooltip = d3.select(BS_wrap.id)
-  .append("div")
-  .attr("class", "tooltip")
-
-function BS_mouseover(d) {
-  BS_tooltip.transition()
+function BS_Mouse_Over(wrap, d) {
+  wrap.tooltip.transition()
     .duration(200)
     .style("opacity", 0.9)
-  d3.select(this)
+  d3.select(d3.event.target)
     .style("opacity", 0.8)
 }
 
-function BS_getTooltipPos(d) {
+function BS_Get_Tooltip_Pos(wrap, d) {
   var l_max = 0;
   var i_max = -1;
   var i, l;
   
   //-- Look for the furthest vertex
   for (i=0; i<4; i++) {
-    l = (d[0] - BS_wrap.corner[i][0])**2 + (d[1] - BS_wrap.corner[i][1])**2;
+    l = (d[0] - wrap.corner[i][0])**2 + (d[1] - wrap.corner[i][1])**2;
     if (l > l_max) {
       l_max = l;
       i_max = i;
     }
   }
   
-  //-- Place the caption somewhere on the longest arm, parametrizaed by xAlpha & yAlpha
-  var xAlpha = 0.1;
-  var yAlpha = 0.5;
-//   var xAlpha = 1;
-//   var yAlpha = 1;
-  var xPos = d[0] * (1-xAlpha) + BS_wrap.corner[i_max][0] * xAlpha;
-  var yPos = d[1] * (1-yAlpha) + BS_wrap.corner[i_max][1] * yAlpha;
+  //-- Place the caption somewhere on the longest arm, parametrizaed by x_alpha & y_alpha
+  var x_alpha = 0.1;
+  var y_alpha = 0.5;
+  var x_pos = d[0] * (1-x_alpha) + wrap.corner[i_max][0] * x_alpha;
+  var y_pos = d[1] * (1-y_alpha) + wrap.corner[i_max][1] * y_alpha;
   
   var buffer = 1.25*16; //-- Margin buffer of card-body
   var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
-  var cardHdr = 3.125*16; //-- Offset caused by card-header
-  var svgDim = d3.select(BS_wrap.id).node().getBoundingClientRect();
-  var xAspect = (svgDim.width - 2*buffer) / BS_wrap.totWidth;
-  var yAspect = (svgDim.height - 2*buffer) / BS_wrap.totHeight;
+  var card_hdr = 3.125*16; //-- Offset caused by card-header
+  var svg_dim = d3.select(wrap.id).node().getBoundingClientRect();
+  var x_aspect = (svg_dim.width - 2*buffer) / wrap.tot_width;
+  var y_aspect = (svg_dim.height - 2*buffer) / wrap.tot_height;
   
-  xPos = (xPos + BS_wrap.margin.left) * xAspect + buffer;
-  yPos = (yPos + BS_wrap.margin.top) * yAspect + buffer + cardHdr + button;
+  x_pos = (x_pos + wrap.margin.left) * x_aspect + buffer;
+  y_pos = (y_pos + wrap.margin.top) * y_aspect + buffer + card_hdr + button;
   
-  return [xPos, yPos];
+  return [x_pos, y_pos];
 }
 
-function BS_mousemove(d) {
-  var newPos = BS_getTooltipPos(d3.mouse(this));
-  var tooltipText;
+function BS_Mouse_Move(wrap, d) {
+  var new_pos = BS_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
+  var tooltip_text;
   
   if (lang == 'zh-tw')
-    tooltipText = d.x + "<br>機場 = " + d.h1+ "<br>港口 = " + d.h2 + "<br>無細節 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
+    tooltip_text = d.x + "<br>機場 = " + d.h1+ "<br>港口 = " + d.h2 + "<br>無細節 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
   else if (lang == 'fr')
-    tooltipText = d.x + "<br>Aéroports = " + d.h1+ "<br>Ports maritimes = " + d.h2 + "<br>Sans précisions = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+    tooltip_text = d.x + "<br>Aéroports = " + d.h1+ "<br>Ports maritimes = " + d.h2 + "<br>Sans précisions = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
   else
-    tooltipText = d.x + "<br>Airports = " + d.h1+ "<br>Seaports = " + d.h2 + "<br>Not specified = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+    tooltip_text = d.x + "<br>Airports = " + d.h1+ "<br>Seaports = " + d.h2 + "<br>Not specified = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
   
-  BS_tooltip
-    .html(tooltipText)
-    .style("left", newPos[0] + "px")
-    .style("top", newPos[1] + "px")
+  wrap.tooltip
+    .html(tooltip_text)
+    .style("left", new_pos[0] + "px")
+    .style("top", new_pos[1] + "px")
 }
 
-function BS_mouseleave(d) {
-  BS_tooltip.transition()
+function BS_Mouse_Leave(wrap, d) {
+  wrap.tooltip.transition()
     .duration(10)
     .style("opacity", 0)
-  d3.select(this)
+  d3.select(d3.event.target)
     .style("opacity", 1)
 }
 
-function BS_initialize() {
+function BS_Initialize(wrap) {
   //-- Add x-axis
   var x = d3.scaleBand()
-    .range([0, BS_wrap.width])
-    .domain(BS_wrap.dateList)
+    .range([0, wrap.width])
+    .domain(wrap.date_list)
     .padding(0.2);
     
-  var xAxis = d3.axisBottom(x)
+  var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function(d, i){return BS_wrap.xticklabel[i]});
+    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
   
-  BS_wrap.svg.append('g')
+  wrap.svg.append('g')
     .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + BS_wrap.height + ')')
-    .call(xAxis)
+    .attr('transform', 'translate(0,' + wrap.height + ')')
+    .call(x_axis)
     .selectAll("text")
       .attr("transform", "translate(-8,15) rotate(-90)")
       .style("text-anchor", "end")
     
   //-- Add a 2nd x-axis for ticks
-  var x2 = d3.scaleLinear()
-    .domain([0, BS_wrap.dateList.length])
-    .range([0, BS_wrap.width])
+  var x_2 = d3.scaleLinear()
+    .domain([0, wrap.date_list.length])
+    .range([0, wrap.width])
   
-  var xAxis2 = d3.axisBottom(x2)
-    .tickValues(BS_wrap.xtick)
+  var x_axis_2 = d3.axisBottom(x_2)
+    .tickValues(wrap.xtick)
     .tickSize(10)
     .tickSizeOuter(0)
-    .tickFormat(function(d, i){return ""});
+    .tickFormat(function (d, i) {return ""});
   
-  BS_wrap.svg.append("g")
-    .attr("transform", "translate(0," + BS_wrap.height + ")")
+  wrap.svg.append("g")
+    .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
-    .call(xAxis2)
+    .call(x_axis_2)
   
   //-- Add y-axis
   var y = d3.scaleLinear()
-    .domain([0, BS_wrap.ymax])
-    .range([BS_wrap.height, 0]);
+    .domain([0, wrap.y_max])
+    .range([wrap.height, 0]);
   
-  var yAxis = d3.axisLeft(y)
-    .tickSize(-BS_wrap.width)
-    .tickValues(BS_wrap.ytick)
+  var y_axis = d3.axisLeft(y)
+    .tickSize(-wrap.width)
+    .tickValues(wrap.ytick)
   
-  BS_wrap.svg.append("g")
+  wrap.svg.append("g")
     .attr("class", "yaxis")
-    .call(yAxis)
+    .call(y_axis)
 
   //-- Add a 2nd y-axis for the frameline at right
-  var yAxis2 = d3.axisRight(y)
+  var y_axis_2 = d3.axisRight(y)
     .ticks(0)
     .tickSize(0)
   
-  BS_wrap.svg.append("g")
+  wrap.svg.append("g")
     .attr("class", "yaxis")
-    .attr("transform", "translate(" + BS_wrap.width + ",0)")
-    .call(yAxis2)
+    .attr("transform", "translate(" + wrap.width + ",0)")
+    .call(y_axis_2)
     
   //-- ylabel
   var ylabel;
   if (lang == 'zh-tw') ylabel = '旅客人數';
   else if (lang == 'fr') ylabel = 'Nombre de voyageurs';
   else ylabel = 'Number of people';
-  BS_wrap.svg.append("text")
+  wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-BS_wrap.margin.left*0.75).toString() + ", " + (BS_wrap.height/2).toString() + ")rotate(-90)")
+    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)")
     .text(ylabel);
     
   //-- Color
-  var colorList = global_var.cList.slice(0, BS_wrap.nbCol);
-  var colTagList = BS_wrap.colTagList.slice().reverse();
+  var color_list = GS_var.c_list.slice(0, wrap.nb_col);
+  var col_tag_list = wrap.col_tag_list.slice().reverse();
   var color = d3.scaleOrdinal()
-    .domain(colTagList)
-    .range(colorList);
+    .domain(col_tag_list)
+    .range(color_list);
   
   //-- Bar
-  var bar = BS_wrap.svg.selectAll('.content.bar')
-    .data(BS_wrap.formattedData)
+  var bar = wrap.svg.selectAll('.content.bar')
+    .data(wrap.formatted_data)
     .enter();
   
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', function(d) {return color(d.col);})
-    .attr('x', function(d) {return x(d.x);})
-    .attr('y', function(d) {return y(0);})
+    .attr('fill', function (d) {return color(d.col);})
+    .attr('x', function (d) {return x(d.x);})
+    .attr('y', function (d) {return y(0);})
     .attr('width', x.bandwidth())
     .attr('height', 0)
-    .on("mouseover", BS_mouseover)
-    .on("mousemove", BS_mousemove)
-    .on("mouseleave", BS_mouseleave)
+    .on("mouseover", function (d) {BS_Mouse_Over(wrap, d);})
+    .on("mousemove", function (d) {BS_Mouse_Move(wrap, d);})
+    .on("mouseleave", function (d) {BS_Mouse_Leave(wrap, d);})
 
-  BS_wrap.colorList = colorList;
-  BS_wrap.bar = bar;
+  wrap.color_list = color_list;
+  wrap.bar = bar;
 }
 
-function BS_update() {
+function BS_update(wrap) {
   var transDuration = 800;
 
   //-- Add y-axis
   var y = d3.scaleLinear()
-    .domain([0, BS_wrap.ymax])
-    .range([BS_wrap.height, 0]);
+    .domain([0, wrap.y_max])
+    .range([wrap.height, 0]);
   
-  var yAxis = d3.axisLeft(y)
-    .tickSize(-BS_wrap.width)
-    .tickValues(BS_wrap.ytick)
+  var y_axis = d3.axisLeft(y)
+    .tickSize(-wrap.width)
+    .tickValues(wrap.ytick)
   
-  BS_wrap.svg.select('.yaxis')
+  wrap.svg.select('.yaxis')
     .transition()
     .duration(transDuration)
-    .call(yAxis);
+    .call(y_axis);
   
   //-- Update bars
-  BS_wrap.bar.selectAll('.content.bar')
-    .data(BS_wrap.formattedData)
+  wrap.bar.selectAll('.content.bar')
+    .data(wrap.formatted_data)
     .transition()
     .duration(transDuration)
-    .attr('y', function(d) {return y(d.y1);})
-    .attr('height', function(d) {return y(d.y0)-y(d.y1);});
+    .attr('y', function (d) {return y(d.y1);})
+    .attr('height', function (d) {return y(d.y0)-y(d.y1);});
     
   //-- Color
-  colorList = BS_wrap.colorList.slice();
-  colorList.push('#000000');
+  color_list = wrap.color_list.slice();
+  color_list.push('#000000');
   
   //-- Legend - value
   var lPos = {x: 450, y: 45, dx: 12, dy: 30};
-  var lValue = BS_wrap.lValue.slice();
-  var sum = lValue.reduce((a, b) => a + b, 0);
-  lValue.push(sum);
+  var legend_value = wrap.legend_value.slice();
+  var sum = legend_value.reduce((a, b) => a + b, 0);
+  legend_value.push(sum);
   
-  BS_wrap.svg.selectAll(".legend.value")
+  wrap.svg.selectAll(".legend.value")
     .remove()
     .exit()
-    .data(lValue)
+    .data(legend_value)
     .enter()
     .append("text")
       .attr("class", "legend value")
       .attr("x", lPos.x)
-      .attr("y", function(d,i) {return lPos.y + i*lPos.dy})
-      .style("fill", function(d, i) {return colorList[i]})
-      .text(function(d) {return d})
+      .attr("y", function (d,i) {return lPos.y + i*lPos.dy})
+      .style("fill", function (d, i) {return color_list[i]})
+      .text(function (d) {return d})
       .attr("text-anchor", "end")
   
   //-- Legend - label
@@ -362,78 +353,123 @@ function BS_update() {
     lLabel = ["Airports", "Seaports", "Not specified", 'Total'];
   }
   
-  BS_wrap.svg.selectAll(BS_wrap.id+'_legend_label')
+  wrap.svg.selectAll(wrap.id+'_legend_label')
     .remove()
     .exit()
     .data(lLabel)
     .enter()
     .append("text")
-      .attr("id", BS_wrap.tag+"_legend_label")
+      .attr("id", wrap.tag+"_legend_label")
       .attr("class", "legend label")
       .attr("x", lPos.x+lPos.dx)
-      .attr("y", function(d, i) {return lPos.y + i*lPos.dy})
-      .style("fill", function(d, i) {return colorList[i]})
-      .text(function(d) {return d})
+      .attr("y", function (d, i) {return lPos.y + i*lPos.dy})
+      .style("fill", function (d, i) {return color_list[i]})
+      .text(function (d) {return d})
       .attr("text-anchor", "start")
   
   //-- Legend - title
   var lTitle;
   if (lang == 'zh-tw') {
-    lTitle = ['於' + BS_wrap.lastDate];
+    lTitle = ['於' + wrap.last_date];
   }
   else if (lang == 'fr') {
-    lTitle = ['Au ' + BS_wrap.lastDate];
+    lTitle = ['Au ' + wrap.last_date];
   }
   else {
-    lTitle = ['On ' + BS_wrap.lastDate];
+    lTitle = ['On ' + wrap.last_date];
   }
   
-  BS_wrap.svg.selectAll(BS_wrap.id+'_legend_title')
+  wrap.svg.selectAll(wrap.id+'_legend_title')
     .remove()
     .exit()
     .data(lTitle)
     .enter()
     .append("text")
-      .attr("id", BS_wrap.tag+"_legend_title")
+      .attr("id", wrap.tag+"_legend_title")
       .attr("class", "legend label")
       .attr("x", lPos.x+lPos.dx)
       .attr("y", lPos.y+4.25*lPos.dy)
       .style("fill", '#000000')
-      .text(function(d) {return d})
+      .text(function (d) {return d})
       .attr("text-anchor", "start")
 }
 
-BS_wrap.doExit = 0;
+//-- Global variable
+var BS_latest_wrap = {};
 
-d3.csv(BS_wrap.dataPathList[BS_wrap.doExit], function(error, data) {
-  if (error) return console.warn(error);
-  
-  BS_makeCanvas();
-  BS_formatData(data);
-  BS_initialize();
-  BS_update();
-});
+//-- ID
+BS_latest_wrap.tag = 'border_statistics_latest'
+BS_latest_wrap.id = '#' + BS_latest_wrap.tag
 
-//-- Button listener
-$(document).on("change", "input:radio[name='" + BS_wrap.tag + "_doExit']", function(event) {
-  BS_wrap.doExit = this.value;
-  
-  d3.csv(BS_wrap.dataPathList[BS_wrap.doExit], function(error, data) {
+//-- File path
+BS_latest_wrap.dataPathList = [
+  "processed_data/border_statistics_entry.csv",
+  "processed_data/border_statistics_exit.csv",
+  "processed_data/border_statistics_both.csv"
+];
+
+//-- Tooltip
+BS_latest_wrap.tooltip = d3.select(BS_latest_wrap.id)
+  .append("div")
+  .attr("class", "tooltip")
+
+//-- Parameters
+BS_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
+BS_latest_wrap.r_list = GS_var.r_list_latest;
+BS_latest_wrap.y_max_factor = 1.8;
+BS_latest_wrap.y_path_0 = 2500;
+BS_latest_wrap.y_path_1 = 1500;
+BS_latest_wrap.y_path_2 = 2500;
+
+//-- Variables
+BS_latest_wrap.doExit = 0;
+
+//-- Plot
+function BS_Latest_Plot() {
+  d3.csv(BS_latest_wrap.dataPathList[BS_latest_wrap.doExit], function (error, data) {
     if (error) return console.warn(error);
     
-    BS_formatData(data);
-    BS_update();
+    BS_Make_Canvas(BS_latest_wrap);
+    BS_Format_Data(BS_latest_wrap, data);
+    BS_Initialize(BS_latest_wrap);
+    BS_update(BS_latest_wrap);
+  });
+}
+
+BS_Latest_Plot();
+
+//-- Buttons
+$(document).on("change", "input:radio[name='" + BS_latest_wrap.tag + "_doExit']", function (event) {
+  BS_latest_wrap.doExit = this.value;
+  
+  d3.csv(BS_latest_wrap.dataPathList[BS_latest_wrap.doExit], function (error, data) {
+    if (error) return console.warn(error);
+    
+    BS_Format_Data(BS_latest_wrap, data);
+    BS_update(BS_latest_wrap);
   });
 });
 
-d3.select(BS_wrap.id + '_button_4').on('click', function(){
+//-- Save button
+d3.select(BS_latest_wrap.id + '_save').on('click', function () {
   var tag1;
   
-  if (BS_wrap.doExit == 0)      tag1 = 'arrival';
-  else if (BS_wrap.doExit == 1) tag1 = 'departure';
-  else                          tag1 = 'both';
+  if (BS_latest_wrap.doExit == 0)      tag1 = 'arrival';
+  else if (BS_latest_wrap.doExit == 1) tag1 = 'departure';
+  else                                 tag1 = 'both';
 
-  name = BS_wrap.tag + '_' + tag1 + '_' + lang + '.png'
-  saveSvgAsPng(d3.select(BS_wrap.id).select('svg').node(), name);
+  name = BS_latest_wrap.tag + '_' + tag1 + '_' + lang + '.png'
+  saveSvgAsPng(d3.select(BS_latest_wrap.id).select('svg').node(), name);
 });
 
+//-- Language button
+$(document).on("change", "input:radio[name='policy_language']", function (event) {
+  lang = this.value;
+  Cookies.set("lang", lang);
+  
+  //-- Remove
+  d3.selectAll(BS_latest_wrap.id+' .plot').remove();
+  
+  //-- Replot
+  BS_Latest_Plot();
+});

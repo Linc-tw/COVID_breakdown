@@ -3,12 +3,13 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.11.27                  ##
+    ##  Version 2020.12.07                  ##
     ##########################################
 
 
 import os
 import sys
+import warnings
 import collections as clt
 import datetime as dtt
 
@@ -173,7 +174,10 @@ def normalizeBoolArr(boolArr):
   mean     = boolArr.mean()
   boolArr -= mean
   norm     = np.sqrt(np.sum(boolArr**2))
-  boolArr /= norm
+  
+  with warnings.catch_warnings(): ## Avoid division by zero
+    warnings.simplefilter("ignore")
+    boolArr /= norm
   return boolArr
 
 def entropy(p):
@@ -293,36 +297,55 @@ class MainSheet(Template):
     self.n_confPressRel = '疾管署新聞稿'
     self.n_disPressRel = '出院新聞稿'
     
+    self.N_total = 0
+    self.N_latest = 0
+    self.N_2020 = 0
+    
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv' % DATA_PATH
     data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
-    reportDateList = data[self.n_reportDate].values
-    ind = reportDateList == reportDateList
+    caseNbList = data[self.n_case].values
+    ind = caseNbList == caseNbList
     self.data = data[ind]
-    self.N_total = ind.sum()
+    
+    self.getReportDate()
     
     if verbose:
       print('Loaded \"%s\"' % name)
       print('N_total = %d' % self.N_total)
+      print('N_latest = %d' % self.N_latest)
+      print('N_2020 = %d' % self.N_2020)
     return 
     
   def getReportDate(self):
+    todayOrd = dtt.date.today().toordinal() + 1
+    end2020Ord = ISODateToOrdinal('2020-12-31') + 1
     reportDateList = []
+    N_total = 0
+    N_latest = 0
+    N_2020 = 0
     
     for reportDate in self.getCol(self.n_reportDate):
+      if reportDate != reportDate: ## NaN
+        reportDateList.append(np.nan)
+        continue
+      
       reportDate = reportDate.split('日')[0].split('月')
       reportDate = '2020-%02s-%02s' % (reportDate[0], reportDate[1])
       reportDateList.append(reportDate)
+      N_total += 1
       
-    reportOrdList = [ISODateToOrdinal(reportDate) for reportDate in reportDateList]
-    todayOrd = dtt.date.today().toordinal() + 1
-    ind = [reportOrd + NB_LOOKBACK_DAYS >= todayOrd for reportOrd in reportOrdList]
-    self.N_latest = sum(ind)
+      reportOrd = ISODateToOrdinal(reportDate)
+      
+      if reportOrd + NB_LOOKBACK_DAYS >= todayOrd:
+        N_latest += 1
+        
+      if reportOrd < end2020Ord:
+        N_2020 += 1
     
-    end2020Ord = ISODateToOrdinal('2020-12-31') + 1
-    ind = [reportOrd < end2020Ord for reportOrd in reportOrdList]
-    self.N_2020 = sum(ind)
-    
+    self.N_total = N_total
+    self.N_latest = N_latest
+    self.N_2020 = N_2020
     return reportDateList
   
   def getAge(self):
@@ -352,7 +375,10 @@ class MainSheet(Template):
   def getTransmission(self):
     transList = []
     for i, trans in enumerate(self.getCol(self.n_transmission)):
-      if trans == '境外':
+      if trans != trans:
+        transList.append(np.nan)
+      
+      elif trans == '境外':
         transList.append('imported')
       
       elif trans in ['敦睦遠訓', '敦睦\n遠訓']:
@@ -554,7 +580,10 @@ class MainSheet(Template):
         entryDateList.append('2020-11-07')
       
       elif entryDate in ['11/20(-27)']:
-        entryDateList.append(np.nan)
+        entryDateList.append('2020-11-24')
+        
+      elif entryDate in ['11/28(12/2)']:
+        entryDateList.append('2020-11-30')
       
       else:
         try:
@@ -629,7 +658,7 @@ class MainSheet(Template):
     keyDict = {
       'sneezing': ['伴隨感冒症狀', '輕微流鼻水', '打噴嚏', '流鼻水', '流鼻涕', '鼻涕倒流', '輕微鼻塞', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['咳嗽有痰', '喉嚨有痰', '有痰', '輕微咳嗽', '咳嗽症狀', '咳嗽併痰', '咳嗽加劇', '咳嗽', '輕微乾咳', '乾咳', '輕咳'],
-      'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '聲音沙啞', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨乾癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', '喉嚨不適', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨'],
+      'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '聲音沙啞', '輕微喉嚨癢', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨乾癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', '喉嚨不適', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨'],
       'dyspnea': ['呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '微喘', '呼吸喘', '氣喘', '走路會喘'],
       'pneumonia': ['X光顯示肺炎', 'X光片顯示肺炎', 'X光顯示肺部輕微浸潤', '診斷為肺炎', '肺炎'], 
       
@@ -757,6 +786,9 @@ class MainSheet(Template):
     N_imported = 0
     
     for reportDate, trans, travHist, symptom in zip(reportDateList, transList, travHistList, symptomList):
+      if reportDate != reportDate:
+        continue
+      
       repOrd = ISODateToOrdinal(reportDate)
       
       if repOrd + NB_LOOKBACK_DAYS <= todayOrd:
@@ -844,6 +876,9 @@ class MainSheet(Template):
     N_total = 0
     
     for reportDate, age, symptom in zip(reportDateList, ageList, symptomList):
+      if reportDate != reportDate:
+        continue
+      
       repOrd = ISODateToOrdinal(reportDate)
       
       if repOrd + NB_LOOKBACK_DAYS <= todayOrd:
@@ -924,6 +959,9 @@ class MainSheet(Template):
     fleet_o    = np.zeros(nbDays, dtype=int)
     
     for reportDate, onsetDate, trans, link in zip(reportDateList, onsetDateList, transList, linkList):
+      if reportDate != reportDate:
+        continue
+      
       ind_r = ISODateToOrdinal(reportDate) - refOrd
       if ind_r < 0 or ind_r >= nbDays:
         print('Bad ind_r = %d' % ind_r)
@@ -995,6 +1033,9 @@ class MainSheet(Template):
     noData_o   = np.zeros(nbDays, dtype=int)
     
     for reportDate, onsetDate, chan in zip(reportDateList, onsetDateList, chanList):
+      if reportDate != reportDate:
+        continue
+      
       ind_r = ISODateToOrdinal(reportDate) - refOrd
       if ind_r < 0 or ind_r >= nbDays:
         print('Bad ind_r = %d' % ind_r)
@@ -1072,6 +1113,9 @@ class MainSheet(Template):
     max_2020 = 30
     
     for reportDate, entryDate, onsetDate, trans in zip(reportDateList, entryDateList, onsetDateList, transList):
+      if reportDate != reportDate:
+        continue
+      
       if trans == 'imported':
         stock_latest = stock_latest_imp
         stock_2020 = stock_2020_imp
@@ -2039,11 +2083,17 @@ def sandbox():
 ## Save
 
 def saveCsv_all():
+  print()
   MainSheet().saveCsv()
+  print()
   StatusSheet().saveCsv()
+  print()
   TestSheet().saveCsv()
+  print()
   BorderSheet().saveCsv()
+  print()
   TimelineSheet().saveCsv()
+  print()
   return
 
 ###############################################################################

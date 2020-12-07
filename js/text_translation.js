@@ -295,45 +295,6 @@ $(document).on("change", "input:radio[name='policy_language']", function (event)
   lang = this.value;
   Cookies.set("lang", lang);
   text_translation();
-  
-  d3.selectAll('.plot').remove()
-  
-  d3.csv(TBC_wrap.dataPath, function (error, data) {
-    if (error) return console.warn(error);
-    
-    TBC_makeCanvas();
-    TBC_formatData(data);
-    TBC_initialize();
-    TBC_update();
-  });
-
-  d3.csv(BS_wrap.dataPathList[BS_wrap.doExit], function (error, data) {
-    if (error) return console.warn(error);
-    
-    BS_makeCanvas();
-    BS_formatData(data);
-    BS_initialize();
-    BS_update();
-  });
-
-  d3.csv(CT_wrap.dataPathList[0], function (error, data) {
-    if (error) return console.warn(error);
-    
-    CT_makeCanvas();
-    CT_formatData(data);
-    CT_initialize();
-    CT_update();
-  });
-  
-  d3.csv(ET_wrap.dataPathList[0], function (error, data) {
-    if (error) return console.warn(error);
-    
-    ET_makeCanvas();
-    ET_formatData(data);
-    ET_initialize();
-    ET_update();
-  });
-
 });
 
 $(document).on("change", "input:radio[name='source_language']", function (event) {

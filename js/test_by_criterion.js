@@ -26,7 +26,7 @@ function TBC_Make_Canvas(wrap) {
   var height = tot_height - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
   
-  var svg = d3.select(TBC_latest_wrap.id)
+  var svg = d3.select(wrap.id)
     .append("svg")
       .attr('class', 'plot')
       .attr("viewBox", "0 0 " + tot_width + " " + tot_height)
@@ -40,13 +40,13 @@ function TBC_Make_Canvas(wrap) {
       .attr("fill", "white")
       .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
-  TBC_latest_wrap.tot_width = tot_width;
-  TBC_latest_wrap.tot_height = tot_height;
-  TBC_latest_wrap.margin = margin;
-  TBC_latest_wrap.width = width;
-  TBC_latest_wrap.height = height;
-  TBC_latest_wrap.corner = corner;
-  TBC_latest_wrap.svg = svg;
+  wrap.tot_width = tot_width;
+  wrap.tot_height = tot_height;
+  wrap.margin = margin;
+  wrap.width = width;
+  wrap.height = height;
+  wrap.corner = corner;
+  wrap.svg = svg;
 }
 
 function TBC_Format_Data(wrap, data) {
@@ -63,7 +63,7 @@ function TBC_Format_Data(wrap, data) {
   var formatted_data = [];
   var i, j, x, y, height, block;
 
-  if (TBC_latest_wrap.doCumul == 1) {
+  if (wrap.doCumul == 1) {
     GS_CumSum(data, col_tag_list);
   }
   
@@ -103,7 +103,7 @@ function TBC_Format_Data(wrap, data) {
   //-- Calculate y_max
   y_max *= wrap.y_max_factor;
   var y_path;
-  if (TBC_latest_wrap.doCumul == 1) y_path = wrap.y_path_1;
+  if (wrap.doCumul == 1) y_path = wrap.y_path_1;
   else                              y_path = wrap.y_path_0;
   
   var ytick = [];
@@ -111,7 +111,7 @@ function TBC_Format_Data(wrap, data) {
   
   //-- Calculate seperate sum
   var ext, qt, clin;
-  if (TBC_latest_wrap.doCumul == 1) {
+  if (wrap.doCumul == 1) {
     ext = d3.max(formatted_data, function (d) {if (d.col == 'extended') return +d.height;});
     qt = d3.max(formatted_data, function (d) {if (d.col == 'quarantine') return +d.height;});
     clin = d3.max(formatted_data, function (d) {if (d.col == 'clinical') return +d.height;});
@@ -123,15 +123,15 @@ function TBC_Format_Data(wrap, data) {
   }
   var legend_value = [ext, qt, clin];
   
-  TBC_latest_wrap.formatted_data = formatted_data;
-  TBC_latest_wrap.date_list = date_list;
-  TBC_latest_wrap.col_tag_list = col_tag_list;
-  TBC_latest_wrap.nb_col = nb_col;
-  TBC_latest_wrap.y_max = y_max;
-  TBC_latest_wrap.xtick = xtick;
-  TBC_latest_wrap.xticklabel = xticklabel;
-  TBC_latest_wrap.ytick = ytick;
-  TBC_latest_wrap.legend_value = legend_value;
+  wrap.formatted_data = formatted_data;
+  wrap.date_list = date_list;
+  wrap.col_tag_list = col_tag_list;
+  wrap.nb_col = nb_col;
+  wrap.y_max = y_max;
+  wrap.xtick = xtick;
+  wrap.xticklabel = xticklabel;
+  wrap.ytick = ytick;
+  wrap.legend_value = legend_value;
 }
 
 function TBC_Mouse_Over(wrap, d) {
@@ -149,7 +149,7 @@ function TBC_Get_Tooltip_Pos(wrap, d) {
   
   //-- Look for the furthest vertex
   for (i=0; i<4; i++) {
-    l = (d[0] - TBC_latest_wrap.corner[i][0])**2 + (d[1] - TBC_latest_wrap.corner[i][1])**2;
+    l = (d[0] - wrap.corner[i][0])**2 + (d[1] - wrap.corner[i][1])**2;
     if (l > l_max) {
       l_max = l;
       i_max = i;
@@ -159,18 +159,18 @@ function TBC_Get_Tooltip_Pos(wrap, d) {
   //-- Place the caption somewhere on the longest arm, parametrizaed by x_alpha & y_alpha
   var x_alpha = 0.1;
   var y_alpha = 0.5;
-  var x_pos = d[0] * (1-x_alpha) + TBC_latest_wrap.corner[i_max][0] * x_alpha;
-  var y_pos = d[1] * (1-y_alpha) + TBC_latest_wrap.corner[i_max][1] * y_alpha;
+  var x_pos = d[0] * (1-x_alpha) + wrap.corner[i_max][0] * x_alpha;
+  var y_pos = d[1] * (1-y_alpha) + wrap.corner[i_max][1] * y_alpha;
   
   var buffer = 1.25*16; //-- Margin buffer of card-body
   var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
   var card_hdr = 3.125*16; //-- Offset caused by card-header
-  var svg_dim = d3.select(TBC_latest_wrap.id).node().getBoundingClientRect();
-  var x_aspect = (svg_dim.width - 2*buffer) / TBC_latest_wrap.tot_width;
-  var y_aspect = (svg_dim.height - 2*buffer) / TBC_latest_wrap.tot_height;
+  var svg_dim = d3.select(wrap.id).node().getBoundingClientRect();
+  var x_aspect = (svg_dim.width - 2*buffer) / wrap.tot_width;
+  var y_aspect = (svg_dim.height - 2*buffer) / wrap.tot_height;
   
-  x_pos = (x_pos + TBC_latest_wrap.margin.left) * x_aspect + buffer;
-  y_pos = (y_pos + TBC_latest_wrap.margin.top) * y_aspect + buffer + card_hdr + button;
+  x_pos = (x_pos + wrap.margin.left) * x_aspect + buffer;
+  y_pos = (y_pos + wrap.margin.top) * y_aspect + buffer + card_hdr + button;
   
   return [x_pos, y_pos];
 }
@@ -203,17 +203,17 @@ function TBC_Mouse_Leave(wrap, d) {
 function TBC_Initialize(wrap) {
   //-- Add x-axis
   var x = d3.scaleBand()
-    .range([0, TBC_latest_wrap.width])
-    .domain(TBC_latest_wrap.date_list)
+    .range([0, wrap.width])
+    .domain(wrap.date_list)
     .padding(0.2);
     
   var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function (d, i) {return TBC_latest_wrap.xticklabel[i]});
+    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
   
-  TBC_latest_wrap.svg.append('g')
+  wrap.svg.append('g')
     .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + TBC_latest_wrap.height + ')')
+    .attr('transform', 'translate(0,' + wrap.height + ')')
     .call(x_axis)
     .selectAll("text")
       .attr("transform", "translate(-8,15) rotate(-90)")
@@ -221,30 +221,30 @@ function TBC_Initialize(wrap) {
     
   //-- Add a 2nd x-axis for ticks
   var x_2 = d3.scaleLinear()
-    .domain([0, TBC_latest_wrap.date_list.length])
-    .range([0, TBC_latest_wrap.width])
+    .domain([0, wrap.date_list.length])
+    .range([0, wrap.width])
   
   var x_axis_2 = d3.axisBottom(x_2)
-    .tickValues(TBC_latest_wrap.xtick)
+    .tickValues(wrap.xtick)
     .tickSize(10)
     .tickSizeOuter(0)
     .tickFormat(function (d, i) {return ""});
   
-  TBC_latest_wrap.svg.append("g")
-    .attr("transform", "translate(0," + TBC_latest_wrap.height + ")")
+  wrap.svg.append("g")
+    .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
     .call(x_axis_2)
   
   //-- Add y-axis
   var y = d3.scaleLinear()
-    .domain([0, TBC_latest_wrap.y_max])
-    .range([TBC_latest_wrap.height, 0]);
+    .domain([0, wrap.y_max])
+    .range([wrap.height, 0]);
   
   var y_axis = d3.axisLeft(y)
-    .tickSize(-TBC_latest_wrap.width)
-    .tickValues(TBC_latest_wrap.ytick)
+    .tickSize(-wrap.width)
+    .tickValues(wrap.ytick)
   
-  TBC_latest_wrap.svg.append("g")
+  wrap.svg.append("g")
     .attr("class", "yaxis")
     .call(y_axis)
 
@@ -253,9 +253,9 @@ function TBC_Initialize(wrap) {
     .ticks(0)
     .tickSize(0)
   
-  TBC_latest_wrap.svg.append("g")
+  wrap.svg.append("g")
     .attr("class", "yaxis")
-    .attr("transform", "translate(" + TBC_latest_wrap.width + ",0)")
+    .attr("transform", "translate(" + wrap.width + ",0)")
     .call(y_axis_2)
     
   //-- ylabel
@@ -263,22 +263,22 @@ function TBC_Initialize(wrap) {
   if (lang == 'zh-tw') ylabel = '檢驗數';
   else if (lang == 'fr') ylabel = 'Nombre de tests';
   else ylabel = 'Number of tests';
-  TBC_latest_wrap.svg.append("text")
+  wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-TBC_latest_wrap.margin.left*0.75).toString() + ", " + (TBC_latest_wrap.height/2).toString() + ")rotate(-90)")
+    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)")
     .text(ylabel);
     
   //-- Color
-  var color_list = GS_var.c_list.slice(0, TBC_latest_wrap.nb_col);
-  var col_tag_list = TBC_latest_wrap.col_tag_list.slice().reverse();
+  var color_list = GS_var.c_list.slice(0, wrap.nb_col);
+  var col_tag_list = wrap.col_tag_list.slice().reverse();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
     .range(color_list.slice().reverse());
   
   //-- Bar
-  var bar = TBC_latest_wrap.svg.selectAll('.content.bar')
-    .data(TBC_latest_wrap.formatted_data)
+  var bar = wrap.svg.selectAll('.content.bar')
+    .data(wrap.formatted_data)
     .enter();
   
   bar.append('rect')
@@ -292,8 +292,8 @@ function TBC_Initialize(wrap) {
     .on("mousemove", function (d) {TBC_Mouse_Move(wrap, d);})
     .on("mouseleave", function (d) {TBC_Mouse_Leave(wrap, d);})
 
-  TBC_latest_wrap.color_list = color_list;
-  TBC_latest_wrap.bar = bar;
+  wrap.color_list = color_list;
+  wrap.bar = bar;
 }
 
 function TBC_Update(wrap) {
@@ -301,42 +301,42 @@ function TBC_Update(wrap) {
 
   //-- Add y-axis
   var y = d3.scaleLinear()
-    .domain([0, TBC_latest_wrap.y_max])
-    .range([TBC_latest_wrap.height, 0]);
+    .domain([0, wrap.y_max])
+    .range([wrap.height, 0]);
   
   var y_axis = d3.axisLeft(y)
-    .tickSize(-TBC_latest_wrap.width)
-    .tickValues(TBC_latest_wrap.ytick)
+    .tickSize(-wrap.width)
+    .tickValues(wrap.ytick)
   
-  TBC_latest_wrap.svg.select('.yaxis')
+  wrap.svg.select('.yaxis')
     .transition()
     .duration(trans_duration)
     .call(y_axis);
   
   //-- Update bars
-  TBC_latest_wrap.bar.selectAll('.content.bar')
-    .data(TBC_latest_wrap.formatted_data)
+  wrap.bar.selectAll('.content.bar')
+    .data(wrap.formatted_data)
     .transition()
     .duration(trans_duration)
     .attr('y', function (d) {return y(d.y1);})
     .attr('height', function (d) {return y(d.y0)-y(d.y1);});
     
   //-- Color
-  color_list = TBC_latest_wrap.color_list.slice();
+  color_list = wrap.color_list.slice();
   color_list.push('#000000');
   
   //-- Legend - value
   var legend_pos = {x: 95, y: 40, dx: 12, dy: 30};
-  if (TBC_latest_wrap.doCumul == 0) {
+  if (wrap.doCumul == 0) {
     if (lang == 'zh-tw') legend_pos.x = 510;
     else if (lang == 'fr') legend_pos.x = 95; //300
     else legend_pos.x = 350;
   }
-  var legend_value = TBC_latest_wrap.legend_value.slice().reverse();
+  var legend_value = wrap.legend_value.slice().reverse();
   var sum = legend_value.reduce((a, b) => a + b, 0);
   legend_value.push(sum);
   
-  TBC_latest_wrap.svg.selectAll(".legend.value")
+  wrap.svg.selectAll(".legend.value")
     .remove()
     .exit()
     .data(legend_value)
@@ -355,7 +355,7 @@ function TBC_Update(wrap) {
   else if (lang == 'fr') legend_label = ["Critères cliniques", "Quarantaine (fusionnée dans clinique)", "Recherche de clusters locaux", "Total"];
   else legend_label = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', "Total"];
   
-  TBC_latest_wrap.svg.selectAll(".legend.label")
+  wrap.svg.selectAll(".legend.label")
     .remove()
     .exit()
     .data(legend_label)
@@ -373,7 +373,7 @@ function TBC_Update(wrap) {
 var TBC_latest_wrap = {};
 
 //-- ID
-TBC_latest_wrap.tag = "test_by_criterion"
+TBC_latest_wrap.tag = "test_by_criterion_latest"
 TBC_latest_wrap.id = '#' + TBC_latest_wrap.tag
 
 //-- File path

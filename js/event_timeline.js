@@ -1,24 +1,24 @@
-var ET_wrap = {};
-ET_wrap.tag = 'event_timeline'
-ET_wrap.id = '#' + ET_wrap.tag
-ET_wrap.dataPathList = [
-  "processed_data/event_timeline_zh-tw.csv"
-];
 
-function ET_makeCanvas() {
-  var totWidth = 1200;
-  var totHeight = 720;
-  var cellSize = 20; //-- Cell size
+//-- Filename:
+//--   criteria_timeline.js
+//--
+//-- Author:
+//--   Chieh-An Lin
+
+function ET_Make_Canvas(wrap) {
+  var tot_width = 1200;
+  var tot_height = 720;
+  var cell_size = 20; //-- Cell size
   
   var margin = {left: 0, right: 0, bottom: 0, top: 0};
-  var width = totWidth - margin.left - margin.right;
-  var height = totHeight - margin.top - margin.bottom;
+  var width = tot_width - margin.left - margin.right;
+  var height = tot_height - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
   
-  var svg = d3.select(ET_wrap.id)
+  var svg = d3.select(wrap.id)
     .append("svg")
       .attr('class', 'plot')
-      .attr("viewBox", "0 0 " + totWidth + " " + totHeight)
+      .attr("viewBox", "0 0 " + tot_width + " " + tot_height)
       .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
@@ -30,85 +30,85 @@ function ET_makeCanvas() {
       .attr("fill", "white")
       .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
   
-  ET_wrap.totWidth = totWidth;
-  ET_wrap.totHeight = totHeight;
-  ET_wrap.cellSize = cellSize;
-  ET_wrap.margin = margin;
-  ET_wrap.width = width;
-  ET_wrap.height = height;
-  ET_wrap.corner = corner;
-  ET_wrap.svg = svg;
+  wrap.tot_width = tot_width;
+  wrap.tot_height = tot_height;
+  wrap.cell_size = cell_size;
+  wrap.margin = margin;
+  wrap.width = width;
+  wrap.height = height;
+  wrap.corner = corner;
+  wrap.svg = svg;
 }
 
-function ET_formatData(data) {
+function ET_Format_Data(wrap, data) {
   var lim = 40;
   var item = '★ ';
-  var formattedData = {}
-  var row, splitA1, splitA2, splitA3, splitB1, splitB2, splitB3;
+  var formatted_data = {}
+  var row, split_a1, split_a2, split_a3, split_b1, split_b2, split_b3;
   var i, j, k, q, r, str_;
   
   for (i=0; i<data.length; i++) {
     row = data[i];
-    splitA1 = row['Taiwan_event'].split('\n');
-    splitA2 = row['global_event'].split('\n');
-    splitA3 = row['key_event'].split('\n');
+    split_a1 = row['Taiwan_event'].split('\n');
+    split_a2 = row['global_event'].split('\n');
+    split_a3 = row['key_event'].split('\n');
     
-    if (splitA1[0] == '') splitA1 = [];
-    if (splitA2[0] == '') splitA2 = [];
-    if (splitA3[0] == '') splitA3 = [];
+    if (split_a1[0] == '') split_a1 = [];
+    if (split_a2[0] == '') split_a2 = [];
+    if (split_a3[0] == '') split_a3 = [];
     
-    splitB1 = ['', '台灣事件'];
-    splitB2 = ['', '全球事件'];
-    splitB3 = ['', '重點事件'];
+    split_b1 = ['', '台灣事件'];
+    split_b2 = ['', '全球事件'];
+    split_b3 = ['', '重點事件'];
     
-    for (j=0; j<splitA1.length; j++) {
-      str_ = item + splitA1[j];
+    for (j=0; j<split_a1.length; j++) {
+      str_ = item + split_a1[j];
       q = Math.ceil(str_.length / lim);
       for (k=0; k<q; k++) {
-        splitB1.push(str_.substring(k*lim, (k+1)*lim));
+        split_b1.push(str_.substring(k*lim, (k+1)*lim));
       }
     }
-    for (j=0; j<splitA2.length; j++) {
-      str_ = item + splitA2[j];
+    for (j=0; j<split_a2.length; j++) {
+      str_ = item + split_a2[j];
       q = Math.ceil(str_.length / lim);
       for (k=0; k<q; k++) {
-        splitB2.push(str_.substring(k*lim, (k+1)*lim));
+        split_b2.push(str_.substring(k*lim, (k+1)*lim));
       }
     }
-    for (j=0; j<splitA3.length; j++) {
-      str_ = item + splitA3[j];
+    for (j=0; j<split_a3.length; j++) {
+      str_ = item + split_a3[j];
       q = Math.ceil(str_.length / lim);
       for (k=0; k<q; k++) {
-        splitB3.push(str_.substring(k*lim, (k+1)*lim));
+        split_b3.push(str_.substring(k*lim, (k+1)*lim));
       }
     }
     
-    formattedData[row['date']] = [[row['date']], splitB1, splitB2, splitB3];
+    formatted_data[row['date']] = [[row['date']], split_b1, split_b2, split_b3];
   }
   
-  ET_specialProcess(formattedData);
+  ET_Special_Process(wrap, formatted_data);
     
-  var dateList = data.map(function (d) {return d['date'];});
-  var beginYear = +dateList[0].substring(0, 4);
-  var beginMonth = +dateList[0].substring(5, 7);
-  var endYear = +dateList[dateList.length-1].substring(0, 4);
-  var endMonth = +dateList[dateList.length-1].substring(5, 7);
-  var beginHalfYear = ~~((beginMonth-1)/6) + 2 * beginYear;
-  var endHalfYear = ~~((endMonth-1)/6) + 2 * endYear;
+  var date_list = data.map(function (d) {return d['date'];});
+  var begin_year = +date_list[0].substring(0, 4);
+  var begin_month = +date_list[0].substring(5, 7);
+  var end_year = +date_list[date_list.length-1].substring(0, 4);
+  var end_month = +date_list[date_list.length-1].substring(5, 7);
+  var begin_half_year = ~~((begin_month-1)/6) + 2 * begin_year;
+  var end_half_year = ~~((end_month-1)/6) + 2 * end_year;
   
-  var halfYearList = [];
-  for (i=beginHalfYear; i<=endHalfYear; i++) halfYearList.push(i);
+  var half_year_list = [];
+  for (i=begin_half_year; i<=end_half_year; i++) half_year_list.push(i);
   
-  ET_wrap.formattedData = formattedData;
-  ET_wrap.beginYear = beginYear;
-  ET_wrap.beginMonth = beginMonth;
-  ET_wrap.endYear = endYear;
-  ET_wrap.endMonth = endMonth;
-  ET_wrap.halfYearList = halfYearList;
+  wrap.formatted_data = formatted_data;
+  wrap.begin_year = begin_year;
+  wrap.begin_month = begin_month;
+  wrap.end_year = end_year;
+  wrap.end_month = end_month;
+  wrap.half_year_list = half_year_list;
 }
 
-function ET_specialProcess(formattedData) {
-  formattedData['2019-12-30'][2] = [
+function ET_Special_Process(wrap, formatted_data) {
+  formatted_data['2019-12-30'][2] = [
     '',
     '全球事件',
     '★ 武漢市衛生健康委員會－市衛生健康委關於報送不明原因肺炎救治情況的緊急通知',
@@ -117,7 +117,7 @@ function ET_specialProcess(formattedData) {
     '★ 李文亮、劉文、謝琳卡等醫生在內部微信群中披露此次疫情相關的訊息'
   ]
   
-  formattedData['2019-12-31'][1] = [
+  formatted_data['2019-12-31'][1] = [
     '',
     '台灣事件', 
     '★ PTT爆卦文 #1U2a3N5t (Gossiping)',
@@ -136,7 +136,7 @@ function ET_specialProcess(formattedData) {
     '已暗示有人傳人的跡象'
   ]
   
-  formattedData['2020-01-07'][2] = [
+  formatted_data['2020-01-07'][2] = [
     '',
     '全球事件',
     '★ 中共中央總書記習近平主持召開中共中央政治局常委會，對疫情防控工作提出了要求',
@@ -145,7 +145,7 @@ function ET_specialProcess(formattedData) {
     '★ 世衛將其正式命名為2019新型冠狀病毒(Novel coronavirus, 2019-nCoV)'
   ]
   
-  formattedData['2020-02-07'][1] = [
+  formatted_data['2020-02-07'][1] = [
     '',
     '台灣事件',
     '★ 陸委會宣布自2月10日起暫停小三通客船服務',
@@ -155,14 +155,14 @@ function ET_specialProcess(formattedData) {
     '灣北部發布防疫訊息，提醒1月31日曾去相關觀光景點的旅客，請自主健康管理至2月14日'
   ]
   
-  formattedData['2020-02-14'][1] = [
+  formatted_data['2020-02-14'][1] = [
     '',
     '台灣事件',
     '★ 中央流行疫情指揮中心將日本升為第一級（一級 一般措施），次日起將中國大陸浙',
     '江省、河南省列為一級流行地區'
   ]
   
-  formattedData['2020-02-25'][1] = [
+  formatted_data['2020-02-25'][1] = [
     '',
     '台灣事件',
     '★ #31',
@@ -175,7 +175,7 @@ function ET_specialProcess(formattedData) {
     '★ 有一名鑽石公主號患者昨晚跟今早都有發燒（未滿38），已送入醫院隔離觀察。'
   ]
   
-  formattedData['2020-02-26'][1] = [
+  formatted_data['2020-02-26'][1] = [
     '',
     '台灣事件',
     '★ #32',
@@ -197,7 +197,7 @@ function ET_specialProcess(formattedData) {
     '★ 社會大型活動:請宗教團體要因應指揮中心規定，準備延期備案全球事件'
   ]
   
-  formattedData['2020-02-27'][1] = [
+  formatted_data['2020-02-27'][1] = [
     '',
     '台灣事件',
     '★ 指揮中心一級開設',
@@ -219,7 +219,7 @@ function ET_specialProcess(formattedData) {
     '８　規範對象僅限於醫事與社工人員，暫不擴及全體醫院人員。'
   ]
   
-  formattedData['2020-02-27'][2] = [
+  formatted_data['2020-02-27'][2] = [
     '',
     '全球事件',
     '★ 日本內閣總理大臣（首相）安倍晉三召開的政府對策本部會議上，提出了要求全國的小',
@@ -227,7 +227,7 @@ function ET_specialProcess(formattedData) {
     '★ 同時政府已向各體育團體和文化團體下達通告，要求3月15日前停辦所有大型活動和公演'
   ]
   
-  formattedData['2020-02-28'][1] = [
+  formatted_data['2020-02-28'][1] = [
     '',
     '台灣事件',
     '★ #33 #34',
@@ -247,7 +247,7 @@ function ET_specialProcess(formattedData) {
     '★ 三陰才可以出院，以避免出現國外出院又復發的情形。'
   ]
   
-  formattedData['2020-03-17'][1] = [
+  formatted_data['2020-03-17'][1] = [
     '',
     '台灣事件',
     '★ #68 #69 #70 #71 #72 #73 #74 #75 #76 #77',
@@ -267,7 +267,7 @@ function ET_specialProcess(formattedData) {
     '計畫書，落實管理措施。'
   ]
   
-  formattedData['2020-03-18'][1] = [
+  formatted_data['2020-03-18'][1] = [
     '',
     '台灣事件',
     '★ #78~#100',
@@ -292,7 +292,7 @@ function ET_specialProcess(formattedData) {
     '★ 1922進線42090通'
   ]
   
-  formattedData['2020-03-19'][1] = [
+  formatted_data['2020-03-19'][1] = [
     '',
     '台灣事件',
     '★ #101~#108',
@@ -314,7 +314,7 @@ function ET_specialProcess(formattedData) {
     '★ 繳費後會在322統一更新繳費狀況。'
   ]
   
-  formattedData['2020-03-26'][2] = [
+  formatted_data['2020-03-26'][2] = [
     '',
     '全球事件',
     '★ 中華人民共和國外交部、國家移民管理局發布了《中華人民共和國外交部、國家移民',
@@ -328,7 +328,7 @@ function ET_specialProcess(formattedData) {
     '外交官、國際貨運運輸業者及有泰國工作證的外國人之外，均禁止外國人入境'
   ]
   
-  formattedData['2020-03-29'][1] = [
+  formatted_data['2020-03-29'][1] = [
     '',
     '台灣事件',
     '★ #284~#298',
@@ -337,7 +337,7 @@ function ET_specialProcess(formattedData) {
     '眾，共153人返臺，統一送至集中檢疫所進行14天隔離'
   ]
   
-  formattedData['2020-04-21'][2] = [
+  formatted_data['2020-04-21'][2] = [
     '',
     '全球事件',
     '★ 全球確診人數逾250萬',
@@ -348,7 +348,7 @@ function ET_specialProcess(formattedData) {
     '將自23日起再實施14天。'
   ]
   
-  formattedData['2020-04-23'][1] = [
+  formatted_data['2020-04-23'][1] = [
     '',
     '台灣事件',
     '★ 新增:#427',
@@ -373,7 +373,7 @@ function ET_specialProcess(formattedData) {
     '輪都能預購，兩週開放預購一次，預購起始日及取貨起始日都調整至週一（隔週）'
   ]
   
-  formattedData['2020-05-03'][1] = [
+  formatted_data['2020-05-03'][1] = [
     '',
     '台灣事件',
     '★ 零確診 20:00臨時記者會 +4敦睦 #433~#436',
@@ -384,7 +384,7 @@ function ET_specialProcess(formattedData) {
     '★ 磐石艦成員明日上午(間隔24小時後)再度採檢'
   ]
   
-  formattedData['2020-05-11'][2] = [
+  formatted_data['2020-05-11'][2] = [
     '',
     '全球事件',
     '★ 荷蘭首相呂特（Mark Rutte）宣布11日起在4個月內分階段解封，包括學童分批到校',
@@ -393,7 +393,7 @@ function ET_specialProcess(formattedData) {
     '客配戴口罩，高中也將於6月1日復課'
   ]
   
-  formattedData['2020-05-13'][2] = [
+  formatted_data['2020-05-13'][2] = [
     '',
     '全球事件',
     '★ 法國今起逐步解除實施近2個月的全國性封鎖禁令',
@@ -403,7 +403,7 @@ function ET_specialProcess(formattedData) {
     '暫停始發或乘車服務，防疫人員在站外拉起封鎖線'
   ]
   
-  formattedData['2020-05-15'][1] = [
+  formatted_data['2020-05-15'][1] = [
     '',
     '台灣事件',
     '★ 零確診',
@@ -414,7 +414,7 @@ function ET_specialProcess(formattedData) {
     '名，也能於場內食用官方準備之餐盒'
   ]
   
-  formattedData['2020-05-15'][2] = [
+  formatted_data['2020-05-15'][2] = [
     '',
     '全球事件',
     '★ 全球死亡人數逾30萬',
@@ -425,7 +425,7 @@ function ET_specialProcess(formattedData) {
     '新增病例都不超過7例，3國整體通報病故案例迄今不到150例'
   ]
   
-  formattedData['2020-05-16'][1] = [
+  formatted_data['2020-05-16'][1] = [
     '台灣事件',
     '★ 零確診',
     '★ 鑑於商務人士居家檢疫十四天可能影響商務作業，研擬改為商務人士來台居家檢疫第五',
@@ -433,13 +433,13 @@ function ET_specialProcess(formattedData) {
     '★ 經濟部官員表示，口罩本週單日最高產量達2000萬片，平均日產能達1800萬到1900萬片'
   ]
   
-  formattedData['2020-05-16'][2] = [
+  formatted_data['2020-05-16'][2] = [
     '',
     '全球事件',
     '★ 紐約州州長古莫（Andrew Cuomo）今天指出，紐約市防疫封鎖措施延長至5月28日'
   ]
   
-  formattedData['2020-05-26'][1] = [
+  formatted_data['2020-05-26'][1] = [
     '',
     '台灣事件',
     '★ 零確診',
@@ -448,7 +448,7 @@ function ET_specialProcess(formattedData) {
     '休閒活動將不再受限於人數限制規範'
   ]
   
-  formattedData['2020-05-29'][1] = [
+  formatted_data['2020-05-29'][1] = [
     '',
     '台灣事件',
     '★ #442',
@@ -456,7 +456,7 @@ function ET_specialProcess(formattedData) {
     '家，金額以醫院公告為準'
   ]
   
-  formattedData['2020-06-01'][2] = [
+  formatted_data['2020-06-01'][2] = [
     '',
     '全球事件',
     '★ 首相強生宣布小學1日起局部復課，戶外市場若能遵守防疫安全準則就可復業，若政',
@@ -469,7 +469,7 @@ function ET_specialProcess(formattedData) {
     '6月21日，之後解除外國人士入境後須自主隔離命令，並按原計畫於7月1日開放邊境'
   ]
   
-  formattedData['2020-06-22'][1] = [
+  formatted_data['2020-06-22'][1] = [
     '',
     '台灣事件',
     '★ 零確診',
@@ -486,7 +486,7 @@ function ET_specialProcess(formattedData) {
     '★ 中低感染風險國家/地區：韓國、日本、馬來西亞、新加坡。'
   ]
   
-  formattedData['2020-06-29'][1] = [
+  formatted_data['2020-06-29'][1] = [
     '',
     '台灣事件',
     '★ 零確診',
@@ -501,7 +501,7 @@ function ET_specialProcess(formattedData) {
     '疫14天及必要之檢疫措施。'
   ]
   
-  formattedData['2020-07-22'][1] = [
+  formatted_data['2020-07-22'][1] = [
     '',
     '台灣事件',
     '★ 零確診',
@@ -509,132 +509,124 @@ function ET_specialProcess(formattedData) {
     '★ 教育部開放低風險與中低風險國家/地區109學年度第1學期境外學位新生來臺及開放19',
     '個國家/地區以外之應屆畢業境外生返臺入境就學'
   ]
-  
-  
-  
 }
-    
-//-- Tooltip
-var ET_tooltip = d3.select(ET_wrap.id)
-  .append("div")
-  .attr("class", "tooltip")
 
-function ET_mouseover(d) {
-  ET_tooltip.transition()
+function ET_Mouse_Over(wrap, d) {
+  wrap.tooltip.transition()
     .duration(200)
     .style("opacity", 0.9)
-  d3.select(this)
+  d3.select(d3.event.target)
     .style("opacity", 0.6)
 }
 
-function ET_getTooltipPos(pos, d) {
+function ET_Get_Tooltip_Pos(wrap, pos, d) {
   var year  = +d.substring(0, 4);
   var month = +d.substring(5, 7);
   var ind = 2*(year - 2019) + ~~((month-1) / 6) - 1;
   
-  var xPos = pos[0];
-  var yPos = pos[1];
+  var x_pos = pos[0];
+  var y_pos = pos[1];
   
   var buffer = 1.25*16; //-- Margin buffer of card-body
   var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
-  var cardHdr = 3.125*16; //-- Offset caused by card-header
-  var svgDim = d3.select(ET_wrap.id).node().getBoundingClientRect();
-  var xAspect = (svgDim.width - 2*buffer) / ET_wrap.totWidth;
-  var yAspect = (svgDim.height - 2*buffer) / ET_wrap.totHeight;
+  var card_hdr = 3.125*16; //-- Offset caused by card-header
+  var svg_dim = d3.select(wrap.id).node().getBoundingClientRect();
+  var x_aspect = (svg_dim.width - 2*buffer) / wrap.tot_width;
+  var y_aspect = (svg_dim.height - 2*buffer) / wrap.tot_height;
   
-  xPos = (xPos + ET_wrap.margin.left) * xAspect + buffer;
-  yPos = (yPos + ET_wrap.margin.top + ind*(ET_wrap.dy0+ET_wrap.cellSize*7)) * yAspect + buffer + cardHdr + button;
+  x_pos = (x_pos + wrap.margin.left) * x_aspect + buffer;
+  y_pos = (y_pos + wrap.margin.top + ind*(wrap.dy0+wrap.cell_size*7)) * y_aspect + buffer + card_hdr + button;
   
-  xPos = xPos + 0;
-  yPos = yPos - 0;
-  return [xPos, yPos];
+  x_pos = x_pos + 0;
+  y_pos = y_pos - 0;
+  return [x_pos, y_pos];
 }
 
-function ET_mousemove(d) {
-  var newPos = ET_getTooltipPos(d3.mouse(this), d);
-  var tooltipText;
+function ET_Mouse_Move(wrap, d) {
+  var new_pos = ET_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target), d);
+  var tooltip_text;
   
   if (lang == 'zh-tw')
-    tooltipText = '點我'
+    tooltip_text = '點我'
   else if (lang == 'fr')
-    tooltipText = 'Cliquez'
+    tooltip_text = 'Cliquez'
   else
-    tooltipText = 'Click me'
+    tooltip_text = 'Click me'
     
-  ET_tooltip
-    .html(tooltipText)
-    .style("left", newPos[0] + "px")
-    .style("top", newPos[1] + "px")
+  wrap.tooltip
+    .html(tooltip_text)
+    .style("left", new_pos[0] + "px")
+    .style("top", new_pos[1] + "px")
 }
 
-function ET_mouseleave(d) {
-  ET_tooltip.transition()
+function ET_Mouse_Leave(wrap, d) {
+  wrap.tooltip.transition()
     .duration(10)
     .style("opacity", 0)
-  d3.select(this)
+  d3.select(d3.event.target)
     .style("opacity", 1)
 }
 
 //-- Click
-function ET_click(d, i) {
-  var transDuration = 0;
-  if (!(d in ET_wrap.formattedData)) {
-    ET_wrap.svg.selectAll(ET_wrap.id+'_text')
+function ET_Click(wrap, d, i) {
+  var trans_duration = 0;
+  if (!(d in wrap.formatted_data)) {
+    wrap.svg.selectAll(wrap.id+'_text')
       .transition()
-      .duration(transDuration)
+      .duration(trans_duration)
       .text('');
     return;
   }
   
-  var split = ET_wrap.formattedData[d];
-  var colorList = ['#000000'];
+  var split = wrap.formatted_data[d];
+  var color_list = ['#000000'];
   var j;
   
   for (j=0; j<split[1].length; j++) {
-    colorList.push(global_var.cList[0]);
+    color_list.push(GS_var.c_list[0]);
   }
   for (j=0; j<split[2].length; j++) {
-    colorList.push(global_var.cList[1]);
+    color_list.push(GS_var.c_list[1]);
   }
   for (j=0; j<split[3].length; j++) {
-    colorList.push(global_var.cList[2]);
+    color_list.push(GS_var.c_list[2]);
   }
   
   var text = split[0].concat(split[1]).concat(split[2]).concat(split[3]);
   
-  ET_wrap.svg.selectAll(ET_wrap.id+'_text')
+  wrap.svg.selectAll(wrap.id+'_text')
     .transition()
-    .duration(transDuration)
+    .duration(trans_duration)
     .text(function (d2, j) {return text[j];})
-    .attr('fill', function (d2, j) {return colorList[j];});
+    .attr('fill', function (d2, j) {return color_list[j];});
 }
 
-function ET_initialize() {
+function ET_Initialize(wrap) {
   //-- Year block
   var x0 = 35;
   var y0 = 45;
   var dy0 = 30;
   
-  var block = ET_wrap.svg.selectAll(".year")
-    .data(ET_wrap.halfYearList)
+  var block = wrap.svg.selectAll(".year")
+    .data(wrap.half_year_list)
     .enter()
     .append("svg")
       .attr('class', 'year')
-      .attr("width", ET_wrap.width)
-      .attr("height", ET_wrap.height)
+      .attr("width", wrap.width)
+      .attr("height", wrap.height)
       .append("g")
-        .attr("transform", function(d, i) {
-          return "translate(" + x0 + "," + (y0+i*(dy0+ET_wrap.cellSize*7)) + ")";
+        .attr("transform", function (d, i) {
+          return "translate(" + x0 + "," + (y0+i*(dy0+wrap.cell_size*7)) + ")";
         });
   
-  var nbSquares = 27;
+  var nb_squares = 27;
   var dx1 = 25;
   
   block.append("text")
     .attr('class', 'content text')
-    .attr("transform", "translate(" + (nbSquares*ET_wrap.cellSize+dx1) + "," + (ET_wrap.cellSize*3.5) + ")rotate(-90)")
+    .attr("transform", "translate(" + (nb_squares*wrap.cell_size+dx1) + "," + (wrap.cell_size*3.5) + ")rotate(-90)")
     .style("text-anchor", "middle")
-    .text(function(d) {return ~~(d/2);});
+    .text(function (d) {return ~~(d/2);});
   
   //-- Title
   var title;
@@ -642,9 +634,9 @@ function ET_initialize() {
   else if (lang == 'fr') title = "Chronologie de la pandémie (texte en mandarin)";
   else title = 'Pandemic Timeline (text in Mandarin)';
   
-  ET_wrap.svg.append("text")
+  wrap.svg.append("text")
       .attr("class", "title")
-      .attr("x", x0+nbSquares*ET_wrap.cellSize*0.5)
+      .attr("x", x0+nb_squares*wrap.cell_size*0.5)
       .attr("y", 15)
       .attr("fill", 'black')
       .text(title)
@@ -659,214 +651,251 @@ function ET_initialize() {
                '', '', '', '', '', '', '', '', '', '', 
                '', '', '', '', '', '', '', '', '', ''];
   
-  ET_wrap.svg.append("g").selectAll()
+  wrap.svg.append("g").selectAll()
     .data(split)
     .enter()
     .append("text")
       .attr("class", "content text")
-      .attr("x", x0+nbSquares*ET_wrap.cellSize+dx1+dx2)
-      .attr("y", function(d, j) {return y0-28+j*dy2})
+      .attr("x", x0+nb_squares*wrap.cell_size+dx1+dx2)
+      .attr("y", function (d, j) {return y0-28+j*dy2})
       .attr("fill", 'black')
-      .attr("id", function(d, j) {return ET_wrap.tag+'_text';})
-      .text(function(d) {return d;})
+      .attr("id", function (d, j) {return wrap.tag+'_text';})
+      .text(function (d) {return d;})
       .attr("text-anchor", 'start')
       .attr("dominant-baseline", "middle")
           
-  ET_wrap.block = block;
-  ET_wrap.x0 = x0;
-  ET_wrap.y0 = y0;
-  ET_wrap.dy0 = dy0;
+  wrap.block = block;
+  wrap.x0 = x0;
+  wrap.y0 = y0;
+  wrap.dy0 = dy0;
 }
 
-function ET_update() {
+function ET_Update(wrap) {
   //-- Days
-  var YToMFct1 = function (d) {
+  var y_to_m_fct_1 = function (d) {
     var q = ~~(d / 2);
     var r = d % 2;
-    if (d == ET_wrap.halfYearList[0]) {
-      return d3.timeDays(new Date(ET_wrap.beginYear, ET_wrap.beginMonth-1, 1), new Date(ET_wrap.beginYear, 6*(r+1), 1));
+    if (d == wrap.half_year_list[0]) {
+      return d3.timeDays(new Date(wrap.begin_year, wrap.begin_month-1, 1), new Date(wrap.begin_year, 6*(r+1), 1));
     }
-    if (d == ET_wrap.halfYearList[ET_wrap.halfYearList.length-1]) {
-      return d3.timeDays(new Date(ET_wrap.endYear, 6*r, 1), new Date(ET_wrap.endYear, ET_wrap.endMonth, 1));
+    if (d == wrap.half_year_list[wrap.half_year_list.length-1]) {
+      return d3.timeDays(new Date(wrap.end_year, 6*r, 1), new Date(wrap.end_year, wrap.end_month, 1));
     }
     return d3.timeDays(new Date(q, 6*r, 1), new Date(q, 6*(r+1), 1));
   }
   
-  var getDay = function(day, start) {
+  var get_day = function (day, start) {
     return (day.getDay() + 7 - start) % 7;
   }
   
-  var getWeek = function(day, start) {
+  var get_week = function (day, start) {
     if (start == 1) return d3.timeMonday.count(d3.timeYear(day), day);
     return d3.timeWeek.count(d3.timeYear(day), day);
   }
   
-  var square = ET_wrap.block.selectAll(ET_wrap.id+'_day')
+  var square = wrap.block.selectAll(wrap.id+'_day')
     .remove()
     .exit()
-    .data(YToMFct1)
+    .data(y_to_m_fct_1)
     .enter()
     .append("rect")
-      .attr('id', ET_wrap.tag+'_day')
-      .attr("width", ET_wrap.cellSize)
-      .attr("height", ET_wrap.cellSize)
-      .attr("x", function(d) {
-        var weekNb = getWeek(d, ET_wrap.weekStart);
+      .attr('id', wrap.tag+'_day')
+      .attr("width", wrap.cell_size)
+      .attr("height", wrap.cell_size)
+      .attr("x", function (d) {
+        var week_nb = get_week(d, wrap.week_start);
         if (+d3.timeFormat("%m")(d3.timeMonth(d)) > 6) 
-          return (weekNb-26)*ET_wrap.cellSize;
-        return weekNb*ET_wrap.cellSize;
+          return (week_nb-26)*wrap.cell_size;
+        return week_nb*wrap.cell_size;
       })
-      .attr("y", function(d) {return getDay(d, ET_wrap.weekStart) * ET_wrap.cellSize;})
+      .attr("y", function (d) {return get_day(d, wrap.week_start) * wrap.cell_size;})
       .style('fill', '#fff')
       .style('stroke', '#ccc')
       .datum(d3.timeFormat("%Y-%m-%d"))
-      .on("mouseover", ET_mouseover)
-      .on("mousemove", ET_mousemove)
-      .on("mouseleave", ET_mouseleave)
-      .on("click", ET_click);
+      .on("mouseover", function (d) {ET_Mouse_Over(wrap, d);})
+      .on("mousemove", function (d) {ET_Mouse_Move(wrap, d);})
+      .on("mouseleave", function (d) {ET_Mouse_Leave(wrap, d);})
+      .on("click", function (d, i) {ET_Click(wrap, d, i);})
   
   //-- Color
   var color2 = d3.scaleSequential()
     .domain([0, 32])
     .interpolator(t => d3.interpolateBuPu(t));
   
-  square.filter(function (d) {return d in ET_wrap.formattedData;})
+  square.filter(function (d) {return d in wrap.formatted_data;})
     .style("fill", function (d) {
-      var split = ET_wrap.formattedData[d];
+      var split = wrap.formatted_data[d];
       return color2(d3.sum(split.map(function (d) {return d.length;})));
     })
 
   //-- Months
-  var YToMFct2 = function (d) {
+  var y_to_m_fct_2 = function (d) {
     var q = ~~(d / 2);
     var r = d % 2;
-    if (d == ET_wrap.halfYearList[0]) {
-      return d3.timeMonths(new Date(ET_wrap.beginYear, ET_wrap.beginMonth-1, 1), new Date(ET_wrap.beginYear, 6*(r+1), 1));
+    if (d == wrap.half_year_list[0]) {
+      return d3.timeMonths(new Date(wrap.begin_year, wrap.begin_month-1, 1), new Date(wrap.begin_year, 6*(r+1), 1));
     }
-    if (d == ET_wrap.halfYearList[ET_wrap.halfYearList.length-1]) {
-      return d3.timeMonths(new Date(ET_wrap.endYear, 6*r, 1), new Date(ET_wrap.endYear, ET_wrap.endMonth, 1));
+    if (d == wrap.half_year_list[wrap.half_year_list.length-1]) {
+      return d3.timeMonths(new Date(wrap.end_year, 6*r, 1), new Date(wrap.end_year, wrap.end_month, 1));
     }
     return d3.timeMonths(new Date(q, 6*r, 1), new Date(q, 6*(r+1), 1));
   }
   var frame = function (t0) {
     var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0);
-    var d0 = getDay(t0, ET_wrap.weekStart);
-    var w0 = getWeek(t0, ET_wrap.weekStart);
-    var d1 = getDay(t1, ET_wrap.weekStart);
-    var w1 = getWeek(t1, ET_wrap.weekStart);
+    var d0 = get_day(t0, wrap.week_start);
+    var w0 = get_week(t0, wrap.week_start);
+    var d1 = get_day(t1, wrap.week_start);
+    var w1 = get_week(t1, wrap.week_start);
     
     if (+d3.timeFormat("%m")(d3.timeMonth(t0)) > 6) {
       w0 -= 26;
       w1 -= 26;
     }
     
-    return "M" + (w0 + 1) * ET_wrap.cellSize + "," + d0 * ET_wrap.cellSize
-      + "H" + w0 * ET_wrap.cellSize + "V" + 7 * ET_wrap.cellSize
-      + "H" + w1 * ET_wrap.cellSize + "V" + (d1 + 1) * ET_wrap.cellSize
-      + "H" + (w1 + 1) * ET_wrap.cellSize + "V" + 0
-      + "H" + (w0 + 1) * ET_wrap.cellSize + "Z";
+    return "M" + (w0 + 1) * wrap.cell_size + "," + d0 * wrap.cell_size
+      + "H" + w0 * wrap.cell_size + "V" + 7 * wrap.cell_size
+      + "H" + w1 * wrap.cell_size + "V" + (d1 + 1) * wrap.cell_size
+      + "H" + (w1 + 1) * wrap.cell_size + "V" + 0
+      + "H" + (w0 + 1) * wrap.cell_size + "Z";
   }
 
-  ET_wrap.block.selectAll(ET_wrap.id+'_month')
+  wrap.block.selectAll(wrap.id+'_month')
     .remove()
     .exit()
-    .data(YToMFct2)
+    .data(y_to_m_fct_2)
     .enter()
     .append('path')
-      .attr('id', ET_wrap.tag+'_month')
+      .attr('id', wrap.tag+'_month')
       .attr('d', frame)
       .style('fill', 'none')
       .style('stroke', '#000')
       .style('stroke-width', '2px');
   
   //-- Month tag
-  var monthList;
-  if (lang == 'zh-tw') monthList = [
+  var month_list;
+  if (lang == 'zh-tw') month_list = [
     ['', '', '', '', '', '12月'],
     ['1月', '2月', '3月', '4月', '5月', '6月'],
     ['7月', '8月', '9月', '10月', '11月', '12月'],
     ['1月', '2月', '3月', '4月', '5月', '6月']
   ];
-  else if (lang == 'fr') monthList = [
+  else if (lang == 'fr') month_list = [
     ['', '', '', '', '', 'déc'],
     ['janv', 'févr', 'mars', 'avr', 'mai', 'juin'],
     ['juil', 'août', 'sept', 'oct', 'nov', 'déc'],
     ['janv', 'févr', 'mars', 'avr', 'mai', 'juin']
   ];
-  else monthList = [
+  else month_list = [
     ['', '', '', '', '', 'Dec'],
     ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
   ];
-  var dx1 = ET_wrap.cellSize * 4.417; //-- 53 / 12
+  var dx1 = wrap.cell_size * 4.417; //-- 53 / 12
   
-  ET_wrap.block.selectAll(ET_wrap.id+'_month_tag')
+  wrap.block.selectAll(wrap.id+'_month_tag')
     .remove()
     .exit()
-    .data(function (d, i) {return monthList[i];})
+    .data(function (d, i) {return month_list[i];})
     .enter()
     .append("text")
       .attr('class', 'content text')
-      .attr("id", ET_wrap.tag+"_month_tag")
+      .attr("id", wrap.tag+"_month_tag")
       .attr("x", function (d, i) {return (i+0.5)*dx1;})
-      .attr("y", -0.5*ET_wrap.dy0+1)
+      .attr("y", -0.5*wrap.dy0+1)
       .style("fill", 'black')
       .text(function (d) {return d;})
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "middle")
    
   //-- Weekday tag
-  var weekdayList;
-  if (lang == 'zh-tw') weekdayList = ['日', '一', '二', '三', '四', '五', '六'];
-  else if (lang == 'fr') weekdayList = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
-  else weekdayList = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  var weekday_list;
+  if (lang == 'zh-tw') weekday_list = ['日', '一', '二', '三', '四', '五', '六'];
+  else if (lang == 'fr') weekday_list = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+  else weekday_list = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
   
-  if (ET_wrap.weekStart == 1) {
-    weekdayList = [weekdayList[1], weekdayList[2], weekdayList[3], weekdayList[4], weekdayList[5], weekdayList[6], weekdayList[0]];
+  if (wrap.week_start == 1) {
+    weekday_list = [weekday_list[1], weekday_list[2], weekday_list[3], weekday_list[4], weekday_list[5], weekday_list[6], weekday_list[0]];
   }
   
-  ET_wrap.block.selectAll(ET_wrap.id+'_weekday_tag')
+  wrap.block.selectAll(wrap.id+'_weekday_tag')
     .remove()
     .exit()
-    .data(weekdayList)
+    .data(weekday_list)
     .enter()
     .append("text")
       .attr('class', 'content text')
-      .attr("id", ET_wrap.tag+"_weekday_tag")
+      .attr("id", wrap.tag+"_weekday_tag")
       .attr("x", -20)
-      .attr("y", function (d, i) {return (i+0.5)*ET_wrap.cellSize;})
+      .attr("y", function (d, i) {return (i+0.5)*wrap.cell_size;})
       .style("fill", 'black')
       .text(function (d) {return d})
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "middle")
 }
 
-ET_wrap.weekStart = 0;
+//-- Global variable
+var ET_latest_wrap = {};
 
-d3.csv(ET_wrap.dataPathList[0], function(error, data) {
-  if (error) return console.warn(error);
-  
-  ET_makeCanvas();
-  ET_formatData(data);
-  ET_initialize();
-  ET_update();
-});
+//-- ID
+ET_latest_wrap.tag = 'event_timeline_latest';
+ET_latest_wrap.id = '#' + ET_latest_wrap.tag;
+
+//-- File path
+ET_latest_wrap.data_path_list = [
+  "processed_data/event_timeline_zh-tw.csv"
+];
+
+//-- Tooltip
+ET_latest_wrap.tooltip = d3.select(ET_latest_wrap.id)
+  .append("div")
+  .attr("class", "tooltip")
+
+//-- Parameters
+
+//-- Variables
+ET_latest_wrap.week_start = 0;
+
+//-- Plot
+function ET_Latest_Plot() {
+  d3.csv(ET_latest_wrap.data_path_list[0], function (error, data) {
+    if (error) return console.warn(error);
+    
+    ET_Make_Canvas(ET_latest_wrap);
+    ET_Format_Data(ET_latest_wrap, data);
+    ET_Initialize(ET_latest_wrap);
+    ET_Update(ET_latest_wrap);
+  });
+}
+
+ET_Latest_Plot();
 
 //-- Buttons 
-$(document).on("change", "input:radio[name='" + ET_wrap.tag + "_weekStart']", function(event) {
-  ET_wrap.weekStart = this.value;
+$(document).on("change", "input:radio[name='" + ET_latest_wrap.tag + "_weekStart']", function (event) {
+  ET_latest_wrap.week_start = this.value;
   
-  ET_update();
+  ET_Update(ET_latest_wrap);
 });
 
-d3.select(ET_wrap.id + '_button_3').on('click', function(){
+//-- Save button
+d3.select(ET_latest_wrap.id + '_save').on('click', function () {
   var tag1, tag2;
   
-  if (ET_wrap.weekStart == 1) tag1 = 'start_on_Monday';
+  if (ET_latest_wrap.week_start == 1) tag1 = 'start_on_Monday';
   else tag1 = 'start_on_Sunday';
   
-  name = ET_wrap.tag + '_' + tag1 + '_' + lang + '.png'
-  saveSvgAsPng(d3.select(ET_wrap.id).select('svg').node(), name);
+  name = ET_latest_wrap.tag + '_' + tag1 + '_' + lang + '.png'
+  saveSvgAsPng(d3.select(ET_latest_wrap.id).select('svg').node(), name);
 });
 
+//-- Language button
+$(document).on("change", "input:radio[name='policy_language']", function (event) {
+  lang = this.value;
+  Cookies.set("lang", lang);
+  
+  //-- Remove
+  d3.selectAll(ET_latest_wrap.id+' .plot').remove();
+  
+  //-- Replot
+  ET_Latest_Plot();
+});
