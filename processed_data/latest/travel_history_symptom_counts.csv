@@ -1,8 +1,8 @@
 label,count,label_zh,label_fr
-N_total,221,合計,Total
-N_imported,221,境外移入總數,Importés
-N_data,198,有資料案例數,Données complètes
-Indonesia,101,印尼,Indonésie
+N_total,223,合計,Total
+N_imported,223,境外移入總數,Importés
+N_data,200,有資料案例數,Données complètes
+Indonesia,102,印尼,Indonésie
 Philippines,41,菲律賓,Philippines
 USA,20,美國,États-Unis
 France,6,法國,France
@@ -12,11 +12,11 @@ Japan,3,日本,Japon
 Turkey,3,土耳其,Turquie
 Ireland,2,愛爾蘭,Irlande
 India,2,印度,Inde
-asymptomatic,112,無症狀,asymptomatique
+asymptomatic,113,無症狀,asymptomatique
 sneezing,33,鼻腔症狀,éternuement
 cough,33,咳嗽,toux
+fever,28,發燒,fièvre
 throatache,28,喉嚨症狀,mal de gorge
-fever,27,發燒,fièvre
 anosmia,27,嗅覺異常,anosmie
 ageusia,18,味覺異常,agueusie
 soreness,15,痠痛,myalgie
