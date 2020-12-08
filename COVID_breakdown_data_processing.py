@@ -772,7 +772,7 @@ class MainSheet(Template):
     hist = sorted(hist.items(), key=lambda x: x[1], reverse=True)
     return hist
   
-  def makeTravHistSymptomMat(self):
+  def makeTravHistSymptomMat(self, selection='latest'):
     reportDateList = self.getReportDate()
     transList = self.getTransmission()
     travHistList = self.getTravHist()
@@ -780,6 +780,7 @@ class MainSheet(Template):
     symptomList = self.getSymptom()
     
     todayOrd = dtt.date.today().toordinal() + 1
+    end2020Ord = ISODateToOrdinal('2020-12-31') + 1
     travHistList2 = []
     symptomList2 = []
     N_total = 0
@@ -791,7 +792,10 @@ class MainSheet(Template):
       
       repOrd = ISODateToOrdinal(reportDate)
       
-      if repOrd + NB_LOOKBACK_DAYS <= todayOrd:
+      if 'latest' == selection and repOrd + NB_LOOKBACK_DAYS < todayOrd:
+        continue
+      
+      if '2020' == selection and repOrd >= end2020Ord:
         continue
       
       N_total += 1
@@ -823,40 +827,8 @@ class MainSheet(Template):
     
     return N_total, N_imported, N_data, travHistHist, symptomHist, travBoolMat, sympBoolMat
   
-  def makeTravHistSymptomCorr1(self):
-    N_imported, N_data, travHistHist, symptomHist, travBoolMat, sympBoolMat = self.makeTravHistSymptomMat()
-    travBoolMat = travBoolMat.astype(bool)
-    p_symp = [symptom[1] / N_data for symptom in symptomHist]
-    
-    p_symp_given_trav = []
-    for travBoolArr in travBoolMat:
-      sympBoolMat2 = sympBoolMat.T[travBoolArr].astype(float)
-      sympBoolMat2 = sympBoolMat2.mean(axis=0)
-      p_symp_given_trav.append(sympBoolMat2)
-  
-    corrMat  = np.array(p_symp_given_trav) - p_symp
-    countMat = travBoolMat.dot(sympBoolMat.T)
-    return N_imported, N_data, travHistHist, symptomHist, corrMat, countMat
-    
-  def makeTravHistSymptomCorr2(self):
-    N_imported, N_data, travHistHist, symptomHist, travBoolMat, sympBoolMat = self.makeTravHistSymptomMat()
-    travBoolMat = travBoolMat.astype(bool)
-    p_symp = [symptom[1] / N_data for symptom in symptomHist]
-    S_symp = entropy(np.array(p_symp))
-    
-    p_symp_given_trav = []
-    for travBoolArr in travBoolMat:
-      sympBoolMat2 = sympBoolMat.T[travBoolArr].astype(float)
-      sympBoolMat2 = sympBoolMat2.mean(axis=0)
-      p_symp_given_trav.append(sympBoolMat2)
-  
-    S_symp_given_trav = entropy(np.array(p_symp_given_trav))
-    corrMat  = S_symp - S_symp_given_trav
-    countMat = travBoolMat.dot(sympBoolMat.T)
-    return N_imported, N_data, travHistHist, symptomHist, corrMat, countMat
-    
-  def makeTravHistSymptomCorr3(self):
-    N_total, N_imported, N_data, travHistHist, symptomHist, travBoolMat, sympBoolMat = self.makeTravHistSymptomMat()
+  def makeTravHistSymptomCorr(self, selection='latest'):
+    N_total, N_imported, N_data, travHistHist, symptomHist, travBoolMat, sympBoolMat = self.makeTravHistSymptomMat(selection=selection)
     
     travBoolMat_n = np.array([normalizeBoolArr(travBoolArr) for travBoolArr in travBoolMat])
     sympBoolMat_n = np.array([normalizeBoolArr(sympBoolArr) for sympBoolArr in sympBoolMat])
@@ -865,12 +837,13 @@ class MainSheet(Template):
     countMat = travBoolMat.dot(sympBoolMat.T)
     return N_total, N_imported, N_data, travHistHist, symptomHist, corrMat, countMat
   
-  def makeAgeSymptomMat(self):
+  def makeAgeSymptomMat(self, selection='latest'):
     reportDateList = self.getReportDate()
     ageList = self.getAge()
     symptomList = self.getSymptom()
     
     todayOrd = dtt.date.today().toordinal() + 1
+    end2020Ord = ISODateToOrdinal('2020-12-31') + 1
     ageList2 = []
     symptomList2 = []
     N_total = 0
@@ -881,7 +854,10 @@ class MainSheet(Template):
       
       repOrd = ISODateToOrdinal(reportDate)
       
-      if repOrd + NB_LOOKBACK_DAYS <= todayOrd:
+      if 'latest' == selection and repOrd + NB_LOOKBACK_DAYS < todayOrd:
+        continue
+      
+      if '2020' == selection and repOrd >= end2020Ord:
         continue
       
       N_total += 1
@@ -913,8 +889,8 @@ class MainSheet(Template):
     
     return N_total, N_data, ageHist, symptomHist, ageBoolMat, sympBoolMat
   
-  def makeAgeSymptomCorr3(self):
-    N_total, N_data, ageHist, symptomHist, ageBoolMat, sympBoolMat = self.makeAgeSymptomMat()
+  def makeAgeSymptomCorr(self, selection='latest'):
+    N_total, N_data, ageHist, symptomHist, ageBoolMat, sympBoolMat = self.makeAgeSymptomMat(selection=selection)
     
     ageBoolMat_n = np.array([normalizeBoolArr(ageBoolArr) for ageBoolArr in ageBoolMat])
     sympBoolMat_n = np.array([normalizeBoolArr(sympBoolArr) for sympBoolArr in sympBoolMat])
@@ -991,20 +967,26 @@ class MainSheet(Template):
         else:
           linked_o[ind_o] += 1
     
-    data_full_r = {'date': date, 'fleet': fleet_r, 'unlinked': unlinked_r, 'linked': linked_r, 'imported': imported_r}
-    data_full_r = pd.DataFrame(data_full_r)
-    data_last_r = data_full_r.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020_r = data_full_r.iloc[:366]
+    data_r = {'date': date, 'fleet': fleet_r, 'unlinked': unlinked_r, 'linked': linked_r, 'imported': imported_r}
+    data_r = pd.DataFrame(data_r)
+    data_o = {'date': date, 'fleet': fleet_o, 'unlinked': unlinked_o, 'linked': linked_o, 'imported': imported_o}
+    data_o = pd.DataFrame(data_o)
     
-    data_full_o = {'date': date, 'fleet': fleet_o, 'unlinked': unlinked_o, 'linked': linked_o, 'imported': imported_o}
-    data_full_o = pd.DataFrame(data_full_o)
-    data_last_o = data_full_o.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020_o = data_full_o.iloc[:366]
+    data_latest_r = data_r.iloc[-NB_LOOKBACK_DAYS:]
+    data_latest_o = data_o.iloc[-NB_LOOKBACK_DAYS:]
     
-    name = '%sprocessed_data/case_by_transmission_by_report_day.csv' % DATA_PATH
-    saveCsv(name, data_last_r)
-    name = '%sprocessed_data/case_by_transmission_by_onset_day.csv' % DATA_PATH
-    saveCsv(name, data_last_o)
+    name = '%sprocessed_data/latest/case_by_transmission_by_report_day.csv' % DATA_PATH
+    saveCsv(name, data_latest_r)
+    name = '%sprocessed_data/latest/case_by_transmission_by_onset_day.csv' % DATA_PATH
+    saveCsv(name, data_latest_o)
+    
+    data_2020_r = data_r.iloc[:366]
+    data_2020_o = data_o.iloc[:366]
+    
+    name = '%sprocessed_data/2020/case_by_transmission_by_report_day.csv' % DATA_PATH
+    saveCsv(name, data_2020_r)
+    name = '%sprocessed_data/2020/case_by_transmission_by_onset_day.csv' % DATA_PATH
+    saveCsv(name, data_2020_o)
     return
   
   def saveCsv_caseByDetection(self):
@@ -1077,22 +1059,28 @@ class MainSheet(Template):
         elif chan != chan: ## Is nan
           noData_o[ind_o] += 1
     
-    data_full_r = {'date': date, 'no_data': noData_r, 'overseas': overseas_r, 'hospital': hospital_r, 
-                   'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': QT_r, 'airport': airport_r}
-    data_full_r = pd.DataFrame(data_full_r)
-    data_last_r = data_full_r.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020_r = data_full_r.iloc[:366]
+    data_r = {'date': date, 'no_data': noData_r, 'overseas': overseas_r, 'hospital': hospital_r, 
+              'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': QT_r, 'airport': airport_r}
+    data_r = pd.DataFrame(data_r)
+    data_o = {'date': date, 'no_data': noData_o, 'overseas': overseas_o, 'hospital': hospital_o, 
+              'monitoring': monitor_o, 'isolation': iso_o, 'quarantine': QT_o, 'airport': airport_o}
+    data_o = pd.DataFrame(data_o)
     
-    data_full_o = {'date': date, 'no_data': noData_o, 'overseas': overseas_o, 'hospital': hospital_o, 
-                   'monitoring': monitor_o, 'isolation': iso_o, 'quarantine': QT_o, 'airport': airport_o}
-    data_full_o = pd.DataFrame(data_full_o).iloc[-NB_LOOKBACK_DAYS:]
-    data_last_o = data_full_o.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020_o = data_full_o.iloc[:366]
+    data_latest_r = data_r.iloc[-NB_LOOKBACK_DAYS:]
+    data_latest_o = data_o.iloc[-NB_LOOKBACK_DAYS:]
     
-    name = '%sprocessed_data/case_by_detection_by_report_day.csv' % DATA_PATH
-    saveCsv(name, data_last_r)
-    name = '%sprocessed_data/case_by_detection_by_onset_day.csv' % DATA_PATH
-    saveCsv(name, data_last_o)
+    name = '%sprocessed_data/latest/case_by_detection_by_report_day.csv' % DATA_PATH
+    saveCsv(name, data_latest_r)
+    name = '%sprocessed_data/latest/case_by_detection_by_onset_day.csv' % DATA_PATH
+    saveCsv(name, data_latest_o)
+    
+    data_2020_r = data_r.iloc[:366]
+    data_2020_o = data_o.iloc[:366]
+    
+    name = '%sprocessed_data/2020/case_by_detection_by_report_day.csv' % DATA_PATH
+    saveCsv(name, data_2020_r)
+    name = '%sprocessed_data/2020/case_by_detection_by_onset_day.csv' % DATA_PATH
+    saveCsv(name, data_2020_o)
     return
   
   def saveCsv_diffByTrans(self):
@@ -1184,12 +1172,12 @@ class MainSheet(Template):
     saveCsv(name, data)
     return
   
-  def saveCsv_travHistSymptomCorr(self):
-    N_total, N_imported, N_data, travHistHist, symptomHist, corrMat, countMat = self.makeTravHistSymptomCorr3()
+  def saveCsv_travHistSymptomCorr(self, selection='latest'):
+    N_total, N_imported, N_data, travHistHist, symptomHist, corrMat, countMat = self.makeTravHistSymptomCorr(selection=selection)
     N_min = N_data * 0.033
     
-    N_trav = 9 #sum([1 if travHist[1] > N_min else 0 for travHist in travHistHist])
-    N_symp = 9 #sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
+    N_trav = 10
+    N_symp = 10
     
     corrMat = corrMat[:N_trav, :N_symp]
     countMat = countMat[:N_trav, :N_symp]
@@ -1221,20 +1209,20 @@ class MainSheet(Template):
     data_3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
     data_3 = pd.DataFrame(data_3)
     
-    name = '%sprocessed_data/travel_history_symptom_correlations_coefficient.csv' % DATA_PATH
+    name = '%sprocessed_data/%s/travel_history_symptom_correlations_coefficient.csv' % (DATA_PATH, selection)
     saveCsv(name, data_1)
-    name = '%sprocessed_data/travel_history_symptom_correlations_counts.csv' % DATA_PATH
+    name = '%sprocessed_data/%s/travel_history_symptom_correlations_counts.csv' % (DATA_PATH, selection)
     saveCsv(name, data_2)
-    name = '%sprocessed_data/travel_history_symptom_counts.csv' % DATA_PATH
+    name = '%sprocessed_data/%s/travel_history_symptom_counts.csv' % (DATA_PATH, selection)
     saveCsv(name, data_3)
     return
   
-  def saveCsv_ageSymptomCorr(self):
-    N_total, N_data, ageHist, symptomHist, corrMat, countMat = self.makeAgeSymptomCorr3()
+  def saveCsv_ageSymptomCorr(self, selection='latest'):
+    N_total, N_data, ageHist, symptomHist, corrMat, countMat = self.makeAgeSymptomCorr(selection=selection)
     N_min = N_data * 0.033
     
     N_age  = corrMat.shape[0]
-    N_symp = 9 #sum([1 if symptom[1] > N_min else 0 for symptom in symptomHist])
+    N_symp = 10
     
     corrMat = corrMat[:N_age, :N_symp]
     countMat = countMat[:N_age, :N_symp]
@@ -1266,11 +1254,11 @@ class MainSheet(Template):
     data_3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
     data_3 = pd.DataFrame(data_3)
     
-    name = '%sprocessed_data/age_symptom_correlations_coefficient.csv' % DATA_PATH
+    name = '%sprocessed_data/%s/age_symptom_correlations_coefficient.csv' % (DATA_PATH, selection)
     saveCsv(name, data_1)
-    name = '%sprocessed_data/age_symptom_correlations_counts.csv' % DATA_PATH
+    name = '%sprocessed_data/%s/age_symptom_correlations_counts.csv' % (DATA_PATH, selection)
     saveCsv(name, data_2)
-    name = '%sprocessed_data/age_symptom_counts.csv' % DATA_PATH
+    name = '%sprocessed_data/%s/age_symptom_counts.csv' % (DATA_PATH, selection)
     saveCsv(name, data_3)
     return
   
@@ -1279,8 +1267,10 @@ class MainSheet(Template):
     self.saveCsv_caseByTrans()
     self.saveCsv_caseByDetection()
     self.saveCsv_diffByTrans()
-    self.saveCsv_travHistSymptomCorr()
-    self.saveCsv_ageSymptomCorr()
+    self.saveCsv_travHistSymptomCorr(selection='latest')
+    self.saveCsv_travHistSymptomCorr(selection='2020')
+    self.saveCsv_ageSymptomCorr(selection='latest')
+    self.saveCsv_ageSymptomCorr(selection='2020')
     return
 
 ###############################################################################
@@ -1488,14 +1478,19 @@ class TestSheet(Template):
     fromQTList  = self.getFromQT()
     fromClinicalDefList = self.getFromClinicalDef()
     
-    data_full = {'date': dateList, 'clinical': fromClinicalDefList, 'quarantine': fromQTList, 'extended': fromExtList}
-    data_full = pd.DataFrame(data_full)
-    data_full = adjustDateRange(data_full)
-    data_last = data_full.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020 = data_full.iloc[:366]
+    data = {'date': dateList, 'clinical': fromClinicalDefList, 'quarantine': fromQTList, 'extended': fromExtList}
+    data = pd.DataFrame(data)
+    data = adjustDateRange(data)
     
-    name = '%sprocessed_data/test_by_criterion.csv' % DATA_PATH
-    saveCsv(name, data_last)
+    data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
+    
+    name = '%sprocessed_data/latest/test_by_criterion.csv' % DATA_PATH
+    saveCsv(name, data_latest)
+    
+    data_2020 = data.iloc[:366]
+    
+    name = '%sprocessed_data/2020/test_by_criterion.csv' % DATA_PATH
+    saveCsv(name, data_2020)
     return
   
   def printCriteria(self):
@@ -1916,40 +1911,49 @@ class BorderSheet(Template):
     seaList     = self.getSeaport(tag='in')
     notSpecList = self.getNotSpecified(tag='in')
     
-    data_full = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
-    data_full = pd.DataFrame(data_full)
-    data_full = adjustDateRange(data_full)
-    data_last = data_full.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020 = data_full.iloc[:366]
+    data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
+    data = pd.DataFrame(data)
+    data = adjustDateRange(data)
     
-    name = '%sprocessed_data/border_statistics_entry.csv' % DATA_PATH
-    saveCsv(name, data_last)
+    data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
+    name = '%sprocessed_data/latest/border_statistics_entry.csv' % DATA_PATH
+    saveCsv(name, data_latest)
+    
+    data_2020 = data.iloc[:366]
+    name = '%sprocessed_data/2020/border_statistics_entry.csv' % DATA_PATH
+    saveCsv(name, data_2020)
     
     airList     = self.getAirport(tag='out')
     seaList     = self.getSeaport(tag='out')
     notSpecList = self.getNotSpecified(tag='out')
     
-    data_full = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
-    data_full = pd.DataFrame(data_full)
-    data_full = adjustDateRange(data_full)
-    data_last = data_full.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020 = data_full.iloc[:366]
+    data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
+    data = pd.DataFrame(data)
+    data = adjustDateRange(data)
     
-    name = '%sprocessed_data/border_statistics_exit.csv' % DATA_PATH
-    saveCsv(name, data_last)
+    data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
+    name = '%sprocessed_data/latest/border_statistics_exit.csv' % DATA_PATH
+    saveCsv(name, data_latest)
+    
+    data_2020 = data.iloc[:366]
+    name = '%sprocessed_data/2020/border_statistics_exit.csv' % DATA_PATH
+    saveCsv(name, data_2020)
     
     airList     = self.getAirport(tag='total')
     seaList     = self.getSeaport(tag='total')
     notSpecList = self.getNotSpecified(tag='total')
     
-    data_full = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
-    data_full = pd.DataFrame(data_full)
-    data_full = adjustDateRange(data_full)
-    data_last = data_full.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020 = data_full.iloc[:366]
+    data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
+    data = pd.DataFrame(data)
+    data = adjustDateRange(data)
     
-    name = '%sprocessed_data/border_statistics_both.csv' % DATA_PATH
-    saveCsv(name, data_last)
+    data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
+    name = '%sprocessed_data/latest/border_statistics_both.csv' % DATA_PATH
+    saveCsv(name, data_latest)
+    
+    data_2020 = data.iloc[:366]
+    name = '%sprocessed_data/2020/border_statistics_both.csv' % DATA_PATH
+    saveCsv(name, data_2020)
     return
       
   def saveCsv(self):

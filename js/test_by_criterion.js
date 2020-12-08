@@ -63,7 +63,7 @@ function TBC_Format_Data(wrap, data) {
   var formatted_data = [];
   var i, j, x, y, height, block;
 
-  if (wrap.doCumul == 1) {
+  if (wrap.do_cumul == 1) {
     GS_CumSum(data, col_tag_list);
   }
   
@@ -93,7 +93,7 @@ function TBC_Format_Data(wrap, data) {
     
     if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
-      xticklabel.push(ISODateToMDDate(x));
+      xticklabel.push(GS_ISO_Date_To_MD_Date(x));
     }
     else {
       xticklabel.push("");
@@ -103,15 +103,15 @@ function TBC_Format_Data(wrap, data) {
   //-- Calculate y_max
   y_max *= wrap.y_max_factor;
   var y_path;
-  if (wrap.doCumul == 1) y_path = wrap.y_path_1;
-  else                              y_path = wrap.y_path_0;
+  if (wrap.do_cumul == 1) y_path = wrap.y_path_1;
+  else                    y_path = wrap.y_path_0;
   
   var ytick = [];
   for (i=0; i<y_max; i+=y_path) ytick.push(i)
   
   //-- Calculate seperate sum
   var ext, qt, clin;
-  if (wrap.doCumul == 1) {
+  if (wrap.do_cumul == 1) {
     ext = d3.max(formatted_data, function (d) {if (d.col == 'extended') return +d.height;});
     qt = d3.max(formatted_data, function (d) {if (d.col == 'quarantine') return +d.height;});
     clin = d3.max(formatted_data, function (d) {if (d.col == 'clinical') return +d.height;});
@@ -327,7 +327,7 @@ function TBC_Update(wrap) {
   
   //-- Legend - value
   var legend_pos = {x: 95, y: 40, dx: 12, dy: 30};
-  if (wrap.doCumul == 0) {
+  if (wrap.do_cumul == 0) {
     if (lang == 'zh-tw') legend_pos.x = 510;
     else if (lang == 'fr') legend_pos.x = 95; //300
     else legend_pos.x = 350;
@@ -368,77 +368,3 @@ function TBC_Update(wrap) {
       .text(function (d) {return d})
       .attr("text-anchor", "start")
 }
-
-//-- Global variable
-var TBC_latest_wrap = {};
-
-//-- ID
-TBC_latest_wrap.tag = "test_by_criterion_latest"
-TBC_latest_wrap.id = '#' + TBC_latest_wrap.tag
-
-//-- File path
-TBC_latest_wrap.dataPath = "processed_data/test_by_criterion.csv";
-
-//-- Tooltip
-TBC_latest_wrap.tooltip = d3.select(TBC_latest_wrap.id)
-  .append("div")
-  .attr("class", "tooltip")
-
-//-- Parameters
-TBC_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
-TBC_latest_wrap.r_list = GS_var.r_list_latest;
-TBC_latest_wrap.y_max_factor = 1.3;
-TBC_latest_wrap.y_path_1 = 6000;
-TBC_latest_wrap.y_path_0 = 250;
-
-//-- Variables
-TBC_latest_wrap.doCumul = 0;;
-
-//-- Plot
-function TBC_Latest_Plot() {
-  d3.csv(TBC_latest_wrap.dataPath, function (error, data) {
-    if (error) return console.warn(error);
-    
-    TBC_Make_Canvas(TBC_latest_wrap);
-    TBC_Format_Data(TBC_latest_wrap, data);
-    TBC_Initialize(TBC_latest_wrap);
-    TBC_Update(TBC_latest_wrap);
-  });
-}
-
-TBC_Latest_Plot();
-
-//-- Buttons
-$(document).on("change", "input:radio[name='" + TBC_latest_wrap.tag + "_doCumul']", function (event) {
-  TBC_latest_wrap.doCumul = this.value;
-  
-  d3.csv(TBC_latest_wrap.dataPath, function (error, data) {
-    if (error) return console.warn(error);
-    
-    TBC_Format_Data(TBC_latest_wrap, data);
-    TBC_Update(TBC_latest_wrap);
-  });
-});
-
-//-- Save button
-d3.select(TBC_latest_wrap.id + '_save').on('click', function(){
-  var tag1;
-  
-  if (TBC_latest_wrap.doCumul == 1) tag1 = 'cumulative';
-  else tag1 = 'daily';
-  
-  name = TBC_latest_wrap.tag + '_' + tag1 + '_' + lang + '.png'
-  saveSvgAsPng(d3.select(TBC_latest_wrap.id).select('svg').node(), name);
-});
-
-//-- Language button
-$(document).on("change", "input:radio[name='policy_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
-  
-  //-- Remove
-  d3.selectAll(TBC_latest_wrap.id+' .plot').remove();
-  
-  //-- Replot
-  TBC_Latest_Plot();
-});

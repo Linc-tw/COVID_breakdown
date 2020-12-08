@@ -10,17 +10,17 @@ function ASC_Make_Canvas(wrap) {
   var tot_height, top;
   if (lang == 'zh-tw') {
     tot_height = 540;
-    left = 200;
+    left = 205;
     top = 155;
   }
   else if (lang == 'fr') {
     tot_height = 600;
-    left = 235;
-    top = 225;
+    left = 260;
+    top = 235;
   }
   else {
     tot_height = 600;
-    left = 235;
+    left = 230;
     top = 215;
   }
   
@@ -244,7 +244,7 @@ function ASC_initialize(wrap) {
   
   //-- Color
   var color = d3.scaleSequential()
-    .domain([-0.42, 0.42])
+    .domain([-0.3, 0.3])
     .interpolator(t => d3.interpolateRdBu(1-t));
   
   //-- Squares
@@ -271,7 +271,7 @@ function ASC_initialize(wrap) {
       .attr("class", "content text")
       .attr("x", function (d) {return x(d['symptom']) + 0.5*+x.bandwidth();})
       .attr("y", function (d) {return y(d['age']) + 0.5*+y.bandwidth();})
-      .style("fill", '#000')
+      .style("fill", function (d) {if (Math.abs(d['value'])<0.25) return '#000'; return '#fff';})
       .text(function (d) {return d['label'];})
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "central")
@@ -293,7 +293,7 @@ function ASC_update(wrap) {
       .attr("class", "content text")
       .attr("x", function (d) {return wrap.x(d['symptom']) + 0.5*+wrap.x.bandwidth();})
       .attr("y", function (d) {return wrap.y(d['age']) + 0.5*+wrap.y.bandwidth();})
-      .style("fill", '#000')
+      .style("fill", function (d) {if (Math.abs(d['value'])<0.25) return '#000'; return '#fff';})
       .text(function (d) {return d['label'];})
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "central")
@@ -317,81 +317,3 @@ function ASC_update(wrap) {
       .text(function (d) {return d})
       .attr("text-anchor", "start")
 }
-
-//-- Global variable
-var ASC_latest_wrap = {};
-
-//-- ID
-ASC_latest_wrap.tag = 'age_symptom_correlations_latest'
-ASC_latest_wrap.id = '#' + ASC_latest_wrap.tag
-
-//-- File path
-ASC_latest_wrap.dataPathList = [
-  "processed_data/age_symptom_correlations_coefficient.csv",
-  "processed_data/age_symptom_correlations_counts.csv", 
-  "processed_data/age_symptom_counts.csv"
-];
-
-//-- Parameters
-
-//-- Variables
-ASC_latest_wrap.doCount = 0;
-
-//-- Plot
-function ASC_Latest_Plot() {
-  d3.csv(ASC_latest_wrap.dataPathList[ASC_latest_wrap.doCount], function (error, data) {
-    d3.csv(ASC_latest_wrap.dataPathList[2], function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      ASC_Make_Canvas(ASC_latest_wrap);
-      ASC_Format_Data(ASC_latest_wrap, data);
-      ASC_FormatData_2(ASC_latest_wrap, data2);
-      ASC_initialize(ASC_latest_wrap);
-      ASC_update(ASC_latest_wrap);
-    });
-  });
-}
-
-ASC_Latest_Plot();
-
-//-- Buttons
-$(document).on("change", "input:radio[name='" + ASC_latest_wrap.tag + "_doCount']", function (event) {
-  ASC_latest_wrap.doCount = this.value;
-  dataPath = ASC_latest_wrap.dataPathList[ASC_latest_wrap.doCount]
-  dataPath2 = ASC_latest_wrap.dataPathList[2]
-  
-  d3.csv(dataPath, function (error, data) {
-    d3.csv(dataPath2, function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      ASC_Format_Data(ASC_latest_wrap, data);
-      ASC_FormatData_2(ASC_latest_wrap, data2);
-      ASC_update(ASC_latest_wrap);
-    });
-  });
-});
-
-//-- Save button
-d3.select(ASC_latest_wrap.id + '_save').on('click', function(){
-  var tag1;
-  
-  if (ASC_latest_wrap.doCount == 1) tag1 = 'count';
-  else tag1 = 'coefficient';
-  
-  name = ASC_latest_wrap.tag + '_' + tag1 + '_' + lang + '.png'
-  saveSvgAsPng(d3.select(ASC_latest_wrap.id).select('svg').node(), name);
-});
-
-//-- Language button
-$(document).on("change", "input:radio[name='index_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
-  
-  //-- Remove
-  d3.selectAll(ASC_latest_wrap.id+' .plot').remove()
-  
-  //-- Replot
-  ASC_Latest_Plot();
-});

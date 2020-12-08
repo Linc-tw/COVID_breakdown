@@ -284,6 +284,12 @@ d3.csv("processed_data/key_numbers.csv", function (error, data) {
   text_translation();
 });
 
+//-- Language button
+$(document).on("change", "input:radio[name='index_language']", function (event) {
+  lang = this.value;
+  Cookies.set("lang", lang);
+  text_translation();
+});
 
 $(document).on("change", "input:radio[name='2020_language']", function (event) {
   lang = this.value;
@@ -308,4 +314,3 @@ $(document).on("change", "input:radio[name='copyleft_language']", function (even
   Cookies.set("lang", lang);
   text_translation();
 });
-

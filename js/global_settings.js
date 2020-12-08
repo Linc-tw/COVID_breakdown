@@ -44,35 +44,5 @@ function GS_CumSum(data, colTagList) {
 }
 
 //TODO
-//border
 //Taux de positivité
 //lang
-
-
-
-
-//-- Obsolete
-var global_var = {};
-global_var.xlabel_path = 7;
-global_var.rList = [3, 3, 4, 1, 1, 2, 2];
-global_var.cList = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022'];
-
-function ISODateToMDDate(ISODate) {
-  var fmtStr;
-  var MDDateFormat;
-  if (lang == 'zh-tw')   MDDateFormat = d3.timeFormat("%-m月%-d日");
-  else if (lang == 'fr') MDDateFormat = d3.timeFormat("%d/%m");
-  else MDDateFormat = d3.timeFormat("%b %d");
-  
-  var date = d3.isoParse(ISODate);
-  return MDDateFormat(date);
-}
-
-function cumsum(data, colTagList) {
-  var i, j;
-  for (i=1; i<data.length; i++) {
-    for (j=0; j<colTagList.length; j++) {
-      data[i][colTagList[j]] = +data[i][colTagList[j]] + +data[i-1][colTagList[j]];
-    }
-  }
-}
