@@ -1,11 +1,11 @@
 label,count,label_zh,label_fr
-N_total,740,合計,Total
-N_imported,649,境外移入總數,Importés
-N_data,615,有資料案例數,Données complètes
+N_total,742,合計,Total
+N_imported,651,境外移入總數,Importés
+N_data,617,有資料案例數,Données complètes
 USA,127,美國,États-Unis
-Indonesia,125,印尼,Indonésie
+Indonesia,126,印尼,Indonésie
 UK,88,英國,Royaume-Uni
-Philippines,84,菲律賓,Philippines
+Philippines,85,菲律賓,Philippines
 France,34,法國,France
 Spain,21,西班牙,Espagne
 Turkey,16,土耳其,Turquie
@@ -16,7 +16,7 @@ cough,215,咳嗽,toux
 fever,203,發燒,fièvre
 sneezing,157,鼻腔症狀,éternuement
 throatache,152,喉嚨症狀,mal de gorge
-asymptomatic,149,無症狀,asymptomatique
+asymptomatic,151,無症狀,asymptomatique
 anosmia,85,嗅覺異常,anosmie
 fatigue,82,倦怠,fatigue
 soreness,73,痠痛,myalgie
