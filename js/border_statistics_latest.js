@@ -13,7 +13,7 @@ BS_latest_wrap.tag = 'border_statistics_latest'
 BS_latest_wrap.id = '#' + BS_latest_wrap.tag
 
 //-- File path
-BS_latest_wrap.dataPathList = [
+BS_latest_wrap.data_path_list = [
   "processed_data/latest/border_statistics_entry.csv",
   "processed_data/latest/border_statistics_exit.csv",
   "processed_data/latest/border_statistics_both.csv"
@@ -33,11 +33,11 @@ BS_latest_wrap.y_path_1 = 1500;
 BS_latest_wrap.y_path_2 = 2500;
 
 //-- Variables
-BS_latest_wrap.doExit = 0;
+BS_latest_wrap.do_exit = 0;
 
 //-- Plot
 function BS_Latest_Plot() {
-  d3.csv(BS_latest_wrap.dataPathList[BS_latest_wrap.doExit], function (error, data) {
+  d3.csv(BS_latest_wrap.data_path_list[BS_latest_wrap.do_exit], function (error, data) {
     if (error) return console.warn(error);
     
     BS_Make_Canvas(BS_latest_wrap);
@@ -51,9 +51,9 @@ BS_Latest_Plot();
 
 //-- Buttons
 $(document).on("change", "input:radio[name='" + BS_latest_wrap.tag + "_doExit']", function (event) {
-  BS_latest_wrap.doExit = this.value;
+  BS_latest_wrap.do_exit = this.value;
   
-  d3.csv(BS_latest_wrap.dataPathList[BS_latest_wrap.doExit], function (error, data) {
+  d3.csv(BS_latest_wrap.data_path_list[BS_latest_wrap.do_exit], function (error, data) {
     if (error) return console.warn(error);
     
     BS_Format_Data(BS_latest_wrap, data);
@@ -65,9 +65,9 @@ $(document).on("change", "input:radio[name='" + BS_latest_wrap.tag + "_doExit']"
 d3.select(BS_latest_wrap.id + '_save').on('click', function () {
   var tag1;
   
-  if (BS_latest_wrap.doExit == 0)      tag1 = 'arrival';
-  else if (BS_latest_wrap.doExit == 1) tag1 = 'departure';
-  else                                 tag1 = 'both';
+  if (BS_latest_wrap.do_exit == 0)      tag1 = 'arrival';
+  else if (BS_latest_wrap.do_exit == 1) tag1 = 'departure';
+  else                                  tag1 = 'both';
 
   name = BS_latest_wrap.tag + '_' + tag1 + '_' + lang + '.png'
   saveSvgAsPng(d3.select(BS_latest_wrap.id).select('svg').node(), name);

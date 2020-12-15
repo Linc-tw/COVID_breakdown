@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.12.07                  ##
+    ##  Version 2020.12.16                  ##
     ##########################################
 
 
@@ -355,7 +355,7 @@ class MainSheet(Template):
         age.append(a[0]+'0s')
       elif a in ['1XX', '10X', '11X']:
         age.append('100s')
-      elif a in ['<10', '4', '5']:
+      elif a in ['<10', '3', '4', '5']:
         age.append('0s')
       elif a in ['11']:
         age.append('10s')
@@ -404,7 +404,7 @@ class MainSheet(Template):
   def getTravHist(self):
     keyDict = {
       'Bangladesh': ['孟加拉'],
-      'China': ['中國', '武漢', '深圳', '廣州', '遼寧', '江蘇'],
+      'China': ['中國', '武漢', '深圳', '廣州', '遼寧', '江蘇', '浙江'],
       'Hong Kong': ['香港'],
       'India': ['印度'], 
       'Indonesia': ['印尼'], 
@@ -673,12 +673,12 @@ class MainSheet(Template):
       'eyes sore': ['結膜充血', '後眼窩痛', '眼睛癢', '眼睛痛'], 
       'chest pain+backache': ['胸背痛'], 
       'chest pain': ['呼吸時胸痛', '胸痛', '輕微胸悶', '胸悶'],
-      'stomachache': ['腹悶痛', '胃痛', '腹痛', '胃脹', '胃部不適', '肚子不適'],
+      'stomachache': ['腹悶痛', '胃痛', '腹痛', '胃脹', '腹脹', '胃部不適', '肚子不適'],
       'backache': ['背痛'], 
       'toothache': ['牙痛'], 
       
       'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '走路喘', '倦怠', '疲憊', '疲倦', '無力'],
-      'soreness': ['全身肌肉痠痛', '上半身骨頭刺痛', '全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉酸痛', '肌肉痠痛', '肌肉 痠痛', '骨頭痠痛', '骨頭酸', '關節痠痛', '關節痛', '痠痛'],
+      'soreness': ['全身肌肉痠痛', '上半身骨頭刺痛', '全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉關節痠痛', '肌肉酸痛', '肌肉痠痛', '肌肉 痠痛', '骨頭痠痛', '骨頭酸', '關節痠痛', '關節痛', '痠痛'],
       'hypersomnia': ['嗜睡'],
       
       'anosmia+ageusia': ['味覺及嗅覺喪失', '味覺及嗅覺都喪失', '嗅覺和味覺喪失', '嗅味覺異常', '味嗅覺異常'], 
@@ -744,6 +744,37 @@ class MainSheet(Template):
         print('Symptom, Case %d, %s' % (i+1, link))
         linkList.append(np.nan)
     return linkList
+    
+  def makeDailyCaseCounts(self):
+    reportDateList = self.getReportDate()
+    transList = self.getTransmission()
+    
+    refOrd = ISODateToOrdinal(REF_ISO_DATE)
+    todayOrd = dtt.date.today().toordinal() + 1
+    
+    dateArr = [ordinalToISODate(i) for i in range(refOrd, todayOrd)]
+    nbDays = todayOrd - refOrd
+    nbImpArr = np.zeros(nbDays, dtype=int)
+    nbIndiArr = np.zeros(nbDays, dtype=int)
+    nbCasesArr = np.zeros(nbDays, dtype=int)
+    
+    for reportDate, trans in zip(reportDateList, transList):
+      if reportDate != reportDate:
+        continue
+      
+      ind = ISODateToOrdinal(reportDate) - refOrd
+      if ind < 0 or ind >= nbDays:
+        print('Bad ind_r = %d' % ind)
+        continue
+      
+      if trans == 'imported':
+        nbImpArr[ind] += 1
+      elif trans == 'indigenous':
+        nbIndiArr[ind] += 1
+      
+      nbCasesArr[ind] += 1
+      
+    return dateArr, nbImpArr, nbIndiArr, nbCasesArr
     
   def makeTravHistHist(self):
     transList = self.getTransmission()
@@ -1368,7 +1399,7 @@ class StatusSheet(Template):
     name = '%sprocessed_data/2020/status_evolution.csv' % DATA_PATH
     saveCsv(name, data_2020)
     return
-      
+    
   def saveCsv(self):
     self.saveCsv_statusEvolution()
     return
@@ -1471,6 +1502,27 @@ class TestSheet(Template):
     for criteria in self.getCol(self.n_criteria):
       criteriaList.append(criteria)
     return criteriaList
+  
+  def makeDailyTestCounts(self):
+    refOrd = ISODateToOrdinal(REF_ISO_DATE)
+    todayOrd = dtt.date.today().toordinal() + 1
+    
+    nbDays = todayOrd - refOrd
+    nbTestsArr = np.zeros(nbDays, dtype=int)
+    
+    dateList = self.getDate()
+    fromExtList = self.getFromExtended()
+    fromQTList = self.getFromQT()
+    fromClinicalDefList = self.getFromClinicalDef()
+    
+    for date, fromClinicalDef, fromQT, fromExt in zip(dateList, fromClinicalDefList, fromQTList, fromExtList):
+      ind = ISODateToOrdinal(date) - refOrd
+      if ind < 0 or ind >= nbDays:
+        print('Bad ind_r = %d' % ind)
+        continue
+      
+      nbTestsArr[ind] = fromClinicalDef + fromQT + fromExt
+    return nbTestsArr
   
   def saveCsv_testByCriterion(self):
     dateList    = self.getDate()
@@ -1905,6 +1957,25 @@ class BorderSheet(Template):
     notSpecList = np.array(notSpecList_break).sum(axis=0)
     return notSpecList
   
+  def makeDailyArrivalCounts(self):
+    refOrd = ISODateToOrdinal(REF_ISO_DATE)
+    todayOrd = dtt.date.today().toordinal() + 1
+    
+    nbDays = todayOrd - refOrd
+    nbArrivalArr = np.zeros(nbDays, dtype=int)
+    
+    dateList = self.getDate()
+    inList = self.getIn()
+    
+    for date, in_ in zip(dateList, inList):
+      ind = ISODateToOrdinal(date) - refOrd
+      if ind < 0 or ind >= nbDays:
+        print('Bad ind_r = %d' % ind)
+        continue
+      
+      nbArrivalArr[ind] = in_
+    return nbArrivalArr
+  
   def saveCsv_borderStats(self):
     dateList    = self.getDate()
     airList     = self.getAirport(tag='in')
@@ -2059,28 +2130,88 @@ class TimelineSheet(Template):
     return
   
 ###############################################################################
+## Cross-sheet
+
+import scipy.signal as signal
+
+def makeVariousRates(main_sheet, test_sheet, border_sheet):
+  dateArr, nbImpArr, nbIndiArr, nbCasesArr = main_sheet.makeDailyCaseCounts()
+  nbTestsArr = test_sheet.makeDailyTestCounts()
+  nbArrivalArr = border_sheet.makeDailyArrivalCounts()
+  
+  ## Convert to float
+  nbImpArr = nbImpArr.astype(float)
+  nbIndiArr = nbIndiArr.astype(float)
+  nbCasesArr = nbCasesArr.astype(float)
+  nbTestsArr = nbTestsArr.astype(float)
+  nbArrivalArr = nbArrivalArr.astype(float)
+  
+  ind_test = nbTestsArr == 0
+  ind_arrival = nbArrivalArr == 0
+  
+  ## Smooth
+  kernel = [1/7] * 7 + [0.0] * 6
+  nbImpArr = signal.convolve(nbImpArr, kernel[::-1], mode='same')
+  nbIndiArr = signal.convolve(nbIndiArr, kernel[::-1], mode='same')
+  nbCasesArr = signal.convolve(nbCasesArr, kernel[::-1], mode='same')
+  nbTestsArr = signal.convolve(nbTestsArr, kernel[::-1], mode='same')
+  nbArrivalArr = signal.convolve(nbArrivalArr, kernel[::-1], mode='same')
+  
+  population_TWN = 23563356
+  
+  with warnings.catch_warnings(): ## Avoid division by zero
+    warnings.simplefilter("ignore")
+    
+    pRate = nbCasesArr / nbTestsArr
+    pRate[ind_test] = np.nan
+    
+    iRate_imp = nbImpArr / nbArrivalArr
+    iRate_imp[ind_arrival] = np.nan
+    
+    iRate_indi = nbIndiArr / float(population_TWN)
+    
+  return dateArr, pRate, iRate_imp, iRate_indi
+  
+def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
+  dateArr, pRate, iRate_imp, iRate_indi = makeVariousRates(main_sheet, test_sheet, border_sheet)
+  
+  data = {'date': dateArr, 'positive_rate': pRate, 'imp_inci_rate': iRate_imp, 'indi_inci_rate': iRate_indi}
+  data = pd.DataFrame(data)
+  
+  data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
+  name = '%sprocessed_data/latest/various_rates.csv' % DATA_PATH
+  saveCsv(name, data_latest)
+  
+  data_2020 = data.iloc[:366]
+  name = '%sprocessed_data/2020/various_rates.csv' % DATA_PATH
+  saveCsv(name, data_2020)
+  return
+  
+###############################################################################
 ## Sandbox
 
 def sandbox():
-  sheet = MainSheet()
-  #print(sheet.getAge())
-  sheet.saveCsv_keyNb()
+  main_sheet = MainSheet()
+  #print(main_sheet.makeDailyCaseCounts())
+  #main_sheet.saveCsv_keyNb()
   
-  #sheet = StatusSheet()
-  #print(sheet.getCumHosp())
-  #sheet.saveCsv_statusEvolution()
+  #status_sheet = StatusSheet()
+  #print(status_sheet.getCumHosp())
+  #status_sheet.saveCsv_statusEvolution()
   
-  #sheet = TestSheet()
-  #print(sheet.printCriteria())
-  #sheet.saveCsv_criteriaTimeline()
+  test_sheet = TestSheet()
+  #print(test_sheet.printCriteria())
+  #test_sheet.saveCsv_criteriaTimeline()
   
-  #sheet = BorderSheet()
-  #print(sheet.getAirportBreakdown('in'))
-  #sheet.saveCsv_borderStats()
+  border_sheet = BorderSheet()
+  #print(border_sheet.makeDailyArrivalCounts())
+  #border_sheet.saveCsv_borderStats()
   
-  #sheet = TimelineSheet()
-  #print(sheet.saveCriteria())
-  #sheet.saveCsv_evtTimeline()
+  #timeline_sheet = TimelineSheet()
+  #print(timeline_sheet.saveCriteria())
+  #timeline_sheet.saveCsv_evtTimeline()
+  
+  saveCsv_variousRate(main_sheet, test_sheet, border_sheet)
   return
 
 ###############################################################################
@@ -2088,15 +2219,20 @@ def sandbox():
 
 def saveCsv_all():
   print()
-  MainSheet().saveCsv()
+  main_sheet = MainSheet()
+  main_sheet.saveCsv()
   print()
   StatusSheet().saveCsv()
   print()
-  TestSheet().saveCsv()
+  test_sheet = TestSheet()
+  test_sheet.saveCsv()
   print()
-  BorderSheet().saveCsv()
+  border_sheet = BorderSheet()
+  border_sheet.saveCsv()
   print()
   TimelineSheet().saveCsv()
+  print()
+  saveCsv_variousRate(main_sheet, test_sheet, border_sheet)
   print()
   return
 

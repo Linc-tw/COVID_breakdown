@@ -99,9 +99,9 @@ function BS_Format_Data(wrap, data) {
   //-- Calculate y_max
   y_max *= wrap.y_max_factor;
   var y_path;
-  if (wrap.doExit == 0)      y_path = wrap.y_path_0;
-  else if (wrap.doExit == 1) y_path = wrap.y_path_1;
-  else                          y_path = wrap.y_path_2;
+  if (wrap.do_exit == 0)      y_path = wrap.y_path_0;
+  else if (wrap.do_exit == 1) y_path = wrap.y_path_1;
+  else                        y_path = wrap.y_path_2;
   
   var ytick = [];
   for (i=0; i<y_max; i+=y_path) ytick.push(i)
@@ -323,7 +323,7 @@ function BS_update(wrap) {
   color_list.push('#000000');
   
   //-- Legend - value
-  var lPos = {x: 450, y: 45, dx: 12, dy: 30};
+  var legend_pos = {x: 450, y: 45, dx: 12, dy: 30};
   var legend_value = wrap.legend_value.slice();
   var sum = legend_value.reduce((a, b) => a + b, 0);
   legend_value.push(sum);
@@ -335,60 +335,60 @@ function BS_update(wrap) {
     .enter()
     .append("text")
       .attr("class", "legend value")
-      .attr("x", lPos.x)
-      .attr("y", function (d,i) {return lPos.y + i*lPos.dy})
+      .attr("x", legend_pos.x)
+      .attr("y", function (d,i) {return legend_pos.y + i*legend_pos.dy})
       .style("fill", function (d, i) {return color_list[i]})
       .text(function (d) {return d})
       .attr("text-anchor", "end")
   
   //-- Legend - label
-  var lLabel;
+  var legend_label;
   if (lang == 'zh-tw') {
-    lLabel = ["機場", "港口", "無細節", "合計"];
+    legend_label = ["機場", "港口", "無細節", "合計"];
   }
   else if (lang == 'fr') {
-    lLabel = ["Aéroports", "Ports maritimes", "Sans précisions", "Total"];
+    legend_label = ["Aéroports", "Ports maritimes", "Sans précisions", "Total"];
   }
   else {
-    lLabel = ["Airports", "Seaports", "Not specified", 'Total'];
+    legend_label = ["Airports", "Seaports", "Not specified", 'Total'];
   }
   
   wrap.svg.selectAll(wrap.id+'_legend_label')
     .remove()
     .exit()
-    .data(lLabel)
+    .data(legend_label)
     .enter()
     .append("text")
       .attr("id", wrap.tag+"_legend_label")
       .attr("class", "legend label")
-      .attr("x", lPos.x+lPos.dx)
-      .attr("y", function (d, i) {return lPos.y + i*lPos.dy})
+      .attr("x", legend_pos.x+legend_pos.dx)
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
       .style("fill", function (d, i) {return color_list[i]})
       .text(function (d) {return d})
       .attr("text-anchor", "start")
   
   //-- Legend - title
-  var lTitle;
+  var legend_title;
   if (lang == 'zh-tw') {
-    lTitle = ['於' + wrap.last_date];
+    legend_title = ['於' + wrap.last_date];
   }
   else if (lang == 'fr') {
-    lTitle = ['Au ' + wrap.last_date];
+    legend_title = ['Au ' + wrap.last_date];
   }
   else {
-    lTitle = ['On ' + wrap.last_date];
+    legend_title = ['On ' + wrap.last_date];
   }
   
   wrap.svg.selectAll(wrap.id+'_legend_title')
     .remove()
     .exit()
-    .data(lTitle)
+    .data(legend_title)
     .enter()
     .append("text")
       .attr("id", wrap.tag+"_legend_title")
       .attr("class", "legend label")
-      .attr("x", lPos.x+lPos.dx)
-      .attr("y", lPos.y+4.25*lPos.dy)
+      .attr("x", legend_pos.x+legend_pos.dx)
+      .attr("y", legend_pos.y+4.25*legend_pos.dy)
       .style("fill", '#000000')
       .text(function (d) {return d})
       .attr("text-anchor", "start")

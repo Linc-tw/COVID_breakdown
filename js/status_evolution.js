@@ -21,7 +21,7 @@ function SE_Make_Canvas(wrap) {
     bottom = 90;
   }
   
-  var margin = {left: 70, right: 2, bottom: bottom, top: 2};
+  var margin = {left: 100, right: 2, bottom: bottom, top: 2};
   var width = tot_width - margin.left - margin.right;
   var height = tot_height - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];

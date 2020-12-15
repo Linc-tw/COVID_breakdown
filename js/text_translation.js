@@ -52,6 +52,9 @@ function text_translation() {
     //-- Status evolution
     TT_Add_Str("status_evolution_title", "疫情變化");
     
+    //-- Various rates
+    TT_Add_Str("various_rates_title", "各種比率之七日平均");
+    
     //-- Difference by transmission
     TT_Add_Str("difference_by_transmission_title", "確診等多久？");
     TT_Add_Str("difference_by_transmission_button_1", "全部");
@@ -131,6 +134,9 @@ function text_translation() {
     //-- Status evolution
     TT_Add_Str("status_evolution_title", "Évolution de la situation");
     
+    //-- Various rates
+    TT_Add_Str("various_rates_title", "Taux en moyenne glissante sur 7 jours");
+    
     //-- Difference by transmission
     TT_Add_Str("difference_by_transmission_title", "Combien de temps pour identifier un cas ?");
     TT_Add_Str("difference_by_transmission_button_1", "Tous");
@@ -209,6 +215,9 @@ function text_translation() {
     
     //-- Status evolution
     TT_Add_Str("status_evolution_title", "Status Evolution");
+    
+    //-- Various rates
+    TT_Add_Str("various_rates_title", "7-day average of various rates");
     
     //-- Difference by transmission
     TT_Add_Str("difference_by_transmission_title", "How many days to identify cases?");
