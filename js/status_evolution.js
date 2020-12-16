@@ -8,11 +8,11 @@
 function SE_Make_Canvas(wrap) {
   var tot_width = 800;
   var tot_height;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     tot_height = 415;
     bottom = 105;
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     tot_height = 400;
     bottom = 90;
   }
@@ -21,7 +21,7 @@ function SE_Make_Canvas(wrap) {
     bottom = 90;
   }
   
-  var margin = {left: 100, right: 2, bottom: bottom, top: 2};
+  var margin = {left: 90, right: 2, bottom: bottom, top: 2};
   var width = tot_width - margin.left - margin.right;
   var height = tot_height - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
@@ -171,9 +171,9 @@ function SE_Mouse_Move(wrap, d) {
   var new_pos = SE_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
   var tooltip_text;
   
-  if (lang == 'zh-tw')
+  if (GS_lang == 'zh-tw')
     tooltip_text = d.x + "<br>解隔離 = " + d.h1+ "<br>隔離中 = " + d.h2 + "<br>死亡 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
-  else if (lang == 'fr')
+  else if (GS_lang == 'fr')
     tooltip_text = d.x + "<br>Rétablis = " + d.h1+ "<br>Hospitalisés = " + d.h2 + "<br>Décédés = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
   else
     tooltip_text = d.x + "<br>Discharged = " + d.h1+ "<br>Hospitalized = " + d.h2 + "<br>Deaths = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
@@ -235,6 +235,7 @@ function SE_Initialize(wrap) {
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
+    .tickFormat(d3.format("d"));
   
   wrap.svg.append("g")
     .attr("class", "yaxis")
@@ -252,8 +253,8 @@ function SE_Initialize(wrap) {
     
   //-- ylabel
   var ylabel;
-  if (lang == 'zh-tw') ylabel = '案例數';
-  else if (lang == 'fr') ylabel = 'Nombre de cas';
+  if (GS_lang == 'zh-tw') ylabel = '案例數';
+  else if (GS_lang == 'fr') ylabel = 'Nombre de cas';
   else ylabel = 'Number of cases';
   wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -299,6 +300,7 @@ function SE_Update(wrap) {
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
+    .tickFormat(d3.format("d"));
   
   wrap.svg.select('.yaxis')
     .transition()
@@ -338,10 +340,10 @@ function SE_Update(wrap) {
   
   //-- Legend - label
   var legend_label;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     legend_label = ["解隔離", "隔離中", "死亡", "合計"];
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     legend_label = ["Rétablis", "Hospitalisés", "Décédés", "Total"];
   }
   else {

@@ -28,7 +28,7 @@ function TT_Add_Html(id, string) {
 
 //-- Text content
 function text_translation() {
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     //-- Header + menu + footer
     TT_Add_Str("title", "嚴重特殊傳染性肺炎 台灣疫情");
     TT_Add_Str("menu_summary", "近90日統計摘要");
@@ -110,7 +110,7 @@ function text_translation() {
     TT_Add_Str("event_timeline_button_2", "週一為首");
   }
   
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     //-- Header + menu + footer
     TT_Add_Str("title", "Statistiques de COVID-19 à Taïwan");
     TT_Add_Str("menu_summary", "Derniers 90 jours");
@@ -217,7 +217,7 @@ function text_translation() {
     TT_Add_Str("status_evolution_title", "Status Evolution");
     
     //-- Various rates
-    TT_Add_Str("various_rates_title", "7-day average of various rates");
+    TT_Add_Str("various_rates_title", "7-day Average of Various Rates");
     
     //-- Difference by transmission
     TT_Add_Str("difference_by_transmission_title", "How many days to identify cases?");
@@ -295,31 +295,31 @@ d3.csv("processed_data/key_numbers.csv", function (error, data) {
 
 //-- Language button
 $(document).on("change", "input:radio[name='index_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   text_translation();
 });
 
 $(document).on("change", "input:radio[name='2020_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   text_translation();
 });
 
 $(document).on("change", "input:radio[name='policy_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   text_translation();
 });
 
 $(document).on("change", "input:radio[name='source_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   text_translation();
 });
 
 $(document).on("change", "input:radio[name='copyleft_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   text_translation();
 });

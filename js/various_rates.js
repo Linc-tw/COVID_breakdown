@@ -8,11 +8,11 @@
 function VR_Make_Canvas(wrap) {
   var tot_width = 800;
   var tot_height;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     tot_height = 415;
     bottom = 105;
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     tot_height = 400;
     bottom = 90;
   }
@@ -157,9 +157,9 @@ function VR_Format_Data(wrap, data) {
 //   var new_pos = VR_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
 //   var tooltip_text;
 //   
-//   if (lang == 'zh-tw')
+//   if (GS_lang == 'zh-tw')
 //     tooltip_text = d.x + "<br>機場 = " + d.h1+ "<br>港口 = " + d.h2 + "<br>無細節 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
-//   else if (lang == 'fr')
+//   else if (GS_lang == 'fr')
 //     tooltip_text = d.x + "<br>Aéroports = " + d.h1+ "<br>Ports maritimes = " + d.h2 + "<br>Sans précisions = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
 //   else
 //     tooltip_text = d.x + "<br>Airports = " + d.h1+ "<br>Seaports = " + d.h2 + "<br>Not specified = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
@@ -238,8 +238,8 @@ function VR_Initialize(wrap) {
     
   //-- ylabel
   var ylabel;
-  if (lang == 'zh-tw') ylabel = '比率';
-  else if (lang == 'fr') ylabel = 'Taux';
+  if (GS_lang == 'zh-tw') ylabel = '比率';
+  else if (GS_lang == 'fr') ylabel = 'Taux';
   else ylabel = 'Rate';
   wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -308,12 +308,12 @@ function VR_update(wrap) {
     .attr('d', function (d) {return wrap.draw_line(d.values);});
 
   //-- Legend - label
-  var legend_pos = {x: 40, y: 45, dx: 12, dy: 30};
+  var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   var legend_label;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     legend_label = ["陽性率", "入境盛行率", "本土盛行率"];
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     legend_label = ["Taux de positivité", "Taux d'incidence frontalier", "Taux d'incidence local"];
   }
   else {

@@ -21,13 +21,14 @@ This project is driven by 3 key motivations:
 Features
 --------
 
-So far, 6 plots can be found on Dashboard:
+So far, 7 plots can be found on Dashboard:
 - Status Evolution
-- How many days to identify cases? (day difference between report date & entry/onset date)
+- 7-day Average of Various Rates
 - Confirmed Cases by Transmission Type
 - Confirmed Cases by Detection Channel
 - Correlations between Travel History & Symptoms
 - Correlations between Age & Symptoms
+- How many days to identify cases? (day difference between report date & entry/onset date)
 
 And 4 are on Policy:
 - Number of Tests by Reporting Criterion

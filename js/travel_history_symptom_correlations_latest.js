@@ -67,14 +67,14 @@ d3.select(THSC_latest_wrap.id + '_save').on('click', function () {
   if (THSC_latest_wrap.do_count == 1) tag1 = 'count';
   else tag1 = 'coefficient';
   
-  name = THSC_latest_wrap.tag + '_' + tag1 + '_' + lang + '.png'
+  name = THSC_latest_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(THSC_latest_wrap.id).select('svg').node(), name);
 });
 
 //-- Language button
 $(document).on("change", "input:radio[name='index_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   
   //-- Remove
   d3.selectAll(THSC_latest_wrap.id+' .plot').remove()

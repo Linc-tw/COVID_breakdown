@@ -8,11 +8,11 @@
 function CBD_Make_Canvas(wrap) {
   var tot_width = 800;
   var tot_height;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     tot_height = 415;
     bottom = 105;
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     tot_height = 400;
     bottom = 90;
   }
@@ -224,9 +224,9 @@ function CBD_Mouse_Move(wrap, d) {
   var new_pos = CBD_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
   var tooltip_text;
   
-  if (lang == 'zh-tw')
+  if (GS_lang == 'zh-tw')
     tooltip_text = d.x + "<br>機場 = " + d.h1 + "<br>居家或集中檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自費或自行就醫 = " + d.h5 + "<br>外國檢驗 = " + d.h6 + "<br>無管道資料 = " + d.h7 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
-  else if (lang == 'fr')
+  else if (GS_lang == 'fr')
     tooltip_text = d.x + "<br>Aéroports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Auto-contrôle = " + d.h4 + "<br>Hôpitaux = " + d.h5 + "<br>À l'étranger = " + d.h6 + "<br>Pas annoncés = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
   else
     tooltip_text = d.x + "<br>Airports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospitals = " + d.h5 + "<br>Overseas = " + d.h6 + "<br>Not announced = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
@@ -288,6 +288,7 @@ function CBD_Initialize(wrap) {
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
+    .tickFormat(d3.format("d"));
   
   wrap.svg.append("g")
     .attr("class", "yaxis")
@@ -305,8 +306,8 @@ function CBD_Initialize(wrap) {
     
   //-- ylabel
   var ylabel;
-  if (lang == 'zh-tw') ylabel = '案例數';
-  else if (lang == 'fr') ylabel = 'Nombre de cas';
+  if (GS_lang == 'zh-tw') ylabel = '案例數';
+  else if (GS_lang == 'fr') ylabel = 'Nombre de cas';
   else ylabel = 'Number of cases';
   wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -353,6 +354,7 @@ function CBD_Update(wrap) {
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
+    .tickFormat(d3.format("d"));
   
   wrap.svg.select('.yaxis')
     .transition()
@@ -374,17 +376,15 @@ function CBD_Update(wrap) {
   
   //-- Legend - value
   var legend_pos;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     legend_pos = {x: 70, y: 40, dx: 12, dy: 30, x1: 220};
   }
   else {
     legend_pos = {x: 70, y: 40, dx: 12, dy: 30, x1: 190};
   }
-//   if (wrap.do_cumul == 0) {
-//     if (lang == 'zh-tw') legend_pos.x = 330;
-//     else if (lang == 'fr') legend_pos.x = 370;
-//     else legend_pos.x = 360;
-//   }
+  if (wrap.do_cumul == 0) {
+    if (wrap.legend_pos_x_0__[GS_lang] != 0) legend_pos.x = wrap.legend_pos_x_0__[GS_lang];
+  }
   var legend_value = wrap.legend_value.slice();
   var sum = legend_value.reduce((a, b) => a + b, 0);
   if (wrap.do_onset == 1) legend_value.push(wrap.n_tot-sum);
@@ -405,11 +405,11 @@ function CBD_Update(wrap) {
   
   //-- Legend - label
   var legend_label, legend_label_plus;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     legend_label = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自費或自行就醫', '外國檢驗', '無檢驗管道資料', '合計'];
     legend_label_plus = '無發病日資料';
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     legend_label = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', "À l'étranger", 'Pas annoncés', 'Total'];
     legend_label_plus = "Sans date début sympt.";
   }

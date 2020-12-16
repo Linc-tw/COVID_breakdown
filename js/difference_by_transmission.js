@@ -8,11 +8,11 @@
 function DBT_Make_Canvas(wrap) {
   var tot_width = 800;
   var tot_height;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     tot_height = 415;
     bottom = 90;
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     tot_height = 400;
     bottom = 80;
   }
@@ -167,7 +167,7 @@ function DBT_Mouse_Move(wrap, d) {
   var new_pos = DBT_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
   var col_tag, col_tag_2, tooltip_text;
   
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     col_tag = wrap.col_tag_list[wrap.col_ind];
     if (col_tag == 'all') col_tag_2 = '全部';
     else if (col_tag == 'imported') col_tag_2 = '境外移入';
@@ -175,7 +175,7 @@ function DBT_Mouse_Move(wrap, d) {
     else if (col_tag == 'fleet') col_tag_2 = '敦睦艦隊';
     tooltip_text = col_tag_2 + '案例中有' + d[col_tag] + '位<br>發病或入境後' + d['difference'] + '日確診';
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     col_tag = wrap.col_tag_list[wrap.col_ind];
     if (col_tag == 'all') col_tag_2 = "de l'ensemble des cas";
     else if (col_tag == 'imported') col_tag_2 = 'des cas importés';
@@ -247,6 +247,7 @@ function DBT_Initialize(wrap) {
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
+    .tickFormat(d3.format("d"));
   
   wrap.svg.append("g")
     .attr("class", "yaxis")
@@ -264,8 +265,8 @@ function DBT_Initialize(wrap) {
     
   //-- xlabel
   var xlabel;
-  if (lang == 'zh-tw') xlabel = '發病或入境後到確診所需天數';
-  else if (lang == 'fr') xlabel = "Nombre de jours avant identification";
+  if (GS_lang == 'zh-tw') xlabel = '發病或入境後到確診所需天數';
+  else if (GS_lang == 'fr') xlabel = "Nombre de jours avant identification";
   else xlabel = "Days required for each case to be identified";
   wrap.svg.append("text")
     .attr("class", "xlabel")
@@ -276,8 +277,8 @@ function DBT_Initialize(wrap) {
   
   //-- ylabel
   var ylabel;
-  if (lang == 'zh-tw') ylabel = '案例數';
-  else if (lang == 'fr') ylabel = 'Nombre de cas';
+  if (GS_lang == 'zh-tw') ylabel = '案例數';
+  else if (GS_lang == 'fr') ylabel = 'Nombre de cas';
   else ylabel = 'Number of cases';
   wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -344,9 +345,9 @@ function DBT_Update(wrap) {
   //-- Legend
   var legend_pos = {x: 450, y: 45, dx: 12, dy: 30};
   var legend_color_list, legend_label, legend_label_2, legend_value_2;
-  if (lang == 'zh-tw')
+  if (GS_lang == 'zh-tw')
     legend_label = ['有資料案例數', "境外移入", "本土", '敦睦艦隊', '資料不全', '合計'];
-  else if (lang == 'fr')
+  else if (GS_lang == 'fr')
     legend_label = ['Données complètes', "Importés", "Locaux", 'Flotte diplomatique', 'Données incomplètes', 'Total'];
   else 
     legend_label = ['Data complete', 'Imported', 'Local', 'Diplomatic fleet cluster', 'Data incomplete', 'Total'];

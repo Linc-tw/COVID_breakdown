@@ -37,6 +37,10 @@ CBT_latest_wrap.y_path_1_1 = 20;
 CBT_latest_wrap.y_path_1_0 = 50;
 CBT_latest_wrap.y_path_0_1 = 2;
 CBT_latest_wrap.y_path_0_0 = 5;
+CBT_latest_wrap.legend_pos_x_0__ = {};
+CBT_latest_wrap.legend_pos_x_0__['zh-tw'] = 0;
+CBT_latest_wrap.legend_pos_x_0__['fr'] = 0;
+CBT_latest_wrap.legend_pos_x_0__['en'] = 0;
 
 //-- Variables
 CBT_latest_wrap.do_cumul = 0;
@@ -94,14 +98,14 @@ d3.select(CBT_latest_wrap.id + '_save').on('click', function() {
   if (CBT_latest_wrap.do_onset == 1) tag2 = 'onset';
   else tag2 = 'report';
   
-  name = CBT_latest_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + lang + '.png'
+  name = CBT_latest_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(CBT_latest_wrap.id).select('svg').node(), name);
 });
 
 //-- Language button
 $(document).on("change", "input:radio[name='index_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   
   //-- Remove
   d3.selectAll(CBT_latest_wrap.id+' .plot').remove();

@@ -23,9 +23,15 @@ TBC_latest_wrap.tooltip = d3.select(TBC_latest_wrap.id)
 //-- Parameters
 TBC_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
 TBC_latest_wrap.r_list = GS_var.r_list_latest;
-TBC_latest_wrap.y_max_factor = 1.3;
-TBC_latest_wrap.y_path_1 = 6000;
-TBC_latest_wrap.y_path_0 = 250;
+TBC_latest_wrap.y_max_factor = 1.4;
+TBC_latest_wrap.y_path_1 = 8000;
+TBC_latest_wrap.y_path_0 = 300;
+TBC_latest_wrap.yticklabel_format_1 = ".2s";
+TBC_latest_wrap.yticklabel_format_0 = "d";
+TBC_latest_wrap.legend_pos_x_0__ = {};
+TBC_latest_wrap.legend_pos_x_0__['zh-tw'] = 0;
+TBC_latest_wrap.legend_pos_x_0__['fr'] = 0;
+TBC_latest_wrap.legend_pos_x_0__['en'] = 0;
 
 //-- Variables
 TBC_latest_wrap.do_cumul = 0;;
@@ -63,14 +69,14 @@ d3.select(TBC_latest_wrap.id + '_save').on('click', function(){
   if (TBC_latest_wrap.do_cumul == 1) tag1 = 'cumulative';
   else tag1 = 'daily';
   
-  name = TBC_latest_wrap.tag + '_' + tag1 + '_' + lang + '.png'
+  name = TBC_latest_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(TBC_latest_wrap.id).select('svg').node(), name);
 });
 
 //-- Language button
 $(document).on("change", "input:radio[name='policy_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   
   //-- Remove
   d3.selectAll(TBC_latest_wrap.id+' .plot').remove();

@@ -8,11 +8,11 @@
 function CBT_Make_Canvas(wrap) {
   var tot_width = 800;
   var tot_height;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     tot_height = 415;
     bottom = 105;
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     tot_height = 400;
     bottom = 90;
   }
@@ -216,9 +216,9 @@ function CBT_Mouse_Move(wrap, d) {
   var new_pos = CBT_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
   var tooltip_text;
   
-  if (lang == 'zh-tw')
+  if (GS_lang == 'zh-tw')
     tooltip_text = d.x + "<br>境外移入 = " + d.h1 + "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>敦睦艦隊 = " + d.h4 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
-  else if (lang == 'fr')
+  else if (GS_lang == 'fr')
     tooltip_text = d.x + "<br>Importés = " + d.h1 + "<br>Locaux connus = " + d.h2 + "<br>Locaux inconnus = " + d.h3 + "<br>Flotte = " + d.h4 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
   else
     tooltip_text = d.x + "<br>Imported = " + d.h1 + "<br>Local linked = " + d.h2 + "<br>Local unlinked = " + d.h3 + "<br>Fleet = " + d.h4 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
@@ -280,6 +280,7 @@ function CBT_Initialize(wrap) {
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
+    .tickFormat(d3.format("d"));
   
   wrap.svg.append("g")
     .attr("class", "yaxis")
@@ -297,8 +298,8 @@ function CBT_Initialize(wrap) {
     
   //-- ylabel
   var ylabel;
-  if (lang == 'zh-tw') ylabel = '案例數';
-  else if (lang == 'fr') ylabel = 'Nombre de cas';
+  if (GS_lang == 'zh-tw') ylabel = '案例數';
+  else if (GS_lang == 'fr') ylabel = 'Nombre de cas';
   else ylabel = 'Number of cases';
   wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -344,6 +345,7 @@ function CBT_Update(wrap) {
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
+    .tickFormat(d3.format("d"));
   
   wrap.svg.select('.yaxis')
     .transition()
@@ -365,11 +367,9 @@ function CBT_Update(wrap) {
   
   //-- Legend - value
   var legend_pos = {x: 70, y: 45, dx: 12, dy: 30};
-//   if (wrap.do_cumul == 0) {
-//     if (lang == 'zh-tw') legend_pos.x = 530;
-//     else if (lang == 'fr') legend_pos.x = 480;
-//     else legend_pos.x = 410;
-//   }
+  if (wrap.do_cumul == 0) {
+    if (wrap.legend_pos_x_0__[GS_lang] != 0) legend_pos.x = wrap.legend_pos_x_0__[GS_lang];
+  }
   var legend_value = wrap.legend_value.slice();
   var sum = legend_value.reduce((a, b) => a + b, 0);
   if (wrap.do_onset == 1) legend_value.push(wrap.n_tot-sum);
@@ -390,11 +390,11 @@ function CBT_Update(wrap) {
   
   //-- Legend - label
   var legend_label, legend_label_plus;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     legend_label = ["境外移入", "本土感染源已知", "本土感染源未知", '敦睦艦隊', "合計"];
     legend_label_plus = '無發病日資料';
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     legend_label = ["Importés", "Locaux & lien connu", "Locaux & lien inconnu", "Flotte diplomatique", "Total"];
     legend_label_plus = "Sans date début sympt.";
   }

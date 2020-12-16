@@ -73,9 +73,9 @@ function CT_Mouse_Move(wrap, d) {
   var new_pos = CT_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
   var tooltip_text;
   
-  if (lang == 'zh-tw')
+  if (GS_lang == 'zh-tw')
     tooltip_text = '點我'
-  else if (lang == 'fr')
+  else if (GS_lang == 'fr')
     tooltip_text = 'Cliquez'
   else
     tooltip_text = 'Click me'
@@ -135,8 +135,8 @@ function CT_Click_Timeline(wrap, d, j) {
 function CT_Initialize(wrap) {
   //-- Title
   var title;
-  if (lang == 'zh-tw') title = ['台灣針對嚴重特殊傳染性肺炎之', '採檢標準暨其生效日期變化圖'];
-  else if (lang == 'fr') title = ['Antécédents de voyage, symptômes et autres', 'conditions avec lesquelles Taïwan dépiste', "systématiquement & leurs dates d'effet"];
+  if (GS_lang == 'zh-tw') title = ['台灣針對嚴重特殊傳染性肺炎之', '採檢標準暨其生效日期變化圖'];
+  else if (GS_lang == 'fr') title = ['Antécédents de voyage, symptômes et autres', 'conditions avec lesquelles Taïwan dépiste', "systématiquement & leurs dates d'effet"];
   else title = ['Travel history, symptoms, & other conditions', 'with which Taiwan tests systematically &', 'their starting dates'];
   
   wrap.svg.selectAll(".title")
@@ -156,7 +156,7 @@ function CT_Initialize(wrap) {
   
   //-- Timeline texts & lines
   var x_list_t;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     x_list_t = [
       0, 
           300, 120, 0, 180, 240, 
@@ -174,7 +174,7 @@ function CT_Initialize(wrap) {
       0
     ];
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     x_list_t = [
       0, 
           380, 120, 0, 180, 240, 
@@ -222,12 +222,12 @@ function CT_Initialize(wrap) {
   for (i=0; i<wrap.length; i++) {
     wrap['timeline_text_'+i] = 0; //-- Hide all
     date = wrap.formatted_data[i]['date'];
-    split = wrap.formatted_data[i][lang].split('\n');
+    split = wrap.formatted_data[i][GS_lang].split('\n');
     if (date == '2020-01-25' || date == '2020-03-17' || date == '2020-03-19')
       split = [split.join(' ')]
-    if (date == '2020-02-16' && lang == 'fr')
+    if (date == '2020-02-16' && GS_lang == 'fr')
       split = [split[0]+' '+split[1], split[2]+' '+split[3]]
-    if (date == '2020-02-29' && lang == 'fr')
+    if (date == '2020-02-29' && GS_lang == 'fr')
       split = [split[0], split[1], split[2]+' '+split[3]]
     
     //-- Timeline - date
@@ -329,7 +329,7 @@ function CT_Initialize(wrap) {
   
   //-- Circle texts & lines
   var x_list_c, y_list_c;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     x_list_c = [
       0, 
         1, 1, 0, 1, 1, 
@@ -365,7 +365,7 @@ function CT_Initialize(wrap) {
       0
     ];
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     x_list_c = [
       0, 
         1, 1, 0, 1, 1, 
@@ -443,9 +443,9 @@ function CT_Initialize(wrap) {
   for (i=0; i<wrap.length; i++) {
     wrap['circle_text_'+i] = 0; //-- Hide all
     if (i > 12)
-      split = (wrap.formatted_data[i]['date'] + ' ' + wrap.formatted_data[i][lang]).split('\n');
+      split = (wrap.formatted_data[i]['date'] + ' ' + wrap.formatted_data[i][GS_lang]).split('\n');
     else
-      split = (wrap.formatted_data[i]['date'] + '\n' + wrap.formatted_data[i][lang]).split('\n');
+      split = (wrap.formatted_data[i]['date'] + '\n' + wrap.formatted_data[i][GS_lang]).split('\n');
     x1 = x_list_c[i] ? wrap.width-10 : 2*x0_c+20;
     anchor = x_list_c[i] ? 'end' : 'start';
     
@@ -530,12 +530,12 @@ function CT_Update(wrap) {
       .attr('opacity', 1)
     
     //-- Title
-    if (lang == 'zh-tw') {
+    if (GS_lang == 'zh-tw') {
       title_x_t = wrap.width - 270;
       title_y0_t = wrap.height - 100;
       title_y1_t = 20;
     }
-    else if (lang == 'fr') {
+    else if (GS_lang == 'fr') {
       title_x_t = wrap.width - 346;
       title_y0_t = wrap.height - 80;
       title_y1_t = 20;
@@ -691,14 +691,14 @@ d3.select(CT_latest_wrap.id + '_save').on('click', function () {
   else if (CT_latest_wrap.doFull == 2) tag2 = 'custom';
   else tag2 = 'selected';
   
-  name = CT_latest_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + lang + '.png'
+  name = CT_latest_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(CT_latest_wrap.id).select('svg').node(), name);
 });
 
 //-- Language button
 $(document).on("change", "input:radio[name='policy_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   
   //-- Remove
   d3.selectAll(CT_latest_wrap.id+' .plot').remove();

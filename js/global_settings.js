@@ -6,13 +6,13 @@
 //--   Chieh-An Lin
 
 //-- Language settings
-var lang = Cookies.get("lang"); // 'en', 'fr', 'zh-tw'
-if (!lang) {
-  lang = "en";
-  Cookies.set("lang", lang);
+var GS_lang = Cookies.get("lang"); // 'en', 'fr', 'zh-tw'
+if (!GS_lang) {
+  GS_lang = "en";
+  Cookies.set("lang", GS_lang);
 }
 
-let el = document.getElementById('lang_'+lang);
+let el = document.getElementById('lang_'+GS_lang);
 el.classList.add("active");
 
 //-- Global variables
@@ -26,23 +26,25 @@ GS_var.c_list = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55
 //-- General functions
 function GS_ISO_Date_To_MD_Date(iso_date) {
   var md_date_format;
-  if (lang == 'zh-tw')   md_date_format = d3.timeFormat("%-m月%-d日");
-  else if (lang == 'fr') md_date_format = d3.timeFormat("%d/%m");
+  if (GS_lang == 'zh-tw')   md_date_format = d3.timeFormat("%-m月%-d日");
+  else if (GS_lang == 'fr') md_date_format = d3.timeFormat("%d/%m");
   else md_date_format = d3.timeFormat("%b %d");
   
   var date = d3.isoParse(iso_date);
   return md_date_format(date);
 }
 
-function GS_CumSum(data, colTagList) {
+function GS_CumSum(data, col_tag_list) {
   var i, j;
   for (i=1; i<data.length; i++) {
-    for (j=0; j<colTagList.length; j++) {
-      data[i][colTagList[j]] = +data[i][colTagList[j]] + +data[i-1][colTagList[j]];
+    for (j=0; j<col_tag_list.length; j++) {
+      data[i][col_tag_list[j]] = +data[i][col_tag_list[j]] + +data[i-1][col_tag_list[j]];
     }
   }
 }
 
 //TODO
-//Taux de positivité
-//lang
+//python convention
+//VR tooltip
+//2020 page
+//transition

@@ -44,14 +44,14 @@ SE_2020_Plot();
 
 //-- Save button
 d3.select(SE_2020_wrap.id + '_save').on('click', function () {
-  name = SE_2020_wrap.tag + '_' + lang + '.png';
+  name = SE_2020_wrap.tag + '_' + GS_lang + '.png';
   saveSvgAsPng(d3.select(SE_2020_wrap.id).select('svg').node(), name);
 });
 
 //-- Language button
 $(document).on("change", "input:radio[name='2020_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   
   //-- Remove
   d3.selectAll(SE_2020_wrap.id+' .plot').remove();

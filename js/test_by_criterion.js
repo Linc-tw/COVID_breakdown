@@ -8,11 +8,11 @@
 function TBC_Make_Canvas(wrap) {
   var tot_width = 800;
   var tot_height;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     tot_height = 415;
     bottom = 105;
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     tot_height = 400;
     bottom = 90;
   }
@@ -21,7 +21,7 @@ function TBC_Make_Canvas(wrap) {
     bottom = 90;
   }
   
-  var margin = {left: 110, right: 2, bottom: bottom, top: 2};
+  var margin = {left: 90, right: 2, bottom: bottom, top: 2};
   var width = tot_width - margin.left - margin.right;
   var height = tot_height - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
@@ -179,9 +179,9 @@ function TBC_Mouse_Move(wrap, d) {
   var new_pos = TBC_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
   var tooltip_text;
   
-  if (lang == 'zh-tw')
+  if (GS_lang == 'zh-tw')
     tooltip_text = d.x + "<br>法定通報 = " + d.h3 + "<br>居家檢疫 = " + d.h2 + "<br>擴大監測 = " + d.h1 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
-  else if (lang == 'fr')
+  else if (GS_lang == 'fr')
     tooltip_text = d.x + "<br>Clinique = " + d.h3 + "<br>Quarantine = " + d.h2 + "<br>Clusters locaux = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
   else
     tooltip_text = d.x + "<br>Clinical = " + d.h3 + "<br>Quarantine = " + d.h2 + "<br>Community = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
@@ -243,6 +243,7 @@ function TBC_Initialize(wrap) {
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
+    .tickFormat(d3.format("d"));
   
   wrap.svg.append("g")
     .attr("class", "yaxis")
@@ -260,8 +261,8 @@ function TBC_Initialize(wrap) {
     
   //-- ylabel
   var ylabel;
-  if (lang == 'zh-tw') ylabel = '檢驗數';
-  else if (lang == 'fr') ylabel = 'Nombre de tests';
+  if (GS_lang == 'zh-tw') ylabel = '檢驗數';
+  else if (GS_lang == 'fr') ylabel = 'Nombre de tests';
   else ylabel = 'Number of tests';
   wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -304,9 +305,13 @@ function TBC_Update(wrap) {
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
+  var yticklabel_format;
+  if (wrap.do_cumul == 0) yticklabel_format = wrap.yticklabel_format_0;
+  else yticklabel_format = wrap.yticklabel_format_1;
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
+    .tickFormat(d3.format(yticklabel_format));
   
   wrap.svg.select('.yaxis')
     .transition()
@@ -328,9 +333,7 @@ function TBC_Update(wrap) {
   //-- Legend - value
   var legend_pos = {x: 95, y: 40, dx: 12, dy: 30};
   if (wrap.do_cumul == 0) {
-    if (lang == 'zh-tw') legend_pos.x = 510;
-    else if (lang == 'fr') legend_pos.x = 95; //300
-    else legend_pos.x = 350;
+    if (wrap.legend_pos_x_0__[GS_lang] != 0) legend_pos.x = wrap.legend_pos_x_0__[GS_lang];
   }
   var legend_value = wrap.legend_value.slice().reverse();
   var sum = legend_value.reduce((a, b) => a + b, 0);
@@ -351,8 +354,8 @@ function TBC_Update(wrap) {
       
   //-- Legend - label
   var legend_label;
-  if (lang == 'zh-tw') legend_label = ["法定定義通報", "居家檢疫", "擴大社區監測", "合計"];
-  else if (lang == 'fr') legend_label = ["Critères cliniques", "Quarantaine (fusionnée dans clinique)", "Recherche de clusters locaux", "Total"];
+  if (GS_lang == 'zh-tw') legend_label = ["法定定義通報", "居家檢疫", "擴大社區監測", "合計"];
+  else if (GS_lang == 'fr') legend_label = ["Critères cliniques", "Quarantaine (fusionnée dans clinique)", "Recherche de clusters locaux", "Total"];
   else legend_label = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', "Total"];
   
   wrap.svg.selectAll(".legend.label")

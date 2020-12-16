@@ -8,11 +8,11 @@
 function BS_Make_Canvas(wrap) {
   var tot_width = 800;
   var tot_height;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     tot_height = 415;
     bottom = 105;
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     tot_height = 400;
     bottom = 90;
   }
@@ -21,7 +21,7 @@ function BS_Make_Canvas(wrap) {
     bottom = 90;
   }
   
-  var margin = {left: 120, right: 2, bottom: bottom, top: 2};
+  var margin = {left: 90, right: 2, bottom: bottom, top: 2};
   var width = tot_width - margin.left - margin.right;
   var height = tot_height - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
@@ -176,9 +176,9 @@ function BS_Mouse_Move(wrap, d) {
   var new_pos = BS_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
   var tooltip_text;
   
-  if (lang == 'zh-tw')
+  if (GS_lang == 'zh-tw')
     tooltip_text = d.x + "<br>機場 = " + d.h1+ "<br>港口 = " + d.h2 + "<br>無細節 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
-  else if (lang == 'fr')
+  else if (GS_lang == 'fr')
     tooltip_text = d.x + "<br>Aéroports = " + d.h1+ "<br>Ports maritimes = " + d.h2 + "<br>Sans précisions = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
   else
     tooltip_text = d.x + "<br>Airports = " + d.h1+ "<br>Seaports = " + d.h2 + "<br>Not specified = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
@@ -240,6 +240,7 @@ function BS_Initialize(wrap) {
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
+    .tickFormat(d3.format("d"));
   
   wrap.svg.append("g")
     .attr("class", "yaxis")
@@ -257,8 +258,8 @@ function BS_Initialize(wrap) {
     
   //-- ylabel
   var ylabel;
-  if (lang == 'zh-tw') ylabel = '旅客人數';
-  else if (lang == 'fr') ylabel = 'Nombre de voyageurs';
+  if (GS_lang == 'zh-tw') ylabel = '旅客人數';
+  else if (GS_lang == 'fr') ylabel = 'Nombre de voyageurs';
   else ylabel = 'Number of people';
   wrap.svg.append("text")
     .attr("class", "ylabel")
@@ -304,6 +305,7 @@ function BS_update(wrap) {
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
+    .tickFormat(d3.format(".2s"));
   
   wrap.svg.select('.yaxis')
     .transition()
@@ -323,7 +325,7 @@ function BS_update(wrap) {
   color_list.push('#000000');
   
   //-- Legend - value
-  var legend_pos = {x: 450, y: 45, dx: 12, dy: 30};
+  var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   var legend_value = wrap.legend_value.slice();
   var sum = legend_value.reduce((a, b) => a + b, 0);
   legend_value.push(sum);
@@ -343,10 +345,10 @@ function BS_update(wrap) {
   
   //-- Legend - label
   var legend_label;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     legend_label = ["機場", "港口", "無細節", "合計"];
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     legend_label = ["Aéroports", "Ports maritimes", "Sans précisions", "Total"];
   }
   else {
@@ -369,10 +371,10 @@ function BS_update(wrap) {
   
   //-- Legend - title
   var legend_title;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     legend_title = ['於' + wrap.last_date];
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     legend_title = ['Au ' + wrap.last_date];
   }
   else {

@@ -28,6 +28,7 @@ VR_latest_wrap.r_list = GS_var.r_list_latest;
 VR_latest_wrap.y_max_factor = 1.2;
 VR_latest_wrap.y_max_fix = 0;
 VR_latest_wrap.y_path = 0.01;
+VR_latest_wrap.legend_pos_x = 40;
 
 //-- Plot
 function VR_Latest_Plot() {
@@ -45,14 +46,14 @@ VR_Latest_Plot();
 
 //-- Save button
 d3.select(VR_latest_wrap.id + '_save').on('click', function () {
-  name = VR_latest_wrap.tag + '_' + lang + '.png'
+  name = VR_latest_wrap.tag + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(VR_latest_wrap.id).select('svg').node(), name);
 });
 
 //-- Language button
 $(document).on("change", "input:radio[name='index_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   
   //-- Remove
   d3.selectAll(VR_latest_wrap.id+' .plot').remove();

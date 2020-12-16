@@ -546,9 +546,9 @@ function ET_Mouse_Move(wrap, d) {
   var new_pos = ET_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target), d);
   var tooltip_text;
   
-  if (lang == 'zh-tw')
+  if (GS_lang == 'zh-tw')
     tooltip_text = '點我'
-  else if (lang == 'fr')
+  else if (GS_lang == 'fr')
     tooltip_text = 'Cliquez'
   else
     tooltip_text = 'Click me'
@@ -630,8 +630,8 @@ function ET_Initialize(wrap) {
   
   //-- Title
   var title;
-  if (lang == 'zh-tw') title = '疫情爆發時間軸';
-  else if (lang == 'fr') title = "Chronologie de la pandémie (texte en mandarin)";
+  if (GS_lang == 'zh-tw') title = '疫情爆發時間軸';
+  else if (GS_lang == 'fr') title = "Chronologie de la pandémie (texte en mandarin)";
   else title = 'Pandemic Timeline (text in Mandarin)';
   
   wrap.svg.append("text")
@@ -773,13 +773,13 @@ function ET_Update(wrap) {
   
   //-- Month tag
   var month_list;
-  if (lang == 'zh-tw') month_list = [
+  if (GS_lang == 'zh-tw') month_list = [
     ['', '', '', '', '', '12月'],
     ['1月', '2月', '3月', '4月', '5月', '6月'],
     ['7月', '8月', '9月', '10月', '11月', '12月'],
     ['1月', '2月', '3月', '4月', '5月', '6月']
   ];
-  else if (lang == 'fr') month_list = [
+  else if (GS_lang == 'fr') month_list = [
     ['', '', '', '', '', 'déc'],
     ['janv', 'févr', 'mars', 'avr', 'mai', 'juin'],
     ['juil', 'août', 'sept', 'oct', 'nov', 'déc'],
@@ -810,8 +810,8 @@ function ET_Update(wrap) {
    
   //-- Weekday tag
   var weekday_list;
-  if (lang == 'zh-tw') weekday_list = ['日', '一', '二', '三', '四', '五', '六'];
-  else if (lang == 'fr') weekday_list = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+  if (GS_lang == 'zh-tw') weekday_list = ['日', '一', '二', '三', '四', '五', '六'];
+  else if (GS_lang == 'fr') weekday_list = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
   else weekday_list = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
   
   if (wrap.week_start == 1) {
@@ -884,14 +884,14 @@ d3.select(ET_latest_wrap.id + '_save').on('click', function () {
   if (ET_latest_wrap.week_start == 1) tag1 = 'start_on_Monday';
   else tag1 = 'start_on_Sunday';
   
-  name = ET_latest_wrap.tag + '_' + tag1 + '_' + lang + '.png'
+  name = ET_latest_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(ET_latest_wrap.id).select('svg').node(), name);
 });
 
 //-- Language button
 $(document).on("change", "input:radio[name='policy_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   
   //-- Remove
   d3.selectAll(ET_latest_wrap.id+' .plot').remove();

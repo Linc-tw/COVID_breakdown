@@ -74,14 +74,14 @@ d3.select(DBT_latest_wrap.id + '_save').on('click', function () {
   else if (DBT_latest_wrap.col_ind == 2) tag1 = 'local';
   else tag1 = 'fleet';
   
-  name = DBT_latest_wrap.tag + '_' + tag1 + '_' + lang + '.png'
+  name = DBT_latest_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(DBT_latest_wrap.id).select('svg').node(), name);
 });
 
 //-- Language button
 $(document).on("change", "input:radio[name='index_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   
   //-- Remove
   d3.selectAll(DBT_latest_wrap.id+' .plot').remove();

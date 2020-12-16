@@ -8,20 +8,20 @@
 function ASC_Make_Canvas(wrap) {
   var tot_width = 800;
   var tot_height, top;
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     tot_height = 540;
-    left = 205;
-    top = 155;
+    left = 230;
+    top = 145;
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     tot_height = 600;
-    left = 260;
-    top = 235;
+    left = 280;
+    top = 220;
   }
   else {
     tot_height = 600;
-    left = 230;
-    top = 215;
+    left = 250;
+    top = 200;
   }
   
   var margin = {left: left, right: 2, bottom: 2, top: top};
@@ -91,7 +91,7 @@ function ASC_FormatData_2(wrap, data2) {
     }
   }
   
-  if (lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw') {
     for (i=0; i<wrap.symptom_list.length; i++) {
       for (j=0; j<data2.length; j++) {
         if (wrap.symptom_list[i] == data2[j]['label']) {
@@ -110,7 +110,7 @@ function ASC_FormatData_2(wrap, data2) {
       }
     }
   }
-  else if (lang == 'fr') {
+  else if (GS_lang == 'fr') {
     for (i=0; i<wrap.symptom_list.length; i++) {
       for (j=0; j<data2.length; j++) {
         if (wrap.symptom_list[i] == data2[j]['label']) {
@@ -300,8 +300,8 @@ function ASC_update(wrap) {
   
   //-- Legend - label
   var legend_label;
-  if (lang == 'zh-tw') legend_label = ['有資料案例數', '資料不全', '合計'];
-  else if (lang == 'fr') legend_label = ['Données complètes', 'Données incomplètes', 'Total'];
+  if (GS_lang == 'zh-tw') legend_label = ['有資料案例數', '資料不全', '合計'];
+  else if (GS_lang == 'fr') legend_label = ['Données complètes', 'Données incomplètes', 'Total'];
   else legend_label = ['Data complete', 'Data incomplete', 'Total'];
   
   wrap.svg.selectAll(".legend.label")

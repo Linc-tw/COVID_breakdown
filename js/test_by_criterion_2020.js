@@ -23,9 +23,15 @@ TBC_2020_wrap.tooltip = d3.select(TBC_2020_wrap.id)
 //-- Parameters
 TBC_2020_wrap.xlabel_path = GS_var.xlabel_path_2020;
 TBC_2020_wrap.r_list = GS_var.r_list_2020;
-TBC_2020_wrap.y_max_factor = 1.3;
+TBC_2020_wrap.y_max_factor = 1.2;
 TBC_2020_wrap.y_path_1 = 40000;
 TBC_2020_wrap.y_path_0 = 500;
+TBC_2020_wrap.yticklabel_format_1 = ".2s";
+TBC_2020_wrap.yticklabel_format_0 = "d";
+TBC_2020_wrap.legend_pos_x_0__ = {};
+TBC_2020_wrap.legend_pos_x_0__['zh-tw'] = 510;
+TBC_2020_wrap.legend_pos_x_0__['fr'] = 305;
+TBC_2020_wrap.legend_pos_x_0__['en'] = 350;
 
 //-- Variables
 TBC_2020_wrap.do_cumul = 0;;
@@ -63,14 +69,14 @@ d3.select(TBC_2020_wrap.id + '_save').on('click', function(){
   if (TBC_2020_wrap.do_cumul == 1) tag1 = 'cumulative';
   else tag1 = 'daily';
   
-  name = TBC_2020_wrap.tag + '_' + tag1 + '_' + lang + '.png'
+  name = TBC_2020_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(TBC_2020_wrap.id).select('svg').node(), name);
 });
 
 //-- Language button
 $(document).on("change", "input:radio[name='2020_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   
   //-- Remove
   d3.selectAll(TBC_2020_wrap.id+' .plot').remove();

@@ -67,14 +67,14 @@ d3.select(THSC_2020_wrap.id + '_save').on('click', function () {
   if (THSC_2020_wrap.do_count == 1) tag1 = 'count';
   else tag1 = 'coefficient';
   
-  name = THSC_2020_wrap.tag + '_' + tag1 + '_' + lang + '.png'
+  name = THSC_2020_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(THSC_2020_wrap.id).select('svg').node(), name);
 });
 
 //-- Language button
 $(document).on("change", "input:radio[name='2020_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   
   //-- Remove
   d3.selectAll(THSC_2020_wrap.id+' .plot').remove()

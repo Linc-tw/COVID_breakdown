@@ -31,6 +31,7 @@ BS_latest_wrap.y_max_factor = 1.8;
 BS_latest_wrap.y_path_0 = 2500;
 BS_latest_wrap.y_path_1 = 1500;
 BS_latest_wrap.y_path_2 = 2500;
+BS_latest_wrap.legend_pos_x = 370;
 
 //-- Variables
 BS_latest_wrap.do_exit = 0;
@@ -69,14 +70,14 @@ d3.select(BS_latest_wrap.id + '_save').on('click', function () {
   else if (BS_latest_wrap.do_exit == 1) tag1 = 'departure';
   else                                  tag1 = 'both';
 
-  name = BS_latest_wrap.tag + '_' + tag1 + '_' + lang + '.png'
+  name = BS_latest_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(BS_latest_wrap.id).select('svg').node(), name);
 });
 
 //-- Language button
 $(document).on("change", "input:radio[name='policy_language']", function (event) {
-  lang = this.value;
-  Cookies.set("lang", lang);
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
   
   //-- Remove
   d3.selectAll(BS_latest_wrap.id+' .plot').remove();
