@@ -283,8 +283,6 @@ function VR_Initialize(wrap) {
 }
 
 function VR_update(wrap) {
-  var transDuration = 800;
-  
   //-- Add y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
@@ -297,14 +295,14 @@ function VR_update(wrap) {
   
   wrap.svg.select('.yaxis')
     .transition()
-    .duration(transDuration)
+    .duration(GS_var.trans_duration)
     .call(y_axis);
   
   //-- Update lines
   wrap.line.selectAll('.content.line')
     .data(wrap.formatted_data)
     .transition()
-    .duration(transDuration)
+    .duration(GS_var.trans_duration)
     .attr('d', function (d) {return wrap.draw_line(d.values);});
 
   //-- Legend - label

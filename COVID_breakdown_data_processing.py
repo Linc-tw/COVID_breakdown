@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.12.16                  ##
+    ##  Version 2020.12.17                  ##
     ##########################################
 
 
@@ -162,33 +162,22 @@ def saveCsv(name, data, verbose=True):
     print('Saved \"%s\"' % name)
   return
 
-def ISODateToOrdinal(ISODate):
-  ordinal = dtt.date.fromisoformat(ISODate).toordinal()
+def ISODateToOrdinal(iso_date):
+  ordinal = dtt.date.fromisoformat(iso_date).toordinal()
   return ordinal
 
 def ordinalToISODate(ordinal):
   return dtt.date.fromordinal(ordinal).isoformat()
 
-def normalizeBoolArr(boolArr):
-  boolArr  = boolArr.astype(float)
-  mean     = boolArr.mean()
-  boolArr -= mean
-  norm     = np.sqrt(np.sum(boolArr**2))
+def normalizeBoolArr(bool_arr):
+  bool_arr = bool_arr.astype(float)
+  bool_arr -= bool_arr.mean()
+  norm = np.sqrt(np.sum(bool_arr**2))
   
   with warnings.catch_warnings(): ## Avoid division by zero
     warnings.simplefilter("ignore")
-    boolArr /= norm
-  return boolArr
-
-def entropy(p):
-  ind0 = p == 0
-  ind1 = p == 1
-  ind2 = ~(ind0 + ind1)
-  p2 = p[ind2]
-  
-  s = np.zeros_like(p, dtype=float)
-  s[ind2] = p2*np.log2(p2) + (1-p2)*np.log2(1-p2)
-  return s
+    bool_arr /= norm
+  return bool_arr
 
 def asFloat(a, copy=True):
   if np.isscalar(a):
@@ -198,8 +187,8 @@ def asFloat(a, copy=True):
   return a.astype(float, copy=copy)
 
 def centerOfBins(bins, area=False):
-  bins  = np.array(bins, dtype=float)
-  left  = bins[:-1]
+  bins = np.array(bins, dtype=float)
+  left = bins[:-1]
   right = bins[1:]
   if area is True:
     return np.sqrt(0.5 * (left**2 + right**2))
@@ -227,34 +216,34 @@ def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
     center of the bins
     n & ctrBin have the same size.
   """
-  nArr, bins = np.histogram(data, bins, weights=wgt)
-  ctrBin     = centerOfBins(bins)
+  n_arr, bins = np.histogram(data, bins, weights=wgt)
+  ctr_bins = centerOfBins(bins)
   if pdf == True:
-    nArr = asFloat(nArr) / (float(sum(nArr)) * (bins[1:] - bins[:-1]))
+    n_arr = asFloat(n_arr) / (float(sum(n_arr)) * (bins[1:] - bins[:-1]))
   else:
-    nArr = asFloat(nArr) * factor
-  return nArr, ctrBin
+    n_arr = asFloat(n_arr) * factor
+  return n_arr, ctr_bins
 
 def adjustDateRange(data):
-  refOrd   = ISODateToOrdinal(REF_ISO_DATE)
-  beginOrd = ISODateToOrdinal(data['date'].values[0])
-  endOrd   = ISODateToOrdinal(data['date'].values[-1]) + 1
-  todayOrd = dtt.date.today().toordinal() + 1
+  ref_ord = ISODateToOrdinal(REF_ISO_DATE)
+  begin_ord = ISODateToOrdinal(data['date'].values[0])
+  end_ord = ISODateToOrdinal(data['date'].values[-1]) + 1
+  today_ord = dtt.date.today().toordinal() + 1
   
-  zero   = [0] * (len(data.columns) - 1)
+  zero = [0] * (len(data.columns) - 1)
   stock1 = []
   stock2 = []
   
-  for ord in range(refOrd, beginOrd):
+  for ord in range(ref_ord, begin_ord):
     ISO = ordinalToISODate(ord)
     stock1.append([ISO] + zero)
     
-  for ord in range(endOrd, todayOrd):
+  for ord in range(end_ord, today_ord):
     ISO = ordinalToISODate(ord)
     stock2.append([ISO] + zero)
   
-  if refOrd > beginOrd:
-    data = data[refOrd-beginOrd:]
+  if ref_ord > begin_ord:
+    data = data[ref_ord-begin_ord:]
   
   data1 = pd.DataFrame(stock1, columns=data.columns)
   data2 = pd.DataFrame(stock2, columns=data.columns)
@@ -275,82 +264,82 @@ class Template:
 class MainSheet(Template):
   
   def __init__(self, verbose=True):
-    self.n_case = '案例'
-    self.n_reportDate = '新聞稿發布日期'
-    self.n_gender = '性別'
-    self.n_age = '年齡'
-    self.n_nationality = '國籍'
-    self.n_city = '區域'
-    self.n_transmission = '來源'
-    self.n_travHist = '旅遊史'
-    self.n_entryDate = '入境臺灣日期'
-    self.n_onsetDate = '出現症狀日期'
-    self.n_hospDate = '就醫日期'
-    self.n_channel = '發現管道'
-    self.n_symptom = '症狀'
-    self.n_disease = '疾病史'
-    self.n_link = '感染源'
-    self.n_notes = '備註'
-    self.n_discharged = '痊癒'
-    self.n_disDate = '痊癒日期'
-    self.n_disDate2 = '出院日期'
-    self.n_confPressRel = '疾管署新聞稿'
-    self.n_disPressRel = '出院新聞稿'
+    self.coltag_case = '案例'
+    self.coltag_report_date = '新聞稿發布日期'
+    self.coltag_gender = '性別'
+    self.coltag_age = '年齡'
+    self.coltag_nationality = '國籍'
+    self.coltag_city = '區域'
+    self.coltag_transmission = '來源'
+    self.coltag_trav_hist = '旅遊史'
+    self.coltag_entry_date = '入境臺灣日期'
+    self.coltag_onset_date = '出現症狀日期'
+    self.coltag_hosp_date = '就醫日期'
+    self.coltag_channel = '發現管道'
+    self.coltag_symptom = '症狀'
+    self.coltag_disease = '疾病史'
+    self.coltag_link = '感染源'
+    self.coltag_notes = '備註'
+    self.coltag_discharged = '痊癒'
+    self.coltag_dis_date = '痊癒日期'
+    self.coltag_dis_date_2 = '出院日期'
+    self.coltag_conf_press_rel = '疾管署新聞稿'
+    self.coltag_dis_press_rel = '出院新聞稿'
     
-    self.N_total = 0
-    self.N_latest = 0
-    self.N_2020 = 0
+    self.n_total = 0
+    self.n_latest = 0
+    self.n_2020 = 0
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv' % DATA_PATH
     data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
-    caseNbList = data[self.n_case].values
-    ind = caseNbList == caseNbList
+    case_nb_list = data[self.coltag_case].values
+    ind = case_nb_list == case_nb_list
     self.data = data[ind]
     
     self.getReportDate()
     
     if verbose:
       print('Loaded \"%s\"' % name)
-      print('N_total = %d' % self.N_total)
-      print('N_latest = %d' % self.N_latest)
-      print('N_2020 = %d' % self.N_2020)
+      print('N_total = %d' % self.n_total)
+      print('N_latest = %d' % self.n_latest)
+      print('N_2020 = %d' % self.n_2020)
     return 
     
   def getReportDate(self):
-    todayOrd = dtt.date.today().toordinal() + 1
-    end2020Ord = ISODateToOrdinal('2020-12-31') + 1
-    reportDateList = []
-    N_total = 0
-    N_latest = 0
-    N_2020 = 0
+    today_ord = dtt.date.today().toordinal() + 1
+    end_2020_ord = ISODateToOrdinal('2020-12-31') + 1
+    report_date_list = []
+    n_total = 0
+    n_latest = 0
+    n_2020 = 0
     
-    for reportDate in self.getCol(self.n_reportDate):
-      if reportDate != reportDate: ## NaN
-        reportDateList.append(np.nan)
+    for report_date in self.getCol(self.coltag_report_date):
+      if report_date != report_date: ## NaN
+        report_date_list.append(np.nan)
         continue
       
-      reportDate = reportDate.split('日')[0].split('月')
-      reportDate = '2020-%02s-%02s' % (reportDate[0], reportDate[1])
-      reportDateList.append(reportDate)
-      N_total += 1
+      report_date = report_date.split('日')[0].split('月')
+      report_date = '2020-%02s-%02s' % (report_date[0], report_date[1])
+      report_date_list.append(report_date)
+      n_total += 1
       
-      reportOrd = ISODateToOrdinal(reportDate)
+      rep_ord = ISODateToOrdinal(report_date)
       
-      if reportOrd + NB_LOOKBACK_DAYS >= todayOrd:
-        N_latest += 1
+      if rep_ord + NB_LOOKBACK_DAYS >= today_ord:
+        n_latest += 1
         
-      if reportOrd < end2020Ord:
-        N_2020 += 1
+      if rep_ord < end_2020_ord:
+        n_2020 += 1
     
-    self.N_total = N_total
-    self.N_latest = N_latest
-    self.N_2020 = N_2020
-    return reportDateList
+    self.n_total = n_total
+    self.n_latest = n_latest
+    self.n_2020 = n_2020
+    return report_date_list
   
   def getAge(self):
     age = []
-    for i, a in enumerate(self.getCol(self.n_age)):
+    for i, a in enumerate(self.getCol(self.coltag_age)):
       if a in ['1X', '2X', '3X', '4X', '5X', '6X', '7X', '8X', '9X']:
         age.append(a[0]+'0s')
       elif a in ['1XX', '10X', '11X']:
@@ -373,36 +362,36 @@ class MainSheet(Template):
     return age
   
   def getTransmission(self):
-    transList = []
-    for i, trans in enumerate(self.getCol(self.n_transmission)):
+    trans_list = []
+    for i, trans in enumerate(self.getCol(self.coltag_transmission)):
       if trans != trans:
-        transList.append(np.nan)
+        trans_list.append(np.nan)
       
       elif trans == '境外':
-        transList.append('imported')
+        trans_list.append('imported')
       
       elif trans in ['敦睦遠訓', '敦睦\n遠訓']:
-        transList.append('fleet')
+        trans_list.append('fleet')
       
       elif trans == '本土':
-        transList.append('indigenous')
+        trans_list.append('indigenous')
       
       elif trans == '不明':
-        transList.append('imported') #WARNING Shortcut
+        trans_list.append('imported') #WARNING Shortcut
       
       else:
         print('Transmission, Case %d, %s' % (i+1, trans))
-        transList.append(np.nan)
-    return transList
+        trans_list.append(np.nan)
+    return trans_list
   
   def getNationality(self):
-    natList = []
-    for nat in self.getCol(self.n_nationality):
-      natList.append(nat)
-    return natList
+    nat_list = []
+    for nat in self.getCol(self.coltag_nationality):
+      nat_list.append(nat)
+    return nat_list
   
   def getTravHist(self):
-    keyDict = {
+    key_dict = {
       'Bangladesh': ['孟加拉'],
       'China': ['中國', '武漢', '深圳', '廣州', '遼寧', '江蘇', '浙江'],
       'Hong Kong': ['香港'],
@@ -477,185 +466,146 @@ class MainSheet(Template):
       'Pan-Shi': ['海軍敦睦支隊磐石艦', '整隊登艦', '台灣啟航', '左營靠泊檢疫'],
       'indigenous': ['無']
     }
-    natList = self.getNationality()
-    travHistList = []
+    nat_list = self.getNationality()
+    trav_hist_list = []
     
-    for i, travHist in enumerate(self.getCol(self.n_travHist)):
-      if travHist != travHist: ## Is nan
-        travHistList.append([])
+    for i, trav_hist in enumerate(self.getCol(self.coltag_trav_hist)):
+      if trav_hist != trav_hist: ## Is nan
+        trav_hist_list.append([])
         continue
       
       stock = []
       
       ## Scan the content with all keys
-      for key, valueList in keyDict.items():
-        for value in valueList:
-          if value in travHist:
-            travHist = ''.join(travHist.split(value))
+      for key, value_list in key_dict.items():
+        for value in value_list:
+          if value in trav_hist:
+            trav_hist = ''.join(trav_hist.split(value))
             stock.append(key) ## Put the translation in stock
       
       ## Remove meaningless words
-      travHist = ''.join(travHist.split('自離境前往'))
-      travHist = ''.join(travHist.split('從搭機'))
-      travHist = ''.join(travHist.split('返國'))
-      travHist = ''.join(travHist.split('來台'))
-      travHist = ''.join(travHist.split('轉機'))
-      travHist = ''.join(travHist.split('下旬'))
-      travHist = ''.join(travHist.split('上旬'))
-      travHist = ''.join(travHist.split('中旬'))
-      travHist = ''.join(travHist.split('台灣'))
-      travHist = travHist.lstrip(' 0123456789/-\n月及等經()、→ ')
+      trav_hist = ''.join(trav_hist.split('自離境前往'))
+      trav_hist = ''.join(trav_hist.split('從搭機'))
+      trav_hist = ''.join(trav_hist.split('返國'))
+      trav_hist = ''.join(trav_hist.split('來台'))
+      trav_hist = ''.join(trav_hist.split('轉機'))
+      trav_hist = ''.join(trav_hist.split('下旬'))
+      trav_hist = ''.join(trav_hist.split('上旬'))
+      trav_hist = ''.join(trav_hist.split('中旬'))
+      trav_hist = ''.join(trav_hist.split('台灣'))
+      trav_hist = trav_hist.lstrip(' 0123456789/-\n月及等經()、→ ')
       
       ## Complain if unrecognized texts remain
-      if len(travHist) > 0:
-        print('Travel history, Case %d, %s' % (i+1, travHist))
+      if len(trav_hist) > 0:
+        print('Travel history, Case %d, %s' % (i+1, trav_hist))
       
       ## If no travel history but imported, add nationality (only for i >= 460)
       if i >= 460 and len(stock) == 0:
-        for key, valueList in keyDict.items():
-          for value in valueList:
-            if value in natList[i]:
+        for key, value_list in key_dict.items():
+          for value in value_list:
+            if value in nat_list[i]:
               stock.append(key)
               break
       
       stock = list(set(stock))
-      travHistList.append(stock)
+      trav_hist_list.append(stock)
       
-    travHistList = [travHist if len(travHist) > 0 else np.nan for travHist in travHistList]
-    return travHistList
-  
-  ##WARNING require updates
-  def getContinent(self):
-    keyDict = {
-      'East Asia': ['China', 'Hong Kong', 'Macao', 'Japan', 'Thailand', 'Malaysia', 'Indonesia', 'Philippines', 'Singapore', 'Bangladesh'],
-      'North America': ['USA', 'Canada', 'Mexico'], 
-      'South America': ['Chile', 'Argentina', 'Peru', 'Bolivia', 'Brazil', 'Guatemala', 'Latin America'], 
-      'Europe': ['Europe', 'Ireland', 'UK', 'France', 'Portugal', 'Spain', 'Italy', 'Belgium', 'Netherlands', 'Luxemburg', 'Switzerland', 
-                 'Germany', 'Austria', 'Czechia', 'Danmark', 'Finland', 'Iceland', 'Poland', 'Bulgaria', 'Greece', 'Russia'],
-      'Middle East': ['Turkey', 'Qatar', 'UAE', 'Egypt', 'Oman'], 
-      'Africa': ['Morocco', 'Tunisia', 'South Africa', 'Senegal'],
-      'Occeania': ['Australia', 'New Zealand', 'Palau'], 
-      
-      'Antarctica': ['Antarctica'], 
-      'Others': ['Diamond Princess', 'Coral Princess', 'Pan-Shi'], 
-      
-      'indigenous': ['indigenous']
-    }
-      
-    continentList = []
-    
-    for travHist in self.getTravHist():
-      if travHist != travHist: ## Is nan
-        continentList.append([])
-        continue
-      
-      stock = []
-      
-      for trav in travHist:
-        for key, valueList in keyDict.items():
-          if trav in valueList:
-            stock.append(key)
-            break
-      
-      stock = list(set(stock))
-      continentList.append(stock)
-      
-    continentList = [continent if len(continent) > 0 else np.nan for continent in continentList]
-    return continentList
+    trav_hist_list = [trav_hist if len(trav_hist) > 0 else np.nan for trav_hist in trav_hist_list]
+    return trav_hist_list
   
   def getEntryDate(self):
-    entryDateList = []
+    entry_date_list = []
     
-    for i, entryDate in enumerate(self.getCol(self.n_entryDate)):
+    for i, entryDate in enumerate(self.getCol(self.coltag_entry_date)):
       if entryDate != entryDate: ## NaN
-        entryDateList.append(np.nan)
+        entry_date_list.append(np.nan)
         
       elif entryDate in ['3/1\n3/8']:
-        entryDateList.append('2020-03-08')
+        entry_date_list.append('2020-03-08')
       
       elif entryDate in ['10/28(29)']:
-        entryDateList.append('2020-10-28')
+        entry_date_list.append('2020-10-28')
       
       elif entryDate in ['11/7(8)']:
-        entryDateList.append('2020-11-07')
+        entry_date_list.append('2020-11-07')
       
       elif entryDate in ['11/20(-27)']:
-        entryDateList.append('2020-11-24')
+        entry_date_list.append('2020-11-24')
         
       elif entryDate in ['11/28(12/2)']:
-        entryDateList.append('2020-11-30')
+        entry_date_list.append('2020-11-30')
       
       else:
         try:
-          MD = entryDate.split('/')
-          entryDate = '2020-%02d-%02d' % (int(MD[0]), int(MD[1]))
-          entryDateList.append(entryDate)
+          mmdd = entryDate.split('/')
+          entryDate = '2020-%02d-%02d' % (int(mmdd[0]), int(mmdd[1]))
+          entry_date_list.append(entryDate)
         except:
           print('Entry date, Case %d, %s' % (i+1, entryDate))
-          entryDateList.append(np.nan)
+          entry_date_list.append(np.nan)
     
-    return entryDateList
+    return entry_date_list
   
   def getOnsetDate(self):
-    onsetDateList = []
+    onset_date_list = []
     
-    for i, onsetDate in enumerate(self.getCol(self.n_onsetDate)):
-      if onsetDate != onsetDate: ## NaN
-        onsetDateList.append(np.nan)
+    for i, onset_date in enumerate(self.getCol(self.coltag_onset_date)):
+      if onset_date != onset_date: ## NaN
+        onset_date_list.append(np.nan)
       
-      elif onsetDate in ['2/18-25', '9月下旬', '10月中旬', '11月初', 'x', 'X']:
-        onsetDateList.append(np.nan)
+      elif onset_date in ['2/18-25', '9月下旬', '10月中旬', '11月初', 'x', 'X']:
+        onset_date_list.append(np.nan)
         
-      elif onsetDate in ['7月、11/1']:
-        onsetDateList.append('2020-11-01')
+      elif onset_date in ['7月、11/1']:
+        onset_date_list.append('2020-11-01')
         
       else:
         try:
-          MD = onsetDate.split('/')
-          onsetDate = '2020-%02d-%02d' % (int(MD[0]), int(MD[1]))
-          onsetDateList.append(onsetDate)
+          mmdd = onset_date.split('/')
+          onset_date = '2020-%02d-%02d' % (int(mmdd[0]), int(mmdd[1]))
+          onset_date_list.append(onset_date)
         except:
-          print('Onset date, Case %d, %s' % (i+1, onsetDate))
-          onsetDateList.append(np.nan)
+          print('Onset date, Case %d, %s' % (i+1, onset_date))
+          onset_date_list.append(np.nan)
     
-    return onsetDateList
+    return onset_date_list
   
   def getChannel(self):
-    chanList = []
-    keyList_out = ['採檢']
+    channel_list = []
+    key_list_out = ['採檢']
     
-    for i, chan in enumerate(self.getCol(self.n_channel)):
-      if chan != chan: ## Is nan
-        chanList.append(np.nan)
+    for i, channel in enumerate(self.getCol(self.coltag_channel)):
+      if channel != channel: ## Is nan
+        channel_list.append(np.nan)
       
-      elif chan in keyList_out:
-        chanList.append(np.nan)
+      elif channel in key_list_out:
+        channel_list.append(np.nan)
         
-      elif '機場' in chan:
-        chanList.append('airport')
+      elif '機場' in channel:
+        channel_list.append('airport')
         
-      elif '檢疫' in chan or '回溯性採檢' in chan:
-        chanList.append('quarantine')
+      elif '檢疫' in channel or '回溯性採檢' in channel:
+        channel_list.append('quarantine')
         
-      elif '隔離' in chan or '接觸者檢查' in chan:
-        chanList.append('isolation')
+      elif '隔離' in channel or '接觸者檢查' in channel:
+        channel_list.append('isolation')
         
-      elif '自主健康管理' in chan or '加強自主管理' in chan:
-        chanList.append('monitoring')
+      elif '自主健康管理' in channel or '加強自主管理' in channel:
+        channel_list.append('monitoring')
         
-      elif '自行就醫' in chan or '自主就醫' in chan or '自費篩檢' in chan or '自費檢驗' in chan:
-        chanList.append('hospital')
+      elif '自行就醫' in channel or '自主就醫' in channel or '自費篩檢' in channel or '自費檢驗' in channel:
+        channel_list.append('hospital')
         
-      elif '香港檢驗' in chan:
-        chanList.append('overseas')
+      elif '香港檢驗' in channel:
+        channel_list.append('overseas')
         
       else:
-        print('Channel, Case %d, %s' % (i+1, chan))
-        chanList.append(np.nan)
-    return chanList
+        print('Channel, Case %d, %s' % (i+1, channel))
+        channel_list.append(np.nan)
+    return channel_list
   
   def getSymptom(self):
-    keyDict = {
+    key_dict = {
       'sneezing': ['伴隨感冒症狀', '輕微流鼻水', '打噴嚏', '流鼻水', '流鼻涕', '鼻涕倒流', '輕微鼻塞', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['咳嗽有痰', '喉嚨有痰', '有痰', '輕微咳嗽', '咳嗽症狀', '咳嗽併痰', '咳嗽加劇', '咳嗽', '輕微乾咳', '乾咳', '輕咳'],
       'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '聲音沙啞', '輕微喉嚨癢', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨乾癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', '喉嚨不適', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨'],
@@ -693,19 +643,19 @@ class MainSheet(Template):
       'symptomatic': ['有症狀', '出現症狀', '身體不適'],
       'asymptomatic': ['首例無症狀', '無症狀', 'x', 'X']
     }
-    symptomList = []
+    symptom_list = []
     
-    for i, symptom in enumerate(self.getCol(self.n_symptom)):
+    for i, symptom in enumerate(self.getCol(self.coltag_symptom)):
       if symptom != symptom: ## Is nan
-        symptomList.append([])
+        symptom_list.append([])
         continue
       
       stock = []
       symptom = ''.join(symptom.split('入境已無症狀'))
       symptom = ''.join(symptom.split('#68 #69 #70 #73其中一人無症狀'))
       
-      for key, valueList in keyDict.items():
-        for value in valueList:
+      for key, value_list in key_dict.items():
+        for value in value_list:
           if value in symptom:
             symptom = ''.join(symptom.split(value))
             for k in key.split('+'):
@@ -720,215 +670,214 @@ class MainSheet(Template):
         print('Symptom, Case %d, %s' % (i+1, symptom))
       
       stock = list(set(stock))
-      symptomList.append(stock)
+      symptom_list.append(stock)
       
-    symptomList = [symptom if len(symptom) > 0 else np.nan for symptom in symptomList]
-    return symptomList
+    symptom_list = [symptom if len(symptom) > 0 else np.nan for symptom in symptom_list]
+    return symptom_list
 
   def getLink(self):
-    linkList = []
-    for i, link in enumerate(self.getCol(self.n_link)):
+    link_list = []
+    for i, link in enumerate(self.getCol(self.coltag_link)):
       if link == '未知':
-        linkList.append('unlinked')
+        link_list.append('unlinked')
       
       elif link == '軍艦':
-        linkList.append('fleet')
+        link_list.append('fleet')
       
       elif link != link:
-        linkList.append(np.nan)
+        link_list.append(np.nan)
       
       elif 'O' in link:
-        linkList.append('linked')
+        link_list.append('linked')
         
       else:
         print('Symptom, Case %d, %s' % (i+1, link))
-        linkList.append(np.nan)
-    return linkList
+        link_list.append(np.nan)
+    return link_list
     
   def makeDailyCaseCounts(self):
-    reportDateList = self.getReportDate()
-    transList = self.getTransmission()
+    report_date_list = self.getReportDate()
+    trans_list = self.getTransmission()
     
-    refOrd = ISODateToOrdinal(REF_ISO_DATE)
-    todayOrd = dtt.date.today().toordinal() + 1
+    ref_ord = ISODateToOrdinal(REF_ISO_DATE)
+    today_ord = dtt.date.today().toordinal() + 1
     
-    dateArr = [ordinalToISODate(i) for i in range(refOrd, todayOrd)]
-    nbDays = todayOrd - refOrd
-    nbImpArr = np.zeros(nbDays, dtype=int)
-    nbIndiArr = np.zeros(nbDays, dtype=int)
-    nbCasesArr = np.zeros(nbDays, dtype=int)
+    date_arr = [ordinalToISODate(i) for i in range(ref_ord, today_ord)]
+    nb_days = today_ord - ref_ord
+    nb_imp_arr = np.zeros(nb_days, dtype=int)
+    nb_indi_arr = np.zeros(nb_days, dtype=int)
+    nb_cases_arr = np.zeros(nb_days, dtype=int)
     
-    for reportDate, trans in zip(reportDateList, transList):
-      if reportDate != reportDate:
+    for report_date, trans in zip(report_date_list, trans_list):
+      if report_date != report_date:
         continue
       
-      ind = ISODateToOrdinal(reportDate) - refOrd
-      if ind < 0 or ind >= nbDays:
+      ind = ISODateToOrdinal(report_date) - ref_ord
+      if ind < 0 or ind >= nb_days:
         print('Bad ind_r = %d' % ind)
         continue
       
       if trans == 'imported':
-        nbImpArr[ind] += 1
+        nb_imp_arr[ind] += 1
       elif trans == 'indigenous':
-        nbIndiArr[ind] += 1
+        nb_indi_arr[ind] += 1
       
-      nbCasesArr[ind] += 1
+      nb_cases_arr[ind] += 1
       
-    return dateArr, nbImpArr, nbIndiArr, nbCasesArr
+    return date_arr, nb_imp_arr, nb_indi_arr, nb_cases_arr
     
   def makeTravHistHist(self):
-    transList = self.getTransmission()
-    travHistList = self.getTravHist()
-    travHistList2 = []
+    trans_list = self.getTransmission()
+    trav_hist_list = self.getTravHist()
+    trav_hist_list_2 = []
     
-    for trans, travHist in zip(transList, travHistList):
-      if trans == 'imported' and travHist == travHist: ## Is not nan
-        for trav in travHist:
-          travHistList2.append(trav)
+    for trans, trav_hist in zip(trans_list, trav_hist_list):
+      if trans == 'imported' and trav_hist == trav_hist: ## Is not nan
+        for trav in trav_hist:
+          trav_hist_list_2.append(trav)
     
-    hist = clt.Counter(travHistList2)
+    hist = clt.Counter(trav_hist_list_2)
     hist = sorted(hist.items(), key=lambda x: x[1], reverse=True)
     return hist
 
   def makeSymptomHist(self):
-    symptomList = self.getSymptom()
-    symptomList2 = []
+    symptom_list = self.getSymptom()
+    symptom_list_2 = []
     
-    for symptom in symptomList:
+    for symptom in symptom_list:
       if symptom == symptom: ## Is not nan
         for symp in symptom:
-          symptomList2.append(symp)
+          symptom_list_2.append(symp)
     
-    hist = clt.Counter(symptomList2)
+    hist = clt.Counter(symptom_list_2)
     hist = sorted(hist.items(), key=lambda x: x[1], reverse=True)
     return hist
   
   def makeTravHistSymptomMat(self, selection='latest'):
-    reportDateList = self.getReportDate()
-    transList = self.getTransmission()
-    travHistList = self.getTravHist()
-    #travHistList = self.getContinent()
-    symptomList = self.getSymptom()
+    report_date_list = self.getReportDate()
+    trans_list = self.getTransmission()
+    trav_hist_list = self.getTravHist()
+    symptom_list = self.getSymptom()
     
-    todayOrd = dtt.date.today().toordinal() + 1
-    end2020Ord = ISODateToOrdinal('2020-12-31') + 1
-    travHistList2 = []
-    symptomList2 = []
-    N_total = 0
-    N_imported = 0
+    today_ord = dtt.date.today().toordinal() + 1
+    end_2020_ord = ISODateToOrdinal('2020-12-31') + 1
+    trav_hist_list_2 = []
+    symptom_list_2 = []
+    n_total = 0
+    n_imported = 0
     
-    for reportDate, trans, travHist, symptom in zip(reportDateList, transList, travHistList, symptomList):
-      if reportDate != reportDate:
+    for report_date, trans, trav_hist, symptom in zip(report_date_list, trans_list, trav_hist_list, symptom_list):
+      if report_date != report_date:
         continue
       
-      repOrd = ISODateToOrdinal(reportDate)
+      rep_ord = ISODateToOrdinal(report_date)
       
-      if 'latest' == selection and repOrd + NB_LOOKBACK_DAYS < todayOrd:
+      if 'latest' == selection and rep_ord + NB_LOOKBACK_DAYS < today_ord:
         continue
       
-      if '2020' == selection and repOrd >= end2020Ord:
+      if '2020' == selection and rep_ord >= end_2020_ord:
         continue
       
-      N_total += 1
+      n_total += 1
       if trans == 'imported':
-        N_imported += 1
-        if travHist == travHist and symptom == symptom: ## Is not nan
-          travHistList2.append(travHist)
-          symptomList2.append(symptom)
+        n_imported += 1
+        if trav_hist == trav_hist and symptom == symptom: ## Is not nan
+          trav_hist_list_2.append(trav_hist)
+          symptom_list_2.append(symptom)
     
-    assert len(travHistList2) == len(symptomList2)
-    N_data = len(travHistList2)
+    assert len(trav_hist_list_2) == len(symptom_list_2)
+    n_data = len(trav_hist_list_2)
         
-    travHistHist = clt.Counter([trav for travHist in travHistList2 for trav in travHist])
-    travHistHist = sorted(travHistHist.items(), key=lambda x: x[1], reverse=True)
-    symptomHist = clt.Counter([symp for symptom in symptomList2 for symp in symptom])
-    symptomHist = sorted(symptomHist.items(), key=lambda x: x[1], reverse=True)
+    trav_hist_hist = clt.Counter([trav for trav_hist in trav_hist_list_2 for trav in trav_hist])
+    trav_hist_hist = sorted(trav_hist_hist.items(), key=lambda x: x[1], reverse=True)
+    symptom_hist = clt.Counter([symp for symptom in symptom_list_2 for symp in symptom])
+    symptom_hist = sorted(symptom_hist.items(), key=lambda x: x[1], reverse=True)
     
-    travBoolMat = []
-    for travHistPair in travHistHist:
-      travBoolArr = [1 if travHistPair[0] in travHist else 0 for travHist in travHistList2]
-      travBoolMat.append(travBoolArr)
-    travBoolMat = np.array(travBoolMat)
+    trav_bool_mat = []
+    for trav_hist_pair in trav_hist_hist:
+      trav_bool_arr = [1 if trav_hist_pair[0] in trav_hist else 0 for trav_hist in trav_hist_list_2]
+      trav_bool_mat.append(trav_bool_arr)
+    trav_bool_mat = np.array(trav_bool_mat)
     
-    sympBoolMat = []
-    for symptomPair in symptomHist:
-      sympBoolArr = [1 if symptomPair[0] in symptom else 0 for symptom in symptomList2]
-      sympBoolMat.append(sympBoolArr)
-    sympBoolMat = np.array(sympBoolMat)
+    symp_bool_mat = []
+    for symptom_pair in symptom_hist:
+      symp_bool_arr = [1 if symptom_pair[0] in symptom else 0 for symptom in symptom_list_2]
+      symp_bool_mat.append(symp_bool_arr)
+    symp_bool_mat = np.array(symp_bool_mat)
     
-    return N_total, N_imported, N_data, travHistHist, symptomHist, travBoolMat, sympBoolMat
+    return n_total, n_imported, n_data, trav_hist_hist, symptom_hist, trav_bool_mat, symp_bool_mat
   
   def makeTravHistSymptomCorr(self, selection='latest'):
-    N_total, N_imported, N_data, travHistHist, symptomHist, travBoolMat, sympBoolMat = self.makeTravHistSymptomMat(selection=selection)
+    n_total, n_imported, n_data, trav_hist_hist, symptom_hist, trav_bool_mat, symp_bool_mat = self.makeTravHistSymptomMat(selection=selection)
     
-    travBoolMat_n = np.array([normalizeBoolArr(travBoolArr) for travBoolArr in travBoolMat])
-    sympBoolMat_n = np.array([normalizeBoolArr(sympBoolArr) for sympBoolArr in sympBoolMat])
+    travBoolMat_n = np.array([normalizeBoolArr(trav_bool_arr) for trav_bool_arr in trav_bool_mat])
+    sympBoolMat_n = np.array([normalizeBoolArr(symp_bool_arr) for symp_bool_arr in symp_bool_mat])
     
-    corrMat  = travBoolMat_n.dot(sympBoolMat_n.T)
-    countMat = travBoolMat.dot(sympBoolMat.T)
-    return N_total, N_imported, N_data, travHistHist, symptomHist, corrMat, countMat
+    corr_mat  = travBoolMat_n.dot(sympBoolMat_n.T)
+    count_mat = trav_bool_mat.dot(symp_bool_mat.T)
+    return n_total, n_imported, n_data, trav_hist_hist, symptom_hist, corr_mat, count_mat
   
   def makeAgeSymptomMat(self, selection='latest'):
-    reportDateList = self.getReportDate()
-    ageList = self.getAge()
-    symptomList = self.getSymptom()
+    report_date_list = self.getReportDate()
+    age_list = self.getAge()
+    symptom_list = self.getSymptom()
     
-    todayOrd = dtt.date.today().toordinal() + 1
-    end2020Ord = ISODateToOrdinal('2020-12-31') + 1
-    ageList2 = []
-    symptomList2 = []
-    N_total = 0
+    today_ord = dtt.date.today().toordinal() + 1
+    end_2020_ord = ISODateToOrdinal('2020-12-31') + 1
+    age_list_2 = []
+    symptom_list_2 = []
+    n_total = 0
     
-    for reportDate, age, symptom in zip(reportDateList, ageList, symptomList):
-      if reportDate != reportDate:
+    for report_date, age, symptom in zip(report_date_list, age_list, symptom_list):
+      if report_date != report_date:
         continue
       
-      repOrd = ISODateToOrdinal(reportDate)
+      rep_ord = ISODateToOrdinal(report_date)
       
-      if 'latest' == selection and repOrd + NB_LOOKBACK_DAYS < todayOrd:
+      if 'latest' == selection and rep_ord + NB_LOOKBACK_DAYS < today_ord:
         continue
       
-      if '2020' == selection and repOrd >= end2020Ord:
+      if '2020' == selection and rep_ord >= end_2020_ord:
         continue
       
-      N_total += 1
+      n_total += 1
       if age == age and symptom == symptom: ## Is not nan
-        ageList2.append(age)
-        symptomList2.append(symptom)
+        age_list_2.append(age)
+        symptom_list_2.append(symptom)
     
-    assert len(ageList2) == len(symptomList2)
-    N_data = len(ageList2)
+    assert len(age_list_2) == len(symptom_list_2)
+    n_data = len(age_list_2)
         
-    ageHist = clt.Counter(ageList2)
+    age_hist = clt.Counter(age_list_2)
     for age in AGE_DICT:
-      ageHist[age] = ageHist.get(age, 0)
-    ageHist = sorted(ageHist.items(), key=lambda x: x[0], reverse=True)
-    symptomHist = clt.Counter([symp for symptom in symptomList2 for symp in symptom])
-    symptomHist = sorted(symptomHist.items(), key=lambda x: x[1], reverse=True)
+      age_hist[age] = age_hist.get(age, 0)
+    age_hist = sorted(age_hist.items(), key=lambda x: x[0], reverse=True)
+    symptom_hist = clt.Counter([symp for symptom in symptom_list_2 for symp in symptom])
+    symptom_hist = sorted(symptom_hist.items(), key=lambda x: x[1], reverse=True)
     
-    ageBoolMat = []
-    for agePair in ageHist:
-      ageBoolArr = [1 if agePair[0] == ageHist else 0 for ageHist in ageList2]
-      ageBoolMat.append(ageBoolArr)
-    ageBoolMat = np.array(ageBoolMat)
+    age_bool_mat = []
+    for age_pair in age_hist:
+      age_bool_arr = [1 if age_pair[0] == age_hist else 0 for age_hist in age_list_2]
+      age_bool_mat.append(age_bool_arr)
+    age_bool_mat = np.array(age_bool_mat)
     
-    sympBoolMat = []
-    for symptomPair in symptomHist:
-      sympBoolArr = [1 if symptomPair[0] in symptom else 0 for symptom in symptomList2]
-      sympBoolMat.append(sympBoolArr)
-    sympBoolMat = np.array(sympBoolMat)
+    symp_bool_mat = []
+    for symptom_pair in symptom_hist:
+      symp_bool_arr = [1 if symptom_pair[0] in symptom else 0 for symptom in symptom_list_2]
+      symp_bool_mat.append(symp_bool_arr)
+    symp_bool_mat = np.array(symp_bool_mat)
     
-    return N_total, N_data, ageHist, symptomHist, ageBoolMat, sympBoolMat
+    return n_total, n_data, age_hist, symptom_hist, age_bool_mat, symp_bool_mat
   
   def makeAgeSymptomCorr(self, selection='latest'):
-    N_total, N_data, ageHist, symptomHist, ageBoolMat, sympBoolMat = self.makeAgeSymptomMat(selection=selection)
+    n_total, n_data, age_hist, symptom_hist, age_bool_mat, symp_bool_mat = self.makeAgeSymptomMat(selection=selection)
     
-    ageBoolMat_n = np.array([normalizeBoolArr(ageBoolArr) for ageBoolArr in ageBoolMat])
-    sympBoolMat_n = np.array([normalizeBoolArr(sympBoolArr) for sympBoolArr in sympBoolMat])
+    age_bool_mat_n = np.array([normalizeBoolArr(age_bool_arr) for age_bool_arr in age_bool_mat])
+    sympBoolMat_n = np.array([normalizeBoolArr(symp_bool_arr) for symp_bool_arr in symp_bool_mat])
     
-    corrMat  = ageBoolMat_n.dot(sympBoolMat_n.T)
-    countMat = ageBoolMat.dot(sympBoolMat.T)
-    return N_total, N_data, ageHist, symptomHist, corrMat, countMat
+    corr_mat  = age_bool_mat_n.dot(sympBoolMat_n.T)
+    count_mat = age_bool_mat.dot(symp_bool_mat.T)
+    return n_total, n_data, age_hist, symptom_hist, corr_mat, count_mat
   
   def saveCsv_keyNb(self):
     self.getReportDate()
@@ -936,7 +885,7 @@ class MainSheet(Template):
     timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
     
     key   = ['overall_total', 'latest_total', '2020_total', 'timestamp']
-    value = [self.N_total, self.N_latest, self.N_2020, timestamp]
+    value = [self.n_total, self.n_latest, self.n_2020, timestamp]
     
     data = {'key': key, 'value': value}
     data = pd.DataFrame(data)
@@ -946,31 +895,31 @@ class MainSheet(Template):
     return
     
   def saveCsv_caseByTrans(self):
-    reportDateList = self.getReportDate()
-    onsetDateList  = self.getOnsetDate()
-    transList      = self.getTransmission()
-    linkList       = self.getLink()
+    report_date_list = self.getReportDate()
+    onset_date_list  = self.getOnsetDate()
+    trans_list      = self.getTransmission()
+    link_list       = self.getLink()
     
-    refOrd   = ISODateToOrdinal(REF_ISO_DATE)
-    todayOrd = dtt.date.today().toordinal() + 1
+    ref_ord = ISODateToOrdinal(REF_ISO_DATE)
+    today_ord = dtt.date.today().toordinal() + 1
     
-    date       = [ordinalToISODate(i) for i in range(refOrd, todayOrd)]
-    nbDays     = todayOrd - refOrd
-    imported_r = np.zeros(nbDays, dtype=int)
-    linked_r   = np.zeros(nbDays, dtype=int)
-    unlinked_r = np.zeros(nbDays, dtype=int)
-    fleet_r    = np.zeros(nbDays, dtype=int)
-    imported_o = np.zeros(nbDays, dtype=int)
-    linked_o   = np.zeros(nbDays, dtype=int)
-    unlinked_o = np.zeros(nbDays, dtype=int)
-    fleet_o    = np.zeros(nbDays, dtype=int)
+    date = [ordinalToISODate(i) for i in range(ref_ord, today_ord)]
+    nb_days = today_ord - ref_ord
+    imported_r = np.zeros(nb_days, dtype=int)
+    linked_r   = np.zeros(nb_days, dtype=int)
+    unlinked_r = np.zeros(nb_days, dtype=int)
+    fleet_r    = np.zeros(nb_days, dtype=int)
+    imported_o = np.zeros(nb_days, dtype=int)
+    linked_o   = np.zeros(nb_days, dtype=int)
+    unlinked_o = np.zeros(nb_days, dtype=int)
+    fleet_o    = np.zeros(nb_days, dtype=int)
     
-    for reportDate, onsetDate, trans, link in zip(reportDateList, onsetDateList, transList, linkList):
-      if reportDate != reportDate:
+    for report_date, onset_date, trans, link in zip(report_date_list, onset_date_list, trans_list, link_list):
+      if report_date != report_date:
         continue
       
-      ind_r = ISODateToOrdinal(reportDate) - refOrd
-      if ind_r < 0 or ind_r >= nbDays:
+      ind_r = ISODateToOrdinal(report_date) - ref_ord
+      if ind_r < 0 or ind_r >= nb_days:
         print('Bad ind_r = %d' % ind_r)
         continue
       
@@ -983,9 +932,9 @@ class MainSheet(Template):
       else:
         linked_r[ind_r] += 1
       
-      if onsetDate == onsetDate: ## Is not nan
-        ind_o = ISODateToOrdinal(onsetDate) - refOrd
-        if ind_o < 0 or ind_o >= nbDays:
+      if onset_date == onset_date: ## Is not nan
+        ind_o = ISODateToOrdinal(onset_date) - ref_ord
+        if ind_o < 0 or ind_o >= nb_days:
           print('Bad ind_o = %d' % ind_o)
           continue
         
@@ -1021,80 +970,80 @@ class MainSheet(Template):
     return
   
   def saveCsv_caseByDetection(self):
-    reportDateList = self.getReportDate()
-    onsetDateList  = self.getOnsetDate()
-    chanList       = self.getChannel()
+    report_date_list = self.getReportDate()
+    onset_date_list  = self.getOnsetDate()
+    channel_list       = self.getChannel()
     
-    refOrd   = ISODateToOrdinal(REF_ISO_DATE)
-    todayOrd = dtt.date.today().toordinal() + 1
+    ref_ord   = ISODateToOrdinal(REF_ISO_DATE)
+    today_ord = dtt.date.today().toordinal() + 1
     
-    date       = [ordinalToISODate(i) for i in range(refOrd, todayOrd)]
-    nbDays     = todayOrd - refOrd
-    airport_r  = np.zeros(nbDays, dtype=int)
-    QT_r       = np.zeros(nbDays, dtype=int)
-    iso_r      = np.zeros(nbDays, dtype=int)
-    monitor_r  = np.zeros(nbDays, dtype=int)
-    hospital_r = np.zeros(nbDays, dtype=int)
-    overseas_r = np.zeros(nbDays, dtype=int)
-    noData_r   = np.zeros(nbDays, dtype=int)
-    airport_o  = np.zeros(nbDays, dtype=int)
-    QT_o       = np.zeros(nbDays, dtype=int)
-    iso_o      = np.zeros(nbDays, dtype=int)
-    monitor_o  = np.zeros(nbDays, dtype=int)
-    hospital_o = np.zeros(nbDays, dtype=int)
-    overseas_o = np.zeros(nbDays, dtype=int)
-    noData_o   = np.zeros(nbDays, dtype=int)
+    date       = [ordinalToISODate(i) for i in range(ref_ord, today_ord)]
+    nb_days     = today_ord - ref_ord
+    airport_r  = np.zeros(nb_days, dtype=int)
+    qt_r       = np.zeros(nb_days, dtype=int)
+    iso_r      = np.zeros(nb_days, dtype=int)
+    monitor_r  = np.zeros(nb_days, dtype=int)
+    hospital_r = np.zeros(nb_days, dtype=int)
+    overseas_r = np.zeros(nb_days, dtype=int)
+    no_data_r  = np.zeros(nb_days, dtype=int)
+    airport_o  = np.zeros(nb_days, dtype=int)
+    qt_o       = np.zeros(nb_days, dtype=int)
+    iso_o      = np.zeros(nb_days, dtype=int)
+    monitor_o  = np.zeros(nb_days, dtype=int)
+    hospital_o = np.zeros(nb_days, dtype=int)
+    overseas_o = np.zeros(nb_days, dtype=int)
+    no_data_o  = np.zeros(nb_days, dtype=int)
     
-    for reportDate, onsetDate, chan in zip(reportDateList, onsetDateList, chanList):
-      if reportDate != reportDate:
+    for report_date, onset_date, channel in zip(report_date_list, onset_date_list, channel_list):
+      if report_date != report_date:
         continue
       
-      ind_r = ISODateToOrdinal(reportDate) - refOrd
-      if ind_r < 0 or ind_r >= nbDays:
+      ind_r = ISODateToOrdinal(report_date) - ref_ord
+      if ind_r < 0 or ind_r >= nb_days:
         print('Bad ind_r = %d' % ind_r)
         continue
       
-      if chan == 'airport':
+      if channel == 'airport':
         airport_r[ind_r] += 1
-      elif chan == 'quarantine':
-        QT_r[ind_r] += 1
-      elif chan == 'isolation':
+      elif channel == 'quarantine':
+        qt_r[ind_r] += 1
+      elif channel == 'isolation':
         iso_r[ind_r] += 1
-      elif chan == 'monitoring':
+      elif channel == 'monitoring':
         monitor_r[ind_r] += 1
-      elif chan == 'hospital':
+      elif channel == 'hospital':
         hospital_r[ind_r] += 1
-      elif chan == 'overseas':
+      elif channel == 'overseas':
         overseas_r[ind_r] += 1
-      elif chan != chan: ## Is nan
-        noData_r[ind_r] += 1
+      elif channel != channel: ## Is nan
+        no_data_r[ind_r] += 1
       
-      if onsetDate == onsetDate: ## Is not nan
-        ind_o = ISODateToOrdinal(onsetDate) - refOrd
-        if ind_o < 0 or ind_o >= nbDays:
+      if onset_date == onset_date: ## Is not nan
+        ind_o = ISODateToOrdinal(onset_date) - ref_ord
+        if ind_o < 0 or ind_o >= nb_days:
           print('Bad ind_o = %d' % ind_o)
           continue
         
-        if chan == 'airport':
+        if channel == 'airport':
           airport_o[ind_o] += 1
-        elif chan == 'quarantine':
-          QT_o[ind_o] += 1
-        elif chan == 'isolation':
+        elif channel == 'quarantine':
+          qt_o[ind_o] += 1
+        elif channel == 'isolation':
           iso_o[ind_o] += 1
-        elif chan == 'monitoring':
+        elif channel == 'monitoring':
           monitor_o[ind_o] += 1
-        elif chan == 'hospital':
+        elif channel == 'hospital':
           hospital_o[ind_o] += 1
-        elif chan == 'overseas':
+        elif channel == 'overseas':
           overseas_o[ind_o] += 1
-        elif chan != chan: ## Is nan
-          noData_o[ind_o] += 1
+        elif channel != channel: ## Is nan
+          no_data_o[ind_o] += 1
     
-    data_r = {'date': date, 'no_data': noData_r, 'overseas': overseas_r, 'hospital': hospital_r, 
-              'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': QT_r, 'airport': airport_r}
+    data_r = {'date': date, 'no_data': no_data_r, 'overseas': overseas_r, 'hospital': hospital_r, 
+              'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': qt_r, 'airport': airport_r}
     data_r = pd.DataFrame(data_r)
-    data_o = {'date': date, 'no_data': noData_o, 'overseas': overseas_o, 'hospital': hospital_o, 
-              'monitoring': monitor_o, 'isolation': iso_o, 'quarantine': QT_o, 'airport': airport_o}
+    data_o = {'date': date, 'no_data': no_data_o, 'overseas': overseas_o, 'hospital': hospital_o, 
+              'monitoring': monitor_o, 'isolation': iso_o, 'quarantine': qt_o, 'airport': airport_o}
     data_o = pd.DataFrame(data_o)
     
     data_latest_r = data_r.iloc[-NB_LOOKBACK_DAYS:]
@@ -1115,69 +1064,69 @@ class MainSheet(Template):
     return
   
   def saveCsv_diffByTrans(self):
-    reportDateList = self.getReportDate()
-    entryDateList  = self.getEntryDate()
-    onsetDateList  = self.getOnsetDate()
-    transList      = self.getTransmission()
+    report_date_list = self.getReportDate()
+    entry_date_list  = self.getEntryDate()
+    onset_date_list  = self.getOnsetDate()
+    trans_list      = self.getTransmission()
     
-    todayOrd = dtt.date.today().toordinal() + 1
-    end2020Ord = ISODateToOrdinal('2020-12-31') + 1
+    today_ord = dtt.date.today().toordinal() + 1
+    end_2020_ord = ISODateToOrdinal('2020-12-31') + 1
     stock_latest_imp = []
-    stock_latest_ind = []
-    stock_latest_fle = []
+    stock_latest_indi = []
+    stock_latest_fleet = []
     stock_2020_imp = []
-    stock_2020_ind = []
-    stock_2020_fle = []
+    stock_2020_indi = []
+    stock_2020_fleet = []
     max_latest = 30
     max_2020 = 30
     
-    for reportDate, entryDate, onsetDate, trans in zip(reportDateList, entryDateList, onsetDateList, transList):
-      if reportDate != reportDate:
+    for report_date, entryDate, onset_date, trans in zip(report_date_list, entry_date_list, onset_date_list, trans_list):
+      if report_date != report_date:
         continue
       
       if trans == 'imported':
         stock_latest = stock_latest_imp
         stock_2020 = stock_2020_imp
       elif trans == 'indigenous':
-        stock_latest = stock_latest_ind
-        stock_2020 = stock_2020_ind
+        stock_latest = stock_latest_indi
+        stock_2020 = stock_2020_indi
       elif trans == 'fleet':
-        stock_latest = stock_latest_fle
-        stock_2020 = stock_2020_fle
+        stock_latest = stock_latest_fleet
+        stock_2020 = stock_2020_fleet
       else:
         print('diffByTrans, transimission not recognized')
       
-      repOrd = ISODateToOrdinal(reportDate)
-      entOrd = ISODateToOrdinal(entryDate) if entryDate == entryDate else 0
-      onsOrd = ISODateToOrdinal(onsetDate) if onsetDate == onsetDate else 0
+      rep_ord = ISODateToOrdinal(report_date)
+      entry_ord = ISODateToOrdinal(entryDate) if entryDate == entryDate else 0
+      onset_ord = ISODateToOrdinal(onset_date) if onset_date == onset_date else 0
       
-      if entOrd + onsOrd == 0:
+      if entry_ord + onset_ord == 0:
         continue
       
-      diff = min(repOrd-entOrd, repOrd-onsOrd)
+      diff = min(rep_ord-entry_ord, rep_ord-onset_ord)
       
-      if repOrd + NB_LOOKBACK_DAYS > todayOrd:
+      if rep_ord + NB_LOOKBACK_DAYS > today_ord:
         stock_latest.append(diff)
         max_latest = max(max_latest, diff)
       
-      if repOrd < end2020Ord:
+      if rep_ord < end_2020_ord:
         stock_2020.append(diff)
         max_2020 = max(max_2020, diff)
     
     ## Latest
     bins = np.arange(-0.5, max_latest+1, 1)
-    n_imp, ctrBin = makeHist(stock_latest_imp, bins)
-    n_ind, ctrBin = makeHist(stock_latest_ind, bins)
-    n_fle, ctrBin = makeHist(stock_latest_fle, bins)
-    n_tot = n_imp + n_ind + n_fle
+    n_imp, ctr_bins = makeHist(stock_latest_imp, bins)
+    n_indi, ctr_bins = makeHist(stock_latest_indi, bins)
+    n_fleet, ctr_bins = makeHist(stock_latest_fleet, bins)
+    n_tot = n_imp + n_indi + n_fleet
     
     n_imp = n_imp.round(0).astype(int)
-    n_ind = n_ind.round(0).astype(int)
-    n_fle = n_fle.round(0).astype(int)
+    n_indi = n_indi.round(0).astype(int)
+    n_fleet = n_fleet.round(0).astype(int)
     n_tot = n_tot.round(0).astype(int)
-    ctrBin = ctrBin.round(0).astype(int)
+    ctr_bins = ctr_bins.round(0).astype(int)
     
-    data = {'difference': ctrBin, 'all': n_tot, 'imported': n_imp, 'indigenous': n_ind, 'fleet': n_fle}
+    data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'fleet': n_fleet}
     data = pd.DataFrame(data)
     
     name = '%sprocessed_data/latest/difference_by_transmission.csv' % DATA_PATH
@@ -1185,18 +1134,18 @@ class MainSheet(Template):
     
     ## 2020
     bins = np.arange(-0.5, max_2020+1, 1)
-    n_imp, ctrBin = makeHist(stock_2020_imp, bins)
-    n_ind, ctrBin = makeHist(stock_2020_ind, bins)
-    n_fle, ctrBin = makeHist(stock_2020_fle, bins)
-    n_tot = n_imp + n_ind + n_fle
+    n_imp, ctr_bins = makeHist(stock_2020_imp, bins)
+    n_indi, ctr_bins = makeHist(stock_2020_indi, bins)
+    n_fleet, ctr_bins = makeHist(stock_2020_fleet, bins)
+    n_tot = n_imp + n_indi + n_fleet
     
     n_imp = n_imp.round(0).astype(int)
-    n_ind = n_ind.round(0).astype(int)
-    n_fle = n_fle.round(0).astype(int)
+    n_indi = n_indi.round(0).astype(int)
+    n_fleet = n_fleet.round(0).astype(int)
     n_tot = n_tot.round(0).astype(int)
-    ctrBin = ctrBin.round(0).astype(int)
+    ctr_bins = ctr_bins.round(0).astype(int)
     
-    data = {'difference': ctrBin, 'all': n_tot, 'imported': n_imp, 'indigenous': n_ind, 'fleet': n_fle}
+    data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'fleet': n_fleet}
     data = pd.DataFrame(data)
     
     name = '%sprocessed_data/2020/difference_by_transmission.csv' % DATA_PATH
@@ -1204,93 +1153,91 @@ class MainSheet(Template):
     return
   
   def saveCsv_travHistSymptomCorr(self, selection='latest'):
-    N_total, N_imported, N_data, travHistHist, symptomHist, corrMat, countMat = self.makeTravHistSymptomCorr(selection=selection)
-    N_min = N_data * 0.033
+    n_total, n_imported, n_data, trav_hist_hist, symptom_hist, corr_mat, count_mat = self.makeTravHistSymptomCorr(selection=selection)
     
-    N_trav = 10
-    N_symp = 10
+    n_trav = 10
+    n_symp = 10
     
-    corrMat = corrMat[:N_trav, :N_symp]
-    countMat = countMat[:N_trav, :N_symp]
-    travHistHist = travHistHist[:N_trav]
-    symptomHist = symptomHist[:N_symp]
+    corr_mat = corr_mat[:n_trav, :n_symp]
+    count_mat = count_mat[:n_trav, :n_symp]
+    trav_hist_hist = trav_hist_hist[:n_trav]
+    symptom_hist = symptom_hist[:n_symp]
     
-    travHistList = [trav[0] for trav in travHistHist]
-    symptomList = [symp[0] for symp in symptomHist]
-    grid = np.meshgrid(symptomList, travHistList)
+    trav_hist_list = [trav[0] for trav in trav_hist_hist]
+    symptom_list = [symp[0] for symp in symptom_hist]
+    grid = np.meshgrid(symptom_list, trav_hist_list)
     
     symptom   = grid[0].flatten()
     trav_hist = grid[1].flatten()
-    value_r   = corrMat.flatten()
+    value_r   = corr_mat.flatten()
     label_r   = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_r]
-    label_n   = countMat.flatten()
+    label_n   = count_mat.flatten()
     
-    data_1 = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_r}
-    data_1 = pd.DataFrame(data_1)
+    data1 = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_r}
+    data1 = pd.DataFrame(data1)
     
-    data_2 = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_n}
-    data_2 = pd.DataFrame(data_2)
+    data2 = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_n}
+    data2 = pd.DataFrame(data2)
     
-    pairList = [('N_total', N_total), ('N_imported', N_imported), ('N_data', N_data)] + travHistHist + symptomHist
+    pairList = [('N_total', n_total), ('N_imported', n_imported), ('N_data', n_data)] + trav_hist_hist + symptom_hist
     label = [pair[0] for pair in pairList]
     count = [pair[1] for pair in pairList]
-    label_zh = ['合計', '境外移入總數', '有資料案例數'] + [TRAVEL_HISTORY_DICT[trav]['zh-tw'] for trav in travHistList] + [SYMPTOM_DICT[symp]['zh-tw'] for symp in symptomList]
-    label_fr = ['Total', 'Importés', 'Données complètes'] + [TRAVEL_HISTORY_DICT[trav]['fr'] for trav in travHistList] + [SYMPTOM_DICT[symp]['fr'] for symp in symptomList]
+    label_zh = ['合計', '境外移入總數', '有資料案例數'] + [TRAVEL_HISTORY_DICT[trav]['zh-tw'] for trav in trav_hist_list] + [SYMPTOM_DICT[symp]['zh-tw'] for symp in symptom_list]
+    label_fr = ['Total', 'Importés', 'Données complètes'] + [TRAVEL_HISTORY_DICT[trav]['fr'] for trav in trav_hist_list] + [SYMPTOM_DICT[symp]['fr'] for symp in symptom_list]
     
-    data_3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
-    data_3 = pd.DataFrame(data_3)
+    data3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
+    data3 = pd.DataFrame(data3)
     
     name = '%sprocessed_data/%s/travel_history_symptom_correlations_coefficient.csv' % (DATA_PATH, selection)
-    saveCsv(name, data_1)
+    saveCsv(name, data1)
     name = '%sprocessed_data/%s/travel_history_symptom_correlations_counts.csv' % (DATA_PATH, selection)
-    saveCsv(name, data_2)
+    saveCsv(name, data2)
     name = '%sprocessed_data/%s/travel_history_symptom_counts.csv' % (DATA_PATH, selection)
-    saveCsv(name, data_3)
+    saveCsv(name, data3)
     return
   
   def saveCsv_ageSymptomCorr(self, selection='latest'):
-    N_total, N_data, ageHist, symptomHist, corrMat, countMat = self.makeAgeSymptomCorr(selection=selection)
-    N_min = N_data * 0.033
+    n_total, n_data, age_hist, symptom_hist, corr_mat, count_mat = self.makeAgeSymptomCorr(selection=selection)
     
-    N_age  = corrMat.shape[0]
-    N_symp = 10
+    n_age  = corr_mat.shape[0]
+    n_symp = 10
     
-    corrMat = corrMat[:N_age, :N_symp]
-    countMat = countMat[:N_age, :N_symp]
-    ageHist = ageHist[:N_age]
-    symptomHist = symptomHist[:N_symp]
+    corr_mat = corr_mat[:n_age, :n_symp]
+    count_mat = count_mat[:n_age, :n_symp]
+    age_hist = age_hist[:n_age]
+    symptom_hist = symptom_hist[:n_symp]
     
-    ageList = [age[0] for age in ageHist]
-    symptomList = [symp[0] for symp in symptomHist]
-    grid = np.meshgrid(symptomList, ageList)
+    age_list = [age[0] for age in age_hist]
+    symptom_list = [symp[0] for symp in symptom_hist]
+    grid = np.meshgrid(symptom_list, age_list)
     
     symptom = grid[0].flatten()
     age     = grid[1].flatten()
-    value_r = corrMat.flatten()
+    value_r = corr_mat.flatten()
     label_r = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_r]
-    label_n = countMat.flatten() #['%d' % n if v == v else '' for v, n in zip(value_r, countMat.flatten())]
+    label_n = count_mat.flatten() #['%d' % n if v == v else '' for v, n in zip(value_r, count_mat.flatten())]
     
-    data_1 = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_r}
-    data_1 = pd.DataFrame(data_1)
+    data1 = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_r}
+    data1 = pd.DataFrame(data1)
     
-    data_2 = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_n}
-    data_2 = pd.DataFrame(data_2)
+    data2 = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_n}
+    data2 = pd.DataFrame(data2)
     
-    pairList = [('N_total', N_total), ('N_data', N_data)] + ageHist + symptomHist
-    label = [pair[0] for pair in pairList]
-    count = [pair[1] for pair in pairList]
-    label_zh = ['合計', '有資料案例數'] + [AGE_DICT[age]['zh-tw'] for age in ageList] + [SYMPTOM_DICT[symp]['zh-tw'] for symp in symptomList]
-    label_fr = ['Total', 'Données complètes'] + [AGE_DICT[age]['fr'] for age in ageList] + [SYMPTOM_DICT[symp]['fr'] for symp in symptomList]
+    pair_list = [('N_total', n_total), ('N_data', n_data)] + age_hist + symptom_hist
+    label = [pair[0] for pair in pair_list]
+    count = [pair[1] for pair in pair_list]
+    label_zh = ['合計', '有資料案例數'] + [AGE_DICT[age]['zh-tw'] for age in age_list] + [SYMPTOM_DICT[symp]['zh-tw'] for symp in symptom_list]
+    label_fr = ['Total', 'Données complètes'] + [AGE_DICT[age]['fr'] for age in age_list] + [SYMPTOM_DICT[symp]['fr'] for symp in symptom_list]
     
-    data_3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
-    data_3 = pd.DataFrame(data_3)
+    data3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
+    data3 = pd.DataFrame(data3)
     
     name = '%sprocessed_data/%s/age_symptom_correlations_coefficient.csv' % (DATA_PATH, selection)
-    saveCsv(name, data_1)
+    saveCsv(name, data1)
     name = '%sprocessed_data/%s/age_symptom_correlations_counts.csv' % (DATA_PATH, selection)
-    saveCsv(name, data_2)
+    saveCsv(name, data2)
     name = '%sprocessed_data/%s/age_symptom_counts.csv' % (DATA_PATH, selection)
-    saveCsv(name, data_3)
+    saveCsv(name, data3)
     return
   
   def saveCsv(self):
@@ -1310,83 +1257,83 @@ class MainSheet(Template):
 class StatusSheet(Template):
 
   def __init__(self, verbose=True):
-    self.n_date = '日期'
-    self.n_weekNb = '週次'
-    self.n_newNbCases = '新增確診'
-    self.n_newCasesPerWeek = '每週新增確診'
-    self.n_cumCases = '確診總人數'
-    self.n_newMales = '新增男性'
-    self.n_cumMales = '男性總數'
-    self.n_maleFrac = '確診男性率'
-    self.n_newFemales = '新增女性'
-    self.n_cumFemales = '女性總數'
-    self.n_femaleFrac = '確診女性率'
-    self.n_newSoldiers = '新增軍人'
-    self.n_cumSoldiers = '敦睦總人數'
-    self.n_soldierFrac = '軍隊率'
-    self.n_newImported = '新增境外'
-    self.n_cumImported = '境外總人數'
-    self.n_importedFrac = '境外率'
-    self.n_newLocal = '新增本土'
-    self.n_cumLocal = '本土總人數'
-    self.n_localFrac = '本土率'
-    self.n_newDeaths = '新增死亡'
-    self.n_cumDeaths = '死亡總人數'
-    self.n_deathFrac = '死亡率'
-    self.n_newUnknown = '當日未知感染源數'
-    self.n_cumUnknown = '未知感染源總數'
-    self.n_cumKnown = '已知感染源數'
-    self.n_newDis = '新增解除隔離'
-    self.n_cumDis = '解除隔離數'
-    self.n_cumDisAndDeaths = '解除隔離+死亡'
-    self.n_cumHosp = '未解除隔離數'
-    self.n_notes = '備註'
+    self.coltag_date = '日期'
+    self.coltag_week_nb = '週次'
+    self.coltag_new_nb_cases = '新增確診'
+    self.coltag_new_cases_per_week = '每週新增確診'
+    self.coltag_cum_cases = '確診總人數'
+    self.coltag_new_males = '新增男性'
+    self.coltag_cum_males = '男性總數'
+    self.coltag_male_frac = '確診男性率'
+    self.coltag_new_females = '新增女性'
+    self.coltag_cum_females = '女性總數'
+    self.coltag_female_frac = '確診女性率'
+    self.coltag_new_soldiers = '新增軍人'
+    self.coltag_cum_soldiers = '敦睦總人數'
+    self.coltag_soldier_frac = '軍隊率'
+    self.coltag_new_imported = '新增境外'
+    self.coltag_cum_imported = '境外總人數'
+    self.coltag_imported_frac = '境外率'
+    self.coltag_newLocal = '新增本土'
+    self.coltag_cumLocal = '本土總人數'
+    self.coltag_local_frac = '本土率'
+    self.coltag_new_deaths = '新增死亡'
+    self.coltag_cum_deaths = '死亡總人數'
+    self.coltag_death_frac = '死亡率'
+    self.coltag_new_unknown = '當日未知感染源數'
+    self.coltag_cum_unknown = '未知感染源總數'
+    self.coltag_cum_known = '已知感染源數'
+    self.coltag_new_dis = '新增解除隔離'
+    self.coltag_cum_dis = '解除隔離數'
+    self.coltag_cum_dis_and_deaths = '解除隔離+死亡'
+    self.coltag_cum_hosp = '未解除隔離數'
+    self.coltag_notes = '備註'
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_status_evolution.csv' % DATA_PATH
     data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
-    cumDisList = data[self.n_cumDis].values
-    ind = cumDisList == cumDisList
+    cum_dis_list = data[self.coltag_cum_dis].values
+    ind = cum_dis_list == cum_dis_list
     self.data    = data[ind]
-    self.N_total = ind.sum()
+    self.n_total = ind.sum()
     
     if verbose:
       print('Loaded \"%s\"' % name)
-      print('N_total = %d' % self.N_total)
+      print('N_total = %d' % self.n_total)
     return 
   
   def getDate(self):
-    dateList = []
-    Y = 2020 #WARNING
+    date_list = []
+    y = 2020 #WARNING
     
-    for date in self.getCol(self.n_date):
-      MMDD = date.split('月')
-      M = int(MMDD[0])
-      DD = MMDD[1].split('日')
-      D = int(DD[0])
-      date = '%04d-%02d-%02d' % (Y, M, D)
-      dateList.append(date)
-    return dateList
+    for date in self.getCol(self.coltag_date):
+      mmdd = date.split('月')
+      m = int(mmdd[0])
+      dd = mmdd[1].split('日')
+      d = int(dd[0])
+      date = '%04d-%02d-%02d' % (y, m, d)
+      date_list.append(date)
+    return date_list
     
   def getCumCases(self):
-    return self.getCol(self.n_cumCases).astype(int)
+    return self.getCol(self.coltag_cum_cases).astype(int)
     
   def getCumDeaths(self):
-    return self.getCol(self.n_cumDeaths).astype(int)
+    return self.getCol(self.coltag_cum_deaths).astype(int)
     
   def getCumDis(self):
-    return self.getCol(self.n_cumDis).astype(int)
+    return self.getCol(self.coltag_cum_dis).astype(int)
     
   def getCumHosp(self):
-    return self.getCol(self.n_cumHosp).astype(int)
+    return self.getCol(self.coltag_cum_hosp).astype(int)
     
   def saveCsv_statusEvolution(self):
-    dateList      = self.getDate()
-    cumDeathsList = self.getCumDeaths()
-    cumDisList    = self.getCumDis()
-    cumHospList   = self.getCumHosp()
+    date_list = self.getDate()
+    cum_deaths_list = self.getCumDeaths()
+    cum_dis_list = self.getCumDis()
+    cum_hosp_list = self.getCumHosp()
     
-    data = {'date': dateList, 'death': cumDeathsList, 'hospitalized': cumHospList, 'discharged': cumDisList}
+    data = {'date': date_list, 'death': cum_deaths_list, 'hospitalized': cum_hosp_list, 'discharged': cum_dis_list}
     data = pd.DataFrame(data)
     data = adjustDateRange(data)
     
@@ -1410,127 +1357,127 @@ class StatusSheet(Template):
 class TestSheet(Template):
   
   def __init__(self, verbose=True):
-    self.n_date = '日期'
-    self.n_fromExtended = '擴大監測'
-    self.n_cumFromEextended = '擴大監測累計'
-    self.n_fromQT = '居檢送驗'
-    self.n_cumFromQT = '居檢送驗累計'
-    self.n_fromClinicalDef = '武肺通報'
-    self.n_cumFromClinicalDef = '武肺通報累計'
-    self.n_nbTests = '檢驗人數'
-    self.n_cumNbTests = '檢驗人數累計'
-    self.n_confirmed = '確診人數'
-    self.n_cumConfirmed = '確診人數累計'
-    self.n_dailyPosRate = '單日陽性率'
-    self.n_totPosRate = '陽性率'
-    self.n_criteria = '擴大之檢驗標準(含擴大監測標準及通報定義)'
-    self.n_note = '來源：疾管署（每天1am更新）'
+    self.coltag_date = '日期'
+    self.coltag_from_extended = '擴大監測'
+    self.coltag_cum_from_extended = '擴大監測累計'
+    self.coltag_from_qt = '居檢送驗'
+    self.coltag_cum_from_qt = '居檢送驗累計'
+    self.coltag_from_clin_def = '武肺通報'
+    self.coltag_cum_from_clin_def = '武肺通報累計'
+    self.coltag_nb_tests = '檢驗人數'
+    self.coltag_cum_nb_tests = '檢驗人數累計'
+    self.coltag_confirmed = '確診人數'
+    self.coltag_cum_confirmed = '確診人數累計'
+    self.coltag_daily_pos_rate = '單日陽性率'
+    self.coltag_tot_pos_rate = '陽性率'
+    self.coltag_criteria = '擴大之檢驗標準(含擴大監測標準及通報定義)'
+    self.coltag_note = '來源：疾管署（每天1am更新）'
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv' % DATA_PATH
     data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
-    dateList = data[self.n_date].values
-    ind = dateList == dateList
+    date_list = data[self.coltag_date].values
+    ind = date_list == date_list
     self.data    = data[ind]
-    self.N_total = ind.sum()
+    self.n_total = ind.sum()
     
     if verbose:
       print('Loaded \"%s\"' % name)
-      print('N_total = %d' % self.N_total)
+      print('N_total = %d' % self.n_total)
     return 
     
   def getDate(self):
-    dateList = []
+    date_list = []
     
-    for date in self.getCol(self.n_date):
-      MD = date.split('/')
-      date = '2020-%02d-%02d' % (int(MD[0]), int(MD[1]))
-      dateList.append(date)
-    return dateList
+    for date in self.getCol(self.coltag_date):
+      mmdd = date.split('/')
+      date = '2020-%02d-%02d' % (int(mmdd[0]), int(mmdd[1]))
+      date_list.append(date)
+    return date_list
   
   def getFromExtended(self):
-    fromExtList = []
-    for fromExt in self.getCol(self.n_fromExtended):
-      if fromExt != fromExt: ## Is nan
-        fromExtList.append(0)
+    from_ext_list = []
+    for from_ext in self.getCol(self.coltag_from_extended):
+      if from_ext != from_ext: ## Is nan
+        from_ext_list.append(0)
         continue
       
       try:
-        fromExt = fromExt.lstrip('+').split(',')
-        fromExt = int(''.join(fromExt))
-        fromExtList.append(fromExt)
+        from_ext = from_ext.lstrip('+').split(',')
+        from_ext = int(''.join(from_ext))
+        from_ext_list.append(from_ext)
       except:
-        print('From extended, %s' % fromExt)
-        fromExtList.append(0)
-    return fromExtList
+        print('From extended, %s' % from_ext)
+        from_ext_list.append(0)
+    return from_ext_list
 
   def getFromQT(self):
-    fromQTList = []
-    for fromQT in self.getCol(self.n_fromQT):
-      if fromQT != fromQT: ## Is nan
-        fromQTList.append(0)
+    from_qt_list = []
+    for from_qt in self.getCol(self.coltag_from_qt):
+      if from_qt != from_qt: ## Is nan
+        from_qt_list.append(0)
         continue
         
       try:
-        fromQT = fromQT.lstrip('+').split(',')
-        fromQT = int(''.join(fromQT))
-        fromQTList.append(fromQT)
+        from_qt = from_qt.lstrip('+').split(',')
+        from_qt = int(''.join(from_qt))
+        from_qt_list.append(from_qt)
       except:
-        print('From extended, %s' % fromQT)
-        fromQTList.append(0)
-    return fromQTList
+        print('From extended, %s' % from_qt)
+        from_qt_list.append(0)
+    return from_qt_list
 
-  def getFromClinicalDef(self):
-    clinicalDefList = []
-    for clinicalDef in self.getCol(self.n_fromClinicalDef):
-      if clinicalDef != clinicalDef: ## Is nan
-        clinicalDefList.append(np.nan)
+  def getFromClinDef(self):
+    from_clin_def_list = []
+    for from_clin_def in self.getCol(self.coltag_from_clin_def):
+      if from_clin_def != from_clin_def: ## Is nan
+        from_clin_def_list.append(np.nan)
         continue
         
       try:
-        clinicalDef = clinicalDef.lstrip('+').split(',')
-        clinicalDef = int(''.join(clinicalDef))
-        clinicalDefList.append(clinicalDef)
+        from_clin_def = from_clin_def.lstrip('+').split(',')
+        from_clin_def = int(''.join(from_clin_def))
+        from_clin_def_list.append(from_clin_def)
       except:
-        print('Clinical definition, %s' % clinicalDef)
-        clinicalDefList.append(0)
-    return clinicalDefList
+        print('Clinical definition, %s' % from_clin_def)
+        from_clin_def_list.append(0)
+    return from_clin_def_list
 
   def getCriteria(self):
-    criteriaList = []
+    crit_list = []
     
-    for criteria in self.getCol(self.n_criteria):
-      criteriaList.append(criteria)
-    return criteriaList
+    for crit in self.getCol(self.coltag_criteria):
+      crit_list.append(crit)
+    return crit_list
   
   def makeDailyTestCounts(self):
-    refOrd = ISODateToOrdinal(REF_ISO_DATE)
-    todayOrd = dtt.date.today().toordinal() + 1
+    ref_ord = ISODateToOrdinal(REF_ISO_DATE)
+    today_ord = dtt.date.today().toordinal() + 1
     
-    nbDays = todayOrd - refOrd
-    nbTestsArr = np.zeros(nbDays, dtype=int)
+    nb_days = today_ord - ref_ord
+    nb_tests_arr = np.zeros(nb_days, dtype=int)
     
-    dateList = self.getDate()
-    fromExtList = self.getFromExtended()
-    fromQTList = self.getFromQT()
-    fromClinicalDefList = self.getFromClinicalDef()
+    date_list = self.getDate()
+    from_ext_list = self.getFromExtended()
+    from_qt_list = self.getFromQT()
+    from_clin_def_list = self.getFromClinDef()
     
-    for date, fromClinicalDef, fromQT, fromExt in zip(dateList, fromClinicalDefList, fromQTList, fromExtList):
-      ind = ISODateToOrdinal(date) - refOrd
-      if ind < 0 or ind >= nbDays:
+    for date, from_clin_def, from_qt, from_ext in zip(date_list, from_clin_def_list, from_qt_list, from_ext_list):
+      ind = ISODateToOrdinal(date) - ref_ord
+      if ind < 0 or ind >= nb_days:
         print('Bad ind_r = %d' % ind)
         continue
       
-      nbTestsArr[ind] = fromClinicalDef + fromQT + fromExt
-    return nbTestsArr
+      nb_tests_arr[ind] = from_clin_def + from_qt + from_ext
+    return nb_tests_arr
   
   def saveCsv_testByCriterion(self):
-    dateList    = self.getDate()
-    fromExtList = self.getFromExtended()
-    fromQTList  = self.getFromQT()
-    fromClinicalDefList = self.getFromClinicalDef()
+    date_list = self.getDate()
+    from_ext_list = self.getFromExtended()
+    from_qt_list = self.getFromQT()
+    from_clin_def_list = self.getFromClinDef()
     
-    data = {'date': dateList, 'clinical': fromClinicalDefList, 'quarantine': fromQTList, 'extended': fromExtList}
+    data = {'date': date_list, 'clinical': from_clin_def_list, 'quarantine': from_qt_list, 'extended': from_ext_list}
     data = pd.DataFrame(data)
     data = adjustDateRange(data)
     
@@ -1546,10 +1493,10 @@ class TestSheet(Template):
     return
   
   def printCriteria(self):
-    dateList = self.getDate()
-    criteriaList = self.getCriteria()
+    date_list = self.getDate()
+    crit_list = self.getCriteria()
     
-    urlList = {
+    url_list = {
       '2020-01-16': 'http://at.cdc.tw/6Jlc8w', ##   [(F&R)|P & Wuhan] | [(F&R)|P & contact]
       '2020-01-21': 'http://at.cdc.tw/9EM3mV', ##   [(F&R)|P & Wuhan] | [(F&R)|P & contact] | [P & China]
       '2020-01-25': 'http://at.cdc.tw/l99yHG', ##   [F|R|P & (Hubei | contact therein F&R)] | [F|R|P & contact] | [P & China]
@@ -1583,16 +1530,16 @@ class TestSheet(Template):
       '2020-04-24': 'http://at.cdc.tw/R3sI9v'  ##   [(F|R|D-unknown) & (global | contact therein F|R)] | [F|R|D-unknown & contact] | [F|R & cluster] | [P] + [F|R|Ag|An & (cluster | unknown)]
     }
     
-    for date, criteria in zip(dateList, criteriaList):
-      if criteria != criteria:
+    for date, crit in zip(date_list, crit_list):
+      if crit != crit:
         pass
       else:
-        print(date, criteria, urlList.get(date, np.nan))
+        print(date, crit, url_list.get(date, np.nan))
         print()
     return
   
   def saveCsv_criteriaTimeline(self):
-    criteriaDict = {
+    crit_dict = {
       '2020-01-16': {
         'en': 'Wuhan with fever or resp. symp. or pneumonia\nClose contact of confirmed cases', ## Close contact of confirmed cases or ppl satisfying prev. cond.
         'fr': 'Wuhan avec fièvre ou sympt. resp. ou pneumonie\nContacts proches des cas confirmés',
@@ -1690,12 +1637,12 @@ class TestSheet(Template):
       }
     }
     
-    dateList = [key for key, value in criteriaDict.items()]
-    enList = [value['en'] for key, value in criteriaDict.items()]
-    frList = [value['fr'] for key, value in criteriaDict.items()]
-    zhtwList = [value['zh-tw'] for key, value in criteriaDict.items()]
+    date_list = [key for key, value in crit_dict.items()]
+    en_list = [value['en'] for key, value in crit_dict.items()]
+    fr_list = [value['fr'] for key, value in crit_dict.items()]
+    zh_tw_list = [value['zh-tw'] for key, value in crit_dict.items()]
     
-    data = {'date': dateList, 'en': enList, 'fr': frList, 'zh-tw': zhtwList}
+    data = {'date': date_list, 'en': en_list, 'fr': fr_list, 'zh-tw': zh_tw_list}
     data = pd.DataFrame(data)
     
     name = '%sprocessed_data/criteria_timeline.csv' % DATA_PATH
@@ -1713,8 +1660,8 @@ class TestSheet(Template):
 class BorderSheet(Template):
 
   def __init__(self, verbose=True):
-    self.n_date = '日期 '
-    self.tagDict = {
+    self.coltag_date = '日期 '
+    self.tag_dict = {
       'in': '資料來源：各機場、港口入出境人數統計資料 入境總人數',
       'out': '資料來源：各機場、港口入出境人數統計資料 出境總人數',
       'total': '入出境總人數_小計 ',
@@ -1836,7 +1783,7 @@ class BorderSheet(Template):
     data = pd.read_csv(name, dtype=object, skipinitialspace=True, header=[0, 1])
     
     ## Change header
-    hdr  = []
+    hdr = []
     for pair in data.columns:
       if 'Unnamed:' in pair[0]:
         hdr.append((hdr[-1][0], pair[1]))
@@ -1846,23 +1793,23 @@ class BorderSheet(Template):
         hdr.append(pair)
     data.columns = [pair[0]+' '+pair[1] for pair in hdr]
     
-    dateList = data[self.n_date].values
-    ind = dateList == dateList
+    date_list = data[self.coltag_date].values
+    ind = date_list == date_list
     self.data    = data[ind]
-    self.N_total = ind.sum()
+    self.n_total = ind.sum()
     
     if verbose:
       print('Loaded \"%s\"' % name)
-      print('N_total = %d' % self.N_total)
+      print('N_total = %d' % self.n_total)
     return 
     
   def getDate(self):
-    dateList = ['%s-%s-%s' % (date[:4], date[4:6], date[6:8]) for date in self.getCol(self.n_date)]
-    return dateList
+    date_list = ['%s-%s-%s' % (date[:4], date[4:6], date[6:8]) for date in self.getCol(self.coltag_date)]
+    return date_list
     
   def getNumbers(self, tag):
-    nbList = [int(out.replace(',', '')) for out in self.getCol(self.tagDict[tag])]
-    return nbList
+    nb_list = [int(out.replace(',', '')) for out in self.getCol(self.tag_dict[tag])]
+    return nb_list
     
   def getIn(self):
     return self.getNumbers('in')
@@ -1874,7 +1821,7 @@ class BorderSheet(Template):
     return self.getNumbers('total')
     
   def getAirportBreakdown(self, tag='total'):
-    labelList = [
+    label_list = [
       'Taipei A',
       'Taoyuan A1',
       'Taoyuan A2',
@@ -1892,13 +1839,13 @@ class BorderSheet(Template):
       'Mazu AS'
     ]
     
-    airList_break = []
-    for label in labelList:
-      airList_break.append((label, self.getNumbers(label+' '+tag)))
-    return airList_break
+    air_list_break = []
+    for label in label_list:
+      air_list_break.append((label, self.getNumbers(label+' '+tag)))
+    return air_list_break
   
   def getSeaportBreakdown(self, tag='total'):
-    labelList = [
+    label_list = [
       'Keelung S',
       'New Taipei S',
       'Taipei S',
@@ -1923,66 +1870,66 @@ class BorderSheet(Template):
       'Mazu S',
     ]
     
-    seaList_break = []
-    for label in labelList:
-      seaList_break.append((label, self.getNumbers(label+' '+tag)))
-    return seaList_break
+    sea_list_break = []
+    for label in label_list:
+      sea_list_break.append((label, self.getNumbers(label+' '+tag)))
+    return sea_list_break
   
   def getNotSpecifiedBreakdown(self, tag='total'):
-    labelList = [
+    label_list = [
       'Penghu X',
       'Mazu X'
     ]
     
-    notSpecList_break = []
-    for label in labelList:
-      notSpecList_break.append((label, self.getNumbers(label+' '+tag)))
-    return notSpecList_break
+    not_spec_list_break = []
+    for label in label_list:
+      not_spec_list_break.append((label, self.getNumbers(label+' '+tag)))
+    return not_spec_list_break
   
   def getAirport(self, tag='total'):
-    airList_break = self.getAirportBreakdown(tag=tag)
-    airList_break = [airList[1] for airList in airList_break]
-    airList = np.array(airList_break).sum(axis=0)
-    return airList
+    air_list_break = self.getAirportBreakdown(tag=tag)
+    air_list_break = [air_list[1] for air_list in air_list_break]
+    air_list = np.array(air_list_break).sum(axis=0)
+    return air_list
   
   def getSeaport(self, tag='total'):
-    seaList_break = self.getSeaportBreakdown(tag=tag)
-    seaList_break = [airList[1] for airList in seaList_break]
-    seaList = np.array(seaList_break).sum(axis=0)
-    return seaList
+    sea_list_break = self.getSeaportBreakdown(tag=tag)
+    sea_list_break = [sea_list[1] for sea_list in sea_list_break]
+    sea_list = np.array(sea_list_break).sum(axis=0)
+    return sea_list
   
   def getNotSpecified(self, tag='total'):
-    notSpecList_break = self.getNotSpecifiedBreakdown(tag=tag)
-    notSpecList_break = [airList[1] for airList in notSpecList_break]
-    notSpecList = np.array(notSpecList_break).sum(axis=0)
-    return notSpecList
+    not_spec_list_break = self.getNotSpecifiedBreakdown(tag=tag)
+    not_spec_list_break = [not_spec_list[1] for not_spec_list in not_spec_list_break]
+    not_spec_list = np.array(not_spec_list_break).sum(axis=0)
+    return not_spec_list
   
   def makeDailyArrivalCounts(self):
-    refOrd = ISODateToOrdinal(REF_ISO_DATE)
-    todayOrd = dtt.date.today().toordinal() + 1
+    ref_ord = ISODateToOrdinal(REF_ISO_DATE)
+    today_ord = dtt.date.today().toordinal() + 1
     
-    nbDays = todayOrd - refOrd
-    nbArrivalArr = np.zeros(nbDays, dtype=int)
+    nb_days = today_ord - ref_ord
+    nb_arrival_arr = np.zeros(nb_days, dtype=int)
     
-    dateList = self.getDate()
-    inList = self.getIn()
+    date_list = self.getDate()
+    in_list = self.getIn()
     
-    for date, in_ in zip(dateList, inList):
-      ind = ISODateToOrdinal(date) - refOrd
-      if ind < 0 or ind >= nbDays:
+    for date, in_ in zip(date_list, in_list):
+      ind = ISODateToOrdinal(date) - ref_ord
+      if ind < 0 or ind >= nb_days:
         print('Bad ind_r = %d' % ind)
         continue
       
-      nbArrivalArr[ind] = in_
-    return nbArrivalArr
+      nb_arrival_arr[ind] = in_
+    return nb_arrival_arr
   
   def saveCsv_borderStats(self):
-    dateList    = self.getDate()
-    airList     = self.getAirport(tag='in')
-    seaList     = self.getSeaport(tag='in')
-    notSpecList = self.getNotSpecified(tag='in')
+    date_list = self.getDate()
+    air_list = self.getAirport(tag='in')
+    sea_list = self.getSeaport(tag='in')
+    not_spec_list = self.getNotSpecified(tag='in')
     
-    data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
+    data = {'date': date_list, 'not_specified': not_spec_list, 'seaport': sea_list, 'airport': air_list}
     data = pd.DataFrame(data)
     data = adjustDateRange(data)
     
@@ -1994,11 +1941,11 @@ class BorderSheet(Template):
     name = '%sprocessed_data/2020/border_statistics_entry.csv' % DATA_PATH
     saveCsv(name, data_2020)
     
-    airList     = self.getAirport(tag='out')
-    seaList     = self.getSeaport(tag='out')
-    notSpecList = self.getNotSpecified(tag='out')
+    air_list = self.getAirport(tag='out')
+    sea_list = self.getSeaport(tag='out')
+    not_spec_list = self.getNotSpecified(tag='out')
     
-    data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
+    data = {'date': date_list, 'not_specified': not_spec_list, 'seaport': sea_list, 'airport': air_list}
     data = pd.DataFrame(data)
     data = adjustDateRange(data)
     
@@ -2010,11 +1957,11 @@ class BorderSheet(Template):
     name = '%sprocessed_data/2020/border_statistics_exit.csv' % DATA_PATH
     saveCsv(name, data_2020)
     
-    airList     = self.getAirport(tag='total')
-    seaList     = self.getSeaport(tag='total')
-    notSpecList = self.getNotSpecified(tag='total')
+    air_list = self.getAirport(tag='total')
+    sea_list = self.getSeaport(tag='total')
+    not_spec_list = self.getNotSpecified(tag='total')
     
-    data = {'date': dateList, 'not_specified': notSpecList, 'seaport': seaList, 'airport': airList}
+    data = {'date': date_list, 'not_specified': not_spec_list, 'seaport': sea_list, 'airport': air_list}
     data = pd.DataFrame(data)
     data = adjustDateRange(data)
     
@@ -2037,88 +1984,88 @@ class BorderSheet(Template):
 class TimelineSheet(Template):
   
   def __init__(self, verbose=True):
-    self.n_date = '時間'
-    self.n_TWNEvt = '台灣事件'
-    self.n_criteria = '台灣檢驗標準'
-    self.n_globalEvt = '全球事件'
-    self.n_keyEvt = '重點事件'
+    self.coltag_date = '時間'
+    self.coltag_twn_evt = '台灣事件'
+    self.coltag_criteria = '台灣檢驗標準'
+    self.coltag_global_evt = '全球事件'
+    self.coltag_key_evt = '重點事件'
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_timeline.csv' % DATA_PATH
     data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
-    dateList = data[self.n_date].values
-    ind = dateList == dateList
+    date_list = data[self.coltag_date].values
+    ind = date_list == date_list
     self.data    = data[ind]
-    self.N_total = ind.sum()
+    self.n_total = ind.sum()
     
     if verbose:
       print('Loaded \"%s\"' % name)
-      print('N_total = %d' % self.N_total)
+      print('N_total = %d' % self.n_total)
     return 
     
   def getDate(self):
-    dateList = []
+    date_list = []
     
-    for date in self.getCol(self.n_date):
-      YMDD = date.split('年')
-      Y = int(YMDD[0])
-      MDD = YMDD[1].split('月')
-      M = int(MDD[0])
-      DD = MDD[1].split('日')
-      D = int(DD[0])
-      date = '%04d-%02d-%02d' % (Y, M, D)
-      dateList.append(date)
-    return dateList
+    for date in self.getCol(self.coltag_date):
+      yyyymdd = date.split('年')
+      y = int(yyyymdd[0])
+      mdd = yyyymdd[1].split('月')
+      m = int(mdd[0])
+      dd = mdd[1].split('日')
+      d = int(dd[0])
+      date = '%04d-%02d-%02d' % (y, m, d)
+      date_list.append(date)
+    return date_list
   
   def getTWNEvt(self):
-    TWNEvtList = []
-    for TWNEvt in self.getCol(self.n_TWNEvt):
-      if TWNEvt == TWNEvt:
-        TWNEvt = TWNEvt.rstrip('\n')
-        TWNEvt = '\n'.join(TWNEvt.split('\n\n\n'))
-        TWNEvt = '\n'.join(TWNEvt.split('\n\n'))
-        TWNEvtList.append(TWNEvt)
+    twn_evt_list = []
+    for twn_evt in self.getCol(self.coltag_twn_evt):
+      if twn_evt == twn_evt:
+        twn_evt = twn_evt.rstrip('\n')
+        twn_evt = '\n'.join(twn_evt.split('\n\n\n'))
+        twn_evt = '\n'.join(twn_evt.split('\n\n'))
+        twn_evt_list.append(twn_evt)
       else:
-        TWNEvtList.append(TWNEvt)
-    return TWNEvtList
+        twn_evt_list.append(twn_evt)
+    return twn_evt_list
   
   def getGlobalEvt(self):
-    globalEvtList = []
-    for globalEvt in self.getCol(self.n_globalEvt):
-      if globalEvt == globalEvt:
-        globalEvt = globalEvt.rstrip('\n')
-        globalEvt = '\n'.join(globalEvt.split('\n\n\n'))
-        globalEvt = '\n'.join(globalEvt.split('\n\n'))
-        globalEvtList.append(globalEvt)
+    global_evt_list = []
+    for global_evt in self.getCol(self.coltag_global_evt):
+      if global_evt == global_evt:
+        global_evt = global_evt.rstrip('\n')
+        global_evt = '\n'.join(global_evt.split('\n\n\n'))
+        global_evt = '\n'.join(global_evt.split('\n\n'))
+        global_evt_list.append(global_evt)
       else:
-        globalEvtList.append(globalEvt)
-    return globalEvtList
+        global_evt_list.append(global_evt)
+    return global_evt_list
   
   def getKeyEvt(self):
-    keyEvtList = []
-    for keyEvt in self.getCol(self.n_keyEvt):
-      if keyEvt == keyEvt:
-        keyEvtList.append(keyEvt.rstrip('\n'))
+    key_evt_list = []
+    for key_evt in self.getCol(self.coltag_key_evt):
+      if key_evt == key_evt:
+        key_evt_list.append(key_evt.rstrip('\n'))
       else:
-        keyEvtList.append(keyEvt)
-    return keyEvtList
+        key_evt_list.append(key_evt)
+    return key_evt_list
   
   def saveCsv_evtTimeline(self):
-    dateList = []
-    TWNEvtList = []
-    globalEvtList = []
-    keyEvtList = []
+    date_list = []
+    twn_evt_list = []
+    global_evt_list = []
+    key_evt_list = []
     
-    for date, TWNEvt, globalEvt, keyEvt in zip(self.getDate(), self.getTWNEvt(), self.getGlobalEvt(), self.getKeyEvt()):
-      if TWNEvt != TWNEvt and globalEvt != globalEvt and keyEvt != keyEvt:
+    for date, twn_evt, global_evt, key_evt in zip(self.getDate(), self.getTWNEvt(), self.getGlobalEvt(), self.getKeyEvt()):
+      if twn_evt != twn_evt and global_evt != global_evt and key_evt != key_evt:
         continue
       else:
-        dateList.append(date)
-        TWNEvtList.append(TWNEvt)
-        globalEvtList.append(globalEvt)
-        keyEvtList.append(keyEvt)
+        date_list.append(date)
+        twn_evt_list.append(twn_evt)
+        global_evt_list.append(global_evt)
+        key_evt_list.append(key_evt)
     
-    data = {'date': dateList, 'Taiwan_event': TWNEvtList, 'global_event': globalEvtList, 'key_event': keyEvtList}
+    data = {'date': date_list, 'Taiwan_event': twn_evt_list, 'global_event': global_evt_list, 'key_event': key_evt_list}
     data = pd.DataFrame(data)
     
     name = '%sprocessed_data/event_timeline_zh-tw.csv' % DATA_PATH
@@ -2135,47 +2082,47 @@ class TimelineSheet(Template):
 import scipy.signal as signal
 
 def makeVariousRates(main_sheet, test_sheet, border_sheet):
-  dateArr, nbImpArr, nbIndiArr, nbCasesArr = main_sheet.makeDailyCaseCounts()
-  nbTestsArr = test_sheet.makeDailyTestCounts()
-  nbArrivalArr = border_sheet.makeDailyArrivalCounts()
+  date_arr, nb_imp_arr, nb_indi_arr, nb_cases_arr = main_sheet.makeDailyCaseCounts()
+  nb_tests_arr = test_sheet.makeDailyTestCounts()
+  nb_arrival_arr = border_sheet.makeDailyArrivalCounts()
   
   ## Convert to float
-  nbImpArr = nbImpArr.astype(float)
-  nbIndiArr = nbIndiArr.astype(float)
-  nbCasesArr = nbCasesArr.astype(float)
-  nbTestsArr = nbTestsArr.astype(float)
-  nbArrivalArr = nbArrivalArr.astype(float)
+  nb_imp_arr = nb_imp_arr.astype(float)
+  nb_indi_arr = nb_indi_arr.astype(float)
+  nb_cases_arr = nb_cases_arr.astype(float)
+  nb_tests_arr = nb_tests_arr.astype(float)
+  nb_arrival_arr = nb_arrival_arr.astype(float)
   
-  ind_test = nbTestsArr == 0
-  ind_arrival = nbArrivalArr == 0
+  ind_test = nb_tests_arr == 0
+  ind_arrival = nb_arrival_arr == 0
   
   ## Smooth
   kernel = [1/7] * 7 + [0.0] * 6
-  nbImpArr = signal.convolve(nbImpArr, kernel[::-1], mode='same')
-  nbIndiArr = signal.convolve(nbIndiArr, kernel[::-1], mode='same')
-  nbCasesArr = signal.convolve(nbCasesArr, kernel[::-1], mode='same')
-  nbTestsArr = signal.convolve(nbTestsArr, kernel[::-1], mode='same')
-  nbArrivalArr = signal.convolve(nbArrivalArr, kernel[::-1], mode='same')
+  nb_imp_arr = signal.convolve(nb_imp_arr, kernel[::-1], mode='same')
+  nb_indi_arr = signal.convolve(nb_indi_arr, kernel[::-1], mode='same')
+  nb_cases_arr = signal.convolve(nb_cases_arr, kernel[::-1], mode='same')
+  nb_tests_arr = signal.convolve(nb_tests_arr, kernel[::-1], mode='same')
+  nb_arrival_arr = signal.convolve(nb_arrival_arr, kernel[::-1], mode='same')
   
-  population_TWN = 23563356
+  population_twn = 23563356
   
   with warnings.catch_warnings(): ## Avoid division by zero
     warnings.simplefilter("ignore")
     
-    pRate = nbCasesArr / nbTestsArr
-    pRate[ind_test] = np.nan
+    pos_rate = nb_cases_arr / nb_tests_arr
+    pos_rate[ind_test] = np.nan
     
-    iRate_imp = nbImpArr / nbArrivalArr
-    iRate_imp[ind_arrival] = np.nan
+    imp_inci_rate = nb_imp_arr / nb_arrival_arr
+    imp_inci_rate[ind_arrival] = np.nan
     
-    iRate_indi = nbIndiArr / float(population_TWN)
+    indi_inci_rate = nb_indi_arr / float(population_twn)
     
-  return dateArr, pRate, iRate_imp, iRate_indi
+  return date_arr, pos_rate, imp_inci_rate, indi_inci_rate
   
 def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
-  dateArr, pRate, iRate_imp, iRate_indi = makeVariousRates(main_sheet, test_sheet, border_sheet)
+  date_arr, pos_rate, imp_inci_rate, indi_inci_rate = makeVariousRates(main_sheet, test_sheet, border_sheet)
   
-  data = {'date': dateArr, 'positive_rate': pRate, 'imp_inci_rate': iRate_imp, 'indi_inci_rate': iRate_indi}
+  data = {'date': date_arr, 'positive_rate': pos_rate, 'imp_inci_rate': imp_inci_rate, 'indi_inci_rate': indi_inci_rate}
   data = pd.DataFrame(data)
   
   data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
@@ -2243,4 +2190,3 @@ if __name__ == '__main__':
   saveCsv_all()
 
 ###############################################################################
-

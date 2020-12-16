@@ -22,6 +22,7 @@ GS_var.r_list_latest = [3, 3, 4, 1, 1, 2, 2];
 GS_var.xlabel_path_2020 = 25;
 GS_var.r_list_2020 = [7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7];
 GS_var.c_list = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022'];
+GS_var.trans_duration = 800;
 
 //-- General functions
 function GS_ISO_Date_To_MD_Date(iso_date) {
@@ -47,4 +48,3 @@ function GS_CumSum(data, col_tag_list) {
 //python convention
 //VR tooltip
 //2020 page
-//transition

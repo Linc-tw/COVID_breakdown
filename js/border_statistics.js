@@ -295,8 +295,6 @@ function BS_Initialize(wrap) {
 }
 
 function BS_update(wrap) {
-  var transDuration = 800;
-
   //-- Add y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
@@ -309,14 +307,14 @@ function BS_update(wrap) {
   
   wrap.svg.select('.yaxis')
     .transition()
-    .duration(transDuration)
+    .duration(GS_var.trans_duration)
     .call(y_axis);
   
   //-- Update bars
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
-    .duration(transDuration)
+    .duration(GS_var.trans_duration)
     .attr('y', function (d) {return y(d.y1);})
     .attr('height', function (d) {return y(d.y0)-y(d.y1);});
     

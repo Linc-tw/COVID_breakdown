@@ -484,7 +484,6 @@ function CT_Initialize(wrap) {
 }
 
 function CT_Update(wrap) {
-  var trans_duration = 800;
   var i, active_list;
   
   if (wrap.doFull == 0)
@@ -513,20 +512,20 @@ function CT_Update(wrap) {
     wrap.svg.selectAll('.circle')
       .data(wrap.formatted_data)
       .transition()
-      .duration(trans_duration)
+      .duration(GS_var.trans_duration)
       .attr("r", 0)
       
     //-- Update dots
     wrap.svg.selectAll('.dot')
       .data(wrap.formatted_data)
       .transition()
-      .duration(trans_duration)
+      .duration(GS_var.trans_duration)
       .attr("r", 5)
     
     //-- Update baseline
     wrap.svg.selectAll(wrap.id+'_timeline_baseline')
       .transition()
-      .duration(trans_duration)
+      .duration(GS_var.trans_duration)
       .attr('opacity', 1)
     
     //-- Title
@@ -548,7 +547,7 @@ function CT_Update(wrap) {
     
     wrap.svg.selectAll('.title')
       .transition()
-      .duration(trans_duration)
+      .duration(GS_var.trans_duration)
       .attr("x", title_x_t)
       .attr("y", function (d, i) {return title_y0_t + title_y1_t*i})
       
@@ -557,22 +556,22 @@ function CT_Update(wrap) {
       wrap['circle_text_'+i] = 0;
       wrap.svg.selectAll(wrap.id+'_circle_text_'+i)
         .transition()
-        .duration(trans_duration)
+        .duration(GS_var.trans_duration)
         .attr("opacity", 0)
       wrap.svg.selectAll(wrap.id+'_circle_line_'+i)
         .transition()
-        .duration(trans_duration)
+        .duration(GS_var.trans_duration)
         .attr("opacity", wrap.line_alpha*0)
         
       //-- Update timeline texts
       wrap['timeline_text_'+i] = active_list[i];
       wrap.svg.selectAll(wrap.id+'_timeline_text_'+i)
         .transition()
-        .duration(trans_duration)
+        .duration(GS_var.trans_duration)
         .attr("opacity", active_list[i])
       wrap.svg.selectAll(wrap.id+'_timeline_line_'+i)
         .transition()
-        .duration(trans_duration)
+        .duration(GS_var.trans_duration)
         .attr("opacity", wrap.line_alpha*active_list[i])
     }
   }
@@ -581,26 +580,26 @@ function CT_Update(wrap) {
     wrap.svg.selectAll('.circle')
       .data(wrap.formatted_data)
       .transition()
-      .duration(trans_duration)
+      .duration(GS_var.trans_duration)
       .attr("r", function (d, i) {return wrap.r_c_max-(wrap.r_c_max-wrap.r_c_min)*i/(wrap.length-1);})
       
     //-- Update dots
     wrap.svg.selectAll('.dot')
       .data(wrap.formatted_data)
       .transition()
-      .duration(trans_duration)
+      .duration(GS_var.trans_duration)
       .attr("r", 0)
     
     //-- Update baseline
     wrap.svg.selectAll(wrap.id+'_timeline_baseline')
       .transition()
-      .duration(trans_duration)
+      .duration(GS_var.trans_duration)
       .attr('opacity', 0)
       
     //-- Title
     wrap.svg.selectAll('.title')
       .transition()
-      .duration(trans_duration)
+      .duration(GS_var.trans_duration)
       .attr("x", 10)
       .attr("y", function (d, i) {return 20 + i*20})
       
@@ -609,22 +608,22 @@ function CT_Update(wrap) {
       wrap['circle_text_'+i] = active_list[i];
       wrap.svg.selectAll(wrap.id+'_circle_text_'+i)
         .transition()
-        .duration(trans_duration)
+        .duration(GS_var.trans_duration)
         .attr("opacity", active_list[i])
       wrap.svg.selectAll(wrap.id+'_circle_line_'+i)
         .transition()
-        .duration(trans_duration)
+        .duration(GS_var.trans_duration)
         .attr("opacity", wrap.line_alpha*active_list[i])
         
       //-- Update timeline texts
       wrap['timeline_text_'+i] = 0;
       wrap.svg.selectAll(wrap.id+'_timeline_text_'+i)
         .transition()
-        .duration(trans_duration)
+        .duration(GS_var.trans_duration)
         .attr("opacity", 0)
       wrap.svg.selectAll(wrap.id+'_timeline_line_'+i)
         .transition()
-        .duration(trans_duration)
+        .duration(GS_var.trans_duration)
         .attr("opacity", wrap.line_alpha*0)
     }
   }
