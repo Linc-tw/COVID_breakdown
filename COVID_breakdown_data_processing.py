@@ -201,27 +201,33 @@ def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
   Parameters
   ----------
   data : array-like
+  
   bins : (1, N) float array
     bin edges
+    
   factor : float, optional
     rescaling factor for the histogram
+    
   pdf : bool, optional
     make the output a pdf, i.e. normalized by the binwidth & the total counts
   
   Returns
   -------
-  n : (1, N) float array
+  n_arr : (1, N) float array
     number counts, could be rescaled
-  ctrBin : (1, N) float array
+    
+  ctr_bins : (1, N) float array
     center of the bins
-    n & ctrBin have the same size.
+    n_arr & ctr_bins have the same size.
   """
   n_arr, bins = np.histogram(data, bins, weights=wgt)
   ctr_bins = centerOfBins(bins)
+  
   if pdf == True:
     n_arr = asFloat(n_arr) / (float(sum(n_arr)) * (bins[1:] - bins[:-1]))
   else:
     n_arr = asFloat(n_arr) * factor
+  
   return n_arr, ctr_bins
 
 def adjustDateRange(data):
@@ -231,23 +237,23 @@ def adjustDateRange(data):
   today_ord = dtt.date.today().toordinal() + 1
   
   zero = [0] * (len(data.columns) - 1)
-  stock1 = []
-  stock2 = []
+  stock_1 = []
+  stock_2 = []
   
   for ord in range(ref_ord, begin_ord):
-    ISO = ordinalToISODate(ord)
-    stock1.append([ISO] + zero)
+    iso_date = ordinalToISODate(ord)
+    stock_1.append([iso_date] + zero)
     
   for ord in range(end_ord, today_ord):
-    ISO = ordinalToISODate(ord)
-    stock2.append([ISO] + zero)
+    iso_date = ordinalToISODate(ord)
+    stock_2.append([iso_date] + zero)
   
   if ref_ord > begin_ord:
     data = data[ref_ord-begin_ord:]
   
-  data1 = pd.DataFrame(stock1, columns=data.columns)
-  data2 = pd.DataFrame(stock2, columns=data.columns)
-  data  = pd.concat([data1, data, data2])
+  data_1 = pd.DataFrame(stock_1, columns=data.columns)
+  data_2 = pd.DataFrame(stock_2, columns=data.columns)
+  data = pd.concat([data_1, data, data_2])
   return data
 
 ###############################################################################
@@ -534,7 +540,13 @@ class MainSheet(Template):
         
       elif entryDate in ['11/28(12/2)']:
         entry_date_list.append('2020-11-30')
-      
+        
+      elif entryDate in ['12/4\n12/15']:
+        entry_date_list.append('2020-12-15')
+        
+      elif entryDate in ['12/7\n12/15']:
+        entry_date_list.append('2020-12-15')
+        
       else:
         try:
           mmdd = entryDate.split('/')
@@ -584,7 +596,7 @@ class MainSheet(Template):
       elif '機場' in channel:
         channel_list.append('airport')
         
-      elif '檢疫' in channel or '回溯性採檢' in channel:
+      elif '檢疫' in channel or '回溯':
         channel_list.append('quarantine')
         
       elif '隔離' in channel or '接觸者檢查' in channel:
@@ -1173,11 +1185,11 @@ class MainSheet(Template):
     label_r   = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_r]
     label_n   = count_mat.flatten()
     
-    data1 = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_r}
-    data1 = pd.DataFrame(data1)
+    data_1 = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_r}
+    data_1 = pd.DataFrame(data_1)
     
-    data2 = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_n}
-    data2 = pd.DataFrame(data2)
+    data_2 = {'symptom': symptom, 'trav_hist': trav_hist, 'value': value_r, 'label': label_n}
+    data_2 = pd.DataFrame(data_2)
     
     pairList = [('N_total', n_total), ('N_imported', n_imported), ('N_data', n_data)] + trav_hist_hist + symptom_hist
     label = [pair[0] for pair in pairList]
@@ -1189,9 +1201,9 @@ class MainSheet(Template):
     data3 = pd.DataFrame(data3)
     
     name = '%sprocessed_data/%s/travel_history_symptom_correlations_coefficient.csv' % (DATA_PATH, selection)
-    saveCsv(name, data1)
+    saveCsv(name, data_1)
     name = '%sprocessed_data/%s/travel_history_symptom_correlations_counts.csv' % (DATA_PATH, selection)
-    saveCsv(name, data2)
+    saveCsv(name, data_2)
     name = '%sprocessed_data/%s/travel_history_symptom_counts.csv' % (DATA_PATH, selection)
     saveCsv(name, data3)
     return
@@ -1217,11 +1229,11 @@ class MainSheet(Template):
     label_r = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_r]
     label_n = count_mat.flatten() #['%d' % n if v == v else '' for v, n in zip(value_r, count_mat.flatten())]
     
-    data1 = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_r}
-    data1 = pd.DataFrame(data1)
+    data_1 = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_r}
+    data_1 = pd.DataFrame(data_1)
     
-    data2 = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_n}
-    data2 = pd.DataFrame(data2)
+    data_2 = {'symptom': symptom, 'age': age, 'value': value_r, 'label': label_n}
+    data_2 = pd.DataFrame(data_2)
     
     pair_list = [('N_total', n_total), ('N_data', n_data)] + age_hist + symptom_hist
     label = [pair[0] for pair in pair_list]
@@ -1233,9 +1245,9 @@ class MainSheet(Template):
     data3 = pd.DataFrame(data3)
     
     name = '%sprocessed_data/%s/age_symptom_correlations_coefficient.csv' % (DATA_PATH, selection)
-    saveCsv(name, data1)
+    saveCsv(name, data_1)
     name = '%sprocessed_data/%s/age_symptom_correlations_counts.csv' % (DATA_PATH, selection)
-    saveCsv(name, data2)
+    saveCsv(name, data_2)
     name = '%sprocessed_data/%s/age_symptom_counts.csv' % (DATA_PATH, selection)
     saveCsv(name, data3)
     return
