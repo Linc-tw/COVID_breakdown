@@ -45,6 +45,4 @@ function GS_CumSum(data, col_tag_list) {
 }
 
 //TODO
-//VR tooltip
-//2020 page
 //show data table

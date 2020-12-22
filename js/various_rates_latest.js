@@ -29,6 +29,7 @@ VR_latest_wrap.y_max_factor = 1.2;
 VR_latest_wrap.y_max_fix = 0;
 VR_latest_wrap.y_path = 0.01;
 VR_latest_wrap.legend_pos_x = 40;
+VR_latest_wrap.r = 3.5;
 
 //-- Plot
 function VR_Latest_Plot() {

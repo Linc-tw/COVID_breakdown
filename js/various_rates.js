@@ -327,7 +327,7 @@ function VR_update(wrap) {
   wrap.dot.selectAll('.content.dot')
     .transition()
     .duration(GS_var.trans_duration)
-    .attr("r", 3.5);
+    .attr("r", wrap.r);
 
   //-- Legend - label
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
