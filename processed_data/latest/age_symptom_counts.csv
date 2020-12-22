@@ -1,17 +1,17 @@
 label,count,label_zh,label_fr
-N_total,257,合計,Total
-N_data,163,有資料案例數,Données complètes
+N_total,261,合計,Total
+N_data,166,有資料案例數,Données complètes
 90s,1,90-99歲,90aine
 80s,0,80-89歲,80aine
 70s,1,70-79歲,70aine
 60s,5,60-69歲,60aine
 50s,13,50-59歲,50aine
-40s,23,40-49歲,40aine
-30s,56,30-39歲,30aine
+40s,24,40-49歲,40aine
+30s,58,30-39歲,30aine
 20s,55,20-29歲,20aine
 10s,8,10-19歲,10aine
 0s,1,<10歲,< 10 ans
-asymptomatic,75,無症狀,asymptomatique
+asymptomatic,78,無症狀,asymptomatique
 cough,35,咳嗽,toux
 sneezing,32,鼻腔症狀,éternuement
 anosmia,31,嗅覺異常,anosmie
