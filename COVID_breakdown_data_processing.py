@@ -260,7 +260,6 @@ def adjustDateRange(data):
 ## Template
 
 class Template:
-  
   def getCol(self, col):
     return self.data[col].values
 

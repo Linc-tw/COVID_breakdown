@@ -115,6 +115,12 @@ body,
   margin-top: -55px;
   margin-bottom: -55px;
 }
+#various_rates_latest .tooltip, #various_rates_2020 .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
+  margin-top: -45px;
+  margin-bottom: -45px;
+}
 #difference_by_transmission_latest .tooltip, #difference_by_transmission_2020 .tooltip {
   margin-left: -90px;
   margin-right: -90px;

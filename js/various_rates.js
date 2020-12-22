@@ -84,7 +84,10 @@ function VR_Format_Data(wrap, data) {
       y = +data[i][col];
       block = {
         'x': data[i]["date"],
-        'y': y
+        'y': y,
+        'y1': +data[i][col_tag_list[0]],
+        'y2': +data[i][col_tag_list[1]],
+        'y3': +data[i][col_tag_list[2]]
       };
       
       y_max = Math.max(y_max, y);
@@ -112,71 +115,72 @@ function VR_Format_Data(wrap, data) {
   wrap.ytick = ytick;
 }
 
-// function VR_Mouse_Over(wrap, d) {
-//   wrap.tooltip.transition()
-//     .duration(200)
-//     .style("opacity", 0.9)
-//   d3.select(d3.event.target)
-//     .style("opacity", 0.8)
-// }
-// 
-// function VR_Get_Tooltip_Pos(wrap, d) {
-//   var l_max = 0;
-//   var i_max = -1;
-//   var i, l;
-//   
-//   //-- Look for the furthest vertex
-//   for (i=0; i<4; i++) {
-//     l = (d[0] - wrap.corner[i][0])**2 + (d[1] - wrap.corner[i][1])**2;
-//     if (l > l_max) {
-//       l_max = l;
-//       i_max = i;
-//     }
-//   }
-//   
-//   //-- Place the caption somewhere on the longest arm, parametrizaed by x_alpha & y_alpha
-//   var x_alpha = 0.1;
-//   var y_alpha = 0.5;
-//   var x_pos = d[0] * (1-x_alpha) + wrap.corner[i_max][0] * x_alpha;
-//   var y_pos = d[1] * (1-y_alpha) + wrap.corner[i_max][1] * y_alpha;
-//   
-//   var buffer = 1.25*16; //-- Margin buffer of card-body
-//   var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
-//   var card_hdr = 3.125*16; //-- Offset caused by card-header
-//   var svg_dim = d3.select(wrap.id).node().getBoundingClientRect();
-//   var x_aspect = (svg_dim.width - 2*buffer) / wrap.tot_width;
-//   var y_aspect = (svg_dim.height - 2*buffer) / wrap.tot_height;
-//   
-//   x_pos = (x_pos + wrap.margin.left) * x_aspect + buffer;
-//   y_pos = (y_pos + wrap.margin.top) * y_aspect + buffer + card_hdr + button;
-//   
-//   return [x_pos, y_pos];
-// }
+function VR_Mouse_Over(wrap, d) {
+  wrap.tooltip.transition()
+    .duration(200)
+    .style("opacity", 0.9)
+  d3.select(d3.event.target)
+    .style("opacity", 0.8)
+}
+ 
+function VR_Get_Tooltip_Pos(wrap, d) {
+  var l_max = 0;
+  var i_max = -1;
+  var i, l;
+  
+  //-- Look for the furthest vertex
+  for (i=0; i<4; i++) {
+    l = (d[0] - wrap.corner[i][0])**2 + (d[1] - wrap.corner[i][1])**2;
+    if (l > l_max) {
+      l_max = l;
+      i_max = i;
+    }
+  }
+  
+  //-- Place the caption somewhere on the longest arm, parametrizaed by x_alpha & y_alpha
+  var x_alpha = 0.1;
+  var y_alpha = 0.5;
+  var x_pos = d[0] * (1-x_alpha) + wrap.corner[i_max][0] * x_alpha;
+  var y_pos = d[1] * (1-y_alpha) + wrap.corner[i_max][1] * y_alpha;
+  
+  var buffer = 1.25*16; //-- Margin buffer of card-body
+  var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
+  var card_hdr = 3.125*16; //-- Offset caused by card-header
+  var svg_dim = d3.select(wrap.id).node().getBoundingClientRect();
+  var x_aspect = (svg_dim.width - 2*buffer) / wrap.tot_width;
+  var y_aspect = (svg_dim.height - 2*buffer) / wrap.tot_height;
+  
+  x_pos = (x_pos + wrap.margin.left) * x_aspect + buffer;
+  y_pos = (y_pos + wrap.margin.top) * y_aspect + buffer + card_hdr + button;
+  
+  return [x_pos, y_pos];
+}
 
-// function VR_Mouse_Move(wrap, d) {
-//   var new_pos = VR_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
-//   var tooltip_text;
-//   
-//   if (GS_lang == 'zh-tw')
-//     tooltip_text = d.x + "<br>機場 = " + d.h1+ "<br>港口 = " + d.h2 + "<br>無細節 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
-//   else if (GS_lang == 'fr')
-//     tooltip_text = d.x + "<br>Aéroports = " + d.h1+ "<br>Ports maritimes = " + d.h2 + "<br>Sans précisions = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
-//   else
-//     tooltip_text = d.x + "<br>Airports = " + d.h1+ "<br>Seaports = " + d.h2 + "<br>Not specified = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
-//   
-//   wrap.tooltip
-//     .html(tooltip_text)
-//     .style("left", new_pos[0] + "px")
-//     .style("top", new_pos[1] + "px")
-// }
-// 
-// function VR_Mouse_Leave(wrap, d) {
-//   wrap.tooltip.transition()
-//     .duration(10)
-//     .style("opacity", 0)
-//   d3.select(d3.event.target)
-//     .style("opacity", 1)
-// }
+function VR_Mouse_Move(wrap, d) {
+  var new_pos = VR_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
+  var fct_format = d3.format(".2%");
+  var tooltip_text;
+  
+  if (GS_lang == 'zh-tw')
+    tooltip_text = d.x + '<br>陽性率 = ' + fct_format(d.y1) + '<br>入境盛行率 = ' + fct_format(d.y2) + '<br>本土盛行率 = ' + fct_format(d.y3)
+  else if (GS_lang == 'fr')
+    tooltip_text = d.x + '<br>Taux de positivité = ' + fct_format(d.y1) + "<br>Taux d'inci. front. = " + fct_format(d.y2) + "<br>Taux d'inci. local = " + fct_format(d.y3)
+  else
+    tooltip_text = d.x + '<br>Positive rate = ' + fct_format(d.y1) + '<br>Arr. inci. rate = ' + fct_format(d.y2) + '<br>Indi. inci. rate = ' + fct_format(d.y3)
+  
+  wrap.tooltip
+    .html(tooltip_text)
+    .style("left", new_pos[0] + "px")
+    .style("top", new_pos[1] + "px")
+}
+ 
+function VR_Mouse_Leave(wrap, d) {
+  wrap.tooltip.transition()
+    .duration(10)
+    .style("opacity", 0)
+  d3.select(d3.event.target)
+    .style("opacity", 1)
+}
 
 function VR_Initialize(wrap) {
   //-- Add x-axis
@@ -273,13 +277,29 @@ function VR_Initialize(wrap) {
       .style('stroke', function (d) {return color(d.col);})
       .style('stroke-width', '2.5px')
       .style("fill", 'none');
-//       .on("mouseover", function (d) {VR_Mouse_Over(wrap, d);})
-//       .on("mousemove", function (d) {VR_Mouse_Move(wrap, d);})
-//       .on("mouseleave", function (d) {VR_Mouse_Leave(wrap, d);})
-
+      
+  var dot = wrap.svg.selectAll()
+    .data(wrap.formatted_data)
+    .enter();
+    
+  dot.append('g')
+    .style("fill", function (d) {return color(d.col);})
+    .selectAll(".content.dot")
+    .data(function (d) {return d.values;})
+    .enter()
+    .append("circle")
+      .attr('class', 'content dot')
+      .attr("cx", function (d) {return x(d.x);})
+      .attr("cy", function (d) {return y(d.y);})
+      .attr("r", 0)
+      .on("mouseover", function (d) {VR_Mouse_Over(wrap, d);})
+      .on("mousemove", function (d) {VR_Mouse_Move(wrap, d);})
+      .on("mouseleave", function (d) {VR_Mouse_Leave(wrap, d);});
+      
   wrap.color_list = color_list;
   wrap.draw_line = draw_line;
   wrap.line = line;
+  wrap.dot = dot;
 }
 
 function VR_update(wrap) {
@@ -300,10 +320,14 @@ function VR_update(wrap) {
   
   //-- Update lines
   wrap.line.selectAll('.content.line')
-    .data(wrap.formatted_data)
     .transition()
     .duration(GS_var.trans_duration)
     .attr('d', function (d) {return wrap.draw_line(d.values);});
+    
+  wrap.dot.selectAll('.content.dot')
+    .transition()
+    .duration(GS_var.trans_duration)
+    .attr("r", 3.5);
 
   //-- Legend - label
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -327,8 +351,8 @@ function VR_update(wrap) {
       .attr("id", wrap.tag+"_legend_label")
       .attr("class", "legend label")
       .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function (d, i) {return color_list[i]})
-      .text(function (d) {return d})
-      .attr("text-anchor", "start")
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style("fill", function (d, i) {return wrap.color_list[i];})
+      .text(function (d) {return d;})
+      .attr("text-anchor", "start");
 }
