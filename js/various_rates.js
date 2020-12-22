@@ -166,7 +166,7 @@ function VR_Mouse_Move(wrap, d) {
   else if (GS_lang == 'fr')
     tooltip_text = d.x + '<br>Taux de positivité = ' + fct_format(d.y1) + "<br>Taux d'inci. front. = " + fct_format(d.y2) + "<br>Taux d'inci. local = " + fct_format(d.y3)
   else
-    tooltip_text = d.x + '<br>Positive rate = ' + fct_format(d.y1) + '<br>Arr. inci. rate = ' + fct_format(d.y2) + '<br>Indi. inci. rate = ' + fct_format(d.y3)
+    tooltip_text = d.x + '<br>Positive rate = ' + fct_format(d.y1) + '<br>Arrival inci. rate = ' + fct_format(d.y2) + '<br>Local inci. rate = ' + fct_format(d.y3)
   
   wrap.tooltip
     .html(tooltip_text)
@@ -339,7 +339,7 @@ function VR_update(wrap) {
     legend_label = ["Taux de positivité", "Taux d'incidence frontalier", "Taux d'incidence local"];
   }
   else {
-    legend_label = ["Positive rate", "Arrival incidence rate", "Indigenous incidence rate"];
+    legend_label = ["Positive rate", "Arrival incidence rate", "Local incidence rate"];
   }
   
   wrap.svg.selectAll(wrap.id+'_legend_label')

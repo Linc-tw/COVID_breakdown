@@ -128,6 +128,7 @@ TRAVEL_HISTORY_DICT = {
   'Tunisia': {'zh-tw': '突尼西亞', 'fr': 'Tunisie'},
   
   'Australia': {'zh-tw': '澳洲', 'fr': 'Australie'},
+  'Marshall Islands': {'zh-tw': '馬紹爾', 'fr': 'Îles Marshall'},
   'New Zealand': {'zh-tw': '紐西蘭', 'fr': 'Nouvelle-Zélande'},
   'Palau': {'zh-tw': '帛琉', 'fr': 'Palaos'},
   
@@ -461,6 +462,7 @@ class MainSheet(Template):
       'Tunisia': ['突尼西亞'], 
       
       'Australia': ['澳大利亞', '澳洲'], 
+      'Marshall Islands': ['馬紹爾'],
       'New Zealand': ['紐西蘭'], 
       'Palau': ['帛琉'], 
       
@@ -523,6 +525,9 @@ class MainSheet(Template):
     
     for i, entryDate in enumerate(self.getCol(self.coltag_entry_date)):
       if entryDate != entryDate: ## NaN
+        entry_date_list.append(np.nan)
+        
+      elif entryDate in ['x']:
         entry_date_list.append(np.nan)
         
       elif entryDate in ['3/1\n3/8']:
@@ -595,7 +600,7 @@ class MainSheet(Template):
       elif '機場' in channel:
         channel_list.append('airport')
         
-      elif '檢疫' in channel or '回溯':
+      elif '檢疫' in channel or '回溯' in channel:
         channel_list.append('quarantine')
         
       elif '隔離' in channel or '接觸者檢查' in channel:
@@ -982,14 +987,14 @@ class MainSheet(Template):
   
   def saveCsv_caseByDetection(self):
     report_date_list = self.getReportDate()
-    onset_date_list  = self.getOnsetDate()
-    channel_list       = self.getChannel()
+    onset_date_list = self.getOnsetDate()
+    channel_list = self.getChannel()
     
-    ref_ord   = ISODateToOrdinal(REF_ISO_DATE)
+    ref_ord = ISODateToOrdinal(REF_ISO_DATE)
     today_ord = dtt.date.today().toordinal() + 1
     
-    date       = [ordinalToISODate(i) for i in range(ref_ord, today_ord)]
-    nb_days     = today_ord - ref_ord
+    date = [ordinalToISODate(i) for i in range(ref_ord, today_ord)]
+    nb_days = today_ord - ref_ord
     airport_r  = np.zeros(nb_days, dtype=int)
     qt_r       = np.zeros(nb_days, dtype=int)
     iso_r      = np.zeros(nb_days, dtype=int)
@@ -2150,18 +2155,18 @@ def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
 
 def sandbox():
   main_sheet = MainSheet()
-  #print(main_sheet.makeDailyCaseCounts())
+  print(main_sheet.getChannel())
   #main_sheet.saveCsv_keyNb()
   
   #status_sheet = StatusSheet()
   #print(status_sheet.getCumHosp())
   #status_sheet.saveCsv_statusEvolution()
   
-  test_sheet = TestSheet()
+  #test_sheet = TestSheet()
   #print(test_sheet.printCriteria())
   #test_sheet.saveCsv_criteriaTimeline()
   
-  border_sheet = BorderSheet()
+  #border_sheet = BorderSheet()
   #print(border_sheet.makeDailyArrivalCounts())
   #border_sheet.saveCsv_borderStats()
   
@@ -2169,7 +2174,7 @@ def sandbox():
   #print(timeline_sheet.saveCriteria())
   #timeline_sheet.saveCsv_evtTimeline()
   
-  saveCsv_variousRate(main_sheet, test_sheet, border_sheet)
+  #saveCsv_variousRate(main_sheet, test_sheet, border_sheet)
   return
 
 ###############################################################################

@@ -1,7 +1,7 @@
 label,count,label_zh,label_fr
 N_total,770,合計,Total
 N_imported,678,境外移入總數,Importés
-N_data,643,有資料案例數,Données complètes
+N_data,644,有資料案例數,Données complètes
 USA,136,美國,États-Unis
 Indonesia,128,印尼,Indonésie
 Philippines,93,菲律賓,Philippines
@@ -14,7 +14,7 @@ China,12,中國,Chine
 Egypt,12,埃及,Égypte
 cough,222,咳嗽,toux
 fever,205,發燒,fièvre
-asymptomatic,169,無症狀,asymptomatique
+asymptomatic,170,無症狀,asymptomatique
 sneezing,158,鼻腔症狀,éternuement
 throatache,155,喉嚨症狀,mal de gorge
 anosmia,88,嗅覺異常,anosmie
