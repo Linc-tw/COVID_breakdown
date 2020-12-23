@@ -21,7 +21,7 @@ This project is driven by 3 key motivations:
 Features
 --------
 
-So far, 7 plots can be found on Dashboard:
+So far, 7 plots can be found on _Dashboard_:
 - Status Evolution
 - 7-day Average of Various Rates
 - Confirmed Cases by Transmission Type
@@ -30,11 +30,14 @@ So far, 7 plots can be found on Dashboard:
 - Correlations between Age & Symptoms
 - How many days to identify cases? (day difference between report date & entry/onset date)
 
-And 4 are on Policy:
+And 4 are on _Policy_:
 - Number of Tests by Reporting Criterion
 - Border Crossing
 - Chronology of Systematic Testing
 - Pandemic Timeline (text in Mandarin)
+
+The above plots are only for the statistics from last 90 days.
+The 2020 all-year graphics are in _Evolution in 2020_.
 
 Other ideas are welcome. To be proposed at [Issues](https://github.com/Linc-tw/COVID_breakdown/issues).
 
