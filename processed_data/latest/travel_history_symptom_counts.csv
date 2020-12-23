@@ -1,9 +1,9 @@
 label,count,label_zh,label_fr
-N_total,261,合計,Total
-N_imported,260,境外移入總數,Importés
-N_data,237,有資料案例數,Données complètes
-Indonesia,114,印尼,Indonésie
-Philippines,48,菲律賓,Philippines
+N_total,267,合計,Total
+N_imported,266,境外移入總數,Importés
+N_data,243,有資料案例數,Données complètes
+Indonesia,117,印尼,Indonésie
+Philippines,51,菲律賓,Philippines
 USA,33,美國,États-Unis
 France,6,法國,France
 Russia,5,俄羅斯,Russie
@@ -12,9 +12,9 @@ UK,4,英國,Royaume-Uni
 Turkey,3,土耳其,Turquie
 Myanmar,3,緬甸,Myanmar
 Japan,2,日本,Japon
-asymptomatic,144,無症狀,asymptomatique
-cough,35,咳嗽,toux
-sneezing,34,鼻腔症狀,éternuement
+asymptomatic,149,無症狀,asymptomatique
+cough,36,咳嗽,toux
+sneezing,35,鼻腔症狀,éternuement
 anosmia,31,嗅覺異常,anosmie
 throatache,29,喉嚨症狀,mal de gorge
 fever,28,發燒,fièvre
