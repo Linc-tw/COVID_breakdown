@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2020.12.17                  ##
+    ##  Version 2020.12.26                  ##
     ##########################################
 
 
@@ -22,7 +22,7 @@ import pandas as pd
 ################################################################################
 ## Global variables
 
-DATA_PATH = '/home/linc/03_Codes/COVID_breakdown/'
+DATA_PATH = '/home/linc/21_Codes/COVID_breakdown/'
 REF_ISO_DATE = '2020-01-01'
 NB_LOOKBACK_DAYS = 90
 
@@ -74,6 +74,7 @@ TRAVEL_HISTORY_DICT = {
   'Malaysia': {'zh-tw': '馬來西亞', 'fr': 'Malaisie'},
   'Myanmar': {'zh-tw': '緬甸', 'fr': 'Myanmar'},
   'Nepal': {'zh-tw': '尼泊爾', 'fr': 'Népal'},
+  'Pakistan': {'zh-tw': '巴基斯坦', 'fr': 'Pakistan'},
   'Philippines': {'zh-tw': '菲律賓', 'fr': 'Philippines'},
   'Singapore': {'zh-tw': '新加坡', 'fr': 'Singapour'},
   'Thailand': {'zh-tw': '泰國', 'fr': 'Thaïlande'},
@@ -408,6 +409,7 @@ class MainSheet(Template):
       'Malaysia': ['馬來西亞'], 
       'Myanmar' : ['緬甸'],
       'Nepal': ['尼泊爾'],
+      'Pakistan': ['巴基斯坦'],
       'Philippines': ['菲律賓'], 
       'Singapore': ['新加坡'], 
       'Thailand': ['泰國', '曼谷'], 
@@ -2010,7 +2012,7 @@ class TimelineSheet(Template):
     data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
     date_list = data[self.coltag_date].values
-    ind = date_list == date_list
+    ind = (date_list == date_list) * (date_list != '2021分隔線')
     self.data    = data[ind]
     self.n_total = ind.sum()
     
