@@ -1,9 +1,9 @@
 label,count,label_zh,label_fr
-N_total,273,合計,Total
-N_imported,272,境外移入總數,Importés
-N_data,249,有資料案例數,Données complètes
-Indonesia,118,印尼,Indonésie
-Philippines,54,菲律賓,Philippines
+N_total,272,合計,Total
+N_imported,271,境外移入總數,Importés
+N_data,248,有資料案例數,Données complètes
+Indonesia,119,印尼,Indonésie
+Philippines,52,菲律賓,Philippines
 USA,34,美國,États-Unis
 France,6,法國,France
 Russia,5,俄羅斯,Russie
@@ -20,5 +20,5 @@ throatache,30,喉嚨症狀,mal de gorge
 fever,29,發燒,fièvre
 ageusia,19,味覺異常,agueusie
 soreness,17,痠痛,myalgie
-fatigue,14,倦怠,fatigue
 headache,13,頭痛,mal de tête
+fatigue,13,倦怠,fatigue
