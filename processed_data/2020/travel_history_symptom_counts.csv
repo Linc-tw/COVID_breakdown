@@ -1,11 +1,11 @@
 label,count,label_zh,label_fr
-N_total,795,合計,Total
-N_imported,703,境外移入總數,Importés
-N_data,666,有資料案例數,Données complètes
+N_total,797,合計,Total
+N_imported,705,境外移入總數,Importés
+N_data,671,有資料案例數,Données complètes
 USA,138,美國,États-Unis
 Indonesia,135,印尼,Indonésie
-Philippines,102,菲律賓,Philippines
-UK,91,英國,Royaume-Uni
+Philippines,104,菲律賓,Philippines
+UK,94,英國,Royaume-Uni
 France,34,法國,France
 Spain,21,西班牙,Espagne
 Turkey,16,土耳其,Turquie
@@ -13,8 +13,8 @@ Czechia,16,捷克,Tchéquie
 China,12,中國,Chine
 Egypt,12,埃及,Égypte
 cough,226,咳嗽,toux
-fever,207,發燒,fièvre
-asymptomatic,186,無症狀,asymptomatique
+fever,208,發燒,fièvre
+asymptomatic,190,無症狀,asymptomatique
 sneezing,162,鼻腔症狀,éternuement
 throatache,156,喉嚨症狀,mal de gorge
 dysnosmia,88,嗅覺異常,anosmie
