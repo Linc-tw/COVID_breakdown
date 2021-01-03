@@ -328,9 +328,13 @@ class MainSheet(Template):
         report_date_list.append(np.nan)
         continue
       
-      report_date = report_date.split('日')[0].split('月')
-      report_date = report_date[0].split('年') + [report_date[1]]
-      report_date = '%04d-%02d-%02d' % (int(report_date[0]), int(report_date[1]), int(report_date[2]))
+      yyyymdday_zh = report_date.split('年')
+      y = int(yyyymdday_zh[0])
+      mdday_zh = yyyymdday_zh[1].split('月')
+      m = int(mdday_zh[0])
+      dday_zh = mdday_zh[1].split('日')
+      d = int(dday_zh[0])
+      report_date = '%04d-%02d-%02d' % (y, m, d)
       report_date_list.append(report_date)
       n_total += 1
       
@@ -1315,8 +1319,11 @@ class StatusSheet(Template):
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_status_evolution.csv' % DATA_PATH
     data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
+    date_list = data[self.coltag_date].values
+    self.ind_2021 = (date_list == '2021分隔線').argmax()
+    
     cum_dis_list = data[self.coltag_cum_dis].values
-    ind = cum_dis_list == cum_dis_list
+    ind = (cum_dis_list == cum_dis_list) * (date_list != '2021分隔線')
     self.data    = data[ind]
     self.n_total = ind.sum()
     
@@ -1329,11 +1336,14 @@ class StatusSheet(Template):
     date_list = []
     y = 2020 #WARNING
     
-    for date in self.getCol(self.coltag_date):
-      mmdd = date.split('月')
-      m = int(mmdd[0])
-      dd = mmdd[1].split('日')
-      d = int(dd[0])
+    for i, date in enumerate(self.getCol(self.coltag_date)):
+      if i >= self.ind_2021:
+        y = 2021
+        
+      mmdd_zh = date.split('月')
+      m = int(mmdd_zh[0])
+      dd_zh = mmdd_zh[1].split('日')
+      d = int(dd_zh[0])
       date = '%04d-%02d-%02d' % (y, m, d)
       date_list.append(date)
     return date_list
@@ -1399,6 +1409,9 @@ class TestSheet(Template):
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv' % DATA_PATH
     data = pd.read_csv(name, dtype=object, skipinitialspace=True)
     
+    from_extended_list = data[self.coltag_from_extended].values
+    self.ind_2021 = (from_extended_list == '2021分隔線').argmax()
+    
     date_list = data[self.coltag_date].values
     ind = date_list == date_list
     self.data    = data[ind]
@@ -1411,10 +1424,17 @@ class TestSheet(Template):
     
   def getDate(self):
     date_list = []
+    y = 2020
     
-    for date in self.getCol(self.coltag_date):
-      mmdd = date.split('/')
-      date = '2020-%02d-%02d' % (int(mmdd[0]), int(mmdd[1]))
+    for i, date in enumerate(self.getCol(self.coltag_date)):
+      if i >= self.ind_2021:
+        y = 2021
+      
+      md_slash = date.split('/')
+      m = int(md_slash[0])
+      d = int(md_slash[1])
+      
+      date = '%04d-%02d-%02d' % (y, m, d)
       date_list.append(date)
     return date_list
   
@@ -2030,12 +2050,12 @@ class TimelineSheet(Template):
     date_list = []
     
     for date in self.getCol(self.coltag_date):
-      yyyymdd = date.split('年')
-      y = int(yyyymdd[0])
-      mdd = yyyymdd[1].split('月')
-      m = int(mdd[0])
-      dd = mdd[1].split('日')
-      d = int(dd[0])
+      yyyymmddday_zh = date.split('年')
+      y = int(yyyymmddday_zh[0])
+      mmddday_zh = yyyymmddday_zh[1].split('月')
+      m = int(mmddday_zh[0])
+      ddday_zh = mmddday_zh[1].split('日')
+      d = int(ddday_zh[0])
       date = '%04d-%02d-%02d' % (y, m, d)
       date_list.append(date)
     return date_list
