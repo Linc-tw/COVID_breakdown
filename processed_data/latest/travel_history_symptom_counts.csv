@@ -1,7 +1,7 @@
 label,count,label_zh,label_fr
 N_total,298,合計,Total
 N_imported,297,境外移入總數,Importés
-N_data,273,有資料案例數,Données complètes
+N_data,274,有資料案例數,Données complètes
 Indonesia,124,印尼,Indonésie
 Philippines,57,菲律賓,Philippines
 USA,40,美國,États-Unis
@@ -16,9 +16,9 @@ asymptomatic,170,無症狀,asymptomatique
 cough,41,咳嗽,toux
 sneezing,40,鼻腔症狀,éternuement
 throatache,33,喉嚨症狀,mal de gorge
-fever,29,發燒,fièvre
+fever,30,發燒,fièvre
 dysnosmia,29,嗅覺異常,dysosmie
 dysgeusia,20,味覺異常,dysgueusie
 soreness,17,痠痛,myalgie
-fatigue,15,倦怠,fatigue
+fatigue,16,倦怠,fatigue
 headache,13,頭痛,mal de tête

@@ -28,7 +28,7 @@ wget -O 'raw_data/COVID-19_in_Taiwan_raw_data_border_statistics.csv' 'https://do
 sleep 8
 echo
 wget -O 'raw_data/COVID-19_in_Taiwan_raw_data_timeline.csv' 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pub?output=csv&gid=1744708886' &
-sleep 15
+sleep 16
 echo
 
 echo "## Process data"
@@ -38,13 +38,13 @@ echo
 
 echo "## Push to repo"
 echo
-git add raw_data/*.csv & sleep 1
-git add processed_data/*.csv & sleep 1
-git add processed_data/latest/*.csv & sleep 1
-git add processed_data/2020/*.csv & sleep 1
+git add raw_data/*.csv
+git add processed_data/*.csv
+git add processed_data/latest/*.csv
+git add processed_data/2020/*.csv & sleep 2
 git commit -m "${MODE} data update" & sleep 1
 echo
-git push & sleep 5
+git push & sleep 7
 echo
 
 date

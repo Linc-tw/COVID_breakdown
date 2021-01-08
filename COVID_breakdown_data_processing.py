@@ -52,8 +52,8 @@ SYMPTOM_DICT = {
   'soreness': {'zh-tw': '痠痛', 'fr': 'myalgie'},
   'hypersomnia': {'zh-tw': '嗜睡', 'fr': 'hypersomnie'},
   
-  'dysnosmia': {'zh-tw': '嗅覺異常', 'fr': 'anosmie'}, 
-  'dysgeusia': {'zh-tw': '味覺異常', 'fr': 'agueusie'},
+  'dysnosmia': {'zh-tw': '嗅覺異常', 'fr': 'dysosmie'}, 
+  'dysgeusia': {'zh-tw': '味覺異常', 'fr': 'dysgueusie'},
   
   'tonsillitis': {'zh-tw': '淋巴腫脹', 'fr': 'adénopathie'}, 
   'hypoglycemia': {'zh-tw': '低血糖', 'fr': 'hypoglycémie'}, 
@@ -85,6 +85,7 @@ TRAVEL_HISTORY_DICT = {
   'Brazil': {'zh-tw': '巴西', 'fr': 'Brésil'},
   'Canada': {'zh-tw': '加拿大', 'fr': 'Canada'},
   'Chile': {'zh-tw': '智利', 'fr': 'Chili'},
+  'Dominican Republic': {'zh-tw': '多明尼加', 'fr': 'République dominicaine'},
   'Guatemala': {'zh-tw': '瓜地馬拉', 'fr': 'Guatemala'}, 
   'Latin America': {'zh-tw': '中南美洲', 'fr': 'Amérique latine'},
   'Mexico': {'zh-tw': '墨西哥', 'fr': 'Mexique'},
@@ -126,6 +127,7 @@ TRAVEL_HISTORY_DICT = {
   'Ghana': {'zh-tw': '迦納', 'fr': 'Ghana'},
   'Lesotho': {'zh-tw': '賴索托', 'fr': 'Lesotho'},
   'Morocco': {'zh-tw': '摩洛哥', 'fr': 'Maroc'},
+  'Nigeria': {'zh-tw': '奈及利亞', 'fr': 'Nigéria'}, 
   'Senegal': {'zh-tw': '塞內加爾', 'fr': 'Sénégal'},
   'South Africa': {'zh-tw': '南非', 'fr': 'Afrique du Sud'},
   'Tunisia': {'zh-tw': '突尼西亞', 'fr': 'Tunisie'},
@@ -426,6 +428,7 @@ class MainSheet(Template):
       'Brazil': ['巴西'],
       'Canada': ['加拿大'], 
       'Chile': ['智利', '聖地牙哥'], 
+      'Dominican Republic': ['多明尼加'],
       'Guatemala': ['瓜地馬拉'], 
       'Latin America': ['中南美洲'], 
       'Mexico': ['墨西哥'], 
@@ -467,6 +470,7 @@ class MainSheet(Template):
       'Ghana': ['迦納'], 
       'Lesotho': ['賴索托'],
       'Morocco': ['摩洛哥'], 
+      'Nigeria': ['奈及利亞'], 
       'Senegal': ['塞內加爾'],
       'South Africa': ['南非'], 
       'Tunisia': ['突尼西亞'], 
@@ -579,7 +583,7 @@ class MainSheet(Template):
       if onset_date != onset_date: ## NaN
         onset_date_list.append(np.nan)
       
-      elif onset_date in ['2/18-25', '9月下旬', '10月中旬', '11月初', 'x', 'X']:
+      elif onset_date in ['2/18-25', '9月下旬', '10月中旬', '11月初', '12/', 'x', 'X']:
         onset_date_list.append(np.nan)
         
       elif onset_date in ['7月、11/1']:
@@ -654,7 +658,7 @@ class MainSheet(Template):
       'backache': ['背痛'], 
       'toothache': ['牙痛'], 
       
-      'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '走路喘', '倦怠', '疲憊', '疲倦', '無力'],
+      'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '走路喘', '倦怠', '疲憊', '疲倦', '無力', '虛弱'],
       'soreness': ['全身肌肉痠痛', '上半身骨頭刺痛', '全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉關節痠痛', '肌肉酸痛', '肌肉痠痛', '肌肉 痠痛', '骨頭痠痛', '骨頭酸', '關節痠痛', '關節痛', '痠痛'],
       'hypersomnia': ['嗜睡'],
       
@@ -1664,7 +1668,7 @@ class TestSheet(Template):
         'zh-tw': '有呼吸道症狀之醫護',
       },
       '2020-04-01': {
-        'en': 'Anosmia, dysgeusia',
+        'en': 'Dysnosmia, dysgeusia',
         'fr': 'Anosmie, agueusie',
         'zh-tw': '味嗅覺異常',
       },
@@ -2182,7 +2186,16 @@ def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
 
 def sandbox():
   main_sheet = MainSheet()
-  print(main_sheet.getChannel())
+  report_date = main_sheet.getReportDate()
+  trans = main_sheet.getTransmission()
+  bool_list = [t == 'indigenous' for t in trans]
+  local_date = [d for d, b in zip(report_date, bool_list) if b]
+  print(len(local_date))
+  print(local_date[-1])
+  print(local_date[-2])
+  ord1 = ISODateToOrd(local_date[-1])
+  ord2 = ISODateToOrd(local_date[-2])
+  print(ord1-ord2-1)
   #main_sheet.saveCsv_keyNb()
   
   #status_sheet = StatusSheet()
