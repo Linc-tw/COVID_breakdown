@@ -216,13 +216,23 @@ function CBT_Mouse_Move(wrap, d) {
   var new_pos = CBT_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
   var tooltip_text;
   
-  if (GS_lang == 'zh-tw')
-    tooltip_text = d.x + "<br>境外移入 = " + d.h1 + "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>敦睦艦隊 = " + d.h4 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
-  else if (GS_lang == 'fr')
-    tooltip_text = d.x + "<br>Importés = " + d.h1 + "<br>Locaux connus = " + d.h2 + "<br>Locaux inconnus = " + d.h3 + "<br>Flotte = " + d.h4 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
-  else
-    tooltip_text = d.x + "<br>Imported = " + d.h1 + "<br>Local linked = " + d.h2 + "<br>Local unlinked = " + d.h3 + "<br>Fleet = " + d.h4 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
-  
+  if (wrap.tag.includes("latest") || wrap.tag.includes("2021")) {
+    if (GS_lang == 'zh-tw')
+      tooltip_text = d.x + "<br>境外移入 = " + d.h1 + "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
+    else if (GS_lang == 'fr')
+      tooltip_text = d.x + "<br>Importés = " + d.h1 + "<br>Locaux connus = " + d.h2 + "<br>Locaux inconnus = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
+    else
+      tooltip_text = d.x + "<br>Imported = " + d.h1 + "<br>Local linked = " + d.h2 + "<br>Local unlinked = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
+  }
+  else {
+    if (GS_lang == 'zh-tw')
+      tooltip_text = d.x + "<br>境外移入 = " + d.h1 + "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>敦睦艦隊 = " + d.h4 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
+    else if (GS_lang == 'fr')
+      tooltip_text = d.x + "<br>Importés = " + d.h1 + "<br>Locaux connus = " + d.h2 + "<br>Locaux inconnus = " + d.h3 + "<br>Flotte = " + d.h4 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
+    else
+      tooltip_text = d.x + "<br>Imported = " + d.h1 + "<br>Local linked = " + d.h2 + "<br>Local unlinked = " + d.h3 + "<br>Fleet = " + d.h4 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
+  }
+    
   wrap.tooltip
     .html(tooltip_text)
     .style("left", new_pos[0] + "px")
@@ -373,19 +383,6 @@ function CBT_Update(wrap) {
   if (wrap.do_onset == 1) legend_value.push(wrap.n_tot-sum);
   legend_value.push(wrap.n_tot);
   
-  wrap.svg.selectAll(".legend.value")
-    .remove()
-    .exit()
-    .data(legend_value)
-    .enter()
-    .append("text")
-      .attr("class", "legend value")
-      .attr("x", legend_pos.x)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function (d, i) {return color_list[i]})
-      .text(function (d) {return d})
-      .attr("text-anchor", "end")
-  
   //-- Legend - label
   var legend_label, legend_label_plus;
   if (GS_lang == 'zh-tw') {
@@ -401,6 +398,25 @@ function CBT_Update(wrap) {
     legend_label_plus = 'No onset date';
   }
   if (wrap.do_onset == 1) legend_label.splice(wrap.nb_col, 0, legend_label_plus);
+  
+  if (wrap.tag.includes("latest") || wrap.tag.includes("2021")) {
+    color_list.splice(3, 1);
+    legend_value.splice(3, 1);
+    legend_label.splice(3, 1);
+  }
+  
+  wrap.svg.selectAll(".legend.value")
+    .remove()
+    .exit()
+    .data(legend_value)
+    .enter()
+    .append("text")
+      .attr("class", "legend value")
+      .attr("x", legend_pos.x)
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
+      .style("fill", function (d, i) {return color_list[i]})
+      .text(function (d) {return d})
+      .attr("text-anchor", "end")
   
   wrap.svg.selectAll(".legend.label")
     .remove()

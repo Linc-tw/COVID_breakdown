@@ -34,6 +34,7 @@ function text_translation() {
     TT_Add_Str("menu_summary", "近90日摘要");
     TT_Add_Str("menu_policy", "防疫措施");
     TT_Add_Str("menu_2020", "2020統計");
+    TT_Add_Str("menu_2021", "2021統計");
     TT_Add_Str("menu_source", "資料來源");
     TT_Add_Str("menu_copyleft", "版權沒有");
     TT_Add_Str("footer_last_update", '最後更新：' + TT_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3');
@@ -117,6 +118,7 @@ function text_translation() {
     TT_Add_Str("menu_summary", "Derniers 90 jours");
     TT_Add_Str("menu_policy", "Mesures de prévention");
     TT_Add_Str("menu_2020", "Évolution en 2020");
+    TT_Add_Str("menu_2021", "Évolution en 2021");
     TT_Add_Str("menu_source", "Source des données");
     TT_Add_Str("menu_copyleft", "Sans droit d'auteur");
     TT_Add_Str("footer_last_update", 'Dernière mise à jour : ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3');
@@ -200,6 +202,7 @@ function text_translation() {
     TT_Add_Str("menu_summary", "90-day dashboard");
     TT_Add_Str("menu_policy", "Policy");
     TT_Add_Str("menu_2020", "Evolution in 2020");
+    TT_Add_Str("menu_2021", "Evolution in 2021");
     TT_Add_Str("menu_source", "Data Source");
     TT_Add_Str("menu_copyleft", "No right reserved");
     TT_Add_Str("footer_last_update", 'Last updates: ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3');
@@ -304,6 +307,12 @@ $(document).on("change", "input:radio[name='index_language']", function (event) 
 });
 
 $(document).on("change", "input:radio[name='2020_language']", function (event) {
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang);
+  text_translation();
+});
+
+$(document).on("change", "input:radio[name='2021_language']", function (event) {
   GS_lang = this.value;
   Cookies.set("lang", GS_lang);
   text_translation();

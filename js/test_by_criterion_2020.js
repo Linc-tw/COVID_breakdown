@@ -28,10 +28,10 @@ TBC_2020_wrap.y_path_1 = 40000;
 TBC_2020_wrap.y_path_0 = 500;
 TBC_2020_wrap.yticklabel_format_1 = ".2s";
 TBC_2020_wrap.yticklabel_format_0 = "d";
-TBC_2020_wrap.legend_pos_x_0__ = {};
-TBC_2020_wrap.legend_pos_x_0__['zh-tw'] = 510;
-TBC_2020_wrap.legend_pos_x_0__['fr'] = 305;
-TBC_2020_wrap.legend_pos_x_0__['en'] = 350;
+TBC_2020_wrap.legend_pos_x_0_i_ = {};
+TBC_2020_wrap.legend_pos_x_0_i_['zh-tw'] = 510;
+TBC_2020_wrap.legend_pos_x_0_i_['fr'] = 305;
+TBC_2020_wrap.legend_pos_x_0_i_['en'] = 350;
 
 //-- Variables
 TBC_2020_wrap.do_cumul = 0;;

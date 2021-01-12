@@ -179,12 +179,22 @@ function TBC_Mouse_Move(wrap, d) {
   var new_pos = TBC_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
   var tooltip_text;
   
-  if (GS_lang == 'zh-tw')
-    tooltip_text = d.x + "<br>法定通報 = " + d.h3 + "<br>居家檢疫 = " + d.h2 + "<br>擴大監測 = " + d.h1 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
-  else if (GS_lang == 'fr')
-    tooltip_text = d.x + "<br>Clinique = " + d.h3 + "<br>Quarantine = " + d.h2 + "<br>Clusters locaux = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
-  else
-    tooltip_text = d.x + "<br>Clinical = " + d.h3 + "<br>Quarantine = " + d.h2 + "<br>Community = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+  if (wrap.tag.includes("latest") || wrap.tag.includes("2021")) {
+    if (GS_lang == 'zh-tw')
+      tooltip_text = d.x + "<br>法定通報 = " + d.h3 + "<br>擴大監測 = " + d.h1 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
+    else if (GS_lang == 'fr')
+      tooltip_text = d.x + "<br>Clinique = " + d.h3 + "<br>Clusters locaux = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+    else
+      tooltip_text = d.x + "<br>Clinical = " + d.h3 + "<br>Community = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+  }
+  else {
+    if (GS_lang == 'zh-tw')
+      tooltip_text = d.x + "<br>法定通報 = " + d.h3 + "<br>居家檢疫 = " + d.h2 + "<br>擴大監測 = " + d.h1 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
+    else if (GS_lang == 'fr')
+      tooltip_text = d.x + "<br>Clinique = " + d.h3 + "<br>Quarantine = " + d.h2 + "<br>Clusters locaux = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+    else
+      tooltip_text = d.x + "<br>Clinical = " + d.h3 + "<br>Quarantine = " + d.h2 + "<br>Community = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+  }
   
   wrap.tooltip
     .html(tooltip_text)
@@ -331,11 +341,23 @@ function TBC_Update(wrap) {
   //-- Legend - value
   var legend_pos = {x: 95, y: 40, dx: 12, dy: 30};
   if (wrap.do_cumul == 0) {
-    if (wrap.legend_pos_x_0__[GS_lang] != 0) legend_pos.x = wrap.legend_pos_x_0__[GS_lang];
+    if (wrap.legend_pos_x_0_i_[GS_lang] != 0) legend_pos.x = wrap.legend_pos_x_0_i_[GS_lang];
   }
   var legend_value = wrap.legend_value.slice().reverse();
   var sum = legend_value.reduce((a, b) => a + b, 0);
   legend_value.push(sum);
+  
+  //-- Legend - label
+  var legend_label;
+  if (GS_lang == 'zh-tw') legend_label = ["法定定義通報", "居家檢疫", "擴大社區監測", "合計"];
+  else if (GS_lang == 'fr') legend_label = ["Critères cliniques", "Quarantaine (fusionnée dans clinique)", "Recherche de clusters locaux", "Total"];
+  else legend_label = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', "Total"];
+  
+  if (wrap.tag.includes("latest") || wrap.tag.includes("2021")) {
+    color_list.splice(1, 1);
+    legend_value.splice(1, 1);
+    legend_label.splice(1, 1);
+  }
   
   wrap.svg.selectAll(".legend.value")
     .remove()
@@ -350,12 +372,6 @@ function TBC_Update(wrap) {
       .text(function (d) {return d})
       .attr("text-anchor", "end")
       
-  //-- Legend - label
-  var legend_label;
-  if (GS_lang == 'zh-tw') legend_label = ["法定定義通報", "居家檢疫", "擴大社區監測", "合計"];
-  else if (GS_lang == 'fr') legend_label = ["Critères cliniques", "Quarantaine (fusionnée dans clinique)", "Recherche de clusters locaux", "Total"];
-  else legend_label = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', "Total"];
-  
   wrap.svg.selectAll(".legend.label")
     .remove()
     .exit()

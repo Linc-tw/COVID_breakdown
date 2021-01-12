@@ -224,12 +224,22 @@ function CBD_Mouse_Move(wrap, d) {
   var new_pos = CBD_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
   var tooltip_text;
   
-  if (GS_lang == 'zh-tw')
-    tooltip_text = d.x + "<br>機場 = " + d.h1 + "<br>居家或集中檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自費或自行就醫 = " + d.h5 + "<br>外國檢驗 = " + d.h6 + "<br>無管道資料 = " + d.h7 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
-  else if (GS_lang == 'fr')
-    tooltip_text = d.x + "<br>Aéroports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Auto-contrôle = " + d.h4 + "<br>Hôpitaux = " + d.h5 + "<br>À l'étranger = " + d.h6 + "<br>Pas annoncés = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
-  else
-    tooltip_text = d.x + "<br>Airports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospitals = " + d.h5 + "<br>Overseas = " + d.h6 + "<br>Not announced = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
+  if (wrap.tag.includes("latest") || wrap.tag.includes("2021")) {
+    if (GS_lang == 'zh-tw')
+      tooltip_text = d.x + "<br>機場 = " + d.h1 + "<br>居家或集中檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自費或自行就醫 = " + d.h5 + "<br>無管道資料 = " + d.h7 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
+    else if (GS_lang == 'fr')
+      tooltip_text = d.x + "<br>Aéroports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Auto-contrôle = " + d.h4 + "<br>Hôpitaux = " + d.h5 + "<br>Pas annoncés = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
+    else
+      tooltip_text = d.x + "<br>Airports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospitals = " + d.h5 + "<br>Not announced = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
+  }
+  else {
+    if (GS_lang == 'zh-tw')
+      tooltip_text = d.x + "<br>機場 = " + d.h1 + "<br>居家或集中檢疫 = " + d.h2 + "<br>居家隔離 = " + d.h3 + "<br>自主健康管理 = " + d.h4 + "<br>自費或自行就醫 = " + d.h5 + "<br>外國檢驗 = " + d.h6 + "<br>無管道資料 = " + d.h7 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
+    else if (GS_lang == 'fr')
+      tooltip_text = d.x + "<br>Aéroports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Auto-contrôle = " + d.h4 + "<br>Hôpitaux = " + d.h5 + "<br>À l'étranger = " + d.h6 + "<br>Pas annoncés = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
+    else
+      tooltip_text = d.x + "<br>Airports = " + d.h1 + "<br>Quarantine = " + d.h2 + "<br>Isolation = " + d.h3 + "<br>Monitoring = " + d.h4 + "<br>Hospitals = " + d.h5 + "<br>Overseas = " + d.h6 + "<br>Not announced = " + d.h7 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4 + +d.h5 + +d.h6 + +d.h7)
+  }
   
   wrap.tooltip
     .html(tooltip_text)
@@ -388,19 +398,6 @@ function CBD_Update(wrap) {
   if (wrap.do_onset == 1) legend_value.push(wrap.n_tot-sum);
   legend_value.push(wrap.n_tot);
   
-  wrap.svg.selectAll(".legend.value")
-    .remove()
-    .exit()
-    .data(legend_value)
-    .enter()
-    .append("text")
-      .attr("class", "legend value")
-      .attr("x", function (d, i) {return legend_pos.x + Math.floor(i/6)*legend_pos.x1;})
-      .attr("y", function (d, i) {return legend_pos.y + (i%6)*legend_pos.dy;})
-      .style("fill", function (d, i) {return color_list[i]})
-      .text(function (d) {return d})
-      .attr("text-anchor", "end")
-  
   //-- Legend - label
   var legend_label, legend_label_plus;
   if (GS_lang == 'zh-tw') {
@@ -416,6 +413,25 @@ function CBD_Update(wrap) {
     legend_label_plus = 'No onset date';
   }
   if (wrap.do_onset == 1) legend_label.splice(wrap.nb_col, 0, legend_label_plus);
+  
+  if (wrap.tag.includes("latest") || wrap.tag.includes("2021")) {
+    legend_value.splice(5, 1);
+    color_list.splice(5, 1);
+    legend_label.splice(5, 1);
+  }
+  
+  wrap.svg.selectAll(".legend.value")
+    .remove()
+    .exit()
+    .data(legend_value)
+    .enter()
+    .append("text")
+      .attr("class", "legend value")
+      .attr("x", function (d, i) {return legend_pos.x + Math.floor(i/6)*legend_pos.x1;})
+      .attr("y", function (d, i) {return legend_pos.y + (i%6)*legend_pos.dy;})
+      .style("fill", function (d, i) {return color_list[i]})
+      .text(function (d) {return d})
+      .attr("text-anchor", "end")
   
   wrap.svg.selectAll(".legend.label")
     .remove()

@@ -9,8 +9,8 @@
 var TBC_latest_wrap = {};
 
 //-- ID
-TBC_latest_wrap.tag = "test_by_criterion_latest"
-TBC_latest_wrap.id = '#' + TBC_latest_wrap.tag
+TBC_latest_wrap.tag = "test_by_criterion_latest";
+TBC_latest_wrap.id = '#' + TBC_latest_wrap.tag;
 
 //-- File path
 TBC_latest_wrap.data_path = "processed_data/latest/test_by_criterion.csv";
@@ -28,10 +28,10 @@ TBC_latest_wrap.y_path_1 = 8000;
 TBC_latest_wrap.y_path_0 = 300;
 TBC_latest_wrap.yticklabel_format_1 = ".2s";
 TBC_latest_wrap.yticklabel_format_0 = "d";
-TBC_latest_wrap.legend_pos_x_0__ = {};
-TBC_latest_wrap.legend_pos_x_0__['zh-tw'] = 0;
-TBC_latest_wrap.legend_pos_x_0__['fr'] = 0;
-TBC_latest_wrap.legend_pos_x_0__['en'] = 0;
+TBC_latest_wrap.legend_pos_x_0_i_ = {};
+TBC_latest_wrap.legend_pos_x_0_i_['zh-tw'] = 0;
+TBC_latest_wrap.legend_pos_x_0_i_['fr'] = 0;
+TBC_latest_wrap.legend_pos_x_0_i_['en'] = 0;
 
 //-- Variables
 TBC_latest_wrap.do_cumul = 0;;

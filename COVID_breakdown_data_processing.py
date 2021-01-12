@@ -300,6 +300,7 @@ class MainSheet(Template):
     self.n_total = 0
     self.n_latest = 0
     self.n_2020 = 0
+    self.n_2021 = 0
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv' % DATA_PATH
     data = pd.read_csv(name, dtype=object, skipinitialspace=True)
@@ -320,10 +321,12 @@ class MainSheet(Template):
   def getReportDate(self):
     ord_today = dtt.date.today().toordinal() + 1
     ord_end_2020 = ISODateToOrd('2020-12-31') + 1
+    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
     report_date_list = []
     n_total = 0
     n_latest = 0
     n_2020 = 0
+    n_2021 = 0
     
     for report_date in self.getCol(self.coltag_report_date):
       if report_date != report_date: ## NaN
@@ -347,10 +350,14 @@ class MainSheet(Template):
         
       if rep_ord < ord_end_2020:
         n_2020 += 1
+        
+      if rep_ord >= ord_end_2020 and rep_ord < ord_end_2021:
+        n_2021 += 1
     
     self.n_total = n_total
     self.n_latest = n_latest
     self.n_2020 = n_2020
+    self.n_2021 = n_2021
     return report_date_list
   
   def getAge(self):
@@ -623,7 +630,7 @@ class MainSheet(Template):
       elif '自主健康管理' in channel or '加強自主管理' in channel:
         channel_list.append('monitoring')
         
-      elif '自行就醫' in channel or '自主就醫' in channel or '自費篩檢' in channel or '自費檢驗' in channel:
+      elif '自行就醫' in channel or '自主就醫' in channel or '自費篩檢' in channel or '自費檢驗' in channel or '接觸患者' in channel:
         channel_list.append('hospital')
         
       elif '香港檢驗' in channel:
@@ -792,6 +799,7 @@ class MainSheet(Template):
     
     ord_today = dtt.date.today().toordinal() + 1
     ord_end_2020 = ISODateToOrd('2020-12-31') + 1
+    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
     trav_hist_list_2 = []
     symp_list_2 = []
     n_total = 0
@@ -807,6 +815,9 @@ class MainSheet(Template):
         continue
       
       if '2020' == selection and rep_ord >= ord_end_2020:
+        continue
+      
+      if '2021' == selection and (rep_ord < ord_end_2020 or rep_ord >= ord_end_2021):
         continue
       
       n_total += 1
@@ -855,6 +866,7 @@ class MainSheet(Template):
     
     ord_today = dtt.date.today().toordinal() + 1
     ord_end_2020 = ISODateToOrd('2020-12-31') + 1
+    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
     age_list_2 = []
     symp_list_2 = []
     n_total = 0
@@ -869,6 +881,9 @@ class MainSheet(Template):
         continue
       
       if '2020' == selection and rep_ord >= ord_end_2020:
+        continue
+      
+      if '2021' == selection and (rep_ord < ord_end_2020 or rep_ord >= ord_end_2021):
         continue
       
       n_total += 1
@@ -915,8 +930,8 @@ class MainSheet(Template):
     timestamp = dtt.datetime.now().astimezone()
     timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
     
-    key = ['overall_total', 'latest_total', '2020_total', 'timestamp']
-    value = [self.n_total, self.n_latest, self.n_2020, timestamp]
+    key = ['overall_total', 'latest_total', '2020_total', '2021_total', 'timestamp']
+    value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, timestamp]
     
     data = {'key': key, 'value': value}
     data = pd.DataFrame(data)
@@ -985,19 +1000,25 @@ class MainSheet(Template):
     
     data_latest_r = data_r.iloc[-NB_LOOKBACK_DAYS:]
     data_latest_o = data_o.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020_r = data_r.iloc[:366]
+    data_2020_o = data_o.iloc[:366]
+    data_2021_r = data_r.iloc[366:731]
+    data_2021_o = data_o.iloc[366:731]
     
     name = '%sprocessed_data/latest/case_by_transmission_by_report_day.csv' % DATA_PATH
     saveCsv(name, data_latest_r)
     name = '%sprocessed_data/latest/case_by_transmission_by_onset_day.csv' % DATA_PATH
     saveCsv(name, data_latest_o)
     
-    data_2020_r = data_r.iloc[:366]
-    data_2020_o = data_o.iloc[:366]
-    
     name = '%sprocessed_data/2020/case_by_transmission_by_report_day.csv' % DATA_PATH
     saveCsv(name, data_2020_r)
     name = '%sprocessed_data/2020/case_by_transmission_by_onset_day.csv' % DATA_PATH
     saveCsv(name, data_2020_o)
+    
+    name = '%sprocessed_data/2021/case_by_transmission_by_report_day.csv' % DATA_PATH
+    saveCsv(name, data_2021_r)
+    name = '%sprocessed_data/2021/case_by_transmission_by_onset_day.csv' % DATA_PATH
+    saveCsv(name, data_2021_o)
     return
   
   def saveCsv_caseByDetection(self):
@@ -1079,19 +1100,25 @@ class MainSheet(Template):
     
     data_latest_r = data_r.iloc[-NB_LOOKBACK_DAYS:]
     data_latest_o = data_o.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020_r = data_r.iloc[:366]
+    data_2020_o = data_o.iloc[:366]
+    data_2021_r = data_r.iloc[366:731]
+    data_2021_o = data_o.iloc[366:731]
     
     name = '%sprocessed_data/latest/case_by_detection_by_report_day.csv' % DATA_PATH
     saveCsv(name, data_latest_r)
     name = '%sprocessed_data/latest/case_by_detection_by_onset_day.csv' % DATA_PATH
     saveCsv(name, data_latest_o)
     
-    data_2020_r = data_r.iloc[:366]
-    data_2020_o = data_o.iloc[:366]
-    
     name = '%sprocessed_data/2020/case_by_detection_by_report_day.csv' % DATA_PATH
     saveCsv(name, data_2020_r)
     name = '%sprocessed_data/2020/case_by_detection_by_onset_day.csv' % DATA_PATH
     saveCsv(name, data_2020_o)
+    
+    name = '%sprocessed_data/2021/case_by_detection_by_report_day.csv' % DATA_PATH
+    saveCsv(name, data_2021_r)
+    name = '%sprocessed_data/2021/case_by_detection_by_onset_day.csv' % DATA_PATH
+    saveCsv(name, data_2021_o)
     return
   
   def saveCsv_diffByTrans(self):
@@ -1102,14 +1129,19 @@ class MainSheet(Template):
     
     ord_today = dtt.date.today().toordinal() + 1
     ord_end_2020 = ISODateToOrd('2020-12-31') + 1
+    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
     stock_latest_imp = []
     stock_latest_indi = []
     stock_latest_fleet = []
     stock_2020_imp = []
     stock_2020_indi = []
     stock_2020_fleet = []
+    stock_2021_imp = []
+    stock_2021_indi = []
+    stock_2021_fleet = []
     max_latest = 30
     max_2020 = 30
+    max_2021 = 30
     
     for report_date, entryDate, onset_date, trans in zip(report_date_list, entry_date_list, onset_date_list, trans_list):
       if report_date != report_date:
@@ -1118,12 +1150,15 @@ class MainSheet(Template):
       if trans == 'imported':
         stock_latest = stock_latest_imp
         stock_2020 = stock_2020_imp
+        stock_2021 = stock_2021_imp
       elif trans == 'indigenous':
         stock_latest = stock_latest_indi
         stock_2020 = stock_2020_indi
+        stock_2021 = stock_2021_indi
       elif trans == 'fleet':
         stock_latest = stock_latest_fleet
         stock_2020 = stock_2020_fleet
+        stock_2021 = stock_2021_fleet
       else:
         print('diffByTrans, transimission not recognized')
       
@@ -1143,6 +1178,10 @@ class MainSheet(Template):
       if rep_ord < ord_end_2020:
         stock_2020.append(diff)
         max_2020 = max(max_2020, diff)
+        
+      if rep_ord >= ord_end_2020 and rep_ord < ord_end_2021:
+        stock_2021.append(diff)
+        max_2021 = max(max_2021, diff)
     
     ## Latest
     bins = np.arange(-0.5, max_latest+1, 1)
@@ -1180,6 +1219,25 @@ class MainSheet(Template):
     data = pd.DataFrame(data)
     
     name = '%sprocessed_data/2020/difference_by_transmission.csv' % DATA_PATH
+    saveCsv(name, data)
+    
+    ## 2021
+    bins = np.arange(-0.5, max_2021+1, 1)
+    n_imp, ctr_bins = makeHist(stock_2021_imp, bins)
+    n_indi, ctr_bins = makeHist(stock_2021_indi, bins)
+    n_fleet, ctr_bins = makeHist(stock_2021_fleet, bins)
+    n_tot = n_imp + n_indi + n_fleet
+    
+    n_imp = n_imp.round(0).astype(int)
+    n_indi = n_indi.round(0).astype(int)
+    n_fleet = n_fleet.round(0).astype(int)
+    n_tot = n_tot.round(0).astype(int)
+    ctr_bins = ctr_bins.round(0).astype(int)
+    
+    data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'fleet': n_fleet}
+    data = pd.DataFrame(data)
+    
+    name = '%sprocessed_data/2021/difference_by_transmission.csv' % DATA_PATH
     saveCsv(name, data)
     return
   
@@ -1278,8 +1336,10 @@ class MainSheet(Template):
     self.saveCsv_diffByTrans()
     self.saveCsv_travHistSymptomCorr(selection='latest')
     self.saveCsv_travHistSymptomCorr(selection='2020')
+    self.saveCsv_travHistSymptomCorr(selection='2021')
     self.saveCsv_ageSymptomCorr(selection='latest')
     self.saveCsv_ageSymptomCorr(selection='2020')
+    self.saveCsv_ageSymptomCorr(selection='2021')
     return
 
 ###############################################################################
@@ -1376,12 +1436,16 @@ class StatusSheet(Template):
     
     data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
     data_2020 = data.iloc[:366]
+    data_2021 = data.iloc[366:731]
     
     name = '%sprocessed_data/latest/status_evolution.csv' % DATA_PATH
     saveCsv(name, data_latest)
     
     name = '%sprocessed_data/2020/status_evolution.csv' % DATA_PATH
     saveCsv(name, data_2020)
+    
+    name = '%sprocessed_data/2021/status_evolution.csv' % DATA_PATH
+    saveCsv(name, data_2021)
     return
     
   def saveCsv(self):
@@ -1529,14 +1593,17 @@ class TestSheet(Template):
     data = adjustDateRange(data)
     
     data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020 = data.iloc[:366]
+    data_2021 = data.iloc[366:731]
     
     name = '%sprocessed_data/latest/test_by_criterion.csv' % DATA_PATH
     saveCsv(name, data_latest)
     
-    data_2020 = data.iloc[:366]
-    
     name = '%sprocessed_data/2020/test_by_criterion.csv' % DATA_PATH
     saveCsv(name, data_2020)
+    
+    name = '%sprocessed_data/2021/test_by_criterion.csv' % DATA_PATH
+    saveCsv(name, data_2021)
     return
   
   def printCriteria(self):
@@ -1971,6 +2038,9 @@ class BorderSheet(Template):
     return nb_arrival_arr
   
   def saveCsv_borderStats(self):
+    pass 
+    
+    ## In
     date_list = self.getDate()
     air_list = self.getAirport(tag='in')
     sea_list = self.getSeaport(tag='in')
@@ -1981,13 +2051,19 @@ class BorderSheet(Template):
     data = adjustDateRange(data)
     
     data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020 = data.iloc[:366]
+    data_2021 = data.iloc[366:731]
+    
     name = '%sprocessed_data/latest/border_statistics_entry.csv' % DATA_PATH
     saveCsv(name, data_latest)
     
-    data_2020 = data.iloc[:366]
     name = '%sprocessed_data/2020/border_statistics_entry.csv' % DATA_PATH
     saveCsv(name, data_2020)
     
+    name = '%sprocessed_data/2021/border_statistics_entry.csv' % DATA_PATH
+    saveCsv(name, data_2021)
+    
+    ## Out
     air_list = self.getAirport(tag='out')
     sea_list = self.getSeaport(tag='out')
     not_spec_list = self.getNotSpecified(tag='out')
@@ -1997,13 +2073,19 @@ class BorderSheet(Template):
     data = adjustDateRange(data)
     
     data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020 = data.iloc[:366]
+    data_2021 = data.iloc[366:731]
+    
     name = '%sprocessed_data/latest/border_statistics_exit.csv' % DATA_PATH
     saveCsv(name, data_latest)
     
-    data_2020 = data.iloc[:366]
     name = '%sprocessed_data/2020/border_statistics_exit.csv' % DATA_PATH
     saveCsv(name, data_2020)
     
+    name = '%sprocessed_data/2021/border_statistics_exit.csv' % DATA_PATH
+    saveCsv(name, data_2021)
+    
+    ## Both
     air_list = self.getAirport(tag='total')
     sea_list = self.getSeaport(tag='total')
     not_spec_list = self.getNotSpecified(tag='total')
@@ -2013,12 +2095,17 @@ class BorderSheet(Template):
     data = adjustDateRange(data)
     
     data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
+    data_2020 = data.iloc[:366]
+    data_2021 = data.iloc[366:731]
+    
     name = '%sprocessed_data/latest/border_statistics_both.csv' % DATA_PATH
     saveCsv(name, data_latest)
     
-    data_2020 = data.iloc[:366]
     name = '%sprocessed_data/2020/border_statistics_both.csv' % DATA_PATH
     saveCsv(name, data_2020)
+    
+    name = '%sprocessed_data/2021/border_statistics_both.csv' % DATA_PATH
+    saveCsv(name, data_2021)
     return
       
   def saveCsv(self):
@@ -2173,12 +2260,17 @@ def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
   data = pd.DataFrame(data)
   
   data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
+  data_2020 = data.iloc[:366]
+  data_2021 = data.iloc[366:731]
+  
   name = '%sprocessed_data/latest/various_rates.csv' % DATA_PATH
   saveCsv(name, data_latest)
   
-  data_2020 = data.iloc[:366]
   name = '%sprocessed_data/2020/various_rates.csv' % DATA_PATH
   saveCsv(name, data_2020)
+  
+  name = '%sprocessed_data/2021/various_rates.csv' % DATA_PATH
+  saveCsv(name, data_2021)
   return
   
 ###############################################################################
