@@ -62,7 +62,7 @@ function text_translation() {
     TT_Add_Str("difference_by_transmission_button_1", "全部");
     TT_Add_Str("difference_by_transmission_button_2", "境外移入");
     TT_Add_Str("difference_by_transmission_button_3", "本土");
-    TT_Add_Str("difference_by_transmission_button_4", "敦睦艦隊");
+    TT_Add_Str("difference_by_transmission_button_4", "其他");
     
     //-- Case by transmission
     TT_Add_Str("case_by_transmission_title", "依感染源之確診人數");
@@ -146,7 +146,7 @@ function text_translation() {
     TT_Add_Str("difference_by_transmission_button_1", "Tous");
     TT_Add_Str("difference_by_transmission_button_2", "Importés");
     TT_Add_Str("difference_by_transmission_button_3", "Locaux");
-    TT_Add_Str("difference_by_transmission_button_4", "Flotte");
+    TT_Add_Str("difference_by_transmission_button_4", "Divers");
     
     //-- Case by transmission
     TT_Add_Str("case_by_transmission_title", "Cas confirmés par moyen de transmission");
@@ -230,7 +230,7 @@ function text_translation() {
     TT_Add_Str("difference_by_transmission_button_1", "All");
     TT_Add_Str("difference_by_transmission_button_2", "Imported");
     TT_Add_Str("difference_by_transmission_button_3", "Local");
-    TT_Add_Str("difference_by_transmission_button_4", "Fleet");
+    TT_Add_Str("difference_by_transmission_button_4", "Others");
     
     //-- Case by transmission
     TT_Add_Str("case_by_transmission_title", "Confirmed Cases by Transmission Type");

@@ -390,6 +390,9 @@ class MainSheet(Template):
       if trans != trans:
         trans_list.append(np.nan)
       
+      elif i+1 in [760, 766]:
+        trans_list.append('plane')
+      
       elif trans == '境外':
         trans_list.append('imported')
       
@@ -400,7 +403,7 @@ class MainSheet(Template):
         trans_list.append('indigenous')
       
       elif trans == '不明':
-        trans_list.append('imported') #WARNING Shortcut
+        trans_list.append('unknown')
       
       else:
         print('Transmission, Case %d, %s' % (i+1, trans))
@@ -544,41 +547,49 @@ class MainSheet(Template):
   def getEntryDate(self):
     entry_date_list = []
     
-    for i, entryDate in enumerate(self.getCol(self.coltag_entry_date)):
-      if entryDate != entryDate: ## NaN
+    for i, entry_date in enumerate(self.getCol(self.coltag_entry_date)):
+      if entry_date != entry_date: ## NaN
         entry_date_list.append(np.nan)
         
-      elif entryDate in ['x']:
+      elif entry_date in ['x']:
         entry_date_list.append(np.nan)
         
-      elif entryDate in ['3/1\n3/8']:
+      elif entry_date in ['3/1\n3/8']:
         entry_date_list.append('2020-03-08')
       
-      elif entryDate in ['10/28(29)']:
+      elif entry_date in ['10/28(29)']:
         entry_date_list.append('2020-10-28')
       
-      elif entryDate in ['11/7(8)']:
+      elif entry_date in ['11/7(8)']:
         entry_date_list.append('2020-11-07')
       
-      elif entryDate in ['11/20(-27)']:
+      elif entry_date in ['11/20(-27)']:
         entry_date_list.append('2020-11-24')
         
-      elif entryDate in ['11/28(12/2)']:
+      elif entry_date in ['11/28(12/2)']:
         entry_date_list.append('2020-11-30')
         
-      elif entryDate in ['12/4\n12/15']:
+      elif entry_date in ['12/4\n12/15', '12/7\n12/15']:
         entry_date_list.append('2020-12-15')
         
-      elif entryDate in ['12/7\n12/15']:
-        entry_date_list.append('2020-12-15')
+      elif entry_date in ['12/27(30)']:
+        entry_date_list.append('2020-12-29')
         
       else:
         try:
-          mmdd = entryDate.split('/')
-          entryDate = '2020-%02d-%02d' % (int(mmdd[0]), int(mmdd[1]))
-          entry_date_list.append(entryDate)
+          mmdd = entry_date.split('/')
+          y = 2020
+          m = int(mmdd[0])
+          d = int(mmdd[1])
+          if i+1 < 100 and m > 6:
+            y = 2019
+          elif i+1 >= 800 and m <= 6:
+            y = 2021
+            
+          entry_date = '%04d-%02d-%02d' % (y, m, d)
+          entry_date_list.append(entry_date)
         except:
-          print('Entry date, Case %d, %s' % (i+1, entryDate))
+          print('Entry date, Case %d, %s' % (i+1, entry_date))
           entry_date_list.append(np.nan)
     
     return entry_date_list
@@ -599,7 +610,14 @@ class MainSheet(Template):
       else:
         try:
           mmdd = onset_date.split('/')
-          onset_date = '2020-%02d-%02d' % (int(mmdd[0]), int(mmdd[1]))
+          y = 2020
+          m = int(mmdd[0])
+          d = int(mmdd[1])
+          if i+1 < 100 and m > 6:
+            y = 2019
+          elif i+1 >= 800 and m <= 6:
+            y = 2021
+          onset_date = '%04d-%02d-%02d' % (y, m, d)
           onset_date_list.append(onset_date)
         except:
           print('Onset date, Case %d, %s' % (i+1, onset_date))
@@ -770,7 +788,7 @@ class MainSheet(Template):
     trav_hist_list_2 = []
     
     for trans, trav_hist in zip(trans_list, trav_hist_list):
-      if trans == 'imported' and trav_hist == trav_hist: ## Is not nan
+      if trans == 'imported' and trav_hist == trav_hist: ## Not NaN
         for trav in trav_hist:
           trav_hist_list_2.append(trav)
     
@@ -783,7 +801,7 @@ class MainSheet(Template):
     symp_list_2 = []
     
     for symp in symp_list:
-      if symp == symp: ## Is not nan
+      if symp == symp: ## Not NaN
         for s in symp:
           symp_list_2.append(s)
     
@@ -823,7 +841,7 @@ class MainSheet(Template):
       n_total += 1
       if trans == 'imported':
         n_imported += 1
-        if trav_hist == trav_hist and symp == symp: ## Is not nan
+        if trav_hist == trav_hist and symp == symp: ## Not NaN
           trav_hist_list_2.append(trav_hist)
           symp_list_2.append(symp)
     
@@ -887,7 +905,7 @@ class MainSheet(Template):
         continue
       
       n_total += 1
-      if age == age and symp == symp: ## Is not nan
+      if age == age and symp == symp: ## Not NaN
         age_list_2.append(age)
         symp_list_2.append(symp)
     
@@ -955,15 +973,20 @@ class MainSheet(Template):
     linked_r   = np.zeros(nb_days, dtype=int)
     unlinked_r = np.zeros(nb_days, dtype=int)
     fleet_r    = np.zeros(nb_days, dtype=int)
+    plane_r    = np.zeros(nb_days, dtype=int)
+    unknown_r  = np.zeros(nb_days, dtype=int)
     imported_o = np.zeros(nb_days, dtype=int)
     linked_o   = np.zeros(nb_days, dtype=int)
     unlinked_o = np.zeros(nb_days, dtype=int)
     fleet_o    = np.zeros(nb_days, dtype=int)
+    plane_o    = np.zeros(nb_days, dtype=int)
+    unknown_o  = np.zeros(nb_days, dtype=int)
     
     for report_date, onset_date, trans, link in zip(report_date_list, onset_date_list, trans_list, link_list):
       if report_date != report_date:
         continue
       
+      ## Regroup by report date
       ind_r = ISODateToOrd(report_date) - ord_ref
       if ind_r < 0 or ind_r >= nb_days:
         print('Bad ind_r = %d' % ind_r)
@@ -973,12 +996,17 @@ class MainSheet(Template):
         imported_r[ind_r] += 1
       elif trans == 'fleet':
         fleet_r[ind_r] += 1
+      elif trans == 'plane':
+        plane_r[ind_r] += 1
+      elif trans == 'unknown':
+        unknown_r[ind_r] += 1
       elif link == 'unlinked':
         unlinked_r[ind_r] += 1
       else:
         linked_r[ind_r] += 1
       
-      if onset_date == onset_date: ## Is not nan
+      ## Regroup by onset date
+      if onset_date == onset_date: ## Not NaN
         ind_o = ISODateToOrd(onset_date) - ord_ref
         if ind_o < 0 or ind_o >= nb_days:
           print('Bad ind_o = %d' % ind_o)
@@ -988,14 +1016,18 @@ class MainSheet(Template):
           imported_o[ind_o] += 1
         elif trans == 'fleet':
           fleet_o[ind_o] += 1
+        elif trans == 'plane':
+          plane_o[ind_o] += 1
+        elif trans == 'unknown':
+          unknown_o[ind_o] += 1
         elif link == 'unlinked':
           unlinked_o[ind_o] += 1
         else:
           linked_o[ind_o] += 1
     
-    data_r = {'date': date, 'fleet': fleet_r, 'unlinked': unlinked_r, 'linked': linked_r, 'imported': imported_r}
+    data_r = {'date': date, 'unknown': unknown_r, 'plane': plane_r, 'fleet': fleet_r, 'unlinked': unlinked_r, 'linked': linked_r, 'imported': imported_r}
     data_r = pd.DataFrame(data_r)
-    data_o = {'date': date, 'fleet': fleet_o, 'unlinked': unlinked_o, 'linked': linked_o, 'imported': imported_o}
+    data_o = {'date': date, 'unknown': unknown_o, 'plane': plane_o, 'fleet': fleet_o, 'unlinked': unlinked_o, 'linked': linked_o, 'imported': imported_o}
     data_o = pd.DataFrame(data_o)
     
     data_latest_r = data_r.iloc[-NB_LOOKBACK_DAYS:]
@@ -1070,7 +1102,7 @@ class MainSheet(Template):
       elif channel != channel: ## Is nan
         no_data_r[ind_r] += 1
       
-      if onset_date == onset_date: ## Is not nan
+      if onset_date == onset_date: ## Not NaN
         ind_o = ISODateToOrd(onset_date) - ord_ref
         if ind_o < 0 or ind_o >= nb_days:
           print('Bad ind_o = %d' % ind_o)
@@ -1125,25 +1157,22 @@ class MainSheet(Template):
     report_date_list = self.getReportDate()
     entry_date_list  = self.getEntryDate()
     onset_date_list  = self.getOnsetDate()
-    trans_list      = self.getTransmission()
+    trans_list       = self.getTransmission()
     
     ord_today = dtt.date.today().toordinal() + 1
     ord_end_2020 = ISODateToOrd('2020-12-31') + 1
     ord_end_2021 = ISODateToOrd('2021-12-31') + 1
     stock_latest_imp = []
     stock_latest_indi = []
-    stock_latest_fleet = []
+    stock_latest_other = []
     stock_2020_imp = []
     stock_2020_indi = []
-    stock_2020_fleet = []
+    stock_2020_other = []
     stock_2021_imp = []
     stock_2021_indi = []
-    stock_2021_fleet = []
-    max_latest = 30
-    max_2020 = 30
-    max_2021 = 30
+    stock_2021_other = []
     
-    for report_date, entryDate, onset_date, trans in zip(report_date_list, entry_date_list, onset_date_list, trans_list):
+    for report_date, entry_date, onset_date, trans in zip(report_date_list, entry_date_list, onset_date_list, trans_list):
       if report_date != report_date:
         continue
       
@@ -1155,15 +1184,15 @@ class MainSheet(Template):
         stock_latest = stock_latest_indi
         stock_2020 = stock_2020_indi
         stock_2021 = stock_2021_indi
-      elif trans == 'fleet':
-        stock_latest = stock_latest_fleet
-        stock_2020 = stock_2020_fleet
-        stock_2021 = stock_2021_fleet
+      elif trans in ['fleet', 'plane', 'unknown']:
+        stock_latest = stock_latest_other
+        stock_2020 = stock_2020_other
+        stock_2021 = stock_2021_other
       else:
         print('diffByTrans, transimission not recognized')
       
       rep_ord = ISODateToOrd(report_date)
-      entry_ord = ISODateToOrd(entryDate) if entryDate == entryDate else 0
+      entry_ord = ISODateToOrd(entry_date) if entry_date == entry_date else 0
       onset_ord = ISODateToOrd(onset_date) if onset_date == onset_date else 0
       
       if entry_ord + onset_ord == 0:
@@ -1173,68 +1202,69 @@ class MainSheet(Template):
       
       if rep_ord + NB_LOOKBACK_DAYS > ord_today:
         stock_latest.append(diff)
-        max_latest = max(max_latest, diff)
       
       if rep_ord < ord_end_2020:
         stock_2020.append(diff)
-        max_2020 = max(max_2020, diff)
         
       if rep_ord >= ord_end_2020 and rep_ord < ord_end_2021:
         stock_2021.append(diff)
-        max_2021 = max(max_2021, diff)
+    
+    ## Histogram bins
+    bins = np.arange(-0.5, 31, 1)
+    bins[-1] = 999
     
     ## Latest
-    bins = np.arange(-0.5, max_latest+1, 1)
     n_imp, ctr_bins = makeHist(stock_latest_imp, bins)
     n_indi, ctr_bins = makeHist(stock_latest_indi, bins)
-    n_fleet, ctr_bins = makeHist(stock_latest_fleet, bins)
-    n_tot = n_imp + n_indi + n_fleet
+    n_other, ctr_bins = makeHist(stock_latest_other, bins)
+    n_tot = n_imp + n_indi + n_other
     
     n_imp = n_imp.round(0).astype(int)
     n_indi = n_indi.round(0).astype(int)
-    n_fleet = n_fleet.round(0).astype(int)
+    n_other = n_other.round(0).astype(int)
     n_tot = n_tot.round(0).astype(int)
     ctr_bins = ctr_bins.round(0).astype(int)
+    ctr_bins[-1] = 30
     
-    data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'fleet': n_fleet}
+    data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'other': n_other}
     data = pd.DataFrame(data)
     
     name = '%sprocessed_data/latest/difference_by_transmission.csv' % DATA_PATH
     saveCsv(name, data)
     
     ## 2020
-    bins = np.arange(-0.5, max_2020+1, 1)
     n_imp, ctr_bins = makeHist(stock_2020_imp, bins)
     n_indi, ctr_bins = makeHist(stock_2020_indi, bins)
-    n_fleet, ctr_bins = makeHist(stock_2020_fleet, bins)
-    n_tot = n_imp + n_indi + n_fleet
+    n_other, ctr_bins = makeHist(stock_2020_other, bins)
+    n_tot = n_imp + n_indi + n_other
     
     n_imp = n_imp.round(0).astype(int)
     n_indi = n_indi.round(0).astype(int)
-    n_fleet = n_fleet.round(0).astype(int)
+    n_other = n_other.round(0).astype(int)
     n_tot = n_tot.round(0).astype(int)
     ctr_bins = ctr_bins.round(0).astype(int)
+    ctr_bins[-1] = 30
     
-    data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'fleet': n_fleet}
+    data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'other': n_other}
     data = pd.DataFrame(data)
     
     name = '%sprocessed_data/2020/difference_by_transmission.csv' % DATA_PATH
     saveCsv(name, data)
     
     ## 2021
-    bins = np.arange(-0.5, max_2021+1, 1)
     n_imp, ctr_bins = makeHist(stock_2021_imp, bins)
     n_indi, ctr_bins = makeHist(stock_2021_indi, bins)
-    n_fleet, ctr_bins = makeHist(stock_2021_fleet, bins)
-    n_tot = n_imp + n_indi + n_fleet
+    n_other, ctr_bins = makeHist(stock_2021_other, bins)
+    n_tot = n_imp + n_indi + n_other
     
     n_imp = n_imp.round(0).astype(int)
     n_indi = n_indi.round(0).astype(int)
-    n_fleet = n_fleet.round(0).astype(int)
+    n_other = n_other.round(0).astype(int)
     n_tot = n_tot.round(0).astype(int)
     ctr_bins = ctr_bins.round(0).astype(int)
+    ctr_bins[-1] = 30
     
-    data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'fleet': n_fleet}
+    data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'other': n_other}
     data = pd.DataFrame(data)
     
     name = '%sprocessed_data/2021/difference_by_transmission.csv' % DATA_PATH

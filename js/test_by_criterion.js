@@ -177,24 +177,46 @@ function TBC_Get_Tooltip_Pos(wrap, d) {
 
 function TBC_Mouse_Move(wrap, d) {
   var new_pos = TBC_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
-  var tooltip_text;
+  var tooltip_text = d.x;
+  var sum = 0;
   
-  if (wrap.tag.includes("latest") || wrap.tag.includes("2021")) {
+  if (+d.h3 > 0) {
     if (GS_lang == 'zh-tw')
-      tooltip_text = d.x + "<br>法定通報 = " + d.h3 + "<br>擴大監測 = " + d.h1 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
+      tooltip_text += "<br>法定通報 = ";
     else if (GS_lang == 'fr')
-      tooltip_text = d.x + "<br>Clinique = " + d.h3 + "<br>Clusters locaux = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+      tooltip_text += "<br>Clinique = ";
     else
-      tooltip_text = d.x + "<br>Clinical = " + d.h3 + "<br>Community = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+      tooltip_text += "<br>Clinical = ";
+    tooltip_text += d.h3;
+    sum += +d.h3;
   }
-  else {
+  if (+d.h2 > 0) {
     if (GS_lang == 'zh-tw')
-      tooltip_text = d.x + "<br>法定通報 = " + d.h3 + "<br>居家檢疫 = " + d.h2 + "<br>擴大監測 = " + d.h1 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
+      tooltip_text += "<br>居家檢疫 = ";
     else if (GS_lang == 'fr')
-      tooltip_text = d.x + "<br>Clinique = " + d.h3 + "<br>Quarantine = " + d.h2 + "<br>Clusters locaux = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+      tooltip_text += "<br>Quarantaine = ";
     else
-      tooltip_text = d.x + "<br>Clinical = " + d.h3 + "<br>Quarantine = " + d.h2 + "<br>Community = " + d.h1 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+      tooltip_text += "<br>Quarantine = ";
+    tooltip_text += d.h2;
+    sum += +d.h2;
   }
+  if (+d.h1 > 0) {
+    if (GS_lang == 'zh-tw')
+      tooltip_text += "<br>擴大監測 = ";
+    else if (GS_lang == 'fr')
+      tooltip_text += "<br>Communauté = ";
+    else
+      tooltip_text += "<br>Community = ";
+    tooltip_text += d.h1;
+    sum += +d.h1;
+  }
+  if (GS_lang == 'zh-tw')
+    tooltip_text += "<br>合計 = ";
+  else if (GS_lang == 'fr')
+    tooltip_text += "<br>Total = ";
+  else
+    tooltip_text += "<br>Total = ";
+  tooltip_text += sum;
   
   wrap.tooltip
     .html(tooltip_text)
@@ -350,13 +372,16 @@ function TBC_Update(wrap) {
   //-- Legend - label
   var legend_label;
   if (GS_lang == 'zh-tw') legend_label = ["法定定義通報", "居家檢疫", "擴大社區監測", "合計"];
-  else if (GS_lang == 'fr') legend_label = ["Critères cliniques", "Quarantaine (fusionnée dans clinique)", "Recherche de clusters locaux", "Total"];
+  else if (GS_lang == 'fr') legend_label = ["Critères cliniques", "Quarantaine (fusionnée dans clinique)", "Recherche dans la communauté", "Total"];
   else legend_label = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', "Total"];
   
-  if (wrap.tag.includes("latest") || wrap.tag.includes("2021")) {
-    color_list.splice(1, 1);
-    legend_value.splice(1, 1);
-    legend_label.splice(1, 1);
+  var i;
+  for (i=legend_value.length-1; i>=0; i--) {
+    if (0 == legend_value[i]) {
+      color_list.splice(i, 1);
+      legend_value.splice(i, 1);
+      legend_label.splice(i, 1);
+    }
   }
   
   wrap.svg.selectAll(".legend.value")

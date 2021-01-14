@@ -174,14 +174,46 @@ function BS_Get_Tooltip_Pos(wrap, d) {
 
 function BS_Mouse_Move(wrap, d) {
   var new_pos = BS_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
-  var tooltip_text;
+  var tooltip_text = d.x;
+  var sum = 0;
   
+  if (+d.h1 > 0) {
+    if (GS_lang == 'zh-tw')
+      tooltip_text += "<br>機場 = ";
+    else if (GS_lang == 'fr')
+      tooltip_text += "<br>Aéroports = ";
+    else
+      tooltip_text += "<br>Airports = ";
+    tooltip_text += d.h1;
+    sum += +d.h1;
+  }
+  if (+d.h2 > 0) {
+    if (GS_lang == 'zh-tw')
+      tooltip_text += "<br>港口 = ";
+    else if (GS_lang == 'fr')
+      tooltip_text += "<br>Ports maritimes = ";
+    else
+      tooltip_text += "<br>Seaports = ";
+    tooltip_text += d.h2;
+    sum += +d.h2;
+  }
+  if (+d.h3 > 0) {
+    if (GS_lang == 'zh-tw')
+      tooltip_text += "<br>無細節 = ";
+    else if (GS_lang == 'fr')
+      tooltip_text += "<br>Sans précisions = ";
+    else
+      tooltip_text += "<br>Not specified = ";
+    tooltip_text += d.h3;
+    sum += +d.h3;
+  }
   if (GS_lang == 'zh-tw')
-    tooltip_text = d.x + "<br>機場 = " + d.h1+ "<br>港口 = " + d.h2 + "<br>無細節 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
+    tooltip_text += "<br>合計 = ";
   else if (GS_lang == 'fr')
-    tooltip_text = d.x + "<br>Aéroports = " + d.h1+ "<br>Ports maritimes = " + d.h2 + "<br>Sans précisions = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+    tooltip_text += "<br>Total = ";
   else
-    tooltip_text = d.x + "<br>Airports = " + d.h1+ "<br>Seaports = " + d.h2 + "<br>Not specified = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+    tooltip_text += "<br>Total = ";
+  tooltip_text += sum;
   
   wrap.tooltip
     .html(tooltip_text)
@@ -328,6 +360,27 @@ function BS_update(wrap) {
   var sum = legend_value.reduce((a, b) => a + b, 0);
   legend_value.push(sum);
   
+  //-- Legend - label
+  var legend_label;
+  if (GS_lang == 'zh-tw') {
+    legend_label = ["機場", "港口", "無細節", "合計"];
+  }
+  else if (GS_lang == 'fr') {
+    legend_label = ["Aéroports", "Ports maritimes", "Sans précisions", "Total"];
+  }
+  else {
+    legend_label = ["Airports", "Seaports", "Not specified", 'Total'];
+  }
+  
+  var i;
+  for (i=legend_value.length-1; i>=0; i--) {
+    if (0 == legend_value[i]) {
+      color_list.splice(i, 1);
+      legend_value.splice(i, 1);
+      legend_label.splice(i, 1);
+    }
+  }
+  
   wrap.svg.selectAll(".legend.value")
     .remove()
     .exit()
@@ -340,18 +393,6 @@ function BS_update(wrap) {
       .style("fill", function (d, i) {return color_list[i]})
       .text(function (d) {return d})
       .attr("text-anchor", "end")
-  
-  //-- Legend - label
-  var legend_label;
-  if (GS_lang == 'zh-tw') {
-    legend_label = ["機場", "港口", "無細節", "合計"];
-  }
-  else if (GS_lang == 'fr') {
-    legend_label = ["Aéroports", "Ports maritimes", "Sans précisions", "Total"];
-  }
-  else {
-    legend_label = ["Airports", "Seaports", "Not specified", 'Total'];
-  }
   
   wrap.svg.selectAll(wrap.id+'_legend_label')
     .remove()
@@ -388,7 +429,7 @@ function BS_update(wrap) {
       .attr("id", wrap.tag+"_legend_title")
       .attr("class", "legend label")
       .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", legend_pos.y+4.25*legend_pos.dy)
+      .attr("y", legend_pos.y+(legend_value.length+0.25)*legend_pos.dy)
       .style("fill", '#000000')
       .text(function (d) {return d})
       .attr("text-anchor", "start")

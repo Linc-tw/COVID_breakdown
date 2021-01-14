@@ -50,4 +50,3 @@ function GS_CumSum(data, col_tag_list) {
 
 //TODO
 //show data table
-//separate on-plane & unknown from imported (CBT)

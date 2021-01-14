@@ -70,7 +70,11 @@ function DBT_Format_Data(wrap, data) {
     
     y_max = Math.max(y_max, y);
     
-    if (i % xlabel_path == r) {
+    if (30 == i) {
+      xtick.push(i+0.5)
+      xticklabel.push('30+');
+    }
+    else if (i % xlabel_path == r) {
       xtick.push(i+0.5)
       xticklabel.push(x);
     }
@@ -92,10 +96,10 @@ function DBT_Format_Data(wrap, data) {
   
   //-- Calculate separate sum
   var all = d3.sum(data, function (d) {return d['all'];});
-  var imp = d3.sum(data, function (d) {return d['imported'];});
-  var ind = d3.sum(data, function (d) {return d['indigenous'];});
-  var fle = d3.sum(data, function (d) {return d['fleet'];});
-  var legend_value = [all, imp, ind, fle];
+  var imported = d3.sum(data, function (d) {return d['imported'];});
+  var local = d3.sum(data, function (d) {return d['indigenous'];});
+  var other = d3.sum(data, function (d) {return d['other'];});
+  var legend_value = [all, imported, local, other];
   
   wrap.formatted_data = data;
   wrap.diff_list = diff_list;
@@ -172,7 +176,7 @@ function DBT_Mouse_Move(wrap, d) {
     if (col_tag == 'all') col_tag_2 = '全部';
     else if (col_tag == 'imported') col_tag_2 = '境外移入';
     else if (col_tag == 'indigenous') col_tag_2 = '本土';
-    else if (col_tag == 'fleet') col_tag_2 = '敦睦艦隊';
+    else if (col_tag == 'fleet') col_tag_2 = '其他';
     tooltip_text = col_tag_2 + '案例中有' + d[col_tag] + '位<br>發病或入境後' + d['difference'] + '日確診';
   }
   else if (GS_lang == 'fr') {
@@ -180,12 +184,12 @@ function DBT_Mouse_Move(wrap, d) {
     if (col_tag == 'all') col_tag_2 = "de l'ensemble des cas";
     else if (col_tag == 'imported') col_tag_2 = 'des cas importés';
     else if (col_tag == 'indigenous') col_tag_2 = 'des cas locaux';
-    else if (col_tag == 'fleet') col_tag_2 = 'des cas en flotte';
+    else if (col_tag == 'fleet') col_tag_2 = 'des autres cas';
     tooltip_text = d[col_tag] + ' ' + col_tag_2 + ' attend(ent)<br>' + d['difference'] + " jour(s) avant d'être identifié(s)";
   }
   else {
     col_tag = wrap.col_tag_list[wrap.col_ind];
-    if (col_tag == 'imported') col_tag_2 = 'local';
+    if (col_tag == 'indigenous') col_tag_2 = 'local';
     else col_tag_2 = col_tag;
     tooltip_text = d[col_tag] + ' of ' + col_tag_2 + ' cases required<br>' + d['difference'] + ' day(s) to be identified'
   }
@@ -346,11 +350,11 @@ function DBT_Update(wrap) {
   var legend_pos = {x: 450, y: 45, dx: 12, dy: 30};
   var legend_color_list, legend_label, legend_label_2, legend_value_2;
   if (GS_lang == 'zh-tw')
-    legend_label = ['有資料案例數', "境外移入", "本土", '敦睦艦隊', '資料不全', '合計'];
+    legend_label = ['有資料案例數', "境外移入", "本土", '其他', '資料不全', '合計'];
   else if (GS_lang == 'fr')
-    legend_label = ['Données complètes', "Importés", "Locaux", 'Flotte diplomatique', 'Données incomplètes', 'Total'];
+    legend_label = ['Données complètes', "Importés", "Locaux", 'Divers', 'Données incomplètes', 'Total'];
   else 
-    legend_label = ['Data complete', 'Imported', 'Local', 'Diplomatic fleet cluster', 'Data incomplete', 'Total'];
+    legend_label = ['Data complete', 'Imported', 'Local', 'Others', 'Data incomplete', 'Total'];
   var legend_value = wrap.legend_value.slice(0);
   var sum = wrap.legend_value.slice(1).reduce((a, b) => a + b, 0);
   legend_value.push(wrap.n_tot-sum);

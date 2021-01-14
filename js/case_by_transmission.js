@@ -83,6 +83,8 @@ function CBT_Format_Data(wrap, data) {
         'h2': +data[i][col_tag_list[nb_col-2]],
         'h3': +data[i][col_tag_list[nb_col-3]],
         'h4': +data[i][col_tag_list[nb_col-4]],
+        'h5': +data[i][col_tag_list[nb_col-5]],
+        'h6': +data[i][col_tag_list[nb_col-6]],
         'col': col_tag_list[j]
       };
         
@@ -130,21 +132,25 @@ function CBT_Format_Data(wrap, data) {
   for (i=0; i<y_max; i+=y_path) ytick.push(i)
   
   //-- Calculate separate sum
-  var imp, ind_link, ind_unlink, fle;
+  var imported, local_link, local_unlink, fleet, plane, unknown;
   
   if (wrap.do_cumul == 1) {
-    imp = d3.max(formatted_data, function (d) {if (d.col == 'imported') return +d.height;});
-    ind_link = d3.max(formatted_data, function (d) {if (d.col == 'linked') return +d.height;});
-    ind_unlink = d3.max(formatted_data, function (d) {if (d.col == 'unlinked') return +d.height;});
-    fle = d3.max(formatted_data, function (d) {if (d.col == 'fleet') return +d.height;});
+    imported = d3.max(formatted_data, function (d) {if (d.col == 'imported') return +d.height;});
+    local_link = d3.max(formatted_data, function (d) {if (d.col == 'linked') return +d.height;});
+    local_unlink = d3.max(formatted_data, function (d) {if (d.col == 'unlinked') return +d.height;});
+    fleet = d3.max(formatted_data, function (d) {if (d.col == 'fleet') return +d.height;});
+    plane = d3.max(formatted_data, function (d) {if (d.col == 'plane') return +d.height;});
+    unknown = d3.max(formatted_data, function (d) {if (d.col == 'unknown') return +d.height;});
   }
   else {
-    imp = d3.sum(formatted_data, function (d) {if (d.col == 'imported') return +d.height;});
-    ind_link = d3.sum(formatted_data, function (d) {if (d.col == 'linked') return +d.height;});
-    ind_unlink = d3.sum(formatted_data, function (d) {if (d.col == 'unlinked') return +d.height;});
-    fle = d3.sum(formatted_data, function (d) {if (d.col == 'fleet') return +d.height;});
+    imported = d3.sum(formatted_data, function (d) {if (d.col == 'imported') return +d.height;});
+    local_link = d3.sum(formatted_data, function (d) {if (d.col == 'linked') return +d.height;});
+    local_unlink = d3.sum(formatted_data, function (d) {if (d.col == 'unlinked') return +d.height;});
+    fleet = d3.sum(formatted_data, function (d) {if (d.col == 'fleet') return +d.height;});
+    plane = d3.sum(formatted_data, function (d) {if (d.col == 'plane') return +d.height;});
+    unknown = d3.sum(formatted_data, function (d) {if (d.col == 'unknown') return +d.height;});
   }
-  var legend_value = [imp, ind_link, ind_unlink, fle];
+  var legend_value = [imported, local_link, local_unlink, fleet, plane, unknown];
   
   wrap.formatted_data = formatted_data;
   wrap.date_list = date_list;
@@ -214,25 +220,77 @@ function CBT_Get_Tooltip_Pos(wrap, d) {
 
 function CBT_Mouse_Move(wrap, d) {
   var new_pos = CBT_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
-  var tooltip_text;
+  var tooltip_text = d.x;
+  var sum = 0;
   
-  if (wrap.tag.includes("latest") || wrap.tag.includes("2021")) {
+  if (+d.h1 > 0) {
     if (GS_lang == 'zh-tw')
-      tooltip_text = d.x + "<br>境外移入 = " + d.h1 + "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
+      tooltip_text += "<br>境外移入 = ";
     else if (GS_lang == 'fr')
-      tooltip_text = d.x + "<br>Importés = " + d.h1 + "<br>Locaux connus = " + d.h2 + "<br>Locaux inconnus = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
+      tooltip_text += "<br>Importés = ";
     else
-      tooltip_text = d.x + "<br>Imported = " + d.h1 + "<br>Local linked = " + d.h2 + "<br>Local unlinked = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
+      tooltip_text += "<br>Imported = ";
+    tooltip_text += d.h1;
+    sum += +d.h1;
   }
-  else {
+  if (+d.h2 > 0) {
     if (GS_lang == 'zh-tw')
-      tooltip_text = d.x + "<br>境外移入 = " + d.h1 + "<br>本土已知 = " + d.h2 + "<br>本土未知 = " + d.h3 + "<br>敦睦艦隊 = " + d.h4 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
+      tooltip_text += "<br>本土已知 = ";
     else if (GS_lang == 'fr')
-      tooltip_text = d.x + "<br>Importés = " + d.h1 + "<br>Locaux connus = " + d.h2 + "<br>Locaux inconnus = " + d.h3 + "<br>Flotte = " + d.h4 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
+      tooltip_text += "<br>Locaux connus = ";
     else
-      tooltip_text = d.x + "<br>Imported = " + d.h1 + "<br>Local linked = " + d.h2 + "<br>Local unlinked = " + d.h3 + "<br>Fleet = " + d.h4 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3 + +d.h4)
+      tooltip_text += "<br>Local linked = ";
+    tooltip_text += d.h2;
+    sum += +d.h2;
   }
-    
+  if (+d.h3 > 0) {
+    if (GS_lang == 'zh-tw')
+      tooltip_text += "<br>本土未知 = ";
+    else if (GS_lang == 'fr')
+      tooltip_text += "<br>Locaux inconnus = ";
+    else
+      tooltip_text += "<br>Local unlinked = ";
+    tooltip_text += d.h3;
+    sum += +d.h3;
+  }
+  if (+d.h4 > 0) {
+    if (GS_lang == 'zh-tw')
+      tooltip_text += "<br>敦睦艦隊 = ";
+    else if (GS_lang == 'fr')
+      tooltip_text += "<br>En bateau = ";
+    else
+      tooltip_text += "<br>On boat = ";
+    tooltip_text += d.h4;
+    sum += +d.h4;
+  }
+  if (+d.h5 > 0) {
+    if (GS_lang == 'zh-tw')
+      tooltip_text += "<br>航空器 = ";
+    else if (GS_lang == 'fr')
+      tooltip_text += "<br>En avion = ";
+    else
+      tooltip_text += "<br>On plane = ";
+    tooltip_text += d.h5;
+    sum += +d.h5;
+  }
+  if (+d.h6 > 0) {
+    if (GS_lang == 'zh-tw')
+      tooltip_text += "<br>未知 = ";
+    else if (GS_lang == 'fr')
+      tooltip_text += "<br>Inconnus = ";
+    else
+      tooltip_text += "<br>Unknown = ";
+    tooltip_text += d.h6;
+    sum += +d.h6;
+  }
+  if (GS_lang == 'zh-tw')
+    tooltip_text += "<br>合計 = ";
+  else if (GS_lang == 'fr')
+    tooltip_text += "<br>Total = ";
+  else
+    tooltip_text += "<br>Total = ";
+  tooltip_text += sum;
+  
   wrap.tooltip
     .html(tooltip_text)
     .style("left", new_pos[0] + "px")
@@ -374,7 +432,16 @@ function CBT_Update(wrap) {
   color_list.push('#000000');
   
   //-- Legend - value
-  var legend_pos = {x: 70, y: 45, dx: 12, dy: 30};
+  var legend_pos;
+  if (GS_lang == 'zh-tw') {
+    legend_pos = {x: 70, y: 45, dx: 12, dy: 30, x1: 220};
+  }
+  else if (GS_lang == 'fr') {
+    legend_pos = {x: 70, y: 45, dx: 12, dy: 30, x1: 280};
+  }
+  else {
+    legend_pos = {x: 70, y: 45, dx: 12, dy: 30, x1: 240};
+  }
   if (wrap.do_cumul == 0) {
     if (wrap.legend_pos_x_0__[GS_lang] != 0) legend_pos.x = wrap.legend_pos_x_0__[GS_lang];
   }
@@ -386,23 +453,26 @@ function CBT_Update(wrap) {
   //-- Legend - label
   var legend_label, legend_label_plus;
   if (GS_lang == 'zh-tw') {
-    legend_label = ["境外移入", "本土感染源已知", "本土感染源未知", '敦睦艦隊', "合計"];
+    legend_label = ["境外移入", "本土感染源已知", "本土感染源未知", '敦睦艦隊', '航空器', '未知', "合計"];
     legend_label_plus = '無發病日資料';
   }
   else if (GS_lang == 'fr') {
-    legend_label = ["Importés", "Locaux & lien connu", "Locaux & lien inconnu", "Flotte diplomatique", "Total"];
+    legend_label = ["Importés", "Locaux & lien connu", "Locaux & lien inconnu", "En bateau", "En avion", "Inconnus", "Total"];
     legend_label_plus = "Sans date début sympt.";
   }
   else {
-    legend_label = ["Imported", "Local & linked to known cases", "Local & unlinked", 'Diplomatic fleet cluster', "Total"];
+    legend_label = ["Imported", "Local & linked", "Local & unlinked", 'On boat', "On plane", "Unknown", "Total"];
     legend_label_plus = 'No onset date';
   }
   if (wrap.do_onset == 1) legend_label.splice(wrap.nb_col, 0, legend_label_plus);
   
-  if (wrap.tag.includes("latest") || wrap.tag.includes("2021")) {
-    color_list.splice(3, 1);
-    legend_value.splice(3, 1);
-    legend_label.splice(3, 1);
+  var i;
+  for (i=legend_value.length-1; i>=0; i--) {
+    if (0 == legend_value[i]) {
+      color_list.splice(i, 1);
+      legend_value.splice(i, 1);
+      legend_label.splice(i, 1);
+    }
   }
   
   wrap.svg.selectAll(".legend.value")
@@ -412,8 +482,8 @@ function CBT_Update(wrap) {
     .enter()
     .append("text")
       .attr("class", "legend value")
-      .attr("x", legend_pos.x)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
+      .attr("x", function (d, i) {return legend_pos.x + Math.floor(i/5)*legend_pos.x1;})
+      .attr("y", function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
       .style("fill", function (d, i) {return color_list[i]})
       .text(function (d) {return d})
       .attr("text-anchor", "end")
@@ -425,8 +495,8 @@ function CBT_Update(wrap) {
     .enter()
     .append("text")
       .attr("class", "legend label")
-      .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
+      .attr("x", function (d, i) {return legend_pos.x + legend_pos.dx + Math.floor(i/5)*legend_pos.x1;})
+      .attr("y", function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
       .style("fill", function (d, i) {return color_list[i]})
       .text(function (d) {return d})
       .attr("text-anchor", "start")
