@@ -41,7 +41,8 @@ echo
 git add raw_data/*.csv
 git add processed_data/*.csv
 git add processed_data/latest/*.csv
-git add processed_data/2020/*.csv & sleep 2
+git add processed_data/2020/*.csv
+git add processed_data/2021/*.csv & sleep 2
 git commit -m "${MODE} data update" & sleep 1
 echo
 git push & sleep 7

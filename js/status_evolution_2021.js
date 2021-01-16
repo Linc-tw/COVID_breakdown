@@ -23,10 +23,10 @@ SE_2021_wrap.tooltip = d3.select(SE_2021_wrap.id)
   .attr("class", "tooltip");
 
 //-- Parameters
-SE_2021_wrap.y_max_factor = 1.95;
-SE_2021_wrap.y_path = 400;
 SE_2021_wrap.xlabel_path = GS_var.xlabel_path_2021;
 SE_2021_wrap.r_list = GS_var.r_list_2021;
+SE_2021_wrap.y_max_factor = 1.95;
+SE_2021_wrap.y_path = 400;
 
 //-- Plot
 function SE_2021_Plot() {

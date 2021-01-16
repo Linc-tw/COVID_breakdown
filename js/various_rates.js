@@ -68,12 +68,12 @@ function VR_Format_Data(wrap, data) {
     date_list.push(x);
     
     if (i % wrap.xlabel_path == r) {
-      xtick.push(i+0.5)
+      xtick.push(i)
       xticklabel.push(GS_ISO_Date_To_MD_Date(x));
     }
-    else {
-      xticklabel.push("");
-    }
+//     else {
+//       xticklabel.push("");
+//     }
   }
   
   for (j=0; j<nb_col; j++) {
@@ -190,15 +190,12 @@ function VR_Initialize(wrap) {
     
   var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
+    .tickFormat(function (d, i) {return ""});
   
   wrap.svg.append('g')
     .attr('class', 'xaxis')
     .attr('transform', 'translate(0,' + wrap.height + ')')
     .call(x_axis)
-    .selectAll("text")
-      .attr("transform", "translate(-8,15) rotate(-90)")
-      .style("text-anchor", "end")
     
   //-- Add a 2nd x-axis for ticks
   var x_2 = d3.scaleLinear()
@@ -207,14 +204,17 @@ function VR_Initialize(wrap) {
   
   var x_axis_2 = d3.axisBottom(x_2)
     .tickValues(wrap.xtick)
-    .tickSize(10)
+    .tickSize(12)
     .tickSizeOuter(0)
-    .tickFormat(function (d, i) {return ""});
+    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
   
   wrap.svg.append("g")
     .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
     .call(x_axis_2)
+    .selectAll("text")
+      .attr("transform", "translate(-22,15) rotate(-90)")
+      .style("text-anchor", "end")
   
   //-- Add y-axis
   var y = d3.scaleLinear()
