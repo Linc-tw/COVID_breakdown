@@ -1572,7 +1572,7 @@ class TestSheet(Template):
     from_clin_def_list = []
     for from_clin_def in self.getCol(self.coltag_from_clin_def):
       if from_clin_def != from_clin_def: ## Is nan
-        from_clin_def_list.append(np.nan)
+        from_clin_def_list.append(0)
         continue
         
       try:
@@ -2307,25 +2307,16 @@ def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
 ## Sandbox
 
 def sandbox():
-  main_sheet = MainSheet()
-  report_date = main_sheet.getReportDate()
-  trans = main_sheet.getTransmission()
-  bool_list = [t == 'indigenous' for t in trans]
-  local_date = [d for d, b in zip(report_date, bool_list) if b]
-  print(len(local_date))
-  print(local_date[-1])
-  print(local_date[-2])
-  ord1 = ISODateToOrd(local_date[-1])
-  ord2 = ISODateToOrd(local_date[-2])
-  print(ord1-ord2-1)
+  #main_sheet = MainSheet()
+  #report_date = main_sheet.getReportDate()
   #main_sheet.saveCsv_keyNb()
   
   #status_sheet = StatusSheet()
   #print(status_sheet.getCumHosp())
   #status_sheet.saveCsv_statusEvolution()
   
-  #test_sheet = TestSheet()
-  #print(test_sheet.printCriteria())
+  test_sheet = TestSheet()
+  test_sheet.makeDailyTestCounts()
   #test_sheet.saveCsv_criteriaTimeline()
   
   #border_sheet = BorderSheet()
