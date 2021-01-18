@@ -27,9 +27,9 @@ BS_2020_wrap.tooltip = d3.select(BS_2020_wrap.id)
 //-- Parameters
 BS_2020_wrap.xlabel_path = GS_var.xlabel_path_2020;
 BS_2020_wrap.r_list = GS_var.r_list_2020;
-BS_2020_wrap.y_max_factor = 1.2;
-BS_2020_wrap.y_path_0 = 30000;
-BS_2020_wrap.y_path_1 = 30000;
+BS_2020_wrap.y_max_factor = 1.15;
+BS_2020_wrap.y_path_0 = 25000;
+BS_2020_wrap.y_path_1 = 25000;
 BS_2020_wrap.y_path_2 = 50000;
 BS_2020_wrap.legend_pos_x = 500;
 

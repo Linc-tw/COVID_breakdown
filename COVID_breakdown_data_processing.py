@@ -316,6 +316,7 @@ class MainSheet(Template):
       print('N_total = %d' % self.n_total)
       print('N_latest = %d' % self.n_latest)
       print('N_2020 = %d' % self.n_2020)
+      print('N_2021 = %d' % self.n_2021)
     return 
     
   def getReportDate(self):
