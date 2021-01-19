@@ -1,6 +1,6 @@
 label,count,label_zh,label_fr
-N_total,320,合計,Total
-N_imported,312,境外移入總數,Importés
+N_total,325,合計,Total
+N_imported,313,境外移入總數,Importés
 N_data,288,有資料案例數,Données complètes
 Indonesia,129,印尼,Indonésie
 Philippines,58,菲律賓,Philippines
@@ -15,7 +15,7 @@ Germany,3,德國,Allemagne
 asymptomatic,182,無症狀,asymptomatique
 sneezing,42,鼻腔症狀,éternuement
 cough,40,咳嗽,toux
-throatache,34,喉嚨症狀,mal de gorge
+throatache,33,喉嚨症狀,mal de gorge
 dysnosmia,30,嗅覺異常,dysosmie
 fever,29,發燒,fièvre
 dysgeusia,19,味覺異常,dysgueusie
