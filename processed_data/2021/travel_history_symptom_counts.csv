@@ -1,7 +1,7 @@
 label,count,label_zh,label_fr
-N_total,69,合計,Total
-N_imported,60,境外移入總數,Importés
-N_data,57,有資料案例數,Données complètes
+N_total,71,合計,Total
+N_imported,61,境外移入總數,Importés
+N_data,58,有資料案例數,Données complètes
 Indonesia,16,印尼,Indonésie
 USA,13,美國,États-Unis
 Philippines,12,菲律賓,Philippines
@@ -13,12 +13,12 @@ Dominican Republic,1,多明尼加,République dominicaine
 Nigeria,1,奈及利亞,Nigéria
 India,1,印度,Inde
 asymptomatic,34,無症狀,asymptomatique
+throatache,9,喉嚨症狀,mal de gorge
+cough,9,咳嗽,toux
 sneezing,8,鼻腔症狀,éternuement
-throatache,8,喉嚨症狀,mal de gorge
-cough,8,咳嗽,toux
 fever,5,發燒,fièvre
 headache,5,頭痛,mal de tête
+dysnosmia,4,嗅覺異常,dysosmie
 fatigue,3,倦怠,fatigue
-dysnosmia,3,嗅覺異常,dysosmie
 diarrhea,2,腹瀉,diarrhée
 dysgeusia,2,味覺異常,dysgueusie
