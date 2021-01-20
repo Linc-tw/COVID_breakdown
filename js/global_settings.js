@@ -47,6 +47,3 @@ function GS_CumSum(data, col_tag_list) {
     }
   }
 }
-
-//TODO
-//show data table: scroll in html; table in d3

@@ -72,7 +72,7 @@ d3.select(DBT_2021_wrap.id + '_save').on('click', function () {
   if (DBT_2021_wrap.col_ind == 0) tag1 = 'all';
   else if (DBT_2021_wrap.col_ind == 1) tag1 = 'imported';
   else if (DBT_2021_wrap.col_ind == 2) tag1 = 'local';
-  else tag1 = 'fleet';
+  else tag1 = 'others';
   
   name = DBT_2021_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(DBT_2021_wrap.id).select('svg').node(), name);
