@@ -38,9 +38,9 @@ CBT_latest_wrap.y_path_1_0 = 80;
 CBT_latest_wrap.y_path_0_1 = 2;
 CBT_latest_wrap.y_path_0_0 = 5;
 CBT_latest_wrap.legend_pos_x_0__ = {};
-CBT_latest_wrap.legend_pos_x_0__['zh-tw'] = 0;
-CBT_latest_wrap.legend_pos_x_0__['fr'] = 0;
-CBT_latest_wrap.legend_pos_x_0__['en'] = 0;
+CBT_latest_wrap.legend_pos_x_0__['zh-tw'] = 400;
+CBT_latest_wrap.legend_pos_x_0__['fr'] = 400;
+CBT_latest_wrap.legend_pos_x_0__['en'] = 400;
 
 //-- Variables
 CBT_latest_wrap.do_cumul = 0;

@@ -33,14 +33,14 @@ CBT_2021_wrap.y_max_fix_1_1 = 0;
 CBT_2021_wrap.y_max_fix_1_0 = 0;
 CBT_2021_wrap.y_max_fix_0_1 = 9;
 CBT_2021_wrap.y_max_fix_0_0 = 14;
-CBT_2021_wrap.y_path_1_1 = 5;
-CBT_2021_wrap.y_path_1_0 = 20;
+CBT_2021_wrap.y_path_1_1 = 6;
+CBT_2021_wrap.y_path_1_0 = 25;
 CBT_2021_wrap.y_path_0_1 = 2;
 CBT_2021_wrap.y_path_0_0 = 3;
 CBT_2021_wrap.legend_pos_x_0__ = {};
-CBT_2021_wrap.legend_pos_x_0__['zh-tw'] = 430;
-CBT_2021_wrap.legend_pos_x_0__['fr'] = 380;
-CBT_2021_wrap.legend_pos_x_0__['en'] = 330;
+CBT_2021_wrap.legend_pos_x_0__['zh-tw'] = 70;
+CBT_2021_wrap.legend_pos_x_0__['fr'] = 70;
+CBT_2021_wrap.legend_pos_x_0__['en'] = 70;
 
 //-- Variables
 CBT_2021_wrap.do_cumul = 0;

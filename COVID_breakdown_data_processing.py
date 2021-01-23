@@ -642,7 +642,7 @@ class MainSheet(Template):
       elif '機場' in channel:
         channel_list.append('airport')
         
-      elif '檢疫' in channel or '回溯' in channel:
+      elif '檢疫' in channel or '回溯' in channel or '英國專案' in channel:
         channel_list.append('quarantine')
         
       elif '隔離' in channel or '接觸者檢查' in channel:

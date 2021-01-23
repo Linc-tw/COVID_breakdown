@@ -33,14 +33,14 @@ CBD_2021_wrap.y_max_fix_1_1 = 0;
 CBD_2021_wrap.y_max_fix_1_0 = 0;
 CBD_2021_wrap.y_max_fix_0_1 = 9;
 CBD_2021_wrap.y_max_fix_0_0 = 14;
-CBD_2021_wrap.y_path_1_1 = 5;
-CBD_2021_wrap.y_path_1_0 = 20;
+CBD_2021_wrap.y_path_1_1 = 6;
+CBD_2021_wrap.y_path_1_0 = 25;
 CBD_2021_wrap.y_path_0_1 = 2;
 CBD_2021_wrap.y_path_0_0 = 3;
 CBD_2021_wrap.legend_pos_x_0__ = {};
-CBD_2021_wrap.legend_pos_x_0__['zh-tw'] = 300;
-CBD_2021_wrap.legend_pos_x_0__['fr'] = 330;
-CBD_2021_wrap.legend_pos_x_0__['en'] = 310;
+CBD_2021_wrap.legend_pos_x_0__['zh-tw'] = 70;
+CBD_2021_wrap.legend_pos_x_0__['fr'] = 70;
+CBD_2021_wrap.legend_pos_x_0__['en'] = 70;
 
 //-- Variables
 CBD_2021_wrap.do_cumul = 0;

@@ -23,9 +23,9 @@ TBC_2021_wrap.tooltip = d3.select(TBC_2021_wrap.id)
 //-- Parameters
 TBC_2021_wrap.xlabel_path = GS_var.xlabel_path_2021;
 TBC_2021_wrap.r_list = GS_var.r_list_2021;
-TBC_2021_wrap.y_max_factor = 1.5;
-TBC_2021_wrap.y_path_1 = 2500;
-TBC_2021_wrap.y_path_0 = 400;
+TBC_2021_wrap.y_max_factor = 1.6;
+TBC_2021_wrap.y_path_1 = 6000;
+TBC_2021_wrap.y_path_0 = 500;
 TBC_2021_wrap.yticklabel_format_1 = ".2s";
 TBC_2021_wrap.yticklabel_format_0 = "d";
 TBC_2021_wrap.legend_pos_x_0_i_ = {};
