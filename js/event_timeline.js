@@ -772,31 +772,36 @@ function ET_Update(wrap) {
       .style('stroke-width', '2px');
   
   //-- Month tag
-  var month_list;
-  if (GS_lang == 'zh-tw') month_list = [
-    ['', '', '', '', '', '12月'],
-    ['1月', '2月', '3月', '4月', '5月', '6月'],
-    ['7月', '8月', '9月', '10月', '11月', '12月'],
-    ['1月', '2月', '3月', '4月', '5月', '6月']
-  ];
-  else if (GS_lang == 'fr') month_list = [
-    ['', '', '', '', '', 'déc'],
-    ['janv', 'févr', 'mars', 'avr', 'mai', 'juin'],
-    ['juil', 'août', 'sept', 'oct', 'nov', 'déc'],
-    ['janv', 'févr', 'mars', 'avr', 'mai', 'juin']
-  ];
-  else month_list = [
-    ['', '', '', '', '', 'Dec'],
-    ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
-  ];
+  var month_name_list;
+  if (GS_lang == 'zh-tw') month_name_list = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+  else if (GS_lang == 'fr') month_name_list = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'];
+  else month_name_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  
+  //-- Append head buffer
+  var length = (wrap.begin_month-1) % 6;
+  var month_list = [];
+  var i;
+  for (i=0; i<length; i++) month_list.push('');
+  
+  //-- Append month
+  for (i=wrap.begin_month-1+12*wrap.begin_year; i<wrap.end_month+12*wrap.end_year; i++) month_list.push(month_name_list[i%12]);
+  
+  //-- Append tail buffer
+  length = month_list.length % 6;
+  if (length > 0) length = 6 - length;
+  for (i=0; i<length; i++) month_list.push('');
+  
+  //-- Reshape list
+  var month_list_list = []
+  length = month_list.length / 6;
+  for (i=0; i<length; i++) month_list_list.push(month_list.slice(6*i, 6*(i+1)));
+  
   var dx1 = wrap.cell_size * 4.417; //-- 53 / 12
   
   wrap.block.selectAll(wrap.id+'_month_tag')
     .remove()
     .exit()
-    .data(function (d, i) {return month_list[i];})
+    .data(function (d, i) {return month_list_list[i];})
     .enter()
     .append("text")
       .attr('class', 'content text')
