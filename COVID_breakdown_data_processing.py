@@ -47,6 +47,7 @@ SYMPTOM_DICT = {
   'stomachache': {'zh-tw': '腹痛', 'fr': 'mal de ventre'},
   'backache': {'zh-tw': '背痛', 'fr': 'mal de dos'}, 
   'toothache': {'zh-tw': '牙痛', 'fr': 'mal de dents'}, 
+  'rash': {'zh-tw': '出疹', 'fr': 'rash'},
   
   'fatigue': {'zh-tw': '倦怠', 'fr': 'fatigue'},
   'soreness': {'zh-tw': '痠痛', 'fr': 'myalgie'},
@@ -651,7 +652,7 @@ class MainSheet(Template):
       elif '自主健康管理' in channel or '加強自主管理' in channel:
         channel_list.append('monitoring')
         
-      elif '自行就醫' in channel or '自主就醫' in channel or '自費篩檢' in channel or '自費檢驗' in channel or '接觸患者' in channel:
+      elif '自行就醫' in channel or '自主就醫' in channel or '自費篩檢' in channel or '自費檢驗' in channel or '接觸患者' in channel or '同院患者' in channel:
         channel_list.append('hospital')
         
       elif '香港檢驗' in channel:
@@ -685,6 +686,7 @@ class MainSheet(Template):
       'stomachache': ['腹悶痛', '胃痛', '腹痛', '胃脹', '腹脹', '胃部不適', '肚子不適'],
       'backache': ['背痛'], 
       'toothache': ['牙痛'], 
+      'rash': ['出疹'],
       
       'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '走路喘', '倦怠', '疲憊', '疲倦', '無力', '虛弱'],
       'soreness': ['全身肌肉痠痛', '上半身骨頭刺痛', '全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉關節痠痛', '肌肉酸痛', '肌肉痠痛', '肌肉 痠痛', '骨頭痠痛', '骨頭酸', '關節痠痛', '關節痛', '痠痛'],
@@ -738,6 +740,9 @@ class MainSheet(Template):
     link_list = []
     for i, link in enumerate(self.getCol(self.coltag_link)):
       if link == '未知':
+        link_list.append('unlinked')
+      
+      elif link == '院內尚不明':
         link_list.append('unlinked')
       
       elif link == '軍艦':
