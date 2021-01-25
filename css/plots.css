@@ -161,6 +161,12 @@ body,
   font-weight: bold;
 }
 
+.btn-front {
+  float: left;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
 .btn-pos {
   float: right;
   margin-top: 20px;

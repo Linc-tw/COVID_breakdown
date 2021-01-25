@@ -95,6 +95,7 @@ function text_translation() {
     
     //-- Border statistics
     TT_Add_Str("border_statistics_title", "入出境人數統計");
+    TT_Add_Str("border_statistics_text", "逐月更新");
     TT_Add_Str("border_statistics_button_1", "入境");
     TT_Add_Str("border_statistics_button_2", "出境");
     TT_Add_Str("border_statistics_button_3", "合計");
@@ -179,6 +180,7 @@ function text_translation() {
     
     //-- Border statistics
     TT_Add_Str("border_statistics_title", "Statistiques frontalières");
+    TT_Add_Str("border_statistics_text", "Mise à jour mensuellement");
     TT_Add_Str("border_statistics_button_1", "Arrivée");
     TT_Add_Str("border_statistics_button_2", "Départ");
     TT_Add_Str("border_statistics_button_3", "Total");
@@ -263,6 +265,7 @@ function text_translation() {
     
     //-- Border statistics
     TT_Add_Str("border_statistics_title", "Border Crossing");
+    TT_Add_Str("border_statistics_text", "Updated monthly");
     TT_Add_Str("border_statistics_button_1", "Arrival");
     TT_Add_Str("border_statistics_button_2", "Departure");
     TT_Add_Str("border_statistics_button_3", "Both");
