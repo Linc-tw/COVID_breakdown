@@ -2,23 +2,23 @@ label,count,label_zh,label_fr
 N_total,340,合計,Total
 N_imported,322,境外移入總數,Importés
 N_data,297,有資料案例數,Données complètes
-Indonesia,130,印尼,Indonésie
+Indonesia,129,印尼,Indonésie
 Philippines,59,菲律賓,Philippines
 USA,45,美國,États-Unis
 UK,16,英國,Royaume-Uni
 India,5,印度,Inde
+Myanmar,5,緬甸,Myanmar
 Russia,5,俄羅斯,Russie
-Myanmar,4,緬甸,Myanmar
 Egypt,4,埃及,Égypte
 Germany,3,德國,Allemagne
 France,2,法國,France
-asymptomatic,189,無症狀,asymptomatique
-sneezing,42,鼻腔症狀,éternuement
-cough,40,咳嗽,toux
+asymptomatic,190,無症狀,asymptomatique
+sneezing,41,鼻腔症狀,éternuement
+cough,39,咳嗽,toux
 throatache,37,喉嚨症狀,mal de gorge
-fever,30,發燒,fièvre
+fever,31,發燒,fièvre
 dysnosmia,30,嗅覺異常,dysosmie
 dysgeusia,19,味覺異常,dysgueusie
 headache,17,頭痛,mal de tête
-soreness,14,痠痛,myalgie
-fatigue,14,倦怠,fatigue
+soreness,13,痠痛,myalgie
+fatigue,13,倦怠,fatigue
