@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.01.03                  ##
+    ##  Version 2021.01.26                  ##
     ##########################################
 
 
@@ -655,7 +655,7 @@ class MainSheet(Template):
       elif '自行就醫' in channel or '自主就醫' in channel or '自費篩檢' in channel or '自費檢驗' in channel or '接觸患者' in channel or '同院患者' in channel:
         channel_list.append('hospital')
         
-      elif '香港檢驗' in channel:
+      elif '香港檢驗' in channel or '外國檢驗' in channel:
         channel_list.append('overseas')
         
       else:
