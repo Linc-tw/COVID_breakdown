@@ -378,7 +378,7 @@ class MainSheet(Template):
         age.append('20s')
       elif a in ['30']:
         age.append('30s')
-      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X']:
+      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X']:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
