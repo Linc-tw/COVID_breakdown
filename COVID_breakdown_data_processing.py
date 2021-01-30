@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.01.26                  ##
+    ##  Version 2021.01.29                  ##
     ##########################################
 
 
@@ -605,7 +605,7 @@ class MainSheet(Template):
       if onset_date != onset_date: ## NaN
         onset_date_list.append(np.nan)
       
-      elif onset_date in ['2/18-25', '9月下旬', '10月中旬', '11月初', '12/', 'x', 'X']:
+      elif onset_date in ['2/18-25', '9月下旬', '10月中旬', '11月初', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
       elif onset_date in ['7月、11/1']:
