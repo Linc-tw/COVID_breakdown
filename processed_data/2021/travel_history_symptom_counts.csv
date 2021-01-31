@@ -1,9 +1,9 @@
 label,count,label_zh,label_fr
-N_total,110,合計,Total
-N_imported,91,境外移入總數,Importés
-N_data,88,有資料案例數,Données complètes
+N_total,112,合計,Total
+N_imported,93,境外移入總數,Importés
+N_data,90,有資料案例數,Données complètes
 Indonesia,21,印尼,Indonésie
-Philippines,19,菲律賓,Philippines
+Philippines,21,菲律賓,Philippines
 USA,18,美國,États-Unis
 UK,5,英國,Royaume-Uni
 Egypt,4,埃及,Égypte
@@ -12,7 +12,7 @@ South Africa,3,南非,Afrique du Sud
 Germany,2,德國,Allemagne
 Myanmar,2,緬甸,Myanmar
 Eswatini,1,史瓦帝尼,Eswatini
-asymptomatic,49,無症狀,asymptomatique
+asymptomatic,51,無症狀,asymptomatique
 throatache,15,喉嚨症狀,mal de gorge
 sneezing,12,鼻腔症狀,éternuement
 cough,12,咳嗽,toux
