@@ -1,101 +1,101 @@
 symptom,trav_hist,value,label
-asymptomatic,Indonesia,0.3233856616548792,+32%
-throatache,Indonesia,-0.17622684421256002,-18%
-sneezing,Indonesia,-0.21638563370731506,-22%
-cough,Indonesia,-0.13910505024041686,-14%
-fever,Indonesia,-0.12565362776610317,-13%
-dysnosmia,Indonesia,-0.06212302525243072,-6%
-headache,Indonesia,-0.1602120124931111,-16%
-fatigue,Indonesia,-0.11897778297335083,-12%
-dysgeusia,Indonesia,0.00849841306952503,+1%
-diarrhea,Indonesia,-0.10244389988519663,-10%
-asymptomatic,Philippines,0.4824277903376063,+48%
-throatache,Philippines,-0.24671758189758422,-25%
-sneezing,Philippines,-0.21638563370731503,-22%
-cough,Philippines,-0.21638563370731526,-22%
-fever,Philippines,-0.20585807102106277,-21%
-dysnosmia,Philippines,-0.16021201249311093,-16%
-headache,Philippines,-0.16021201249311104,-16%
-fatigue,Philippines,-0.11897778297335095,-12%
-dysgeusia,Philippines,-0.11897778297335095,-12%
-diarrhea,Philippines,-0.10244389988519656,-10%
-asymptomatic,USA,-0.40360367639778716,-40%
-throatache,USA,0.07453559924999299,+7%
-sneezing,USA,0.13074409009212257,+13%
-cough,USA,0.45760431532243057,+46%
-fever,USA,0.32226542748756015,+32%
-dysnosmia,USA,0.1659479627290046,+17%
-headache,USA,-0.04148699068225097,-4%
-fatigue,USA,0.2965401263094553,+30%
-dysgeusia,USA,0.2965401263094553,+30%
-diarrhea,USA,0.21664456120656056,+22%
-asymptomatic,UK,-0.08157355826841634,-8%
-throatache,UK,0.02169304578186561,+2%
-sneezing,UK,0.04756514941544949,+5%
-cough,UK,-0.09513029883089873,-10%
-fever,UK,0.057592202966639125,+6%
-dysnosmia,UK,-0.07043451251197409,-7%
-headache,UK,0.11068280537595913,+11%
-fatigue,UK,-0.05230657809659421,-5%
-dysgeusia,UK,-0.052306578096594204,-5%
-diarrhea,UK,-0.0450377349111044,-5%
-asymptomatic,Egypt,-0.1378187283867425,-14%
-throatache,Egypt,0.33756997551928797,+34%
-sneezing,Egypt,0.391233314354978,+39%
-cough,Egypt,-0.08459098688756242,-8%
-fever,Egypt,-0.08047547837670034,-8%
-dysnosmia,Egypt,-0.06263120159985282,-6%
-headache,Egypt,0.5413125281130151,+54%
-fatigue,Egypt,-0.046511627906976896,-5%
-dysgeusia,Egypt,-0.0465116279069769,-5%
-diarrhea,Egypt,-0.04004808657316363,-4%
-asymptomatic,Brazil,-0.2466229876394339,-25%
-throatache,Brazil,0.04822428221704122,+5%
-sneezing,Brazil,-0.08459098688756271,-8%
-cough,Brazil,-0.0845909868875627,-8%
-fever,Brazil,0.0841334546665505,+8%
-dysnosmia,Brazil,-0.06263120159985287,-6%
-headache,Brazil,-0.06263120159985287,-6%
-fatigue,Brazil,-0.04651162790697676,-5%
-dysgeusia,Brazil,-0.04651162790697676,-5%
-diarrhea,Brazil,-0.040048086573163666,-4%
-asymptomatic,South Africa,-0.21235074333820095,-21%
-throatache,South Africa,0.24913643956121992,+25%
-sneezing,South Africa,0.10925355610938449,+11%
-cough,South Africa,0.10925355610938449,+11%
-fever,South Africa,-0.06929211188850751,-7%
-dysnosmia,South Africa,-0.05392758535282177,-5%
-headache,South Africa,-0.053927585352821786,-5%
-fatigue,South Africa,-0.040048086573163645,-4%
-dysgeusia,South Africa,-0.04004808657316365,-4%
-diarrhea,South Africa,0.3103448275862079,+31%
-asymptomatic,Germany,-0.17239570679190305,-17%
-throatache,Germany,0.1348399724926488,+13%
-sneezing,Germany,0.16261090889699772,+16%
-cough,Germany,-0.059131239598908245,-6%
-fever,Germany,0.17387722105220374,+17%
-dysnosmia,Germany,-0.043780794200817416,-4%
-headache,Germany,0.23766716851872285,+24%
-fatigue,Germany,-0.03251280443811767,-3%
-dysgeusia,Germany,-0.03251280443811775,-3%
-diarrhea,Germany,-0.027994625547792716,-3%
-asymptomatic,Myanmar,0.131832011076161,+13%
-throatache,Myanmar,-0.06741998624632431,-7%
-sneezing,Myanmar,-0.05913123959890826,-6%
-cough,Myanmar,-0.05913123959890827,-6%
-fever,Myanmar,-0.056254395046301184,-6%
-dysnosmia,Myanmar,-0.0437807942008174,-4%
-headache,Myanmar,-0.043780794200817395,-4%
-fatigue,Myanmar,-0.03251280443811773,-3%
-dysgeusia,Myanmar,-0.03251280443811775,-3%
-diarrhea,Myanmar,-0.027994625547792716,-3%
-asymptomatic,Eswatini,-0.12121539504758765,-12%
-throatache,Eswatini,-0.04740454631399753,-5%
-sneezing,Eswatini,0.2702474937259706,+27%
-cough,Eswatini,-0.04157653749630292,-4%
-fever,Eswatini,-0.03955376178208128,-4%
-dysnosmia,Eswatini,-0.030783285519720864,-3%
-headache,Eswatini,0.3650018140195481,+37%
-fatigue,Eswatini,-0.02286050219817023,-2%
-dysgeusia,Eswatini,-0.022860502198170228,-2%
-diarrhea,Eswatini,-0.01968366647947382,-2%
+asymptomatic,Indonesia,0.32742309379905005,+33%
+throatache,Indonesia,-0.17303618253947955,-17%
+sneezing,Indonesia,-0.22360679774997927,-22%
+cough,Indonesia,-0.14907119849998612,-15%
+fever,Indonesia,-0.1230914909793326,-12%
+dysnosmia,Indonesia,-0.0602338601936834,-6%
+headache,Indonesia,-0.15811388300841867,-16%
+diarrhea,Indonesia,-0.1174440439029407,-12%
+fatigue,Indonesia,-0.11744404390294058,-12%
+dysgeusia,Indonesia,0.009787003658578361,+1%
+asymptomatic,Philippines,0.4850712500726665,+49%
+throatache,Philippines,-0.24333213169614343,-24%
+sneezing,Philippines,-0.22360679774997924,-22%
+cough,Philippines,-0.2236067977499792,-22%
+fever,Philippines,-0.203100960115899,-20%
+dysnosmia,Philippines,-0.15811388300841886,-16%
+headache,Philippines,-0.15811388300841894,-16%
+diarrhea,Philippines,-0.11744404390294069,-12%
+fatigue,Philippines,-0.11744404390294073,-12%
+dysgeusia,Philippines,-0.11744404390294072,-12%
+asymptomatic,USA,-0.3939553006899555,-39%
+throatache,USA,0.07680292236333398,+8%
+sneezing,USA,0.11262289639991432,+11%
+cough,USA,0.4279670063196744,+43%
+fever,USA,0.32362363023630175,+32%
+dysnosmia,USA,0.1672364688986243,+17%
+headache,USA,-0.039818206880624755,-4%
+diarrhea,USA,0.16266921863063133,+16%
+fatigue,USA,0.2972410267705174,+30%
+dysgeusia,USA,0.2972410267705174,+30%
+asymptomatic,UK,-0.07794235947101447,-8%
+throatache,UK,0.022852479561601784,+2%
+sneezing,UK,0.039374961547907886,+4%
+cough,UK,-0.09843740386976968,-10%
+fever,UK,0.058523047988612006,+6%
+dysnosmia,UK,-0.06960575579871295,-7%
+headache,UK,0.11136920927794093,+11%
+diarrhea,UK,-0.05170185744844516,-5%
+fatigue,UK,-0.05170185744844509,-5%
+dysgeusia,UK,-0.051701857448445146,-5%
+asymptomatic,Egypt,-0.13411388330048937,-13%
+throatache,Egypt,0.3381719297686973,+34%
+sneezing,Egypt,0.37203489310254717,+37%
+cough,Egypt,-0.0875376219064818,-9%
+fever,Egypt,-0.07950999358860322,-8%
+dysnosmia,Egypt,-0.0618984460590172,-6%
+headache,Egypt,0.5416114030163985,+54%
+diarrhea,Egypt,-0.045977011494253005,-5%
+fatigue,Egypt,-0.045977011494253005,-5%
+dysgeusia,Egypt,-0.045977011494253005,-5%
+asymptomatic,Brazil,-0.24211709905575116,-24%
+throatache,Brazil,0.04921751090530333,+5%
+sneezing,Brazil,-0.08753762190648168,-9%
+cough,Brazil,-0.08753762190648169,-9%
+fever,Brazil,0.08493112951509921,+8%
+dysnosmia,Brazil,-0.06189844605901728,-6%
+headache,Brazil,-0.06189844605901728,-6%
+diarrhea,Brazil,-0.04597701149425285,-5%
+fatigue,Brazil,-0.045977011494252866,-5%
+dysgeusia,Brazil,-0.045977011494252866,-5%
+asymptomatic,South Africa,-0.20848479342846366,-21%
+throatache,South Africa,0.2497273899108066,+25%
+sneezing,South Africa,0.10050378152592125,+10%
+cough,South Africa,0.10050378152592124,+10%
+fever,South Africa,-0.06846531968814577,-7%
+dysnosmia,South Africa,-0.05330017908890263,-5%
+headache,South Africa,-0.053300179088902645,-5%
+diarrhea,South Africa,0.26063666256136253,+26%
+fatigue,South Africa,-0.039590379123244826,-4%
+dysgeusia,South Africa,-0.03959037912324482,-4%
+asymptomatic,Germany,-0.16926808734448004,-17%
+throatache,Germany,0.13541519772058044,+14%
+sneezing,Germany,0.15299751534052608,+15%
+cough,Germany,-0.061199006136210383,-6%
+fever,Germany,0.1743402857633338,+17%
+dysnosmia,Germany,-0.04327423224079152,-4%
+headache,Germany,0.23800827732435337,+24%
+diarrhea,Germany,-0.03214329276122421,-3%
+fatigue,Germany,-0.03214329276122422,-3%
+dysgeusia,Germany,-0.03214329276122422,-3%
+asymptomatic,Myanmar,0.1327592841917488,+13%
+throatache,Myanmar,-0.06659763822323633,-7%
+sneezing,Myanmar,-0.06119900613621041,-6%
+cough,Myanmar,-0.06119900613621041,-6%
+fever,Myanmar,-0.05558675777961366,-6%
+dysnosmia,Myanmar,-0.0432742322407915,-4%
+headache,Myanmar,-0.0432742322407915,-4%
+diarrhea,Myanmar,-0.03214329276122424,-3%
+fatigue,Myanmar,-0.03214329276122424,-3%
+dysgeusia,Myanmar,-0.03214329276122424,-3%
+asymptomatic,Eswatini,-0.11902380714238088,-12%
+throatache,Eswatini,-0.04682929057908478,-5%
+sneezing,Eswatini,0.2581988897471623,+26%
+cough,Eswatini,-0.04303314829119337,-4%
+fever,Eswatini,-0.03908679799852843,-4%
+dysnosmia,Eswatini,-0.030429030972509152,-3%
+headache,Eswatini,0.3651483716701095,+37%
+diarrhea,Eswatini,-0.022602116787360477,-2%
+fatigue,Eswatini,-0.02260211678736048,-2%
+dysgeusia,Eswatini,-0.02260211678736048,-2%
