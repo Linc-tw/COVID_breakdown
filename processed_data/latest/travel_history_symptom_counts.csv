@@ -1,10 +1,10 @@
 label,count,label_zh,label_fr
-N_total,348,合計,Total
-N_imported,326,境外移入總數,Importés
-N_data,301,有資料案例數,Données complètes
-Indonesia,126,印尼,Indonésie
+N_total,346,合計,Total
+N_imported,324,境外移入總數,Importés
+N_data,298,有資料案例數,Données complètes
+Indonesia,123,印尼,Indonésie
 Philippines,62,菲律賓,Philippines
-USA,46,美國,États-Unis
+USA,47,美國,États-Unis
 UK,15,英國,Royaume-Uni
 Myanmar,5,緬甸,Myanmar
 Russia,5,俄羅斯,Russie
@@ -12,13 +12,13 @@ India,4,印度,Inde
 Egypt,4,埃及,Égypte
 Brazil,4,巴西,Brésil
 Japan,3,日本,Japon
-asymptomatic,193,無症狀,asymptomatique
-sneezing,38,鼻腔症狀,éternuement
+asymptomatic,191,無症狀,asymptomatique
+sneezing,37,鼻腔症狀,éternuement
 throatache,37,喉嚨症狀,mal de gorge
 cough,35,咳嗽,toux
 fever,31,發燒,fièvre
-dysnosmia,29,嗅覺異常,dysosmie
-dysgeusia,18,味覺異常,dysgueusie
-headache,17,頭痛,mal de tête
+dysnosmia,28,嗅覺異常,dysosmie
+dysgeusia,17,味覺異常,dysgueusie
+headache,16,頭痛,mal de tête
 fatigue,12,倦怠,fatigue
 soreness,11,痠痛,myalgie
