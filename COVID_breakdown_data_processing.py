@@ -3,7 +3,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.01.29                  ##
+    ##  Version 2021.02.04                  ##
     ##########################################
 
 
@@ -2324,8 +2324,8 @@ def sandbox():
   #status_sheet.saveCsv_statusEvolution()
   
   test_sheet = TestSheet()
-  test_sheet.makeDailyTestCounts()
-  #test_sheet.saveCsv_criteriaTimeline()
+  #test_sheet.makeDailyTestCounts()
+  test_sheet.saveCsv_testByCriterion()
   
   #border_sheet = BorderSheet()
   #print(border_sheet.makeDailyArrivalCounts())
