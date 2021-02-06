@@ -1,10 +1,10 @@
 label,count,label_zh,label_fr
-N_total,124,合計,Total
-N_imported,104,境外移入總數,Importés
-N_data,100,有資料案例數,Données complètes
+N_total,125,合計,Total
+N_imported,105,境外移入總數,Importés
+N_data,101,有資料案例數,Données complètes
 Indonesia,23,印尼,Indonésie
+USA,22,美國,États-Unis
 Philippines,22,菲律賓,Philippines
-USA,21,美國,États-Unis
 UK,5,英國,Royaume-Uni
 Egypt,4,埃及,Égypte
 Brazil,4,巴西,Brésil
@@ -12,7 +12,7 @@ South Africa,3,南非,Afrique du Sud
 Germany,2,德國,Allemagne
 Myanmar,2,緬甸,Myanmar
 Japan,2,日本,Japon
-asymptomatic,57,無症狀,asymptomatique
+asymptomatic,58,無症狀,asymptomatique
 throatache,16,喉嚨症狀,mal de gorge
 cough,15,咳嗽,toux
 sneezing,13,鼻腔症狀,éternuement
