@@ -31,7 +31,7 @@ BS_latest_wrap.y_max_factor = 1.95;
 BS_latest_wrap.y_path_0 = 2500;
 BS_latest_wrap.y_path_1 = 900;
 BS_latest_wrap.y_path_2 = 3000;
-BS_latest_wrap.legend_pos_x = 300;
+BS_latest_wrap.legend_pos_x = 250;
 
 //-- Variables
 BS_latest_wrap.do_exit = 0;

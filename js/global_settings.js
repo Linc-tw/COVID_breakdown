@@ -23,8 +23,8 @@ GS_var.xlabel_path_2020 = 25;
 GS_var.r_list_2020 = [7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7];
 //GS_var.xlabel_path_2021 = 25;
 //GS_var.r_list_2021 = [7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7];
-GS_var.xlabel_path_2021 = 3;
-GS_var.r_list_2021 = [1, 1, 2];
+GS_var.xlabel_path_2021 = 5;
+GS_var.r_list_2021 = [2, 3, 1, 1, 2];
 GS_var.c_list = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022'];
 GS_var.trans_duration = 800;
 
