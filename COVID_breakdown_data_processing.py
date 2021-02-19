@@ -5,7 +5,6 @@
     ##  Version 2021.02.10                  ##
     ##########################################
 
-
 import os
 import sys
 import warnings
@@ -17,9 +16,8 @@ import scipy as sp
 import matplotlib as mpl
 import pandas as pd
 
-
 ################################################################################
-## Global variables
+## Parameters
 
 DATA_PATH = '/home/linc/21_Codes/COVID_breakdown/'
 ISO_DATE_REF = '2020-01-01'
@@ -162,7 +160,7 @@ AGE_DICT = {
 }
 
 ###############################################################################
-## General functions
+## Functions - utilities
 
 def saveCsv(name, data, verbose=True):
   data.to_csv(name, index=False)
@@ -265,14 +263,14 @@ def adjustDateRange(data):
   return data
 
 ###############################################################################
-## Template
+## Classes - template
 
 class Template:
   def getCol(self, col):
     return self.data[col].values
 
 ###############################################################################
-## Main sheet
+## Classes - main sheet
 
 class MainSheet(Template):
   
@@ -655,7 +653,7 @@ class MainSheet(Template):
       elif '自行就醫' in channel or '自主就醫' in channel or '自費篩檢' in channel or '自費檢驗' in channel or '接觸患者' in channel or '同院患者' in channel:
         channel_list.append('hospital')
         
-      elif '香港檢驗' in channel or '外國檢驗' in channel:
+      elif '香港檢驗' in channel or '外國檢驗' in channel or '外國篩檢' in channel:
         channel_list.append('overseas')
         
       else:
@@ -1383,7 +1381,7 @@ class MainSheet(Template):
     return
 
 ###############################################################################
-## Status sheet
+## Classes - status sheet
 
 class StatusSheet(Template):
 
@@ -1493,7 +1491,7 @@ class StatusSheet(Template):
     return
 
 ###############################################################################
-## Test sheet
+## Classes - test sheet
 
 class TestSheet(Template):
   
@@ -1809,7 +1807,7 @@ class TestSheet(Template):
     return
 
 ###############################################################################
-## Border sheet
+## Classes - border sheet
 
 class BorderSheet(Template):
 
@@ -2153,7 +2151,7 @@ class BorderSheet(Template):
     return
 
 ###############################################################################
-## Timeline sheet
+## Classes - timeline sheet
 
 class TimelineSheet(Template):
   
@@ -2251,7 +2249,7 @@ class TimelineSheet(Template):
     return
   
 ###############################################################################
-## Cross-sheet
+## Functions - cross-sheet operations
 
 import scipy.signal as signal
 
@@ -2314,7 +2312,7 @@ def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
   return
   
 ###############################################################################
-## Sandbox
+## Functions - sandbox
 
 def sandbox():
   #main_sheet = MainSheet()
@@ -2341,7 +2339,7 @@ def sandbox():
   return
 
 ###############################################################################
-## Save
+## Functions - save
 
 def saveCsv_all():
   print()
@@ -2368,4 +2366,5 @@ def saveCsv_all():
 if __name__ == '__main__':
   saveCsv_all()
 
+## End of file
 ###############################################################################

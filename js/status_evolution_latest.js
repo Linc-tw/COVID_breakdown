@@ -25,8 +25,8 @@ SE_latest_wrap.tooltip = d3.select(SE_latest_wrap.id)
 //-- Parameters
 SE_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
 SE_latest_wrap.r_list = GS_var.r_list_latest;
-SE_latest_wrap.y_max_factor = 1.5;
-SE_latest_wrap.y_path = 300;
+SE_latest_wrap.y_max_factor = 1.6;
+SE_latest_wrap.y_path = 350;
 
 //-- Plot
 function SE_Latest_Plot() {

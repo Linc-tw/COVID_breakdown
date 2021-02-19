@@ -347,7 +347,7 @@ function DBT_Update(wrap) {
     .attr('height', function (d) {return y(0)-y(d[col_tag_list[wrap.col_ind]]);});
   
   //-- Legend
-  var legend_pos = {x: 450, y: 45, dx: 12, dy: 30};
+  var legend_pos = {x: 470, y: 45, dx: 12, dy: 30};
   var legend_color_list, legend_label, legend_label_2, legend_value_2;
   if (GS_lang == 'zh-tw')
     legend_label = ['有資料案例數', "境外移入", "本土", '其他', '資料不全', '合計'];

@@ -7,17 +7,17 @@ N_data,234,有資料案例數,Données complètes
 60s,13,60-69歲,60aine
 50s,19,50-59歲,50aine
 40s,33,40-49歲,40aine
-30s,67,30-39歲,30aine
-20s,85,20-29歲,20aine
+30s,66,30-39歲,30aine
+20s,86,20-29歲,20aine
 10s,6,10-19歲,10aine
 0s,4,<10歲,< 10 ans
-asymptomatic,126,無症狀,asymptomatique
+asymptomatic,125,無症狀,asymptomatique
 cough,45,咳嗽,toux
 throatache,36,喉嚨症狀,mal de gorge
 sneezing,34,鼻腔症狀,éternuement
 fever,33,發燒,fièvre
-dysnosmia,24,嗅覺異常,dysosmie
+dysnosmia,25,嗅覺異常,dysosmie
 headache,15,頭痛,mal de tête
 fatigue,14,倦怠,fatigue
-dysgeusia,11,味覺異常,dysgueusie
+dysgeusia,12,味覺異常,dysgueusie
 diarrhea,9,腹瀉,diarrhée

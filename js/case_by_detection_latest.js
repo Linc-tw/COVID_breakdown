@@ -34,13 +34,13 @@ CBD_latest_wrap.y_max_fix_1_0 = 0;
 CBD_latest_wrap.y_max_fix_0_1 = 9;
 CBD_latest_wrap.y_max_fix_0_0 = 0;
 CBD_latest_wrap.y_path_1_1 = 25;
-CBD_latest_wrap.y_path_1_0 = 100;
+CBD_latest_wrap.y_path_1_0 = 90;
 CBD_latest_wrap.y_path_0_1 = 2;
 CBD_latest_wrap.y_path_0_0 = 5;
 CBD_latest_wrap.legend_pos_x_0__ = {};
-CBD_latest_wrap.legend_pos_x_0__['zh-tw'] = 400;
-CBD_latest_wrap.legend_pos_x_0__['fr'] = 400;
-CBD_latest_wrap.legend_pos_x_0__['en'] = 400;
+CBD_latest_wrap.legend_pos_x_0__['zh-tw'] = 320;
+CBD_latest_wrap.legend_pos_x_0__['fr'] = 280;
+CBD_latest_wrap.legend_pos_x_0__['en'] = 320;
 
 //-- Variables
 CBD_latest_wrap.do_cumul = 0;
