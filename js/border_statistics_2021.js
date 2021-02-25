@@ -31,7 +31,7 @@ BS_2021_wrap.y_max_factor = 1.8;
 BS_2021_wrap.y_path_0 = 2500;
 BS_2021_wrap.y_path_1 = 800;
 BS_2021_wrap.y_path_2 = 3000;
-BS_2021_wrap.legend_pos_x = 530;
+BS_2021_wrap.legend_pos_x = 510;
 
 //-- Variables
 BS_2021_wrap.do_exit = 0;

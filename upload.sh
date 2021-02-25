@@ -10,7 +10,7 @@ fi
 echo "################################################################################"
 echo "## Log - upload.sh"
 date
-cd /home/linc/03_Codes/COVID_breakdown
+cd /home/linc/21_Codes/COVID_breakdown
 echo
 
 echo "## Download raw data"

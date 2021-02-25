@@ -26,8 +26,8 @@ DBT_latest_wrap.tooltip = d3.select(DBT_latest_wrap.id)
 //-- Parameters
 DBT_latest_wrap.n_tot_key = 'latest_total';
 DBT_latest_wrap.y_max_factor = 1.2;
-DBT_latest_wrap.y_path_0 = 18;
-DBT_latest_wrap.y_path_1 = 18;
+DBT_latest_wrap.y_path_0 = 12;
+DBT_latest_wrap.y_path_1 = 12;
 DBT_latest_wrap.y_path_2 = 1;
 DBT_latest_wrap.y_path_3 = 1;
 
