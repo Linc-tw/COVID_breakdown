@@ -78,6 +78,7 @@ TRAVEL_HISTORY_DICT = {
   'Philippines': {'zh-tw': '菲律賓', 'fr': 'Philippines'},
   'Singapore': {'zh-tw': '新加坡', 'fr': 'Singapour'},
   'Thailand': {'zh-tw': '泰國', 'fr': 'Thaïlande'},
+  'Vietnam': {'zh-tw': '越南', 'fr': 'Vietnam'},
   
   'Argentina': {'zh-tw': '阿根廷', 'fr': 'Argentine'},
   'Bolivia': {'zh-tw': '玻利維亞', 'fr': 'Bolivie'},
@@ -433,6 +434,7 @@ class MainSheet(Template):
       'Philippines': ['菲律賓'], 
       'Singapore': ['新加坡'], 
       'Thailand': ['泰國', '曼谷'], 
+      'Vietnam': ['越南'],
       
       'Argentina': ['阿根廷'], 
       'Bolivia': ['玻利維亞'], 
