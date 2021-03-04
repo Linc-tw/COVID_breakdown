@@ -27,11 +27,11 @@ BS_latest_wrap.tooltip = d3.select(BS_latest_wrap.id)
 //-- Parameters
 BS_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
 BS_latest_wrap.r_list = GS_var.r_list_latest;
-BS_latest_wrap.y_max_factor = 1.95;
-BS_latest_wrap.y_path_0 = 2500;
-BS_latest_wrap.y_path_1 = 900;
-BS_latest_wrap.y_path_2 = 3000;
-BS_latest_wrap.legend_pos_x = 510;
+BS_latest_wrap.y_max_factor = 1.65;
+BS_latest_wrap.y_path_0 = 2000;
+BS_latest_wrap.y_path_1 = 1500;
+BS_latest_wrap.y_path_2 = 2500;
+BS_latest_wrap.legend_pos_x = 80;
 
 //-- Variables
 BS_latest_wrap.do_exit = 0;

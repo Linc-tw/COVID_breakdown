@@ -27,11 +27,11 @@ BS_2021_wrap.tooltip = d3.select(BS_2021_wrap.id)
 //-- Parameters
 BS_2021_wrap.xlabel_path = GS_var.xlabel_path_2021;
 BS_2021_wrap.r_list = GS_var.r_list_2021;
-BS_2021_wrap.y_max_factor = 1.8;
-BS_2021_wrap.y_path_0 = 2500;
-BS_2021_wrap.y_path_1 = 800;
-BS_2021_wrap.y_path_2 = 3000;
-BS_2021_wrap.legend_pos_x = 510;
+BS_2021_wrap.y_max_factor = 1.6;
+BS_2021_wrap.y_path_0 = 2000;
+BS_2021_wrap.y_path_1 = 1500;
+BS_2021_wrap.y_path_2 = 2500;
+BS_2021_wrap.legend_pos_x = 330;
 
 //-- Variables
 BS_2021_wrap.do_exit = 0;
