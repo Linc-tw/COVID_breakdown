@@ -207,7 +207,7 @@ function text_translation() {
     TT_Add_Str("menu_2021", "Evolution in 2021");
     TT_Add_Str("menu_source", "Data Source");
     TT_Add_Str("menu_copyleft", "No right reserved");
-    TT_Add_Str("footer_last_update", 'Last updates: ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3');
+    TT_Add_Str("footer_last_update", 'Last update: ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3');
     
     //-- Data source page
     TT_Add_Str("data_source_original_title", "Original dataset");
