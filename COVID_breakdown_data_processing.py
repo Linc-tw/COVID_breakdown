@@ -87,8 +87,10 @@ TRAVEL_HISTORY_DICT = {
   'Chile': {'zh-tw': '智利', 'fr': 'Chili'},
   'Dominican Republic': {'zh-tw': '多明尼加', 'fr': 'République dominicaine'},
   'Guatemala': {'zh-tw': '瓜地馬拉', 'fr': 'Guatemala'}, 
+  'Honduras': {'zh-tw': '宏都拉斯', 'fr': 'Honduras'}, 
   'Latin America': {'zh-tw': '中南美洲', 'fr': 'Amérique latine'},
   'Mexico': {'zh-tw': '墨西哥', 'fr': 'Mexique'},
+  'Paraguay': {'zh-tw': '巴拉圭', 'fr': 'Paraguay'},
   'Peru': {'zh-tw': '秘魯', 'fr': 'Pérou'},
   'USA': {'zh-tw': '美國', 'fr': 'États-Unis'},
   
@@ -443,8 +445,10 @@ class MainSheet(Template):
       'Chile': ['智利', '聖地牙哥'], 
       'Dominican Republic': ['多明尼加'],
       'Guatemala': ['瓜地馬拉'], 
+      'Honduras': ['宏都拉斯'], 
       'Latin America': ['中南美洲'], 
       'Mexico': ['墨西哥'], 
+      'Paraguay': ['巴拉圭'],
       'Peru': ['秘魯', '祕魯'], 
       'USA': ['美國', '加州', '紐約'], 
       
@@ -605,7 +609,7 @@ class MainSheet(Template):
       if onset_date != onset_date: ## NaN
         onset_date_list.append(np.nan)
       
-      elif onset_date in ['2/18-25', '9月下旬', '10月中旬', '11月初', '12/', '12月上旬', 'x', 'X']:
+      elif onset_date in ['2/18-25', '9月下旬', '10月中旬', '11月初', '12/', '12月上旬', '1月', 'x', 'X']:
         onset_date_list.append(np.nan)
         
       elif onset_date in ['7月、11/1']:

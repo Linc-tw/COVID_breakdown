@@ -1,10 +1,10 @@
 label,count,label_zh,label_fr
-N_total,254,合計,Total
-N_imported,230,境外移入總數,Importés
+N_total,253,合計,Total
+N_imported,229,境外移入總數,Importés
 N_data,223,有資料案例數,Données complètes
 Philippines,61,菲律賓,Philippines
 Indonesia,49,印尼,Indonésie
-USA,43,美國,États-Unis
+USA,42,美國,États-Unis
 UK,17,英國,Royaume-Uni
 UAE,8,阿拉伯聯合大公國,EAU
 Brazil,6,巴西,Brésil
@@ -17,7 +17,7 @@ cough,33,咳嗽,toux
 throatache,27,喉嚨症狀,mal de gorge
 sneezing,23,鼻腔症狀,éternuement
 fever,22,發燒,fièvre
-dysnosmia,20,嗅覺異常,dysosmie
+dysnosmia,19,嗅覺異常,dysosmie
 dysgeusia,11,味覺異常,dysgueusie
 headache,9,頭痛,mal de tête
 fatigue,8,倦怠,fatigue

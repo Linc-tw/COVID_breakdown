@@ -28,7 +28,7 @@ VR_2021_wrap.r_list = GS_var.r_list_2021;
 VR_2021_wrap.y_max_factor = 1.2;
 VR_2021_wrap.y_max_fix = 0.033;
 VR_2021_wrap.y_path = 0.01;
-VR_2021_wrap.legend_pos_x = 240;
+VR_2021_wrap.legend_pos_x = 440;
 VR_2021_wrap.r = 3.5; //2.5;
 
 //-- Plot
