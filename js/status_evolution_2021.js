@@ -25,7 +25,7 @@ SE_2021_wrap.tooltip = d3.select(SE_2021_wrap.id)
 //-- Parameters
 SE_2021_wrap.xlabel_path = GS_var.xlabel_path_2021;
 SE_2021_wrap.r_list = GS_var.r_list_2021;
-SE_2021_wrap.y_max_factor = 1.95;
+SE_2021_wrap.y_max_factor = 1.8;
 SE_2021_wrap.y_path = 400;
 
 //-- Plot

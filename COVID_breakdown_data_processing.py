@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.02.10                  ##
+    ##  Version 2021.03.14                  ##
     ##########################################
 
 import os
@@ -528,6 +528,7 @@ class MainSheet(Template):
       trav_hist = ''.join(trav_hist.split('返國'))
       trav_hist = ''.join(trav_hist.split('來台'))
       trav_hist = ''.join(trav_hist.split('轉機'))
+      trav_hist = ''.join(trav_hist.split('出境'))
       trav_hist = ''.join(trav_hist.split('下旬'))
       trav_hist = ''.join(trav_hist.split('上旬'))
       trav_hist = ''.join(trav_hist.split('中旬'))
