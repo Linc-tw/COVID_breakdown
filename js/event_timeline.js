@@ -806,7 +806,7 @@ function ET_Update(wrap) {
     .append("text")
       .attr('class', 'content text')
       .attr("id", wrap.tag+"_month_tag")
-      .attr("x", function (d, i) {return (i+0.5)*dx1;})
+      .attr("x", function (d, i) {return (i+0.65)*dx1;})
       .attr("y", -0.5*wrap.dy0+1)
       .style("fill", 'black')
       .text(function (d) {return d;})
