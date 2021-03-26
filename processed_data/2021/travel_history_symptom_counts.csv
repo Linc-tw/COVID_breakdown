@@ -1,8 +1,8 @@
 label,count,label_zh,label_fr
-N_total,213,合計,Total
-N_imported,192,境外移入總數,Importés
-N_data,183,有資料案例數,Données complètes
-Philippines,52,菲律賓,Philippines
+N_total,214,合計,Total
+N_imported,193,境外移入總數,Importés
+N_data,184,有資料案例數,Données complètes
+Philippines,53,菲律賓,Philippines
 Indonesia,33,印尼,Indonésie
 USA,33,美國,États-Unis
 UK,10,英國,Royaume-Uni
@@ -12,7 +12,7 @@ Egypt,6,埃及,Égypte
 France,5,法國,France
 South Africa,4,南非,Afrique du Sud
 Myanmar,3,緬甸,Myanmar
-asymptomatic,113,無症狀,asymptomatique
+asymptomatic,114,無症狀,asymptomatique
 cough,28,咳嗽,toux
 throatache,24,喉嚨症狀,mal de gorge
 sneezing,18,鼻腔症狀,éternuement
