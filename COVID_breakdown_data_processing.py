@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.03.14                  ##
+    ##  Version 2021.04.01                  ##
     ##########################################
 
 import os
@@ -70,6 +70,7 @@ TRAVEL_HISTORY_DICT = {
   'Indonesia': {'zh-tw': '印尼', 'fr': 'Indonésie'},
   'India': {'zh-tw': '印度', 'fr': 'Inde'},
   'Japan': {'zh-tw': '日本', 'fr': 'Japon'},
+  'Korea': {'zh-tw': '韓國', 'fr': 'Corée'},
   'Macao': {'zh-tw': '澳門', 'fr': 'Macao'},
   'Malaysia': {'zh-tw': '馬來西亞', 'fr': 'Malaisie'},
   'Myanmar': {'zh-tw': '緬甸', 'fr': 'Myanmar'},
@@ -127,6 +128,7 @@ TRAVEL_HISTORY_DICT = {
   'Cameroon': {'zh-tw': '喀麥隆', 'fr': 'Cameroun'},
   'Eswatini': {'zh-tw': '史瓦帝尼', 'fr': 'Eswatini'},
   'Egypt': {'zh-tw': '埃及', 'fr': 'Égypte'},
+  'Ethiopia': {'zh-tw': '衣索比亞', 'fr': 'Éthiopie'},
   'Ghana': {'zh-tw': '迦納', 'fr': 'Ghana'},
   'Lesotho': {'zh-tw': '賴索托', 'fr': 'Lesotho'},
   'Morocco': {'zh-tw': '摩洛哥', 'fr': 'Maroc'},
@@ -428,6 +430,7 @@ class MainSheet(Template):
       'India': ['印度'], 
       'Indonesia': ['印尼'], 
       'Japan': ['日本', '東京', '大阪', '北海道'],
+      'Korea': ['韓國'],
       'Macao': ['澳門'],
       'Malaysia': ['馬來西亞'], 
       'Myanmar' : ['緬甸'],
@@ -485,6 +488,7 @@ class MainSheet(Template):
       'Cameroon': ['喀麥隆'],
       'Eswatini': ['史瓦帝尼'],
       'Egypt': ['埃及'], 
+      'Ethiopia': ['衣索比亞'],
       'Ghana': ['迦納'], 
       'Lesotho': ['賴索托'],
       'Morocco': ['摩洛哥'], 
