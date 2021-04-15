@@ -1,17 +1,17 @@
 label,count,label_zh,label_fr
-N_total,263,合計,Total
-N_data,218,有資料案例數,Données complètes
+N_total,269,合計,Total
+N_data,222,有資料案例數,Données complètes
 90s,1,90-99歲,90aine
 80s,1,80-89歲,80aine
-70s,3,70-79歲,70aine
+70s,4,70-79歲,70aine
 60s,12,60-69歲,60aine
 50s,21,50-59歲,50aine
-40s,23,40-49歲,40aine
-30s,60,30-39歲,30aine
-20s,88,20-29歲,20aine
+40s,24,40-49歲,40aine
+30s,61,30-39歲,30aine
+20s,89,20-29歲,20aine
 10s,6,10-19歲,10aine
 0s,3,<10歲,< 10 ans
-asymptomatic,119,無症狀,asymptomatique
+asymptomatic,123,無症狀,asymptomatique
 cough,43,咳嗽,toux
 fever,30,發燒,fièvre
 throatache,29,喉嚨症狀,mal de gorge
