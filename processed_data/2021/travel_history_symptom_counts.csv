@@ -1,8 +1,8 @@
 label,count,label_zh,label_fr
-N_total,269,合計,Total
-N_imported,248,境外移入總數,Importés
-N_data,236,有資料案例數,Données complètes
-Philippines,68,菲律賓,Philippines
+N_total,271,合計,Total
+N_imported,250,境外移入總數,Importés
+N_data,238,有資料案例數,Données complètes
+Philippines,69,菲律賓,Philippines
 Indonesia,50,印尼,Indonésie
 USA,36,美國,États-Unis
 UK,13,英國,Royaume-Uni
@@ -15,10 +15,10 @@ Myanmar,4,緬甸,Myanmar
 asymptomatic,146,無症狀,asymptomatique
 cough,39,咳嗽,toux
 throatache,25,喉嚨症狀,mal de gorge
-fever,23,發燒,fièvre
-sneezing,22,鼻腔症狀,éternuement
-dysnosmia,21,嗅覺異常,dysosmie
-dysgeusia,15,味覺異常,dysgueusie
+fever,24,發燒,fièvre
+sneezing,23,鼻腔症狀,éternuement
+dysnosmia,23,嗅覺異常,dysosmie
+dysgeusia,17,味覺異常,dysgueusie
 headache,14,頭痛,mal de tête
 diarrhea,10,腹瀉,diarrhée
 fatigue,6,倦怠,fatigue
