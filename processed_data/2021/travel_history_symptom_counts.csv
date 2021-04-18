@@ -1,7 +1,7 @@
 label,count,label_zh,label_fr
-N_total,271,合計,Total
-N_imported,250,境外移入總數,Importés
-N_data,238,有資料案例數,Données complètes
+N_total,273,合計,Total
+N_imported,252,境外移入總數,Importés
+N_data,240,有資料案例數,Données complètes
 Philippines,69,菲律賓,Philippines
 Indonesia,50,印尼,Indonésie
 USA,36,美國,États-Unis
@@ -12,7 +12,7 @@ Brazil,8,巴西,Brésil
 France,5,法國,France
 South Africa,4,南非,Afrique du Sud
 Myanmar,4,緬甸,Myanmar
-asymptomatic,146,無症狀,asymptomatique
+asymptomatic,148,無症狀,asymptomatique
 cough,39,咳嗽,toux
 throatache,25,喉嚨症狀,mal de gorge
 fever,24,發燒,fièvre
