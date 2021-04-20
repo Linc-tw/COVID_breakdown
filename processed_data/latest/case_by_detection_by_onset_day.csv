@@ -1,5 +1,4 @@
 date,no_data,overseas,hospital,monitoring,isolation,quarantine,airport
-2021-01-20,0,0,1,0,0,1,0
 2021-01-21,0,0,0,0,0,0,0
 2021-01-22,0,0,0,0,0,3,0
 2021-01-23,0,0,0,0,0,0,0
@@ -89,3 +88,4 @@ date,no_data,overseas,hospital,monitoring,isolation,quarantine,airport
 2021-04-17,0,0,0,0,0,0,0
 2021-04-18,0,0,0,0,0,0,0
 2021-04-19,0,0,0,0,0,0,0
+2021-04-20,0,0,0,0,0,0,0
