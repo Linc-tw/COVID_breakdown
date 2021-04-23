@@ -64,6 +64,7 @@ SYMPTOM_DICT = {
 }
 
 TRAVEL_HISTORY_DICT = {
+  ## Far-East Asia
   'Bangladesh': {'zh-tw': '孟加拉', 'fr': 'Bangladesh'},
   'China': {'zh-tw': '中國', 'fr': 'Chine'},
   'Hong Kong': {'zh-tw': '香港', 'fr': 'Hong Kong'},
@@ -81,20 +82,14 @@ TRAVEL_HISTORY_DICT = {
   'Thailand': {'zh-tw': '泰國', 'fr': 'Thaïlande'},
   'Vietnam': {'zh-tw': '越南', 'fr': 'Vietnam'},
   
-  'Argentina': {'zh-tw': '阿根廷', 'fr': 'Argentine'},
-  'Bolivia': {'zh-tw': '玻利維亞', 'fr': 'Bolivie'},
-  'Brazil': {'zh-tw': '巴西', 'fr': 'Brésil'},
-  'Canada': {'zh-tw': '加拿大', 'fr': 'Canada'},
-  'Chile': {'zh-tw': '智利', 'fr': 'Chili'},
-  'Dominican Republic': {'zh-tw': '多明尼加', 'fr': 'République dominicaine'},
-  'Guatemala': {'zh-tw': '瓜地馬拉', 'fr': 'Guatemala'}, 
-  'Honduras': {'zh-tw': '宏都拉斯', 'fr': 'Honduras'}, 
-  'Latin America': {'zh-tw': '中南美洲', 'fr': 'Amérique latine'},
-  'Mexico': {'zh-tw': '墨西哥', 'fr': 'Mexique'},
-  'Paraguay': {'zh-tw': '巴拉圭', 'fr': 'Paraguay'},
-  'Peru': {'zh-tw': '秘魯', 'fr': 'Pérou'},
-  'USA': {'zh-tw': '美國', 'fr': 'États-Unis'},
+  ## West & Central Asia
+  'Kazakhstan': {'zh-tw': '哈薩克', 'fr': 'Kazakhstan'}, 
+  'Oman': {'zh-tw': '阿曼', 'fr': 'Oman'},
+  'Qatar': {'zh-tw': '卡達', 'fr': 'Qatar'},
+  'Turkey': {'zh-tw': '土耳其', 'fr': 'Turquie'},
+  'UAE': {'zh-tw': '阿拉伯聯合大公國', 'fr': 'EAU'},
   
+  ## Europe
   'Europe': {'zh-tw': '歐洲', 'fr': 'Europe'},
   'Austria': {'zh-tw': '奧地利', 'fr': 'Autriche'},
   'Belarus': {'zh-tw': '白俄羅斯', 'fr': 'Biélorussie'},
@@ -115,16 +110,13 @@ TRAVEL_HISTORY_DICT = {
   'Poland': {'zh-tw': '波蘭', 'fr': 'Pologne'},
   'Portugal': {'zh-tw': '葡萄牙', 'fr': 'Portugal'},
   'Russia': {'zh-tw': '俄羅斯', 'fr': 'Russie'},
+  'Slovakia': {'zh-tw': '斯洛伐克', 'fr': 'Slovaquie'},
   'Spain': {'zh-tw': '西班牙', 'fr': 'Espagne'},
   'Switzerland': {'zh-tw': '瑞士', 'fr': 'Suisse'},
   'UK': {'zh-tw': '英國', 'fr': 'Royaume-Uni'},
   'Ukraine': {'zh-tw': '烏克蘭', 'fr': 'Ukraine'},
   
-  'Oman': {'zh-tw': '阿曼', 'fr': 'Oman'},
-  'Qatar': {'zh-tw': '卡達', 'fr': 'Qatar'},
-  'Turkey': {'zh-tw': '土耳其', 'fr': 'Turquie'},
-  'UAE': {'zh-tw': '阿拉伯聯合大公國', 'fr': 'EAU'},
-  
+  ## Africa
   'Africa': {'zh-tw': '非洲', 'fr': 'Afrique'},
   'Cameroon': {'zh-tw': '喀麥隆', 'fr': 'Cameroun'},
   'Eswatini': {'zh-tw': '史瓦帝尼', 'fr': 'Eswatini'},
@@ -138,13 +130,29 @@ TRAVEL_HISTORY_DICT = {
   'South Africa': {'zh-tw': '南非', 'fr': 'Afrique du Sud'},
   'Tunisia': {'zh-tw': '突尼西亞', 'fr': 'Tunisie'},
   
+  ## North & South America
+  'Argentina': {'zh-tw': '阿根廷', 'fr': 'Argentine'},
+  'Bolivia': {'zh-tw': '玻利維亞', 'fr': 'Bolivie'},
+  'Brazil': {'zh-tw': '巴西', 'fr': 'Brésil'},
+  'Canada': {'zh-tw': '加拿大', 'fr': 'Canada'},
+  'Chile': {'zh-tw': '智利', 'fr': 'Chili'},
+  'Dominican Republic': {'zh-tw': '多明尼加', 'fr': 'République dominicaine'},
+  'Guatemala': {'zh-tw': '瓜地馬拉', 'fr': 'Guatemala'}, 
+  'Honduras': {'zh-tw': '宏都拉斯', 'fr': 'Honduras'}, 
+  'Latin America': {'zh-tw': '中南美洲', 'fr': 'Amérique latine'},
+  'Mexico': {'zh-tw': '墨西哥', 'fr': 'Mexique'},
+  'Paraguay': {'zh-tw': '巴拉圭', 'fr': 'Paraguay'},
+  'Peru': {'zh-tw': '秘魯', 'fr': 'Pérou'},
+  'USA': {'zh-tw': '美國', 'fr': 'États-Unis'},
+  
+  ## Oceania
   'Australia': {'zh-tw': '澳洲', 'fr': 'Australie'},
   'Marshall Islands': {'zh-tw': '馬紹爾', 'fr': 'Îles Marshall'},
   'New Zealand': {'zh-tw': '紐西蘭', 'fr': 'Nouvelle-Zélande'},
   'Palau': {'zh-tw': '帛琉', 'fr': 'Palaos'},
   
+  ## Others
   'Antarctica': {'zh-tw': '南極', 'fr': 'Antartique'},
-  
   'Coral Princess': {'zh-tw': '珊瑚公主號', 'fr': 'Coral Princess'},
   'Diamond Princess': {'zh-tw': '鑽石公主號', 'fr': 'Diamond Princess'}, 
   'Pan-Shi': {'zh-tw': '磐石艦', 'fr': 'Pan-Shi'},
@@ -374,7 +382,7 @@ class MainSheet(Template):
         age.append(a[0]+'0s')
       elif a in ['1XX', '10X', '11X']:
         age.append('100s')
-      elif a in ['<10', '3', '4', '5']:
+      elif a in ['<10', '<5', '3', '4', '5']:
         age.append('0s')
       elif a in ['11']:
         age.append('10s')
@@ -425,6 +433,7 @@ class MainSheet(Template):
   
   def getTravHist(self):
     key_dict = {
+      ## Far-East Asia
       'Bangladesh': ['孟加拉'],
       'China': ['中國', '武漢', '深圳', '廣州', '遼寧', '江蘇', '浙江'],
       'Hong Kong': ['香港'],
@@ -442,20 +451,14 @@ class MainSheet(Template):
       'Thailand': ['泰國', '曼谷'], 
       'Vietnam': ['越南'],
       
-      'Argentina': ['阿根廷'], 
-      'Bolivia': ['玻利維亞'], 
-      'Brazil': ['巴西'],
-      'Canada': ['加拿大'], 
-      'Chile': ['智利', '聖地牙哥'], 
-      'Dominican Republic': ['多明尼加'],
-      'Guatemala': ['瓜地馬拉'], 
-      'Honduras': ['宏都拉斯'], 
-      'Latin America': ['中南美洲'], 
-      'Mexico': ['墨西哥'], 
-      'Paraguay': ['巴拉圭'],
-      'Peru': ['秘魯', '祕魯'], 
-      'USA': ['美國', '加州', '紐約'], 
+      ## West & Central Asia
+      'Kazakhstan': ['哈薩克'], 
+      'Oman': ['阿曼'],
+      'Qatar': ['阿拉伯－卡達', '卡達'], 
+      'Turkey': ['土耳其'], 
+      'UAE': ['阿拉伯－杜拜', '杜拜'], 
       
+      ## Europe
       'Europe': ['歐洲'], 
       'Austria': ['奧地利'], 
       'Belarus': ['白俄羅斯'],
@@ -476,16 +479,13 @@ class MainSheet(Template):
       'Poland': ['波蘭'], 
       'Portugal': ['葡萄牙'], 
       'Russia': ['俄羅斯'],
+      'Slovakia': ['斯洛伐克'],
       'Spain': ['西班牙'], 
       'Switzerland': ['瑞士'], 
       'UK': ['英國', '倫敦'], 
       'Ukraine': ['烏克蘭'],
       
-      'Oman': ['阿曼'],
-      'Qatar': ['阿拉伯－卡達', '卡達'], 
-      'Turkey': ['土耳其'], 
-      'UAE': ['阿拉伯－杜拜', '杜拜'], 
-      
+      ## Africa
       'Africa': ['非洲'],
       'Cameroon': ['喀麥隆'],
       'Eswatini': ['史瓦帝尼'],
@@ -499,13 +499,29 @@ class MainSheet(Template):
       'South Africa': ['南非'], 
       'Tunisia': ['突尼西亞'], 
       
+      ## North & South America
+      'Argentina': ['阿根廷'], 
+      'Bolivia': ['玻利維亞'], 
+      'Brazil': ['巴西'],
+      'Canada': ['加拿大'], 
+      'Chile': ['智利', '聖地牙哥'], 
+      'Dominican Republic': ['多明尼加'],
+      'Guatemala': ['瓜地馬拉'], 
+      'Honduras': ['宏都拉斯'], 
+      'Latin America': ['中南美洲'], 
+      'Mexico': ['墨西哥'], 
+      'Paraguay': ['巴拉圭'],
+      'Peru': ['秘魯', '祕魯'], 
+      'USA': ['美國', '加州', '紐約'], 
+      
+      ## Oceania
       'Australia': ['澳大利亞', '澳洲'], 
       'Marshall Islands': ['馬紹爾'],
       'New Zealand': ['紐西蘭'], 
       'Palau': ['帛琉'], 
       
+      ## Others
       'Antarctica': ['南極'], 
-      
       'Coral Princess': ['珊瑚公主號'], 
       'Diamond Princess': ['鑽石公主號'], 
       'Pan-Shi': ['海軍敦睦支隊磐石艦', '整隊登艦', '台灣啟航', '左營靠泊檢疫'],
@@ -531,13 +547,15 @@ class MainSheet(Template):
       ## Remove meaningless words
       trav_hist = ''.join(trav_hist.split('自離境前往'))
       trav_hist = ''.join(trav_hist.split('從搭機'))
-      trav_hist = ''.join(trav_hist.split('返國'))
-      trav_hist = ''.join(trav_hist.split('來台'))
       trav_hist = ''.join(trav_hist.split('轉機'))
+      trav_hist = ''.join(trav_hist.split('出海'))
       trav_hist = ''.join(trav_hist.split('出境'))
-      trav_hist = ''.join(trav_hist.split('下旬'))
       trav_hist = ''.join(trav_hist.split('上旬'))
       trav_hist = ''.join(trav_hist.split('中旬'))
+      trav_hist = ''.join(trav_hist.split('下旬'))
+      trav_hist = ''.join(trav_hist.split('返國'))
+      trav_hist = ''.join(trav_hist.split('回台'))
+      trav_hist = ''.join(trav_hist.split('來台'))
       trav_hist = ''.join(trav_hist.split('台灣'))
       trav_hist = trav_hist.lstrip(' 0123456789/-\n月及等經()、→ ')
       
@@ -616,7 +634,7 @@ class MainSheet(Template):
       if onset_date != onset_date: ## NaN
         onset_date_list.append(np.nan)
       
-      elif onset_date in ['2/18-25', '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', '1月', 'x', 'X']:
+      elif onset_date in ['1月', '2/18-25', '3月', '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
       elif onset_date in ['7月、11/1']:
@@ -681,7 +699,7 @@ class MainSheet(Template):
       'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '聲音沙啞', '輕微喉嚨癢', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨乾癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', 
                      '喉嚨不適', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨', '異物感'],
       'earache': [' 耳朵痛'],
-      'dyspnea': ['呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '微喘', '活動後呼吸喘', '呼吸喘', '氣喘', '走路會喘'],
+      'dyspnea': ['呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '輕微喘', '微喘', '活動後呼吸喘', '呼吸喘', '氣喘', '走路會喘'],
       'bronchitis': ['支氣管炎'],
       'pneumonia': ['X光顯示肺炎', 'X光片顯示肺炎', 'X光顯示肺部輕微浸潤', '雙側肺部有異狀', '肺浸潤', '診斷為肺炎', '肺炎'], 
       
