@@ -1,14 +1,14 @@
 label,count,label_zh,label_fr
-N_total,214,合計,Total
-N_imported,199,境外移入總數,Importés
+N_total,217,合計,Total
+N_imported,201,境外移入總數,Importés
 N_data,187,有資料案例數,Données complètes
-Philippines,64,菲律賓,Philippines
+Philippines,65,菲律賓,Philippines
 Indonesia,33,印尼,Indonésie
-USA,21,美國,États-Unis
+USA,20,美國,États-Unis
 UAE,10,阿拉伯聯合大公國,EAU
 Brazil,8,巴西,Brésil
 UK,8,英國,Royaume-Uni
-Japan,5,日本,Japon
+Japan,6,日本,Japon
 France,5,法國,France
 Paraguay,4,巴拉圭,Paraguay
 Egypt,4,埃及,Égypte
@@ -17,8 +17,8 @@ cough,33,咳嗽,toux
 fever,21,發燒,fièvre
 dysnosmia,20,嗅覺異常,dysosmie
 dysgeusia,16,味覺異常,dysgueusie
-sneezing,15,鼻腔症狀,éternuement
-throatache,14,喉嚨症狀,mal de gorge
+sneezing,14,鼻腔症狀,éternuement
+throatache,13,喉嚨症狀,mal de gorge
 headache,10,頭痛,mal de tête
-diarrhea,8,腹瀉,diarrhée
+diarrhea,7,腹瀉,diarrhée
 dyspnea,7,呼吸困難,dyspnée
