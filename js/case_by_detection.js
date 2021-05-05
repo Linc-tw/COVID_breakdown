@@ -133,7 +133,7 @@ function CBD_Format_Data(wrap, data) {
   for (i=0; i<y_max; i+=y_path) ytick.push(i)
   
   //-- Calculate separate sum
-  var air, qt, iso, moni, hosp, no_data;
+  var air, qt, iso, moni, hosp, over, no_data;
   if (wrap.do_cumul == 1) {
     air = d3.max(formatted_data, function (d) {if (d.col == 'airport') return +d.height;});
     qt = d3.max(formatted_data, function (d) {if (d.col == 'quarantine') return +d.height;});

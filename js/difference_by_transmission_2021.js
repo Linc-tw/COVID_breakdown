@@ -28,7 +28,7 @@ DBT_2021_wrap.n_tot_key = '2021_total';
 DBT_2021_wrap.y_max_factor = 1.2;
 DBT_2021_wrap.y_path_0 = 15;
 DBT_2021_wrap.y_path_1 = 15;
-DBT_2021_wrap.y_path_2 = 1;
+DBT_2021_wrap.y_path_2 = 2;
 DBT_2021_wrap.y_path_3 = 1;
 
 //-- Variables

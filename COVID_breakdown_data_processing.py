@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.04.06                  ##
+    ##  Version 2021.04.25                  ##
     ##########################################
 
 import os
@@ -50,6 +50,7 @@ SYMPTOM_DICT = {
   'fatigue': {'zh-tw': '倦怠', 'fr': 'fatigue'},
   'soreness': {'zh-tw': '痠痛', 'fr': 'myalgie'},
   'hypersomnia': {'zh-tw': '嗜睡', 'fr': 'hypersomnie'},
+  'insomnia': {'zh-tw': '失眠', 'fr': 'insomnie'},
   
   'dysnosmia': {'zh-tw': '嗅覺異常', 'fr': 'dysosmie'}, 
   'dysgeusia': {'zh-tw': '味覺異常', 'fr': 'dysgueusie'},
@@ -58,6 +59,7 @@ SYMPTOM_DICT = {
   'hypoglycemia': {'zh-tw': '低血糖', 'fr': 'hypoglycémie'}, 
   'anorexia': {'zh-tw': '食慾不佳', 'fr': 'anorexie'},
   'arrhythmia': {'zh-tw': '心律不整', 'fr': 'arythmie'},
+  'coma': {'zh-tw': '意識不清', 'fr': 'coma'},
   
   'symptomatic': {'zh-tw': '有症狀', 'fr': 'symptomatique'},
   'asymptomatic': {'zh-tw': '無症狀', 'fr': 'asymptomatique'} 
@@ -88,6 +90,7 @@ TRAVEL_HISTORY_DICT = {
   'Qatar': {'zh-tw': '卡達', 'fr': 'Qatar'},
   'Turkey': {'zh-tw': '土耳其', 'fr': 'Turquie'},
   'UAE': {'zh-tw': '阿拉伯聯合大公國', 'fr': 'EAU'},
+  'Uzbekistan': {'zh-tw': '烏茲別克',  'fr': 'Ouzbékistan'},
   
   ## Europe
   'Europe': {'zh-tw': '歐洲', 'fr': 'Europe'},
@@ -173,7 +176,7 @@ AGE_DICT = {
   #'100s': {'zh-tw': '>100歲', 'fr': '100aine'}
 }
 
-###############################################################################
+################################################################################
 ## Functions - utilities
 
 def saveCsv(name, data, verbose=True):
@@ -276,14 +279,14 @@ def adjustDateRange(data):
   data = pd.concat([data1, data, data2])
   return data
 
-###############################################################################
+################################################################################
 ## Classes - template
 
 class Template:
   def getCol(self, col):
     return self.data[col].values
 
-###############################################################################
+################################################################################
 ## Classes - main sheet
 
 class MainSheet(Template):
@@ -390,7 +393,7 @@ class MainSheet(Template):
         age.append('20s')
       elif a in ['30']:
         age.append('30s')
-      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X']:
+      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X']:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
@@ -457,6 +460,7 @@ class MainSheet(Template):
       'Qatar': ['阿拉伯－卡達', '卡達'], 
       'Turkey': ['土耳其'], 
       'UAE': ['阿拉伯－杜拜', '杜拜'], 
+      'Uzbekistan': ['烏茲別克'],
       
       ## Europe
       'Europe': ['歐洲'], 
@@ -525,7 +529,7 @@ class MainSheet(Template):
       'Coral Princess': ['珊瑚公主號'], 
       'Diamond Princess': ['鑽石公主號'], 
       'Pan-Shi': ['海軍敦睦支隊磐石艦', '整隊登艦', '台灣啟航', '左營靠泊檢疫'],
-      'indigenous': ['無']
+      'indigenous': ['無', 'x']
     }
     nat_list = self.getNationality()
     trav_hist_list = []
@@ -672,7 +676,7 @@ class MainSheet(Template):
       elif '機場' in channel:
         channel_list.append('airport')
         
-      elif '檢疫' in channel or '回溯' in channel or '英國專案' in channel:
+      elif '檢疫' in channel or '回溯' in channel or '英國專案' in channel or '死亡' in channel:
         channel_list.append('quarantine')
         
       elif '隔離' in channel or '接觸者檢查' in channel:
@@ -681,7 +685,7 @@ class MainSheet(Template):
       elif '自主健康管理' in channel or '加強自主管理' in channel:
         channel_list.append('monitoring')
         
-      elif '自行就醫' in channel or '自主就醫' in channel or '自費篩檢' in channel or '自費檢驗' in channel or '接觸患者' in channel or '同院患者' in channel:
+      elif '自行就醫' in channel or '自主就醫' in channel or '自費篩檢' in channel or '自費檢驗' in channel or '接觸患者' in channel or '同院患者' in channel or '自行通報' in channel:
         channel_list.append('hospital')
         
       elif '香港檢驗' in channel or '外國檢驗' in channel or '外國篩檢' in channel:
@@ -697,20 +701,20 @@ class MainSheet(Template):
       'sneezing': ['伴隨感冒症狀', '輕微流鼻水', '打噴嚏', '流鼻水', '流鼻涕', '鼻涕倒流', '輕微鼻塞', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['咳嗽有痰', '喉嚨有痰', '有痰', '輕微咳嗽', '咳嗽症狀', '咳嗽併痰', '咳嗽加劇', '咳嗽', '輕微乾咳', '乾咳', '輕咳'],
       'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '聲音沙啞', '輕微喉嚨癢', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨乾癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', 
-                     '喉嚨不適', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨', '異物感'],
+                     '喉嚨不適', '喉嚨乾痛', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨', '異物感'],
       'earache': [' 耳朵痛'],
       'dyspnea': ['呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '輕微喘', '微喘', '活動後呼吸喘', '呼吸喘', '氣喘', '走路會喘'],
       'bronchitis': ['支氣管炎'],
       'pneumonia': ['X光顯示肺炎', 'X光片顯示肺炎', 'X光顯示肺部輕微浸潤', '雙側肺部有異狀', '肺浸潤', '診斷為肺炎', '肺炎'], 
       
-      'fever': ['微燒(37.5度)', '體溫偏高(37.4度)', '發燒(耳溫量測37.7度)', '微燒', '輕微發燒', '自覺有發燒', '間歇性發燒', '體溫偏高', '自覺發熱', '身體悶熱不適', '發燒', '發熱', '盜汗'],
+      'fever': ['微燒(37.5度)', '體溫偏高(37.4度)', '發燒(耳溫量測37.7度)', '微燒', '輕微發燒', '自覺有發燒', '間歇性發燒', '身體微熱', '體溫偏高', '自覺發熱', '身體悶熱不適', '發燒', '發熱', '盜汗'],
       'chills': ['畏寒', '冒冷汗', '忽冷忽熱症狀', '忽冷忽熱', '發冷', '寒顫'], 
       
       'nausea': ['噁心'],
       'vomiting': ['嘔吐'],
       'diarrhea': ['輕微腹瀉', '腹瀉'], 
       
-      'headache': ['輕微頭痛', '輕度頭痛', '頭痛', '頭暈', '頭脹'],
+      'headache': ['輕微頭痛', '輕度頭痛', '頭痛', '頭暈', '頭脹', '暈眩'],
       'eyes sore': ['結膜充血', '後眼窩痛', '眼睛癢', '眼睛痛'], 
       'chest pain+backache': ['胸背痛'], 
       'chest pain': ['呼吸時胸痛', '胸痛', '輕微胸悶', '胸悶'],
@@ -719,18 +723,20 @@ class MainSheet(Template):
       'toothache': ['牙痛'], 
       'rash': ['出疹'],
       
-      'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '走路喘', '倦怠', '疲憊', '疲倦', '無力', '虛弱'],
-      'soreness': ['全身肌肉痠痛', '上半身骨頭刺痛', '全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉關節痠痛', '肌肉酸痛', '肌肉痠痛', '肌肉 痠痛', '骨頭痠痛', '骨頭酸', '關節痠痛', '關節痛', '痠痛'],
+      'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '走路喘', '倦怠', '疲憊', '疲倦', '疲勞', '無力', '虛弱'],
+      'soreness': ['全身肌肉痠痛', '上半身骨頭刺痛', '全身痠痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉關節痠痛', '肌肉酸痛', '肌肉痠痛', '肌肉 痠痛', '肌肉痛', '骨頭痠痛', '骨頭酸', '關節痠痛', '關節痛', '身體痛', '痠痛'],
       'hypersomnia': ['嗜睡'],
+      'insomnia': ['睡不著'], 
       
       'dysnosmia+dysgeusia': ['味覺及嗅覺喪失', '味覺及嗅覺都喪失', '嗅覺和味覺喪失', '嗅味覺異常', '味嗅覺異常'], 
       'dysnosmia': ['嗅覺異常症狀', '自覺嗅覺喪失', '失去嗅覺', '嗅覺不靈敏', '嗅覺喪失', '嗅覺變差', '喪失嗅覺', '嗅覺遲鈍', '嗅覺異常', '無嗅覺'], 
-      'dysgeusia': ['自覺喪失味覺', '味覺喪失', '味覺異常', '失去味覺', '味覺變差'], 
+      'dysgeusia': ['自覺喪失味覺', '味覺喪失', '味覺異常', '失去味覺', '味覺變差', '口苦'], 
       
       'tonsillitis': ['淋巴腫脹', '扁桃腺腫痛'], 
       'hypoglycemia': ['低血糖'], 
-      'anorexia': ['食慾不佳', '食慾不振'],
+      'anorexia': ['食慾不佳', '食慾不振', '無食慾'],
       'arrhythmia': ['心律不整'],
+      'coma': ['意識不清'],
       
       'symptomatic': ['有症狀', '出現症狀', '身體不適'],
       'asymptomatic': ['首例無症狀', '無症狀', 'x', 'X'],
@@ -756,6 +762,7 @@ class MainSheet(Template):
       symp = ''.join(symp.split('首例本土'))
       symp = ''.join(symp.split('入境前有'))
       symp = ''.join(symp.split('伴隨'))
+      symp = ''.join(symp.split('心情不佳'))
       symp = symp.lstrip(' \n  ，、與及')
       
       if len(symp) > 0:
@@ -772,10 +779,11 @@ class MainSheet(Template):
     for i, link in enumerate(self.getCol(self.coltag_link)):
       if link == '未知':
         link_list.append('unlinked')
-      
       elif link == '院內尚不明':
         link_list.append('unlinked')
-      
+      elif link == '調查中':
+        link_list.append('unlinked')
+        
       elif link == '軍艦':
         link_list.append('fleet')
       
@@ -786,7 +794,7 @@ class MainSheet(Template):
         link_list.append('linked')
         
       else:
-        print('Symptom, Case %d, %s' % (i+1, link))
+        print('Link, Case %d, %s' % (i+1, link))
         link_list.append(np.nan)
     return link_list
     
@@ -1411,7 +1419,7 @@ class MainSheet(Template):
     self.saveCsv_ageSymptomCorr(selection='2021')
     return
 
-###############################################################################
+################################################################################
 ## Classes - status sheet
 
 class StatusSheet(Template):
@@ -1521,7 +1529,7 @@ class StatusSheet(Template):
     self.saveCsv_statusEvolution()
     return
 
-###############################################################################
+################################################################################
 ## Classes - test sheet
 
 class TestSheet(Template):
@@ -1837,7 +1845,7 @@ class TestSheet(Template):
     self.saveCsv_criteriaTimeline()
     return
 
-###############################################################################
+################################################################################
 ## Classes - border sheet
 
 class BorderSheet(Template):
@@ -2181,7 +2189,7 @@ class BorderSheet(Template):
     self.saveCsv_borderStats()
     return
 
-###############################################################################
+################################################################################
 ## Classes - timeline sheet
 
 class TimelineSheet(Template):
@@ -2279,7 +2287,7 @@ class TimelineSheet(Template):
     self.saveCsv_evtTimeline()
     return
   
-###############################################################################
+################################################################################
 ## Functions - cross-sheet operations
 
 import scipy.signal as signal
@@ -2342,7 +2350,7 @@ def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
   saveCsv(name, data_2021)
   return
   
-###############################################################################
+################################################################################
 ## Functions - sandbox
 
 def sandbox():
@@ -2369,7 +2377,7 @@ def sandbox():
   #saveCsv_variousRate(main_sheet, test_sheet, border_sheet)
   return
 
-###############################################################################
+################################################################################
 ## Functions - save
 
 def saveCsv_all():
@@ -2391,11 +2399,11 @@ def saveCsv_all():
   print()
   return
 
-###############################################################################
+################################################################################
 ## Main
 
 if __name__ == '__main__':
   saveCsv_all()
 
 ## End of file
-###############################################################################
+################################################################################
