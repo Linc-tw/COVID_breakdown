@@ -88,6 +88,7 @@ TRAVEL_HISTORY_DICT = {
   'Kazakhstan': {'zh-tw': '哈薩克', 'fr': 'Kazakhstan'}, 
   'Oman': {'zh-tw': '阿曼', 'fr': 'Oman'},
   'Qatar': {'zh-tw': '卡達', 'fr': 'Qatar'},
+  'Syria': {'zh-tw': '敘利亞', 'fr': 'Syrie'}, 
   'Turkey': {'zh-tw': '土耳其', 'fr': 'Turquie'},
   'UAE': {'zh-tw': '阿拉伯聯合大公國', 'fr': 'EAU'},
   'Uzbekistan': {'zh-tw': '烏茲別克',  'fr': 'Ouzbékistan'},
@@ -393,7 +394,7 @@ class MainSheet(Template):
         age.append('20s')
       elif a in ['30']:
         age.append('30s')
-      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X']:
+      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X']:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
@@ -458,6 +459,7 @@ class MainSheet(Template):
       'Kazakhstan': ['哈薩克'], 
       'Oman': ['阿曼'],
       'Qatar': ['阿拉伯－卡達', '卡達'], 
+      'Syria': ['敘利亞'], 
       'Turkey': ['土耳其'], 
       'UAE': ['阿拉伯－杜拜', '杜拜'], 
       'Uzbekistan': ['烏茲別克'],
@@ -673,22 +675,22 @@ class MainSheet(Template):
       elif channel in key_list_out:
         channel_list.append(np.nan)
         
-      elif '機場' in channel:
+      elif channel in ['機場']:
         channel_list.append('airport')
         
-      elif '檢疫' in channel or '回溯' in channel or '英國專案' in channel or '死亡' in channel:
+      elif channel in ['居家檢疫', '集中檢疫', '英國專案', '死亡']:
         channel_list.append('quarantine')
         
-      elif '隔離' in channel or '接觸者檢查' in channel:
+      elif channel in ['居家隔離', '接觸者回溯', '接觸者檢查']:
         channel_list.append('isolation')
         
-      elif '自主健康管理' in channel or '加強自主管理' in channel:
+      elif channel in ['自主健康管理', '加強自主管理']:
         channel_list.append('monitoring')
         
-      elif '自行就醫' in channel or '自主就醫' in channel or '自費篩檢' in channel or '自費檢驗' in channel or '接觸患者' in channel or '同院患者' in channel or '自行通報' in channel:
+      elif channel in ['自行就醫',  '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', '接觸患者', '同院患者']:
         channel_list.append('hospital')
         
-      elif '香港檢驗' in channel or '外國檢驗' in channel or '外國篩檢' in channel:
+      elif channel in ['香港檢驗', '外國檢驗', '外國篩檢']:
         channel_list.append('overseas')
         
       else:
@@ -738,7 +740,7 @@ class MainSheet(Template):
       'arrhythmia': ['心律不整'],
       'coma': ['意識不清'],
       
-      'symptomatic': ['有症狀', '出現症狀', '身體不適'],
+      'symptomatic': ['有症狀', '出現症狀', '身體不適', '不適'],
       'asymptomatic': ['首例無症狀', '無症狀', 'x', 'X'],
     }
     symp_list = []
