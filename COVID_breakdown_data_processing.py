@@ -133,6 +133,7 @@ TRAVEL_HISTORY_DICT = {
   'Senegal': {'zh-tw': '塞內加爾', 'fr': 'Sénégal'},
   'South Africa': {'zh-tw': '南非', 'fr': 'Afrique du Sud'},
   'Tunisia': {'zh-tw': '突尼西亞', 'fr': 'Tunisie'},
+  'Uganda': {'zh-tw': '烏干達', 'fr': 'Ouganda'},
   
   ## North & South America
   'Argentina': {'zh-tw': '阿根廷', 'fr': 'Argentine'},
@@ -394,7 +395,7 @@ class MainSheet(Template):
         age.append('20s')
       elif a in ['30']:
         age.append('30s')
-      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X']:
+      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X']:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
@@ -504,6 +505,7 @@ class MainSheet(Template):
       'Senegal': ['塞內加爾'],
       'South Africa': ['南非'], 
       'Tunisia': ['突尼西亞'], 
+      'Uganda': ['烏干達'],
       
       ## North & South America
       'Argentina': ['阿根廷'], 
@@ -645,6 +647,9 @@ class MainSheet(Template):
         
       elif onset_date in ['7月、11/1']:
         onset_date_list.append('2020-11-01')
+        
+      elif onset_date in ['5/8-10']:
+        onset_date_list.append('2021-05-09')
         
       else:
         try:
