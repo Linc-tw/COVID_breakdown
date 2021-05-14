@@ -31,16 +31,16 @@ CBT_latest_wrap.r_list = GS_var.r_list_latest;
 CBT_latest_wrap.y_max_factor = 1.25;
 CBT_latest_wrap.y_max_fix_1_1 = 0;
 CBT_latest_wrap.y_max_fix_1_0 = 0;
-CBT_latest_wrap.y_max_fix_0_1 = 9;
+CBT_latest_wrap.y_max_fix_0_1 = 0;
 CBT_latest_wrap.y_max_fix_0_0 = 0;
-CBT_latest_wrap.y_path_1_1 = 25;
-CBT_latest_wrap.y_path_1_0 = 90;
-CBT_latest_wrap.y_path_0_1 = 2;
-CBT_latest_wrap.y_path_0_0 = 6;
+CBT_latest_wrap.y_path_1_1 = 35;
+CBT_latest_wrap.y_path_1_0 = 120;
+CBT_latest_wrap.y_path_0_1 = 3;
+CBT_latest_wrap.y_path_0_0 = 10;
 CBT_latest_wrap.legend_pos_x_0__ = {};
-CBT_latest_wrap.legend_pos_x_0__['zh-tw'] = 380;
-CBT_latest_wrap.legend_pos_x_0__['fr'] = 350;
-CBT_latest_wrap.legend_pos_x_0__['en'] = 380;
+CBT_latest_wrap.legend_pos_x_0__['zh-tw'] = 80; //800;
+CBT_latest_wrap.legend_pos_x_0__['fr'] = 80; //350;
+CBT_latest_wrap.legend_pos_x_0__['en'] = 80; //380;
 
 //-- Variables
 CBT_latest_wrap.do_cumul = 0;
