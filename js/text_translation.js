@@ -33,7 +33,7 @@ function text_translation() {
     TT_Add_Str("title", "嚴重特殊傳染性肺炎 台灣疫情");
     TT_Add_Str("menu_summary", "近90日摘要");
     TT_Add_Str("menu_policy", "防疫措施");
-    TT_Add_Str("menu_2020", "2020統計");
+    TT_Add_Html("menu_2020", "<p style='margin-bottom: 0em'>2020統計<br/>(載入費時)</p>");
     TT_Add_Str("menu_2021", "2021統計");
     TT_Add_Str("menu_source", "資料來源");
     TT_Add_Str("menu_copyleft", "版權沒有");
@@ -118,7 +118,7 @@ function text_translation() {
     TT_Add_Str("title", "Statistiques de COVID-19 à Taïwan");
     TT_Add_Str("menu_summary", "Derniers 90 jours");
     TT_Add_Str("menu_policy", "Mesures de prévention");
-    TT_Add_Str("menu_2020", "Évolution en 2020");
+    TT_Add_Html("menu_2020", "<p style='margin-bottom: 0em'>Évolution en 2020<br/>(chargement lent)</p>");
     TT_Add_Str("menu_2021", "Évolution en 2021");
     TT_Add_Str("menu_source", "Source des données");
     TT_Add_Str("menu_copyleft", "Sans droit d'auteur");
@@ -203,7 +203,7 @@ function text_translation() {
     TT_Add_Str("title", "COVID-19 Statistics in Taiwan");
     TT_Add_Str("menu_summary", "90-day dashboard");
     TT_Add_Str("menu_policy", "Policy");
-    TT_Add_Str("menu_2020", "Evolution in 2020");
+    TT_Add_Html("menu_2020", "<p style='margin-bottom: 0em'>Evolution in 2020<br/>(slow loading)</p>");
     TT_Add_Str("menu_2021", "Evolution in 2021");
     TT_Add_Str("menu_source", "Data Source");
     TT_Add_Str("menu_copyleft", "No right reserved");
