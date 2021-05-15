@@ -396,7 +396,7 @@ class MainSheet(Template):
         age.append('20s')
       elif a in ['30']:
         age.append('30s')
-      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X']:
+      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X', '<5-8X']:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
@@ -597,7 +597,7 @@ class MainSheet(Template):
       elif entry_date in ['x']:
         entry_date_list.append(np.nan)
         
-      elif entry_date in ['3/1\n3/8']:
+      elif entry_date in ['3/1\n3/8', '3/7-5/12']:
         entry_date_list.append('2020-03-08')
       
       elif entry_date in ['10/28(29)']:
@@ -644,7 +644,7 @@ class MainSheet(Template):
       if onset_date != onset_date: ## NaN
         onset_date_list.append(np.nan)
       
-      elif onset_date in ['1月', '2/18-25', '3月', '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
+      elif onset_date in ['1月', '2/18-25', '3月', '5/2-13', '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
       elif onset_date in ['7月、11/1']:
