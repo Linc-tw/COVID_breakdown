@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.04.25                  ##
+    ##  Version 2021.05.16                  ##
     ##########################################
 
 import os
@@ -392,10 +392,12 @@ class MainSheet(Template):
         age.append('0s')
       elif a in ['11']:
         age.append('10s')
-      elif a in ['20', '27']:
+      elif a in ['20', '27', '29']:
         age.append('20s')
       elif a in ['30']:
         age.append('30s')
+      elif a in ['68']:
+        age.append('60s')
       elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X', '<5-8X']:
         age.append(np.nan)
       elif a != a:
@@ -644,7 +646,7 @@ class MainSheet(Template):
       if onset_date != onset_date: ## NaN
         onset_date_list.append(np.nan)
       
-      elif onset_date in ['1月', '2/18-25', '3月', '5/2-13', '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
+      elif onset_date in ['1月', '2/18-25', '3月', '4/6-5/15', '5/2-13', '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
       elif onset_date in ['7月、11/1']:
@@ -710,7 +712,7 @@ class MainSheet(Template):
       'sneezing': ['伴隨感冒症狀', '輕微流鼻水', '打噴嚏', '流鼻水', '流鼻涕', '鼻涕倒流', '輕微鼻塞', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['咳嗽有痰', '喉嚨有痰', '有痰', '輕微咳嗽', '咳嗽症狀', '咳嗽併痰', '咳嗽加劇', '咳嗽', '輕微乾咳', '乾咳', '輕咳'],
       'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '聲音沙啞', '輕微喉嚨癢', '輕微喉嚨痛', '喉嚨痛癢', '喉嚨乾癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', 
-                     '喉嚨不適', '喉嚨乾痛', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨', '異物感', '沙啞'],
+                     '喉嚨不適', '喉嚨乾痛', '喉嚨乾', '咽喉不適', '喉嚨有異物感', '喉嚨', '異物感', '沙啞', '乾嘔'],
       'earache': [' 耳朵痛'],
       'dyspnea': ['呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '輕微喘', '微喘', '活動後呼吸喘', '呼吸喘', '氣喘', '走路會喘'],
       'bronchitis': ['支氣管炎'],
@@ -749,7 +751,7 @@ class MainSheet(Template):
       'arrhythmia': ['心律不整'],
       'coma': ['意識不清'],
       
-      'symptomatic': ['有症狀', '出現症狀', '身體不適', '不適'],
+      'symptomatic': ['有症狀', '出現症狀', '身體不適', '不舒服', '不適'],
       'asymptomatic': ['首例無症狀', '無症狀', 'x', 'X'],
     }
     symp_list = []
