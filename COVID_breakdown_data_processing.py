@@ -144,6 +144,7 @@ TRAVEL_HISTORY_DICT = {
   'Chile': {'zh-tw': '智利', 'fr': 'Chili'},
   'Dominican Republic': {'zh-tw': '多明尼加', 'fr': 'République dominicaine'},
   'Guatemala': {'zh-tw': '瓜地馬拉', 'fr': 'Guatemala'}, 
+  'Haiti': {'zh-tw': '海地', 'fr': 'Haïti'}, 
   'Honduras': {'zh-tw': '宏都拉斯', 'fr': 'Honduras'}, 
   'Latin America': {'zh-tw': '中南美洲', 'fr': 'Amérique latine'},
   'Mexico': {'zh-tw': '墨西哥', 'fr': 'Mexique'},
@@ -384,21 +385,32 @@ class MainSheet(Template):
   def getAge(self):
     age = []
     for i, a in enumerate(self.getCol(self.coltag_age)):
-      if a in ['1X', '2X', '3X', '4X', '5X', '6X', '7X', '8X', '9X']:
+      if a in ['1X', '2X', '3X', '4X', '5x', '5X', '6X', '7X', '8X', '9X']:
         age.append(a[0]+'0s')
       elif a in ['1XX', '10X', '11X']:
         age.append('100s')
-      elif a in ['<10', '<5', '3', '4', '5']:
+        
+      elif a in ['3', '4', '5', '<10', '<5', '<6']:
         age.append('0s')
+        
       elif a in ['11']:
         age.append('10s')
-      elif a in ['20', '27', '29']:
+        
+      elif a in ['20', '26', '27', '29']:
         age.append('20s')
-      elif a in ['30']:
+        
+      elif a in ['30', '31', '32', '34']:
         age.append('30s')
+        
+      elif a in ['45', '48']:
+        age.append('40s')
+        
+      elif a in ['55', '58']:
+        age.append('50s')
+        
       elif a in ['68']:
         age.append('60s')
-      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X', '<5-8X']:
+      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X', '<5-8X', '<5-9X']:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
@@ -519,6 +531,7 @@ class MainSheet(Template):
       'Chile': ['智利', '聖地牙哥'], 
       'Dominican Republic': ['多明尼加'],
       'Guatemala': ['瓜地馬拉'], 
+      'Haiti': ['海地'], 
       'Honduras': ['宏都拉斯'], 
       'Latin America': ['中南美洲'], 
       'Mexico': ['墨西哥'], 
@@ -569,6 +582,14 @@ class MainSheet(Template):
       trav_hist = ''.join(trav_hist.split('回台'))
       trav_hist = ''.join(trav_hist.split('來台'))
       trav_hist = ''.join(trav_hist.split('台灣'))
+      trav_hist = ''.join(trav_hist.split('台北'))
+      trav_hist = ''.join(trav_hist.split('新北'))
+      trav_hist = ''.join(trav_hist.split('苗栗'))
+      trav_hist = ''.join(trav_hist.split('彰化'))
+      trav_hist = ''.join(trav_hist.split('雲林'))
+      trav_hist = ''.join(trav_hist.split('台南'))
+      trav_hist = ''.join(trav_hist.split('高雄'))
+      trav_hist = ''.join(trav_hist.split('屏東'))
       trav_hist = trav_hist.lstrip(' 0123456789/-\n月及等經()、→ ')
       
       ## Complain if unrecognized texts remain
@@ -646,7 +667,7 @@ class MainSheet(Template):
       if onset_date != onset_date: ## NaN
         onset_date_list.append(np.nan)
       
-      elif onset_date in ['1月', '2/18-25', '3月', '4/6-5/15', '5/2-13', '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
+      elif onset_date in ['1月', '2/18-25', '3月', '4/6-5/15', '5/2-13', '5/5-5/16', '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
       elif onset_date in ['7月、11/1']:
@@ -804,6 +825,8 @@ class MainSheet(Template):
         link_list.append(np.nan)
       
       elif 'O' in link:
+        link_list.append('linked')
+      elif link in ['#1365']:
         link_list.append('linked')
         
       else:
