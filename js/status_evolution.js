@@ -318,7 +318,7 @@ function SE_Update(wrap) {
   color_list.push('#000000');
   
   //-- Legend - value
-  var legend_pos = {x: 70, y: 45, dx: 12, dy: 30};
+  var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   var legend_value = wrap.legend_value.slice();
   var sum = legend_value.reduce((a, b) => a + b, 0);
   legend_value.push(sum);

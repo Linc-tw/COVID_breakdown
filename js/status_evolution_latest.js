@@ -27,6 +27,7 @@ SE_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
 SE_latest_wrap.r_list = GS_var.r_list_latest;
 SE_latest_wrap.y_max_factor = 1.2;
 SE_latest_wrap.y_path = 500;
+SE_latest_wrap.legend_pos_x = 80;
 
 //-- Plot
 function SE_Latest_Plot() {
