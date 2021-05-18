@@ -86,6 +86,7 @@ TRAVEL_HISTORY_DICT = {
   
   ## West & Central Asia
   'Kazakhstan': {'zh-tw': '哈薩克', 'fr': 'Kazakhstan'}, 
+  'Kyrgyzstan': {'zh-tw': '吉爾吉斯', 'fr': 'Kirghizistan'},
   'Oman': {'zh-tw': '阿曼', 'fr': 'Oman'},
   'Qatar': {'zh-tw': '卡達', 'fr': 'Qatar'},
   'Syria': {'zh-tw': '敘利亞', 'fr': 'Syrie'}, 
@@ -385,22 +386,23 @@ class MainSheet(Template):
   def getAge(self):
     age = []
     for i, a in enumerate(self.getCol(self.coltag_age)):
-      if a in ['1X', '2X', '3X', '4X', '5x', '5X', '6X', '7X', '8X', '9X']:
+      if a in ['1X', '2X', '3X', '4X', '5X', '6X', '7X', '8X', '9X',
+               '1x', '2x', '3x', '4x', '5x', '6x', '7x', '8x', '9x']:
         age.append(a[0]+'0s')
       elif a in ['1XX', '10X', '11X']:
         age.append('100s')
         
       elif a in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '<10', '<5', '<6']:
         age.append('0s')
-      elif a in ['10', '11', '12', '13', '14', '15', '16', '17', '18', '19']:
+      elif a in ['10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '10-14']:
         age.append('10s')
-      elif a in ['20', '21', '22', '23', '24', '25', '26', '27', '28', '29']:
+      elif a in ['20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '20-24']:
         age.append('20s')
       elif a in ['30', '31', '32', '33', '34', '35', '36', '37', '38', '39']:
         age.append('30s')
-      elif a in ['40', '41', '42', '43', '44', '45', '46', '47', '48', '49']:
+      elif a in ['40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '40-44']:
         age.append('40s')
-      elif a in ['50', '51', '52', '53', '54', '55', '56', '57', '58', '59']:
+      elif a in ['50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '50-54']:
         age.append('50s')
       elif a in ['60', '61', '62', '63', '64', '65', '66', '67', '68', '69']:
         age.append('60s')
@@ -470,6 +472,7 @@ class MainSheet(Template):
       
       ## West & Central Asia
       'Kazakhstan': ['哈薩克'], 
+      'Kyrgyzstan': ['吉爾吉斯'],
       'Oman': ['阿曼'],
       'Qatar': ['阿拉伯－卡達', '卡達'], 
       'Syria': ['敘利亞'], 
@@ -664,7 +667,7 @@ class MainSheet(Template):
       if onset_date != onset_date: ## NaN
         onset_date_list.append(np.nan)
       
-      elif onset_date in ['1月', '2/18-25', '3月', '4/6-5/15', '5/2-13', '5/5-5/16', '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
+      elif onset_date in ['1月', '2/18-25', '3月', '4/6-5/15', '5/2-13', '5/5-16', '5/5-17', '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
       elif onset_date in ['7月、11/1']:
