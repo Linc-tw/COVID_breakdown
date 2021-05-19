@@ -28,19 +28,19 @@ CBD_2021_wrap.tooltip = d3.select(CBD_2021_wrap.id)
 CBD_2021_wrap.n_tot_key = 'n_2021';
 CBD_2021_wrap.xlabel_path = GS_var.xlabel_path_2021;
 CBD_2021_wrap.r_list = GS_var.r_list_2021;
-CBD_2021_wrap.y_max_factor = 1.15;
+CBD_2021_wrap.y_max_factor = 1.2;
 CBD_2021_wrap.y_max_fix_1_1 = 0;
 CBD_2021_wrap.y_max_fix_1_0 = 0;
 CBD_2021_wrap.y_max_fix_0_1 = 0;
 CBD_2021_wrap.y_max_fix_0_0 = 0;
 CBD_2021_wrap.y_path_1_1 = 50;
-CBD_2021_wrap.y_path_1_0 = 300;
+CBD_2021_wrap.y_path_1_0 = 450;
 CBD_2021_wrap.y_path_0_1 = 3;
-CBD_2021_wrap.y_path_0_0 = 80;
+CBD_2021_wrap.y_path_0_0 = 90;
 CBD_2021_wrap.legend_pos_x_0__ = {};
-CBD_2021_wrap.legend_pos_x_0__['zh-tw'] = 70;
-CBD_2021_wrap.legend_pos_x_0__['fr'] = 70;
-CBD_2021_wrap.legend_pos_x_0__['en'] = 70;
+CBD_2021_wrap.legend_pos_x_0__['zh-tw'] = 80;
+CBD_2021_wrap.legend_pos_x_0__['fr'] = 80;
+CBD_2021_wrap.legend_pos_x_0__['en'] = 80;
 
 //-- Variables
 CBD_2021_wrap.do_cumul = 0;

@@ -28,7 +28,7 @@ DBT_latest_wrap.n_tot_key = 'n_latest';
 DBT_latest_wrap.y_max_factor = 1.2;
 DBT_latest_wrap.y_path_0 = 12;
 DBT_latest_wrap.y_path_1 = 12;
-DBT_latest_wrap.y_path_2 = 3;
+DBT_latest_wrap.y_path_2 = 4;
 DBT_latest_wrap.y_path_3 = 1;
 
 //-- Variables

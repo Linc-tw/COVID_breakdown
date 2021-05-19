@@ -21,7 +21,7 @@ function CBD_Make_Canvas(wrap) {
     bottom = 90;
   }
   
-  var margin = {left: 70, right: 2, bottom: bottom, top: 2};
+  var margin = {left: 90, right: 2, bottom: bottom, top: 2};
   var width = tot_width - margin.left - margin.right;
   var height = tot_height - margin.top - margin.bottom;
   var corner = [[0, 0], [width, 0], [0, height], [width, height]];
@@ -447,10 +447,10 @@ function CBD_Update(wrap) {
   //-- Legend - value
   var legend_pos;
   if (GS_lang == 'zh-tw') {
-    legend_pos = {x: 70, y: 40, dx: 12, dy: 30, x1: 220};
+    legend_pos = {x: 80, y: 40, dx: 12, dy: 30, x1: 220};
   }
   else {
-    legend_pos = {x: 70, y: 40, dx: 12, dy: 30, x1: 190};
+    legend_pos = {x: 80, y: 40, dx: 12, dy: 30, x1: 190};
   }
   if (wrap.do_cumul == 0) {
     if (wrap.legend_pos_x_0__[GS_lang] != 0) legend_pos.x = wrap.legend_pos_x_0__[GS_lang];
