@@ -25,7 +25,7 @@ CBD_2020_wrap.tooltip = d3.select(CBD_2020_wrap.id)
   .attr("class", "tooltip")
 
 //-- Parameters
-CBD_2020_wrap.n_tot_key = '2020_total';
+CBD_2020_wrap.n_tot_key = 'n_2020';
 CBD_2020_wrap.xlabel_path = GS_var.xlabel_path_2020;
 CBD_2020_wrap.r_list = GS_var.r_list_2020;
 CBD_2020_wrap.y_max_factor = 1.3;

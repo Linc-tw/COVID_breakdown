@@ -25,7 +25,7 @@ CBT_latest_wrap.tooltip = d3.select(CBT_latest_wrap.id)
   .attr("class", "tooltip");
 
 //-- Parameters
-CBT_latest_wrap.n_tot_key = 'latest_total';
+CBT_latest_wrap.n_tot_key = 'n_latest';
 CBT_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
 CBT_latest_wrap.r_list = GS_var.r_list_latest;
 CBT_latest_wrap.y_max_factor = 1.15;

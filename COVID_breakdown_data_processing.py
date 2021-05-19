@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.05.16                  ##
+    ##  Version 2021.05.19                  ##
     ##########################################
 
 import os
@@ -323,6 +323,7 @@ class MainSheet(Template):
     self.n_latest = 0
     self.n_2020 = 0
     self.n_2021 = 0
+    self.n_empty = 0
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv' % DATA_PATH
     data = pd.read_csv(name, dtype=object, skipinitialspace=True)
@@ -339,21 +340,26 @@ class MainSheet(Template):
       print('N_latest = %d' % self.n_latest)
       print('N_2020 = %d' % self.n_2020)
       print('N_2021 = %d' % self.n_2021)
+      print('N_empty = %d' % self.n_empty)
     return 
     
   def getReportDate(self):
     ord_today = dtt.date.today().toordinal() + 1
     ord_end_2020 = ISODateToOrd('2020-12-31') + 1
     ord_end_2021 = ISODateToOrd('2021-12-31') + 1
+    ord_end_2022 = ISODateToOrd('2022-12-31') + 1
+    
     report_date_list = []
     n_total = 0
     n_latest = 0
     n_2020 = 0
     n_2021 = 0
+    n_empty = 0
     
-    for report_date in self.getCol(self.coltag_report_date):
-      if report_date != report_date: ## NaN
+    for report_date, trans in zip(self.getCol(self.coltag_report_date), self.getCol(self.coltag_transmission)):
+      if trans != trans: ## NaN
         report_date_list.append(np.nan)
+        n_empty += 1
         continue
       
       yyyymdday_zh = report_date.split('年')
@@ -381,6 +387,7 @@ class MainSheet(Template):
     self.n_latest = n_latest
     self.n_2020 = n_2020
     self.n_2021 = n_2021
+    self.n_empty = n_empty
     return report_date_list
   
   def getAge(self):
@@ -408,8 +415,10 @@ class MainSheet(Template):
         age.append('60s')
       elif a in ['70', '71', '72', '73', '74', '75', '76', '77', '78', '79']:
         age.append('70s')
+      elif a in ['80', '81', '82', '83', '84', '85', '86', '87', '88', '89']:
+        age.append('80s')
         
-      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X', '<5-8X', '<5-9X']:
+      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X', '<5-8X', '<5-9X', '<5-4X']:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
@@ -420,6 +429,7 @@ class MainSheet(Template):
   
   def getTransmission(self):
     trans_list = []
+    
     for i, trans in enumerate(self.getCol(self.coltag_transmission)):
       if trans != trans:
         trans_list.append(np.nan)
@@ -442,6 +452,7 @@ class MainSheet(Template):
       else:
         print('Transmission, Case %d, %s' % (i+1, trans))
         trans_list.append(np.nan)
+        
     return trans_list
   
   def getNationality(self):
@@ -459,7 +470,7 @@ class MainSheet(Template):
       'India': ['印度'], 
       'Indonesia': ['印尼'], 
       'Japan': ['日本', '東京', '大阪', '北海道'],
-      'Korea': ['韓國'],
+      'Korea': ['韓國', '首爾'],
       'Macao': ['澳門'],
       'Malaysia': ['馬來西亞'], 
       'Myanmar' : ['緬甸'],
@@ -590,7 +601,7 @@ class MainSheet(Template):
       trav_hist = ''.join(trav_hist.split('台南'))
       trav_hist = ''.join(trav_hist.split('高雄'))
       trav_hist = ''.join(trav_hist.split('屏東'))
-      trav_hist = trav_hist.lstrip(' 0123456789/-\n月及等經()、→ ')
+      trav_hist = trav_hist.lstrip(' 0123456789/-\n月及到等經()、→ ')
       
       ## Complain if unrecognized texts remain
       if len(trav_hist) > 0:
@@ -617,10 +628,10 @@ class MainSheet(Template):
       if entry_date != entry_date: ## NaN
         entry_date_list.append(np.nan)
         
-      elif entry_date in ['x']:
+      elif entry_date in ['x', '3/7-5/12']:
         entry_date_list.append(np.nan)
         
-      elif entry_date in ['3/1\n3/8', '3/7-5/12']:
+      elif entry_date in ['3/1\n3/8']:
         entry_date_list.append('2020-03-08')
       
       elif entry_date in ['10/28(29)']:
@@ -640,6 +651,9 @@ class MainSheet(Template):
         
       elif entry_date in ['12/27(30)']:
         entry_date_list.append('2020-12-29')
+        
+      elif entry_date in ['5/17(18)']:
+        entry_date_list.append('2021-05-17')
         
       else:
         try:
@@ -667,7 +681,9 @@ class MainSheet(Template):
       if onset_date != onset_date: ## NaN
         onset_date_list.append(np.nan)
       
-      elif onset_date in ['1月', '2/18-25', '3月', '4/6-5/15', '5/2-13', '5/5-16', '5/5-17', '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
+      elif onset_date in [
+        '1月', '2/18-25', '3月', '4/6-5/15', '4/30-5/18', '5/2-13', '5/5-16', '5/5-17', 
+        '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
       elif onset_date in ['7月、11/1']:
@@ -826,6 +842,8 @@ class MainSheet(Template):
       
       elif 'O' in link:
         link_list.append('linked')
+      elif 'o' in link:
+        link_list.append('linked')
       elif link in ['#1365']:
         link_list.append('linked')
         
@@ -848,7 +866,7 @@ class MainSheet(Template):
     nb_cases_arr = np.zeros(nb_days, dtype=int)
     
     for report_date, trans in zip(report_date_list, trans_list):
-      if report_date != report_date:
+      if trans != trans:
         continue
       
       ind = ISODateToOrd(report_date) - ord_ref
@@ -907,7 +925,7 @@ class MainSheet(Template):
     n_imported = 0
     
     for report_date, trans, trav_hist, symp in zip(report_date_list, trans_list, trav_hist_list, symp_list):
-      if report_date != report_date:
+      if trans != trans:
         continue
       
       rep_ord = ISODateToOrd(report_date)
@@ -962,6 +980,7 @@ class MainSheet(Template):
   
   def makeAgeSymptomMat(self, selection='latest'):
     report_date_list = self.getReportDate()
+    trans_list = self.getTransmission()
     age_list = self.getAge()
     symp_list = self.getSymptom()
     
@@ -972,8 +991,8 @@ class MainSheet(Template):
     symp_list_2 = []
     n_total = 0
     
-    for report_date, age, symp in zip(report_date_list, age_list, symp_list):
-      if report_date != report_date:
+    for report_date, trans, age, symp in zip(report_date_list, trans_list, age_list, symp_list):
+      if trans != trans:
         continue
       
       rep_ord = ISODateToOrd(report_date)
@@ -1031,8 +1050,8 @@ class MainSheet(Template):
     timestamp = dtt.datetime.now().astimezone()
     timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
     
-    key = ['overall_total', 'latest_total', '2020_total', '2021_total', 'timestamp']
-    value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, timestamp]
+    key = ['n_total', 'n_latest', 'n_2020', 'n_2021', 'n_empty', 'timestamp']
+    value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_empty, timestamp]
     
     data = {'key': key, 'value': value}
     data = pd.DataFrame(data)
@@ -1066,7 +1085,7 @@ class MainSheet(Template):
     unknown_o  = np.zeros(nb_days, dtype=int)
     
     for report_date, onset_date, trans, link in zip(report_date_list, onset_date_list, trans_list, link_list):
-      if report_date != report_date:
+      if trans != trans:
         continue
       
       ## Regroup by report date
@@ -1139,6 +1158,7 @@ class MainSheet(Template):
   def saveCsv_caseByDetection(self):
     report_date_list = self.getReportDate()
     onset_date_list = self.getOnsetDate()
+    trans_list = self.getTransmission()
     channel_list = self.getChannel()
     
     ord_ref = ISODateToOrd(ISO_DATE_REF)
@@ -1161,8 +1181,8 @@ class MainSheet(Template):
     overseas_o = np.zeros(nb_days, dtype=int)
     no_data_o  = np.zeros(nb_days, dtype=int)
     
-    for report_date, onset_date, channel in zip(report_date_list, onset_date_list, channel_list):
-      if report_date != report_date:
+    for report_date, onset_date, trans, channel in zip(report_date_list, onset_date_list, trans_list, channel_list):
+      if trans != trans:
         continue
       
       ind_r = ISODateToOrd(report_date) - ord_ref
@@ -1255,8 +1275,8 @@ class MainSheet(Template):
     stock_2021_indi = []
     stock_2021_other = []
     
-    for report_date, entry_date, onset_date, trans in zip(report_date_list, entry_date_list, onset_date_list, trans_list):
-      if report_date != report_date:
+    for i, report_date, entry_date, onset_date, trans in zip(range(len(report_date_list)), report_date_list, entry_date_list, onset_date_list, trans_list):
+      if trans != trans:
         continue
       
       if trans == 'imported':
@@ -1272,7 +1292,7 @@ class MainSheet(Template):
         stock_2020 = stock_2020_other
         stock_2021 = stock_2021_other
       else:
-        print('diffByTrans, transimission not recognized')
+        print('diffByTrans, Case %d, %s' % (i+1, trans))
       
       rep_ord = ISODateToOrd(report_date)
       entry_ord = ISODateToOrd(entry_date) if entry_date == entry_date else 0
@@ -1417,7 +1437,7 @@ class MainSheet(Template):
     age = grid[1].flatten()
     value_r = corr_mat.flatten()
     label_r = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_r]
-    label_n = count_mat.flatten() #['%d' % n if v == v else '' for v, n in zip(value_r, count_mat.flatten())]
+    label_n = count_mat.flatten()
     
     data1 = {'symptom': symp, 'age': age, 'value': value_r, 'label': label_r}
     data1 = pd.DataFrame(data1)

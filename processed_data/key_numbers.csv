@@ -1,6 +1,7 @@
 key,value
-overall_total,2535
-latest_total,1595
-2020_total,799
-2021_total,1736
-timestamp,2021-05-19 14:40:55 UTC+0800
+n_total,2532
+n_latest,1592
+n_2020,799
+n_2021,1733
+n_empty,6
+timestamp,2021-05-19 22:08:37 UTC+0800

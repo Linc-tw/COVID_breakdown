@@ -24,7 +24,7 @@ DBT_2021_wrap.tooltip = d3.select(DBT_2021_wrap.id)
   .attr("class", "tooltip")
 
 //-- Parameters
-DBT_2021_wrap.n_tot_key = '2021_total';
+DBT_2021_wrap.n_tot_key = 'n_2021';
 DBT_2021_wrap.y_max_factor = 1.2;
 DBT_2021_wrap.y_path_0 = 15;
 DBT_2021_wrap.y_path_1 = 15;
