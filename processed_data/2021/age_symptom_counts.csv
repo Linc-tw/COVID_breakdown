@@ -1,21 +1,21 @@
 label,count,label_zh,label_fr
 N_total,1733,合計,Total
-N_data,403,有資料案例數,Données complètes
+N_data,405,有資料案例數,Données complètes
 90s,1,90-99歲,90aine
 80s,2,80-89歲,80aine
 70s,10,70-79歲,70aine
 60s,37,60-69歲,60aine
 50s,45,50-59歲,50aine
-40s,55,40-49歲,40aine
+40s,56,40-49歲,40aine
 30s,98,30-39歲,30aine
-20s,133,20-29歲,20aine
+20s,134,20-29歲,20aine
 10s,15,10-19歲,10aine
 0s,7,<10歲,< 10 ans
-asymptomatic,202,無症狀,asymptomatique
-cough,91,咳嗽,toux
-fever,87,發燒,fièvre
+asymptomatic,203,無症狀,asymptomatique
+cough,93,咳嗽,toux
+fever,89,發燒,fièvre
 throatache,65,喉嚨症狀,mal de gorge
-sneezing,45,鼻腔症狀,éternuement
+sneezing,47,鼻腔症狀,éternuement
 dysnosmia,33,嗅覺異常,dysosmie
 headache,27,頭痛,mal de tête
 dysgeusia,26,味覺異常,dysgueusie
