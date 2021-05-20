@@ -592,6 +592,7 @@ class MainSheet(Template):
       trav_hist = ''.join(trav_hist.split('返國'))
       trav_hist = ''.join(trav_hist.split('回台'))
       trav_hist = ''.join(trav_hist.split('來台'))
+      trav_hist = ''.join(trav_hist.split('臺灣'))
       trav_hist = ''.join(trav_hist.split('台灣'))
       trav_hist = ''.join(trav_hist.split('台北'))
       trav_hist = ''.join(trav_hist.split('新北'))
@@ -652,6 +653,9 @@ class MainSheet(Template):
       elif entry_date in ['12/27(30)']:
         entry_date_list.append('2020-12-29')
         
+      elif entry_date in ['5/5(6)']:
+        entry_date_list.append('2021-05-05')
+        
       elif entry_date in ['5/17(18)']:
         entry_date_list.append('2021-05-17')
         
@@ -682,7 +686,7 @@ class MainSheet(Template):
         onset_date_list.append(np.nan)
       
       elif onset_date in [
-        '1月', '2/18-25', '3月', '4/6-5/15', '4/30-5/18', '5/2-13', '5/5-16', '5/5-17', 
+        '1月', '2/18-25', '3月', '4/6-5/15', '4/30-5/18', '5/2-13', '5/5-16', '5/5-17', '5/1-19', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
@@ -788,7 +792,7 @@ class MainSheet(Template):
       'arrhythmia': ['心律不整'],
       'coma': ['意識不清'],
       
-      'symptomatic': ['有症狀', '出現症狀', '身體不適', '不舒服', '不適'],
+      'symptomatic': ['有症狀', '出現症狀', '身體不適', '全身不舒服', '不舒服', '不適'],
       'asymptomatic': ['首例無症狀', '無症狀', 'x', 'X'],
     }
     symp_list = []
