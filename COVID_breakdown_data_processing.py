@@ -594,10 +594,14 @@ class MainSheet(Template):
       trav_hist = ''.join(trav_hist.split('來台'))
       trav_hist = ''.join(trav_hist.split('臺灣'))
       trav_hist = ''.join(trav_hist.split('台灣'))
+      trav_hist = ''.join(trav_hist.split('北部')) 
       trav_hist = ''.join(trav_hist.split('台北'))
+      trav_hist = ''.join(trav_hist.split('萬華')) 
       trav_hist = ''.join(trav_hist.split('新北'))
+      trav_hist = ''.join(trav_hist.split('桃園'))
       trav_hist = ''.join(trav_hist.split('苗栗'))
       trav_hist = ''.join(trav_hist.split('彰化'))
+      trav_hist = ''.join(trav_hist.split('新竹')) 
       trav_hist = ''.join(trav_hist.split('南投'))
       trav_hist = ''.join(trav_hist.split('雲林'))
       trav_hist = ''.join(trav_hist.split('台南'))
@@ -687,7 +691,7 @@ class MainSheet(Template):
         onset_date_list.append(np.nan)
       
       elif onset_date in [
-        '1月', '2/18-25', '3月', '4/6-5/15', '4/30-5/18', '5/2-13', '5/5-16', '5/5-17', '5/1-19', '5/8-20',
+        '1月', '2/18-25', '3月', '4/6-5/15', '4/30-5/18', '5/2-13', '5/5-16', '5/5-17', '5/1-19', '5/7-20', '5/8-20', '5/10-21',
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
@@ -738,7 +742,7 @@ class MainSheet(Template):
       elif channel in ['自主健康管理', '加強自主管理']:
         channel_list.append('monitoring')
         
-      elif channel in ['自行就醫',  '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', '接觸患者', '同院患者']:
+      elif channel in ['自行就醫',  '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', '接觸患者', '同院患者', '入院篩檢', '萬華專案', '入院']:
         channel_list.append('hospital')
         
       elif channel in ['香港檢驗', '外國檢驗', '外國篩檢']:
@@ -820,10 +824,11 @@ class MainSheet(Template):
       symp = ''.join(symp.split('入境前有'))
       symp = ''.join(symp.split('心情不佳'))
       symp = ''.join(symp.split('診斷為'))
+      symp = ''.join(symp.split('嚴重'))
       symp = ''.join(symp.split('輕微'))
       symp = ''.join(symp.split('伴隨'))
       symp = ''.join(symp.split('自覺'))
-      symp = symp.lstrip(' \n  ，、與及有')
+      symp = symp.lstrip(' \n  .，、與及有')
       
       if len(symp) > 0:
         print('Symptom, Case %d, %s' % (i+1, symp))
@@ -854,7 +859,15 @@ class MainSheet(Template):
         link_list.append('linked')
       elif 'o' in link:
         link_list.append('linked')
-      elif link in ['#1365', '萬華茶館\n串門子餐廳', '萬華']:
+      elif '萬華' in link:
+        link_list.append('linked')
+      elif '串門子餐廳' in link:
+        link_list.append('linked')
+      elif '朝陽夜唱' in link:
+        link_list.append('linked')
+      elif '金沙酒店' in link:
+        link_list.append('linked')
+      elif link in ['#1365']:
         link_list.append('linked')
         
       else:

@@ -129,6 +129,18 @@ function CBD_Format_Data(wrap, data) {
     }
   }
   
+  //-- Calculate ytick
+  //-- If string, use it as nb of ticks
+  var log_precision, precision;
+  if (typeof y_path === 'string') {
+    log_precision = Math.floor(Math.log10(y_max)) - 1;
+    precision = Math.pow(10, log_precision);
+    precision = Math.max(1, precision); //-- precision at least 1
+    y_path = y_max / (+y_path + 0.5);
+    y_path = Math.round(y_path / precision) * precision;
+  }
+  //-- Otherwise, do nothing
+  
   var ytick = [];
   for (i=0; i<y_max; i+=y_path) ytick.push(i)
   

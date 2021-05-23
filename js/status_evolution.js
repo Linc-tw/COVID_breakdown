@@ -99,8 +99,21 @@ function SE_Format_Data(wrap, data) {
   //-- Calculate y_max
   y_max *= wrap.y_max_factor;
   
+  //-- Calculate ytick
+  //-- If string, use it as nb of ticks
+  var y_path, log_precision, precision;
+  if (typeof wrap.y_path === 'string') {
+    log_precision = Math.floor(Math.log10(y_max)) - 1;
+    precision = Math.pow(10, log_precision);
+    precision = Math.max(1, precision); //-- precision at least 1
+    y_path = y_max / (+wrap.y_path + 0.5);
+    y_path = Math.round(y_path / precision) * precision;
+  }
+  else
+    y_path = wrap.y_path;
+  
   var ytick = [];
-  for (i=0; i<y_max; i+=wrap.y_path) ytick.push(i)
+  for (i=0; i<y_max; i+=y_path) ytick.push(i)
   
   //-- Calculate separate sum
   var last = data.length - 1;

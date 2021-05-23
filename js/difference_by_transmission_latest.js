@@ -26,10 +26,10 @@ DBT_latest_wrap.tooltip = d3.select(DBT_latest_wrap.id)
 //-- Parameters
 DBT_latest_wrap.n_tot_key = 'n_latest';
 DBT_latest_wrap.y_max_factor = 1.2;
-DBT_latest_wrap.y_path_0 = 12;
-DBT_latest_wrap.y_path_1 = 12;
-DBT_latest_wrap.y_path_2 = 4;
-DBT_latest_wrap.y_path_3 = 1;
+DBT_latest_wrap.y_path_0 = '4'; //-- 4 ticks
+DBT_latest_wrap.y_path_1 = '4';
+DBT_latest_wrap.y_path_2 = '4';
+DBT_latest_wrap.y_path_3 = '4';
 
 //-- Variables
 DBT_latest_wrap.col_ind = 0;
