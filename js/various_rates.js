@@ -6,82 +6,59 @@
 //--   Chieh-An Lin
 
 function VR_Make_Canvas(wrap) {
-  var tot_width = 800;
-  var tot_height;
-  if (GS_lang == 'zh-tw') {
-    tot_height = 415;
-    bottom = 105;
-  }
-  else if (GS_lang == 'fr') {
-    tot_height = 400;
-    bottom = 90;
-  }
-  else {
-    tot_height = 400;
-    bottom = 90;
-  }
+  wrap.tot_width = 800;
+  wrap.tot_height_ = {};
+  wrap.tot_height_['zh-tw'] = 415;
+  wrap.tot_height_['fr'] = 400;
+  wrap.tot_height_['en'] = 400;
+  wrap.margin_ = {};
+  wrap.margin_['zh-tw'] = {left: 70, right: 2, bottom: 105, top: 2};
+  wrap.margin_['fr'] = {left: 70, right: 2, bottom: 90, top: 2};
+  wrap.margin_['en'] = {left: 70, right: 2, bottom: 90, top: 2};
   
-  var margin = {left: 70, right: 2, bottom: bottom, top: 2};
-  var width = tot_width - margin.left - margin.right;
-  var height = tot_height - margin.top - margin.bottom;
-  var corner = [[0, 0], [width, 0], [0, height], [width, height]];
-  
-  var svg = d3.select(wrap.id)
-    .append("svg")
-      .attr('class', 'plot')
-      .attr("viewBox", "0 0 " + tot_width + " " + tot_height)
-      .attr("preserveAspectRatio", "xMinYMin meet")
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-  
-  svg.append("rect")
-      .attr("width", "100%")
-      .attr("height", "100%")
-      .attr("fill", "white")
-      .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
-  
-  wrap.tot_width = tot_width;
-  wrap.tot_height = tot_height;
-  wrap.margin = margin;
-  wrap.width = width;
-  wrap.height = height;
-  wrap.corner = corner;
-  wrap.svg = svg;
+  GS_Make_Canvas(wrap);
 }
 
 function VR_Format_Data(wrap, data) {
-  //-- Settings for xticklabels
+  //-- Variables for xtick
   var q = data.length % wrap.xlabel_path;
   var r = wrap.r_list[q];
   var xtick = [];
   var xticklabel = [];
-  var y_max = 0;
   
+  //-- Variables for data
   var col_tag_list = data.columns.slice(1);
   var nb_col = col_tag_list.length;
   var date_list = [];
   var formatted_data = [];
+  
+  //-- Other variables
+  var y_max = 0;
   var i, j, x, y, height, block;
   
+  //-- Loop over row
   for (i=0; i<data.length; i++) {
     x = data[i]["date"];
     date_list.push(x);
     
+    //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
-      xtick.push(i)
+      xtick.push(i) //-- No 0.5 due to points
       xticklabel.push(GS_ISO_Date_To_MD_Date(x));
     }
-//     else {
-//       xticklabel.push("");
-//     }
   }
   
+  //-- Loop over column
   for (j=0; j<nb_col; j++) {
     col = col_tag_list[j];
     block2 = [];
     
+    //-- Loop over row
     for (i=0; i<data.length; i++) {
+      //-- Current value
       y = +data[i][col];
+      
+      //-- Make data block; redundant information is for toolpix text
       block = {
         'x': data[i]["date"],
         'y': y,
@@ -90,21 +67,31 @@ function VR_Format_Data(wrap, data) {
         'y3': +data[i][col_tag_list[2]]
       };
       
+      //-- Update y_max
       y_max = Math.max(y_max, y);
+      
+      //-- Stock
       block2.push(block);
     }
     
+    //-- Stock
     formatted_data.push({'col': col, 'values': block2});
   }
   
   //-- Calculate y_max
   y_max *= wrap.y_max_factor;
-  if (wrap.y_max_fix > 0) y_max = wrap.y_max_fix;
+  if (wrap.y_max_fix > 0)
+    y_max = wrap.y_max_fix;
+  
+  //-- Calculate y_path
   var y_path = wrap.y_path;
   
+  //-- Generate yticks
   var ytick = [];
-  for (i=0; i<y_max; i+=y_path) ytick.push(i)
+  for (i=0; i<y_max; i+=y_path) 
+    ytick.push(i)
   
+  //-- Save to wrapper
   wrap.formatted_data = formatted_data;
   wrap.date_list = date_list;
   wrap.col_tag_list = col_tag_list;
@@ -115,52 +102,15 @@ function VR_Format_Data(wrap, data) {
   wrap.ytick = ytick;
 }
 
-function VR_Mouse_Over(wrap, d) {
-  wrap.tooltip.transition()
-    .duration(200)
-    .style("opacity", 0.9)
-  d3.select(d3.event.target)
-    .style("opacity", 0.8)
-}
- 
-function VR_Get_Tooltip_Pos(wrap, d) {
-  var l_max = 0;
-  var i_max = -1;
-  var i, l;
-  
-  //-- Look for the furthest vertex
-  for (i=0; i<4; i++) {
-    l = (d[0] - wrap.corner[i][0])**2 + (d[1] - wrap.corner[i][1])**2;
-    if (l > l_max) {
-      l_max = l;
-      i_max = i;
-    }
-  }
-  
-  //-- Place the caption somewhere on the longest arm, parametrizaed by x_alpha & y_alpha
-  var x_alpha = 0.1;
-  var y_alpha = 0.5;
-  var x_pos = d[0] * (1-x_alpha) + wrap.corner[i_max][0] * x_alpha;
-  var y_pos = d[1] * (1-y_alpha) + wrap.corner[i_max][1] * y_alpha;
-  
-  var buffer = 1.25*16; //-- Margin buffer of card-body
-  var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
-  var card_hdr = 3.125*16; //-- Offset caused by card-header
-  var svg_dim = d3.select(wrap.id).node().getBoundingClientRect();
-  var x_aspect = (svg_dim.width - 2*buffer) / wrap.tot_width;
-  var y_aspect = (svg_dim.height - 2*buffer) / wrap.tot_height;
-  
-  x_pos = (x_pos + wrap.margin.left) * x_aspect + buffer;
-  y_pos = (y_pos + wrap.margin.top) * y_aspect + buffer + card_hdr + button;
-  
-  return [x_pos, y_pos];
-}
-
+//-- Tooltip
 function VR_Mouse_Move(wrap, d) {
-  var new_pos = VR_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
+  //-- Get tooltip position
+  var y_alpha = 0.5;
+  var new_pos = GS_Get_Tooltip_Pos(wrap, y_alpha, d3.mouse(d3.event.target));
+  
+  //-- Define tooltip texts
   var fct_format = d3.format(".2%");
   var tooltip_text;
-  
   if (GS_lang == 'zh-tw')
     tooltip_text = d.x + '<br>陽性率 = ' + fct_format(d.y1) + '<br>入境盛行率 = ' + fct_format(d.y2) + '<br>本土盛行率 = ' + fct_format(d.y3)
   else if (GS_lang == 'fr')
@@ -168,109 +118,117 @@ function VR_Mouse_Move(wrap, d) {
   else
     tooltip_text = d.x + '<br>Positive rate = ' + fct_format(d.y1) + '<br>Arrival inci. rate = ' + fct_format(d.y2) + '<br>Local inci. rate = ' + fct_format(d.y3)
   
+  //-- Generate tooltip
   wrap.tooltip
     .html(tooltip_text)
     .style("left", new_pos[0] + "px")
     .style("top", new_pos[1] + "px")
 }
- 
-function VR_Mouse_Leave(wrap, d) {
-  wrap.tooltip.transition()
-    .duration(10)
-    .style("opacity", 0)
-  d3.select(d3.event.target)
-    .style("opacity", 1)
-}
 
 function VR_Initialize(wrap) {
-  //-- Add x-axis
+  //-- Define x-axis
   var x = d3.scaleBand()
-    .range([0, wrap.width])
-    .domain(wrap.date_list);
+    .domain(wrap.date_list)
+    .range([0, wrap.width]);
     
+  //-- No xtick or xticklabel 
   var x_axis = d3.axisBottom(x)
     .tickSize(0)
     .tickFormat(function (d, i) {return ""});
   
+  //-- Add x-axis & adjust position
   wrap.svg.append('g')
     .attr('class', 'xaxis')
     .attr('transform', 'translate(0,' + wrap.height + ')')
     .call(x_axis)
     
-  //-- Add a 2nd x-axis for ticks
+  //-- Define a 2nd x-axis for xtick & xticklabel
   var x_2 = d3.scaleLinear()
     .domain([0, wrap.date_list.length])
     .range([0, wrap.width])
   
+  //-- Define xtick & xticklabel
   var x_axis_2 = d3.axisBottom(x_2)
     .tickValues(wrap.xtick)
     .tickSize(12)
     .tickSizeOuter(0)
     .tickFormat(function (d, i) {return wrap.xticklabel[i]});
   
+  //-- Add 2nd x-axis & adjust position
   wrap.svg.append("g")
     .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
     .call(x_axis_2)
     .selectAll("text")
-      .attr("transform", "translate(-22,15) rotate(-90)")
+      .attr("transform", "translate(-20,15) rotate(-90)")
       .style("text-anchor", "end")
   
-  //-- Add y-axis
+  //-- Define y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
+  //-- Define ytick & yticklabel
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
     .tickFormat(d3.format(".0%"));
   
+  //-- Add y-axis
   wrap.svg.append("g")
     .attr("class", "yaxis")
     .call(y_axis)
 
-  //-- Add a 2nd y-axis for the frameline at right
+  //-- Define a 2nd y-axis for the frameline at right
   var y_axis_2 = d3.axisRight(y)
     .ticks(0)
     .tickSize(0)
   
+  //-- Add 2nd y-axis
   wrap.svg.append("g")
     .attr("class", "yaxis")
     .attr("transform", "translate(" + wrap.width + ",0)")
     .call(y_axis_2)
     
-  //-- ylabel
+  //-- Define ylabel
   var ylabel;
-  if (GS_lang == 'zh-tw') ylabel = '比率';
-  else if (GS_lang == 'fr') ylabel = 'Taux';
-  else ylabel = 'Rate';
+  if (GS_lang == 'zh-tw')
+    ylabel = '比率';
+  else if (GS_lang == 'fr')
+    ylabel = 'Taux';
+  else
+    ylabel = 'Rate';
+  
+  //-- Add ylabel
   wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
     .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)")
     .text(ylabel);
     
-  //-- Color
+  //-- Define color
   var color_list = GS_var.c_list.slice(0, wrap.nb_col);
   var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
     .range(color_list);
   
-  //-- Line
+  //-- Define dummy line
   var draw_line_0 = d3.line()
     .x(function (d) {return x(d.x);})
     .y(function (d) {return y(0);});
-  
+    
+  //-- Define real line
   var draw_line = d3.line()
     .x(function (d) {return x(d.x);})
     .y(function (d) {return y(d.y);});
   
+  //-- Add line
   var line = wrap.svg.selectAll('.content.line')
     .data(wrap.formatted_data)
     .enter();
     
+  //-- Update line with dummy details
   line.append('path')
       .attr('class', 'content line')
       .attr('d', function (d) {return draw_line_0(d.values);})
@@ -278,10 +236,12 @@ function VR_Initialize(wrap) {
       .style('stroke-width', '2.5px')
       .style("fill", 'none');
       
+  //-- Add dot
   var dot = wrap.svg.selectAll()
     .data(wrap.formatted_data)
     .enter();
     
+  //-- Update dot with dummy details
   dot.append('g')
     .style("fill", function (d) {return color(d.col);})
     .selectAll(".content.dot")
@@ -292,10 +252,11 @@ function VR_Initialize(wrap) {
       .attr("cx", function (d) {return x(d.x);})
       .attr("cy", function (d) {return y(d.y);})
       .attr("r", 0)
-      .on("mouseover", function (d) {VR_Mouse_Over(wrap, d);})
+      .on("mouseover", function (d) {GS_Mouse_Over(wrap, d);})
       .on("mousemove", function (d) {VR_Mouse_Move(wrap, d);})
-      .on("mouseleave", function (d) {VR_Mouse_Leave(wrap, d);});
+      .on("mouseleave", function (d) {GS_Mouse_Leave(wrap, d);});
       
+  //-- Save to wrapper
   wrap.color_list = color_list;
   wrap.draw_line = draw_line;
   wrap.line = line;
@@ -303,45 +264,48 @@ function VR_Initialize(wrap) {
 }
 
 function VR_update(wrap) {
-  //-- Add y-axis
+  //-- Define y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
+  //-- Define ytick
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
     .tickFormat(d3.format(".0%"));
   
+  //-- Update y-axis
   wrap.svg.select('.yaxis')
     .transition()
     .duration(GS_var.trans_duration)
     .call(y_axis);
   
-  //-- Update lines
+  //-- Update line
   wrap.line.selectAll('.content.line')
     .transition()
     .duration(GS_var.trans_duration)
     .attr('d', function (d) {return wrap.draw_line(d.values);});
     
+  //-- Update dot
   wrap.dot.selectAll('.content.dot')
     .transition()
     .duration(GS_var.trans_duration)
     .attr("r", wrap.r);
 
-  //-- Legend - label
+  //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
-  var legend_label;
-  if (GS_lang == 'zh-tw') {
-    legend_label = ["陽性率", "入境盛行率", "本土盛行率"];
-  }
-  else if (GS_lang == 'fr') {
-    legend_label = ["Taux de positivité", "Taux d'incidence frontalier", "Taux d'incidence local"];
-  }
-  else {
-    legend_label = ["Positive rate", "Arrival incidence rate", "Local incidence rate"];
-  }
   
+  //-- Define legend label
+  var legend_label;
+  if (GS_lang == 'zh-tw')
+    legend_label = ["陽性率", "入境盛行率", "本土盛行率"];
+  else if (GS_lang == 'fr')
+    legend_label = ["Taux de positivité", "Taux d'incidence frontalier", "Taux d'incidence local"];
+  else
+    legend_label = ["Positive rate", "Arrival incidence rate", "Local incidence rate"];
+  
+  //-- Update legend label
   wrap.svg.selectAll(wrap.id+'_legend_label')
     .remove()
     .exit()

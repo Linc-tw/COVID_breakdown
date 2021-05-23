@@ -34,8 +34,8 @@ function ASC_Latest_Plot() {
       ASC_Make_Canvas(ASC_2021_wrap);
       ASC_Format_Data(ASC_2021_wrap, data);
       ASC_FormatData_2(ASC_2021_wrap, data2);
-      ASC_initialize(ASC_2021_wrap);
-      ASC_update(ASC_2021_wrap);
+      ASC_Initialize(ASC_2021_wrap);
+      ASC_Update(ASC_2021_wrap);
     });
   });
 }
@@ -55,7 +55,7 @@ $(document).on("change", "input:radio[name='" + ASC_2021_wrap.tag + "_doCount']"
       
       ASC_Format_Data(ASC_2021_wrap, data);
       ASC_FormatData_2(ASC_2021_wrap, data2);
-      ASC_update(ASC_2021_wrap);
+      ASC_Update(ASC_2021_wrap);
     });
   });
 });

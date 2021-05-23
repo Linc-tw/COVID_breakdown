@@ -6,88 +6,90 @@
 //--   Chieh-An Lin
 
 function ET_Make_Canvas(wrap) {
-  var tot_width = 1200;
-  var tot_height = 720;
-  var cell_size = 20; //-- Cell size
+  wrap.tot_width = 1200;
+  wrap.tot_height_ = {};
+  wrap.tot_height_['zh-tw'] = 720;
+  wrap.tot_height_['fr'] = 720;
+  wrap.tot_height_['en'] = 720;
+  wrap.margin_ = {};
+  wrap.margin_['zh-tw'] = {left: 0, right: 0, bottom: 0, top: 0};
+  wrap.margin_['fr'] = {left: 0, right: 0, bottom: 0, top: 0};
+  wrap.margin_['en'] = {left: 0, right: 0, bottom: 0, top: 0};
+  wrap.cell_size = 20; //-- Cell size
   
-  var margin = {left: 0, right: 0, bottom: 0, top: 0};
-  var width = tot_width - margin.left - margin.right;
-  var height = tot_height - margin.top - margin.bottom;
-  var corner = [[0, 0], [width, 0], [0, height], [width, height]];
-  
-  var svg = d3.select(wrap.id)
-    .append("svg")
-      .attr('class', 'plot')
-      .attr("viewBox", "0 0 " + tot_width + " " + tot_height)
-      .attr("preserveAspectRatio", "xMinYMin meet")
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-      .style('shape-rendering', 'crispEdges');
-  
-  svg.append("rect")
-      .attr("width", "100%")
-      .attr("height", "100%")
-      .attr("fill", "white")
-      .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
-  
-  wrap.tot_width = tot_width;
-  wrap.tot_height = tot_height;
-  wrap.cell_size = cell_size;
-  wrap.margin = margin;
-  wrap.width = width;
-  wrap.height = height;
-  wrap.corner = corner;
-  wrap.svg = svg;
+  GS_Make_Canvas(wrap);
 }
 
 function ET_Format_Data(wrap, data) {
-  var lim = 40;
-  var item = '★ ';
+  var lim = 40; //-- Number of characters
+  var item = '★ '; //-- Item symbol
   var formatted_data = {}
   var row, split_a1, split_a2, split_a3, split_b1, split_b2, split_b3;
   var i, j, k, q, r, str_;
   
+  //-- Loop over rows
   for (i=0; i<data.length; i++) {
     row = data[i];
+    
+    //-- Get text from data & split into paragraphs
     split_a1 = row['Taiwan_event'].split('\n');
     split_a2 = row['global_event'].split('\n');
     split_a3 = row['key_event'].split('\n');
     
-    if (split_a1[0] == '') split_a1 = [];
-    if (split_a2[0] == '') split_a2 = [];
-    if (split_a3[0] == '') split_a3 = [];
+    //-- Force empty text to empty list (iterable)
+    if (split_a1[0] == '')
+      split_a1 = [];
+    if (split_a2[0] == '')
+      split_a2 = [];
+    if (split_a3[0] == '')
+      split_a3 = [];
     
+    //-- Initialize beginning of each section
     split_b1 = ['', '台灣事件'];
     split_b2 = ['', '全球事件'];
     split_b3 = ['', '重點事件'];
     
+    //-- Loop over paragraphs
     for (j=0; j<split_a1.length; j++) {
+      //-- Calculate number of lines for each paragraphs
       str_ = item + split_a1[j];
       q = Math.ceil(str_.length / lim);
-      for (k=0; k<q; k++) {
+      
+      //-- Stock line by line
+      for (k=0; k<q; k++)
         split_b1.push(str_.substring(k*lim, (k+1)*lim));
-      }
-    }
-    for (j=0; j<split_a2.length; j++) {
-      str_ = item + split_a2[j];
-      q = Math.ceil(str_.length / lim);
-      for (k=0; k<q; k++) {
-        split_b2.push(str_.substring(k*lim, (k+1)*lim));
-      }
-    }
-    for (j=0; j<split_a3.length; j++) {
-      str_ = item + split_a3[j];
-      q = Math.ceil(str_.length / lim);
-      for (k=0; k<q; k++) {
-        split_b3.push(str_.substring(k*lim, (k+1)*lim));
-      }
     }
     
+    //-- Loop over paragraphs
+    for (j=0; j<split_a2.length; j++) {
+      //-- Calculate number of lines for each paragraphs
+      str_ = item + split_a2[j];
+      q = Math.ceil(str_.length / lim);
+      
+      //-- Stock line by line
+      for (k=0; k<q; k++)
+        split_b2.push(str_.substring(k*lim, (k+1)*lim));
+    }
+    
+    //-- Loop over paragraphs
+    for (j=0; j<split_a3.length; j++) {
+      //-- Calculate number of lines for each paragraphs
+      str_ = item + split_a3[j];
+      q = Math.ceil(str_.length / lim);
+      
+      //-- Stock line by line
+      for (k=0; k<q; k++)
+        split_b3.push(str_.substring(k*lim, (k+1)*lim));
+    }
+    
+    //-- Stock
     formatted_data[row['date']] = [[row['date']], split_b1, split_b2, split_b3];
   }
   
+  //-- Fine-tuning
   ET_Special_Process(wrap, formatted_data);
-    
+  
+  //-- Calculate calendar duration
   var date_list = data.map(function (d) {return d['date'];});
   var begin_year = +date_list[0].substring(0, 4);
   var begin_month = +date_list[0].substring(5, 7);
@@ -96,9 +98,12 @@ function ET_Format_Data(wrap, data) {
   var begin_half_year = ~~((begin_month-1)/6) + 2 * begin_year;
   var end_half_year = ~~((end_month-1)/6) + 2 * end_year;
   
+  //-- Generate half years
   var half_year_list = [];
-  for (i=begin_half_year; i<=end_half_year; i++) half_year_list.push(i);
+  for (i=begin_half_year; i<=end_half_year; i++)
+    half_year_list.push(i);
   
+  //-- Save to wrapper
   wrap.formatted_data = formatted_data;
   wrap.begin_year = begin_year;
   wrap.begin_month = begin_month;
@@ -511,22 +516,17 @@ function ET_Special_Process(wrap, formatted_data) {
   ]
 }
 
-function ET_Mouse_Over(wrap, d) {
-  wrap.tooltip.transition()
-    .duration(200)
-    .style("opacity", 0.9)
-  d3.select(d3.event.target)
-    .style("opacity", 0.6)
-}
-
 function ET_Get_Tooltip_Pos(wrap, pos, d) {
+  //-- Get year & month
   var year  = +d.substring(0, 4);
   var month = +d.substring(5, 7);
   var ind = 2*(year - 2019) + ~~((month-1) / 6) - 1;
   
+  //-- Get position
   var x_pos = pos[0];
   var y_pos = pos[1];
   
+  //-- Calculate adjustment from card header, card body, & buttons
   var buffer = 1.25*16; //-- Margin buffer of card-body
   var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
   var card_hdr = 3.125*16; //-- Offset caused by card-header
@@ -534,18 +534,19 @@ function ET_Get_Tooltip_Pos(wrap, pos, d) {
   var x_aspect = (svg_dim.width - 2*buffer) / wrap.tot_width;
   var y_aspect = (svg_dim.height - 2*buffer) / wrap.tot_height;
   
+  //-- Update position
   x_pos = (x_pos + wrap.margin.left) * x_aspect + buffer;
   y_pos = (y_pos + wrap.margin.top + ind*(wrap.dy0+wrap.cell_size*7)) * y_aspect + buffer + card_hdr + button;
   
-  x_pos = x_pos + 0;
-  y_pos = y_pos - 0;
   return [x_pos, y_pos];
 }
 
 function ET_Mouse_Move(wrap, d) {
+  //-- Get tooltip position
   var new_pos = ET_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target), d);
-  var tooltip_text;
   
+  //-- Define tooltip texts
+  var tooltip_text;
   if (GS_lang == 'zh-tw')
     tooltip_text = '點我'
   else if (GS_lang == 'fr')
@@ -553,23 +554,18 @@ function ET_Mouse_Move(wrap, d) {
   else
     tooltip_text = 'Click me'
     
+  //-- Generate tooltip
   wrap.tooltip
     .html(tooltip_text)
     .style("left", new_pos[0] + "px")
     .style("top", new_pos[1] + "px")
 }
 
-function ET_Mouse_Leave(wrap, d) {
-  wrap.tooltip.transition()
-    .duration(10)
-    .style("opacity", 0)
-  d3.select(d3.event.target)
-    .style("opacity", 1)
-}
-
 //-- Click
 function ET_Click(wrap, d, i) {
   var trans_duration = 0;
+  
+  //-- Click on empty square
   if (!(d in wrap.formatted_data)) {
     wrap.svg.selectAll(wrap.id+'_text')
       .transition()
@@ -578,22 +574,27 @@ function ET_Click(wrap, d, i) {
     return;
   }
   
+  //-- Variables for text
   var split = wrap.formatted_data[d];
   var color_list = ['#000000'];
   var j;
   
-  for (j=0; j<split[1].length; j++) {
+  //-- Update color
+  for (j=0; j<split[1].length; j++)
     color_list.push(GS_var.c_list[0]);
-  }
-  for (j=0; j<split[2].length; j++) {
-    color_list.push(GS_var.c_list[1]);
-  }
-  for (j=0; j<split[3].length; j++) {
-    color_list.push(GS_var.c_list[2]);
-  }
   
+  //-- Update color
+  for (j=0; j<split[2].length; j++)
+    color_list.push(GS_var.c_list[1]);
+  
+  //-- Update color
+  for (j=0; j<split[3].length; j++)
+    color_list.push(GS_var.c_list[2]);
+  
+  //-- Generate text
   var text = split[0].concat(split[1]).concat(split[2]).concat(split[3]);
   
+  //-- Update text
   wrap.svg.selectAll(wrap.id+'_text')
     .transition()
     .duration(trans_duration)
@@ -602,11 +603,12 @@ function ET_Click(wrap, d, i) {
 }
 
 function ET_Initialize(wrap) {
-  //-- Year block
+  //-- Parameters for half year block
   var x0 = 35;
   var y0 = 45;
   var dy0 = 30;
   
+  //-- Add half year block
   var block = wrap.svg.selectAll(".year")
     .data(wrap.half_year_list)
     .enter()
@@ -619,21 +621,27 @@ function ET_Initialize(wrap) {
           return "translate(" + x0 + "," + (y0+i*(dy0+wrap.cell_size*7)) + ")";
         });
   
+  //-- Parameters for day square
   var nb_squares = 27;
   var dx1 = 25;
   
+  //-- Add year text
   block.append("text")
     .attr('class', 'content text')
     .attr("transform", "translate(" + (nb_squares*wrap.cell_size+dx1) + "," + (wrap.cell_size*3.5) + ")rotate(-90)")
     .style("text-anchor", "middle")
     .text(function (d) {return ~~(d/2);});
   
-  //-- Title
+  //-- Define title
   var title;
-  if (GS_lang == 'zh-tw') title = '疫情爆發時間軸';
-  else if (GS_lang == 'fr') title = "Chronologie de la pandémie (texte en mandarin)";
-  else title = 'Pandemic Timeline (text in Mandarin)';
+  if (GS_lang == 'zh-tw')
+    title = '疫情爆發時間軸';
+  else if (GS_lang == 'fr')
+    title = "Chronologie de la pandémie (texte en mandarin)";
+  else
+    title = 'Pandemic Timeline (text in Mandarin)';
   
+  //-- Add title
   wrap.svg.append("text")
       .attr("class", "title")
       .attr("x", x0+nb_squares*wrap.cell_size*0.5)
@@ -643,7 +651,7 @@ function ET_Initialize(wrap) {
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "bottom")
   
-  //-- Content text
+  //-- Parameters for text zone
   var dx2 = 20;
   var dy2 = 16;
   var split = ['', '', '', '', '', '', '', '', '', '', 
@@ -651,6 +659,7 @@ function ET_Initialize(wrap) {
                '', '', '', '', '', '', '', '', '', '', 
                '', '', '', '', '', '', '', '', '', ''];
   
+  //-- Add text zone
   wrap.svg.append("g").selectAll()
     .data(split)
     .enter()
@@ -663,7 +672,8 @@ function ET_Initialize(wrap) {
       .text(function (d) {return d;})
       .attr("text-anchor", 'start')
       .attr("dominant-baseline", "middle")
-          
+      
+  //-- Save to wrapper
   wrap.block = block;
   wrap.x0 = x0;
   wrap.y0 = y0;
@@ -671,28 +681,35 @@ function ET_Initialize(wrap) {
 }
 
 function ET_Update(wrap) {
-  //-- Days
-  var y_to_m_fct_1 = function (d) {
-    var q = ~~(d / 2);
-    var r = d % 2;
-    if (d == wrap.half_year_list[0]) {
-      return d3.timeDays(new Date(wrap.begin_year, wrap.begin_month-1, 1), new Date(wrap.begin_year, 6*(r+1), 1));
-    }
-    if (d == wrap.half_year_list[wrap.half_year_list.length-1]) {
-      return d3.timeDays(new Date(wrap.end_year, 6*r, 1), new Date(wrap.end_year, wrap.end_month, 1));
-    }
-    return d3.timeDays(new Date(q, 6*r, 1), new Date(q, 6*(r+1), 1));
-  }
-  
+  //-- Function to get day index
   var get_day = function (day, start) {
     return (day.getDay() + 7 - start) % 7;
   }
   
+  //-- Function to get week index
   var get_week = function (day, start) {
-    if (start == 1) return d3.timeMonday.count(d3.timeYear(day), day);
+    if (start == 1)
+      return d3.timeMonday.count(d3.timeYear(day), day);
     return d3.timeWeek.count(d3.timeYear(day), day);
   }
   
+  //-- Day square
+  
+  //-- Function to generate day numbers given a half-year index
+  var y_to_m_fct_1 = function (d) {
+    var q = ~~(d / 2);
+    var r = d % 2;
+    
+    if (d == wrap.half_year_list[0])
+      return d3.timeDays(new Date(wrap.begin_year, wrap.begin_month-1, 1), new Date(wrap.begin_year, 6*(r+1), 1));
+    
+    if (d == wrap.half_year_list[wrap.half_year_list.length-1])
+      return d3.timeDays(new Date(wrap.end_year, 6*r, 1), new Date(wrap.end_year, wrap.end_month, 1));
+    
+    return d3.timeDays(new Date(q, 6*r, 1), new Date(q, 6*(r+1), 1));
+  }
+  
+  //-- Update square
   var square = wrap.block.selectAll(wrap.id+'_day')
     .remove()
     .exit()
@@ -709,37 +726,43 @@ function ET_Update(wrap) {
         return week_nb*wrap.cell_size;
       })
       .attr("y", function (d) {return get_day(d, wrap.week_start) * wrap.cell_size;})
-      .style('fill', '#fff')
-      .style('stroke', '#ccc')
+      .style('fill', '#FFFFFF')
+      .style('stroke', '#CCCCCC')
       .datum(d3.timeFormat("%Y-%m-%d"))
-      .on("mouseover", function (d) {ET_Mouse_Over(wrap, d);})
+      .on("mouseover", function (d) {GS_Mouse_Over_3(wrap, d);})
       .on("mousemove", function (d) {ET_Mouse_Move(wrap, d);})
-      .on("mouseleave", function (d) {ET_Mouse_Leave(wrap, d);})
+      .on("mouseleave", function (d) {GS_Mouse_Leave(wrap, d);})
       .on("click", function (d, i) {ET_Click(wrap, d, i);})
   
-  //-- Color
+  //-- Define color
   var color2 = d3.scaleSequential()
     .domain([0, 32])
     .interpolator(t => d3.interpolateBuPu(t));
   
+  //-- Update square with color
   square.filter(function (d) {return d in wrap.formatted_data;})
     .style("fill", function (d) {
       var split = wrap.formatted_data[d];
       return color2(d3.sum(split.map(function (d) {return d.length;})));
     })
 
-  //-- Months
+  //-- Month frame
+  
+  //-- Function to generate month numbers given a half-year index
   var y_to_m_fct_2 = function (d) {
     var q = ~~(d / 2);
     var r = d % 2;
-    if (d == wrap.half_year_list[0]) {
+    
+    if (d == wrap.half_year_list[0])
       return d3.timeMonths(new Date(wrap.begin_year, wrap.begin_month-1, 1), new Date(wrap.begin_year, 6*(r+1), 1));
-    }
-    if (d == wrap.half_year_list[wrap.half_year_list.length-1]) {
+    
+    if (d == wrap.half_year_list[wrap.half_year_list.length-1])
       return d3.timeMonths(new Date(wrap.end_year, 6*r, 1), new Date(wrap.end_year, wrap.end_month, 1));
-    }
+    
     return d3.timeMonths(new Date(q, 6*r, 1), new Date(q, 6*(r+1), 1));
   }
+  
+  //-- Function to draw a frame
   var frame = function (t0) {
     var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0);
     var d0 = get_day(t0, wrap.week_start);
@@ -759,6 +782,7 @@ function ET_Update(wrap) {
       + "H" + (w0 + 1) * wrap.cell_size + "Z";
   }
 
+  //-- Add month frame
   wrap.block.selectAll(wrap.id+'_month')
     .remove()
     .exit()
@@ -768,36 +792,48 @@ function ET_Update(wrap) {
       .attr('id', wrap.tag+'_month')
       .attr('d', frame)
       .style('fill', 'none')
-      .style('stroke', '#000')
+      .style('stroke', '#000000')
       .style('stroke-width', '2px');
   
   //-- Month tag
+  
+  //-- Define month tag
   var month_name_list;
-  if (GS_lang == 'zh-tw') month_name_list = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-  else if (GS_lang == 'fr') month_name_list = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'];
-  else month_name_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  if (GS_lang == 'zh-tw')
+    month_name_list = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+  else if (GS_lang == 'fr')
+    month_name_list = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'];
+  else
+    month_name_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   
   //-- Append head buffer
   var length = (wrap.begin_month-1) % 6;
   var month_list = [];
   var i;
-  for (i=0; i<length; i++) month_list.push('');
+  for (i=0; i<length; i++)
+    month_list.push('');
   
   //-- Append month
-  for (i=wrap.begin_month-1+12*wrap.begin_year; i<wrap.end_month+12*wrap.end_year; i++) month_list.push(month_name_list[i%12]);
+  for (i=wrap.begin_month-1+12*wrap.begin_year; i<wrap.end_month+12*wrap.end_year; i++)
+    month_list.push(month_name_list[i%12]);
   
   //-- Append tail buffer
   length = month_list.length % 6;
-  if (length > 0) length = 6 - length;
-  for (i=0; i<length; i++) month_list.push('');
+  if (length > 0)
+    length = 6 - length;
+  for (i=0; i<length; i++)
+    month_list.push('');
   
   //-- Reshape list
   var month_list_list = []
   length = month_list.length / 6;
-  for (i=0; i<length; i++) month_list_list.push(month_list.slice(6*i, 6*(i+1)));
+  for (i=0; i<length; i++)
+    month_list_list.push(month_list.slice(6*i, 6*(i+1)));
   
+  //-- Define interval for month tag
   var dx1 = wrap.cell_size * 4.417; //-- 53 / 12
   
+  //-- Update month tag
   wrap.block.selectAll(wrap.id+'_month_tag')
     .remove()
     .exit()
@@ -814,15 +850,21 @@ function ET_Update(wrap) {
       .attr("dominant-baseline", "middle")
    
   //-- Weekday tag
+  
+  //-- Define weekday tag
   var weekday_list;
-  if (GS_lang == 'zh-tw') weekday_list = ['日', '一', '二', '三', '四', '五', '六'];
-  else if (GS_lang == 'fr') weekday_list = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
-  else weekday_list = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  if (GS_lang == 'zh-tw')
+    weekday_list = ['日', '一', '二', '三', '四', '五', '六'];
+  else if (GS_lang == 'fr')
+    weekday_list = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+  else
+    weekday_list = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
   
-  if (wrap.week_start == 1) {
+  //-- Update order
+  if (wrap.week_start == 1)
     weekday_list = [weekday_list[1], weekday_list[2], weekday_list[3], weekday_list[4], weekday_list[5], weekday_list[6], weekday_list[0]];
-  }
   
+  //-- Update weekday tag
   wrap.block.selectAll(wrap.id+'_weekday_tag')
     .remove()
     .exit()

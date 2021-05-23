@@ -27,7 +27,7 @@ BS_2021_wrap.tooltip = d3.select(BS_2021_wrap.id)
 //-- Parameters
 BS_2021_wrap.xlabel_path = GS_var.xlabel_path_2021;
 BS_2021_wrap.r_list = GS_var.r_list_2021;
-BS_2021_wrap.y_max_factor = 1.6;
+BS_2021_wrap.y_max_factor = 1.5;
 BS_2021_wrap.y_path_0 = '4'; //-- 4 ticks
 BS_2021_wrap.y_path_1 = '4';
 BS_2021_wrap.y_path_2 = '4';

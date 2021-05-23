@@ -27,7 +27,7 @@ BS_latest_wrap.tooltip = d3.select(BS_latest_wrap.id)
 //-- Parameters
 BS_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
 BS_latest_wrap.r_list = GS_var.r_list_latest;
-BS_latest_wrap.y_max_factor = 1.9;
+BS_latest_wrap.y_max_factor = 1.99;
 BS_latest_wrap.y_path_0 = '4'; //-- 4 ticks
 BS_latest_wrap.y_path_1 = '4';
 BS_latest_wrap.y_path_2 = '4';

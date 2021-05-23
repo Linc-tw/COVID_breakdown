@@ -6,54 +6,31 @@
 //--   Chieh-An Lin
 
 function CT_Make_Canvas(wrap) {
-  var tot_width = 800;
-  var tot_height = 540;
+  wrap.tot_width = 800;
+  wrap.tot_height_ = {};
+  wrap.tot_height_['zh-tw'] = 540;
+  wrap.tot_height_['fr'] = 540;
+  wrap.tot_height_['en'] = 540;
+  wrap.margin_ = {};
+  wrap.margin_['zh-tw'] = {left: 0, right: 0, bottom: 0, top: 0};
+  wrap.margin_['fr'] = {left: 0, right: 0, bottom: 0, top: 0};
+  wrap.margin_['en'] = {left: 0, right: 0, bottom: 0, top: 0};
   
-  var margin = {left: 0, right: 0, bottom: 0, top: 0};
-  var width = tot_width - margin.left - margin.right;
-  var height = tot_height - margin.top - margin.bottom;
-  var corner = [[0, 0], [width, 0], [0, height], [width, height]];
-  
-  var svg = d3.select(wrap.id)
-    .append("svg")
-      .attr('class', 'plot')
-      .attr("viewBox", "0 0 " + tot_width + " " + tot_height)
-      .attr("preserveAspectRatio", "xMinYMin meet")
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-  
-  svg.append("rect")
-      .attr("width", "100%")
-      .attr("height", "100%")
-      .attr("fill", "white")
-      .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
-  
-  wrap.tot_width = tot_width;
-  wrap.tot_height = tot_height;
-  wrap.margin = margin;
-  wrap.width = width;
-  wrap.height = height;
-  wrap.corner = corner;
-  wrap.svg = svg;
+  GS_Make_Canvas(wrap);
 }
 
 function CT_Format_Data(wrap, data) {
+  //-- Save to wrapper
   wrap.formatted_data = data;
   wrap.length = data.length;
 }
 
-function CT_Mouse_Over(wrap, d) {
-  wrap.tooltip.transition()
-    .duration(200)
-    .style("opacity", 0.9)
-  d3.select(d3.event.target)
-    .style("opacity", 0.6)
-}
-
 function CT_Get_Tooltip_Pos(wrap, d) {
+  //-- Get position
   var x_pos = d[0];
   var y_pos = d[1];
   
+  //-- Calculate the adjustment from card header, card body, & buttons
   var buffer = 1.25*16; //-- Margin buffer of card-body
   var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
   var card_hdr = 3.125*16; //-- Offset caused by card-header
@@ -61,18 +38,22 @@ function CT_Get_Tooltip_Pos(wrap, d) {
   var x_aspect = (svg_dim.width - 2*buffer) / wrap.tot_width;
   var y_aspect = (svg_dim.height - 2*buffer) / wrap.tot_height;
   
+  //-- Update position
   x_pos = (x_pos + wrap.margin.left) * x_aspect + buffer;
   y_pos = (y_pos + wrap.margin.top) * y_aspect + buffer + card_hdr + button;
   
+  //-- Intentional adjustment
   x_pos = x_pos + 10;
   y_pos = y_pos - 40;
   return [x_pos, y_pos];
 }
 
 function CT_Mouse_Move(wrap, d) {
+  //-- Get tooltip position
   var new_pos = CT_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
-  var tooltip_text;
   
+  //-- Define tooltip texts
+  var tooltip_text;
   if (GS_lang == 'zh-tw')
     tooltip_text = '點我'
   else if (GS_lang == 'fr')
@@ -80,65 +61,68 @@ function CT_Mouse_Move(wrap, d) {
   else
     tooltip_text = 'Click me'
   
+  //-- Generate tooltip
   wrap.tooltip
     .html(tooltip_text)
     .style("left", new_pos[0] + "px")
     .style("top", new_pos[1] + "px")
 }
 
-function CT_Mouse_Leave(wrap, d) {
-  wrap.tooltip.transition()
-    .duration(10)
-    .style("opacity", 0)
-  d3.select(d3.event.target)
-    .style("opacity", 1)
-}
-
 //-- Click
 function CT_Click_Circle(wrap, d, i) {
-  var j = wrap.length - 1 - i;
   var trans_duration = 200;
+  var j = wrap.length - 1 - i;
   var alpha = 1 - wrap['circle_text_'+j];
-  wrap.doFull = 2;
   
+  //-- Update text
   wrap.svg.selectAll(wrap.id+'_circle_text_'+j)
     .transition()
     .duration(trans_duration)
     .attr("opacity", alpha);
   
+  //-- Update line
   wrap.svg.selectAll(wrap.id+'_circle_line_'+j)
     .transition()
     .duration(trans_duration)
     .attr("opacity", wrap.line_alpha*alpha)
   
+  //-- Save to wrapper
+  wrap.doFull = 2;
   wrap['circle_text_'+j] = alpha;
 }
 
 function CT_Click_Timeline(wrap, d, j) {
   var trans_duration = 200;
   var alpha = 1 - wrap['timeline_text_'+j];
-  wrap.doFull = 2;
   
+  //-- Update text
   wrap.svg.selectAll(wrap.id+'_timeline_text_'+j)
     .transition()
     .duration(trans_duration)
     .attr("opacity", alpha);
   
+  //-- Update line
   wrap.svg.selectAll(wrap.id+'_timeline_line_'+j)
     .transition()
     .duration(trans_duration)
     .attr("opacity", wrap.line_alpha*alpha)
   
+  //-- Save to wrapper
+  wrap.doFull = 2;
   wrap['timeline_text_'+j] = alpha;
 }
 
 function CT_Initialize(wrap) {
-  //-- Title
+  //-- Define title
   var title;
-  if (GS_lang == 'zh-tw') title = ['台灣針對嚴重特殊傳染性肺炎之', '採檢標準暨其生效日期變化圖'];
-  else if (GS_lang == 'fr') title = ['Antécédents de voyage, symptômes et autres', 'conditions avec lesquelles Taïwan dépiste', "systématiquement & leurs dates d'effet"];
-  else title = ['Travel history, symptoms, & other conditions', 'with which Taiwan tests systematically &', 'their starting dates'];
+  if (GS_lang == 'zh-tw')
+    title = ['台灣針對嚴重特殊傳染性肺炎之', '採檢標準暨其生效日期變化圖'];
+  else if (GS_lang == 'fr')
+    title = ['Antécédents de voyage, symptômes et autres', 'conditions avec lesquelles Taïwan dépiste', "systématiquement & leurs dates d'effet"];
+  else
+    title = ['Travel history, symptoms, & other conditions', 'with which Taiwan tests systematically &', 'their starting dates'];
   
+  //-- Add title
   wrap.svg.selectAll(".title")
     .data(title)
     .enter()
@@ -151,10 +135,14 @@ function CT_Initialize(wrap) {
       .attr("text-anchor", "start")
       .attr("dominant-baseline", "bottom")
   
-  //-- Color
-  var color = d3.scaleLinear().domain([0, 0.25*(wrap.length-1), 0.5*(wrap.length-1), 0.75*(wrap.length-1), wrap.length-1]).range(['#aa0033', '#bb8866', '#aaaa99', '#5588aa', '#002299']);
+  //-- Define color
+  var color = d3.scaleLinear()
+    .domain([0, 0.25*(wrap.length-1), 0.5*(wrap.length-1), 0.75*(wrap.length-1), wrap.length-1])
+    .range(['#aa0033', '#bb8866', '#aaaa99', '#5588aa', '#002299']);
   
-  //-- Timeline texts & lines
+  //-- Timeline
+  
+  //-- Define timeline text x position
   var x_list_t;
   if (GS_lang == 'zh-tw') {
     x_list_t = [
@@ -210,18 +198,24 @@ function CT_Initialize(wrap) {
       0
     ];
   }
+  
+  //-- Define timeline text y position
   var y_list_t = [0,0,0,0,0,  0,0,0,0,0,  0,0,0,0,0,  0,0,0,0];
+  
+  //-- Define timeline parameters
   var x0_t = 130;
   var dx_t = 20;
-  
   var text = wrap.svg.append("g");
   var line = wrap.svg.append("g");
   var line_alpha = 0.35;
   var i, date, split;
   
+  //-- Loop over items
   for (i=0; i<wrap.length; i++) {
     wrap['timeline_text_'+i] = 0; //-- Hide all
     date = wrap.formatted_data[i]['date'];
+    
+    //-- Split text into multiple lines
     split = wrap.formatted_data[i][GS_lang].split('\n');
     if (date == '2020-01-25' || date == '2020-03-17' || date == '2020-03-19')
       split = [split.join(' ')]
@@ -230,7 +224,7 @@ function CT_Initialize(wrap) {
     if (date == '2020-02-29' && GS_lang == 'fr')
       split = [split[0], split[1], split[2]+' '+split[3]]
     
-    //-- Timeline - date
+    //-- Add timeline date
     text.append("text")
       .attr("class", "content text")
       .attr("x", x0_t-dx_t)
@@ -242,7 +236,7 @@ function CT_Initialize(wrap) {
       .attr("text-anchor", 'end')
       .attr("dominant-baseline", "middle")
         
-    //-- Timeline - text
+    //-- Add timeline text
     text.selectAll()
       .data(split)
       .enter()
@@ -257,7 +251,7 @@ function CT_Initialize(wrap) {
         .attr("text-anchor", 'start')
         .attr("dominant-baseline", "middle")
         
-    //-- Timeline - line
+    //-- Add timeline line
     if (x_list_t[i] > 0) {
       y1 = wrap.height*(i+0.5)/wrap.length;
       y2 = wrap.height*(i+0.5)/wrap.length+y_list_t[i];
@@ -271,9 +265,8 @@ function CT_Initialize(wrap) {
     }
   }
   
-  //-- Timeline - baseline
+  //-- Add timeline baseline
   var dot = wrap.svg.append("g");
-  
   dot.append("line")
     .attr("x1", x0_t)
     .attr("y1", wrap.height*0.5/wrap.length)
@@ -284,7 +277,7 @@ function CT_Initialize(wrap) {
     .attr("stroke", "black")
     .attr("stroke-width", 1)
   
-  //-- Timeline - dot
+  //-- Add timeline dot
   dot.selectAll(".dot")
     .data(wrap.formatted_data)
     .enter()
@@ -298,17 +291,20 @@ function CT_Initialize(wrap) {
       .attr("stroke", "black")
       .attr("stroke-width", 1)
       .on("click", function (d, j) {CT_Click_Timeline(wrap, d, j);})
-      .on("mouseover", function (d) {CT_Mouse_Over(wrap, d);})
+      .on("mouseover", function (d) {GS_Mouse_Over_3(wrap, d);})
       .on("mousemove", function (d) {CT_Mouse_Move(wrap, d);})
-      .on("mouseleave", function (d) {CT_Mouse_Leave(wrap, d);})
+      .on("mouseleave", function (d) {GS_Mouse_Leave(wrap, d);})
   
-  //-- Circle - circle
+  //-- Circle
+  
+  //-- Define circle parameters
   var r_c_min = 30;
   var r_c_max = 195;
   var x0_c = 210;
   var y0_c = wrap.height*0.6;
   var dy_c = 0.5;
   
+  //-- Add circle
   wrap.svg.append("g")
     .selectAll(".circle")
     .data(wrap.formatted_data)
@@ -323,11 +319,11 @@ function CT_Initialize(wrap) {
       .attr("stroke", "black")
       .attr("stroke-width", 0.3)
       .on("click", function (d, i) {CT_Click_Circle(wrap, d, i);})
-      .on("mouseover", function (d) {CT_Mouse_Over(wrap, d);})
+      .on("mouseover", function (d) {GS_Mouse_Over_3(wrap, d);})
       .on("mousemove", function (d) {CT_Mouse_Move(wrap, d);})
-      .on("mouseleave", function (d) {CT_Mouse_Leave(wrap, d);})
+      .on("mouseleave", function (d) {GS_Mouse_Leave(wrap, d);})
   
-  //-- Circle texts & lines
+  //-- Define circle text position
   var x_list_c, y_list_c;
   if (GS_lang == 'zh-tw') {
     x_list_c = [
@@ -437,19 +433,26 @@ function CT_Initialize(wrap) {
       0
     ];
   }
+  
+  //-- Define circle parameters
   var line_2 = wrap.svg.append("g");
   var x1, y1, y2, anchor;
   
+  //-- Loop over items
   for (i=0; i<wrap.length; i++) {
     wrap['circle_text_'+i] = 0; //-- Hide all
+    
+    //-- Split text into multiple lines
     if (i > 12)
       split = (wrap.formatted_data[i]['date'] + ' ' + wrap.formatted_data[i][GS_lang]).split('\n');
     else
       split = (wrap.formatted_data[i]['date'] + '\n' + wrap.formatted_data[i][GS_lang]).split('\n');
+    
+    //-- Fine-tuning
     x1 = x_list_c[i] ? wrap.width-10 : 2*x0_c+20;
     anchor = x_list_c[i] ? 'end' : 'start';
     
-    //-- Circle - text
+    //-- Add circle text
     text.selectAll()
       .data(split)
       .enter()
@@ -464,7 +467,7 @@ function CT_Initialize(wrap) {
         .attr("text-anchor", anchor)
         .attr("dominant-baseline", "middle")
         
-    //-- Circle - line
+    //-- Add circle line
     if (x_list_c[i] == 0) {
       y1 = y0_c+r_c_max - 2*(r_c_max-r_c_min)*(wrap.length-1-(i-0.45))/(wrap.length-1) + dy_c*(wrap.length-1-(i-0.45));
       y2 = wrap.height*(i+0.5)/wrap.length+y_list_c[i];
@@ -478,6 +481,7 @@ function CT_Initialize(wrap) {
     }
   }
   
+  //-- Save to wrapper
   wrap.r_c_min = r_c_min;
   wrap.r_c_max = r_c_max;
   wrap.line_alpha = line_alpha;
@@ -486,12 +490,15 @@ function CT_Initialize(wrap) {
 function CT_Update(wrap) {
   var i, active_list;
   
+  //-- Switch state to selected
   if (wrap.doFull == 0)
     active_list = [1,0,0,1,0,  0,1,1,0,1,  0,0,1,1,1,  0,1,1,1];
+  
+  //-- Switch state to full
   else if (wrap.doFull == 1)
     active_list = [1,1,1,1,1,  1,1,1,1,1,  1,1,1,1,1,  1,1,1,1];
   
-  //-- Custom
+  //-- Switch state to custom
   else {
     active_list = []
     
@@ -500,6 +507,7 @@ function CT_Update(wrap) {
       for (i=0; i<wrap.length; i++)
         active_list.push(wrap['circle_text_'+i])
     }
+    
     //-- Was timeline before
     else {
       for (i=0; i<wrap.length; i++)
@@ -507,15 +515,16 @@ function CT_Update(wrap) {
     }
   }
   
+  //-- If timeline
   if (wrap.doTimeline == 1) {
-    //-- Update circles
+    //-- Update circle
     wrap.svg.selectAll('.circle')
       .data(wrap.formatted_data)
       .transition()
       .duration(GS_var.trans_duration)
       .attr("r", 0)
       
-    //-- Update dots
+    //-- Update dot
     wrap.svg.selectAll('.dot')
       .data(wrap.formatted_data)
       .transition()
@@ -528,7 +537,8 @@ function CT_Update(wrap) {
       .duration(GS_var.trans_duration)
       .attr('opacity', 1)
     
-    //-- Title
+    //-- Define title parameters
+    var title_x_t, title_y0_t, title_y1_t;
     if (GS_lang == 'zh-tw') {
       title_x_t = wrap.width - 270;
       title_y0_t = wrap.height - 100;
@@ -545,45 +555,58 @@ function CT_Update(wrap) {
       title_y1_t = 20;
     }
     
+    //-- Update title
     wrap.svg.selectAll('.title')
       .transition()
       .duration(GS_var.trans_duration)
       .attr("x", title_x_t)
       .attr("y", function (d, i) {return title_y0_t + title_y1_t*i})
       
+    //-- Loop over items
     for (i=0; i<wrap.length; i++) {
-      //-- Update circle texts
+      //-- Update circle state
       wrap['circle_text_'+i] = 0;
+      
+      //-- Update circle text
       wrap.svg.selectAll(wrap.id+'_circle_text_'+i)
         .transition()
         .duration(GS_var.trans_duration)
         .attr("opacity", 0)
+        
+      //-- Update circle line
       wrap.svg.selectAll(wrap.id+'_circle_line_'+i)
         .transition()
         .duration(GS_var.trans_duration)
         .attr("opacity", wrap.line_alpha*0)
         
-      //-- Update timeline texts
+      //-- Update timeline state
       wrap['timeline_text_'+i] = active_list[i];
+        
+      //-- Update timeline text
       wrap.svg.selectAll(wrap.id+'_timeline_text_'+i)
         .transition()
         .duration(GS_var.trans_duration)
         .attr("opacity", active_list[i])
+        
+      //-- Update timeline line
       wrap.svg.selectAll(wrap.id+'_timeline_line_'+i)
         .transition()
         .duration(GS_var.trans_duration)
         .attr("opacity", wrap.line_alpha*active_list[i])
     }
   }
+  
+  
+  //-- If circle
   else {
-    //-- Update circles
+    //-- Update circle
     wrap.svg.selectAll('.circle')
       .data(wrap.formatted_data)
       .transition()
       .duration(GS_var.trans_duration)
       .attr("r", function (d, i) {return wrap.r_c_max-(wrap.r_c_max-wrap.r_c_min)*i/(wrap.length-1);})
       
-    //-- Update dots
+    //-- Update dot
     wrap.svg.selectAll('.dot')
       .data(wrap.formatted_data)
       .transition()
@@ -596,31 +619,40 @@ function CT_Update(wrap) {
       .duration(GS_var.trans_duration)
       .attr('opacity', 0)
       
-    //-- Title
+    //-- Update title
     wrap.svg.selectAll('.title')
       .transition()
       .duration(GS_var.trans_duration)
       .attr("x", 10)
       .attr("y", function (d, i) {return 20 + i*20})
       
+    //-- Loop over items
     for (i=0; i<wrap.length; i++) {
-      //-- Update circle texts
+      //-- Update circle state
       wrap['circle_text_'+i] = active_list[i];
+      
+      //-- Update circle text
       wrap.svg.selectAll(wrap.id+'_circle_text_'+i)
         .transition()
         .duration(GS_var.trans_duration)
         .attr("opacity", active_list[i])
+      
+      //-- Update circle line
       wrap.svg.selectAll(wrap.id+'_circle_line_'+i)
         .transition()
         .duration(GS_var.trans_duration)
         .attr("opacity", wrap.line_alpha*active_list[i])
         
-      //-- Update timeline texts
+      //-- Update timeline state
       wrap['timeline_text_'+i] = 0;
+        
+      //-- Update timeline text
       wrap.svg.selectAll(wrap.id+'_timeline_text_'+i)
         .transition()
         .duration(GS_var.trans_duration)
         .attr("opacity", 0)
+        
+      //-- Update timeline line
       wrap.svg.selectAll(wrap.id+'_timeline_line_'+i)
         .transition()
         .duration(GS_var.trans_duration)

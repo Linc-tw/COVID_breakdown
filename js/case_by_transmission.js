@@ -6,74 +6,58 @@
 //--   Chieh-An Lin
 
 function CBT_Make_Canvas(wrap) {
-  var tot_width = 800;
-  var tot_height;
-  if (GS_lang == 'zh-tw') {
-    tot_height = 415;
-    bottom = 105;
-  }
-  else if (GS_lang == 'fr') {
-    tot_height = 400;
-    bottom = 90;
-  }
-  else {
-    tot_height = 400;
-    bottom = 90;
-  }
+  wrap.tot_width = 800;
+  wrap.tot_height_ = {};
+  wrap.tot_height_['zh-tw'] = 415;
+  wrap.tot_height_['fr'] = 400;
+  wrap.tot_height_['en'] = 400;
+  wrap.margin_ = {};
+  wrap.margin_['zh-tw'] = {left: 90, right: 2, bottom: 105, top: 2};
+  wrap.margin_['fr'] = {left: 90, right: 2, bottom: 90, top: 2};
+  wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
   
-  var margin = {left: 90, right: 2, bottom: bottom, top: 2};
-  var width = tot_width - margin.left - margin.right;
-  var height = tot_height - margin.top - margin.bottom;
-  var corner = [[0, 0], [width, 0], [0, height], [width, height]];
-  
-  var svg = d3.select(wrap.id)
-    .append("svg")
-      .attr('class', 'plot')
-      .attr("viewBox", "0 0 " + tot_width + " " + tot_height)
-      .attr("preserveAspectRatio", "xMinYMin meet")
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-  
-  svg.append("rect")
-      .attr("width", "100%")
-      .attr("height", "100%")
-      .attr("fill", "white")
-      .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
-  
-  wrap.tot_width = tot_width;
-  wrap.tot_height = tot_height;
-  wrap.margin = margin;
-  wrap.width = width;
-  wrap.height = height;
-  wrap.corner = corner;
-  wrap.svg = svg;
+  GS_Make_Canvas(wrap);
 }
 
 function CBT_Format_Data(wrap, data) {
-  //-- Settings for xticklabels
+  //-- Variables for xtick
   var q = data.length % wrap.xlabel_path;
   var r = wrap.r_list[q];
   var xtick = [];
   var xticklabel = [];
-  var y_max = 0;
   
+  //-- Variables for data
   var col_tag_list = data.columns.slice(1);
   var nb_col = col_tag_list.length;
   var date_list = [];
   var formatted_data = [];
+  
+  //-- Other variables
+  var y_max = 0;
   var i, j, x, y, height, block;
 
-  if (wrap.do_cumul == 1) {
+  //-- Convert data form
+  if (wrap.do_cumul == 1)
     GS_CumSum(data, col_tag_list);
-  }
   
+  //-- Loop over row
   for (i=0; i<data.length; i++) {
     y = 0;
     x = data[i]["date"];
     date_list.push(x);
     
+    //-- Determine whether to have xtick
+    if (i % wrap.xlabel_path == r) {
+      xtick.push(i+0.5)
+      xticklabel.push(GS_ISO_Date_To_MD_Date(x));
+    }
+    
+    //-- Loop over column
     for (j=0; j<nb_col; j++) {
+      //-- Current value
       height = +data[i][col_tag_list[j]];
+      
+      //-- Make data block
       block = {
         'x': x,
         'y0': y,
@@ -88,47 +72,48 @@ function CBT_Format_Data(wrap, data) {
         'col': col_tag_list[j]
       };
         
+      //-- Update total height
       y += height;
+      
+      //-- Stock
       formatted_data.push(block);
     }
     
+    //-- Update y_max
     y_max = Math.max(y_max, y);
-    
-    if (i % wrap.xlabel_path == r) {
-      xtick.push(i+0.5)
-      xticklabel.push(GS_ISO_Date_To_MD_Date(x));
-    }
-    else {
-      xticklabel.push("");
-    }
   }
   
   //-- Calculate y_max
   y_max *= wrap.y_max_factor;
   
+  //-- Choose y_max & y_path
   var y_path;
   if (wrap.do_cumul == 1) {
     if (wrap.do_onset == 1) {
-      if (wrap.y_max_fix_1_1 > 0) y_max = wrap.y_max_fix_1_1;
+      if (wrap.y_max_fix_1_1 > 0)
+        y_max = wrap.y_max_fix_1_1;
       y_path = wrap.y_path_1_1;
     }
     else {
-      if (wrap.y_max_fix_1_0 > 0) y_max = wrap.y_max_fix_1_0;
+      if (wrap.y_max_fix_1_0 > 0)
+        y_max = wrap.y_max_fix_1_0;
       y_path = wrap.y_path_1_0;
     }
   }
   else {
     if (wrap.do_onset == 1) {
-      if (wrap.y_max_fix_0_1 > 0) y_max = wrap.y_max_fix_0_1;
+      if (wrap.y_max_fix_0_1 > 0)
+        y_max = wrap.y_max_fix_0_1;
       y_path = wrap.y_path_0_1;
     }
     else {
-      if (wrap.y_max_fix_0_0 > 0) y_max = wrap.y_max_fix_0_0;
+      if (wrap.y_max_fix_0_0 > 0)
+        y_max = wrap.y_max_fix_0_0;
       y_path = wrap.y_path_0_0;
     }
   }
   
-  //-- Calculate ytick
+  //-- Calculate y_path
   //-- If string, use it as nb of ticks
   var log_precision, precision;
   if (typeof y_path === 'string') {
@@ -140,12 +125,13 @@ function CBT_Format_Data(wrap, data) {
   }
   //-- Otherwise, do nothing
   
+  //-- Generate yticks
   var ytick = [];
-  for (i=0; i<y_max; i+=y_path) ytick.push(i)
+  for (i=0; i<y_max; i+=y_path)
+    ytick.push(i)
   
-  //-- Calculate separate sum
+  //-- Calculate respective sum
   var imported, local_link, local_unlink, fleet, plane, unknown;
-  
   if (wrap.do_cumul == 1) {
     imported = d3.max(formatted_data, function (d) {if (d.col == 'imported') return +d.height;});
     local_link = d3.max(formatted_data, function (d) {if (d.col == 'linked') return +d.height;});
@@ -164,6 +150,7 @@ function CBT_Format_Data(wrap, data) {
   }
   var legend_value = [imported, local_link, local_unlink, fleet, plane, unknown];
   
+  //-- Save to wrapper
   wrap.formatted_data = formatted_data;
   wrap.date_list = date_list;
   wrap.col_tag_list = col_tag_list;
@@ -179,62 +166,28 @@ function CBT_Format_Data_2(wrap, data2) {
   var n_tot = 0;
   var i;
   
+  //-- Loop over row
   for (i=0; i<data2.length; i++) {
+    //-- Get value of `n_tot`
     if (wrap.n_tot_key == data2[i]['key']) {
       n_tot = +data2[i]['value'];
       break;
     }
   }
   
+  //-- Save to wrapper
   wrap.n_tot = n_tot;
 }
 
-function CBT_Mouse_Over(wrap, d) {
-  wrap.tooltip.transition()
-    .duration(200)
-    .style("opacity", 0.9)
-  d3.select(d3.event.target)
-    .style("opacity", 0.8)
-}
-
-function CBT_Get_Tooltip_Pos(wrap, d) {
-  var l_max = 0;
-  var i_max = -1;
-  var i, l;
-  
-  //-- Look for the furthest vertex
-  for (i=0; i<4; i++) {
-    l = (d[0] - wrap.corner[i][0])**2 + (d[1] - wrap.corner[i][1])**2;
-    if (l > l_max) {
-      l_max = l;
-      i_max = i;
-    }
-  }
-  
-  //-- Place the caption somewhere on the longest arm, parametrizaed by x_alpha & y_alpha
-  var x_alpha = 0.1;
-  var y_alpha = 0.5;
-  var x_pos = d[0] * (1-x_alpha) + wrap.corner[i_max][0] * x_alpha;
-  var y_pos = d[1] * (1-y_alpha) + wrap.corner[i_max][1] * y_alpha;
-  
-  var buffer = 1.25*16; //-- Margin buffer of card-body
-  var button = (0.9+0.875)*16 + 20; //-- Offset caused by button
-  var card_hdr = 3.125*16; //-- Offset caused by card-header
-  var svg_dim = d3.select(wrap.id).node().getBoundingClientRect();
-  var x_aspect = (svg_dim.width - 2*buffer) / wrap.tot_width;
-  var y_aspect = (svg_dim.height - 2*buffer) / wrap.tot_height;
-  
-  x_pos = (x_pos + wrap.margin.left) * x_aspect + buffer;
-  y_pos = (y_pos + wrap.margin.top) * y_aspect + buffer + card_hdr + button;
-  
-  return [x_pos, y_pos];
-}
-
+//-- Tooltip
 function CBT_Mouse_Move(wrap, d) {
-  var new_pos = CBT_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
+  //-- Get tooltip position
+  var y_alpha = 0.5;
+  var new_pos = GS_Get_Tooltip_Pos(wrap, y_alpha, d3.mouse(d3.event.target));
+  
+  //-- Define tooltip texts
   var tooltip_text = d.x;
   var sum = 0;
-  
   if (+d.h1 > 0) {
     if (GS_lang == 'zh-tw')
       tooltip_text += "<br>境外移入 = ";
@@ -303,102 +256,107 @@ function CBT_Mouse_Move(wrap, d) {
     tooltip_text += "<br>Total = ";
   tooltip_text += sum;
   
+  //-- Generate tooltip
   wrap.tooltip
     .html(tooltip_text)
     .style("left", new_pos[0] + "px")
     .style("top", new_pos[1] + "px")
 }
 
-function CBT_Mouse_Leave(wrap, d) {
-  wrap.tooltip.transition()
-    .duration(10)
-    .style("opacity", 0)
-  d3.select(d3.event.target)
-    .style("opacity", 1)
-}
-
 function CBT_Initialize(wrap) {
-  //-- Add x-axis
+  //-- Define x-axis
   var x = d3.scaleBand()
-    .range([0, wrap.width])
     .domain(wrap.date_list)
+    .range([0, wrap.width])
     .padding(0.2);
     
+  //-- No xtick or xticklabel 
   var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
+    .tickFormat(function (d, i) {return ""});
   
+  //-- Add x-axis & adjust position
   wrap.svg.append('g')
     .attr('class', 'xaxis')
     .attr('transform', 'translate(0,' + wrap.height + ')')
     .call(x_axis)
-    .selectAll("text")
-      .attr("transform", "translate(-8,15) rotate(-90)")
-      .style("text-anchor", "end")
     
-  //-- Add a 2nd x-axis for ticks
+  //-- Define a 2nd x-axis for xtick & xticklabel
   var x_2 = d3.scaleLinear()
     .domain([0, wrap.date_list.length])
     .range([0, wrap.width])
   
+  //-- Define xtick & xticklabel
   var x_axis_2 = d3.axisBottom(x_2)
-    .tickValues(wrap.xtick)
     .tickSize(10)
     .tickSizeOuter(0)
-    .tickFormat(function (d, i) {return ""});
+    .tickValues(wrap.xtick)
+    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
   
+  //-- Add 2nd x-axis & adjust position
   wrap.svg.append("g")
     .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
     .call(x_axis_2)
+    .selectAll("text")
+      .attr("transform", "translate(-20,15) rotate(-90)")
+      .style("text-anchor", "end")
   
-  //-- Add y-axis
+  //-- Define y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
+  //-- Define ytick & yticklabel
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
     .tickFormat(d3.format("d"));
   
+  //-- Add y-axis
   wrap.svg.append("g")
     .attr("class", "yaxis")
-    .call(y_axis)
+    .call(y_axis);
 
-  //-- Add a 2nd y-axis for the frameline at right
+  //-- Define a 2nd y-axis for the frameline at right
   var y_axis_2 = d3.axisRight(y)
-    .ticks(0)
-    .tickSize(0)
+    .tickSize(0);
   
+  //-- Add 2nd y-axis
   wrap.svg.append("g")
     .attr("class", "yaxis")
     .attr("transform", "translate(" + wrap.width + ",0)")
     .call(y_axis_2)
     
-  //-- ylabel
+  //-- Define ylabel
   var ylabel;
-  if (GS_lang == 'zh-tw') ylabel = '案例數';
-  else if (GS_lang == 'fr') ylabel = 'Nombre de cas';
-  else ylabel = 'Number of cases';
+  if (GS_lang == 'zh-tw')
+    ylabel = '案例數';
+  else if (GS_lang == 'fr')
+    ylabel = 'Nombre de cas';
+  else
+    ylabel = 'Number of cases';
+  
+  //-- Add ylabel
   wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
     .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)")
     .text(ylabel);
     
-  //-- Color
+  //-- Define color
   var color_list = GS_var.c_list.slice(0, wrap.nb_col);
   var col_tag_list = wrap.col_tag_list.slice().reverse();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
     .range(color_list);
   
-  //-- Bar
+  //-- Add bar
   var bar = wrap.svg.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .enter();
   
+  //-- Update bar with dummy details
   bar.append('rect')
     .attr('class', 'content bar')
     .attr('fill', function (d) {return color(d.col);})
@@ -406,31 +364,41 @@ function CBT_Initialize(wrap) {
     .attr('y', function (d) {return y(0);})
     .attr('width', x.bandwidth())
     .attr('height', 0)
-    .on("mouseover", function (d) {CBT_Mouse_Over(wrap, d);})
+    .on("mouseover", function (d) {GS_Mouse_Over(wrap, d);})
     .on("mousemove", function (d) {CBT_Mouse_Move(wrap, d);})
-    .on("mouseleave", function (d) {CBT_Mouse_Leave(wrap, d);})
+    .on("mouseleave", function (d) {GS_Mouse_Leave(wrap, d);})
 
+  //-- Save to wrapper
   wrap.color_list = color_list;
   wrap.bar = bar;
 }
 
 function CBT_Update(wrap) {
-  //-- Add y-axis
+  //-- Define y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
+  //-- Define yticklabel format
+  var yticklabel_format;
+  if (wrap.ytick[wrap.ytick.length-1] > 9999) 
+    yticklabel_format = ".2s";
+  else
+    yticklabel_format = "d";
+  
+  //-- Define ytick
   var y_axis = d3.axisLeft(y)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
-    .tickFormat(d3.format("d"));
+    .tickFormat(d3.format(yticklabel_format));
   
+  //-- Update y-axis
   wrap.svg.select('.yaxis')
     .transition()
     .duration(GS_var.trans_duration)
     .call(y_axis);
   
-  //-- Update bars
+  //-- Update bar
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
@@ -438,31 +406,33 @@ function CBT_Update(wrap) {
     .attr('y', function (d) {return y(d.y1);})
     .attr('height', function (d) {return y(d.y0)-y(d.y1);});
     
-  //-- Color
-  color_list = wrap.color_list.slice();
-  if (wrap.do_onset == 1) color_list.push('#999999');
-  color_list.push('#000000');
-  
-  //-- Legend - value
+  //-- Define legend position
   var legend_pos;
-  if (GS_lang == 'zh-tw') {
+  if (GS_lang == 'zh-tw')
     legend_pos = {x: 80, y: 45, dx: 12, dy: 30, x1: 220};
-  }
-  else if (GS_lang == 'fr') {
+  else if (GS_lang == 'fr')
     legend_pos = {x: 80, y: 45, dx: 12, dy: 30, x1: 280};
-  }
-  else {
+  else
     legend_pos = {x: 80, y: 45, dx: 12, dy: 30, x1: 240};
-  }
   if (wrap.do_cumul == 0) {
-    if (wrap.legend_pos_x_0__[GS_lang] != 0) legend_pos.x = wrap.legend_pos_x_0__[GS_lang];
+    if (wrap.legend_pos_x_0__[GS_lang] != 0)
+      legend_pos.x = wrap.legend_pos_x_0__[GS_lang];
   }
+  
+  //-- Define legend color
+  var legend_color_list = wrap.color_list.slice();
+  if (wrap.do_onset == 1)
+    legend_color_list.push('#999999');
+  legend_color_list.push('#000000');
+  
+  //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
   var sum = legend_value.reduce((a, b) => a + b, 0);
-  if (wrap.do_onset == 1) legend_value.push(wrap.n_tot-sum);
+  if (wrap.do_onset == 1)
+    legend_value.push(wrap.n_tot-sum);
   legend_value.push(wrap.n_tot);
   
-  //-- Legend - label
+  //-- Define legend label
   var legend_label, legend_label_plus;
   if (GS_lang == 'zh-tw') {
     legend_label = ["境外移入", "本土感染源已知", "本土感染源未知", '敦睦艦隊', '航空器', '未知', "合計"];
@@ -476,17 +446,20 @@ function CBT_Update(wrap) {
     legend_label = ["Imported", "Local & linked", "Local & unlinked", 'On boat', "On plane", "Unknown", "Total"];
     legend_label_plus = 'No onset date';
   }
-  if (wrap.do_onset == 1) legend_label.splice(wrap.nb_col, 0, legend_label_plus);
+  if (wrap.do_onset == 1)
+    legend_label.splice(wrap.nb_col, 0, legend_label_plus);
   
+  //-- Remove from legend if value = 0
   var i;
   for (i=legend_value.length-1; i>=0; i--) {
     if (0 == legend_value[i]) {
-      color_list.splice(i, 1);
+      legend_color_list.splice(i, 1);
       legend_value.splice(i, 1);
       legend_label.splice(i, 1);
     }
   }
   
+  //-- Update legend value
   wrap.svg.selectAll(".legend.value")
     .remove()
     .exit()
@@ -496,10 +469,11 @@ function CBT_Update(wrap) {
       .attr("class", "legend value")
       .attr("x", function (d, i) {return legend_pos.x + Math.floor(i/5)*legend_pos.x1;})
       .attr("y", function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
-      .style("fill", function (d, i) {return color_list[i]})
+      .style("fill", function (d, i) {return legend_color_list[i]})
       .text(function (d) {return d})
       .attr("text-anchor", "end")
   
+  //-- Update legend label
   wrap.svg.selectAll(".legend.label")
     .remove()
     .exit()
@@ -509,7 +483,7 @@ function CBT_Update(wrap) {
       .attr("class", "legend label")
       .attr("x", function (d, i) {return legend_pos.x + legend_pos.dx + Math.floor(i/5)*legend_pos.x1;})
       .attr("y", function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
-      .style("fill", function (d, i) {return color_list[i]})
+      .style("fill", function (d, i) {return legend_color_list[i]})
       .text(function (d) {return d})
       .attr("text-anchor", "start")
 }
