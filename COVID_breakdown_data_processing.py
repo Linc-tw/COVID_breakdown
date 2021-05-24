@@ -399,7 +399,7 @@ class MainSheet(Template):
       elif a in ['1XX', '10X', '11X']:
         age.append('100s')
         
-      elif a in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '<10', '<5', '<6']:
+      elif a in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '<10', '<1', '<5', '<6']:
         age.append('0s')
       elif a in ['10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '10-14']:
         age.append('10s')
@@ -607,7 +607,8 @@ class MainSheet(Template):
       trav_hist = ''.join(trav_hist.split('台南'))
       trav_hist = ''.join(trav_hist.split('高雄'))
       trav_hist = ''.join(trav_hist.split('屏東'))
-      trav_hist = trav_hist.lstrip(' 0123456789/-\n月及到等經()、→ ')
+      trav_hist = ''.join(trav_hist.split('宜蘭'))
+      trav_hist = trav_hist.lstrip(' 0123456789-/()、月及到等經\n→ ')
       
       ## Complain if unrecognized texts remain
       if len(trav_hist) > 0:
@@ -692,7 +693,7 @@ class MainSheet(Template):
       
       elif onset_date in [
         '1月', '2/18-25', '3月', '4/6-5/15', '4/25-5/22', '4/30-5/18', '5/1-19', '5/2-13', '5/5-16', '5/5-17', '5/6-22', '5/7-20', '5/8-20', 
-        '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', 
+        '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/14-22', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
@@ -761,11 +762,11 @@ class MainSheet(Template):
       'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '聲音沙啞', '異物感', '沙啞', '乾嘔', 
                      '喉嚨有異物感', '喉嚨痛癢', '喉嚨乾癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', '喉嚨不適', '喉嚨乾痛', '喉嚨乾', '咽喉不適', '喉嚨'],
       'earache': [' 耳朵痛'],
-      'dyspnea': ['活動後呼吸喘', '呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '走路會喘', '呼吸喘', '輕微喘', '微喘', '氣喘'],
+      'dyspnea': ['活動後呼吸喘', '呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '走路會喘', '走路喘', '呼吸喘', '輕微喘', '微喘', '氣喘', '喘'],
       'bronchitis': ['支氣管炎'],
       'pneumonia': ['X光顯示肺炎', 'X光片顯示肺炎', 'X光顯示肺部輕微浸潤', '雙側肺部有異狀', '肺浸潤', '肺炎'], 
       
-      'fever': ['身體悶熱不適', '間歇性發燒', '身體微熱', '體溫偏高', '微燒', '發燒', '發熱', '盜汗'],
+      'fever': ['身體悶熱不適', '間歇性發燒', '身體微熱', '體溫偏高', '體溫升高', '反覆發燒', '微燒', '發燒', '發熱', '盜汗'], 
       'chills': ['忽冷忽熱症狀', '忽冷忽熱', '冒冷汗', '畏寒', '發冷', '寒顫'], 
       
       'nausea': ['噁心'],
@@ -781,7 +782,7 @@ class MainSheet(Template):
       'toothache': ['牙痛'], 
       'rash': ['出疹'],
       
-      'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '走路喘', '倦怠', '疲憊', '疲倦', '疲勞', '無力', '虛弱'],
+      'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '倦怠', '疲憊', '疲倦', '疲勞', '無力', '虛弱'],
       'soreness': ['全身肌肉痠痛', '上半身骨頭刺痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉關節痠痛', '肌肉 痠痛', '肌肉酸痛', '肌肉痠痛', 
                    '全身痠痛', '骨頭痠痛', '關節痠痛', '肌肉痛', '骨頭酸', '關節痛', '身體痛', '痠痛'],
       'hypersomnia': ['嗜睡'],
@@ -860,15 +861,25 @@ class MainSheet(Template):
         link_list.append('linked')
       elif 'o' in link:
         link_list.append('linked')
-      elif '萬華' in link:
+      elif '#' in link:
         link_list.append('linked')
-      elif '串門子餐廳' in link:
+      elif '萬華' in link:
         link_list.append('linked')
       elif '朝陽夜唱' in link:
         link_list.append('linked')
       elif '金沙酒店' in link:
         link_list.append('linked')
-      elif link in ['#1365']:
+      elif '金樽喜宴' in link:
+        link_list.append('linked')
+      elif '維納斯會館' in link:
+        link_list.append('linked')
+      elif '羅東遊藝場' in link:
+        link_list.append('linked')
+      elif '串門子餐廳' in link:
+        link_list.append('linked')
+      elif '中國醫K歌團' in link:
+        link_list.append('linked')
+      elif '東方紅時尚會館' in link:
         link_list.append('linked')
         
       else:

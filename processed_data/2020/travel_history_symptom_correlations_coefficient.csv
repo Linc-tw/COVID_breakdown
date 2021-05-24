@@ -5,7 +5,7 @@ asymptomatic,USA,-0.2681126124573857,-27%
 sneezing,USA,0.028828554776409283,+3%
 throatache,USA,0.08875508457750443,+9%
 dysnosmia,USA,0.08939493976046936,+9%
-fatigue,USA,-0.000568656991817254,-0%
+fatigue,USA,0.0017147546619116702,+0%
 soreness,USA,0.1181373704219141,+12%
 headache,USA,0.06265011852225363,+6%
 dysgeusia,USA,0.044569649770343646,+4%
@@ -15,7 +15,7 @@ asymptomatic,Indonesia,0.5012331080721257,+50%
 sneezing,Indonesia,-0.20413728588382218,-20%
 throatache,Indonesia,-0.18126454113090656,-18%
 dysnosmia,Indonesia,-0.11821764041488189,-12%
-fatigue,Indonesia,-0.11152941366024902,-11%
+fatigue,Indonesia,-0.10982786671149293,-11%
 soreness,Indonesia,-0.10577707807190348,-11%
 headache,Indonesia,-0.10541804760033918,-11%
 dysgeusia,Indonesia,-0.09208072871309131,-9%
@@ -25,7 +25,7 @@ asymptomatic,Philippines,0.2423933255181197,+24%
 sneezing,Philippines,-0.11567382933658105,-12%
 throatache,Philippines,-0.12036947003106835,-12%
 dysnosmia,Philippines,-0.03245487838324054,-3%
-fatigue,Philippines,-0.02537682957474198,-3%
+fatigue,Philippines,-0.03607647862225889,-4%
 soreness,Philippines,0.019900962438929047,+2%
 headache,Philippines,-0.06226334013364197,-6%
 dysgeusia,Philippines,-0.06454875155711082,-6%
@@ -35,7 +35,7 @@ asymptomatic,UK,-0.21776131143773686,-22%
 sneezing,UK,0.19198467124206123,+19%
 throatache,UK,0.12867651544185513,+13%
 dysnosmia,UK,0.08261956110715056,+8%
-fatigue,UK,0.07868210805823554,+8%
+fatigue,UK,0.08092871749207302,+8%
 soreness,UK,0.006926984284166229,+1%
 headache,UK,0.08230222020152697,+8%
 dysgeusia,UK,0.08695230550121427,+9%
@@ -45,7 +45,7 @@ asymptomatic,France,-0.1303806459097826,-13%
 sneezing,France,0.10870416146012377,+11%
 throatache,France,0.14501816126091324,+15%
 dysnosmia,France,-0.02950805899338458,-3%
-fatigue,France,0.09728602412038738,+10%
+fatigue,France,0.09883442647640711,+10%
 soreness,France,-0.016384889270641186,-2%
 headache,France,0.070381194154939,+7%
 dysgeusia,France,-0.04256943574683172,-4%
@@ -55,7 +55,7 @@ asymptomatic,Spain,-0.09416915399236056,-9%
 sneezing,Spain,0.03916839912477299,+4%
 throatache,Spain,0.062267112027695234,+6%
 dysnosmia,Spain,-0.019227768654139714,-2%
-fatigue,Spain,-0.0422373706900806,-4%
+fatigue,Spain,-0.04163989535214785,-4%
 soreness,Spain,-0.06338405634195317,-6%
 headache,Spain,-0.026416755291671194,-3%
 dysgeusia,Spain,-0.05272088012140125,-5%
@@ -65,7 +65,7 @@ asymptomatic,Turkey,-0.0550303958363451,-6%
 sneezing,Turkey,-0.019328392513471265,-2%
 throatache,Turkey,0.005786979014556805,+1%
 dysnosmia,Turkey,-0.03187899840056236,-3%
-fatigue,Turkey,0.08838806210342043,+9%
+fatigue,Turkey,0.08955177305337501,+9%
 soreness,Turkey,-0.0239262845704866,-2%
 headache,Turkey,-0.01481864826352306,-1%
 dysgeusia,Turkey,-0.009622559828283684,-1%
@@ -75,7 +75,7 @@ asymptomatic,Czechia,-0.03334194571260937,-3%
 sneezing,Czechia,-0.04220829177853458,-4%
 throatache,Czechia,-0.01729204443635498,-2%
 dysnosmia,Czechia,-0.060820636514894194,-6%
-fatigue,Czechia,-0.029697683877220906,-3%
+fatigue,Czechia,-0.029141971646449355,-3%
 soreness,Czechia,0.007261673916334064,+1%
 headache,Czechia,-0.049054835630973084,-5%
 dysgeusia,Czechia,-0.009622559828283597,-1%
@@ -85,7 +85,7 @@ asymptomatic,Egypt,-0.03502892944522467,-4%
 sneezing,Egypt,0.02940533956268293,+3%
 throatache,Egypt,0.031564650804357094,+3%
 dysnosmia,Egypt,-0.05251187432208752,-5%
-fatigue,Egypt,0.016840154159414443,+2%
+fatigue,Egypt,0.017538674816108005,+2%
 soreness,Egypt,0.024221212241287593,+2%
 headache,Egypt,-0.002941209037788964,-0%
 dysgeusia,Egypt,-0.03957974838529472,-4%
@@ -95,7 +95,7 @@ asymptomatic,Netherlands,-0.08496378631394916,-8%
 sneezing,Netherlands,0.055744346924979135,+6%
 throatache,Netherlands,0.004996414574559064,+0%
 dysnosmia,Netherlands,0.0474397046432499,+5%
-fatigue,Netherlands,0.05082480261365422,+5%
+fatigue,Netherlands,0.05169830309166772,+5%
 soreness,Netherlands,0.024221212241287517,+2%
 headache,Netherlands,-0.042353410144161906,-4%
 dysgeusia,Netherlands,0.08550719226634307,+9%
