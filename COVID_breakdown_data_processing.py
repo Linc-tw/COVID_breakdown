@@ -418,7 +418,7 @@ class MainSheet(Template):
       elif a in ['80', '81', '82', '83', '84', '85', '86', '87', '88', '89']:
         age.append('80s')
         
-      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X', '<5-8X', '<5-9X', '<5-4X', '5X-8X']:
+      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X', '<5-8X', '<5-9X', '<5-4X', '5X-8X', '<10-9X']:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
@@ -608,6 +608,8 @@ class MainSheet(Template):
       trav_hist = ''.join(trav_hist.split('高雄'))
       trav_hist = ''.join(trav_hist.split('屏東'))
       trav_hist = ''.join(trav_hist.split('宜蘭'))
+      trav_hist = ''.join(trav_hist.split('花蓮'))
+      trav_hist = ''.join(trav_hist.split('台東'))
       trav_hist = trav_hist.lstrip(' 0123456789-/()、月及到等經\n→ ')
       
       ## Complain if unrecognized texts remain
@@ -693,7 +695,7 @@ class MainSheet(Template):
       
       elif onset_date in [
         '1月', '2/18-25', '3月', '4/6-5/15', '4/25-5/22', '4/30-5/18', '5/1-19', '5/2-13', '5/5-16', '5/5-17', '5/6-22', '5/7-20', '5/8-20', 
-        '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/14-22', 
+        '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/14-22', '5/2-22', '5/7-24', '5/7-25', '5/8-25', '5/13-25',
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
@@ -778,11 +780,11 @@ class MainSheet(Template):
       'chest pain+backache': ['胸背痛'], 
       'chest pain': ['呼吸時胸痛', '胸痛', '胸悶'],
       'stomachache': ['胃部不適', '肚子不適', '腹悶痛', '胃痛', '腹痛', '胃脹', '腹脹'],
-      'backache': ['背痛'], 
+      'backache': ['腰酸背痛', '背痛'], 
       'toothache': ['牙痛'], 
       'rash': ['出疹'],
       
-      'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '倦怠', '疲憊', '疲倦', '疲勞', '無力', '虛弱'],
+      'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '倦怠情', '倦怠', '疲憊', '疲倦', '疲勞', '無力', '虛弱'],
       'soreness': ['全身肌肉痠痛', '上半身骨頭刺痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉關節痠痛', '肌肉 痠痛', '肌肉酸痛', '肌肉痠痛', 
                    '全身痠痛', '骨頭痠痛', '關節痠痛', '肌肉痛', '骨頭酸', '關節痛', '身體痛', '痠痛'],
       'hypersomnia': ['嗜睡'],
@@ -873,11 +875,19 @@ class MainSheet(Template):
         link_list.append('linked')
       elif '維納斯會館' in link:
         link_list.append('linked')
+      elif '銀河百家樂' in link:
+        link_list.append('linked')
       elif '羅東遊藝場' in link:
         link_list.append('linked')
       elif '串門子餐廳' in link:
         link_list.append('linked')
+      elif '美樂地KTV' in link:
+        link_list.append('linked')
+      elif '小姑娘小吃店' in link:
+        link_list.append('linked')
       elif '中國醫K歌團' in link:
+        link_list.append('linked')
+      elif '林家小館喜宴' in link:
         link_list.append('linked')
       elif '東方紅時尚會館' in link:
         link_list.append('linked')
