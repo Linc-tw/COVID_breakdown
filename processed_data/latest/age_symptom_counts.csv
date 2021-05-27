@@ -1,11 +1,11 @@
 label,count,label_zh,label_fr
-N_total,5544,合計,Total
-N_data,429,有資料案例數,Données complètes
+N_total,5810,合計,Total
+N_data,430,有資料案例數,Données complètes
 90s,3,90-99歲,90aine
 80s,8,80-89歲,80aine
 70s,26,70-79歲,70aine
 60s,54,60-69歲,60aine
-50s,56,50-59歲,50aine
+50s,57,50-59歲,50aine
 40s,59,40-49歲,40aine
 30s,85,30-39歲,30aine
 20s,114,20-29歲,20aine
@@ -14,7 +14,7 @@ N_data,429,有資料案例數,Données complètes
 asymptomatic,172,無症狀,asymptomatique
 fever,129,發燒,fièvre
 cough,112,咳嗽,toux
-throatache,71,喉嚨症狀,mal de gorge
+throatache,72,喉嚨症狀,mal de gorge
 sneezing,42,鼻腔症狀,éternuement
 headache,29,頭痛,mal de tête
 diarrhea,27,腹瀉,diarrhée

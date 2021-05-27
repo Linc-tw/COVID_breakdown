@@ -43,9 +43,9 @@ function text_translation() {
     TT_Add_Str("data_source_original_title", "原始資料");
     TT_Add_Html("data_source_original_body", "<p><a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>原始資料 <i class='fas fa-external-link-alt'></i></a> 乃由PTT網友們所整理，需從每天疾管署新聞稿及指揮中心記者會將單獨個案資料彙整成統一表單。作者由衷感謝資料整理團隊，若無如此熱心之舉本站勢必難以完成。</p>");
     TT_Add_Str("data_source_raw_title", "初階資料");
-    TT_Add_Html("data_source_raw_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>初階資料 <i class='fas fa-external-link-alt'></i></a> 則是原始資料中本站所使用的兩個分頁：病例清單和檢驗人數。檔案格式為csv。</p>");
+    TT_Add_Html("data_source_raw_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>初階資料 <i class='fas fa-external-link-alt'></i></a> 則是原始資料中本站所使用的五個分頁，其中最主要者為所有確診者及其相關流行病學資訊之清單。檔案格式為csv。</p>");
     TT_Add_Str("data_source_processed_title", "高階資料");
-    TT_Add_Html("data_source_processed_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>高階資料 <i class='fas fa-external-link-alt'></i></a> 為整理過後，讓Javascript直接用來畫圖的檔案。絕大部分都只使用ASCII編碼，檔案格式皆為csv。</p>");
+    TT_Add_Html("data_source_processed_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>高階資料 <i class='fas fa-external-link-alt'></i></a> 為整理過後，讓Javascript直接用來畫圖的檔案。除時間軸以及矩陣標籤檔之外，其他都只使用ASCII編碼。檔案格式皆為csv。</p>");
     
     //-- Copyleft page
     TT_Add_Str("no_right_reserved_title", "啊就真的沒有版權");
@@ -128,7 +128,7 @@ function text_translation() {
     TT_Add_Str("data_source_original_title", "Données d'origine");
     TT_Add_Html("data_source_original_body", "<p>Les <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>données d'origine <i class='fas fa-external-link-alt'></i></a> sont mises à jour par de nombreux internautes anonymes du forum PTT, qui est souvent considéré comme le <i>Reddit</i> taïwanais. Ils rassemblent les informations à partir des communiqués et des conférences de presse quotidiens, pour produire des feuilles de calcul consolidées.</p><p>Bien évidemment, ce site n'aurait pas pu voir le jour sans le travail de ces bénévoles bienveillants. Je leur en suis très reconnaissant.</p><p>Le jeu de données est en mandarin.</p>");
     TT_Add_Str("data_source_raw_title", "Données brutes");
-    TT_Add_Html("data_source_raw_body", "<p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>données brutes <i class='fas fa-external-link-alt'></i></a> sont 2 feuilles de calcul parmi les données d'origine. La première est une liste des cas confirmés avec certains détails ; la seconde est la statistique quotidienne des dépistages.</p><p>Ces données sont en format csv et contiennent beaucoup de caractères en mandarin.</p>");
+    TT_Add_Html("data_source_raw_body", "<p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>données brutes <i class='fas fa-external-link-alt'></i></a> sont 5 feuilles de calcul parmi les données d'origine. La feuille principale est une liste exhaustive des cas confirmés avec certains détails épidémiologiques.</p><p>Ces données sont en format csv et contiennent beaucoup de caractères en mandarin.</p>");
     TT_Add_Str("data_source_processed_title", "Données traitées");
     TT_Add_Html("data_source_processed_body", "<p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>données traitées <i class='fas fa-external-link-alt'></i></a> comprennent de nombreux fichiers directement utilisés par Javascript pour afficher les figures.</p><p>Ces données sont en format csv. La plupart d'entre elles contient seulement des caractères ASCII.</p>");
     
@@ -213,9 +213,9 @@ function text_translation() {
     TT_Add_Str("data_source_original_title", "Original dataset");
     TT_Add_Html("data_source_original_body", "<p>The <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>original dataset <i class='fas fa-external-link-alt'></i></a> is maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit. They collect information from daily press releases and conferences, and sort them into comprehensive worksheets.</p><p>Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.</p><p>This dataset has been edited in Mandarin.</p>");
     TT_Add_Str("data_source_raw_title", "Raw data");
-    TT_Add_Html("data_source_raw_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>Raw data <i class='fas fa-external-link-alt'></i></a> are 2 worksheets from the original set that are used here. The first one is a list of confirmed cases with available details; the other one is daily statistics in testing.</p><p>These are csv files containing Mandarin strings.</p>");
+    TT_Add_Html("data_source_raw_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>Raw data <i class='fas fa-external-link-alt'></i></a> are 5 worksheets from the original set that are used here. The main one is a list of each confirmed cases with available details.</p><p>These are csv files containing Mandarin strings.</p>");
     TT_Add_Str("data_source_processed_title", "Processed data");
-    TT_Add_Html("data_source_processed_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>Processed data <i class='fas fa-external-link-alt'></i></a> contain various files that are directly used by Javascript for plotting.</p><p>These are csv files. Most of them are ASCII-compatible.</p>");
+    TT_Add_Html("data_source_processed_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>Processed data <i class='fas fa-external-link-alt'></i></a> contain various files that are directly used by Javascript for plotting.</p><p>These are csv files. Except for timeline data & label lists for matrices, they are ASCII-compatible.</p>");
     
     //-- Copyleft page
     TT_Add_Str("no_right_reserved_title", "Proudly No Right Reserved");

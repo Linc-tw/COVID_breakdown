@@ -418,7 +418,7 @@ class MainSheet(Template):
       elif a in ['80', '81', '82', '83', '84', '85', '86', '87', '88', '89']:
         age.append('80s')
         
-      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X', '<5-8X', '<5-9X', '<5-4X', '5X-8X', '<10-9X']:
+      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X', '<5-8X', '<5-9X', '<5-4X', '5X-8X', '<10-9X', '<5-1XX']:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
@@ -581,6 +581,7 @@ class MainSheet(Template):
             stock.append(key) ## Put the translation in stock
       
       ## Remove meaningless words
+      trav_hist = ''.join(trav_hist.split('2017年8月就入境台灣，期間並未出境'))
       trav_hist = ''.join(trav_hist.split('自離境前往'))
       trav_hist = ''.join(trav_hist.split('從搭機'))
       trav_hist = ''.join(trav_hist.split('轉機'))
@@ -600,6 +601,7 @@ class MainSheet(Template):
       trav_hist = ''.join(trav_hist.split('新北'))
       trav_hist = ''.join(trav_hist.split('桃園'))
       trav_hist = ''.join(trav_hist.split('苗栗'))
+      trav_hist = ''.join(trav_hist.split('台中'))
       trav_hist = ''.join(trav_hist.split('彰化'))
       trav_hist = ''.join(trav_hist.split('新竹')) 
       trav_hist = ''.join(trav_hist.split('南投'))
@@ -610,6 +612,7 @@ class MainSheet(Template):
       trav_hist = ''.join(trav_hist.split('宜蘭'))
       trav_hist = ''.join(trav_hist.split('花蓮'))
       trav_hist = ''.join(trav_hist.split('台東'))
+      trav_hist = ''.join(trav_hist.split('馬祖'))
       trav_hist = trav_hist.lstrip(' 0123456789-/()、月及到等經\n→ ')
       
       ## Complain if unrecognized texts remain
@@ -637,7 +640,7 @@ class MainSheet(Template):
       if entry_date != entry_date: ## NaN
         entry_date_list.append(np.nan)
         
-      elif entry_date in ['x', '3/7-5/12']:
+      elif entry_date in ['x', '3/7-5/12', '2017年8月']:
         entry_date_list.append(np.nan)
         
       elif entry_date in ['3/1\n3/8']:
@@ -694,10 +697,13 @@ class MainSheet(Template):
         onset_date_list.append(np.nan)
       
       elif onset_date in [
-        '1月', '2/18-25', '3月', '4/6-5/15', '4/25-5/22', '4/30-5/18', '5/1-19', '5/2-13', '5/5-16', '5/5-17', '5/6-22', '5/7-20', '5/8-20', 
-        '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/14-22', '5/2-22', '5/7-24', '5/7-25', '5/8-25', '5/13-25',
+        '1月', '2/18-25', '3月', '4/6-5/15', '4/25-5/22', '4/26-5/26', '4/30-5/18', '5/1-19', '5/2-13', '5/5-16', '5/5-17', '5/6-22', '5/7-20', '5/8-20', 
+        '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/14-22', '5/2-22', '5/7-24', '5/7-25', '5/8-25', '5/13-25', '5/15-26',
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
+        
+      elif onset_date in ['5/26 採檢\n5/26 確診']:
+        onset_date_list.append('2021-05-26')
         
       elif onset_date in ['7月、11/1']:
         onset_date_list.append('2020-11-01')
@@ -740,7 +746,7 @@ class MainSheet(Template):
       elif channel in ['居家檢疫', '集中檢疫', '英國專案', '死亡']:
         channel_list.append('quarantine')
         
-      elif channel in ['居家隔離', '接觸者回溯', '接觸者檢查']:
+      elif channel in ['居家隔離', '接觸者回溯', '接觸者檢查', '接觸者採檢']:
         channel_list.append('isolation')
         
       elif channel in ['自主健康管理', '加強自主管理']:
@@ -867,31 +873,14 @@ class MainSheet(Template):
         link_list.append('linked')
       elif '萬華' in link:
         link_list.append('linked')
-      elif '朝陽夜唱' in link:
+      elif '高血壓' in link:
         link_list.append('linked')
-      elif '金沙酒店' in link:
-        link_list.append('linked')
-      elif '金樽喜宴' in link:
-        link_list.append('linked')
-      elif '維納斯會館' in link:
-        link_list.append('linked')
-      elif '銀河百家樂' in link:
-        link_list.append('linked')
-      elif '羅東遊藝場' in link:
-        link_list.append('linked')
-      elif '串門子餐廳' in link:
-        link_list.append('linked')
-      elif '美樂地KTV' in link:
-        link_list.append('linked')
-      elif '小姑娘小吃店' in link:
-        link_list.append('linked')
-      elif '中國醫K歌團' in link:
-        link_list.append('linked')
-      elif '林家小館喜宴' in link:
-        link_list.append('linked')
-      elif '東方紅時尚會館' in link:
+      elif '林家小館' in link:
         link_list.append('linked')
         
+      elif link in ['朝陽夜唱', '金沙酒店', '金樽喜宴', '銀河百家樂', '維納斯會館', '羅東遊藝場', '串門子餐廳', '美樂地KTV', '中國醫K歌團', '小姑娘小吃店', '接觸確診個案', '東方紅時尚會館']:
+        link_list.append('linked')
+
       else:
         print('Link, Case %d, %s' % (i+1, link))
         link_list.append(np.nan)
