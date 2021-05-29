@@ -1,7 +1,7 @@
 label,count,label_zh,label_fr
-N_total,5962,合計,Total
-N_imported,420,境外移入總數,Importés
-N_data,374,有資料案例數,Données complètes
+N_total,6515,合計,Total
+N_imported,423,境外移入總數,Importés
+N_data,375,有資料案例數,Données complètes
 Philippines,124,菲律賓,Philippines
 Indonesia,78,印尼,Indonésie
 USA,38,美國,États-Unis
@@ -15,7 +15,7 @@ Paraguay,6,巴拉圭,Paraguay
 asymptomatic,249,無症狀,asymptomatique
 cough,55,咳嗽,toux
 fever,41,發燒,fièvre
-sneezing,34,鼻腔症狀,éternuement
+sneezing,35,鼻腔症狀,éternuement
 throatache,33,喉嚨症狀,mal de gorge
 dysnosmia,31,嗅覺異常,dysosmie
 dysgeusia,23,味覺異常,dysgueusie

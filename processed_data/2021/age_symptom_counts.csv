@@ -1,23 +1,23 @@
 label,count,label_zh,label_fr
-N_total,5962,合計,Total
-N_data,554,有資料案例數,Données complètes
-90s,4,90-99歲,90aine
-80s,9,80-89歲,80aine
-70s,28,70-79歲,70aine
-60s,65,60-69歲,60aine
-50s,68,50-59歲,50aine
-40s,75,40-49歲,40aine
-30s,117,30-39歲,30aine
-20s,157,20-29歲,20aine
+N_total,6515,合計,Total
+N_data,629,有資料案例數,Données complètes
+90s,5,90-99歲,90aine
+80s,18,80-89歲,80aine
+70s,43,70-79歲,70aine
+60s,84,60-69歲,60aine
+50s,81,50-59歲,50aine
+40s,79,40-49歲,40aine
+30s,120,30-39歲,30aine
+20s,163,20-29歲,20aine
 10s,21,10-19歲,10aine
-0s,10,<10歲,< 10 ans
-asymptomatic,231,無症狀,asymptomatique
-fever,149,發燒,fièvre
-cough,138,咳嗽,toux
-throatache,95,喉嚨症狀,mal de gorge
-sneezing,60,鼻腔症狀,éternuement
-dysnosmia,37,嗅覺異常,dysosmie
-headache,37,頭痛,mal de tête
-diarrhea,34,腹瀉,diarrhée
-fatigue,31,倦怠,fatigue
-soreness,30,痠痛,myalgie
+0s,15,<10歲,< 10 ans
+asymptomatic,242,無症狀,asymptomatique
+fever,182,發燒,fièvre
+cough,167,咳嗽,toux
+throatache,106,喉嚨症狀,mal de gorge
+sneezing,69,鼻腔症狀,éternuement
+dyspnea,47,呼吸困難,dyspnée
+diarrhea,40,腹瀉,diarrhée
+dysnosmia,40,嗅覺異常,dysosmie
+headache,40,頭痛,mal de tête
+fatigue,37,倦怠,fatigue
