@@ -37,10 +37,9 @@ CBT_2021_wrap.y_path_1_1 = '4'; //-- 4 ticks
 CBT_2021_wrap.y_path_1_0 = '4';
 CBT_2021_wrap.y_path_0_1 = '4';
 CBT_2021_wrap.y_path_0_0 = '4';
-CBT_2021_wrap.legend_pos_x_0__ = {};
-CBT_2021_wrap.legend_pos_x_0__['zh-tw'] = 80;
-CBT_2021_wrap.legend_pos_x_0__['fr'] = 80;
-CBT_2021_wrap.legend_pos_x_0__['en'] = 80;
+CBT_2021_wrap.legend_pos_x_0_i_ = {'zh-tw': 80, fr: 80, en: 80};
+CBT_2021_wrap.legend_pos_x_1_i_ = {'zh-tw': 80, fr: 80, en: 80};
+CBT_2021_wrap.legend_pos_x1_ = {'zh-tw': 230, fr: 300, en: 240};
 
 //-- Variables
 CBT_2021_wrap.do_cumul = 0;

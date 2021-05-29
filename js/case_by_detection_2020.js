@@ -33,14 +33,13 @@ CBD_2020_wrap.y_max_fix_1_1 = 0;
 CBD_2020_wrap.y_max_fix_1_0 = 0;
 CBD_2020_wrap.y_max_fix_0_1 = 0;
 CBD_2020_wrap.y_max_fix_0_0 = 0;
-CBD_2020_wrap.y_path_1_1 = 150;
-CBD_2020_wrap.y_path_1_0 = 240;
-CBD_2020_wrap.y_path_0_1 = 7;
-CBD_2020_wrap.y_path_0_0 = 8;
-CBD_2020_wrap.legend_pos_x_0__ = {};
-CBD_2020_wrap.legend_pos_x_0__['zh-tw'] = 280;
-CBD_2020_wrap.legend_pos_x_0__['fr'] = 290;
-CBD_2020_wrap.legend_pos_x_0__['en'] = 290;
+CBD_2020_wrap.y_path_1_1 = '4'; //-- 4 ticks
+CBD_2020_wrap.y_path_1_0 = '4';
+CBD_2020_wrap.y_path_0_1 = '4';
+CBD_2020_wrap.y_path_0_0 = '4';
+CBD_2020_wrap.legend_pos_x_0_i_ = {'zh-tw': 280, fr: 290, en: 290};
+CBD_2020_wrap.legend_pos_x_1_i_ = {'zh-tw': 0, fr: 0, en: 0};
+CBD_2020_wrap.legend_pos_x1_ = {'zh-tw': 0, fr: 0, en: 0};
 
 //-- Variables
 CBD_2020_wrap.do_cumul = 0;

@@ -393,8 +393,10 @@ class MainSheet(Template):
   def getAge(self):
     age = []
     for i, a in enumerate(self.getCol(self.coltag_age)):
-      if a in ['1X', '2X', '3X', '4X', '5X', '6X', '7X', '8X', '9X',
-               '1x', '2x', '3x', '4x', '5x', '6x', '7x', '8x', '9x']:
+      if a in [
+        '1X', '2X', '3X', '4X', '5X', '6X', '7X', '8X', '9X',
+        '1x', '2x', '3x', '4x', '5x', '6x', '7x', '8x', '9x'
+      ]:
         age.append(a[0]+'0s')
       elif a in ['1XX', '10X', '11X']:
         age.append('100s')
@@ -417,8 +419,13 @@ class MainSheet(Template):
         age.append('70s')
       elif a in ['80', '81', '82', '83', '84', '85', '86', '87', '88', '89']:
         age.append('80s')
+      elif a in ['90', '91', '92', '93', '94', '95', '96', '97', '98', '99']:
+        age.append('90s')
         
-      elif a in ['2X-6X', '1X-2X', '2X-4X', '3X-4X', '2X-3X', '<10-4X', '1X-4X', '5X-7X', '3X-8X', '<5-8X', '<5-9X', '<5-4X', '5X-8X', '<10-9X', '<5-1XX']:
+      elif a in [
+        '<5-4X', '<5-8X', '<5-9X', '<5-1XX', '<10-4X', '<10-9X', '3-77', 
+        '1X-2X', '1X-4X', '2X-3X', '2X-4X', '2X-6X', '3X-4X', '3X-8X', '5X-7X', '5X-8X'
+      ]:
         age.append(np.nan)
       elif a != a:
         age.append(np.nan)
@@ -582,6 +589,7 @@ class MainSheet(Template):
       
       ## Remove meaningless words
       trav_hist = ''.join(trav_hist.split('2017年8月就入境台灣，期間並未出境'))
+      trav_hist = ''.join(trav_hist.split('2020年3月入境後未再出境'))
       trav_hist = ''.join(trav_hist.split('自離境前往'))
       trav_hist = ''.join(trav_hist.split('從搭機'))
       trav_hist = ''.join(trav_hist.split('轉機'))
@@ -593,26 +601,13 @@ class MainSheet(Template):
       trav_hist = ''.join(trav_hist.split('返國'))
       trav_hist = ''.join(trav_hist.split('回台'))
       trav_hist = ''.join(trav_hist.split('來台'))
-      trav_hist = ''.join(trav_hist.split('臺灣'))
-      trav_hist = ''.join(trav_hist.split('台灣'))
-      trav_hist = ''.join(trav_hist.split('北部')) 
-      trav_hist = ''.join(trav_hist.split('台北'))
-      trav_hist = ''.join(trav_hist.split('萬華')) 
-      trav_hist = ''.join(trav_hist.split('新北'))
-      trav_hist = ''.join(trav_hist.split('桃園'))
-      trav_hist = ''.join(trav_hist.split('苗栗'))
-      trav_hist = ''.join(trav_hist.split('台中'))
-      trav_hist = ''.join(trav_hist.split('彰化'))
-      trav_hist = ''.join(trav_hist.split('新竹')) 
-      trav_hist = ''.join(trav_hist.split('南投'))
-      trav_hist = ''.join(trav_hist.split('雲林'))
-      trav_hist = ''.join(trav_hist.split('台南'))
-      trav_hist = ''.join(trav_hist.split('高雄'))
-      trav_hist = ''.join(trav_hist.split('屏東'))
-      trav_hist = ''.join(trav_hist.split('宜蘭'))
-      trav_hist = ''.join(trav_hist.split('花蓮'))
-      trav_hist = ''.join(trav_hist.split('台東'))
-      trav_hist = ''.join(trav_hist.split('馬祖'))
+      
+      for key in [
+        '臺灣', '台灣', '北部', '台北', '萬華', '板橋', '新北', '桃園', '苗栗', '台中', '彰化', '新竹', '南投', 
+        '雲林', '嘉縣', '台南', '高雄', '屏東', '宜蘭', '花蓮', '台東', '馬祖'
+      ]:
+        trav_hist = ''.join(trav_hist.split(key))
+      
       trav_hist = trav_hist.lstrip(' 0123456789-/()、月及到等經\n→ ')
       
       ## Complain if unrecognized texts remain
@@ -697,8 +692,8 @@ class MainSheet(Template):
         onset_date_list.append(np.nan)
       
       elif onset_date in [
-        '1月', '2/18-25', '3月', '4/6-5/15', '4/25-5/22', '4/26-5/26', '4/30-5/18', '5/1-19', '5/2-13', '5/5-16', '5/5-17', '5/6-22', '5/7-20', '5/8-20', 
-        '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/14-22', '5/2-22', '5/7-24', '5/7-25', '5/8-25', '5/13-25', '5/15-26',
+        '1月', '2/18-25', '3月', '4/6-5/15', '4/25-5/22', '4/26-5/26', '4/29-5/27', '4/30-5/18', '5/1-19', '5/2-13', '5/5-16', '5/5-17', '5/6-22', '5/6-27', '5/7-20', '5/7-28', '5/8-20', 
+        '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/14-22', '5/2-22', '5/7-24', '5/7-25', '5/8-25', '5/11-27', '5/13-25', '5/15-26',
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
@@ -752,7 +747,7 @@ class MainSheet(Template):
       elif channel in ['自主健康管理', '加強自主管理']:
         channel_list.append('monitoring')
         
-      elif channel in ['自行就醫',  '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', '接觸患者', '同院患者', '入院篩檢', '萬華專案', '入院']:
+      elif channel in ['自行就醫',  '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', '接觸患者', '同院患者', '入院篩檢', '社區快篩', '萬華專案', '入院']:
         channel_list.append('hospital')
         
       elif channel in ['香港檢驗', '外國檢驗', '外國篩檢']:
@@ -767,8 +762,10 @@ class MainSheet(Template):
     key_dict = {
       'sneezing': ['伴隨感冒症狀', '鼻涕倒流', '打噴嚏', '流鼻水', '流鼻涕', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['輕微咳嗽', '咳嗽症狀', '咳嗽加劇', '咳嗽併痰', '咳嗽有痰', '喉嚨有痰', '咳嗽', '乾咳', '輕咳', '有痰'],
-      'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '急性咽炎', '聲音沙啞', '異物感', '沙啞', '乾嘔', 
-                     '喉嚨有異物感', '喉嚨痛癢', '喉嚨乾癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', '喉嚨不適', '喉嚨乾痛', '喉嚨乾', '咽喉不適', '喉嚨'],
+      'throatache': ['上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '呼吸道', 
+                     '急性咽炎', '聲音沙啞', '口乾舌燥', '異物感', '沙啞', '乾嘔', 
+                     '喉嚨有異物感', '喉嚨痛癢', '喉嚨乾癢', '喉嚨乾痛', '喉嚨痛', '喉嚨癢', '喉嚨腫', '喉嚨不適', 
+                     '喉嚨乾', '咽喉不適', '喉嚨'],
       'earache': [' 耳朵痛'],
       'dyspnea': ['活動後呼吸喘', '呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '走路會喘', '走路喘', '呼吸喘', '輕微喘', '微喘', '氣喘', '喘'],
       'bronchitis': ['支氣管炎'],
@@ -777,7 +774,7 @@ class MainSheet(Template):
       'fever': ['身體悶熱不適', '間歇性發燒', '身體微熱', '體溫偏高', '體溫升高', '反覆發燒', '微燒', '發燒', '發熱', '盜汗'], 
       'chills': ['忽冷忽熱症狀', '忽冷忽熱', '冒冷汗', '畏寒', '發冷', '寒顫'], 
       
-      'nausea': ['噁心'],
+      'nausea': ['噁心', '想吐'],
       'vomiting': ['嘔吐'],
       'diarrhea': ['腹瀉'], 
       
@@ -785,14 +782,14 @@ class MainSheet(Template):
       'eyes sore': ['結膜充血', '後眼窩痛', '眼睛癢', '眼睛痛'], 
       'chest pain+backache': ['胸背痛'], 
       'chest pain': ['呼吸時胸痛', '胸痛', '胸悶'],
-      'stomachache': ['胃部不適', '肚子不適', '腹悶痛', '胃痛', '腹痛', '胃脹', '腹脹'],
+      'stomachache': ['腸胃不舒服', '胃部不適', '肚子不適', '腹悶痛', '胃痛', '腹痛', '胃脹', '腹脹'],
       'backache': ['腰酸背痛', '背痛'], 
       'toothache': ['牙痛'], 
       'rash': ['出疹'],
       
       'fatigue': ['全身倦怠無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '疲倦感', '倦怠情', '倦怠', '疲憊', '疲倦', '疲勞', '無力', '虛弱'],
       'soreness': ['全身肌肉痠痛', '上半身骨頭刺痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉關節痠痛', '肌肉 痠痛', '肌肉酸痛', '肌肉痠痛', 
-                   '全身痠痛', '骨頭痠痛', '關節痠痛', '肌肉痛', '骨頭酸', '關節痛', '身體痛', '痠痛'],
+                   '全身痠痛', '全身酸痛', '骨頭痠痛', '骨頭酸痛', '關節痠痛', '肌肉痛', '骨頭酸', '關節痛', '身體痛', '痠痛'],
       'hypersomnia': ['嗜睡'],
       'insomnia': ['睡不著'], 
       
@@ -802,11 +799,11 @@ class MainSheet(Template):
       
       'tonsillitis': ['淋巴腫脹', '扁桃腺腫痛'], 
       'hypoglycemia': ['低血糖'], 
-      'anorexia': ['食慾不佳', '食慾不振', '無食慾'],
+      'anorexia': ['食慾不佳', '食慾不振', '食慾差', '無食慾'],
       'arrhythmia': ['心律不整'],
-      'coma': ['意識不清'],
+      'coma': ['意識不清', '意識改變'],
       
-      'symptomatic': ['全身不舒服', '出現症狀', '身體不適', '有症狀', '不舒服', '不適'],
+      'symptomatic': ['全身不舒服', '出現症狀', '身體不適', '有症狀', '不舒服', '不適'] + ['排尿疼痛', '鼻子乾', '猝死', '吐血'],
       'asymptomatic': ['首例無症狀', '無症狀', 'x', 'X'],
     }
     symp_list = []
@@ -871,14 +868,20 @@ class MainSheet(Template):
         link_list.append('linked')
       elif '#' in link:
         link_list.append('linked')
+      elif '群聚' in link:
+        link_list.append('linked')
       elif '萬華' in link:
         link_list.append('linked')
       elif '高血壓' in link:
         link_list.append('linked')
+      elif '糖尿病' in link:
+        link_list.append('linked')
       elif '林家小館' in link:
         link_list.append('linked')
+      elif '美樂地KTV' in link:
+        link_list.append('linked')        
         
-      elif link in ['朝陽夜唱', '金沙酒店', '金樽喜宴', '銀河百家樂', '維納斯會館', '羅東遊藝場', '串門子餐廳', '美樂地KTV', '中國醫K歌團', '小姑娘小吃店', '接觸確診個案', '東方紅時尚會館']:
+      elif link in ['朝陽夜唱', '金沙酒店', '金樽喜宴', '泰安附幼', '銀河百家樂', '維納斯會館', '羅東遊藝場', '串門子餐廳', '中國醫K歌團', '小姑娘小吃店', '接觸確診個案', '接觸其他確診者', '東方紅時尚會館']:
         link_list.append('linked')
 
       else:

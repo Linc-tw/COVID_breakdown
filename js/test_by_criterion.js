@@ -334,8 +334,12 @@ function TBC_Update(wrap) {
   //-- Define legend position
   var legend_pos = {x: 95, y: 40, dx: 12, dy: 30};
   if (wrap.do_cumul == 0) {
-    if (wrap.legend_pos_x_0_i_[GS_lang] != 0)
-      legend_pos.x = wrap.legend_pos_x_0_i_[GS_lang];
+    if (wrap.legend_pos_x_0_[GS_lang] != 0)
+      legend_pos.x = wrap.legend_pos_x_0_[GS_lang];
+  }
+  else {
+    if (wrap.legend_pos_x_1_[GS_lang] != 0)
+      legend_pos.x = wrap.legend_pos_x_1_[GS_lang];
   }
   
   //-- Define legend color

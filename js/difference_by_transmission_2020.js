@@ -26,10 +26,10 @@ DBT_2020_wrap.tooltip = d3.select(DBT_2020_wrap.id)
 //-- Parameters
 DBT_2020_wrap.n_tot_key = 'n_2020';
 DBT_2020_wrap.y_max_factor = 1.11;
-DBT_2020_wrap.y_path_0 = 40;
-DBT_2020_wrap.y_path_1 = 40;
-DBT_2020_wrap.y_path_2 = 1;
-DBT_2020_wrap.y_path_3 = 4;
+DBT_2020_wrap.y_path_0 = '4'; //-- 4 ticks
+DBT_2020_wrap.y_path_1 = '4';
+DBT_2020_wrap.y_path_2 = '4';
+DBT_2020_wrap.y_path_3 = '4';
 
 //-- Variables
 DBT_2020_wrap.col_ind = 0;

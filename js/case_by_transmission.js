@@ -407,17 +407,17 @@ function CBT_Update(wrap) {
     .attr('height', function (d) {return y(d.y0)-y(d.y1);});
     
   //-- Define legend position
-  var legend_pos;
-  if (GS_lang == 'zh-tw')
-    legend_pos = {x: 80, y: 45, dx: 12, dy: 30, x1: 220};
-  else if (GS_lang == 'fr')
-    legend_pos = {x: 80, y: 45, dx: 12, dy: 30, x1: 280};
-  else
-    legend_pos = {x: 80, y: 45, dx: 12, dy: 30, x1: 240};
+  var legend_pos = {x: 70, y: 45, dx: 12, dy: 30, x1: 240};
   if (wrap.do_cumul == 0) {
-    if (wrap.legend_pos_x_0__[GS_lang] != 0)
-      legend_pos.x = wrap.legend_pos_x_0__[GS_lang];
+    if (wrap.legend_pos_x_0_i_[GS_lang] != 0)
+      legend_pos.x = wrap.legend_pos_x_0_i_[GS_lang];
   }
+  else {
+    if (wrap.legend_pos_x_1_i_[GS_lang] != 0)
+      legend_pos.x = wrap.legend_pos_x_1_i_[GS_lang];
+  }
+  if (wrap.legend_pos_x1_[GS_lang] != 0)
+    legend_pos.x1 = wrap.legend_pos_x1_[GS_lang];
   
   //-- Define legend color
   var legend_color_list = wrap.color_list.slice();

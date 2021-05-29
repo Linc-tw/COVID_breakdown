@@ -25,11 +25,9 @@ TBC_2020_wrap.xlabel_path = GS_var.xlabel_path_2020;
 TBC_2020_wrap.r_list = GS_var.r_list_2020;
 TBC_2020_wrap.y_max_factor = 1.2;
 TBC_2020_wrap.y_path_1 = 35000;
-TBC_2020_wrap.y_path_0 = 500;
-TBC_2020_wrap.legend_pos_x_0_i_ = {};
-TBC_2020_wrap.legend_pos_x_0_i_['zh-tw'] = 510;
-TBC_2020_wrap.legend_pos_x_0_i_['fr'] = 305;
-TBC_2020_wrap.legend_pos_x_0_i_['en'] = 350;
+TBC_2020_wrap.y_path_0 = '4'; //-- 4 ticks
+TBC_2020_wrap.legend_pos_x_0_ = {'zh-tw': 510, fr: 320, en: 350};
+TBC_2020_wrap.legend_pos_x_1_ = {'zh-tw': 0, fr: 0, en: 0};
 
 //-- Variables
 TBC_2020_wrap.do_cumul = 0;;
