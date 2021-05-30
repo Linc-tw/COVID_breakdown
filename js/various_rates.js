@@ -56,7 +56,10 @@ function VR_Format_Data(wrap, data) {
     //-- Loop over row
     for (i=0; i<data.length; i++) {
       //-- Current value
-      y = +data[i][col];
+      if ('' == data[i][col])
+        y = NaN;
+      else
+        y = +data[i][col];
       
       //-- Make data block; redundant information is for toolpix text
       block = {
@@ -220,6 +223,7 @@ function VR_Initialize(wrap) {
     
   //-- Define real line
   var draw_line = d3.line()
+    .defined(d => !isNaN(d.y))//-- Don't show line if NaN
     .x(function (d) {return x(d.x);})
     .y(function (d) {return y(d.y);});
   
@@ -291,7 +295,7 @@ function VR_update(wrap) {
   wrap.dot.selectAll('.content.dot')
     .transition()
     .duration(GS_var.trans_duration)
-    .attr("r", wrap.r);
+    .attr("r", function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
 
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};

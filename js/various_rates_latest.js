@@ -26,10 +26,10 @@ VR_latest_wrap.tooltip = d3.select(VR_latest_wrap.id)
 VR_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
 VR_latest_wrap.r_list = GS_var.r_list_latest;
 VR_latest_wrap.y_max_factor = 1.2;
-VR_latest_wrap.y_max_fix = 0.033;
+VR_latest_wrap.y_max_fix = 0.053;
 VR_latest_wrap.y_path = 0.01;
 VR_latest_wrap.legend_pos_x = 40;
-VR_latest_wrap.r = 3.5;
+VR_latest_wrap.r = 3.5; //-- Dot radius
 
 //-- Plot
 function VR_Latest_Plot() {
