@@ -5,7 +5,7 @@ processed_data/2020/
 Summary
 -------
 
-- This folder contains data of COVID in Taiwan for year 2020.
+- This folder contains data summarizing Taiwan's COVID situation in year 2020.
 
 
 Contents

@@ -12,16 +12,11 @@ Description
 The goal of this project is to inform general public about COVID-19 with data visualization. 
 It allows users to monitor the situation in Taiwan and to ponder over epidemic prevention policies.
 
-This project is driven by 3 key motivations:
-- Taiwan is one of the rare countries where the infection is low enough to make detailed case-tracing possible;
-- the basic information from case-tracing is publicly available; and 
-- the scientific potential of this breakdown dataset was not fully exploited by other visualization projects.
-
 
 Features
 --------
 
-So far, 7 plots can be found on _Dashboard_:
+There are 7 charts in _90-day dashboard_:
 - Status Evolution
 - 7-day Average of Various Rates
 - Confirmed Cases by Transmission Type
@@ -30,16 +25,18 @@ So far, 7 plots can be found on _Dashboard_:
 - Correlations between Age & Symptoms
 - How many days to identify cases? (day difference between report date & entry/onset date)
 
-And 4 are on _Policy_:
+4 charts in _Policy_:
 - Number of Tests by Reporting Criterion
 - Border Crossing
 - Chronology of Systematic Testing
 - Pandemic Timeline (text in Mandarin)
 
-The above plots are only for the statistics from last 90 days.
-The 2020 all-year graphics are in _Evolution in 2020_.
+From above, the first 9 charts are all produced with data of last 90 days.
 
-Other ideas are welcome. To be proposed at [Issues](https://github.com/Linc-tw/COVID_breakdown/issues).
+The same 9 charts made from all-year statistics can be found in _Evolution in 2020_ & _Evolution in 2021_.
+Loading can be slow for these 2 pages due to large files.
+
+Other ideas for plots are welcome. To be proposed at [Issues](https://github.com/Linc-tw/COVID_breakdown/issues).
 
 
 Language support
@@ -53,12 +50,13 @@ Language support
 Current workflow
 ----------------
 
-There used to be daily automatic updates. 
-Now the updates are done manually every several days. 
+Daily automatic update is resumed now & is executed at 14:30 everyday.
 This is done by executing `upload.sh`. It will:
 - download raw data from the original dataset (a publicly accessible online Google worksheet);
 - execute `python COVID_breakdown_data_processing.py` to generate processed data; and
 - commit & push the data to the repository.
+
+Manual data regularization will be done from time to time in late evening.
 
 
 Credits
