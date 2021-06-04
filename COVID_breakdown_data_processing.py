@@ -568,7 +568,7 @@ class MainSheet(Template):
       'Coral Princess': ['珊瑚公主號'], 
       'Diamond Princess': ['鑽石公主號'], 
       'Pan-Shi': ['海軍敦睦支隊磐石艦', '整隊登艦', '台灣啟航', '左營靠泊檢疫'],
-      'indigenous': ['無', 'x']
+      'indigenous': ['無', 'x', 'X']
     }
     nat_list = self.getNationality()
     trav_hist_list = []
@@ -635,7 +635,7 @@ class MainSheet(Template):
       if entry_date != entry_date: ## NaN
         entry_date_list.append(np.nan)
         
-      elif entry_date in ['x', '3/7-5/12', '2017年8月']:
+      elif entry_date in ['x', 'X', '3/7-5/12', '2017年8月']:
         entry_date_list.append(np.nan)
         
       elif entry_date in ['3/1\n3/8']:
@@ -692,10 +692,10 @@ class MainSheet(Template):
         onset_date_list.append(np.nan)
       
       elif onset_date in [
-        '1月', '2/18-25', '3月', '4/6-5/15', '4/25-5/22', '4/26-5/26', '4/29-5/27', '4/29-5/30', '4/30-5/18', '5/1-19', '5/2-13', '5/2-22', '5/2-6/1', 
-        '5/5-16', '5/5-17', '5/6-22', '5/6-27', '5/7-20', '5/7-24', '5/7-25', '5/7-28', '5/8-20', '5/8-25', 
-        '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', 
-        '5/14-22', '5/14-29', '5/15-26', '5/20-30', '5/20-31', 
+        '1月', '2/18-25', '3月', '4/1-6/3', '4/6-5/15', '4/25-5/22', '4/26-5/26', '4/28-6/2', '4/29-5/27', '4/29-5/30', '4/30-5/18', 
+        '5/1-19', '5/2-13', '5/2-22', '5/2-6/1', '5/5-16', '5/5-17', '5/6-22', '5/6-27', '5/7-20', '5/7-24', '5/7-25', '5/7-28', '5/8-20', '5/8-25', 
+        '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', '5/13-31',
+        '5/14-22', '5/14-29', '5/15-26', '5/20-30', '5/20-31', '5/18-6/2', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
@@ -743,15 +743,16 @@ class MainSheet(Template):
       elif channel in ['居家檢疫', '集中檢疫', '英國專案', '死亡']:
         channel_list.append('quarantine')
         
-      elif channel in ['居家隔離', '住院隔離', '接觸者回溯', '接觸者檢查', '接觸者採檢', '確診者回溯']:
+      elif channel in ['居家隔離', '住院隔離', '接觸患者', '同院患者', '接觸者回溯', '接觸者檢查', '接觸者採檢', '確診者回溯']:
         channel_list.append('isolation')
         
-      elif channel in ['自主健康管理', '加強自主管理']:
+      elif channel in ['自主健康管理', '加強自主管理', '居家隔離期滿\n自主健康管理']:
         channel_list.append('monitoring')
         
       elif channel in [
-        '入院', '自行就醫', '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', '接觸患者', 
-        '同院患者', '入院篩檢', '社區快篩', '社區專案', '萬華專案', '預防性快篩'
+        '入院', '快篩站', '自行就醫', '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', 
+        '入院篩檢', '入院採檢', '院內採檢', '社區快篩', '社區專案', '社區篩檢', 
+        '萬華專案', '擴大採檢', '預防性快篩', '鄰家擴大採檢'
       ]:
         channel_list.append('hospital')
         
@@ -796,7 +797,7 @@ class MainSheet(Template):
       
       'fatigue': [
         '全身倦怠無力', '左側肢體無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '精神倦怠', '體力不支', 
-        '疲倦感', '倦怠情', '倦怠', '疲憊', '疲倦', '疲勞', '無力', '虛弱'
+        '疲倦感', '倦怠情', '倦怠', '疲憊', '疲倦', '疲勞', '疲累', '無力', '虛弱'
       ],
       'soreness': [
         '全身肌肉痠痛', '上半身骨頭刺痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉關節痠痛', '肌肉 痠痛', '肌肉酸痛', '肌肉痠痛', 
@@ -811,7 +812,7 @@ class MainSheet(Template):
       
       'tonsillitis': ['淋巴腫脹', '扁桃腺腫痛'], 
       'hypoglycemia': ['低血糖'],
-      'anorexia': ['食慾不佳', '食慾不振', '食慾下降', '胃口變差', '食慾差', '無食慾'],
+      'anorexia': ['食慾不佳', '食慾不振', '食慾下降', '胃口變差', '沒有食慾', '食慾差', '無食慾'],
       'arrhythmia': ['心律不整'],
       'coma': ['意識不清', '意識改變'],
       
@@ -898,7 +899,7 @@ class MainSheet(Template):
         
       elif link in [
         '遠傳案', '朝陽夜唱', '金沙酒店', '金樽喜宴', '泰安附幼', '成功市場', '銀河百家樂', '維納斯會館', '羅東遊藝場', '串門子餐廳', 
-        '中國醫K歌團', '小姑娘小吃店', '快樂城小吃店', '東方紅時尚會館', 
+        '中國醫K歌團', '小姑娘小吃店', '快樂城小吃店', '東方紅時尚會館', '復興區公所員工家族案關係圖', 
       ]:
         link_list.append('linked')
 
@@ -1607,7 +1608,10 @@ class StatusSheet(Template):
     return self.getCol(self.coltag_cum_deaths).astype(int)
     
   def getCumDischarged(self):
-    return self.getCol(self.coltag_cum_dis).astype(int)
+    cum_dis_list = self.getCol(self.coltag_cum_dis)
+    ind = cum_dis_list == '0.00%'
+    cum_dis_list[ind] = 0
+    return cum_dis_list.astype(float)
     
   def getCumHospitalized(self):
     return self.getCol(self.coltag_cum_hosp).astype(int)

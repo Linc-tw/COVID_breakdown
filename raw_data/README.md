@@ -7,7 +7,7 @@ Processed data
 
 These are different spreadsheets downloaded from the original dataset, which is an [online Google Spreadsheet](https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#).
 
-Each spreadsheet is saved as a csv file, which contain consequent Mandarin strings.
+Each spreadsheet is saved as a csv file, which contains consequent Mandarin strings.
 
 The original dataset are not official. It is rather a collection of information from numerous official press releases & conferences by good-willing netizens.
 

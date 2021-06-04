@@ -5,7 +5,7 @@ processed_data/latest/
 Summary
 -------
 
-- This folder contains data of COVID in Taiwan for the last 90 days counting from the last update.
+- This folder contains data summarizing Taiwan's COVID situation during last 90 days.
 
 
 Contents
