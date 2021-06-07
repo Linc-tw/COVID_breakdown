@@ -57,13 +57,6 @@ function text_translation() {
     //-- Various rates
     TT_Add_Str("various_rates_title", "各種比率之七日平均");
     
-    //-- Difference by transmission
-    TT_Add_Str("difference_by_transmission_title", "確診等多久？");
-    TT_Add_Str("difference_by_transmission_button_1", "全部");
-    TT_Add_Str("difference_by_transmission_button_2", "境外移入");
-    TT_Add_Str("difference_by_transmission_button_3", "本土");
-    TT_Add_Str("difference_by_transmission_button_4", "其他");
-    
     //-- Case by transmission
     TT_Add_Str("case_by_transmission_title", "依感染源之確診人數");
     TT_Add_Str("case_by_transmission_button_1", "逐日");
@@ -87,6 +80,13 @@ function text_translation() {
     TT_Add_Str("age_symptom_correlations_title", "個案年齡與症狀相關程度");
     TT_Add_Str("age_symptom_correlations_button_1", "相關係數");
     TT_Add_Str("age_symptom_correlations_button_2", "案例數");
+    
+    //-- Difference by transmission
+    TT_Add_Str("difference_by_transmission_title", "確診等多久？");
+    TT_Add_Str("difference_by_transmission_button_1", "全部");
+    TT_Add_Str("difference_by_transmission_button_2", "境外移入");
+    TT_Add_Str("difference_by_transmission_button_3", "本土");
+    TT_Add_Str("difference_by_transmission_button_4", "其他");
     
     //-- Test by criterion
     TT_Add_Str("test_by_criterion_title", "檢驗數量");
@@ -142,13 +142,6 @@ function text_translation() {
     //-- Various rates
     TT_Add_Str("various_rates_title", "Taux en moyenne glissante sur 7 jours");
     
-    //-- Difference by transmission
-    TT_Add_Str("difference_by_transmission_title", "Combien de temps pour identifier un cas ?");
-    TT_Add_Str("difference_by_transmission_button_1", "Tous");
-    TT_Add_Str("difference_by_transmission_button_2", "Importés");
-    TT_Add_Str("difference_by_transmission_button_3", "Locaux");
-    TT_Add_Str("difference_by_transmission_button_4", "Divers");
-    
     //-- Case by transmission
     TT_Add_Str("case_by_transmission_title", "Cas confirmés par moyen de transmission");
     TT_Add_Str("case_by_transmission_button_1", "Quotidiens");
@@ -172,6 +165,13 @@ function text_translation() {
     TT_Add_Str("age_symptom_correlations_title", "Corrélations entre âge & symptômes");
     TT_Add_Str("age_symptom_correlations_button_1", "Coefficients");
     TT_Add_Str("age_symptom_correlations_button_2", "Nombres");
+    
+    //-- Difference by transmission
+    TT_Add_Str("difference_by_transmission_title", "Combien de temps pour identifier un cas ?");
+    TT_Add_Str("difference_by_transmission_button_1", "Tous");
+    TT_Add_Str("difference_by_transmission_button_2", "Importés");
+    TT_Add_Str("difference_by_transmission_button_3", "Locaux");
+    TT_Add_Str("difference_by_transmission_button_4", "Divers");
     
     //-- Test by criterion
     TT_Add_Str("test_by_criterion_title", "Nombre de tests par critère");
@@ -227,12 +227,7 @@ function text_translation() {
     //-- Various rates
     TT_Add_Str("various_rates_title", "7-day Average of Various Rates");
     
-    //-- Difference by transmission
-    TT_Add_Str("difference_by_transmission_title", "How many days to identify cases?");
-    TT_Add_Str("difference_by_transmission_button_1", "All");
-    TT_Add_Str("difference_by_transmission_button_2", "Imported");
-    TT_Add_Str("difference_by_transmission_button_3", "Local");
-    TT_Add_Str("difference_by_transmission_button_4", "Others");
+    TT_Add_Str("case_by_county_title", "case_by_county");
     
     //-- Case by transmission
     TT_Add_Str("case_by_transmission_title", "Confirmed Cases by Transmission Type");
@@ -257,6 +252,13 @@ function text_translation() {
     TT_Add_Str("age_symptom_correlations_title", "Correlations between Age & Symptoms");
     TT_Add_Str("age_symptom_correlations_button_1", "Coefficients");
     TT_Add_Str("age_symptom_correlations_button_2", "Counts");
+    
+    //-- Difference by transmission
+    TT_Add_Str("difference_by_transmission_title", "How many days to identify cases?");
+    TT_Add_Str("difference_by_transmission_button_1", "All");
+    TT_Add_Str("difference_by_transmission_button_2", "Imported");
+    TT_Add_Str("difference_by_transmission_button_3", "Local");
+    TT_Add_Str("difference_by_transmission_button_4", "Others");
     
     //-- Test by criterion
     TT_Add_Str("test_by_criterion_title", "Number of Tests by Reporting Criterion");

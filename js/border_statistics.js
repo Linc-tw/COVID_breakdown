@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function BS_Make_Canvas(wrap) {
+function BS_MakeCanvas(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -16,10 +16,10 @@ function BS_Make_Canvas(wrap) {
   wrap.margin_['fr'] = {left: 90, right: 2, bottom: 90, top: 2};
   wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
   
-  GS_Make_Canvas(wrap);
+  GS_MakeCanvas(wrap);
 }
 
-function BS_Format_Data(wrap, data) {
+function BS_FormatData(wrap, data) {
   //-- Variables for xtick
   var q = data.length % wrap.xlabel_path;
   var r = wrap.r_list[q];
@@ -45,7 +45,7 @@ function BS_Format_Data(wrap, data) {
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
-      xticklabel.push(GS_ISO_Date_To_MD_Date(x));
+      xticklabel.push(GS_ISODateToMDDate(x));
     }
     
     //-- Loop over column
@@ -131,10 +131,10 @@ function BS_Format_Data(wrap, data) {
 }
 
 //-- Tooltip
-function BS_Mouse_Move(wrap, d) {
+function BS_MouseMove(wrap, d) {
   //-- Get tooltip position
   var y_alpha = 0.5;
-  var new_pos = GS_Get_Tooltip_Pos(wrap, y_alpha, d3.mouse(d3.event.target));
+  var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Define tooltip texts
   var tooltip_text = d.x;
@@ -286,16 +286,16 @@ function BS_Initialize(wrap) {
     .attr('y', function (d) {return y(0);})
     .attr('width', x.bandwidth())
     .attr('height', 0)
-    .on("mouseover", function (d) {GS_Mouse_Over(wrap, d);})
-    .on("mousemove", function (d) {BS_Mouse_Move(wrap, d);})
-    .on("mouseleave", function (d) {GS_Mouse_Leave(wrap, d);})
+    .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
+    .on("mousemove", function (d) {BS_MouseMove(wrap, d);})
+    .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
   wrap.color_list = color_list;
   wrap.bar = bar;
 }
 
-function BS_update(wrap) {
+function BS_Update(wrap) {
   //-- Define y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
@@ -414,4 +414,23 @@ function BS_update(wrap) {
       .style("fill", '#000000')
       .text(function (d) {return d})
       .attr("text-anchor", "start")
+}
+
+//-- Plot
+function BS_Plot(wrap, error, data) {
+  if (error)
+    return console.warn(error);
+  
+  BS_MakeCanvas(wrap);
+  BS_FormatData(wrap, data);
+  BS_Initialize(wrap);
+  BS_Update(wrap);
+}
+
+function BS_Replot(wrap, error, data) {
+  if (error)
+    return console.warn(error);
+  
+  BS_FormatData(wrap, data);
+  BS_Update(wrap);
 }

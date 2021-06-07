@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function CT_Make_Canvas(wrap) {
+function CT_MakeCanvas(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 540;
@@ -16,16 +16,16 @@ function CT_Make_Canvas(wrap) {
   wrap.margin_['fr'] = {left: 0, right: 0, bottom: 0, top: 0};
   wrap.margin_['en'] = {left: 0, right: 0, bottom: 0, top: 0};
   
-  GS_Make_Canvas(wrap);
+  GS_MakeCanvas(wrap);
 }
 
-function CT_Format_Data(wrap, data) {
+function CT_FormatData(wrap, data) {
   //-- Save to wrapper
   wrap.formatted_data = data;
   wrap.length = data.length;
 }
 
-function CT_Get_Tooltip_Pos(wrap, d) {
+function CT_GetTooltipPos(wrap, d) {
   //-- Get position
   var x_pos = d[0];
   var y_pos = d[1];
@@ -48,9 +48,9 @@ function CT_Get_Tooltip_Pos(wrap, d) {
   return [x_pos, y_pos];
 }
 
-function CT_Mouse_Move(wrap, d) {
+function CT_MouseMove(wrap, d) {
   //-- Get tooltip position
-  var new_pos = CT_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target));
+  var new_pos = CT_GetTooltipPos(wrap, d3.mouse(d3.event.target));
   
   //-- Define tooltip texts
   var tooltip_text;
@@ -87,7 +87,7 @@ function CT_Click_Circle(wrap, d, i) {
     .attr("opacity", wrap.line_alpha*alpha)
   
   //-- Save to wrapper
-  wrap.doFull = 2;
+  wrap.do_full = 2;
   wrap['circle_text_'+j] = alpha;
 }
 
@@ -108,7 +108,7 @@ function CT_Click_Timeline(wrap, d, j) {
     .attr("opacity", wrap.line_alpha*alpha)
   
   //-- Save to wrapper
-  wrap.doFull = 2;
+  wrap.do_full = 2;
   wrap['timeline_text_'+j] = alpha;
 }
 
@@ -291,9 +291,9 @@ function CT_Initialize(wrap) {
       .attr("stroke", "black")
       .attr("stroke-width", 1)
       .on("click", function (d, j) {CT_Click_Timeline(wrap, d, j);})
-      .on("mouseover", function (d) {GS_Mouse_Over_3(wrap, d);})
-      .on("mousemove", function (d) {CT_Mouse_Move(wrap, d);})
-      .on("mouseleave", function (d) {GS_Mouse_Leave(wrap, d);})
+      .on("mouseover", function (d) {GS_MouseOver3(wrap, d);})
+      .on("mousemove", function (d) {CT_MouseMove(wrap, d);})
+      .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
   
   //-- Circle
   
@@ -319,9 +319,9 @@ function CT_Initialize(wrap) {
       .attr("stroke", "black")
       .attr("stroke-width", 0.3)
       .on("click", function (d, i) {CT_Click_Circle(wrap, d, i);})
-      .on("mouseover", function (d) {GS_Mouse_Over_3(wrap, d);})
-      .on("mousemove", function (d) {CT_Mouse_Move(wrap, d);})
-      .on("mouseleave", function (d) {GS_Mouse_Leave(wrap, d);})
+      .on("mouseover", function (d) {GS_MouseOver3(wrap, d);})
+      .on("mousemove", function (d) {CT_MouseMove(wrap, d);})
+      .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
   
   //-- Define circle text position
   var x_list_c, y_list_c;
@@ -491,11 +491,11 @@ function CT_Update(wrap) {
   var i, active_list;
   
   //-- Switch state to selected
-  if (wrap.doFull == 0)
+  if (wrap.do_full == 0)
     active_list = [1,0,0,1,0,  0,1,1,0,1,  0,0,1,1,1,  0,1,1,1];
   
   //-- Switch state to full
-  else if (wrap.doFull == 1)
+  else if (wrap.do_full == 1)
     active_list = [1,1,1,1,1,  1,1,1,1,1,  1,1,1,1,1,  1,1,1,1];
   
   //-- Switch state to custom
@@ -503,7 +503,7 @@ function CT_Update(wrap) {
     active_list = []
     
     //-- Was circle before
-    if (wrap.doTimeline == 1) {
+    if (wrap.do_timeline == 1) {
       for (i=0; i<wrap.length; i++)
         active_list.push(wrap['circle_text_'+i])
     }
@@ -516,7 +516,7 @@ function CT_Update(wrap) {
   }
   
   //-- If timeline
-  if (wrap.doTimeline == 1) {
+  if (wrap.do_timeline == 1) {
     //-- Update circle
     wrap.svg.selectAll('.circle')
       .data(wrap.formatted_data)
@@ -661,6 +661,17 @@ function CT_Update(wrap) {
   }
 }
 
+//-- Plot
+function CT_Plot(wrap, error, data) {
+  if (error)
+    return console.warn(error);
+  
+  CT_MakeCanvas(wrap);
+  CT_FormatData(wrap, data);
+  CT_Initialize(wrap);
+  CT_Update(wrap);
+}
+
 //-- Global variable
 var CT_latest_wrap = {};
 
@@ -669,7 +680,7 @@ CT_latest_wrap.tag = 'criteria_timeline_latest'
 CT_latest_wrap.id = '#' + CT_latest_wrap.tag
 
 //-- File path
-CT_latest_wrap.dataPathList = [
+CT_latest_wrap.data_path_list = [
   "processed_data/criteria_timeline.csv"
 ];
 
@@ -681,33 +692,26 @@ CT_latest_wrap.tooltip = d3.select(CT_latest_wrap.id)
 //-- Parameters
 
 //-- Variables
-CT_latest_wrap.doFull = 0;
-CT_latest_wrap.doTimeline = 1;
+CT_latest_wrap.do_full = 0;
+CT_latest_wrap.do_timeline = 1;
 
 //-- Plot
 function CT_Latest_Plot() {
-  d3.csv(CT_latest_wrap.dataPathList[0], function (error, data) {
-    if (error) return console.warn(error);
-    
-    CT_Make_Canvas(CT_latest_wrap);
-    CT_Format_Data(CT_latest_wrap, data);
-    CT_Initialize(CT_latest_wrap);
-    CT_Update(CT_latest_wrap);
-  });
+  d3.queue()
+    .defer(d3.csv, CT_latest_wrap.data_path_list[0])
+    .await(function (error, data) {CT_Plot(CT_latest_wrap, error, data);});
 }
 
 CT_Latest_Plot();
 
 //-- Buttons
 $(document).on("change", "input:radio[name='" + CT_latest_wrap.tag + "_doFull']", function (event) {
-  CT_latest_wrap.doFull = this.value;
-  
+  CT_latest_wrap.do_full = this.value;
   CT_Update(CT_latest_wrap);
 });
 
 $(document).on("change", "input:radio[name='" + CT_latest_wrap.tag + "_doTimeline']", function (event) {
-  CT_latest_wrap.doTimeline = this.value;
-  
+  CT_latest_wrap.do_timeline = this.value;
   CT_Update(CT_latest_wrap);
 });
 
@@ -715,11 +719,11 @@ $(document).on("change", "input:radio[name='" + CT_latest_wrap.tag + "_doTimelin
 d3.select(CT_latest_wrap.id + '_save').on('click', function () {
   var tag1, tag2;
   
-  if (CT_latest_wrap.doTimeline == 1) tag1 = 'timeline';
+  if (CT_latest_wrap.do_timeline == 1) tag1 = 'timeline';
   else tag1 = 'disks';
   
-  if (CT_latest_wrap.doFull == 1) tag2 = 'full';
-  else if (CT_latest_wrap.doFull == 2) tag2 = 'custom';
+  if (CT_latest_wrap.do_full == 1) tag2 = 'full';
+  else if (CT_latest_wrap.do_full == 2) tag2 = 'custom';
   else tag2 = 'selected';
   
   name = CT_latest_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + GS_lang + '.png'

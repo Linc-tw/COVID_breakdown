@@ -25,39 +25,25 @@ ASC_2021_wrap.data_path_list = [
 ASC_2021_wrap.do_count = 0;
 
 //-- Plot
-function ASC_Latest_Plot() {
-  d3.csv(ASC_2021_wrap.data_path_list[ASC_2021_wrap.do_count], function (error, data) {
-    d3.csv(ASC_2021_wrap.data_path_list[2], function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      ASC_Make_Canvas(ASC_2021_wrap);
-      ASC_Format_Data(ASC_2021_wrap, data);
-      ASC_FormatData_2(ASC_2021_wrap, data2);
-      ASC_Initialize(ASC_2021_wrap);
-      ASC_Update(ASC_2021_wrap);
-    });
-  });
+function ASC_2021_Plot() {
+  d3.queue()
+    .defer(d3.csv, ASC_2021_wrap.data_path_list[ASC_2021_wrap.do_count])
+    .defer(d3.csv, ASC_2021_wrap.data_path_list[2])
+    .await(function (error, data, data2) {ASC_Plot(ASC_2021_wrap, error, data, data2);});
 }
 
-ASC_Latest_Plot();
+function ASC_2021_Replot() {
+  d3.queue()
+    .defer(d3.csv, ASC_2021_wrap.data_path_list[ASC_2021_wrap.do_count])
+    .await(function (error, data) {ASC_Replot(ASC_2021_wrap, error, data);});
+}
+
+ASC_2021_Plot();
 
 //-- Buttons
 $(document).on("change", "input:radio[name='" + ASC_2021_wrap.tag + "_doCount']", function (event) {
   ASC_2021_wrap.do_count = this.value;
-  dataPath = ASC_2021_wrap.data_path_list[ASC_2021_wrap.do_count]
-  dataPath2 = ASC_2021_wrap.data_path_list[2]
-  
-  d3.csv(dataPath, function (error, data) {
-    d3.csv(dataPath2, function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      ASC_Format_Data(ASC_2021_wrap, data);
-      ASC_FormatData_2(ASC_2021_wrap, data2);
-      ASC_Update(ASC_2021_wrap);
-    });
-  });
+  ASC_2021_Replot();
 });
 
 //-- Save button
@@ -80,5 +66,5 @@ $(document).on("change", "input:radio[name='2021_language']", function (event) {
   d3.selectAll(ASC_2021_wrap.id+' .plot').remove()
   
   //-- Replot
-  ASC_Latest_Plot();
+  ASC_2021_Plot();
 });

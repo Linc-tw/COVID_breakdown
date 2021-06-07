@@ -31,14 +31,9 @@ SE_2020_wrap.legend_pos_x = 70;
 
 //-- Plot
 function SE_2020_Plot() {
-  d3.csv(SE_2020_wrap.data_path_list[0], function (error, data) {
-    if (error) return console.warn(error);
-    
-    SE_Make_Canvas(SE_2020_wrap);
-    SE_Format_Data(SE_2020_wrap, data);
-    SE_Initialize(SE_2020_wrap);
-    SE_Update(SE_2020_wrap);
-  });
+  d3.queue()
+    .defer(d3.csv, SE_2020_wrap.data_path_list[0])
+    .await(function (error, data) {SE_Plot(SE_2020_wrap, error, data);});
 }
 
 SE_2020_Plot();

@@ -29,7 +29,7 @@ GS_var.c_list = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55
 GS_var.trans_duration = 800;
 
 //-- General functions
-function GS_ISO_Date_To_MD_Date(iso_date) {
+function GS_ISODateToMDDate(iso_date) {
   var md_date_format;
   if (GS_lang == 'zh-tw')   md_date_format = d3.timeFormat("%-m月%-d日");
   else if (GS_lang == 'fr') md_date_format = d3.timeFormat("%d/%m");
@@ -49,7 +49,7 @@ function GS_CumSum(data, col_tag_list) {
 }
 
 //-- Canvas functions
-function GS_Make_Canvas(wrap) {
+function GS_MakeCanvas(wrap) {
   //-- Parameters for canvas
   var tot_height = wrap.tot_height_[GS_lang];
   var margin = wrap.margin_[GS_lang];
@@ -83,7 +83,7 @@ function GS_Make_Canvas(wrap) {
 }
 
 //-- Tooltip functions
-function GS_Mouse_Over(wrap, d) {
+function GS_MouseOver(wrap, d) {
   //-- Change opacity when moving mouse over
   wrap.tooltip.transition()
     .duration(200)
@@ -92,7 +92,7 @@ function GS_Mouse_Over(wrap, d) {
     .style("opacity", 0.8)
 }
 
-function GS_Mouse_Leave(wrap, d) {
+function GS_MouseLeave(wrap, d) {
   //-- Change opacity when moving mouse away
   wrap.tooltip.transition()
     .duration(10)
@@ -101,7 +101,7 @@ function GS_Mouse_Leave(wrap, d) {
     .style("opacity", 1)
 }
 
-function GS_Get_Tooltip_Pos(wrap, y_alpha, d) {
+function GS_GetTooltipPos(wrap, y_alpha, d) {
   var l_max = 0;
   var i_max = -1;
   var i, l;
@@ -135,17 +135,17 @@ function GS_Get_Tooltip_Pos(wrap, y_alpha, d) {
   return [x_pos, y_pos];
 }
 
-function GS_Mouse_Over_2(wrap, d) {
+function GS_MouseOver2(wrap, d) {
   d3.select(d3.event.target)
     .style("opacity", 0.8)
 }
 
-function GS_Mouse_Leave_2(wrap, d) {
+function GS_MouseLeave2(wrap, d) {
   d3.select(d3.event.target)
     .style("opacity", 1)
 }
 
-function GS_Mouse_Over_3(wrap, d) {
+function GS_MouseOver3(wrap, d) {
   wrap.tooltip.transition()
     .duration(200)
     .style("opacity", 0.9)

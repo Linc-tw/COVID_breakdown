@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function VR_Make_Canvas(wrap) {
+function VR_MakeCanvas(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -16,10 +16,10 @@ function VR_Make_Canvas(wrap) {
   wrap.margin_['fr'] = {left: 70, right: 2, bottom: 90, top: 2};
   wrap.margin_['en'] = {left: 70, right: 2, bottom: 90, top: 2};
   
-  GS_Make_Canvas(wrap);
+  GS_MakeCanvas(wrap);
 }
 
-function VR_Format_Data(wrap, data) {
+function VR_FormatData(wrap, data) {
   //-- Variables for xtick
   var q = data.length % wrap.xlabel_path;
   var r = wrap.r_list[q];
@@ -44,7 +44,7 @@ function VR_Format_Data(wrap, data) {
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
       xtick.push(i) //-- No 0.5 due to points
-      xticklabel.push(GS_ISO_Date_To_MD_Date(x));
+      xticklabel.push(GS_ISODateToMDDate(x));
     }
   }
   
@@ -106,10 +106,10 @@ function VR_Format_Data(wrap, data) {
 }
 
 //-- Tooltip
-function VR_Mouse_Move(wrap, d) {
+function VR_MouseMove(wrap, d) {
   //-- Get tooltip position
   var y_alpha = 0.5;
-  var new_pos = GS_Get_Tooltip_Pos(wrap, y_alpha, d3.mouse(d3.event.target));
+  var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Define tooltip texts
   var fct_format = d3.format(".2%");
@@ -256,9 +256,9 @@ function VR_Initialize(wrap) {
       .attr("cx", function (d) {return x(d.x);})
       .attr("cy", function (d) {return y(d.y);})
       .attr("r", 0)
-      .on("mouseover", function (d) {GS_Mouse_Over(wrap, d);})
-      .on("mousemove", function (d) {VR_Mouse_Move(wrap, d);})
-      .on("mouseleave", function (d) {GS_Mouse_Leave(wrap, d);});
+      .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
+      .on("mousemove", function (d) {VR_MouseMove(wrap, d);})
+      .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);});
       
   //-- Save to wrapper
   wrap.color_list = color_list;
@@ -267,7 +267,7 @@ function VR_Initialize(wrap) {
   wrap.dot = dot;
 }
 
-function VR_update(wrap) {
+function VR_Update(wrap) {
   //-- Define y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
@@ -323,4 +323,15 @@ function VR_update(wrap) {
       .style("fill", function (d, i) {return wrap.color_list[i];})
       .text(function (d) {return d;})
       .attr("text-anchor", "start");
+}
+
+//-- Plot
+function VR_Plot(wrap, error, data) {
+  if (error)
+    return console.warn(error);
+  
+  VR_MakeCanvas(wrap);
+  VR_FormatData(wrap, data);
+  VR_Initialize(wrap);
+  VR_Update(wrap);
 }

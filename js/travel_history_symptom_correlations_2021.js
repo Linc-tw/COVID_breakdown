@@ -25,39 +25,25 @@ THSC_2021_wrap.data_path_list = [
 THSC_2021_wrap.do_count = 0;
 
 //-- Plot
-function THSC_Latest_Plot() {
-  d3.csv(THSC_2021_wrap.data_path_list[THSC_2021_wrap.do_count], function (error, data) {
-    d3.csv(THSC_2021_wrap.data_path_list[2], function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      THSC_Make_Canvas(THSC_2021_wrap);
-      THSC_Format_Data(THSC_2021_wrap, data);
-      THSC_Format_Data_2(THSC_2021_wrap, data2);
-      THSC_Initialize(THSC_2021_wrap);
-      THSC_Update(THSC_2021_wrap);
-    });
-  });
+function THSC_2021_Plot() {
+  d3.queue()
+    .defer(d3.csv, THSC_2021_wrap.data_path_list[THSC_2021_wrap.do_count])
+    .defer(d3.csv, THSC_2021_wrap.data_path_list[2])
+    .await(function (error, data, data2) {THSC_Plot(THSC_2021_wrap, error, data, data2);});
 }
 
-THSC_Latest_Plot();
+function THSC_2021_Replot() {
+  d3.queue()
+    .defer(d3.csv, THSC_2021_wrap.data_path_list[THSC_2021_wrap.do_count])
+    .await(function (error, data) {THSC_Replot(THSC_2021_wrap, error, data);});
+}
+
+THSC_2021_Plot();
 
 //-- Buttons
 $(document).on("change", "input:radio[name='" + THSC_2021_wrap.tag + "_doCount']", function (event) {
   THSC_2021_wrap.do_count = this.value;
-  data_path = THSC_2021_wrap.data_path_list[THSC_2021_wrap.do_count]
-  data_path_2 = THSC_2021_wrap.data_path_list[2]
-  
-  d3.csv(data_path, function (error, data) {
-    d3.csv(data_path_2, function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      THSC_Format_Data(THSC_2021_wrap, data);
-      THSC_Format_Data_2(THSC_2021_wrap, data2);
-      THSC_Update(THSC_2021_wrap);
-    });
-  });
+  THSC_2021_Replot();
 });
 
 //-- Save button
@@ -80,5 +66,5 @@ $(document).on("change", "input:radio[name='2021_language']", function (event) {
   d3.selectAll(THSC_2021_wrap.id+' .plot').remove()
   
   //-- Replot
-  THSC_Latest_Plot();
+  THSC_2021_Plot();
 });

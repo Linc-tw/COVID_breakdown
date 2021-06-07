@@ -33,14 +33,9 @@ VR_latest_wrap.r = 3.5; //-- Dot radius
 
 //-- Plot
 function VR_Latest_Plot() {
-  d3.csv(VR_latest_wrap.data_path_list[0], function (error, data) {
-    if (error) return console.warn(error);
-    
-    VR_Make_Canvas(VR_latest_wrap);
-    VR_Format_Data(VR_latest_wrap, data);
-    VR_Initialize(VR_latest_wrap);
-    VR_update(VR_latest_wrap);
-  });
+  d3.queue()
+    .defer(d3.csv, VR_latest_wrap.data_path_list[0])
+    .await(function (error, data) {VR_Plot(VR_latest_wrap, error, data);});
 }
 
 VR_Latest_Plot();

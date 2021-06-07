@@ -37,29 +37,24 @@ BS_2020_wrap.legend_pos_x = 500;
 BS_2020_wrap.do_exit = 0;
 
 //-- Plot
-function BS_Latest_Plot() {
-  d3.csv(BS_2020_wrap.data_path_list[BS_2020_wrap.do_exit], function (error, data) {
-    if (error) return console.warn(error);
-    
-    BS_Make_Canvas(BS_2020_wrap);
-    BS_Format_Data(BS_2020_wrap, data);
-    BS_Initialize(BS_2020_wrap);
-    BS_update(BS_2020_wrap);
-  });
+function BS_2020_Plot() {
+  d3.queue()
+    .defer(d3.csv, BS_2020_wrap.data_path_list[BS_2020_wrap.do_exit])
+    .await(function (error, data) {BS_Plot(BS_2020_wrap, error, data);});
 }
 
-BS_Latest_Plot();
+function BS_2020_Replot() {
+  d3.queue()
+    .defer(d3.csv, BS_2020_wrap.data_path_list[BS_2020_wrap.do_exit])
+    .await(function (error, data) {BS_Replot(BS_2020_wrap, error, data);});
+}
+
+BS_2020_Plot();
 
 //-- Buttons
 $(document).on("change", "input:radio[name='" + BS_2020_wrap.tag + "_doExit']", function (event) {
   BS_2020_wrap.do_exit = this.value;
-  
-  d3.csv(BS_2020_wrap.data_path_list[BS_2020_wrap.do_exit], function (error, data) {
-    if (error) return console.warn(error);
-    
-    BS_Format_Data(BS_2020_wrap, data);
-    BS_update(BS_2020_wrap);
-  });
+  BS_2020_Replot();
 });
 
 //-- Save button
@@ -83,5 +78,5 @@ $(document).on("change", "input:radio[name='2020_language']", function (event) {
   d3.selectAll(BS_2020_wrap.id+' .plot').remove();
   
   //-- Replot
-  BS_Latest_Plot();
+  BS_2020_Plot();
 });

@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function SE_Make_Canvas(wrap) {
+function SE_MakeCanvas(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -16,10 +16,10 @@ function SE_Make_Canvas(wrap) {
   wrap.margin_['fr'] = {left: 90, right: 2, bottom: 90, top: 2};
   wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
   
-  GS_Make_Canvas(wrap);
+  GS_MakeCanvas(wrap);
 }
 
-function SE_Format_Data(wrap, data) {
+function SE_FormatData(wrap, data) {
   //-- Variables for xtick
   var q = data.length % wrap.xlabel_path;
   var r = wrap.r_list[q];
@@ -45,7 +45,7 @@ function SE_Format_Data(wrap, data) {
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
-      xticklabel.push(GS_ISO_Date_To_MD_Date(x));
+      xticklabel.push(GS_ISODateToMDDate(x));
     }
     
     //-- Loop over column
@@ -121,10 +121,10 @@ function SE_Format_Data(wrap, data) {
 }
 
 //-- Tooltip
-function SE_Mouse_Move(wrap, d) {
+function SE_MouseMove(wrap, d) {
   //-- Get tooltip position
   var y_alpha = 0.5;
-  var new_pos = GS_Get_Tooltip_Pos(wrap, y_alpha, d3.mouse(d3.event.target));
+  var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Define tooltip texts
   var tooltip_text;
@@ -244,9 +244,9 @@ function SE_Initialize(wrap) {
     .attr('y', function (d) {return y(0);})
     .attr('width', x.bandwidth())
     .attr('height', 0)
-    .on("mouseover", function (d) {GS_Mouse_Over(wrap, d);})
-    .on("mousemove", function (d) {SE_Mouse_Move(wrap, d);})
-    .on("mouseleave", function (d) {GS_Mouse_Leave(wrap, d);})
+    .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
+    .on("mousemove", function (d) {SE_MouseMove(wrap, d);})
+    .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
   wrap.color_list = color_list;
@@ -334,4 +334,15 @@ function SE_Update(wrap) {
       .style("fill", function (d, i) {return legend_color_list[i]})
       .text(function (d) {return d})
       .attr("text-anchor", "start")
+}
+
+//-- Plot
+function SE_Plot(wrap, error, data) {
+  if (error)
+    return console.warn(error);
+  
+  SE_MakeCanvas(wrap);
+  SE_FormatData(wrap, data);
+  SE_Initialize(wrap);
+  SE_Update(wrap);
 }

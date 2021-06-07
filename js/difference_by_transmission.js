@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function DBT_Make_Canvas(wrap) {
+function DBT_MakeCanvas(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -16,10 +16,10 @@ function DBT_Make_Canvas(wrap) {
   wrap.margin_['fr'] = {left: 70, right: 2, bottom: 80, top: 2};
   wrap.margin_['en'] = {left: 70, right: 2, bottom: 80, top: 2};
   
-  GS_Make_Canvas(wrap);
+  GS_MakeCanvas(wrap);
 }
 
-function DBT_Format_Data(wrap, data) {
+function DBT_FormatData(wrap, data) {
   //-- Variables for xtick
   var xlabel_path = 3; //-- Hard-coded
   var r = 0;
@@ -106,7 +106,7 @@ function DBT_Format_Data(wrap, data) {
   wrap.legend_value = legend_value;
 }
 
-function DBT_Format_Data_2(wrap, data2) {
+function DBT_FormatData2(wrap, data2) {
   var n_tot = 0;
   var i;
   
@@ -123,10 +123,10 @@ function DBT_Format_Data_2(wrap, data2) {
 }
 
 //-- Tooltip
-function DBT_Mouse_Move(wrap, d) {
+function DBT_MouseMove(wrap, d) {
   //-- Get tooltip position
   var y_alpha = 0.35;
-  var new_pos = GS_Get_Tooltip_Pos(wrap, y_alpha, d3.mouse(d3.event.target));
+  var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Define tooltip texts
   var col_tag, col_tag_2, tooltip_text;
@@ -279,9 +279,9 @@ function DBT_Initialize(wrap) {
     .attr('y', function (d) {return y(0);})
     .attr('width', x.bandwidth())
     .attr('height', 0)
-    .on("mouseover", function (d) {GS_Mouse_Over(wrap, d);})
-    .on("mousemove", function (d) {DBT_Mouse_Move(wrap, d);})
-    .on("mouseleave", function (d) {GS_Mouse_Leave(wrap, d);})
+    .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
+    .on("mousemove", function (d) {DBT_MouseMove(wrap, d);})
+    .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
   wrap.color_list = color_list;
@@ -375,4 +375,24 @@ function DBT_Update(wrap) {
       .style("fill", function (d, i) {return legend_color_list[i]})
       .text(function (d) {return d})
       .attr("text-anchor", "start")
+}
+
+//-- Plot
+function DBT_Plot(wrap, error, data, data2) {
+  if (error)
+    return console.warn(error);
+  
+  DBT_MakeCanvas(wrap);
+  DBT_FormatData(wrap, data);
+  DBT_FormatData2(wrap, data2);
+  DBT_Initialize(wrap);
+  DBT_Update(wrap);
+}
+
+function DBT_Replot(wrap, error, data) {
+  if (error)
+    return console.warn(error);
+  
+  DBT_FormatData(wrap, data);
+  DBT_Update(wrap);
 }

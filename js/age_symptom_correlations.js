@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function ASC_Make_Canvas(wrap) {
+function ASC_MakeCanvas(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 540;
@@ -16,10 +16,10 @@ function ASC_Make_Canvas(wrap) {
   wrap.margin_['fr'] = {left: 280, right: 2, bottom: 2, top: 220};
   wrap.margin_['en'] = {left: 250, right: 2, bottom: 2, top: 200};
   
-  GS_Make_Canvas(wrap);
+  GS_MakeCanvas(wrap);
 }
 
-function ASC_Format_Data(wrap, data) {
+function ASC_FormatData(wrap, data) {
   var symptom_list = [];
   var age_list = [];
   var i, j, age, symptom;
@@ -56,7 +56,7 @@ function ASC_Format_Data(wrap, data) {
   wrap.symptom_list = symptom_list;
 }
 
-function ASC_FormatData_2(wrap, data2) {
+function ASC_FormatData2(wrap, data2) {
   var xticklabel = [];
   var yticklabel = [];
   var i, j, n_total, n_data;
@@ -217,8 +217,8 @@ function ASC_Initialize(wrap) {
       .attr("width", x.bandwidth())
       .attr("height", y.bandwidth())
       .style("fill", function (d) {return color(d['value']);})  
-      .on("mouseover", function (d) {GS_Mouse_Over_2(wrap, d);})
-      .on("mouseleave", function (d) {GS_Mouse_Leave_2(wrap, d);})
+      .on("mouseover", function (d) {GS_MouseOver2(wrap, d);})
+      .on("mouseleave", function (d) {GS_MouseLeave2(wrap, d);})
     
   //-- Add text
   wrap.svg.selectAll()
@@ -228,7 +228,7 @@ function ASC_Initialize(wrap) {
       .attr("class", "content text")
       .attr("x", function (d) {return x(d['symptom']) + 0.5*+x.bandwidth();})
       .attr("y", function (d) {return y(d['age']) + 0.5*+y.bandwidth();})
-      .style("fill", function (d) {if (Math.abs(d['value'])<0.25) return '#000000'; return '#FFFFFF';})
+      .style("fill", function (d) {if (Math.abs(d['value'])<0.205) return '#000000'; return '#FFFFFF';})
       .text(function (d) {return d['label'];})
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "central")
@@ -257,7 +257,7 @@ function ASC_Update(wrap) {
       .attr("class", "content text")
       .attr("x", function (d) {return wrap.x(d['symptom']) + 0.5*+wrap.x.bandwidth();})
       .attr("y", function (d) {return wrap.y(d['age']) + 0.5*+wrap.y.bandwidth();})
-      .style("fill", function (d) {if (Math.abs(d['value'])<0.25) return '#000'; return '#fff';})
+      .style("fill", function (d) {if (Math.abs(d['value'])<0.205) return '#000000'; return '#FFFFFF';})
       .text(function (d) {return d['label'];})
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "central")
@@ -275,4 +275,24 @@ function ASC_Update(wrap) {
       .style("fill", function (d, i) {return wrap.legend_color[i]})
       .text(function (d) {return d})
       .attr("text-anchor", "start")
+}
+
+//-- Plot
+function ASC_Plot(wrap, error, data, data2) {
+  if (error)
+    return console.warn(error);
+  
+  ASC_MakeCanvas(wrap);
+  ASC_FormatData(wrap, data);
+  ASC_FormatData2(wrap, data2);
+  ASC_Initialize(wrap);
+  ASC_Update(wrap);
+}
+
+function ASC_Replot(wrap, error, data) {
+  if (error)
+    return console.warn(error);
+  
+  ASC_FormatData(wrap, data);
+  ASC_Update(wrap);
 }

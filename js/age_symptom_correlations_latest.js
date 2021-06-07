@@ -26,18 +26,16 @@ ASC_latest_wrap.do_count = 0;
 
 //-- Plot
 function ASC_Latest_Plot() {
-  d3.csv(ASC_latest_wrap.data_path_list[ASC_latest_wrap.do_count], function (error, data) {
-    d3.csv(ASC_latest_wrap.data_path_list[2], function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      ASC_Make_Canvas(ASC_latest_wrap);
-      ASC_Format_Data(ASC_latest_wrap, data);
-      ASC_FormatData_2(ASC_latest_wrap, data2);
-      ASC_Initialize(ASC_latest_wrap);
-      ASC_Update(ASC_latest_wrap);
-    });
-  });
+  d3.queue()
+    .defer(d3.csv, ASC_latest_wrap.data_path_list[ASC_latest_wrap.do_count])
+    .defer(d3.csv, ASC_latest_wrap.data_path_list[2])
+    .await(function (error, data, data2) {ASC_Plot(ASC_latest_wrap, error, data, data2);});
+}
+
+function ASC_Latest_Replot() {
+  d3.queue()
+    .defer(d3.csv, ASC_latest_wrap.data_path_list[ASC_latest_wrap.do_count])
+    .await(function (error, data) {ASC_Replot(ASC_latest_wrap, error, data);});
 }
 
 ASC_Latest_Plot();
@@ -45,19 +43,7 @@ ASC_Latest_Plot();
 //-- Buttons
 $(document).on("change", "input:radio[name='" + ASC_latest_wrap.tag + "_doCount']", function (event) {
   ASC_latest_wrap.do_count = this.value;
-  dataPath = ASC_latest_wrap.data_path_list[ASC_latest_wrap.do_count]
-  dataPath2 = ASC_latest_wrap.data_path_list[2]
-  
-  d3.csv(dataPath, function (error, data) {
-    d3.csv(dataPath2, function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      ASC_Format_Data(ASC_latest_wrap, data);
-      ASC_FormatData_2(ASC_latest_wrap, data2);
-      ASC_Update(ASC_latest_wrap);
-    });
-  });
+  ASC_Latest_Replot();
 });
 
 //-- Save button

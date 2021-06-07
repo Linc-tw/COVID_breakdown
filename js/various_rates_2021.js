@@ -33,14 +33,9 @@ VR_2021_wrap.r = 3.5;
 
 //-- Plot
 function VR_2021_Plot() {
-  d3.csv(VR_2021_wrap.data_path_list[0], function (error, data) {
-    if (error) return console.warn(error);
-    
-    VR_Make_Canvas(VR_2021_wrap);
-    VR_Format_Data(VR_2021_wrap, data);
-    VR_Initialize(VR_2021_wrap);
-    VR_update(VR_2021_wrap);
-  });
+  d3.queue()
+    .defer(d3.csv, VR_2021_wrap.data_path_list[0])
+    .await(function (error, data) {VR_Plot(VR_2021_wrap, error, data);});
 }
 
 VR_2021_Plot();

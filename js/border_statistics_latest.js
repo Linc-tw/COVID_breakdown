@@ -38,14 +38,15 @@ BS_latest_wrap.do_exit = 0;
 
 //-- Plot
 function BS_Latest_Plot() {
-  d3.csv(BS_latest_wrap.data_path_list[BS_latest_wrap.do_exit], function (error, data) {
-    if (error) return console.warn(error);
-    
-    BS_Make_Canvas(BS_latest_wrap);
-    BS_Format_Data(BS_latest_wrap, data);
-    BS_Initialize(BS_latest_wrap);
-    BS_update(BS_latest_wrap);
-  });
+  d3.queue()
+    .defer(d3.csv, BS_latest_wrap.data_path_list[BS_latest_wrap.do_exit])
+    .await(function (error, data) {BS_Plot(BS_latest_wrap, error, data);});
+}
+
+function BS_Latest_Replot() {
+  d3.queue()
+    .defer(d3.csv, BS_latest_wrap.data_path_list[BS_latest_wrap.do_exit])
+    .await(function (error, data) {BS_Replot(BS_latest_wrap, error, data);});
 }
 
 BS_Latest_Plot();
@@ -53,13 +54,7 @@ BS_Latest_Plot();
 //-- Buttons
 $(document).on("change", "input:radio[name='" + BS_latest_wrap.tag + "_doExit']", function (event) {
   BS_latest_wrap.do_exit = this.value;
-  
-  d3.csv(BS_latest_wrap.data_path_list[BS_latest_wrap.do_exit], function (error, data) {
-    if (error) return console.warn(error);
-    
-    BS_Format_Data(BS_latest_wrap, data);
-    BS_update(BS_latest_wrap);
-  });
+  BS_Latest_Replot();
 });
 
 //-- Save button

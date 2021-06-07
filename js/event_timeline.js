@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function ET_Make_Canvas(wrap) {
+function ET_MakeCanvas(wrap) {
   wrap.tot_width = 1200;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 720;
@@ -17,10 +17,10 @@ function ET_Make_Canvas(wrap) {
   wrap.margin_['en'] = {left: 0, right: 0, bottom: 0, top: 0};
   wrap.cell_size = 20; //-- Cell size
   
-  GS_Make_Canvas(wrap);
+  GS_MakeCanvas(wrap);
 }
 
-function ET_Format_Data(wrap, data) {
+function ET_FormatData(wrap, data) {
   var lim = 40; //-- Number of characters
   var item = '★ '; //-- Item symbol
   var formatted_data = {}
@@ -87,7 +87,7 @@ function ET_Format_Data(wrap, data) {
   }
   
   //-- Fine-tuning
-  ET_Special_Process(wrap, formatted_data);
+  ET_SpecialProcess(wrap, formatted_data);
   
   //-- Calculate calendar duration
   var date_list = data.map(function (d) {return d['date'];});
@@ -112,7 +112,7 @@ function ET_Format_Data(wrap, data) {
   wrap.half_year_list = half_year_list;
 }
 
-function ET_Special_Process(wrap, formatted_data) {
+function ET_SpecialProcess(wrap, formatted_data) {
   formatted_data['2019-12-30'][2] = [
     '',
     '全球事件',
@@ -516,7 +516,7 @@ function ET_Special_Process(wrap, formatted_data) {
   ]
 }
 
-function ET_Get_Tooltip_Pos(wrap, pos, d) {
+function ET_GetTooltipPos(wrap, pos, d) {
   //-- Get year & month
   var year  = +d.substring(0, 4);
   var month = +d.substring(5, 7);
@@ -541,9 +541,9 @@ function ET_Get_Tooltip_Pos(wrap, pos, d) {
   return [x_pos, y_pos];
 }
 
-function ET_Mouse_Move(wrap, d) {
+function ET_MouseMove(wrap, d) {
   //-- Get tooltip position
-  var new_pos = ET_Get_Tooltip_Pos(wrap, d3.mouse(d3.event.target), d);
+  var new_pos = ET_GetTooltipPos(wrap, d3.mouse(d3.event.target), d);
   
   //-- Define tooltip texts
   var tooltip_text;
@@ -729,9 +729,9 @@ function ET_Update(wrap) {
       .style('fill', '#FFFFFF')
       .style('stroke', '#CCCCCC')
       .datum(d3.timeFormat("%Y-%m-%d"))
-      .on("mouseover", function (d) {GS_Mouse_Over_3(wrap, d);})
-      .on("mousemove", function (d) {ET_Mouse_Move(wrap, d);})
-      .on("mouseleave", function (d) {GS_Mouse_Leave(wrap, d);})
+      .on("mouseover", function (d) {GS_MouseOver3(wrap, d);})
+      .on("mousemove", function (d) {ET_MouseMove(wrap, d);})
+      .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
       .on("click", function (d, i) {ET_Click(wrap, d, i);})
   
   //-- Define color
@@ -881,6 +881,17 @@ function ET_Update(wrap) {
       .attr("dominant-baseline", "middle")
 }
 
+//-- Plot
+function ET_Plot(wrap, error, data) {
+  if (error)
+    return console.warn(error);
+  
+  ET_MakeCanvas(wrap);
+  ET_FormatData(wrap, data);
+  ET_Initialize(wrap);
+  ET_Update(wrap);
+}
+
 //-- Global variable
 var ET_latest_wrap = {};
 
@@ -905,14 +916,9 @@ ET_latest_wrap.week_start = 0;
 
 //-- Plot
 function ET_Latest_Plot() {
-  d3.csv(ET_latest_wrap.data_path_list[0], function (error, data) {
-    if (error) return console.warn(error);
-    
-    ET_Make_Canvas(ET_latest_wrap);
-    ET_Format_Data(ET_latest_wrap, data);
-    ET_Initialize(ET_latest_wrap);
-    ET_Update(ET_latest_wrap);
-  });
+  d3.queue()
+    .defer(d3.csv, ET_latest_wrap.data_path_list[0])
+    .await(function (error, data) {ET_Plot(ET_latest_wrap, error, data);});
 }
 
 ET_Latest_Plot();
@@ -920,7 +926,6 @@ ET_Latest_Plot();
 //-- Buttons 
 $(document).on("change", "input:radio[name='" + ET_latest_wrap.tag + "_weekStart']", function (event) {
   ET_latest_wrap.week_start = this.value;
-  
   ET_Update(ET_latest_wrap);
 });
 

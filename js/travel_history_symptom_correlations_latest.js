@@ -26,18 +26,16 @@ THSC_latest_wrap.do_count = 0;
 
 //-- Plot
 function THSC_Latest_Plot() {
-  d3.csv(THSC_latest_wrap.data_path_list[THSC_latest_wrap.do_count], function (error, data) {
-    d3.csv(THSC_latest_wrap.data_path_list[2], function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      THSC_Make_Canvas(THSC_latest_wrap);
-      THSC_Format_Data(THSC_latest_wrap, data);
-      THSC_Format_Data_2(THSC_latest_wrap, data2);
-      THSC_Initialize(THSC_latest_wrap);
-      THSC_Update(THSC_latest_wrap);
-    });
-  });
+  d3.queue()
+    .defer(d3.csv, THSC_latest_wrap.data_path_list[THSC_latest_wrap.do_count])
+    .defer(d3.csv, THSC_latest_wrap.data_path_list[2])
+    .await(function (error, data, data2) {THSC_Plot(THSC_latest_wrap, error, data, data2);});
+}
+
+function THSC_Latest_Replot() {
+  d3.queue()
+    .defer(d3.csv, THSC_latest_wrap.data_path_list[THSC_latest_wrap.do_count])
+    .await(function (error, data) {THSC_Replot(THSC_latest_wrap, error, data);});
 }
 
 THSC_Latest_Plot();
@@ -45,19 +43,7 @@ THSC_Latest_Plot();
 //-- Buttons
 $(document).on("change", "input:radio[name='" + THSC_latest_wrap.tag + "_doCount']", function (event) {
   THSC_latest_wrap.do_count = this.value;
-  data_path = THSC_latest_wrap.data_path_list[THSC_latest_wrap.do_count]
-  data_path_2 = THSC_latest_wrap.data_path_list[2]
-  
-  d3.csv(data_path, function (error, data) {
-    d3.csv(data_path_2, function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      THSC_Format_Data(THSC_latest_wrap, data);
-      THSC_Format_Data_2(THSC_latest_wrap, data2);
-      THSC_Update(THSC_latest_wrap);
-    });
-  });
+  THSC_Latest_Replot();
 });
 
 //-- Save button

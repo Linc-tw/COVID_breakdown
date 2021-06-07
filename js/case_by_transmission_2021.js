@@ -46,46 +46,30 @@ CBT_2021_wrap.do_cumul = 0;
 CBT_2021_wrap.do_onset = 0;
 
 //-- Plot
-function CBT_Latest_Plot() {
-  d3.csv(CBT_2021_wrap.data_path_list[CBT_2021_wrap.do_onset], function (error, data) {
-    d3.csv(CBT_2021_wrap.data_path_list[2], function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      CBT_Make_Canvas(CBT_2021_wrap);
-      CBT_Format_Data(CBT_2021_wrap, data);
-      CBT_Format_Data_2(CBT_2021_wrap, data2);
-      CBT_Initialize(CBT_2021_wrap);
-      CBT_Update(CBT_2021_wrap);
-    });
-  });
+function CBT_2021_Plot() {
+  d3.queue()
+    .defer(d3.csv, CBT_2021_wrap.data_path_list[CBT_2021_wrap.do_onset])
+    .defer(d3.csv, CBT_2021_wrap.data_path_list[2])
+    .await(function (error, data, data2) {CBT_Plot(CBT_2021_wrap, error, data, data2);});
 }
 
-CBT_Latest_Plot();
+function CBT_2021_Replot() {
+  d3.queue()
+    .defer(d3.csv, CBT_2021_wrap.data_path_list[CBT_2021_wrap.do_onset])
+    .await(function (error, data) {CBT_Replot(CBT_2021_wrap, error, data);});
+}
+
+CBT_2021_Plot();
 
 //-- Buttons
 $(document).on("change", "input:radio[name='" + CBT_2021_wrap.tag + "_doCumul']", function (event) {
   CBT_2021_wrap.do_cumul = this.value;
-  data_path = CBT_2021_wrap.data_path_list[CBT_2021_wrap.do_onset]
-  
-  d3.csv(data_path, function (error, data) {
-    if (error) return console.warn(error);
-    
-    CBT_Format_Data(CBT_2021_wrap, data);
-    CBT_Update(CBT_2021_wrap);
-  });
+  CBT_2021_Replot();
 });
 
 $(document).on("change", "input:radio[name='" + CBT_2021_wrap.tag + "_doOnset']", function (event) {
   CBT_2021_wrap.do_onset = this.value
-  data_path = CBT_2021_wrap.data_path_list[CBT_2021_wrap.do_onset]
-  
-  d3.csv(data_path, function (error, data) {
-    if (error) return console.warn(error);
-    
-    CBT_Format_Data(CBT_2021_wrap, data);
-    CBT_Update(CBT_2021_wrap);
-  });
+  CBT_2021_Replot();
 });
 
 //-- Save button
@@ -110,5 +94,5 @@ $(document).on("change", "input:radio[name='2021_language']", function (event) {
   d3.selectAll(CBT_2021_wrap.id+' .plot').remove();
   
   //-- Replot
-  CBT_Latest_Plot();
+  CBT_2021_Plot();
 });

@@ -46,46 +46,30 @@ CBD_2021_wrap.do_cumul = 0;
 CBD_2021_wrap.do_onset = 0;
 
 //-- Plot
-function CBD_Latest_Plot() {
-  d3.csv(CBD_2021_wrap.data_path_list[CBD_2021_wrap.do_onset], function (error, data) {
-    d3.csv(CBD_2021_wrap.data_path_list[2], function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      CBD_Make_Canvas(CBD_2021_wrap);
-      CBD_Format_Data(CBD_2021_wrap, data);
-      CBD_Format_Data_2(CBD_2021_wrap, data2);
-      CBD_Initialize(CBD_2021_wrap);
-      CBD_Update(CBD_2021_wrap);
-    });
-  });
+function CBD_2021_Plot() {
+  d3.queue()
+    .defer(d3.csv, CBD_2021_wrap.data_path_list[CBD_2021_wrap.do_onset])
+    .defer(d3.csv, CBD_2021_wrap.data_path_list[2])
+    .await(function (error, data, data2) {CBD_Plot(CBD_2021_wrap, error, data, data2);});
 }
 
-CBD_Latest_Plot();
+function CBD_2021_Replot() {
+  d3.queue()
+    .defer(d3.csv, CBD_2021_wrap.data_path_list[CBD_2021_wrap.do_onset])
+    .await(function (error, data) {CBD_Replot(CBD_2021_wrap, error, data);});
+}
+
+CBD_2021_Plot();
 
 //-- Buttons
 $(document).on("change", "input:radio[name='" + CBD_2021_wrap.tag + "_doCumul']", function (event) {
   CBD_2021_wrap.do_cumul = this.value;
-  dataPath = CBD_2021_wrap.data_path_list[CBD_2021_wrap.do_onset]
-  
-  d3.csv(dataPath, function (error, data) {
-    if (error) return console.warn(error);
-    
-    CBD_Format_Data(CBD_2021_wrap, data);
-    CBD_Update(CBD_2021_wrap);
-  });
+  CBD_2021_Replot();
 });
 
 $(document).on("change", "input:radio[name='" + CBD_2021_wrap.tag + "_doOnset']", function (event) {
   CBD_2021_wrap.do_onset = this.value
-  dataPath = CBD_2021_wrap.data_path_list[CBD_2021_wrap.do_onset]
-  
-  d3.csv(dataPath, function (error, data) {
-    if (error) return console.warn(error);
-    
-    CBD_Format_Data(CBD_2021_wrap, data);
-    CBD_Update(CBD_2021_wrap);
-  });
+  CBD_2021_Replot();
 });
 
 //-- Save
@@ -110,5 +94,5 @@ $(document).on("change", "input:radio[name='2021_language']", function (event) {
   d3.selectAll(CBD_2021_wrap.id+' .plot').remove()
   
   //-- Replot
-  CBD_Latest_Plot();
+  CBD_2021_Plot();
 });

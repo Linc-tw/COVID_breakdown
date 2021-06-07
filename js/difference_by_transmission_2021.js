@@ -36,18 +36,16 @@ DBT_2021_wrap.col_ind = 0;
 
 //-- Plot
 function DBT_2021_Plot() {
-  d3.csv(DBT_2021_wrap.data_path_list[0], function (error, data) {
-    d3.csv(DBT_2021_wrap.data_path_list[1], function (error2, data2) {
-      if (error) return console.warn(error);
-      if (error2) return console.warn(error2);
-      
-      DBT_Make_Canvas(DBT_2021_wrap);
-      DBT_Format_Data(DBT_2021_wrap, data);
-      DBT_Format_Data_2(DBT_2021_wrap, data2);
-      DBT_Initialize(DBT_2021_wrap);
-      DBT_Update(DBT_2021_wrap);
-    });
-  });
+  d3.queue()
+    .defer(d3.csv, DBT_2021_wrap.data_path_list[0])
+    .defer(d3.csv, DBT_2021_wrap.data_path_list[1])
+    .await(function (error, data, data2) {DBT_Plot(DBT_2021_wrap, error, data, data2);});
+}
+
+function DBT_2021_Replot() {
+  d3.queue()
+    .defer(d3.csv, DBT_2021_wrap.data_path_list[0])
+    .await(function (error, data) {DBT_Replot(DBT_2021_wrap, error, data);});
 }
 
 DBT_2021_Plot();
@@ -55,14 +53,7 @@ DBT_2021_Plot();
 //-- Buttons
 $(document).on("change", "input:radio[name='" + DBT_2021_wrap.tag + "_colInd']", function (event) {
   DBT_2021_wrap.col_ind = this.value;
-  data_path = DBT_2021_wrap.data_path_list[0]
-  
-  d3.csv(data_path, function (error, data) {
-    if (error) return console.warn(error);
-    
-    DBT_Format_Data(DBT_2021_wrap, data);
-    DBT_Update(DBT_2021_wrap);
-  });
+  DBT_2021_Replot();
 });
 
 //-- Save button
