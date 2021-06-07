@@ -5,7 +5,7 @@ processed_data/
 Summary
 -------
 
-- This folder & its sub-folder contain csv files which are directly used for plotting.
+- This folder & its sub-folders contain csv files which are directly used for plotting.
 - These csv files are processed & calculated from big csv files in `raw_data`.
 - Unless specified, all files here only contain ASCII strings.
 

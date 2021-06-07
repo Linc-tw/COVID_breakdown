@@ -5,13 +5,13 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="This site informs general public about COVID-19 with data visualization. It shows cases, testing, & vaccination statistics in Taiwan." />
-        <meta property="og:title" content="Data source | COVID-19 Statistics in Taiwan" />
+        <meta property="og:title" content="Highlight 2021 | COVID-19 Statistics in Taiwan" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://linc-tw.github.io/COVID_breakdown/timeline.html" />
+        <meta property="og:url" content="https://linc-tw.github.io/COVID_breakdown/2021_highlight.html" />
         <meta property="og:image" content="https://linc-tw.github.io/COVID_breakdown/figures/screenshot.png" />
         <meta property="og:description" content="This site informs general public about COVID-19 with data visualization. It shows cases, testing, & vaccination statistics in Taiwan." />
         
-        <title>Data source | COVID-19 Statistics in Taiwan</title>
+        <title>Highlight 2021 | COVID-19 Statistics in Taiwan</title>
         
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&family=Roboto&display=swap" rel="stylesheet"> 
         <link href="css/template.css" rel="stylesheet" />
@@ -126,7 +126,7 @@
                     </div>
                     
                     <!-- Social media -->
-                   <div class="sb-sidenav-footer-covid icon">
+                    <div class="sb-sidenav-footer-covid icon">
                         <a href="https://github.com/Linc-tw/COVID_breakdown" target="_blank">
                             <img src="figures/GitHub-Mark-Light-64px.png" alt="GitHub"></img>
                         </a>
@@ -143,39 +143,144 @@
                 <main>
                     <div class="container-fluid">
                         <h1 id="title" class="mt-4"></h1>
-                        <h3 id="title_source"></h3>
+                        <h3 id="title_2021_highlight"></h3>
                         <div class="row">
                         
-                            <div class="col-lg-6 col-xl-4">
+                            <!-- Status evolution -->
+                            <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-server mr-1"></i> 
-                                        <span id="data_source_original_title"></span>
+                                        <i class="fas fa-thermometer-half mr-1"></i> <span id="status_evolution_title"></span>
                                     </div>
                                     
-                                    <div id="data_source_original_body" class="card-body" style="text-align: justify;"></div>
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <button id='status_evolution_2021_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="status_evolution_2021"></div>
                                 </div>
                             </div>
                             
-                            <div class="col-lg-6 col-xl-4">
+                            <!-- Various rates -->
+                            <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-box mr-1"></i>
-                                        <span id="data_source_raw_title"></span>
+                                        <i class="fas fa-chart-line mr-1"></i> <span id="various_rates_title"></span>
                                     </div>
                                     
-                                    <div id="data_source_raw_body" class="card-body" style="text-align: justify;"></div>
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <button id='various_rates_2021_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="various_rates_2021"></div>
                                 </div>
                             </div>
                             
-                            <div class="col-lg-6 col-xl-4">
+                            <!-- Case by transmission -->
+                            <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-archive mr-1"></i>
-                                        <span id="data_source_processed_title"></span>
+                                        <i class="fas fa-head-side-cough mr-1"></i> <span id="case_by_transmission_title"></span>
                                     </div>
                                     
-                                    <div id="data_source_processed_body" class="card-body" style="text-align: justify;"></div>
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active">
+                                                    <input type="radio" name="case_by_transmission_2021_doCumul" value=0 checked>
+                                                    <span id="case_by_transmission_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid">
+                                                    <input type="radio" name="case_by_transmission_2021_doCumul" value=1>
+                                                    <span id="case_by_transmission_button_2"></span>
+                                                </label>
+                                            </div>
+                                            <span style="display:inline-block; width: 8px;"></span>
+                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active">
+                                                    <input type="radio" name="case_by_transmission_2021_doOnset" value=0 checked>
+                                                    <span id="case_by_transmission_button_3"></span>
+                                                </label>
+                                                <label class="btn btn-covid">
+                                                    <input type="radio" name="case_by_transmission_2021_doOnset" value=1>
+                                                    <span id="case_by_transmission_button_4"></span>
+                                                </label>
+                                            </div>
+                                            <span style="display:inline-block; width: 8px;"></span>
+                                            <button id='case_by_transmission_2021_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="case_by_transmission_2021"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Test by criterion -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-vial mr-1"></i> <span id="test_by_criterion_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active">
+                                                    <input type="radio" name="test_by_criterion_2021_doCumul" value=0 checked>
+                                                    <span id="test_by_criterion_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid">
+                                                    <input type="radio" name="test_by_criterion_2021_doCumul" value=1>
+                                                    <span id="test_by_criterion_button_2"></span>
+                                                </label>
+                                            </div>
+                                            <span style="display:inline-block; width: 8px;"></span>
+                                            <button id='test_by_criterion_2021_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="test_by_criterion_2021"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Border entry -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-plane-slash mr-1"></i> <span id="border_statistics_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm"> 
+                                              <span id="border_statistics_text"></span>
+                                              <span style="display:inline-block; width: 16px;"></span>
+                                            </div>
+                                            
+                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active">
+                                                    <input type="radio" name="border_statistics_2021_doExit" value=0 checked>
+                                                    <span id="border_statistics_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid">
+                                                    <input type="radio" name="border_statistics_2021_doExit" value=1>
+                                                    <span id="border_statistics_button_2"></span>
+                                                </label>
+                                                <label class="btn btn-covid">
+                                                    <input type="radio" name="border_statistics_2021_doExit" value=2>
+                                                    <span id="border_statistics_button_3"></span>
+                                                </label>
+                                            </div>
+                                            <span style="display:inline-block; width: 8px;"></span>
+                                            <button id='border_statistics_2021_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="border_statistics_2021"></div>
                                 </div>
                             </div>
                             
@@ -209,14 +314,27 @@
         <script src="js/toggle_sidebar.js"></script>
         <script src="js/text_translation.js"></script>
         
+        <script src="js/status_evolution.js"></script>
+        <script src="js/status_evolution_2021.js"></script>
+        <script src="js/various_rates.js"></script>
+        <script src="js/various_rates_2021.js"></script>
+        <script src="js/case_by_transmission.js"></script>
+        <script src="js/case_by_transmission_2021.js"></script>
+        <script src="js/border_statistics.js"></script>
+        <script src="js/border_statistics_2021.js"></script>
+        <script src="js/difference_by_transmission.js"></script>
+        <script src="js/difference_by_transmission_2021.js"></script>
+        
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58898441-4"></script>
         <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'UA-58898441-4');
+          var host = window.location.hostname;
+          if (!host in ["localhost", "127.0.0.1"]) {	
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-58898441-4');
+          }
         </script>
     </body>
 </html>
-

@@ -29,14 +29,48 @@ function TT_Add_Html(id, string) {
 //-- Text content
 function text_translation() {
   if (GS_lang == 'zh-tw') {
-    //-- Header + menu + footer
+    var str_latest = "近90日統計";
+    var str_2021 = "2021統計";
+    var str_2020 = "2020統計";
+    var str_highlight = "儀表板";
+    var str_breakdown = "個案統計";
+    var str_vaccination = "疫苗接種";
+    var str_timeline = "時間軸";
+    var str_source = "資料來源";
+    var str_copyleft = "版權沒有";
+    var str_slow = "載入費時";
+    
+    //-- Menu
+    TT_Add_Str("menu_latest", str_latest);
+    TT_Add_Str("menu_latest_highlight", str_highlight);
+    TT_Add_Str("menu_latest_breakdown", str_breakdown);
+    TT_Add_Str("menu_latest_vaccination", str_vaccination);
+    TT_Add_Str("menu_2021", str_2021);
+    TT_Add_Str("menu_2021_highlight", str_highlight);
+    TT_Add_Str("menu_2021_breakdown", str_breakdown);
+    TT_Add_Str("menu_2021_vaccination", str_vaccination);
+    TT_Add_Html("menu_2020", "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
+    TT_Add_Str("menu_2020_highlight", str_highlight);
+    TT_Add_Str("menu_2020_breakdown", str_breakdown);
+    TT_Add_Str("menu_2020_vaccination", str_vaccination);
+    TT_Add_Str("menu_timeline", str_timeline);
+    TT_Add_Str("menu_source", str_source);
+    TT_Add_Str("menu_copyleft", str_copyleft);
+    
+    //-- Header + footer
     TT_Add_Str("title", "嚴重特殊傳染性肺炎 台灣疫情");
-    TT_Add_Str("menu_summary", "近90日摘要");
-    TT_Add_Str("menu_policy", "防疫措施");
-    TT_Add_Html("menu_2020", "<p style='margin-bottom: 0em'>2020統計<br/>(載入費時)</p>");
-    TT_Add_Str("menu_2021", "2021統計");
-    TT_Add_Str("menu_source", "資料來源");
-    TT_Add_Str("menu_copyleft", "版權沒有");
+    TT_Add_Str("title_latest_highlight", str_latest + " - " + str_highlight);
+    TT_Add_Str("title_latest_breakdown", str_latest + " - " + str_breakdown);
+    TT_Add_Str("title_latest_vaccination", str_latest + " - " + str_vaccination);
+    TT_Add_Str("title_2021_highlight", str_2021 + " - " + str_highlight);
+    TT_Add_Str("title_2021_breakdown", str_2021 + " - " + str_breakdown);
+    TT_Add_Str("title_2021_vaccination", str_2021 + " - " + str_vaccination);
+    TT_Add_Str("title_2020_highlight", str_2020 + " - " + str_highlight);
+    TT_Add_Str("title_2020_breakdown", str_2020 + " - " + str_breakdown);
+    TT_Add_Str("title_2020_vaccination", str_2020 + " - " + str_vaccination);
+    TT_Add_Str("title_timeline", str_timeline);
+    TT_Add_Str("title_source", str_source);
+    TT_Add_Str("title_copyleft", str_copyleft);
     TT_Add_Str("footer_last_update", '最後更新：' + TT_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3');
     
     //-- Data source page
@@ -51,11 +85,27 @@ function text_translation() {
     TT_Add_Str("no_right_reserved_title", "啊就真的沒有版權");
     TT_Add_Html("no_right_reserved_body", "<p>本站所創作之所有文字及圖像均以<a href='https://creativecommons.org/publicdomain/zero/1.0/deed.zh_TW' target='_blank'>CC0 1.0 通用 公眾領域貢獻宣告 <i class='fas fa-external-link-alt'></i></a> 條款發布。</p><p>意即使用者可自由用作營利或非營利之途，且不需經許可或標示來源。</p><p>原始碼授權條款請洽此<a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>連結 <i class='fas fa-external-link-alt'></i></a>。</p>");
     
+    
+    
     //-- Status evolution
     TT_Add_Str("status_evolution_title", "疫情變化");
     
     //-- Various rates
     TT_Add_Str("various_rates_title", "各種比率之七日平均");
+    
+    //-- Test by criterion
+    TT_Add_Str("test_by_criterion_title", "檢驗數量");
+    TT_Add_Str("test_by_criterion_button_1", "逐日");
+    TT_Add_Str("test_by_criterion_button_2", "累計");
+    
+    //-- Border statistics
+    TT_Add_Str("border_statistics_title", "入出境人數統計");
+    TT_Add_Str("border_statistics_text", "逐月更新");
+    TT_Add_Str("border_statistics_button_1", "入境");
+    TT_Add_Str("border_statistics_button_2", "出境");
+    TT_Add_Str("border_statistics_button_3", "合計");
+    
+    
     
     //-- Case by transmission
     TT_Add_Str("case_by_transmission_title", "依感染源之確診人數");
@@ -88,17 +138,7 @@ function text_translation() {
     TT_Add_Str("difference_by_transmission_button_3", "本土");
     TT_Add_Str("difference_by_transmission_button_4", "其他");
     
-    //-- Test by criterion
-    TT_Add_Str("test_by_criterion_title", "檢驗數量");
-    TT_Add_Str("test_by_criterion_button_1", "逐日");
-    TT_Add_Str("test_by_criterion_button_2", "累計");
     
-    //-- Border statistics
-    TT_Add_Str("border_statistics_title", "入出境人數統計");
-    TT_Add_Str("border_statistics_text", "逐月更新");
-    TT_Add_Str("border_statistics_button_1", "入境");
-    TT_Add_Str("border_statistics_button_2", "出境");
-    TT_Add_Str("border_statistics_button_3", "合計");
     
     //-- Criteria timeline
     TT_Add_Str("criteria_timeline_title", "檢驗通報標準沿革");
@@ -114,14 +154,48 @@ function text_translation() {
   }
   
   else if (GS_lang == 'fr') {
-    //-- Header + menu + footer
+    var str_latest = "Derniers 90 jours";
+    var str_2021 = "Stat 2021";
+    var str_2020 = "Stat 2020";
+    var str_highlight = "Mise au point";
+    var str_breakdown = "Analyse des cas";
+    var str_vaccination = "Vaccination";
+    var str_timeline = "Chronologie";
+    var str_source = "Source des données";
+    var str_copyleft = "Sans droit d'auteur";
+    var str_slow = "chargement lent";
+    
+    //-- Menu
+    TT_Add_Str("menu_latest", str_latest);
+    TT_Add_Str("menu_latest_highlight", str_highlight);
+    TT_Add_Str("menu_latest_breakdown", str_breakdown);
+    TT_Add_Str("menu_latest_vaccination", str_vaccination);
+    TT_Add_Str("menu_2021", str_2021);
+    TT_Add_Str("menu_2021_highlight", str_highlight);
+    TT_Add_Str("menu_2021_breakdown", str_breakdown);
+    TT_Add_Str("menu_2021_vaccination", str_vaccination);
+    TT_Add_Html("menu_2020", "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
+    TT_Add_Str("menu_2020_highlight", str_highlight);
+    TT_Add_Str("menu_2020_breakdown", str_breakdown);
+    TT_Add_Str("menu_2020_vaccination", str_vaccination);
+    TT_Add_Str("menu_timeline", str_timeline);
+    TT_Add_Str("menu_source", str_source);
+    TT_Add_Str("menu_copyleft", str_copyleft);
+    
+    //-- Header + footer
     TT_Add_Str("title", "Statistiques de COVID-19 à Taïwan");
-    TT_Add_Str("menu_summary", "Derniers 90 jours");
-    TT_Add_Str("menu_policy", "Mesures de prévention");
-    TT_Add_Html("menu_2020", "<p style='margin-bottom: 0em'>Évolution en 2020<br/>(chargement lent)</p>");
-    TT_Add_Str("menu_2021", "Évolution en 2021");
-    TT_Add_Str("menu_source", "Source des données");
-    TT_Add_Str("menu_copyleft", "Sans droit d'auteur");
+    TT_Add_Str("title_latest_highlight", str_latest + " - " + str_highlight);
+    TT_Add_Str("title_latest_breakdown", str_latest + " - " + str_breakdown);
+    TT_Add_Str("title_latest_vaccination", str_latest + " - " + str_vaccination);
+    TT_Add_Str("title_2021_highlight", str_2021 + " - " + str_highlight);
+    TT_Add_Str("title_2021_breakdown", str_2021 + " - " + str_breakdown);
+    TT_Add_Str("title_2021_vaccination", str_2021 + " - " + str_vaccination);
+    TT_Add_Str("title_2020_highlight", str_2020 + " - " + str_highlight);
+    TT_Add_Str("title_2020_breakdown", str_2020 + " - " + str_breakdown);
+    TT_Add_Str("title_2020_vaccination", str_2020 + " - " + str_vaccination);
+    TT_Add_Str("title_timeline", str_timeline);
+    TT_Add_Str("title_source", str_source);
+    TT_Add_Str("title_copyleft", str_copyleft);
     TT_Add_Str("footer_last_update", 'Dernière mise à jour : ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3');
     
     //-- Data source page
@@ -136,11 +210,27 @@ function text_translation() {
     TT_Add_Str("no_right_reserved_title", "Fièrement sans droit d'auteur");
     TT_Add_Html("no_right_reserved_body", "<p>Tous les textes et les graphes créés sur ce site sont distribués sous <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.fr' target='_blank'>CC0 1.0 universel Transfert dans le Domaine Public <i class='fas fa-external-link-alt'></i></a>.</p><p>Cela signifie que vous pouvez en faire presque tout ce que vous voulez : usages personnel et/ou commercial, sans avoir besoin d'autorisation ou d'attribution d'auteur.</p><p>La license pour les codes et les scripts se trouve <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>ici <i class='fas fa-external-link-alt'></i></a>.</p>");
     
+    
+    
     //-- Status evolution
     TT_Add_Str("status_evolution_title", "Évolution de la situation");
     
     //-- Various rates
     TT_Add_Str("various_rates_title", "Taux en moyenne glissante sur 7 jours");
+    
+    //-- Test by criterion
+    TT_Add_Str("test_by_criterion_title", "Nombre de tests par critère");
+    TT_Add_Str("test_by_criterion_button_1", "Quotidiens");
+    TT_Add_Str("test_by_criterion_button_2", "Cumulés");
+    
+    //-- Border statistics
+    TT_Add_Str("border_statistics_title", "Statistiques frontalières");
+    TT_Add_Str("border_statistics_text", "Mise à jour mensuellement");
+    TT_Add_Str("border_statistics_button_1", "Arrivée");
+    TT_Add_Str("border_statistics_button_2", "Départ");
+    TT_Add_Str("border_statistics_button_3", "Total");
+    
+    
     
     //-- Case by transmission
     TT_Add_Str("case_by_transmission_title", "Cas confirmés par moyen de transmission");
@@ -173,17 +263,7 @@ function text_translation() {
     TT_Add_Str("difference_by_transmission_button_3", "Locaux");
     TT_Add_Str("difference_by_transmission_button_4", "Divers");
     
-    //-- Test by criterion
-    TT_Add_Str("test_by_criterion_title", "Nombre de tests par critère");
-    TT_Add_Str("test_by_criterion_button_1", "Quotidiens");
-    TT_Add_Str("test_by_criterion_button_2", "Cumulés");
     
-    //-- Border statistics
-    TT_Add_Str("border_statistics_title", "Statistiques frontalières");
-    TT_Add_Str("border_statistics_text", "Mise à jour mensuellement");
-    TT_Add_Str("border_statistics_button_1", "Arrivée");
-    TT_Add_Str("border_statistics_button_2", "Départ");
-    TT_Add_Str("border_statistics_button_3", "Total");
     
     //-- Criteria timeline
     TT_Add_Str("criteria_timeline_title", "Chronologie des dépistages systématiques");
@@ -199,14 +279,48 @@ function text_translation() {
   }
   
   else { //-- En
-    //-- Header + menu + footer
+    var str_latest = "Last 90 days";
+    var str_2021 = "Stats 2021";
+    var str_2020 = "Stats 2020";
+    var str_highlight = "Highlight";
+    var str_breakdown = "Case breakdown";
+    var str_vaccination = "Vaccination";
+    var str_timeline = "Timeline";
+    var str_source = "Data Source";
+    var str_copyleft = "No right reserved";
+    var str_slow = "slow loading";
+    
+    //-- Menu
+    TT_Add_Str("menu_latest", str_latest);
+    TT_Add_Str("menu_latest_highlight", str_highlight);
+    TT_Add_Str("menu_latest_breakdown", str_breakdown);
+    TT_Add_Str("menu_latest_vaccination", str_vaccination);
+    TT_Add_Str("menu_2021", str_2021);
+    TT_Add_Str("menu_2021_highlight", str_highlight);
+    TT_Add_Str("menu_2021_breakdown", str_breakdown);
+    TT_Add_Str("menu_2021_vaccination", str_vaccination);
+    TT_Add_Html("menu_2020", "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
+    TT_Add_Str("menu_2020_highlight", str_highlight);
+    TT_Add_Str("menu_2020_breakdown", str_breakdown);
+    TT_Add_Str("menu_2020_vaccination", str_vaccination);
+    TT_Add_Str("menu_timeline", str_timeline);
+    TT_Add_Str("menu_source", str_source);
+    TT_Add_Str("menu_copyleft", str_copyleft);
+    
+    //-- Header + footer
     TT_Add_Str("title", "COVID-19 Statistics in Taiwan");
-    TT_Add_Str("menu_summary", "90-day dashboard");
-    TT_Add_Str("menu_policy", "Policy");
-    TT_Add_Html("menu_2020", "<p style='margin-bottom: 0em'>Evolution in 2020<br/>(slow loading)</p>");
-    TT_Add_Str("menu_2021", "Evolution in 2021");
-    TT_Add_Str("menu_source", "Data Source");
-    TT_Add_Str("menu_copyleft", "No right reserved");
+    TT_Add_Str("title_latest_highlight", str_latest + " - " + str_highlight);
+    TT_Add_Str("title_latest_breakdown", str_latest + " - " + str_breakdown);
+    TT_Add_Str("title_latest_vaccination", str_latest + " - " + str_vaccination);
+    TT_Add_Str("title_2021_highlight", str_2021 + " - " + str_highlight);
+    TT_Add_Str("title_2021_breakdown", str_2021 + " - " + str_breakdown);
+    TT_Add_Str("title_2021_vaccination", str_2021 + " - " + str_vaccination);
+    TT_Add_Str("title_2020_highlight", str_2020 + " - " + str_highlight);
+    TT_Add_Str("title_2020_breakdown", str_2020 + " - " + str_breakdown);
+    TT_Add_Str("title_2020_vaccination", str_2020 + " - " + str_vaccination);
+    TT_Add_Str("title_timeline", str_timeline);
+    TT_Add_Str("title_source", str_source);
+    TT_Add_Str("title_copyleft", str_copyleft);
     TT_Add_Str("footer_last_update", 'Last update: ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3');
     
     //-- Data source page
@@ -221,13 +335,27 @@ function text_translation() {
     TT_Add_Str("no_right_reserved_title", "Proudly No Right Reserved");
     TT_Add_Html("no_right_reserved_body", "<p>All texts and plots created by this site are released under <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en' target='_blank'>CC0 1.0 Universal Public Domain Dedication <i class='fas fa-external-link-alt'></i></a>.</p><p>That basically means you can do almost whatever you want with them: personal and commercial use, no permission or attribution needed.</p><p>The license for codes and scripts can be found <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>here <i class='fas fa-external-link-alt'></i></a>.</p>");
     
+    
+    
     //-- Status evolution
     TT_Add_Str("status_evolution_title", "Status Evolution");
     
     //-- Various rates
     TT_Add_Str("various_rates_title", "7-day Average of Various Rates");
     
-    TT_Add_Str("case_by_county_title", "case_by_county");
+    //-- Test by criterion
+    TT_Add_Str("test_by_criterion_title", "Number of Tests by Reporting Criterion");
+    TT_Add_Str("test_by_criterion_button_1", "Daily");
+    TT_Add_Str("test_by_criterion_button_2", "Cumulative");
+    
+    //-- Border statistics
+    TT_Add_Str("border_statistics_title", "Border Crossing");
+    TT_Add_Str("border_statistics_text", "Updated monthly");
+    TT_Add_Str("border_statistics_button_1", "Arrival");
+    TT_Add_Str("border_statistics_button_2", "Departure");
+    TT_Add_Str("border_statistics_button_3", "Both");
+    
+    
     
     //-- Case by transmission
     TT_Add_Str("case_by_transmission_title", "Confirmed Cases by Transmission Type");
@@ -260,17 +388,11 @@ function text_translation() {
     TT_Add_Str("difference_by_transmission_button_3", "Local");
     TT_Add_Str("difference_by_transmission_button_4", "Others");
     
-    //-- Test by criterion
-    TT_Add_Str("test_by_criterion_title", "Number of Tests by Reporting Criterion");
-    TT_Add_Str("test_by_criterion_button_1", "Daily");
-    TT_Add_Str("test_by_criterion_button_2", "Cumulative");
     
-    //-- Border statistics
-    TT_Add_Str("border_statistics_title", "Border Crossing");
-    TT_Add_Str("border_statistics_text", "Updated monthly");
-    TT_Add_Str("border_statistics_button_1", "Arrival");
-    TT_Add_Str("border_statistics_button_2", "Departure");
-    TT_Add_Str("border_statistics_button_3", "Both");
+    
+    TT_Add_Str("case_by_county_title", "case_by_county");
+    
+    
     
     //-- Criteria timeline
     TT_Add_Str("criteria_timeline_title", "Chronology of Systematic Testing");
@@ -305,37 +427,7 @@ d3.csv("processed_data/key_numbers.csv", function (error, data) {
 });
 
 //-- Language button
-$(document).on("change", "input:radio[name='index_language']", function (event) {
-  GS_lang = this.value;
-  Cookies.set("lang", GS_lang);
-  text_translation();
-});
-
-$(document).on("change", "input:radio[name='2020_language']", function (event) {
-  GS_lang = this.value;
-  Cookies.set("lang", GS_lang);
-  text_translation();
-});
-
-$(document).on("change", "input:radio[name='2021_language']", function (event) {
-  GS_lang = this.value;
-  Cookies.set("lang", GS_lang);
-  text_translation();
-});
-
-$(document).on("change", "input:radio[name='policy_language']", function (event) {
-  GS_lang = this.value;
-  Cookies.set("lang", GS_lang);
-  text_translation();
-});
-
-$(document).on("change", "input:radio[name='source_language']", function (event) {
-  GS_lang = this.value;
-  Cookies.set("lang", GS_lang);
-  text_translation();
-});
-
-$(document).on("change", "input:radio[name='copyleft_language']", function (event) {
+$(document).on("change", "input:radio[name='language']", function (event) {
   GS_lang = this.value;
   Cookies.set("lang", GS_lang);
   text_translation();

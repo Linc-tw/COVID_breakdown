@@ -9,32 +9,37 @@ This repository hosts and generates a [dashboard](https://linc-tw.github.io/COVI
 Description
 -----------
 
-The goal of this project is to inform general public about COVID-19 with data visualization. 
-It allows users to monitor the situation in Taiwan and to ponder over epidemic prevention policies.
+This site informs general public about COVID-19 with data visualization.
+It shows cases, testing, & vaccination statistics in Taiwan.
 
 
 Features
 --------
 
-There are 7 charts in _90-day dashboard_:
+The most recent statisitcs can be found in _Last 90 days_.
+In total, 9 charts are shown on 2 pages, _Highlight_ & _Case breakdown_.
+
+In _Highlight_:
 - Status Evolution
 - 7-day Average of Various Rates
 - Confirmed Cases by Transmission Type
+- Number of Tests by Reporting Criterion
+- Border Crossing
+
+In _Case breakdown_:
+- Confirmed Cases by Transmission Type (repeated)
 - Confirmed Cases by Detection Channel
 - Correlations between Travel History & Symptoms
 - Correlations between Age & Symptoms
-- How many days to identify cases? (day difference between report date & entry/onset date)
+- How many days to identify cases?
 
-4 charts in _Policy_:
-- Number of Tests by Reporting Criterion
-- Border Crossing
+The above charts are all generated with data of last 90 days.
+The same 9 charts made from all-year statistics can be found in _Stats 2020_ & _Stats 2021_.
+Loading can be slow for the 4 pages of these categories due to large files.
+
+There are also 2 charts in _Timeline_:
 - Chronology of Systematic Testing
 - Pandemic Timeline (text in Mandarin)
-
-From above, the first 9 charts are all produced with data of last 90 days.
-
-The same 9 charts made from all-year statistics can be found in _Evolution in 2020_ & _Evolution in 2021_.
-Loading can be slow for these 2 pages due to large files.
 
 Other ideas for plots are welcome. To be proposed at [Issues](https://github.com/Linc-tw/COVID_breakdown/issues).
 

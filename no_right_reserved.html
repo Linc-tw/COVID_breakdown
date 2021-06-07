@@ -4,12 +4,12 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="This site informs general public about COVID-19 with data visualization. It allows users to monitor the situation in Taiwan and to ponder over epidemic prevention policies." />
+        <meta name="description" content="This site informs general public about COVID-19 with data visualization. It shows cases, testing, & vaccination statistics in Taiwan." />
         <meta property="og:title" content="No right reserved | COVID-19 Statistics in Taiwan" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://linc-tw.github.io/COVID_breakdown/no_right_reserved.html" />
         <meta property="og:image" content="https://linc-tw.github.io/COVID_breakdown/figures/screenshot.png" />
-        <meta property="og:description" content="This site informs general public about COVID-19 with data visualization. It allows users to monitor the situation in Taiwan and to ponder over epidemic prevention policies." />
+        <meta property="og:description" content="This site informs general public about COVID-19 with data visualization. It shows cases, testing, & vaccination statistics in Taiwan." />
         
         <title>No right reserved | COVID-19 Statistics in Taiwan</title>
         
@@ -37,43 +37,91 @@
                             <div class="sb-sidenav-menu-heading-nouppercase">
                                 <div class="btn-group-vertical btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                     <label id="lang_en" class="btn btn-covid-white">
-                                        <input type="radio" name="copyleft_language" value='en' checked>English<br>
+                                        <input type="radio" name="language" value='en' checked>English<br>
                                     </label>
                                     <label id="lang_fr" class="btn btn-covid-white">
-                                        <input type="radio" name="copyleft_language" value='fr'>Français<br>
+                                        <input type="radio" name="language" value='fr'>Français<br>
                                     </label>
                                     <label id="lang_zh-tw" class="btn btn-covid-white">
-                                        <input type="radio" name="copyleft_language" value='zh-tw'>正體中文<br>
+                                        <input type="radio" name="language" value='zh-tw'>正體中文<br>
                                     </label>
                                 </div>
                             </div>
                             
                             <!-- Menu -->
                             <div class="sb-sidenav-menu-heading"></div>
-                            <a class="nav-link" href="index.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                <span id="menu_summary"></span>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_latest" aria-expanded="false" aria-controls="collapse_latest">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-times"></i></div>
+                                <span id="menu_latest"></span>
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <a class="nav-link" href="policy.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-vote-yea"></i></div>
-                                <span id="menu_policy"></span>
-                            </a>
-                            <a class="nav-link" href="2020.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-poll"></i></div>
-                                <span id="menu_2020"></span>
-                            </a>
-                            <a class="nav-link" href="2021.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-poll"></i></div>
+                            <div class="collapse" id="collapse_latest" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="index.html">
+                                        <span id="menu_latest_highlight"></span>
+                                    </a>
+                                    <a class="nav-link" href="latest_breakdown.html">
+                                        <span id="menu_latest_breakdown"></span>
+                                    </a>
+<!--                                    <a class="nav-link" href="latest_vaccination.html">
+                                        <span id="menu_latest_vaccination"></span>
+                                    </a>-->
+                                </nav>
+                            </div>
+                            
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_2021" aria-expanded="false" aria-controls="collapse_2021">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-times"></i></div>
                                 <span id="menu_2021"></span>
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+                            <div class="collapse" id="collapse_2021" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="2021_highlight.html">
+                                        <span id="menu_2021_highlight"></span>
+                                    </a>
+                                    <a class="nav-link" href="2021_breakdown.html">
+                                        <span id="menu_2021_breakdown"></span>
+                                    </a>
+<!--                                    <a class="nav-link" href="2021_vaccination.html">
+                                        <span id="menu_2021_vaccination"></span>
+                                    </a>-->
+                                </nav>
+                            </div>
+                            
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_2020" aria-expanded="false" aria-controls="collapse_2020">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-times"></i></div>
+                                <span id="menu_2020"></span>
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapse_2020" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="2020_highlight.html">
+                                        <span id="menu_2020_highlight"></span>
+                                    </a>
+                                    <a class="nav-link" href="2020_breakdown.html">
+                                        <span id="menu_2020_breakdown"></span>
+                                    </a>
+<!--                                    <a class="nav-link" href="2020_vaccination.html">
+                                        <span id="menu_2020_vaccination"></span>
+                                    </a>-->
+                                </nav>
+                            </div>
+                            
+                            <a class="nav-link" href="timeline.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-hourglass-half"></i></div>
+                                <span id="menu_timeline"></span>
+                            </a>
+                            
                             <a class="nav-link" href="data_source.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-database"></i></div>
                                 <span id="menu_source"></span>
                             </a>
+                            
                             <a class="nav-link" href="no_right_reserved.html">
                                 <div class="sb-nav-link-icon"><i class="fab fa-creative-commons-zero"></i></div>
                                 <span id="menu_copyleft"></span>
                             </a>
+                            
                         </div>
                     </div>
                     
@@ -95,6 +143,7 @@
                 <main>
                     <div class="container-fluid">
                         <h1 id="title" class="mt-4"></h1>
+                        <h3 id="title_copyleft"></h3>
                         <div class="row">
                         
                             <div class="col-lg-6">
@@ -125,7 +174,7 @@
         
         <!-- Scripts -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://d3js.org/d3.v4.js"></script>
         <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
