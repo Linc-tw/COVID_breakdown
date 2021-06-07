@@ -427,32 +427,14 @@ d3.csv("processed_data/key_numbers.csv", function (error, data) {
 });
 
 //-- Language button
-$(document).on("change", "input:radio[name='index_language']", function (event) {
-  GS_lang = this.value;
-  Cookies.set("lang", GS_lang, {sameSite: 'strict'});
-  text_translation();
-});
-
-$(document).on("change", "input:radio[name='latest_breakdown_language']", function (event) {
-  GS_lang = this.value;
-  Cookies.set("lang", GS_lang, {sameSite: 'strict'});
-  text_translation();
-});
-
-$(document).on("change", "input:radio[name='2021_highlight_language']", function (event) {
-  GS_lang = this.value;
-  Cookies.set("lang", GS_lang, {sameSite: 'strict'});
-  text_translation();
-});
-
-$(document).on("change", "input:radio[name='2021_breakdown_language']", function (event) {
-  GS_lang = this.value;
-  Cookies.set("lang", GS_lang, {sameSite: 'strict'});
-  text_translation();
-});
-
 $(document).on("change", "input:radio[name='language']", function (event) {
+  var old_lang_btn = document.getElementById('lang_'+GS_lang);
+  
   GS_lang = this.value;
   Cookies.set("lang", GS_lang, {sameSite: 'strict'});
+  var new_lang_btn = document.getElementById('lang_'+GS_lang);
+  
+  old_lang_btn.classList.remove("active");
+  new_lang_btn.classList.add("active");
   text_translation();
 });

@@ -12,8 +12,8 @@ if (!GS_lang) {
   Cookies.set("lang", GS_lang, {sameSite: 'strict'});
 }
 
-let el = document.getElementById('lang_'+GS_lang);
-el.classList.add("active");
+var GS_lang_btn = document.getElementById('lang_'+GS_lang);
+GS_lang_btn.classList.add("active");
 
 //-- Global variables
 var GS_var = {};
