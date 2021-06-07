@@ -427,8 +427,32 @@ d3.csv("processed_data/key_numbers.csv", function (error, data) {
 });
 
 //-- Language button
+$(document).on("change", "input:radio[name='index_language']", function (event) {
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang, {sameSite: 'strict'});
+  text_translation();
+});
+
+$(document).on("change", "input:radio[name='latest_breakdown_language']", function (event) {
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang, {sameSite: 'strict'});
+  text_translation();
+});
+
+$(document).on("change", "input:radio[name='2021_highlight_language']", function (event) {
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang, {sameSite: 'strict'});
+  text_translation();
+});
+
+$(document).on("change", "input:radio[name='2021_breakdown_language']", function (event) {
+  GS_lang = this.value;
+  Cookies.set("lang", GS_lang, {sameSite: 'strict'});
+  text_translation();
+});
+
 $(document).on("change", "input:radio[name='language']", function (event) {
   GS_lang = this.value;
-  Cookies.set("lang", GS_lang);
+  Cookies.set("lang", GS_lang, {sameSite: 'strict'});
   text_translation();
 });
