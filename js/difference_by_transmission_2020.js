@@ -51,7 +51,12 @@ function DBT_2020_Replot() {
 DBT_2020_Plot();
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + DBT_2020_wrap.tag + "_colInd']", function (event) {
+$(document).on("change", "input:radio[name='" + DBT_2020_wrap.tag + "_ind']", function (event) {
+  var old_btn = document.getElementById(DBT_2020_wrap.tag + '_ind_' + DBT_2020_wrap.col_ind);
+  var new_btn = document.getElementById(DBT_2020_wrap.tag + '_ind_' + this.value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
+  
   DBT_2020_wrap.col_ind = this.value;
   DBT_2020_Replot();
 });

@@ -37,7 +37,7 @@
                             <div class="sb-sidenav-menu-heading-nouppercase">
                                 <div class="btn-group-vertical btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                     <label id="lang_en" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='en' checked>English<br>
+                                        <input type="radio" name="language" value='en'>English<br>
                                     </label>
                                     <label id="lang_fr" class="btn btn-covid-white">
                                         <input type="radio" name="language" value='fr'>Français<br>
@@ -190,23 +190,23 @@
                                     <div class="card-img">
                                         <div class="btn-pos"> 
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_transmission_2021_doCumul" value=0 checked>
+                                                <label class="btn btn-covid active" id="case_by_transmission_2021_cumul_0">
+                                                    <input type="radio" name="case_by_transmission_2021_cumul" value=0 checked>
                                                     <span id="case_by_transmission_button_1"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_transmission_2021_doCumul" value=1>
+                                                <label class="btn btn-covid" id="case_by_transmission_2021_cumul_1">
+                                                    <input type="radio" name="case_by_transmission_2021_cumul" value=1>
                                                     <span id="case_by_transmission_button_2"></span>
                                                 </label>
                                             </div>
                                             <span style="display:inline-block; width: 8px;"></span>
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_transmission_2021_doOnset" value=0 checked>
+                                                <label class="btn btn-covid active" id="case_by_transmission_2021_onset_0">
+                                                    <input type="radio" name="case_by_transmission_2021_onset" value=0 checked>
                                                     <span id="case_by_transmission_button_3"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_transmission_2021_doOnset" value=1>
+                                                <label class="btn btn-covid" id="case_by_transmission_2021_onset_1">
+                                                    <input type="radio" name="case_by_transmission_2021_onset" value=1>
                                                     <span id="case_by_transmission_button_4"></span>
                                                 </label>
                                             </div>
@@ -229,12 +229,12 @@
                                     <div class="card-img">
                                         <div class="btn-pos"> 
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="test_by_criterion_2021_doCumul" value=0 checked>
+                                                <label class="btn btn-covid active" id="test_by_criterion_2021_cumul_0">
+                                                    <input type="radio" name="test_by_criterion_2021_cumul" value=0 checked>
                                                     <span id="test_by_criterion_button_1"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="test_by_criterion_2021_doCumul" value=1>
+                                                <label class="btn btn-covid" id="test_by_criterion_2021_cumul_1">
+                                                    <input type="radio" name="test_by_criterion_2021_cumul" value=1>
                                                     <span id="test_by_criterion_button_2"></span>
                                                 </label>
                                             </div>
@@ -262,16 +262,16 @@
                                             </div>
                                             
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="border_statistics_2021_doExit" value=0 checked>
+                                                <label class="btn btn-covid active" id="border_statistics_2021_exit_0">
+                                                    <input type="radio" name="border_statistics_2021_exit" value=0 checked>
                                                     <span id="border_statistics_button_1"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="border_statistics_2021_doExit" value=1>
+                                                <label class="btn btn-covid" id="border_statistics_2021_exit_1">
+                                                    <input type="radio" name="border_statistics_2021_exit" value=1>
                                                     <span id="border_statistics_button_2"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="border_statistics_2021_doExit" value=2>
+                                                <label class="btn btn-covid" id="border_statistics_2021_exit_2">
+                                                    <input type="radio" name="border_statistics_2021_exit" value=2>
                                                     <span id="border_statistics_button_3"></span>
                                                 </label>
                                             </div>
@@ -320,10 +320,11 @@
         <script src="js/various_rates_2021.js"></script>
         <script src="js/case_by_transmission.js"></script>
         <script src="js/case_by_transmission_2021.js"></script>
+        <script src="js/test_by_criterion.js"></script>        
+        <script src="js/test_by_criterion_2021.js"></script>
         <script src="js/border_statistics.js"></script>
         <script src="js/border_statistics_2021.js"></script>
-        <script src="js/difference_by_transmission.js"></script>
-        <script src="js/difference_by_transmission_2021.js"></script>
+        
         
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58898441-4"></script>

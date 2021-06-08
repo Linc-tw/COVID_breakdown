@@ -705,12 +705,22 @@ function CT_Latest_Plot() {
 CT_Latest_Plot();
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + CT_latest_wrap.tag + "_doFull']", function (event) {
+$(document).on("change", "input:radio[name='" + CT_latest_wrap.tag + "_full']", function (event) {
+  var old_btn = document.getElementById(CT_latest_wrap.tag + '_full_' + CT_latest_wrap.do_full);
+  var new_btn = document.getElementById(CT_latest_wrap.tag + '_full_' + this.value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
+  
   CT_latest_wrap.do_full = this.value;
   CT_Update(CT_latest_wrap);
 });
 
-$(document).on("change", "input:radio[name='" + CT_latest_wrap.tag + "_doTimeline']", function (event) {
+$(document).on("change", "input:radio[name='" + CT_latest_wrap.tag + "_timeline']", function (event) {
+  var old_btn = document.getElementById(CT_latest_wrap.tag + '_timeline_' + CT_latest_wrap.do_timeline);
+  var new_btn = document.getElementById(CT_latest_wrap.tag + '_timeline_' + this.value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
+  
   CT_latest_wrap.do_timeline = this.value;
   CT_Update(CT_latest_wrap);
 });

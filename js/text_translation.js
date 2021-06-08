@@ -428,13 +428,23 @@ d3.csv("processed_data/key_numbers.csv", function (error, data) {
 
 //-- Language button
 $(document).on("change", "input:radio[name='language']", function (event) {
-  var old_lang_btn = document.getElementById('lang_'+GS_lang);
+  var old_btn = document.getElementById('lang_'+GS_lang);
+  var new_btn = document.getElementById('lang_'+this.value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
   
   GS_lang = this.value;
-  Cookies.set("lang", GS_lang, {sameSite: 'strict'});
-  var new_lang_btn = document.getElementById('lang_'+GS_lang);
+  Cookies.set("lang", GS_lang, {sameSite: 'lax'});
   
-  old_lang_btn.classList.remove("active");
-  new_lang_btn.classList.add("active");
   text_translation();
+  
+//   CBT_Latest_Replot();
+//   CBT_2021_Replot();
+//   CBT_2020_Replot();
+//   TBC_Latest_Replot();
+//   TBC_2021_Replot();
+//   TBC_2020_Replot();
+//   BS_Latest_Replot();
+//   BS_2021_Replot();
+//   BS_2020_Replot();
 });

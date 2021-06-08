@@ -48,7 +48,12 @@ function TBC_Latest_Replot() {
 TBC_Latest_Plot();
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + TBC_latest_wrap.tag + "_doCumul']", function (event) {
+$(document).on("change", "input:radio[name='" + TBC_latest_wrap.tag + "_cumul']", function (event) {
+  var old_btn = document.getElementById(TBC_latest_wrap.tag + '_cumul_' + TBC_latest_wrap.do_cumul);
+  var new_btn = document.getElementById(TBC_latest_wrap.tag + '_cumul_' + this.value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
+  
   TBC_latest_wrap.do_cumul = this.value;
   TBC_Latest_Replot();
 });

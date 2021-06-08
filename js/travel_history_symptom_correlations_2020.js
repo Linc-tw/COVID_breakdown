@@ -41,7 +41,12 @@ function THSC_2020_Replot() {
 THSC_2020_Plot();
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + THSC_2020_wrap.tag + "_doCount']", function (event) {
+$(document).on("change", "input:radio[name='" + THSC_2020_wrap.tag + "_count']", function (event) {
+  var old_btn = document.getElementById(THSC_2020_wrap.tag + '_count_' + THSC_2020_wrap.do_count);
+  var new_btn = document.getElementById(THSC_2020_wrap.tag + '_count_' + this.value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
+  
   THSC_2020_wrap.do_count = this.value;
   THSC_2020_Replot();
 });

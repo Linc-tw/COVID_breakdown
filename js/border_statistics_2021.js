@@ -52,7 +52,12 @@ function BS_2021_Replot() {
 BS_2021_Plot();
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + BS_2021_wrap.tag + "_doExit']", function (event) {
+$(document).on("change", "input:radio[name='" + BS_2021_wrap.tag + "_exit']", function (event) {
+  var old_btn = document.getElementById(BS_2021_wrap.tag + '_exit_' + BS_2021_wrap.do_exit);
+  var new_btn = document.getElementById(BS_2021_wrap.tag + '_exit_' + this.value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
+  
   BS_2021_wrap.do_exit = this.value;
   BS_2021_Replot();
 });

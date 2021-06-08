@@ -37,7 +37,7 @@
                             <div class="sb-sidenav-menu-heading-nouppercase">
                                 <div class="btn-group-vertical btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                     <label id="lang_en" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='en' checked>English<br>
+                                        <input type="radio" name="language" value='en'>English<br>
                                     </label>
                                     <label id="lang_fr" class="btn btn-covid-white">
                                         <input type="radio" name="language" value='fr'>Français<br>
@@ -156,23 +156,23 @@
                                     <div class="card-img">
                                         <div class="btn-pos"> 
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_transmission_latest_doCumul" value=0 checked>
+                                                <label class="btn btn-covid active" id="case_by_transmission_latest_cumul_0">
+                                                    <input type="radio" name="case_by_transmission_latest_cumul" value=0 checked>
                                                     <span id="case_by_transmission_button_1"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_transmission_latest_doCumul" value=1>
+                                                <label class="btn btn-covid" id="case_by_transmission_latest_cumul_1">
+                                                    <input type="radio" name="case_by_transmission_latest_cumul" value=1>
                                                     <span id="case_by_transmission_button_2"></span>
                                                 </label>
                                             </div>
                                             <span style="display:inline-block; width: 8px;"></span>
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_transmission_latest_doOnset" value=0 checked>
+                                                <label class="btn btn-covid active" id="case_by_transmission_latest_onset_0">
+                                                    <input type="radio" name="case_by_transmission_latest_onset" value=0 checked>
                                                     <span id="case_by_transmission_button_3"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_transmission_latest_doOnset" value=1>
+                                                <label class="btn btn-covid" id="case_by_transmission_latest_onset_1">
+                                                    <input type="radio" name="case_by_transmission_latest_onset" value=1>
                                                     <span id="case_by_transmission_button_4"></span>
                                                 </label>
                                             </div>
@@ -195,23 +195,23 @@
                                     <div class="card-img">
                                         <div class="btn-pos"> 
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_detection_latest_doCumul" value=0 checked>
+                                                <label class="btn btn-covid active" id="case_by_detection_latest_cumul_0">
+                                                    <input type="radio" name="case_by_detection_latest_cumul" value=0 checked>
                                                     <span id="case_by_detection_button_1"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_detection_latest_doCumul" value=1>
+                                                <label class="btn btn-covid" id="case_by_detection_latest_cumul_1">
+                                                    <input type="radio" name="case_by_detection_latest_cumul" value=1>
                                                     <span id="case_by_detection_button_2"></span>
                                                 </label>
                                             </div>
                                             <span style="display:inline-block; width: 8px;"></span>
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="case_by_detection_latest_doOnset" value=0 checked>
+                                                <label class="btn btn-covid active" id="case_by_detection_latest_onset_0">
+                                                    <input type="radio" name="case_by_detection_latest_onset" value=0 checked>
                                                     <span id="case_by_detection_button_3"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="case_by_detection_latest_doOnset" value=1>
+                                                <label class="btn btn-covid" id="case_by_detection_latest_onset_1">
+                                                    <input type="radio" name="case_by_detection_latest_onset" value=1>
                                                     <span id="case_by_detection_button_4"></span>
                                                 </label>
                                             </div>
@@ -234,12 +234,12 @@
                                     <div class="card-img">
                                         <div class="btn-pos"> 
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="travel_history_symptom_correlations_latest_doCount" value=0 checked>
+                                                <label class="btn btn-covid active" id="travel_history_symptom_correlations_latest_count_0">
+                                                    <input type="radio" name="travel_history_symptom_correlations_latest_count" value=0 checked>
                                                     <span id="travel_history_symptom_correlations_button_1"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="travel_history_symptom_correlations_latest_doCount" value=1>
+                                                <label class="btn btn-covid" id="travel_history_symptom_correlations_latest_count_1">
+                                                    <input type="radio" name="travel_history_symptom_correlations_latest_count" value=1>
                                                     <span id="travel_history_symptom_correlations_button_2"></span>
                                                 </label>
                                             </div>
@@ -262,12 +262,12 @@
                                     <div class="card-img">
                                         <div class="btn-pos"> 
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="age_symptom_correlations_latest_doCount" value=0 checked>
+                                                <label class="btn btn-covid active" id="age_symptom_correlations_latest_count_0">
+                                                    <input type="radio" name="age_symptom_correlations_latest_count" value=0 checked>
                                                     <span id="age_symptom_correlations_button_1"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="age_symptom_correlations_latest_doCount" value=1>
+                                                <label class="btn btn-covid" id="age_symptom_correlations_latest_count_1">
+                                                    <input type="radio" name="age_symptom_correlations_latest_count" value=1>
                                                     <span id="age_symptom_correlations_button_2"></span>
                                                 </label>
                                             </div>
@@ -290,20 +290,20 @@
                                     <div class="card-img">
                                         <div class="btn-pos"> 
                                             <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active">
-                                                    <input type="radio" name="difference_by_transmission_latest_colInd" value=0 checked>
+                                                <label class="btn btn-covid active" id="difference_by_transmission_latest_ind_0">
+                                                    <input type="radio" name="difference_by_transmission_latest_ind" value=0 checked>
                                                     <span id="difference_by_transmission_button_1"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="difference_by_transmission_latest_colInd" value=1>
+                                                <label class="btn btn-covid" id="difference_by_transmission_latest_ind_1">
+                                                    <input type="radio" name="difference_by_transmission_latest_ind" value=1>
                                                     <span id="difference_by_transmission_button_2"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="difference_by_transmission_latest_colInd" value=2>
+                                                <label class="btn btn-covid" id="difference_by_transmission_latest_ind_2">
+                                                    <input type="radio" name="difference_by_transmission_latest_ind" value=2>
                                                     <span id="difference_by_transmission_button_3"></span>
                                                 </label>
-                                                <label class="btn btn-covid">
-                                                    <input type="radio" name="difference_by_transmission_latest_colInd" value=3>
+                                                <label class="btn btn-covid" id="difference_by_transmission_latest_ind_3">
+                                                    <input type="radio" name="difference_by_transmission_latest_ind" value=3>
                                                     <span id="difference_by_transmission_button_4"></span>
                                                 </label>
                                             </div>

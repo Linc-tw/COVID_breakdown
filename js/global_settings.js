@@ -9,7 +9,7 @@
 var GS_lang = Cookies.get("lang"); // 'en', 'fr', 'zh-tw'
 if (!GS_lang) {
   GS_lang = "en";
-  Cookies.set("lang", GS_lang, {sameSite: 'strict'});
+  Cookies.set("lang", GS_lang, {sameSite: 'lax'});
 }
 
 var GS_lang_btn = document.getElementById('lang_'+GS_lang);

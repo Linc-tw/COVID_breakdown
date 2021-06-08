@@ -62,12 +62,22 @@ function CBD_2020_Replot() {
 CBD_2020_Plot();
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + CBD_2020_wrap.tag + "_doCumul']", function (event) {
+$(document).on("change", "input:radio[name='" + CBD_2020_wrap.tag + "_cumul']", function (event) {
+  var old_btn = document.getElementById(CBD_2020_wrap.tag + '_cumul_' + CBD_2020_wrap.do_cumul);
+  var new_btn = document.getElementById(CBD_2020_wrap.tag + '_cumul_' + this.value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
+  
   CBD_2020_wrap.do_cumul = this.value;
   CBD_2020_Replot();
 });
 
-$(document).on("change", "input:radio[name='" + CBD_2020_wrap.tag + "_doOnset']", function (event) {
+$(document).on("change", "input:radio[name='" + CBD_2020_wrap.tag + "_onset']", function (event) {
+  var old_btn = document.getElementById(CBD_2020_wrap.tag + '_onset_' + CBD_2020_wrap.do_onset);
+  var new_btn = document.getElementById(CBD_2020_wrap.tag + '_onset_' + this.value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
+  
   CBD_2020_wrap.do_onset = this.value
   CBD_2020_Replot();
 });

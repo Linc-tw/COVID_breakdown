@@ -41,7 +41,12 @@ function ASC_Latest_Replot() {
 ASC_Latest_Plot();
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + ASC_latest_wrap.tag + "_doCount']", function (event) {
+$(document).on("change", "input:radio[name='" + ASC_latest_wrap.tag + "_count']", function (event) {
+  var old_btn = document.getElementById(ASC_latest_wrap.tag + '_count_' + ASC_latest_wrap.do_count);
+  var new_btn = document.getElementById(ASC_latest_wrap.tag + '_count_' + this.value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
+  
   ASC_latest_wrap.do_count = this.value;
   ASC_Latest_Replot();
 });

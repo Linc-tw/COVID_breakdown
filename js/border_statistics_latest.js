@@ -52,7 +52,12 @@ function BS_Latest_Replot() {
 BS_Latest_Plot();
 
 //-- Buttons
-$(document).on("change", "input:radio[name='" + BS_latest_wrap.tag + "_doExit']", function (event) {
+$(document).on("change", "input:radio[name='" + BS_latest_wrap.tag + "_exit']", function (event) {
+  var old_btn = document.getElementById(BS_latest_wrap.tag + '_exit_' + BS_latest_wrap.do_exit);
+  var new_btn = document.getElementById(BS_latest_wrap.tag + '_exit_' + this.value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
+  
   BS_latest_wrap.do_exit = this.value;
   BS_Latest_Replot();
 });

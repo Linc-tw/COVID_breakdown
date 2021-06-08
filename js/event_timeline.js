@@ -924,7 +924,12 @@ function ET_Latest_Plot() {
 ET_Latest_Plot();
 
 //-- Buttons 
-$(document).on("change", "input:radio[name='" + ET_latest_wrap.tag + "_weekStart']", function (event) {
+$(document).on("change", "input:radio[name='" + ET_latest_wrap.tag + "_start']", function (event) {
+  var old_btn = document.getElementById(ET_latest_wrap.tag + '_start_' + ET_latest_wrap.week_start);
+  var new_btn = document.getElementById(ET_latest_wrap.tag + '_start_' + this.value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
+  
   ET_latest_wrap.week_start = this.value;
   ET_Update(ET_latest_wrap);
 });
