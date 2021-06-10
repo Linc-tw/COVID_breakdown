@@ -10,6 +10,7 @@ import sys
 import warnings
 import collections as clt
 import datetime as dtt
+import json
 
 import numpy as np
 import scipy as sp
@@ -190,6 +191,14 @@ def saveCsv(name, data, verbose=True):
     print('Saved \"%s\"' % name)
   return
 
+def loadJson(name, verbose=True):
+  file_ = open(name, 'r')
+  data = json.load(file_)
+  file_.close()
+  if verbose:
+    print('Loaded \"%s\"' % name)
+  return data
+
 def ISODateToOrd(iso):
   ord = dtt.date.fromisoformat(iso).toordinal()
   return ord
@@ -290,6 +299,9 @@ def adjustDateRange(data):
 class Template:
   def getCol(self, col):
     return self.data[col].values
+  
+  def __str__(self):
+    return str(self.data.head(25))
 
 ################################################################################
 ## Classes - main sheet
@@ -391,48 +403,48 @@ class MainSheet(Template):
     return report_date_list
   
   def getAge(self):
-    age = []
-    for i, a in enumerate(self.getCol(self.coltag_age)):
-      if a in [
+    age_list = []
+    for i, age in enumerate(self.getCol(self.coltag_age)):
+      if age in [
         '1X', '2X', '3X', '4X', '5X', '6X', '7X', '8X', '9X',
         '1x', '2x', '3x', '4x', '5x', '6x', '7x', '8x', '9x'
       ]:
-        age.append(a[0]+'0s')
-      elif a in ['1XX', '10X', '11X', '100s']:
-        age.append('100s')
+        age_list.append(age[0]+'0s')
+      elif age in ['1XX', '10X', '11X', '100s']:
+        age_list.append('100s')
         
-      elif a in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '<10', '<1', '<5', '<6', '8月大']:
-        age.append('0s')
-      elif a in ['10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '10-14']:
-        age.append('10s')
-      elif a in ['20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '20-24']:
-        age.append('20s')
-      elif a in ['30', '31', '32', '33', '34', '35', '36', '37', '38', '39']:
-        age.append('30s')
-      elif a in ['40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '40-44']:
-        age.append('40s')
-      elif a in ['50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '50-54']:
-        age.append('50s')
-      elif a in ['60', '61', '62', '63', '64', '65', '66', '67', '68', '69']:
-        age.append('60s')
-      elif a in ['70', '71', '72', '73', '74', '75', '76', '77', '78', '79']:
-        age.append('70s')
-      elif a in ['80', '81', '82', '83', '84', '85', '86', '87', '88', '89']:
-        age.append('80s')
-      elif a in ['90', '91', '92', '93', '94', '95', '96', '97', '98', '99']:
-        age.append('90s')
+      elif age in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '<10', '<1', '<5', '<6', '8月大']:
+        age_list.append('0s')
+      elif age in ['10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '10-14']:
+        age_list.append('10s')
+      elif age in ['20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '20-24']:
+        age_list.append('20s')
+      elif age in ['30', '31', '32', '33', '34', '35', '36', '37', '38', '39']:
+        age_list.append('30s')
+      elif age in ['40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '40-44']:
+        age_list.append('40s')
+      elif age in ['50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '50-54']:
+        age_list.append('50s')
+      elif age in ['60', '61', '62', '63', '64', '65', '66', '67', '68', '69']:
+        age_list.append('60s')
+      elif age in ['70', '71', '72', '73', '74', '75', '76', '77', '78', '79']:
+        age_list.append('70s')
+      elif age in ['80', '81', '82', '83', '84', '85', '86', '87', '88', '89']:
+        age_list.append('80s')
+      elif age in ['90', '91', '92', '93', '94', '95', '96', '97', '98', '99']:
+        age_list.append('90s')
         
-      elif a in [
+      elif age in [
         '<5-4X', '<5-8X', '<5-9X', '<5-1XX', '<10-4X', '<10-8X', '<10-9X', '3-77', 
         '1X-2X', '1X-4X', '2X-3X', '2X-4X', '2X-6X', '3X-4X', '3X-8X', '5X-7X', '5X-8X'
       ]:
-        age.append(np.nan)
-      elif a != a:
-        age.append(np.nan)
+        age_list.append(np.nan)
+      elif age != age:
+        age_list.append(np.nan)
       else:
-        print('Age, Case %d, %s' % (i+1, a))
-        age.append(np.nan)
-    return age
+        print('Age, Case %d, %s' % (i+1, age))
+        age_list.append(np.nan)
+    return age_list
   
   def getTransmission(self):
     trans_list = []
@@ -695,14 +707,20 @@ class MainSheet(Template):
         '1月', '2/18-25', '3月', '4/1-6/3', '4/6-5/15', '4/25-5/22', '4/26-5/26', '4/28-6/2', '4/29-5/27', '4/29-5/30', '4/30-5/18', 
         '5/1-19', '5/2-13', '5/2-22', '5/2-6/1', '5/5-16', '5/5-17', '5/6-22', '5/6-27', '5/7-20', '5/7-24', '5/7-25', '5/7-28', '5/8-20', '5/8-25', 
         '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', '5/13-31',
-        '5/14-22', '5/14-29', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/24-6/5', 
+        '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', 
+        '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/24-6/5', 
         '6/1-2', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
       elif onset_date in ['5/26 採檢\n5/26 確診']:
         onset_date_list.append('2021-05-26')
+      elif onset_date in ['6/7 喉嚨痛、疲勞\n6/8 發燒']:
+        onset_date_list.append('2021-06-07')
+      elif onset_date in ['6/8 發燒']:
+        onset_date_list.append('2021-06-08')
         
+
       elif onset_date in ['7月、11/1']:
         onset_date_list.append('2020-11-01')
         
@@ -752,7 +770,7 @@ class MainSheet(Template):
         
       elif channel in [
         '入院', '快篩站', '自行就醫', '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', 
-        '入院篩檢', '入院採檢', '院內採檢', '社區快篩', '社區專案', '社區篩檢', 
+        '入院篩檢', '入院採檢', '院內採檢', '社區快篩', '社區專案', '社區篩檢', '專案篩檢', 
         '萬華專案', '擴大採檢', '預防性快篩', '預防性採檢', '鄰家擴大採檢', '入院前預防性採檢'
       ]:
         channel_list.append('hospital')
@@ -770,17 +788,20 @@ class MainSheet(Template):
       'sneezing': ['伴隨感冒症狀', '感冒症狀', '鼻涕倒流', '打噴嚏', '流鼻水', '流鼻涕', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['輕微咳嗽', '咳嗽症狀', '咳嗽加劇', '咳嗽併痰', '咳嗽有痰', '痰有血絲', '喉嚨有痰', '咳嗽', '乾咳', '輕咳', '有痰'],
       'throatache': [
-        '上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '呼吸道', 
+        '上呼吸道症狀', '上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '呼吸道', 
         '急性咽炎', '聲音沙啞', '口乾舌燥', '異物感', '沙啞', '乾嘔', 
         '喉嚨有異物感', '喉嚨乾澀想咳', '喉嚨不適', '喉嚨痛癢', '喉嚨乾癢', '喉嚨乾痛', '喉嚨痛', '喉嚨癢', '喉嚨腫', 
         '喉嚨乾', '咽喉不適', '喉嚨'
       ],
       'earache': [' 耳朵痛'],
-      'dyspnea': ['講話、呼吸吃力', '活動後呼吸喘', '重度呼吸窘迫', '呼吸喘 困難', '呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '走路會喘', '走路喘', '呼吸喘', '輕微喘', '微喘', '氣喘', '喘嗚', '喘'],
+      'dyspnea': [
+        '講話、呼吸吃力', '活動後呼吸喘', '重度呼吸窘迫', '呼吸喘 困難', '呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '走路會喘', 
+        '走路喘', '呼吸喘', '輕微喘', '微喘', '氣喘', '喘嗚', '喘'
+      ],
       'bronchitis': ['支氣管炎'],
       'pneumonia': ['X光顯示肺炎', 'X光片顯示肺炎', 'X光顯示肺部輕微浸潤', '雙側肺部有異狀', '肺浸潤', '肺炎'], 
       
-      'fever': ['出現中暑的狀態', '身體悶熱不適', '間歇性發燒', '身體微熱', '體溫偏高', '體溫升高', '反覆發燒', '微燒', '發燒', '發熱', '盜汗'], 
+      'fever': ['出現中暑的狀態', '身體悶熱不適', '間歇性發燒', '身體微熱', '體溫偏高', '體溫升高', '反覆發燒', '微燒', '低燒', '發燒', '發熱', '盜汗'], 
       'chills': ['忽冷忽熱症狀', '忽冷忽熱', '冒冷汗', '畏寒', '發冷', '寒顫'], 
       
       'nausea': ['噁心', '想吐'],
@@ -797,7 +818,7 @@ class MainSheet(Template):
       'rash': ['出疹'],
       
       'fatigue': [
-        '全身倦怠無力', '左側肢體無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '四肢無力', '精神倦怠', '體力不支', '體力變差', '全身虛弱', 
+        '全身倦怠無力', '左側肢體無力', '全身倦怠', '全身疲憊', '身體無力', '全身無力', '走路無力', '四肢無力', '精神倦怠', '體力不支', '體力變差', '全身虛弱', 
         '疲倦感', '倦怠情', '體力差', '倦怠', '疲憊', '疲倦', '疲勞', '疲累', '無力', '虛弱'
       ],
       'soreness': [
@@ -824,6 +845,8 @@ class MainSheet(Template):
     symp_list = []
     
     for i, symp in enumerate(self.getCol(self.coltag_symptom)):
+      symp_orig = symp
+      
       if symp != symp: ## Is nan
         symp_list.append([])
         continue
@@ -852,10 +875,11 @@ class MainSheet(Template):
       symp = ''.join(symp.split('伴隨'))
       symp = ''.join(symp.split('不順'))
       symp = ''.join(symp.split('自覺'))
-      symp = symp.lstrip(' \n  .，、與及有')
+      symp = symp.lstrip('  678/\n .，、與及有')
       
       if len(symp) > 0:
         print('Symptom, Case %d, %s' % (i+1, symp))
+        print('Symptom, Case %d, %s' % (i+1, symp_orig))
       
       stock = list(set(stock))
       symp_list.append(stock)
@@ -903,10 +927,11 @@ class MainSheet(Template):
         link_list.append('linked')        
         
       elif link in [
-        '遠傳案', '京元電', 
-        '養護中心', '朝陽夜唱', '金沙酒店', '泰安附幼', '成功市場', '洗腎診所', '長照機構', '豐原家庭', 
+        '家祭', '遠傳案', '京元電', 
+        '養護中心', '照護中心', '護理之家', '朝陽夜唱', '金沙酒店', '泰安附幼', '成功市場', '洗腎診所', '長照機構', '豐原家庭', '立揚鞋業', 
         '銀河百家樂', '維納斯會館', '羅東遊藝場', '串門子餐廳', 
-        '中國醫K歌團', '小姑娘小吃店', '快樂城小吃店', '東方紅時尚會館', '梧棲區藥局家族', '加強型防疫旅館', '復興區公所員工家族案關係圖', 
+        '中國醫K歌團', '小姑娘小吃店', '快樂城小吃店', '東方紅時尚會館', '梧棲區藥局家族', '加強型防疫旅館', 
+        '南澳雜貨店傳播鏈', '復興區公所員工家族案關係圖', 
       ]:
         link_list.append('linked')
 
@@ -1011,7 +1036,7 @@ class MainSheet(Template):
     
     assert len(trav_hist_list_2) == len(symp_list_2)
     n_data = len(trav_hist_list_2)
-        
+    
     trav_hist_hist = clt.Counter([trav for trav_hist in trav_hist_list_2 for trav in trav_hist])
     trav_hist_hist = sorted(trav_hist_hist.items(), key=lambda x: x[1], reverse=True)
     symp_hist = clt.Counter([s for symp in symp_list_2 for s in symp])
@@ -1997,9 +2022,9 @@ class BorderSheet(Template):
       'Kaohsiung S in': '高雄港 入境查驗', 
       'Kaohsiung S out': '高雄港 出境查驗', 
       'Kaohsiung S total': '高雄港 小計', 
-      'Hualian S in': '花蓮港 入境查驗', 
-      'Hualian S out': '花蓮港 出境查驗', 
-      'Hualian S total': '花蓮港 小計', 
+      'Hualien S in': '花蓮港 入境查驗', 
+      'Hualien S out': '花蓮港 出境查驗', 
+      'Hualien S total': '花蓮港 小計', 
       'Yilan S in': '蘇澳港 入境查驗', 
       'Yilan S out': '蘇澳港 出境查驗', 
       'Yilan S total': '蘇澳港 小計', 
@@ -2021,9 +2046,9 @@ class BorderSheet(Template):
       'Mazu X in': '馬祖 入境查驗', 
       'Mazu X out': '馬祖 出境查驗', 
       'Mazu X total': '馬祖 小計', 
-      'Hualian A in': '花蓮機場 入境查驗', 
-      'Hualian A out': '花蓮機場 出境查驗', 
-      'Hualian A total': '花蓮機場 小計', 
+      'Hualien A in': '花蓮機場 入境查驗', 
+      'Hualien A out': '花蓮機場 出境查驗', 
+      'Hualien A total': '花蓮機場 小計', 
       'Yunlin S in': '麥寮港 入境查驗', 
       'Yunlin S out': '麥寮港 出境查驗', 
       'Yunlin S total': '麥寮港 小計', 
@@ -2033,9 +2058,9 @@ class BorderSheet(Template):
       'Taichung A in': '台中機場 入境查驗', 
       'Taichung A out': '台中機場 出境查驗', 
       'Taichung A total': '台中機場 小計', 
-      'Hualian SN in': '和平港 入境查驗', 
-      'Hualian SN out': '和平港 出境查驗', 
-      'Hualian SN total': '和平港 小計', 
+      'Hualien SN in': '和平港 入境查驗', 
+      'Hualien SN out': '和平港 出境查驗', 
+      'Hualien SN total': '和平港 小計', 
       'Kinmen A in': '金門機場 入境查驗', 
       'Kinmen A out': '金門機場 出境查驗', 
       'Kinmen A total': '金門機場 小計', 
@@ -2144,7 +2169,7 @@ class BorderSheet(Template):
       'Kaohsiung A',
       'Pintung A',
       
-      'Hualian A',
+      'Hualien A',
       'Taitung A',
       'Penghu A',
       'Kinmen A',
@@ -2174,8 +2199,8 @@ class BorderSheet(Template):
       'Pintung SS',
       
       'Yilan S',
-      'Hualian SN',
-      'Hualian S',
+      'Hualien SN',
+      'Hualien S',
       'Taitung S',
       'Penghu S',
       'Kinmen SW',
@@ -2410,6 +2435,388 @@ class TimelineSheet(Template):
     return
   
 ################################################################################
+## Classes - County breakdown
+
+class CountySheet(Template):
+  
+  def __init__(self, verbose=True):
+    self.coltag_disease = '確定病名'
+    self.coltag_report_date = '個案研判日'
+    self.coltag_county = '縣市'
+    self.coltag_village = '鄉鎮'
+    self.coltag_gender = '性別'
+    self.coltag_imported = '是否為境外移入'
+    self.coltag_age = '年齡層'
+    self.coltag_nb_cases = '確定病例數'
+    
+    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_county_age.csv' % DATA_PATH
+    data = pd.read_csv(name, dtype=object, skipinitialspace=True)
+    
+    self.data    = data
+    self.n_total = data[self.coltag_nb_cases].astype(int).sum()
+    
+    if verbose:
+      print('Loaded \"%s\"' % name)
+      print('N_total = %d' % self.n_total)
+    return
+  
+  def getReportDate(self):
+    report_date_list = []
+    
+    for report_date in self.getCol(self.coltag_report_date):
+      yyyy = report_date[:4]
+      mm = report_date[4:6]
+      dd = report_date[6:]
+      report_date = '%s-%s-%s' % (yyyy, mm, dd)
+      report_date_list.append(report_date)
+    
+    return report_date_list
+  
+  def getCounty(self):
+    county_list = []
+    
+    for county in self.getCol(self.coltag_county):
+      if county == '基隆市':
+        county_list.append('Keelung')
+      elif county == '台北市':
+        county_list.append('Taipei')
+      elif county == '新北市':
+        county_list.append('New_Taipei')
+      elif county == '桃園市':
+        county_list.append('Taoyuan')
+      elif county == '新竹縣':
+        county_list.append('Hsinchu')
+      elif county == '新竹市':
+        county_list.append('Hsinchu_C')
+      elif county == '苗栗縣':
+        county_list.append('Miaoli')
+        
+      elif county == '台中市':
+        county_list.append('Taichung')
+      elif county == '彰化縣':
+        county_list.append('Changhua')
+      elif county == '南投縣':
+        county_list.append('Nantou')
+      elif county == '雲林縣':
+        county_list.append('Yunlin')
+      
+      elif county == '嘉義縣':
+        county_list.append('Chiayi')
+      elif county == '嘉義市':
+        county_list.append('Chiayi_C')
+      elif county == '台南市':
+        county_list.append('Tainan')
+      elif county == '高雄市':
+        county_list.append('Kaohsiung')
+      elif county == '屏東縣':
+        county_list.append('Pingtung')
+        
+      elif county == '宜蘭縣':
+        county_list.append('Yilan')
+      elif county == '花蓮縣':
+        county_list.append('Hualien')
+      elif county == '台東縣':
+        county_list.append('Taitung')
+        
+      elif county == '澎湖縣':
+        county_list.append('Penghu')
+      elif county == '金門縣':
+        county_list.append('Kinmen')
+      elif county == '連江縣':
+        county_list.append('Matsu')
+        
+      elif county == '空值':
+        county_list.append('unknown')
+      else:
+        print('County, %s' % county)
+        county_list.append('unknown')
+    
+    return county_list
+    
+  def getVillage(self):
+    return self.getCol(self.coltag_village).values
+    
+  def getGender(self):
+    gender_list = [1 if gender == '男' else 2 for gender in self.getCol(self.coltag_gender)]
+    return gender_list
+    
+  def getImported(self):
+    imported_list = [1 if imported == '是' else 0 for imported in self.getCol(self.coltag_imported)]
+    return imported_list
+    
+  def getAge(self):
+    return self.getCol(self.coltag_age).values
+  
+  def getNbCases(self):
+    return self.getCol(self.coltag_nb_cases).astype(int)
+  
+  def makeCountyHist(self, selection='latest'):
+    report_date_list = self.getReportDate()
+    county_list = self.getCounty()
+    nb_cases_list = self.getNbCases()
+    
+    key_list = [
+      'Keelung', 'Taipei', 'New_Taipei', 'Taoyuan', 'Hsinchu', 'Hsinchu_C', 'Miaoli', 
+      'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Chiayi' ,'Chiayi_C', 'Tainan', 'Kaohsiung', 'Pingtung', 
+      'Yilan', 'Hualien', 'Taitung', 
+      'Penghu', 'Kinmen', 'Matsu', 
+      'unknown'
+    ]
+    
+    hist = {key: 0 for key in key_list}
+    ord_today = dtt.date.today().toordinal() + 1
+    ord_end_2020 = ISODateToOrd('2020-12-31') + 1
+    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
+    
+    for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):
+      rep_ord = ISODateToOrd(report_date)
+      
+      if 'latest' == selection and rep_ord + NB_LOOKBACK_DAYS < ord_today:
+        continue
+      
+      if '2020' == selection and rep_ord >= ord_end_2020:
+        continue
+      
+      if '2021' == selection and (rep_ord < ord_end_2020 or rep_ord >= ord_end_2021):
+        continue
+      
+      hist[county] += nb_cases
+    
+    return hist
+  
+  def saveCsv_caseByCounty(self, selection='latest'):
+    hist = self.makeCountyHist(selection=selection)
+    key_list = [key for key in hist.keys()]
+    value_list = [value for value in hist.values()]
+    
+    data = {'county': key_list, 'nb_cases': value_list}
+    data = pd.DataFrame(data)
+        
+    name = '%sprocessed_data/%s/case_by_county.csv' % (DATA_PATH, selection)
+    saveCsv(name, data)
+    return
+
+  def saveCsv(self):
+    self.saveCsv_caseByCounty(selection='latest')
+    self.saveCsv_caseByCounty(selection='2020')
+    self.saveCsv_caseByCounty(selection='2021')
+    return
+  
+################################################################################
+## Classes - Vaccination
+
+class VaccinationSheet(Template):
+  
+  def __init__(self, verbose=True):
+    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_vaccination.json' % DATA_PATH
+    data = loadJson(name, verbose=verbose)
+    
+    self.key_row_id = 'DT_RowId'
+    self.key_id = 'id'
+    self.key_report_date = 'a01'
+    self.key_county = 'a02'
+    self.key_population = 'a03'
+    self.key_updated_tot = 'a04'
+    self.key_new_vacc = 'a05'
+    self.key_tot_vacc = 'a06'
+    self.key_vacc_rate = 'a07'
+    self.key_nb_doses = 'a08'
+    self.key_remaining_ratio = 'a09'
+    
+    self.report_date_list = []
+    self.county_list = []
+    self.population_list = []
+    self.updated_tot_list = []
+    self.new_vacc_list = []
+    self.tot_vacc_list = []
+    self.vacc_rate_list = []
+    self.nb_doses_list = []
+    self.remaining_ratio_list = []
+    
+    self.data = data
+    self.processed_data = {}
+    self.process()
+    self.applyCorrections()
+    
+    if verbose:
+      print('N_total = %d' % len(self.processed_data))
+    return
+  
+  def getCountyLabel(self, county):
+    if county == '基隆市':
+      return 'Keelung'
+    if county == '臺北市':
+      return 'Taipei'
+    if county == '新北市':
+      return 'New_Taipei'
+    if county == '桃園市':
+      return 'Taoyuan'
+    if county == '新竹縣':
+      return 'Hsinchu'
+    if county == '新竹市':
+      return 'Hsinchu_C'
+    if county == '苗栗縣':
+      return 'Miaoli'
+      
+    if county == '臺中市':
+      return 'Taichung'
+    if county == '彰化縣':
+      return 'Changhua'
+    if county == '南投縣':
+      return 'Nantou'
+    if county == '雲林縣':
+      return 'Yunlin'
+    
+    if county == '嘉義縣':
+      return 'Chiayi'
+    if county == '嘉義市':
+      return 'Chiayi_C'
+    if county == '臺南市':
+      return 'Tainan'
+    if county == '高雄市':
+      return 'Kaohsiung'
+    if county == '屏東縣':
+      return 'Pingtung'
+      
+    if county == '宜蘭縣':
+      return 'Yilan'
+    if county == '花蓮縣':
+      return 'Hualien'
+    if county == '臺東縣':
+      return 'Taitung'
+      
+    if county == '澎湖縣':
+      return 'Penghu'
+    if county == '金門縣':
+      return 'Kinmen'
+    if county == '連江縣':
+      return 'Matsu'
+      
+    print('County label, %s' % county)
+    return 'unknown'
+    
+  def process(self):
+    for row in self.data['data']:
+      report_date = row[self.key_report_date]
+      county = self.getCountyLabel(row[self.key_county])
+      try:
+        self.processed_data[report_date][county] = row
+      except KeyError:
+        self.processed_data[report_date] = {county: row}
+    
+    self.processed_data = dict(sorted(self.processed_data.items()))
+    return
+      
+  def applyCorrections(self):
+    corr_list = [
+      ['2021-05-06', 'Taipei', 15884, 1251, 17135], 
+      ['2021-05-06', 'Kaohsiung', 10159, 676, 10835], 
+      ['2021-05-18', 'Pingtung', 5311, 496, 5807], 
+    ]
+    
+    ## Correct bad crawling numbers
+    for corr in corr_list:
+      row = self.processed_data[corr[0]][corr[1]]
+      row[self.key_updated_tot] = corr[2]
+      row[self.key_new_vacc] = corr[3]
+      row[self.key_tot_vacc] = corr[4]
+      
+    ## Remove repeated data
+    corr_list = ['2021-03-21', '2021-04-04', '2021-04-14']
+    
+    for corr in corr_list:
+      self.processed_data.pop(corr)
+    return
+    
+  def getReportDate(self, county='total'):
+    if 'total' == county:
+      return list(self.processed_data.keys())
+    
+    report_date_list = []
+    for report_date, county_dict in self.processed_data.items():
+      if county in county_dict:
+        report_date_list.append(report_date)
+    return report_date_list
+  
+  def getUpdatedTot(self, county='total'):
+    updated_tot_list = []
+    
+    for report_date, county_dict in self.processed_data.items():
+      if 'total' == county:
+        updated_tot_list.append(0)
+        for _, row in county_dict.items():
+          updated_tot_list[-1] += int(row[self.key_updated_tot])
+      
+      try:
+        row = county_dict[county]
+        updated_tot_list.append(int(row[self.key_updated_tot]))
+      except KeyError:
+        pass
+        
+    return updated_tot_list
+  
+  def getNewVacc(self, county='total'):
+    new_vacc_list = []
+    
+    for report_date, county_dict in self.processed_data.items():
+      if 'total' == county:
+        new_vacc_list.append(0)
+        for _, row in county_dict.items():
+          new_vacc_list[-1] += int(row[self.key_new_vacc])
+      
+      try:
+        row = county_dict[county]
+        new_vacc_list.append(int(row[self.key_new_vacc]))
+      except KeyError:
+        pass
+        
+    return new_vacc_list
+    
+  def getTotVacc(self, county='total'):
+    tot_vacc_list = []
+    
+    for report_date, county_dict in self.processed_data.items():
+      if 'total' == county:
+        tot_vacc_list.append(0)
+        for _, row in county_dict.items():
+          tot_vacc_list[-1] += int(row[self.key_tot_vacc])
+      
+      try:
+        row = county_dict[county]
+        tot_vacc_list.append(int(row[self.key_tot_vacc]))
+      except KeyError:
+        pass
+    
+    return tot_vacc_list
+    
+  def makeUpdatedNew(self, county='total'):
+    updated_tot_list = self.getUpdatedTot()
+    tot_vacc_list = self.getTotVacc()
+    
+    upper_list = updated_tot_list[1:] + [tot_vacc_list[-1]]
+    new_vacc_list = []
+    
+    for updated_tot, upper in zip(updated_tot_list, upper_list):
+      new_vacc_list.append(upper-updated_tot)
+    return new_vacc_list
+    
+  def saveCsv_vaccinationByDay(self):
+    report_date_list = self.getReportDate()
+    updated_new_list = self.makeUpdatedNew()
+    
+    data = {'date': report_date_list, 'updated_new': updated_new_list}
+    data = pd.DataFrame(data)
+    
+    name = '%sprocessed_data/2021/vaccination_by_day.csv' % DATA_PATH
+    saveCsv(name, data)
+    return
+
+  def saveCsv(self):
+    self.saveCsv_vaccinationByDay()
+    return
+  
+################################################################################
 ## Functions - cross-sheet operations
 
 import scipy.signal as signal
@@ -2484,9 +2891,9 @@ def sandbox():
   #print(status_sheet.getCumHosp())
   #status_sheet.saveCsv_statusEvolution()
   
-  test_sheet = TestSheet()
+  #test_sheet = TestSheet()
   #test_sheet.makeDailyTestCounts()
-  test_sheet.saveCsv_testByCriterion()
+  #test_sheet.saveCsv_testByCriterion()
   
   #border_sheet = BorderSheet()
   #print(border_sheet.makeDailyArrivalCounts())
@@ -2496,7 +2903,13 @@ def sandbox():
   #print(timeline_sheet.saveCriteria())
   #timeline_sheet.saveCsv_evtTimeline()
   
-  #saveCsv_variousRate(main_sheet, test_sheet, border_sheet)
+  #county_sheet = CountySheet()
+  #print(county_sheet)
+  #county_sheet.saveCsv()
+  
+  vacc_sheet = VaccinationSheet()
+  #print(vacc_sheet.getTotVacc())
+  vacc_sheet.saveCsv()
   return
 
 ################################################################################
@@ -2506,18 +2919,33 @@ def saveCsv_all():
   print()
   main_sheet = MainSheet()
   main_sheet.saveCsv()
+  
   print()
-  StatusSheet().saveCsv()
+  status_sheet = StatusSheet()
+  status_sheet.saveCsv()
+  
   print()
   test_sheet = TestSheet()
   test_sheet.saveCsv()
+  
   print()
   border_sheet = BorderSheet()
   border_sheet.saveCsv()
+  
   print()
-  TimelineSheet().saveCsv()
+  timeline_sheet = TimelineSheet()
+  timeline_sheet.saveCsv()
+  
   print()
   saveCsv_variousRate(main_sheet, test_sheet, border_sheet)
+  
+  print()
+  county_sheet = CountySheet()
+  county_sheet.saveCsv()
+  
+  print()
+  vacc_sheet = VaccinationSheet()
+  vacc_sheet.saveCsv()
   print()
   return
 
