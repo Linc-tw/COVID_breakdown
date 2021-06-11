@@ -707,7 +707,7 @@ class MainSheet(Template):
         '1月', '2/18-25', '3月', '4/1-6/3', '4/6-5/15', '4/25-5/22', '4/26-5/26', '4/28-6/2', '4/29-5/27', '4/29-5/30', '4/30-5/18', 
         '5/1-19', '5/2-13', '5/2-22', '5/2-6/1', '5/5-16', '5/5-17', '5/6-22', '5/6-27', '5/7-20', '5/7-24', '5/7-25', '5/7-28', '5/8-20', '5/8-25', 
         '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', '5/13-31',
-        '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', 
+        '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/19-6/10', 
         '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/24-6/5', 
         '6/1-2', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
@@ -762,7 +762,10 @@ class MainSheet(Template):
       elif channel in ['居家檢疫', '集中檢疫', '英國專案', '死亡']:
         channel_list.append('quarantine')
         
-      elif channel in ['居家隔離', '住院隔離', '接觸患者', '同院患者', '框列採檢', '接觸者回溯', '接觸者檢查', '接觸者採檢', '確診者回溯', '居家隔離期滿後採檢']:
+      elif channel in [
+        '居家隔離', '住院隔離', '接觸患者', '同院患者', '框列採檢', '接觸者回溯', '接觸者檢查', '接觸者採檢', '確診者回溯', '確診者匡列', 
+        '居家隔離期滿後採檢', '居家隔離期滿後確診'
+      ]:
         channel_list.append('isolation')
         
       elif channel in ['自主健康管理', '加強自主管理', '居家隔離期滿\n自主健康管理']:
@@ -786,7 +789,7 @@ class MainSheet(Template):
   def getSymptom(self):
     key_dict = {
       'sneezing': ['伴隨感冒症狀', '感冒症狀', '鼻涕倒流', '打噴嚏', '流鼻水', '流鼻涕', '鼻塞', '鼻水', '鼻炎', '感冒'],
-      'cough': ['輕微咳嗽', '咳嗽症狀', '咳嗽加劇', '咳嗽併痰', '咳嗽有痰', '痰有血絲', '喉嚨有痰', '咳嗽', '乾咳', '輕咳', '有痰'],
+      'cough': ['輕微咳嗽', '咳嗽症狀', '咳嗽加劇', '咳嗽併痰', '咳嗽有痰', '痰有血絲', '喉嚨有痰', '有點咳嗽', '咳嗽', '乾咳', '輕咳', '有痰'],
       'throatache': [
         '上呼吸道症狀', '上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '呼吸道', 
         '急性咽炎', '聲音沙啞', '口乾舌燥', '異物感', '沙啞', '乾嘔', 
@@ -801,7 +804,7 @@ class MainSheet(Template):
       'bronchitis': ['支氣管炎'],
       'pneumonia': ['X光顯示肺炎', 'X光片顯示肺炎', 'X光顯示肺部輕微浸潤', '雙側肺部有異狀', '肺浸潤', '肺炎'], 
       
-      'fever': ['出現中暑的狀態', '身體悶熱不適', '間歇性發燒', '身體微熱', '體溫偏高', '體溫升高', '反覆發燒', '微燒', '低燒', '發燒', '發熱', '盜汗'], 
+      'fever': ['出現中暑的狀態', '身體悶熱不適', '間歇性發燒', '身體微熱', '體溫偏高', '體溫升高', '反覆發燒', '身體發熱', '微燒', '低燒', '發燒', '發熱', '盜汗'], 
       'chills': ['忽冷忽熱症狀', '忽冷忽熱', '冒冷汗', '畏寒', '發冷', '寒顫'], 
       
       'nausea': ['噁心', '想吐'],
@@ -812,7 +815,7 @@ class MainSheet(Template):
       'eyes sore': ['結膜充血', '後眼窩痛', '眼睛癢', '眼睛痛', '眼壓高'], 
       'chest pain+backache': ['胸背痛'], 
       'chest pain': ['呼吸時胸痛', '心臟不舒服', '胸痛', '胸悶'],
-      'stomachache': ['腸胃不舒服', '腸胃道不適', '胃部不適', '肚子不適', '腹悶痛', '胃痛', '腹痛', '胃脹', '腹脹'],
+      'stomachache': ['腸胃不舒服', '腸胃道不適', '腸胃不適', '胃部不適', '肚子不適', '腹悶痛', '胃痛', '腹痛', '胃脹', '腹脹'],
       'backache': ['腰酸背痛', '背痛'], 
       'toothache': ['牙痛'], 
       'rash': ['出疹'],
@@ -929,8 +932,9 @@ class MainSheet(Template):
       elif link in [
         '家祭', '遠傳案', '京元電', 
         '養護中心', '照護中心', '護理之家', '朝陽夜唱', '金沙酒店', '泰安附幼', '成功市場', '洗腎診所', '長照機構', '豐原家庭', '立揚鞋業', 
-        '銀河百家樂', '維納斯會館', '羅東遊藝場', '串門子餐廳', 
-        '中國醫K歌團', '小姑娘小吃店', '快樂城小吃店', '東方紅時尚會館', '梧棲區藥局家族', '加強型防疫旅館', 
+        '銀河百家樂', '維納斯會館', '羅東遊藝場', '串門子餐廳', '彰化麻將團', 
+        '中國醫K歌團', '小姑娘小吃店', '快樂城小吃店', '桃園觀音工地', 
+        '東方紅時尚會館', '梧棲區藥局家族', '加強型防疫旅館', 
         '南澳雜貨店傳播鏈', '復興區公所員工家族案關係圖', 
       ]:
         link_list.append('linked')
@@ -1996,7 +2000,6 @@ class TestSheet(Template):
 ## Classes - border sheet
 
 class BorderSheet(Template):
-
   def __init__(self, verbose=True):
     self.coltag_date = '日期 '
     self.tag_dict = {
@@ -2340,7 +2343,6 @@ class BorderSheet(Template):
 ## Classes - timeline sheet
 
 class TimelineSheet(Template):
-  
   def __init__(self, verbose=True):
     self.coltag_date = '時間'
     self.coltag_twn_evt = '台灣事件'
@@ -2545,7 +2547,15 @@ class CountySheet(Template):
     return imported_list
     
   def getAge(self):
-    return self.getCol(self.coltag_age).values
+    age_list = []
+    
+    for age in self.getCol(self.coltag_age):
+      if age in ['0', '1', '2', '3', '4']:
+        age_list.append('0-4')
+      else:
+        age_list.append(age)
+    
+    return age_list
   
   def getNbCases(self):
     return self.getCol(self.coltag_nb_cases).astype(int)
@@ -2585,7 +2595,38 @@ class CountySheet(Template):
     
     return hist
   
-  def saveCsv_caseByCounty(self, selection='latest'):
+  def makeAgeHist(self, selection='latest'):
+    report_date_list = self.getReportDate()
+    age_list = self.getAge()
+    nb_cases_list = self.getNbCases()
+    
+    key_list = [
+      '0-4', '5-9', '10-14', '15-19', '20-24', '25-29', '30-34', '35-39', 
+      '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70+',
+    ]
+    
+    hist = {key: 0 for key in age_list}
+    ord_today = dtt.date.today().toordinal() + 1
+    ord_end_2020 = ISODateToOrd('2020-12-31') + 1
+    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
+    
+    for report_date, age, nb_cases in zip(report_date_list, age_list, nb_cases_list):
+      rep_ord = ISODateToOrd(report_date)
+      
+      if 'latest' == selection and rep_ord + NB_LOOKBACK_DAYS < ord_today:
+        continue
+      
+      if '2020' == selection and rep_ord >= ord_end_2020:
+        continue
+      
+      if '2021' == selection and (rep_ord < ord_end_2020 or rep_ord >= ord_end_2021):
+        continue
+      
+      hist[age] += nb_cases
+    
+    return hist
+  
+  def saveCsv_localCaseByCounty(self, selection='latest'):
     hist = self.makeCountyHist(selection=selection)
     key_list = [key for key in hist.keys()]
     value_list = [value for value in hist.values()]
@@ -2593,14 +2634,29 @@ class CountySheet(Template):
     data = {'county': key_list, 'nb_cases': value_list}
     data = pd.DataFrame(data)
         
-    name = '%sprocessed_data/%s/case_by_county.csv' % (DATA_PATH, selection)
+    name = '%sprocessed_data/%s/local_case_by_county.csv' % (DATA_PATH, selection)
+    saveCsv(name, data)
+    return
+
+  def saveCsv_caseByAge(self, selection='latest'):
+    hist = self.makeAgeHist(selection=selection)
+    key_list = [key for key in hist.keys()]
+    value_list = [value for value in hist.values()]
+    
+    data = {'county': key_list, 'nb_cases': value_list}
+    data = pd.DataFrame(data)
+        
+    name = '%sprocessed_data/%s/case_by_age.csv' % (DATA_PATH, selection)
     saveCsv(name, data)
     return
 
   def saveCsv(self):
-    self.saveCsv_caseByCounty(selection='latest')
-    self.saveCsv_caseByCounty(selection='2020')
-    self.saveCsv_caseByCounty(selection='2021')
+    self.saveCsv_localCaseByCounty(selection='latest')
+    self.saveCsv_localCaseByCounty(selection='2020')
+    self.saveCsv_localCaseByCounty(selection='2021')
+    self.saveCsv_caseByAge(selection='latest')
+    self.saveCsv_caseByAge(selection='2020')
+    self.saveCsv_caseByAge(selection='2021')
     return
   
 ################################################################################
@@ -2723,7 +2779,7 @@ class VaccinationSheet(Template):
       row[self.key_tot_vacc] = corr[4]
       
     ## Remove repeated data
-    corr_list = ['2021-03-21', '2021-04-04', '2021-04-14']
+    corr_list = ['2021-03-21', '2021-04-03', '2021-04-04', '2021-04-14']
     
     for corr in corr_list:
       self.processed_data.pop(corr)
@@ -2791,21 +2847,68 @@ class VaccinationSheet(Template):
     return tot_vacc_list
     
   def makeUpdatedNew(self, county='total'):
-    updated_tot_list = self.getUpdatedTot()
-    tot_vacc_list = self.getTotVacc()
+    report_date_list = self.getReportDate(county=county)
+    updated_tot_list = self.getUpdatedTot(county=county)
+    new_vacc_list = self.getNewVacc(county=county)
     
-    upper_list = updated_tot_list[1:] + [tot_vacc_list[-1]]
-    new_vacc_list = []
+    ## Calculate array length
+    ord_begin = ISODateToOrd('2021-03-21') ## Pretend to start on 2021-03-21 for easier reshape later
+    ord_today = dtt.date.today().toordinal() + 1
+    nb_days = ord_today - ord_begin
+    ind = nb_days % 7 - 1 ## Get remainer; will be used later
+    nb_days = ((nb_days - 1) // 7 + 1) * 7 ## Ceiling function for 7
     
-    for updated_tot, upper in zip(updated_tot_list, upper_list):
-      new_vacc_list.append(upper-updated_tot)
-    return new_vacc_list
+    ## Prepare array
+    new_vax_arr = np.zeros(nb_days, dtype=float) + np.nan
+    tot_vax_arr = np.zeros(nb_days, dtype=float) + np.nan
+    date_arr = ord_begin + np.arange(nb_days, dtype=int)
+    date_arr = [ordDateToISO(ord) for ord in date_arr]
+    
+    ## Fill values
+    ord_rep_list = [ISODateToOrd(report_date)-ord_begin for report_date in report_date_list]
+    for ord_rep, updated_tot, new_vacc in zip(ord_rep_list, updated_tot_list, new_vacc_list):
+      new_vax_arr[ord_rep] = new_vacc
+      tot_vax_arr[ord_rep] = updated_tot
+      
+    ## Reshape to mask Saturdays
+    new_vax_arr = new_vax_arr.reshape(-1, 7)
+    tot_vax_arr = tot_vax_arr.reshape(-1, 7)
+    new_vax_arr_2 = new_vax_arr[:, :6].flatten()
+    tot_vax_arr_2 = tot_vax_arr[:, :6].flatten()
+    
+    ## Calculate the correct new_vax
+    for i in range(len(new_vax_arr_2)-1):
+      if tot_vax_arr_2[i] == tot_vax_arr_2[i] and tot_vax_arr_2[i+1] == tot_vax_arr_2[i+1]:
+        new_vax_arr_2[i] = tot_vax_arr_2[i+1] - tot_vax_arr_2[i]
+      elif new_vax_arr_2[i] == new_vax_arr_2[i]:
+        tot_vax_arr_2[i+1] = new_vax_arr_2[i] + tot_vax_arr_2[i]
+    
+    ## Offset tot_vax
+    tot_vax_arr_2[:-1] = tot_vax_arr_2[1:]
+    
+    ## Add the current day's value to tot_vax
+    if ind < 6:
+      tot_vax_arr_2[ind-6] = new_vax_arr_2[ind-6] + tot_vax_arr_2[ind-7]
+    
+    ## Return to 7 columns
+    new_vax_arr[:, :6] = new_vax_arr_2.reshape(-1, 6)
+    tot_vax_arr[:, :6] = tot_vax_arr_2.reshape(-1, 6)
+    
+    ## Remove 2021-03-21 & trailing NaN
+    if ind < 6:
+      new_vax_arr = new_vax_arr.flatten()[1:ind-6]
+      tot_vax_arr = tot_vax_arr.flatten()[1:ind-6]
+      date_arr = date_arr[1:ind-6]
+    else:
+      new_vax_arr = new_vax_arr.flatten()[1:]
+      tot_vax_arr = tot_vax_arr.flatten()[1:]
+      date_arr = date_arr[1:]
+    return date_arr, new_vax_arr, tot_vax_arr
     
   def saveCsv_vaccinationByDay(self):
-    report_date_list = self.getReportDate()
-    updated_new_list = self.makeUpdatedNew()
+    date_arr, new_vax_arr, tot_vax_arr = self.makeUpdatedNew(county='total')
     
-    data = {'date': report_date_list, 'updated_new': updated_new_list}
+    data = {'date': date_arr, 'updated_new': new_vax_arr, 'updated_tot': tot_vax_arr}
     data = pd.DataFrame(data)
     
     name = '%sprocessed_data/2021/vaccination_by_day.csv' % DATA_PATH
@@ -2884,7 +2987,7 @@ def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
 
 def sandbox():
   #main_sheet = MainSheet()
-  #report_date = main_sheet.getReportDate()
+  #print(main_sheet.getReportDate())
   #main_sheet.saveCsv_keyNb()
   
   #status_sheet = StatusSheet()
@@ -2892,7 +2995,7 @@ def sandbox():
   #status_sheet.saveCsv_statusEvolution()
   
   #test_sheet = TestSheet()
-  #test_sheet.makeDailyTestCounts()
+  #print(test_sheet.getReportDate())
   #test_sheet.saveCsv_testByCriterion()
   
   #border_sheet = BorderSheet()
@@ -2903,13 +3006,13 @@ def sandbox():
   #print(timeline_sheet.saveCriteria())
   #timeline_sheet.saveCsv_evtTimeline()
   
-  #county_sheet = CountySheet()
+  county_sheet = CountySheet()
   #print(county_sheet)
-  #county_sheet.saveCsv()
+  county_sheet.test()
   
-  vacc_sheet = VaccinationSheet()
-  #print(vacc_sheet.getTotVacc())
-  vacc_sheet.saveCsv()
+  #vacc_sheet = VaccinationSheet()
+  #print(vacc_sheet.makeUpdatedNew())
+  #vacc_sheet.makeUpdatedNew()
   return
 
 ################################################################################
