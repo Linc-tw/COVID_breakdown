@@ -243,9 +243,12 @@ function ASC_Initialize(wrap) {
 function ASC_Update(wrap) {
   //-- Define legend label
   var legend_label;
-  if (GS_lang == 'zh-tw') legend_label = ['有資料案例數', '資料不全', '合計'];
-  else if (GS_lang == 'fr') legend_label = ['Données complètes', 'Données incomplètes', 'Total'];
-  else legend_label = ['Data complete', 'Data incomplete', 'Total'];
+  if (GS_lang == 'zh-tw')
+    legend_label = ['有資料案例數', '資料不全', '合計'];
+  else if (GS_lang == 'fr')
+    legend_label = ['Données complètes', 'Données incomplètes', 'Total'];
+  else
+    legend_label = ['Data complete', 'Data incomplete', 'Total'];
   
   //-- Update text
   wrap.svg.selectAll(".content.text")
@@ -278,21 +281,80 @@ function ASC_Update(wrap) {
 }
 
 //-- Plot
-function ASC_Plot(wrap, error, data, data2) {
-  if (error)
-    return console.warn(error);
-  
-  ASC_MakeCanvas(wrap);
-  ASC_FormatData(wrap, data);
-  ASC_FormatData2(wrap, data2);
-  ASC_Initialize(wrap);
-  ASC_Update(wrap);
+function ASC_Plot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path_list[wrap.do_count])
+    .defer(d3.csv, wrap.data_path_list[2])
+    .await(function (error, data, data2) {
+      if (error)
+        return console.warn(error);
+      
+      ASC_MakeCanvas(wrap);
+      ASC_FormatData(wrap, data);
+      ASC_FormatData2(wrap, data2);
+      ASC_Initialize(wrap);
+      ASC_Update(wrap);      
+    });
 }
 
-function ASC_Replot(wrap, error, data) {
-  if (error)
-    return console.warn(error);
+function ASC_Replot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path_list[wrap.do_count])
+    .await(function (error, data) {
+      if (error)
+        return console.warn(error);
+      
+      ASC_FormatData(wrap, data);
+      ASC_Update(wrap);
+    });
+}
+
+function ASC_ButtonListener(wrap) {
+  //-- Correlation or count
+  $(document).on("change", "input:radio[name='" + wrap.tag + "_count']", function (event) {
+    GS_PressRadioButton(wrap, 'count', wrap.do_count, this.value);
+    wrap.do_count = this.value;
+    ASC_Replot(wrap);
+  });
+
+  //-- Save
+  d3.select(wrap.id + '_save').on('click', function(){
+    var tag1;
+    
+    if (wrap.do_count == 1)
+      tag1 = 'count';
+    else
+      tag1 = 'coefficient';
+    
+    name = wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
+    saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
+  });
+
+  //-- Language
+  $(document).on("change", "input:radio[name='language']", function (event) {
+    GS_lang = this.value;
+    Cookies.set("lang", GS_lang);
+    
+    //-- Remove
+    d3.selectAll(wrap.id+' .plot').remove()
+    
+    //-- Replot
+    ASC_Plot(wrap);
+  });
+}
+
+//-- Main
+function ASC_Main(wrap) {
+  //-- Variables
+  wrap.id = '#' + wrap.tag
   
-  ASC_FormatData(wrap, data);
-  ASC_Update(wrap);
+  //-- Swap active to current value
+  wrap.do_count = document.querySelector("input[name='" + wrap.tag + "_count']:checked").value;
+  GS_PressRadioButton(wrap, 'count', 0, wrap.do_count); //-- 0 from .html
+
+  //-- Plot
+  ASC_Plot(wrap);
+  
+  //-- Setup button listeners
+  ASC_ButtonListener(wrap);
 }

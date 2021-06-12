@@ -103,7 +103,7 @@ function CBA_FormatData(wrap, data) {
 //-- Tooltip
 function CBA_MouseMove(wrap, d) {
   //-- Get tooltip position
-  var y_alpha = 0.5;
+  var y_alpha = 0.35;
   var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Generate tooltip text
@@ -176,8 +176,8 @@ function CBA_Initialize(wrap) {
   
   //-- Add 2nd x-axis & adjust position
   wrap.svg.append("g")
-    .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
+    .attr("transform", "translate(0," + wrap.height + ")")
     .call(x_axis_2)
     .selectAll("text")
       .attr("transform", "translate(0,5)")
@@ -210,38 +210,21 @@ function CBA_Initialize(wrap) {
     .attr("transform", "translate(" + wrap.width + ",0)")
     .call(y_axis_2)
     
-  //-- Define xlabel
-  var xlabel;
-  if (GS_lang == 'zh-tw')
-    xlabel = '年齡';
-  else if (GS_lang == 'fr')
-    xlabel = "Âge";
-  else
-    xlabel = "Age";
-  
   //-- Add xlabel
   wrap.svg.append("text")
     .attr("class", "xlabel")
     .attr("text-anchor", "middle")
     .attr("dominant-baseline", "bottom")
-    .attr("transform", "translate(" + (wrap.width*0.5).toString() + ", " + (wrap.tot_height-0.2*wrap.margin.bottom).toString() + ")")
-    .text(xlabel);
-  
-  //-- Define ylabel
-  var ylabel;
-  if (GS_lang == 'zh-tw')
-    ylabel = '案例數';
-  else if (GS_lang == 'fr')
-    ylabel = 'Nombre de cas';
-  else
-    ylabel = 'Number of cases';
+    .attr("transform", "translate(" + (wrap.width*0.5).toString() + ", " + (wrap.tot_height-0.2*wrap.margin.bottom).toString() + ")");
   
   //-- Add ylabel
   wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)")
-    .text(ylabel);
+    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)");
+    
+  //-- Add tooltip
+  GS_MakeTooltip(wrap);
     
   //-- Define color
   var color_list = GS_var.c_list.concat(['#999999']); 
@@ -291,6 +274,32 @@ function CBA_Update(wrap) {
     .duration(GS_var.trans_duration)
     .call(y_axis);
   
+  //-- Define xlabel
+  var xlabel;
+  if (GS_lang == 'zh-tw')
+    xlabel = '年齡';
+  else if (GS_lang == 'fr')
+    xlabel = "Âge";
+  else
+    xlabel = "Age";
+  
+  //-- Define ylabel
+  var ylabel;
+  if (GS_lang == 'zh-tw')
+    ylabel = '案例數';
+  else if (GS_lang == 'fr')
+    ylabel = 'Nombre de cas';
+  else
+    ylabel = 'Number of cases';
+  
+  //-- Update xlabel
+  wrap.svg.select(".xlabel")
+    .text(xlabel);
+    
+  //-- Update ylabel
+  wrap.svg.select(".ylabel")
+    .text(ylabel);
+    
   //-- Update bar
   var col_tag_list = wrap.col_tag_list.slice();
   wrap.bar.selectAll('.content.bar')
@@ -313,7 +322,7 @@ function CBA_Update(wrap) {
   //-- Define legend label
   var legend_label = [];
   var i, label_list;
-  if (CBA_latest_wrap.tag.includes('latest')) {
+  if (wrap.tag.includes('latest')) {
     if (GS_lang == 'zh-tw')
       label_list = ['', '到', '天前', '合計'];
     else if (GS_lang == 'fr')
@@ -377,20 +386,67 @@ function CBA_Update(wrap) {
 }
 
 //-- Plot
-function CBA_Plot(wrap, error, data) {
-  if (error)
-    return console.warn(error);
-  
-  CBA_MakeCanvas(wrap);
-  CBA_FormatData(wrap, data);
-  CBA_Initialize(wrap);
-  CBA_Update(wrap);
+function CBA_Plot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path_list[0])
+    .await(function (error, data) {
+      if (error)
+        return console.warn(error);
+      
+      CBA_MakeCanvas(wrap);
+      CBA_FormatData(wrap, data);
+      CBA_Initialize(wrap);
+      CBA_Update(wrap);
+    });
 }
 
-function CBA_Replot(wrap, error) {
-  if (error)
-    return console.warn(error);
+// function CBA_Replot(wrap) {
+//   d3.queue()
+//     .defer(d3.csv, wrap.data_path_list[0])
+//     .await(function (error, data) {
+//       if (error)
+//         return console.warn(error);
+//       
+//       CBA_FormatData(wrap, data);
+//       CBA_Update(wrap);
+//     });
+// }
+
+function CBA_ButtonListener(wrap) {
+//   //-- 
+//   $(document).on("change", "input:radio[name='" + wrap.tag + "_ind']", function (event) {
+//     GS_PressRadioButton(wrap, 'ind', wrap.col_ind, this.value);
+//     wrap.col_ind = this.value;
+//     CBA_Replot(wrap);
+//   });
+
+  //-- Save
+  d3.select(wrap.id + '_save').on('click', function () {
+    name = wrap.tag + '_' + GS_lang + '.png';
+    saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
+  });
+
+  //-- Language
+  $(document).on("change", "input:radio[name='language']", function (event) {
+    GS_lang = this.value;
+    Cookies.set("lang", GS_lang);
+    
+    //-- Update
+    CBA_Update(wrap);
+  });
+}
+
+//-- Main
+function CBA_Main(wrap) {
+  wrap.id = '#' + wrap.tag;
+
+//   //-- Swap active to current value
+//   wrap.col_ind = document.querySelector("input[name='" + wrap.tag + "_ind']:checked").value;
+//   GS_PressRadioButton(wrap, 'ind', 0, wrap.col_ind); //-- 0 from .html
   
-  CBA_FormatData(wrap, data);
-  CBA_Update(wrap);
+  //-- Plot
+  CBA_Plot(wrap);
+  
+  //-- Setup button listeners
+  CBA_ButtonListener(wrap);
 }

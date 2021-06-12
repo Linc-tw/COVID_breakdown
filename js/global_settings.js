@@ -83,6 +83,12 @@ function GS_MakeCanvas(wrap) {
 }
 
 //-- Tooltip functions
+function GS_MakeTooltip(wrap) {
+  wrap.tooltip = d3.select(wrap.id)
+    .append("div")
+    .attr("class", "tooltip")
+}
+
 function GS_MouseOver(wrap, d) {
   //-- Change opacity when moving mouse over
   wrap.tooltip.transition()
@@ -153,6 +159,7 @@ function GS_MouseOver3(wrap, d) {
     .style("opacity", 0.6)
 }
 
+//-- Button functions
 function GS_PressRadioButton(wrap, btn_tag, old_value, new_value) {
   var old_btn, new_btn;
   old_btn = document.getElementById(wrap.tag + '_' + btn_tag + '_' + old_value);

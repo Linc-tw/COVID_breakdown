@@ -1649,7 +1649,7 @@ class StatusSheet(Template):
     cum_dis_list = self.getCol(self.coltag_cum_dis)
     ind = cum_dis_list == '0.00%'
     cum_dis_list[ind] = 0
-    return cum_dis_list.astype(float)
+    return cum_dis_list.astype(int)
     
   def getCumHospitalized(self):
     return self.getCol(self.coltag_cum_hosp).astype(int)

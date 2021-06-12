@@ -46,7 +46,7 @@ function VR_FormatData(wrap, data) {
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
-      xticklabel.push(GS_ISODateToMDDate(x));
+      xticklabel.push(x);
     }
     
     //-- Loop over column
@@ -165,21 +165,18 @@ function VR_Initialize(wrap) {
     .domain([0, wrap.date_list.length])
     .range([0, wrap.width])
   
-  //-- Define xtick & xticklabel
+  //-- Define xtick & update xticklabel later
   var x_axis_2 = d3.axisBottom(x_2)
-    .tickValues(wrap.xtick)
     .tickSize(12)
     .tickSizeOuter(0)
-    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
+    .tickValues(wrap.xtick)
+    .tickFormat(function (d, i) {return "";});
   
   //-- Add 2nd x-axis & adjust position
   wrap.svg.append("g")
-    .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
+    .attr("transform", "translate(0," + wrap.height + ")")
     .call(x_axis_2)
-    .selectAll("text")
-      .attr("transform", "translate(-20,15) rotate(-90)")
-      .style("text-anchor", "end")
   
   //-- Define y-axis
   var y = d3.scaleLinear()
@@ -200,30 +197,23 @@ function VR_Initialize(wrap) {
   //-- Define a 2nd y-axis for the frameline at right
   var y_axis_2 = d3.axisRight(y)
     .ticks(0)
-    .tickSize(0)
+    .tickSize(0);
   
   //-- Add 2nd y-axis
   wrap.svg.append("g")
     .attr("class", "yaxis")
     .attr("transform", "translate(" + wrap.width + ",0)")
-    .call(y_axis_2)
+    .call(y_axis_2);
     
-  //-- Define ylabel
-  var ylabel;
-  if (GS_lang == 'zh-tw')
-    ylabel = '比率';
-  else if (GS_lang == 'fr')
-    ylabel = 'Taux';
-  else
-    ylabel = 'Rate';
-  
-  //-- Add ylabel
+  //-- Add ylabel & update value later
   wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)")
-    .text(ylabel);
+    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)");
     
+  //-- Add tooltip
+  GS_MakeTooltip(wrap);
+  
   //-- Define color
   var color_list = GS_var.c_list.slice(0, wrap.nb_col);
   var col_tag_list = wrap.col_tag_list.slice();
@@ -276,6 +266,7 @@ function VR_Initialize(wrap) {
       .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);});
       
   //-- Save to wrapper
+  wrap.x_2 = x_2;
   wrap.color_list = color_list;
   wrap.draw_line = draw_line;
   wrap.line = line;
@@ -283,6 +274,22 @@ function VR_Initialize(wrap) {
 }
 
 function VR_Update(wrap) {
+  //-- Define xtick & update xticklabel later
+  var x_axis_2 = d3.axisBottom(wrap.x_2)
+    .tickSize(10)
+    .tickSizeOuter(0)
+    .tickValues(wrap.xtick)
+    .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
+  
+  //-- Add 2nd x-axis & adjust position
+  wrap.svg.select('.xaxis')
+    .transition()
+    .duration(GS_var.trans_duration)
+    .call(x_axis_2)
+    .selectAll("text")
+      .attr("transform", "translate(-20,15) rotate(-90)")
+      .style("text-anchor", "end");
+  
   //-- Define y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
@@ -300,6 +307,19 @@ function VR_Update(wrap) {
     .duration(GS_var.trans_duration)
     .call(y_axis);
   
+  //-- Define ylabel
+  var ylabel;
+  if (GS_lang == 'zh-tw')
+    ylabel = '比率';
+  else if (GS_lang == 'fr')
+    ylabel = 'Taux';
+  else
+    ylabel = 'Rate';
+  
+  //-- Update ylabel
+  wrap.svg.select(".ylabel")
+    .text(ylabel);
+    
   //-- Update line
   wrap.line.selectAll('.content.line')
     .transition()
@@ -341,12 +361,44 @@ function VR_Update(wrap) {
 }
 
 //-- Plot
-function VR_Plot(wrap, error, data) {
-  if (error)
-    return console.warn(error);
+function VR_Plot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path_list[0])
+    .await(function (error, data) {
+      if (error)
+        return console.warn(error);
+      
+      VR_MakeCanvas(wrap);
+      VR_FormatData(wrap, data);
+      VR_Initialize(wrap);
+      VR_Update(wrap);
+    });
+}
+
+function VR_ButtonListener(wrap) {
+  //-- Save
+  d3.select(wrap.id + '_save').on('click', function () {
+    name = wrap.tag + '_' + GS_lang + '.png'
+    saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
+  });
+
+  //-- Language
+  $(document).on("change", "input:radio[name='language']", function (event) {
+    GS_lang = this.value;
+    Cookies.set("lang", GS_lang);
+    
+    //-- Replot
+    VR_Update(wrap);
+  });
+}
+
+//-- Main
+function VR_Main(wrap) {
+  wrap.id = '#' + wrap.tag
   
-  VR_MakeCanvas(wrap);
-  VR_FormatData(wrap, data);
-  VR_Initialize(wrap);
-  VR_Update(wrap);
+  //-- Plot
+  VR_Plot(wrap);
+  
+  //-- Setup button listeners
+  VR_ButtonListener(wrap);
 }

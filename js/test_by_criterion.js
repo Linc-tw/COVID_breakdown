@@ -55,7 +55,7 @@ function TBC_FormatData(wrap, data) {
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
-      xticklabel.push(GS_ISODateToMDDate(x));
+      xticklabel.push(x);
     }
     
     //-- Loop over column
@@ -202,21 +202,18 @@ function TBC_Initialize(wrap) {
     .domain([-eps, wrap.date_list.length+eps])
     .range([0, wrap.width])
   
-  //-- Define xtick & xticklabel
+  //-- Define xtick & update xticklabel later
   var x_axis_2 = d3.axisBottom(x_2)
-    .tickValues(wrap.xtick)
     .tickSize(10)
     .tickSizeOuter(0)
-    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
+    .tickValues(wrap.xtick)
+    .tickFormat(function (d, i) {return "";});
   
   //-- Add 2nd x-axis & adjust position
   wrap.svg.append("g")
-    .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
-    .call(x_axis_2)
-    .selectAll("text")
-      .attr("transform", "translate(-20,15) rotate(-90)")
-      .style("text-anchor", "end")
+    .attr("transform", "translate(0," + wrap.height + ")")
+    .call(x_axis_2);
   
   //-- Define y-axis
   var y = d3.scaleLinear()
@@ -232,35 +229,28 @@ function TBC_Initialize(wrap) {
   //-- Add y-axis
   wrap.svg.append("g")
     .attr("class", "yaxis")
-    .call(y_axis)
+    .call(y_axis);
 
   //-- Define a 2nd y-axis for the frameline at right
   var y_axis_2 = d3.axisRight(y)
     .ticks(0)
-    .tickSize(0)
+    .tickSize(0);
   
   //-- Add 2nd y-axis
   wrap.svg.append("g")
     .attr("class", "yaxis")
     .attr("transform", "translate(" + wrap.width + ",0)")
-    .call(y_axis_2)
+    .call(y_axis_2);
     
-  //-- Define ylabel
-  var ylabel;
-  if (GS_lang == 'zh-tw')
-    ylabel = '檢驗數';
-  else if (GS_lang == 'fr')
-    ylabel = 'Nombre de tests';
-  else
-    ylabel = 'Number of tests';
-  
-  //-- Add ylabel
+  //-- Add ylabel & update value later
   wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)")
-    .text(ylabel);
+    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)");
     
+  //-- Add tooltip
+  GS_MakeTooltip(wrap);
+  
   //-- Define color
   var color_list = GS_var.c_list.slice(0, wrap.nb_col);
   var col_tag_list = wrap.col_tag_list.slice().reverse();
@@ -286,11 +276,28 @@ function TBC_Initialize(wrap) {
     .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
+  wrap.x_2 = x_2;
   wrap.color_list = color_list;
   wrap.bar = bar;
 }
 
 function TBC_Update(wrap) {
+  //-- Define xtick & update xticklabel later
+  var x_axis_2 = d3.axisBottom(wrap.x_2)
+    .tickSize(10)
+    .tickSizeOuter(0)
+    .tickValues(wrap.xtick)
+    .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
+  
+  //-- Add 2nd x-axis & adjust position
+  wrap.svg.select('.xaxis')
+    .transition()
+    .duration(GS_var.trans_duration)
+    .call(x_axis_2)
+    .selectAll("text")
+      .attr("transform", "translate(-20,15) rotate(-90)")
+      .style("text-anchor", "end");
+  
   //-- Define y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
@@ -315,6 +322,19 @@ function TBC_Update(wrap) {
     .duration(GS_var.trans_duration)
     .call(y_axis);
   
+  //-- Define ylabel
+  var ylabel;
+  if (GS_lang == 'zh-tw')
+    ylabel = '檢驗數';
+  else if (GS_lang == 'fr')
+    ylabel = 'Nombre de tests';
+  else
+    ylabel = 'Number of tests';
+  
+  //-- Update ylabel
+  wrap.svg.select(".ylabel")
+    .text(ylabel);
+    
   //-- Update bar
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
@@ -392,20 +412,74 @@ function TBC_Update(wrap) {
 }
 
 //-- Plot
-function TBC_Plot(wrap, error, data) {
-  if (error)
-    return console.warn(error);
-  
-  TBC_MakeCanvas(wrap);
-  TBC_FormatData(wrap, data);
-  TBC_Initialize(wrap);
-  TBC_Update(wrap);
+function TBC_Plot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path)
+    .await(function (error, data) {
+      if (error)
+        return console.warn(error);
+      
+      TBC_MakeCanvas(wrap);
+      TBC_FormatData(wrap, data);
+      TBC_Initialize(wrap);
+      TBC_Update(wrap);
+    });
 }
 
-function TBC_Replot(wrap, error, data) {
-  if (error)
-    return console.warn(error);
+function TBC_Replot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path)
+    .await(function (error, data) {
+      if (error)
+        return console.warn(error);
+      
+      TBC_FormatData(wrap, data);
+      TBC_Update(wrap);
+    });
+}
+
+function TBC_ButtonListener(wrap) {
+  //-- Daily or cumulative
+  $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
+    GS_PressRadioButton(wrap, 'cumul', wrap.do_cumul, this.value);
+    wrap.do_cumul = this.value;
+    TBC_Replot(wrap);
+  });
+
+  //-- Save
+  d3.select(wrap.id + '_save').on('click', function(){
+    var tag1;
+    
+    if (wrap.do_cumul == 1)
+      tag1 = 'cumulative';
+    else
+      tag1 = 'daily';
+    
+    name = wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
+    saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
+  });
+
+  //-- Language
+  $(document).on("change", "input:radio[name='language']", function (event) {
+    GS_lang = this.value;
+    Cookies.set("lang", GS_lang);
+    
+    //-- Replot
+    TBC_Update(wrap);
+  });
+}
+
+//-- Main
+function TBC_Main(wrap) {
+  wrap.id = '#' + wrap.tag
   
-  TBC_FormatData(wrap, data);
-  TBC_Update(wrap);
+  //-- Swap active to current value
+  wrap.do_cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
+  GS_PressRadioButton(wrap, 'cumul', 0, wrap.do_cumul); //-- 0 from .html
+  
+  //-- Plot
+  TBC_Plot(wrap);
+  
+  //-- Setup button listeners
+  TBC_ButtonListener(wrap);
 }

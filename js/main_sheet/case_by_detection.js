@@ -55,7 +55,7 @@ function CBD_FormatData(wrap, data) {
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
-      xticklabel.push(GS_ISODateToMDDate(x));
+      xticklabel.push(x);
     }
     
     //-- Loop over column
@@ -239,21 +239,18 @@ function CBD_Initialize(wrap) {
     .domain([-eps, wrap.date_list.length+eps])
     .range([0, wrap.width])
   
-  //-- Define xtick & xticklabel
+  //-- Define xtick & update xticklabel later
   var x_axis_2 = d3.axisBottom(x_2)
     .tickSize(10)
     .tickSizeOuter(0)
     .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
+    .tickFormat(function (d, i) {return "";});
   
   //-- Add 2nd x-axis & adjust position
   wrap.svg.append("g")
-    .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
-    .call(x_axis_2)
-    .selectAll("text")
-      .attr("transform", "translate(-20,15) rotate(-90)")
-      .style("text-anchor", "end")
+    .attr("transform", "translate(0," + wrap.height + ")")
+    .call(x_axis_2);
   
   //-- Define y-axis
   var y = d3.scaleLinear()
@@ -273,6 +270,7 @@ function CBD_Initialize(wrap) {
 
   //-- Define a 2nd y-axis for the frameline at right
   var y_axis_2 = d3.axisRight(y)
+    .ticks(0)
     .tickSize(0);
   
   //-- Add 2nd y-axis
@@ -281,22 +279,15 @@ function CBD_Initialize(wrap) {
     .attr("transform", "translate(" + wrap.width + ",0)")
     .call(y_axis_2)
     
-  //-- Define ylabel
-  var ylabel;
-  if (GS_lang == 'zh-tw')
-    ylabel = '案例數';
-  else if (GS_lang == 'fr')
-    ylabel = 'Nombre de cas';
-  else
-    ylabel = 'Number of cases';
-  
-  //-- Add ylabel
+  //-- Add ylabel & update value later
   wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)")
-    .text(ylabel);
+    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)");
     
+  //-- Add tooltip
+  GS_MakeTooltip(wrap);
+  
   //-- Define color
   var color_list = GS_var.c_list.slice(0, wrap.nb_col-1);
   color_list.push('#CCAAAA')
@@ -323,11 +314,28 @@ function CBD_Initialize(wrap) {
     .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
   
   //-- Save to wrapper
+  wrap.x_2 = x_2;
   wrap.color_list = color_list;
   wrap.bar = bar;
 }
 
 function CBD_Update(wrap) {
+  //-- Define xtick & update xticklabel later
+  var x_axis_2 = d3.axisBottom(wrap.x_2)
+    .tickSize(10)
+    .tickSizeOuter(0)
+    .tickValues(wrap.xtick)
+    .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
+  
+  //-- Add 2nd x-axis & adjust position
+  wrap.svg.select('.xaxis')
+    .transition()
+    .duration(GS_var.trans_duration)
+    .call(x_axis_2)
+    .selectAll("text")
+      .attr("transform", "translate(-20,15) rotate(-90)")
+      .style("text-anchor", "end");
+  
   //-- Define y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
@@ -352,6 +360,19 @@ function CBD_Update(wrap) {
     .duration(GS_var.trans_duration)
     .call(y_axis);
   
+  //-- Define ylabel
+  var ylabel;
+  if (GS_lang == 'zh-tw')
+    ylabel = '案例數';
+  else if (GS_lang == 'fr')
+    ylabel = 'Nombre de cas';
+  else
+    ylabel = 'Number of cases';
+  
+  //-- Update ylabel
+  wrap.svg.select(".ylabel")
+    .text(ylabel);
+    
   //-- Update bar
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
@@ -375,9 +396,9 @@ function CBD_Update(wrap) {
   
   //-- Define legend color
   var legend_color_list = wrap.color_list.slice();
-  legend_color_list.push('#000000');
   if (wrap.do_onset == 1)
-    legend_color_list.splice(wrap.nb_col, 0, '#999999');
+    legend_color_list.push('#999999');
+  legend_color_list.push('#000000');
   
   //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
@@ -443,21 +464,90 @@ function CBD_Update(wrap) {
 }
 
 //-- Plot
-function CBD_Plot(wrap, error, data, data2) {
-  if (error)
-    return console.warn(error);
-  
-  CBD_MakeCanvas(wrap);
-  CBD_FormatData(wrap, data);
-  CBD_FormatData2(wrap, data2);
-  CBD_Initialize(wrap);
-  CBD_Update(wrap);
+function CBD_Plot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path_list[wrap.do_onset])
+    .defer(d3.csv, wrap.data_path_list[2])
+    .await(function (error, data, data2) {
+      if (error)
+        return console.warn(error);
+      
+      CBD_MakeCanvas(wrap);
+      CBD_FormatData(wrap, data);
+      CBD_FormatData2(wrap, data2);
+      CBD_Initialize(wrap);
+      CBD_Update(wrap);
+    });
 }
 
-function CBD_Replot(wrap, error, data) {
-  if (error)
-    return console.warn(error);
+function CBD_Replot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path_list[wrap.do_onset])
+    .await(function (error, data) {
+      if (error)
+        return console.warn(error);
+      
+      CBD_FormatData(wrap, data);
+      CBD_Update(wrap);
+    });
+}
+
+function CBD_ButtonListener(wrap) {
+  //-- Daily or cumulative
+  $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
+    GS_PressRadioButton(wrap, 'cumul', wrap.do_cumul, this.value);
+    wrap.do_cumul = this.value;
+    CBD_Replot(wrap);
+  });
+
+  //-- Report date or onset date
+  $(document).on("change", "input:radio[name='" + wrap.tag + "_onset']", function (event) {
+    GS_PressRadioButton(wrap, 'onset', wrap.do_onset, this.value);
+    wrap.do_onset = this.value
+    CBD_Replot(wrap);
+  });
+
+  //-- Save
+  d3.select(wrap.id + '_save').on('click', function() {
+    var tag1, tag2;
+    
+    if (wrap.do_cumul == 1)
+      tag1 = 'cumulative';
+    else
+      tag1 = 'daily';
+    
+    if (wrap.do_onset == 1)
+      tag2 = 'onset';
+    else
+      tag2 = 'report';
+    
+    name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + GS_lang + '.png'
+    saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
+  });
+
+  //-- Language
+  $(document).on("change", "input:radio[name='language']", function (event) {
+    GS_lang = this.value;
+    Cookies.set("lang", GS_lang);
+    
+    //-- Replot
+    CBD_Update(wrap);
+  });
+}
+
+//-- Main
+function CBD_Main(wrap) {
+  wrap.id = '#' + wrap.tag
   
-  CBD_FormatData(wrap, data);
-  CBD_Update(wrap);
+    //-- Swap active to current value
+  wrap.do_cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
+  wrap.do_onset = document.querySelector("input[name='" + wrap.tag + "_onset']:checked").value;
+  GS_PressRadioButton(wrap, 'cumul', 0, wrap.do_cumul); //-- 0 from .html
+  GS_PressRadioButton(wrap, 'onset', 0, wrap.do_onset); //-- 0 from .html
+  
+  //-- Plot
+  CBD_Plot(wrap);
+  
+  //-- Setup button listeners
+  CBD_ButtonListener(wrap);
 }

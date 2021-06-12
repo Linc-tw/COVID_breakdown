@@ -190,8 +190,8 @@ function DBT_Initialize(wrap) {
   
   //-- Add 2nd x-axis & adjust position
   wrap.svg.append("g")
-    .attr("transform", "translate(0," + wrap.height + ")")
     .attr("class", "xaxis")
+    .attr("transform", "translate(0," + wrap.height + ")")
     .call(x_axis_2)
     .selectAll("text")
       .attr("transform", "translate(0,5)")
@@ -224,39 +224,22 @@ function DBT_Initialize(wrap) {
     .attr("transform", "translate(" + wrap.width + ",0)")
     .call(y_axis_2)
     
-  //-- Define xlabel
-  var xlabel;
-  if (GS_lang == 'zh-tw')
-    xlabel = '發病或入境後到確診所需天數';
-  else if (GS_lang == 'fr')
-    xlabel = "Nombre de jours avant identification";
-  else
-    xlabel = "Days required for each case to be identified";
-  
-  //-- Add xlabel
+  //-- Add xlabel & update value later
   wrap.svg.append("text")
-    .attr("class", "xlabel")
-    .attr("text-anchor", "middle")
-    .attr("dominant-baseline", "bottom")
-    .attr("transform", "translate(" + (wrap.width*0.5).toString() + ", " + (wrap.tot_height-0.2*wrap.margin.bottom).toString() + ")")
-    .text(xlabel);
+      .attr("class", "xlabel")
+      .attr("text-anchor", "middle")
+      .attr("dominant-baseline", "bottom")
+      .attr("transform", "translate(" + (wrap.width*0.5).toString() + ", " + (wrap.tot_height-0.2*wrap.margin.bottom).toString() + ")");
   
-  //-- Define ylabel
-  var ylabel;
-  if (GS_lang == 'zh-tw')
-    ylabel = '案例數';
-  else if (GS_lang == 'fr')
-    ylabel = 'Nombre de cas';
-  else
-    ylabel = 'Number of cases';
-  
-  //-- Add ylabel
+  //-- Add ylabel & update value later
   wrap.svg.append("text")
     .attr("class", "ylabel")
     .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)")
-    .text(ylabel);
+    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)");
     
+  //-- Add tooltip
+  GS_MakeTooltip(wrap);
+  
   //-- Define color
   var color_list = [GS_var.c_list[4], GS_var.c_list[0], GS_var.c_list[1], GS_var.c_list[3], '#999999', '#000000']; 
   var col_tag_list = wrap.col_tag_list.slice();
@@ -315,6 +298,32 @@ function DBT_Update(wrap) {
     .attr('y', function (d) {return y(d[col_tag_list[wrap.col_ind]]);})
     .attr('height', function (d) {return y(0)-y(d[col_tag_list[wrap.col_ind]]);});
   
+  //-- Define xlabel
+  var xlabel;
+  if (GS_lang == 'zh-tw')
+    xlabel = '發病或入境後到確診所需天數';
+  else if (GS_lang == 'fr')
+    xlabel = "Nombre de jours avant identification";
+  else
+    xlabel = "Days required for each case to be identified";
+  
+  //-- Update xlabel
+  wrap.svg.select(".xlabel")
+    .text(xlabel);
+  
+  //-- Define ylabel
+  var ylabel;
+  if (GS_lang == 'zh-tw')
+    ylabel = '案例數';
+  else if (GS_lang == 'fr')
+    ylabel = 'Nombre de cas';
+  else
+    ylabel = 'Number of cases';
+  
+  //-- Update ylabel
+  wrap.svg.select(".ylabel")
+    .text(ylabel);
+    
   //-- Define legend position
   var legend_pos = {x: 470, y: 45, dx: 12, dy: 30};
   
@@ -376,21 +385,80 @@ function DBT_Update(wrap) {
 }
 
 //-- Plot
-function DBT_Plot(wrap, error, data, data2) {
-  if (error)
-    return console.warn(error);
-  
-  DBT_MakeCanvas(wrap);
-  DBT_FormatData(wrap, data);
-  DBT_FormatData2(wrap, data2);
-  DBT_Initialize(wrap);
-  DBT_Update(wrap);
+function DBT_Plot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path_list[0])
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
+      if (error)
+        return console.warn(error);
+      
+      DBT_MakeCanvas(wrap);
+      DBT_FormatData(wrap, data);
+      DBT_FormatData2(wrap, data2);
+      DBT_Initialize(wrap);
+      DBT_Update(wrap);
+    });
 }
 
-function DBT_Replot(wrap, error, data) {
-  if (error)
-    return console.warn(error);
+function DBT_Replot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path_list[0])
+    .await(function (error, data) {
+      if (error)
+        return console.warn(error);
+      
+      DBT_FormatData(wrap, data);
+      DBT_Update(wrap);
+    });
+}
+
+function DBT_ButtonListener(wrap) {
+  //-- Column index
+  $(document).on("change", "input:radio[name='" + wrap.tag + "_ind']", function (event) {
+    GS_PressRadioButton(wrap, 'ind', wrap.col_ind, this.value);
+    wrap.col_ind = this.value;
+    DBT_Replot(wrap);
+  });
+
+  //-- Save
+  d3.select(wrap.id + '_save').on('click', function () {
+    var tag1;
+    
+    if (wrap.col_ind == 0)
+      tag1 = 'all';
+    else if (wrap.col_ind == 1)
+      tag1 = 'imported';
+    else if (wrap.col_ind == 2)
+      tag1 = 'local';
+    else
+      tag1 = 'others';
+    
+    name = wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
+    saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
+  });
+
+  //-- Language
+  $(document).on("change", "input:radio[name='language']", function (event) {
+    GS_lang = this.value;
+    Cookies.set("lang", GS_lang);
+    
+    //-- Update
+    DBT_Update(wrap);
+  });
+}
+
+//-- Main
+function DBT_Main(wrap) {
+  wrap.id = '#' + wrap.tag
   
-  DBT_FormatData(wrap, data);
-  DBT_Update(wrap);
+  //-- Swap active to current value
+  wrap.col_ind = document.querySelector("input[name='" + wrap.tag + "_ind']:checked").value;
+  GS_PressRadioButton(wrap, 'ind', 0, wrap.col_ind); //-- 0 from .html
+  
+  //-- Plot
+  DBT_Plot(wrap);
+  
+  //-- Setup button listeners
+  DBT_ButtonListener(wrap);
 }
