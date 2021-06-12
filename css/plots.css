@@ -12,6 +12,15 @@ body,
   font-family: 'Roboto', 'Noto Sans TC', sans-serif;
 }
 
+.bg-gray-dark {
+  background-color: #343a40 !important;
+}
+
+/* Overwrite template */
+.sb-topnav .navbar-brand {
+  width: 190px;
+}
+
 .xlabel,
 .ylabel,
 .legend,
@@ -121,11 +130,17 @@ body,
   margin-top: -45px;
   margin-bottom: -45px;
 }
-#difference_by_transmission_latest .tooltip, #difference_by_transmission_2020 .tooltip, #difference_by_transmission_2021 .tooltip {
-  margin-left: -90px;
-  margin-right: -90px;
-  margin-top: -25px;
-  margin-bottom: -25px;
+#test_by_criterion_latest .tooltip, #test_by_criterion_2020 .tooltip, #test_by_criterion_2021 .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
+  margin-top: -55px;
+  margin-bottom: -55px;
+}
+#border_statistics_latest .tooltip, #border_statistics_2020 .tooltip, #border_statistics_2021 .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
+  margin-top: -55px;
+  margin-bottom: -55px;
 }
 #case_by_transmission_latest .tooltip, #case_by_transmission_2020 .tooltip, #case_by_transmission_2021 .tooltip {
   margin-left: -56px;
@@ -139,17 +154,17 @@ body,
   margin-top: -72px;
   margin-bottom: -72px;
 }
-#test_by_criterion_latest .tooltip, #test_by_criterion_2020 .tooltip, #test_by_criterion_2021 .tooltip {
-  margin-left: -75px;
-  margin-right: -75px;
-  margin-top: -55px;
-  margin-bottom: -55px;
+#case_by_age_latest .tooltip {  /* , #case_by_age_2020 .tooltip, #case_by_age_2021 .tooltip*/
+  margin-left: -70px;
+  margin-right: -70px;
+  margin-top: -35px;
+  margin-bottom: -35px;
 }
-#border_statistics_latest .tooltip, #border_statistics_2020 .tooltip, #border_statistics_2021 .tooltip {
-  margin-left: -75px;
-  margin-right: -75px;
-  margin-top: -55px;
-  margin-bottom: -55px;
+#difference_by_transmission_latest .tooltip, #difference_by_transmission_2020 .tooltip, #difference_by_transmission_2021 .tooltip {
+  margin-left: -90px;
+  margin-right: -90px;
+  margin-top: -25px;
+  margin-bottom: -25px;
 }
 
 

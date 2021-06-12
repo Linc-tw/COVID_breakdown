@@ -21,9 +21,9 @@
     
     <body class="sb-nav-fixed">
         <!-- Navigation bar -->
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.html">COVID-19 in TWN</a>
-            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-gray-dark">
+            <a class="navbar-brand ps-3" href="index.html">COVID-19 in TWN</a>
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         </nav>
         
         <div id="layoutSidenav">
@@ -37,13 +37,13 @@
                             <div class="sb-sidenav-menu-heading-nouppercase">
                                 <div class="btn-group-vertical btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                     <label id="lang_en" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='en'>English<br>
+                                        <input type="radio" class="btn-check" name="language" value='en'>English<br>
                                     </label>
                                     <label id="lang_fr" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='fr'>Français<br>
+                                        <input type="radio" class="btn-check" name="language" value='fr'>Français<br>
                                     </label>
                                     <label id="lang_zh-tw" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='zh-tw'>正體中文<br>
+                                        <input type="radio" class="btn-check" name="language" value='zh-tw'>正體中文<br>
                                     </label>
                                 </div>
                             </div>
@@ -141,16 +141,16 @@
             <div id="layoutSidenav_content">
                 <!-- Main body -->
                 <main>
-                    <div class="container-fluid">
+                    <div class="container-fluid px-4">
                         <h1 id="title" class="mt-4"></h1>
-                        <h3 id="title_2020_highlight"></h3>
+                        <h4 id="title_2020_highlight" class="mb-4"></h4>
                         <div class="row">
                         
                             <!-- Status evolution -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-thermometer-half mr-1"></i> <span id="status_evolution_title"></span>
+                                        <i class="fas fa-thermometer-half me-1"></i> <span id="status_evolution_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
@@ -167,7 +167,7 @@
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-line mr-1"></i> <span id="various_rates_title"></span>
+                                        <i class="fas fa-chart-line me-1"></i> <span id="various_rates_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
@@ -184,33 +184,33 @@
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-head-side-cough mr-1"></i> <span id="case_by_transmission_title"></span>
+                                        <i class="fas fa-head-side-cough me-1"></i> <span id="case_by_transmission_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="case_by_transmission_2020_cumul_0">
-                                                    <input type="radio" name="case_by_transmission_2020_cumul" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="case_by_transmission_2020_cumul" value=0 checked>
                                                     <span id="case_by_transmission_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="case_by_transmission_2020_cumul_1">
-                                                    <input type="radio" name="case_by_transmission_2020_cumul" value=1>
+                                                    <input type="radio" class="btn-check" name="case_by_transmission_2020_cumul" value=1>
                                                     <span id="case_by_transmission_button_2"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="case_by_transmission_2020_onset_0">
-                                                    <input type="radio" name="case_by_transmission_2020_onset" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="case_by_transmission_2020_onset" value=0 checked>
                                                     <span id="case_by_transmission_button_3"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="case_by_transmission_2020_onset_1">
-                                                    <input type="radio" name="case_by_transmission_2020_onset" value=1>
+                                                    <input type="radio" class="btn-check" name="case_by_transmission_2020_onset" value=1>
                                                     <span id="case_by_transmission_button_4"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
+                                            
                                             <button id='case_by_transmission_2020_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
@@ -223,22 +223,22 @@
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-vial mr-1"></i> <span id="test_by_criterion_title"></span>
+                                        <i class="fas fa-vial me-1"></i> <span id="test_by_criterion_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="test_by_criterion_2020_cumul_0">
-                                                    <input type="radio" name="test_by_criterion_2020_cumul" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="test_by_criterion_2020_cumul" value=0 checked>
                                                     <span id="test_by_criterion_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="test_by_criterion_2020_cumul_1">
-                                                    <input type="radio" name="test_by_criterion_2020_cumul" value=1>
+                                                    <input type="radio" class="btn-check" name="test_by_criterion_2020_cumul" value=1>
                                                     <span id="test_by_criterion_button_2"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
+                                            
                                             <button id='test_by_criterion_2020_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
@@ -251,7 +251,7 @@
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-plane-slash mr-1"></i> <span id="border_statistics_title"></span>
+                                        <i class="fas fa-plane-slash me-1"></i> <span id="border_statistics_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
@@ -261,21 +261,21 @@
                                               <span style="display:inline-block; width: 16px;"></span>
                                             </div>
                                             
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="border_statistics_2020_exit_0">
-                                                    <input type="radio" name="border_statistics_2020_exit" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="border_statistics_2020_exit" value=0 checked>
                                                     <span id="border_statistics_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="border_statistics_2020_exit_1">
-                                                    <input type="radio" name="border_statistics_2020_exit" value=1>
+                                                    <input type="radio" class="btn-check" name="border_statistics_2020_exit" value=1>
                                                     <span id="border_statistics_button_2"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="border_statistics_2020_exit_2">
-                                                    <input type="radio" name="border_statistics_2020_exit" value=2>
+                                                    <input type="radio" class="btn-check" name="border_statistics_2020_exit" value=2>
                                                     <span id="border_statistics_button_3"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
+                                            
                                             <button id='border_statistics_2020_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
@@ -290,7 +290,7 @@
                 
                 <!-- Footer -->
                 <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid">
+                    <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
                             <span id="footer_last_update"></span>
                         </div>

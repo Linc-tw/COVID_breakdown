@@ -21,9 +21,9 @@
     
     <body class="sb-nav-fixed">
         <!-- Navigation bar -->
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.html">COVID-19 in TWN</a>
-            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-gray-dark">
+            <a class="navbar-brand ps-3" href="index.html">COVID-19 in TWN</a>
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         </nav>
         
         <div id="layoutSidenav">
@@ -37,13 +37,13 @@
                             <div class="sb-sidenav-menu-heading-nouppercase">
                                 <div class="btn-group-vertical btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                     <label id="lang_en" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='en'>English<br>
+                                        <input type="radio" class="btn-check" name="language" value='en'>English<br>
                                     </label>
                                     <label id="lang_fr" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='fr'>Français<br>
+                                        <input type="radio" class="btn-check" name="language" value='fr'>Français<br>
                                     </label>
                                     <label id="lang_zh-tw" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='zh-tw'>正體中文<br>
+                                        <input type="radio" class="btn-check" name="language" value='zh-tw'>正體中文<br>
                                     </label>
                                 </div>
                             </div>
@@ -141,42 +141,42 @@
             <div id="layoutSidenav_content">
                 <!-- Main body -->
                 <main>
-                    <div class="container-fluid">
+                    <div class="container-fluid px-4">
                         <h1 id="title" class="mt-4"></h1>
-                        <h3 id="title_timeline"></h3>
+                        <h4 id="title_timeline" class="mb-4"></h4>
                         <div class="row">
                         
                             <!-- Criteria timeline -->
                             <div class="col-xl-8">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-history mr-1"></i> <span id="criteria_timeline_title"></span>
+                                        <i class="fas fa-history me-1"></i> <span id="criteria_timeline_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="criteria_timeline_latest_full_0">
-                                                    <input type="radio" name="criteria_timeline_latest_full" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="criteria_timeline_latest_full" value=0 checked>
                                                     <span id="criteria_timeline_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="criteria_timeline_latest_full_1">
-                                                    <input type="radio" name="criteria_timeline_latest_full" value=1>
+                                                    <input type="radio" class="btn-check" name="criteria_timeline_latest_full" value=1>
                                                     <span id="criteria_timeline_button_2"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="criteria_timeline_latest_timeline_1">
-                                                    <input type="radio" name="criteria_timeline_latest_timeline" value=1 checked>
+                                                    <input type="radio" class="btn-check" name="criteria_timeline_latest_timeline" value=1 checked>
                                                     <span id="criteria_timeline_button_3"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="criteria_timeline_latest_timeline_0">
-                                                    <input type="radio" name="criteria_timeline_latest_timeline" value=0>
+                                                    <input type="radio" class="btn-check" name="criteria_timeline_latest_timeline" value=0>
                                                     <span id="criteria_timeline_button_4"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
+                                            
                                             <button id='criteria_timeline_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
@@ -189,22 +189,22 @@
                             <div class="col-xl-12">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-calendar-alt mr-1"></i> <span id="event_timeline_title"></span>
+                                        <i class="fas fa-calendar-alt me-1"></i> <span id="event_timeline_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="event_timeline_latest_start_0">
-                                                    <input type="radio" name="event_timeline_latest_start" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="event_timeline_latest_start" value=0 checked>
                                                     <span id="event_timeline_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="event_timeline_latest_start_1">
-                                                    <input type="radio" name="event_timeline_latest_start" value=1>
+                                                    <input type="radio" class="btn-check" name="event_timeline_latest_start" value=1>
                                                     <span id="event_timeline_button_2"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
+                                            
                                             <button id='event_timeline_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
@@ -219,7 +219,7 @@
                 
                 <!-- Footer -->
                 <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid">
+                    <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
                             <span id="footer_last_update"></span>
                         </div>

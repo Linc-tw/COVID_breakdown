@@ -183,7 +183,7 @@ function THSC_Initialize(wrap) {
     .call(y_axis_2);
     
   //-- Define legend position
-  var legend_pos = {x: 50, y: -0.8*wrap.margin.top, dx: 12, dy: 30};
+  var legend_pos = {x: wrap.legend_pos_x, y: -0.8*wrap.margin.top, dx: 12, dy: 30};
   
   //-- Define legend color
   var legend_color = [GS_var.c_list[0], '#999999', '#999999', '#000000'];

@@ -180,8 +180,9 @@ function SE_Initialize(wrap) {
     .call(x_axis)
     
   //-- Define a 2nd x-axis for xtick & xticklabel
+  var eps = 0.1
   var x_2 = d3.scaleLinear()
-    .domain([0, wrap.date_list.length])
+    .domain([-eps, wrap.date_list.length+eps])
     .range([0, wrap.width])
   
   //-- Define xtick & xticklabel

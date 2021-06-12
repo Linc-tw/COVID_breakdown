@@ -20,6 +20,7 @@ THSC_2020_wrap.data_path_list = [
 ];
 
 //-- Parameters
+THSC_2020_wrap.legend_pos_x = 50;
 
 //-- Variables
 THSC_2020_wrap.do_count = document.querySelector("input[name='" + THSC_2020_wrap.tag + "_count']:checked").value;
@@ -63,7 +64,7 @@ d3.select(THSC_2020_wrap.id + '_save').on('click', function () {
 });
 
 //-- Language button
-$(document).on("change", "input:radio[name='2020_language']", function (event) {
+$(document).on("change", "input:radio[name='language']", function (event) {
   GS_lang = this.value;
   Cookies.set("lang", GS_lang);
   

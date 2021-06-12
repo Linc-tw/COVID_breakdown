@@ -45,7 +45,7 @@ function VR_FormatData(wrap, data) {
     
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
-      xtick.push(i) //-- No 0.5 due to points
+      xtick.push(i+0.5)
       xticklabel.push(GS_ISODateToMDDate(x));
     }
     
@@ -75,9 +75,6 @@ function VR_FormatData(wrap, data) {
       block = {
         'x': data[i]["date"],
         'y': y_list_list[i][j],
-        'y1': y_list_list[i][0],
-        'y2': y_list_list[i][1],
-        'y3': y_list_list[i][2],
         'y_list': y_list_list[i]
       };
       
@@ -147,9 +144,10 @@ function VR_MouseMove(wrap, d) {
 
 function VR_Initialize(wrap) {
   //-- Define x-axis
-  var x = d3.scaleBand()
+  var x = d3.scalePoint()
     .domain(wrap.date_list)
-    .range([0, wrap.width]);
+    .range([0, wrap.width])
+    .padding(0.5);
     
   //-- No xtick or xticklabel 
   var x_axis = d3.axisBottom(x)

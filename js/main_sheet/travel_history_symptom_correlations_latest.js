@@ -20,6 +20,7 @@ THSC_latest_wrap.data_path_list = [
 ];
 
 //-- Parameters
+THSC_latest_wrap.legend_pos_x = 65;
 
 //-- Variables
 THSC_latest_wrap.do_count = document.querySelector("input[name='" + THSC_latest_wrap.tag + "_count']:checked").value;
@@ -63,7 +64,7 @@ d3.select(THSC_latest_wrap.id + '_save').on('click', function () {
 });
 
 //-- Language button
-$(document).on("change", "input:radio[name='index_language']", function (event) {
+$(document).on("change", "input:radio[name='language']", function (event) {
   GS_lang = this.value;
   Cookies.set("lang", GS_lang);
   

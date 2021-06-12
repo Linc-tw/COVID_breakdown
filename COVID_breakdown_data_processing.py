@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.06.06                  ##
+    ##  Version 2021.06.12                  ##
     ##########################################
 
 import os
@@ -811,7 +811,7 @@ class MainSheet(Template):
       'vomiting': ['嘔吐'],
       'diarrhea': ['腹瀉'], 
       
-      'headache': ['頭暈目眩', '輕度頭痛', '頭骨痛', '頭痛', '頭暈', '頭脹', '暈眩', '頭重'],
+      'headache': ['頭暈目眩', '輕度頭痛', '頭骨痛', '偏頭痛', '頭痛', '頭暈', '頭脹', '暈眩', '頭重'],
       'eyes sore': ['結膜充血', '後眼窩痛', '眼睛癢', '眼睛痛', '眼壓高'], 
       'chest pain+backache': ['胸背痛'], 
       'chest pain': ['呼吸時胸痛', '心臟不舒服', '胸痛', '胸悶'],
@@ -2644,12 +2644,12 @@ class CountySheet(Template):
       if '2021' == selection and (ord_rep < ord_end_2020 or ord_rep >= ord_end_2021):
         continue
       
-      case_hist_list[0][county] += nb_cases
+      case_hist_list[-1][county] += nb_cases
         
       if 'latest' == selection:
         lookback_week = (ord_rep - ord_today) // 7 ## ord_rep-ord_today in [-90, -1]
         if lookback_week >= -12:
-          case_hist_list[lookback_week][county] += nb_cases
+          case_hist_list[lookback_week-1][county] += nb_cases
         
       else:
         mm = int(report_date[5:7])
@@ -2681,12 +2681,12 @@ class CountySheet(Template):
       if '2021' == selection and (ord_rep < ord_end_2020 or ord_rep >= ord_end_2021):
         continue
       
-      case_hist_list[0][age] += nb_cases
+      case_hist_list[-1][age] += nb_cases
         
       if 'latest' == selection:
         lookback_week = (ord_rep - ord_today) // 7 ## ord_rep-ord_today in [-90, -1]
         if lookback_week >= -12:
-          case_hist_list[lookback_week][age] += nb_cases
+          case_hist_list[lookback_week-1][age] += nb_cases
         
       else:
         mm = int(report_date[5:7])
@@ -2707,9 +2707,9 @@ class CountySheet(Template):
     county_list = list(case_hist_list[0].keys())
     
     if 'latest' == selection:
-      label_list = ['total', 'week_-12', 'week_-11', 'week_-10', 'week_-9', 'week_-8', 'week_-7', 'week_-6', 'week_5', 'week_-4', 'week_-3', 'week_-2', 'week_-1']
+      label_list = ['week_-12', 'week_-11', 'week_-10', 'week_-9', 'week_-8', 'week_-7', 'week_-6', 'week_5', 'week_-4', 'week_-3', 'week_-2', 'week_-1', 'total']
     else:
-      label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+      label_list = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec', 'total']
     
     data = {'county': county_list}
     data.update({label: case_hist.values() for label, case_hist in zip(label_list, case_hist_list)})
@@ -2724,14 +2724,14 @@ class CountySheet(Template):
     age_list = list(case_hist_list[0].keys())
     
     if 'latest' == selection:
-      label_list = ['total', 'week_-12', 'week_-11', 'week_-10', 'week_-9', 'week_-8', 'week_-7', 'week_-6', 'week_5', 'week_-4', 'week_-3', 'week_-2', 'week_-1']
+      label_list = ['week_-12', 'week_-11', 'week_-10', 'week_-9', 'week_-8', 'week_-7', 'week_-6', 'week_5', 'week_-4', 'week_-3', 'week_-2', 'week_-1', 'total']
     else:
-      label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+      label_list = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec', 'total']
     
     data = {'age': age_list}
     data.update({label: case_hist.values() for label, case_hist in zip(label_list, case_hist_list)})
     data = pd.DataFrame(data)
-        
+    
     name = '%sprocessed_data/%s/case_by_age.csv' % (DATA_PATH, selection)
     saveCsv(name, data)
     return
@@ -3097,7 +3097,7 @@ def sandbox():
   
   county_sheet = CountySheet()
   #print(county_sheet)
-  county_sheet.saveCsv()
+  county_sheet.saveCsv_caseByAge()
   
   #vacc_sheet = VaccinationSheet()
   #print(vacc_sheet.makeUpdatedNew())

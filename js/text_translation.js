@@ -108,18 +108,21 @@ function text_translation() {
     
     
     //-- Case by transmission
-    TT_Add_Str("case_by_transmission_title", "依感染源之確診人數");
+    TT_Add_Str("case_by_transmission_title", "確診數依感染源區分");
     TT_Add_Str("case_by_transmission_button_1", "逐日");
     TT_Add_Str("case_by_transmission_button_2", "累計");
     TT_Add_Str("case_by_transmission_button_3", "確診日");
     TT_Add_Str("case_by_transmission_button_4", "發病日");
     
     //-- Case by detection
-    TT_Add_Str("case_by_detection_title", "依檢驗管道之確診人數");
+    TT_Add_Str("case_by_detection_title", "確診個案依檢驗管道區分");
     TT_Add_Str("case_by_detection_button_1", "逐日");
     TT_Add_Str("case_by_detection_button_2", "累計");
     TT_Add_Str("case_by_detection_button_3", "確診日");
     TT_Add_Str("case_by_detection_button_4", "發病日");
+    
+    //-- Case by age
+    TT_Add_Str("case_by_age_title", "確診個案年齡分布");
     
     //-- Travel history-symptom correlations
     TT_Add_Str("travel_history_symptom_correlations_title", "旅遊史與症狀相關程度");
@@ -132,7 +135,7 @@ function text_translation() {
     TT_Add_Str("age_symptom_correlations_button_2", "案例數");
     
     //-- Difference by transmission
-    TT_Add_Str("difference_by_transmission_title", "確診等多久？");
+    TT_Add_Str("difference_by_transmission_title", "發現個案所需時間分布");
     TT_Add_Str("difference_by_transmission_button_1", "全部");
     TT_Add_Str("difference_by_transmission_button_2", "境外移入");
     TT_Add_Str("difference_by_transmission_button_3", "本土");
@@ -141,14 +144,14 @@ function text_translation() {
     
     
     //-- Criteria timeline
-    TT_Add_Str("criteria_timeline_title", "檢驗通報標準沿革");
+    TT_Add_Str("criteria_timeline_title", "檢驗通報標準演進圖");
     TT_Add_Str("criteria_timeline_button_1", "精選");
     TT_Add_Str("criteria_timeline_button_2", "完整");
     TT_Add_Str("criteria_timeline_button_3", "軸狀");
     TT_Add_Str("criteria_timeline_button_4", "碟狀");
     
     //-- Event timeline
-    TT_Add_Str("event_timeline_title", "疫情爆發時間軸");
+    TT_Add_Str("event_timeline_title", "疫情時間軸");
     TT_Add_Str("event_timeline_button_1", "週日為首");
     TT_Add_Str("event_timeline_button_2", "週一為首");
   }
@@ -245,6 +248,9 @@ function text_translation() {
     TT_Add_Str("case_by_detection_button_2", "Cumulés");
     TT_Add_Str("case_by_detection_button_3", "Date du diagnostic");
     TT_Add_Str("case_by_detection_button_4", "Date du début des sympt.");
+    
+    //-- Case by age
+    TT_Add_Str("case_by_age_title", "Cas confirmés par âge");
     
     //-- Travel history-symptom correlations
     TT_Add_Str("travel_history_symptom_correlations_title", "Corrélations entre antécédents de voyage & symptômes");
@@ -371,6 +377,9 @@ function text_translation() {
     TT_Add_Str("case_by_detection_button_3", "Report date");
     TT_Add_Str("case_by_detection_button_4", "Onset date");
     
+    //-- Case by age
+    TT_Add_Str("case_by_age_title", "Case by age");
+    
     //-- Travel history-symptom correlations
     TT_Add_Str("travel_history_symptom_correlations_title", "Correlations between Travel History & Symptoms");
     TT_Add_Str("travel_history_symptom_correlations_button_1", "Coefficients");
@@ -387,10 +396,6 @@ function text_translation() {
     TT_Add_Str("difference_by_transmission_button_2", "Imported");
     TT_Add_Str("difference_by_transmission_button_3", "Local");
     TT_Add_Str("difference_by_transmission_button_4", "Others");
-    
-    
-    //-- Case by age
-    TT_Add_Str("case_by_age_title", "Case by age");
     
     
     
@@ -437,14 +442,4 @@ $(document).on("change", "input:radio[name='language']", function (event) {
   Cookies.set("lang", GS_lang, {sameSite: 'lax'});
   
   text_translation();
-  
-//   CBT_Latest_Replot();
-//   CBT_2021_Replot();
-//   CBT_2020_Replot();
-//   TBC_Latest_Replot();
-//   TBC_2021_Replot();
-//   TBC_2020_Replot();
-//   BS_Latest_Replot();
-//   BS_2021_Replot();
-//   BS_2020_Replot();
 });

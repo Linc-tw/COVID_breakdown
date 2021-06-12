@@ -33,13 +33,13 @@ function DBT_FormatData(wrap, data) {
   var diff_list = [];
   
   //-- Other variables
-  var h_sum = [];
+  var y_sum = [];
   var y_max = 4.5;
-  var i, j, x, y, height, block;
+  var i, j, x, y;
   
-  //-- Initialize h_sum
+  //-- Initialize y_sum
   for (j=0; j<nb_col; j++)
-    h_sum.push(0);
+    y_sum.push(0);
   
   //-- Loop over row
   for (i=0; i<31; i++) { //-- Was data.length; now hard-coded to 31 (days)
@@ -57,9 +57,9 @@ function DBT_FormatData(wrap, data) {
       xticklabel.push(x);
     }
     
-    //-- Update h_sum
+    //-- Update y_sum
     for (j=0; j<nb_col; j++)
-      h_sum[j] += +data[i][col_tag_list[j]];
+      y_sum[j] += +data[i][col_tag_list[j]];
       
     //-- Update y_max
     y_max = Math.max(y_max, y);
@@ -97,7 +97,7 @@ function DBT_FormatData(wrap, data) {
     ytick.push(i)
   
   //-- Get respective sum
-  var legend_value = h_sum;
+  var legend_value = y_sum;
   
   //-- Save to wrapper
   wrap.formatted_data = data;
@@ -176,8 +176,9 @@ function DBT_Initialize(wrap) {
     .call(x_axis)
     
   //-- Define a 2nd x-axis for xtick & xticklabel
+  var eps = 0.1
   var x_2 = d3.scaleLinear()
-    .domain([0, wrap.diff_list.length])
+    .domain([-eps, wrap.diff_list.length+eps])
     .range([0, wrap.width])
   
   //-- Define xtick & xticklabel

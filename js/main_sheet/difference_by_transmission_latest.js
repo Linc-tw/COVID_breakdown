@@ -77,7 +77,7 @@ d3.select(DBT_latest_wrap.id + '_save').on('click', function () {
 });
 
 //-- Language button
-$(document).on("change", "input:radio[name='index_language']", function (event) {
+$(document).on("change", "input:radio[name='language']", function (event) {
   GS_lang = this.value;
   Cookies.set("lang", GS_lang);
   

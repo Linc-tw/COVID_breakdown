@@ -21,9 +21,9 @@
     
     <body class="sb-nav-fixed">
         <!-- Navigation bar -->
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.html">COVID-19 in TWN</a>
-            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-gray-dark">
+            <a class="navbar-brand ps-3" href="index.html">COVID-19 in TWN</a>
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         </nav>
         
         <div id="layoutSidenav">
@@ -37,13 +37,13 @@
                             <div class="sb-sidenav-menu-heading-nouppercase">
                                 <div class="btn-group-vertical btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                     <label id="lang_en" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='en'>English<br>
+                                        <input type="radio" class="btn-check" name="language" value='en'>English<br>
                                     </label>
                                     <label id="lang_fr" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='fr'>Français<br>
+                                        <input type="radio" class="btn-check" name="language" value='fr'>Français<br>
                                     </label>
                                     <label id="lang_zh-tw" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='zh-tw'>正體中文<br>
+                                        <input type="radio" class="btn-check" name="language" value='zh-tw'>正體中文<br>
                                     </label>
                                 </div>
                             </div>
@@ -141,42 +141,42 @@
             <div id="layoutSidenav_content">
                 <!-- Main body -->
                 <main>
-                    <div class="container-fluid">
+                    <div class="container-fluid px-4">
                         <h1 id="title" class="mt-4"></h1>
-                        <h3 id="title_latest_breakdown"></h3>
+                        <h4 id="title_latest_breakdown" class="mb-4"></h4>
                         <div class="row">
                         
                             <!-- Case by transmission -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-head-side-cough mr-1"></i> <span id="case_by_transmission_title"></span>
+                                        <i class="fas fa-head-side-cough me-1"></i> <span id="case_by_transmission_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="case_by_transmission_latest_cumul_0">
-                                                    <input type="radio" name="case_by_transmission_latest_cumul" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="case_by_transmission_latest_cumul" value=0 checked>
                                                     <span id="case_by_transmission_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="case_by_transmission_latest_cumul_1">
-                                                    <input type="radio" name="case_by_transmission_latest_cumul" value=1>
+                                                    <input type="radio" class="btn-check" name="case_by_transmission_latest_cumul" value=1>
                                                     <span id="case_by_transmission_button_2"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="case_by_transmission_latest_onset_0">
-                                                    <input type="radio" name="case_by_transmission_latest_onset" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="case_by_transmission_latest_onset" value=0 checked>
                                                     <span id="case_by_transmission_button_3"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="case_by_transmission_latest_onset_1">
-                                                    <input type="radio" name="case_by_transmission_latest_onset" value=1>
+                                                    <input type="radio" class="btn-check" name="case_by_transmission_latest_onset" value=1>
                                                     <span id="case_by_transmission_button_4"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
+                                            
                                             <button id='case_by_transmission_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
@@ -189,33 +189,33 @@
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-ambulance mr-1"></i> <span id="case_by_detection_title"></span>
+                                        <i class="fas fa-ambulance me-1"></i> <span id="case_by_detection_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="case_by_detection_latest_cumul_0">
-                                                    <input type="radio" name="case_by_detection_latest_cumul" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="case_by_detection_latest_cumul" value=0 checked>
                                                     <span id="case_by_detection_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="case_by_detection_latest_cumul_1">
-                                                    <input type="radio" name="case_by_detection_latest_cumul" value=1>
+                                                    <input type="radio" class="btn-check" name="case_by_detection_latest_cumul" value=1>
                                                     <span id="case_by_detection_button_2"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="case_by_detection_latest_onset_0">
-                                                    <input type="radio" name="case_by_detection_latest_onset" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="case_by_detection_latest_onset" value=0 checked>
                                                     <span id="case_by_detection_button_3"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="case_by_detection_latest_onset_1">
-                                                    <input type="radio" name="case_by_detection_latest_onset" value=1>
+                                                    <input type="radio" class="btn-check" name="case_by_detection_latest_onset" value=1>
                                                     <span id="case_by_detection_button_4"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
+                                            
                                             <button id='case_by_detection_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
@@ -228,33 +228,33 @@
 <!--                            <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-head-side-cough mr-1"></i> <span id="case_by_county_title"></span>
+                                        <i class="fas fa-head-side-cough me-1"></i> <span id="case_by_county_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="case_by_county_latest_cumul_0">
-                                                    <input type="radio" name="case_by_county_latest_cumul" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="case_by_county_latest_cumul" value=0 checked>
                                                     <span id="case_by_county_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="case_by_county_latest_cumul_1">
-                                                    <input type="radio" name="case_by_county_latest_cumul" value=1>
+                                                    <input type="radio" class="btn-check" name="case_by_county_latest_cumul" value=1>
                                                     <span id="case_by_county_button_2"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="case_by_county_latest_onset_0">
-                                                    <input type="radio" name="case_by_county_latest_onset" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="case_by_county_latest_onset" value=0 checked>
                                                     <span id="case_by_county_button_3"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="case_by_county_latest_onset_1">
-                                                    <input type="radio" name="case_by_county_latest_onset" value=1>
+                                                    <input type="radio" class="btn-check" name="case_by_county_latest_onset" value=1>
                                                     <span id="case_by_county_button_4"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
+                                            
                                             <button id='case_by_county_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
@@ -263,26 +263,124 @@
                                 </div>
                             </div>-->
                             
-                            <!-- Travel history-symptom correlation -->
+                            <!-- Case by age -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-luggage-cart mr-1"></i> <span id="travel_history_symptom_correlations_title"></span>
+                                        <i class="fas fa-head-side-cough me-1"></i> <span id="case_by_age_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+<!--                                                <select class="form-select" aria-label="case_by_age_latest_period">
+                                                    <option value="12" selected>Total</option>
+                                                    <option value="0">One</option>
+                                                    <option value="1">Two</option>
+                                                    <option value="2">Three</option>
+                                                </select>-->
+                                            <!--                                                <div class="dropdown">
+                                                  <button onclick="CBA_DropdownMenu()" onclick="CBA_DropdownMenu()" class="dropbtn">Dropdown</button>
+                                                  <div id="case_by_age_latest_period" class="dropdown-content">
+                                                    <a href="#">Link 1</a>
+                                                    <a href="#">Link 2</a>
+                                                    <a href="#">Link 3</a>
+                                                  </div>
+                                                </div>-->
+<!--                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="case_by_age_latest_period" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Dropdown button
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="case_by_age_latest_period">
+                                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            </ul>
+                                        </div>-->
+                                        
+<!--                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">
+                                                <label class="btn btn-covid active" id="case_by_age_latest_cumul_0">
+                                                    <input type="radio" class="btn-check" name="case_by_age_latest_cumul" value=0 checked>
+                                                    <span id="case_by_age_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="case_by_age_latest_cumul_1">
+                                                    <input type="radio" class="btn-check" name="case_by_age_latest_cumul" value=1>
+                                                    <span id="case_by_age_button_2"></span>
+                                                </label>
+                                            </div>-->
+                                            
+                                            <button id='case_by_age_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="case_by_age_latest"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Daily case per county (dropdown 22+1) -->
+                            <!--TODO 2-->
+                            
+                            <!-- Case by county map (dropdown 12 months or weeks/total) -->
+                            <!--TODO 3-->
+                            
+                            <!-- Case by age (dropdown 12 months or weeks/total) -->
+                            <!--TODO 1-->
+                            
+                            <!-- Differnce by transimission -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-hospital-user me-1"></i> <span id="difference_by_transmission_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active" id="difference_by_transmission_latest_ind_0">
+                                                    <input type="radio" class="btn-check" name="difference_by_transmission_latest_ind" value=0 checked>
+                                                    <span id="difference_by_transmission_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="difference_by_transmission_latest_ind_1">
+                                                    <input type="radio" class="btn-check" name="difference_by_transmission_latest_ind" value=1>
+                                                    <span id="difference_by_transmission_button_2"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="difference_by_transmission_latest_ind_2">
+                                                    <input type="radio" class="btn-check" name="difference_by_transmission_latest_ind" value=2>
+                                                    <span id="difference_by_transmission_button_3"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="difference_by_transmission_latest_ind_3">
+                                                    <input type="radio" class="btn-check" name="difference_by_transmission_latest_ind" value=3>
+                                                    <span id="difference_by_transmission_button_4"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <button id='difference_by_transmission_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="difference_by_transmission_latest"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Travel history-symptom correlation -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-luggage-cart me-1"></i> <span id="travel_history_symptom_correlations_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="travel_history_symptom_correlations_latest_count_0">
-                                                    <input type="radio" name="travel_history_symptom_correlations_latest_count" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="travel_history_symptom_correlations_latest_count" value=0 checked>
                                                     <span id="travel_history_symptom_correlations_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="travel_history_symptom_correlations_latest_count_1">
-                                                    <input type="radio" name="travel_history_symptom_correlations_latest_count" value=1>
+                                                    <input type="radio" class="btn-check" name="travel_history_symptom_correlations_latest_count" value=1>
                                                     <span id="travel_history_symptom_correlations_button_2"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
+                                            
                                             <button id='travel_history_symptom_correlations_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
@@ -295,22 +393,22 @@
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-birthday-cake mr-1"></i> <span id="age_symptom_correlations_title"></span>
+                                        <i class="fas fa-birthday-cake me-1"></i> <span id="age_symptom_correlations_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
                                                 <label class="btn btn-covid active" id="age_symptom_correlations_latest_count_0">
-                                                    <input type="radio" name="age_symptom_correlations_latest_count" value=0 checked>
+                                                    <input type="radio" class="btn-check" name="age_symptom_correlations_latest_count" value=0 checked>
                                                     <span id="age_symptom_correlations_button_1"></span>
                                                 </label>
                                                 <label class="btn btn-covid" id="age_symptom_correlations_latest_count_1">
-                                                    <input type="radio" name="age_symptom_correlations_latest_count" value=1>
+                                                    <input type="radio" class="btn-check" name="age_symptom_correlations_latest_count" value=1>
                                                     <span id="age_symptom_correlations_button_2"></span>
                                                 </label>
                                             </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
+                                            
                                             <button id='age_symptom_correlations_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
@@ -319,66 +417,13 @@
                                 </div>
                             </div>
                             
-                            <!-- Differnce by transimission -->
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-hospital-user mr-1"></i> <span id="difference_by_transmission_title"></span>
-                                    </div>
-                                    
-                                    <div class="card-img">
-                                        <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active" id="difference_by_transmission_latest_ind_0">
-                                                    <input type="radio" name="difference_by_transmission_latest_ind" value=0 checked>
-                                                    <span id="difference_by_transmission_button_1"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="difference_by_transmission_latest_ind_1">
-                                                    <input type="radio" name="difference_by_transmission_latest_ind" value=1>
-                                                    <span id="difference_by_transmission_button_2"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="difference_by_transmission_latest_ind_2">
-                                                    <input type="radio" name="difference_by_transmission_latest_ind" value=2>
-                                                    <span id="difference_by_transmission_button_3"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="difference_by_transmission_latest_ind_3">
-                                                    <input type="radio" name="difference_by_transmission_latest_ind" value=3>
-                                                    <span id="difference_by_transmission_button_4"></span>
-                                                </label>
-                                            </div>
-                                            <span style="display:inline-block; width: 8px;"></span>
-                                            <button id='difference_by_transmission_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card-body" id="difference_by_transmission_latest"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- Sandbox -->
-<!--                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-thermometer-half mr-1"></i> <span id="case_by_county_title"></span>
-                                    </div>
-                                    
-                                    <div class="card-img">
-                                        <div class="btn-pos"> 
-                                            <button id='case_by_county_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card-body" id="case_by_county_latest"></div>
-                                </div>
-                            </div>-->
-                            
                         </div>
                     </div>
                 </main>
                 
                 <!-- Footer -->
                 <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid">
+                    <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
                             <span id="footer_last_update"></span>
                         </div>
@@ -407,8 +452,8 @@
         <script src="js/main_sheet/case_by_transmission_latest.js"></script>
         <script src="js/main_sheet/case_by_detection.js"></script>
         <script src="js/main_sheet/case_by_detection_latest.js"></script>
-<!--        <script src="js/case_by_county.js"></script>
-        <script src="js/case_by_county_latest.js"></script>-->
+        <script src="js/main_sheet/case_by_age.js"></script>
+        <script src="js/main_sheet/case_by_age_latest.js"></script>
         <script src="js/main_sheet/travel_history_symptom_correlations.js"></script>
         <script src="js/main_sheet/travel_history_symptom_correlations_latest.js"></script>
         <script src="js/main_sheet/age_symptom_correlations.js"></script>

@@ -21,9 +21,9 @@
     
     <body class="sb-nav-fixed">
         <!-- Navigation bar -->
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.html">COVID-19 in TWN</a>
-            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-gray-dark">
+            <a class="navbar-brand ps-3" href="index.html">COVID-19 in TWN</a>
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         </nav>
         
         <div id="layoutSidenav">
@@ -37,13 +37,13 @@
                             <div class="sb-sidenav-menu-heading-nouppercase">
                                 <div class="btn-group-vertical btn-group-sm btn-group-toggle" data-toggle="buttons"> 
                                     <label id="lang_en" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='en'>English<br>
+                                        <input type="radio" class="btn-check" name="language" value='en'>English<br>
                                     </label>
                                     <label id="lang_fr" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='fr'>Français<br>
+                                        <input type="radio" class="btn-check" name="language" value='fr'>Français<br>
                                     </label>
                                     <label id="lang_zh-tw" class="btn btn-covid-white">
-                                        <input type="radio" name="language" value='zh-tw'>正體中文<br>
+                                        <input type="radio" class="btn-check" name="language" value='zh-tw'>正體中文<br>
                                     </label>
                                 </div>
                             </div>
@@ -141,15 +141,15 @@
             <div id="layoutSidenav_content">
                 <!-- Main body -->
                 <main>
-                    <div class="container-fluid">
+                    <div class="container-fluid px-4">
                         <h1 id="title" class="mt-4"></h1>
-                        <h3 id="title_copyleft"></h3>
+                        <h4 id="title_copyleft" class="mb-4"></h4>
                         <div class="row">
                         
                             <div class="col-lg-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="far fa-times-circle mr-1"></i> 
+                                        <i class="far fa-times-circle me-1"></i> 
                                         <span id="no_right_reserved_title"></span>
                                     </div>
                                     
@@ -163,7 +163,7 @@
                 
                 <!-- Footer -->
                 <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid">
+                    <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
                             <span id="footer_last_update"></span>
                         </div>
