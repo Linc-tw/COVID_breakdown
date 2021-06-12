@@ -34,12 +34,13 @@ function BS_FormatData(wrap, data) {
   
   //-- Other variables
   var y_max = 0;
-  var i, j, x, y, height, block;
+  var i, j, x, y, height, h_list, block;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
-    y = 0;
+    h_list = [];
     x = data[i]["date"];
+    y = 0;
     date_list.push(x);
     
     //-- Determine whether to have xtick
@@ -49,19 +50,20 @@ function BS_FormatData(wrap, data) {
     }
     
     //-- Loop over column
+    for (j=0; j<nb_col; j++)
+      h_list.push(+data[i][col_tag_list[j]]);
+    
+    //-- Loop over column again
     for (j=0; j<nb_col; j++) {
       //-- Current value
-      height = +data[i][col_tag_list[j]];
+      height = h_list[j];
       
       //-- Make data block
       block = {
         'x': x,
         'y0': y,
-        'y1': y + height,
-        'height': height,
-        'h1': +data[i][col_tag_list[nb_col-1]],
-        'h2': +data[i][col_tag_list[nb_col-2]],
-        'h3': +data[i][col_tag_list[nb_col-3]],
+        'y1': y+height,
+        'h_list': h_list.slice().reverse(),
         'col': col_tag_list[j]
       };
         
@@ -105,10 +107,19 @@ function BS_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
-  //-- Calculate respective sum
+  //-- Calculate last row which is not zero
   var last = data.length - 1;
+  while (+data[last][col_tag_list[2]] == 0)
+    last -= 1;
+  
+  //-- Get latest value as legend value
+  var legend_value = [];
+  for (j=0; j<nb_col; j++)
+    legend_value.push(+data[last][col_tag_list[j]]);
+    
+  //-- Calculate latest value as legend value
   var air = +data[last]['airport'];
-  while (air == 0) { //-- Avoid training 0 in `airport` column
+  while (air == 0) { //-- Avoid trailing 0 in `airport` column
     last -= 1;
     air = +data[last]['airport'];
   }
@@ -136,39 +147,28 @@ function BS_MouseMove(wrap, d) {
   var y_alpha = 0.5;
   var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
+  //-- Get column tags
+  if (GS_lang == 'zh-tw')
+    col_label_list = ['機場', '港口', '無細節']
+  else if (GS_lang == 'fr')
+    col_label_list = ['Aéroports', 'Ports maritimes', 'Sans précisions']
+  else
+    col_label_list = ['Airports', 'Seaports', 'Not specified']
+  
   //-- Define tooltip texts
   var tooltip_text = d.x;
   var sum = 0;
-  if (+d.h1 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>機場 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Aéroports = ";
-    else
-      tooltip_text += "<br>Airports = ";
-    tooltip_text += d.h1;
-    sum += +d.h1;
+  var i, h;
+  
+  for (i=0; i<wrap.nb_col; i++) {
+    h = d.h_list[i];
+    if (h > 0) {
+      tooltip_text += "<br>" + col_label_list[i] + " = " + h;
+      sum += h;
+    }
   }
-  if (+d.h2 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>港口 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Ports maritimes = ";
-    else
-      tooltip_text += "<br>Seaports = ";
-    tooltip_text += d.h2;
-    sum += +d.h2;
-  }
-  if (+d.h3 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>無細節 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Sans précisions = ";
-    else
-      tooltip_text += "<br>Not specified = ";
-    tooltip_text += d.h3;
-    sum += +d.h3;
-  }
+  
+  //-- Add text for sum
   if (GS_lang == 'zh-tw')
     tooltip_text += "<br>合計 = ";
   else if (GS_lang == 'fr')

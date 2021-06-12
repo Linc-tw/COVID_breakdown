@@ -912,7 +912,7 @@ ET_latest_wrap.tooltip = d3.select(ET_latest_wrap.id)
 //-- Parameters
 
 //-- Variables
-ET_latest_wrap.week_start = 0;
+ET_latest_wrap.week_start = document.querySelector("input[name='" + ET_latest_wrap.tag + "_start']:checked").value;
 
 //-- Plot
 function ET_Latest_Plot() {
@@ -923,13 +923,11 @@ function ET_Latest_Plot() {
 
 ET_Latest_Plot();
 
-//-- Buttons 
+//-- Buttons
+GS_PressRadioButton(ET_latest_wrap, 'start', 0, ET_latest_wrap.week_start); //-- 0 from .html
+
 $(document).on("change", "input:radio[name='" + ET_latest_wrap.tag + "_start']", function (event) {
-  var old_btn = document.getElementById(ET_latest_wrap.tag + '_start_' + ET_latest_wrap.week_start);
-  var new_btn = document.getElementById(ET_latest_wrap.tag + '_start_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(ET_latest_wrap, 'start', ET_latest_wrap.week_start, this.value);
   ET_latest_wrap.week_start = this.value;
   ET_Update(ET_latest_wrap);
 });
@@ -938,8 +936,10 @@ $(document).on("change", "input:radio[name='" + ET_latest_wrap.tag + "_start']",
 d3.select(ET_latest_wrap.id + '_save').on('click', function () {
   var tag1, tag2;
   
-  if (ET_latest_wrap.week_start == 1) tag1 = 'start_on_Monday';
-  else tag1 = 'start_on_Sunday';
+  if (ET_latest_wrap.week_start == 1)
+    tag1 = 'start_on_Monday';
+  else
+    tag1 = 'start_on_Sunday';
   
   name = ET_latest_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(ET_latest_wrap.id).select('svg').node(), name);

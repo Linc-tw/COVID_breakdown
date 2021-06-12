@@ -33,17 +33,23 @@ function CBT_FormatData(wrap, data) {
   var formatted_data = [];
   
   //-- Other variables
+  var h_sum = [];
   var y_max = 0;
-  var i, j, x, y, height, block;
+  var i, j, x, y, height, h_list, block;
 
   //-- Convert data form
   if (wrap.do_cumul == 1)
     GS_CumSum(data, col_tag_list);
   
+  //-- Initialize h_sum
+  for (j=0; j<nb_col; j++)
+    h_sum.push(0);
+  
   //-- Loop over row
   for (i=0; i<data.length; i++) {
-    y = 0;
+    h_list = [];
     x = data[i]["date"];
+    y = 0;
     date_list.push(x);
     
     //-- Determine whether to have xtick
@@ -53,27 +59,31 @@ function CBT_FormatData(wrap, data) {
     }
     
     //-- Loop over column
+    for (j=0; j<nb_col; j++)
+      h_list.push(+data[i][col_tag_list[j]]);
+    
+    //-- Loop over column again
     for (j=0; j<nb_col; j++) {
       //-- Current value
-      height = +data[i][col_tag_list[j]];
+      height = h_list[j];
       
       //-- Make data block
       block = {
         'x': x,
         'y0': y,
-        'y1': y + height,
-        'height': height,
-        'h1': +data[i][col_tag_list[nb_col-1]],
-        'h2': +data[i][col_tag_list[nb_col-2]],
-        'h3': +data[i][col_tag_list[nb_col-3]],
-        'h4': +data[i][col_tag_list[nb_col-4]],
-        'h5': +data[i][col_tag_list[nb_col-5]],
-        'h6': +data[i][col_tag_list[nb_col-6]],
+        'y1': y+height,
+        'h_list': h_list.slice().reverse(),
         'col': col_tag_list[j]
       };
         
       //-- Update total height
       y += height;
+    
+      //-- Update sum
+      if (wrap.do_cumul == 1)
+        h_sum[j] = Math.max(height, h_sum[j]);
+      else
+        h_sum[j] += height;
       
       //-- Stock
       formatted_data.push(block);
@@ -130,25 +140,8 @@ function CBT_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
-  //-- Calculate respective sum
-  var imported, local_link, local_unlink, fleet, plane, unknown;
-  if (wrap.do_cumul == 1) {
-    imported = d3.max(formatted_data, function (d) {if (d.col == 'imported') return +d.height;});
-    local_link = d3.max(formatted_data, function (d) {if (d.col == 'linked') return +d.height;});
-    local_unlink = d3.max(formatted_data, function (d) {if (d.col == 'unlinked') return +d.height;});
-    fleet = d3.max(formatted_data, function (d) {if (d.col == 'fleet') return +d.height;});
-    plane = d3.max(formatted_data, function (d) {if (d.col == 'plane') return +d.height;});
-    unknown = d3.max(formatted_data, function (d) {if (d.col == 'unknown') return +d.height;});
-  }
-  else {
-    imported = d3.sum(formatted_data, function (d) {if (d.col == 'imported') return +d.height;});
-    local_link = d3.sum(formatted_data, function (d) {if (d.col == 'linked') return +d.height;});
-    local_unlink = d3.sum(formatted_data, function (d) {if (d.col == 'unlinked') return +d.height;});
-    fleet = d3.sum(formatted_data, function (d) {if (d.col == 'fleet') return +d.height;});
-    plane = d3.sum(formatted_data, function (d) {if (d.col == 'plane') return +d.height;});
-    unknown = d3.sum(formatted_data, function (d) {if (d.col == 'unknown') return +d.height;});
-  }
-  var legend_value = [imported, local_link, local_unlink, fleet, plane, unknown];
+  //-- Get respective sum
+  var legend_value = h_sum.reverse();
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
@@ -185,69 +178,28 @@ function CBT_MouseMove(wrap, d) {
   var y_alpha = 0.5;
   var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
+  //-- Get column tags
+  if (GS_lang == 'zh-tw')
+    col_label_list = ['境外移入', '本土已知', '本土未知', '敦睦艦隊', '航空器', '未知']
+  else if (GS_lang == 'fr')
+    col_label_list = ['Importés', 'Locaux connus', 'Locaux inconnus', 'En bateau', 'En avion', 'Inconnus']
+  else
+    col_label_list = ['Imported', 'Local linked', 'Local unlinked', 'On boat', 'On plane', 'Unknown']
+  
   //-- Define tooltip texts
   var tooltip_text = d.x;
   var sum = 0;
-  if (+d.h1 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>境外移入 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Importés = ";
-    else
-      tooltip_text += "<br>Imported = ";
-    tooltip_text += d.h1;
-    sum += +d.h1;
+  var i, h;
+  
+  for (i=0; i<wrap.nb_col; i++) {
+    h = d.h_list[i];
+    if (h > 0) {
+      tooltip_text += "<br>" + col_label_list[i] + " = " + h;
+      sum += h;
+    }
   }
-  if (+d.h2 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>本土已知 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Locaux connus = ";
-    else
-      tooltip_text += "<br>Local linked = ";
-    tooltip_text += d.h2;
-    sum += +d.h2;
-  }
-  if (+d.h3 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>本土未知 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Locaux inconnus = ";
-    else
-      tooltip_text += "<br>Local unlinked = ";
-    tooltip_text += d.h3;
-    sum += +d.h3;
-  }
-  if (+d.h4 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>敦睦艦隊 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>En bateau = ";
-    else
-      tooltip_text += "<br>On boat = ";
-    tooltip_text += d.h4;
-    sum += +d.h4;
-  }
-  if (+d.h5 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>航空器 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>En avion = ";
-    else
-      tooltip_text += "<br>On plane = ";
-    tooltip_text += d.h5;
-    sum += +d.h5;
-  }
-  if (+d.h6 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>未知 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Inconnus = ";
-    else
-      tooltip_text += "<br>Unknown = ";
-    tooltip_text += d.h6;
-    sum += +d.h6;
-  }
+  
+  //-- Add text for sum
   if (GS_lang == 'zh-tw')
     tooltip_text += "<br>合計 = ";
   else if (GS_lang == 'fr')

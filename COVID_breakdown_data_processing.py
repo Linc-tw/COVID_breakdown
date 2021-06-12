@@ -384,15 +384,15 @@ class MainSheet(Template):
       report_date_list.append(report_date)
       n_total += 1
       
-      rep_ord = ISODateToOrd(report_date)
+      ord_rep = ISODateToOrd(report_date)
       
-      if rep_ord + NB_LOOKBACK_DAYS >= ord_today:
+      if ord_rep + NB_LOOKBACK_DAYS >= ord_today:
         n_latest += 1
         
-      if rep_ord < ord_end_2020:
+      if ord_rep < ord_end_2020:
         n_2020 += 1
         
-      if rep_ord >= ord_end_2020 and rep_ord < ord_end_2021:
+      if ord_rep >= ord_end_2020 and ord_rep < ord_end_2021:
         n_2021 += 1
     
     self.n_total = n_total
@@ -708,7 +708,7 @@ class MainSheet(Template):
         '5/1-19', '5/2-13', '5/2-22', '5/2-6/1', '5/5-16', '5/5-17', '5/6-22', '5/6-27', '5/7-20', '5/7-24', '5/7-25', '5/7-28', '5/8-20', '5/8-25', 
         '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', '5/13-31',
         '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/19-6/10', 
-        '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/24-6/5', 
+        '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/24-6/5', '5/28-6/11', 
         '6/1-2', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
@@ -763,8 +763,8 @@ class MainSheet(Template):
         channel_list.append('quarantine')
         
       elif channel in [
-        '居家隔離', '住院隔離', '接觸患者', '同院患者', '框列採檢', '接觸者回溯', '接觸者檢查', '接觸者採檢', '確診者回溯', '確診者匡列', 
-        '居家隔離期滿後採檢', '居家隔離期滿後確診'
+        '居家隔離', '住院隔離', '接觸患者', '同院患者', '框列採檢', '接觸者回溯', '接觸者檢查', '接觸者採檢', '接觸者框列', 
+        '確診者回溯', '確診者匡列', '居家隔離期滿後採檢', '居家隔離期滿後確診'
       ]:
         channel_list.append('isolation')
         
@@ -774,7 +774,7 @@ class MainSheet(Template):
       elif channel in [
         '入院', '快篩站', '自行就醫', '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', 
         '入院篩檢', '入院採檢', '院內採檢', '社區快篩', '社區專案', '社區篩檢', '專案篩檢', 
-        '萬華專案', '擴大採檢', '預防性快篩', '預防性採檢', '鄰家擴大採檢', '入院前預防性採檢'
+        '萬華專案', '擴大採檢', '擴大篩檢', '預防性快篩', '預防性採檢', '鄰家擴大採檢', '入院前預防性採檢'
       ]:
         channel_list.append('hospital')
         
@@ -926,12 +926,14 @@ class MainSheet(Template):
         link_list.append('linked')
       elif '林家小館' in link:
         link_list.append('linked')
+      elif '長照機構' in link:
+        link_list.append('linked')
       elif '美樂地KTV' in link:
         link_list.append('linked')        
         
       elif link in [
         '家祭', '遠傳案', '京元電', 
-        '養護中心', '照護中心', '護理之家', '朝陽夜唱', '金沙酒店', '泰安附幼', '成功市場', '洗腎診所', '長照機構', '豐原家庭', '立揚鞋業', 
+        '養護中心', '照護中心', '護理之家', '朝陽夜唱', '金沙酒店', '泰安附幼', '成功市場', '洗腎診所', '豐原家庭', '立揚鞋業', 
         '銀河百家樂', '維納斯會館', '羅東遊藝場', '串門子餐廳', '彰化麻將團', 
         '中國醫K歌團', '小姑娘小吃店', '快樂城小吃店', '桃園觀音工地', 
         '東方紅時尚會館', '梧棲區藥局家族', '加強型防疫旅館', 
@@ -1020,15 +1022,15 @@ class MainSheet(Template):
       if trans != trans:
         continue
       
-      rep_ord = ISODateToOrd(report_date)
+      ord_rep = ISODateToOrd(report_date)
       
-      if 'latest' == selection and rep_ord + NB_LOOKBACK_DAYS < ord_today:
+      if 'latest' == selection and ord_rep + NB_LOOKBACK_DAYS < ord_today:
         continue
       
-      if '2020' == selection and rep_ord >= ord_end_2020:
+      if '2020' == selection and ord_rep >= ord_end_2020:
         continue
       
-      if '2021' == selection and (rep_ord < ord_end_2020 or rep_ord >= ord_end_2021):
+      if '2021' == selection and (ord_rep < ord_end_2020 or ord_rep >= ord_end_2021):
         continue
       
       n_total += 1
@@ -1087,15 +1089,15 @@ class MainSheet(Template):
       if trans != trans:
         continue
       
-      rep_ord = ISODateToOrd(report_date)
+      ord_rep = ISODateToOrd(report_date)
       
-      if 'latest' == selection and rep_ord + NB_LOOKBACK_DAYS < ord_today:
+      if 'latest' == selection and ord_rep + NB_LOOKBACK_DAYS < ord_today:
         continue
       
-      if '2020' == selection and rep_ord >= ord_end_2020:
+      if '2020' == selection and ord_rep >= ord_end_2020:
         continue
       
-      if '2021' == selection and (rep_ord < ord_end_2020 or rep_ord >= ord_end_2021):
+      if '2021' == selection and (ord_rep < ord_end_2020 or ord_rep >= ord_end_2021):
         continue
       
       n_total += 1
@@ -1386,22 +1388,22 @@ class MainSheet(Template):
       else:
         print('diffByTrans, Case %d, %s' % (i+1, trans))
       
-      rep_ord = ISODateToOrd(report_date)
-      entry_ord = ISODateToOrd(entry_date) if entry_date == entry_date else 0
-      onset_ord = ISODateToOrd(onset_date) if onset_date == onset_date else 0
+      ord_rep = ISODateToOrd(report_date)
+      ord_entry = ISODateToOrd(entry_date) if entry_date == entry_date else 0
+      ord_onset = ISODateToOrd(onset_date) if onset_date == onset_date else 0
       
-      if entry_ord + onset_ord == 0:
+      if ord_entry + ord_onset == 0:
         continue
       
-      diff = min(rep_ord-entry_ord, rep_ord-onset_ord)
+      diff = min(ord_rep-ord_entry, ord_rep-ord_onset)
       
-      if rep_ord + NB_LOOKBACK_DAYS > ord_today:
+      if ord_rep + NB_LOOKBACK_DAYS > ord_today:
         stock_latest.append(diff)
       
-      if rep_ord < ord_end_2020:
+      if ord_rep < ord_end_2020:
         stock_2020.append(diff)
         
-      if rep_ord >= ord_end_2020 and rep_ord < ord_end_2021:
+      if ord_rep >= ord_end_2020 and ord_rep < ord_end_2021:
         stock_2021.append(diff)
     
     ## Histogram bins
@@ -2456,6 +2458,17 @@ class CountySheet(Template):
     
     self.data    = data
     self.n_total = data[self.coltag_nb_cases].astype(int).sum()
+    self.county_key_list = [
+      'Keelung', 'Taipei', 'New_Taipei', 'Taoyuan', 'Hsinchu', 'Hsinchu_C', 'Miaoli', 
+      'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Chiayi' ,'Chiayi_C', 'Tainan', 'Kaohsiung', 'Pingtung', 
+      'Yilan', 'Hualien', 'Taitung', 
+      'Penghu', 'Kinmen', 'Matsu', 
+    ]
+    self.age_key_list = [
+      '0-4', '5-9', '10-14', '15-19', '20-24', '25-29', '30-34', '35-39', 
+      '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70+',
+    ]
     
     if verbose:
       print('Loaded \"%s\"' % name)
@@ -2536,7 +2549,7 @@ class CountySheet(Template):
     return county_list
     
   def getVillage(self):
-    return self.getCol(self.coltag_village).values
+    return self.getCol(self.coltag_village)
     
   def getGender(self):
     gender_list = [1 if gender == '男' else 2 for gender in self.getCol(self.coltag_gender)]
@@ -2560,78 +2573,146 @@ class CountySheet(Template):
   def getNbCases(self):
     return self.getCol(self.coltag_nb_cases).astype(int)
   
-  def makeCountyHist(self, selection='latest'):
+  ## In date order
+  def makeCountyListDict(self, selection='latest'):
     report_date_list = self.getReportDate()
     county_list = self.getCounty()
     nb_cases_list = self.getNbCases()
     
-    key_list = [
-      'Keelung', 'Taipei', 'New_Taipei', 'Taoyuan', 'Hsinchu', 'Hsinchu_C', 'Miaoli', 
-      'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
-      'Chiayi' ,'Chiayi_C', 'Tainan', 'Kaohsiung', 'Pingtung', 
-      'Yilan', 'Hualien', 'Taitung', 
-      'Penghu', 'Kinmen', 'Matsu', 
-      'unknown'
-    ]
-    
-    hist = {key: 0 for key in key_list}
+    if 'latest' == selection:
+      case_arr = np.zeros(90, dtype=int)
+    elif '2020' == selection:
+      case_arr = np.zeros(365, dtype=int)
+    else:
+      case_arr = np.zeros(366, dtype=int)
+    case_arr_dict = {county: case_arr.copy() for county in ['total'] + self.county_key_list}
+      
     ord_today = dtt.date.today().toordinal() + 1
     ord_end_2020 = ISODateToOrd('2020-12-31') + 1
     ord_end_2021 = ISODateToOrd('2021-12-31') + 1
     
     for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):
-      rep_ord = ISODateToOrd(report_date)
-      
-      if 'latest' == selection and rep_ord + NB_LOOKBACK_DAYS < ord_today:
+      if 'unknown' == county:
         continue
       
-      if '2020' == selection and rep_ord >= ord_end_2020:
-        continue
+      ord_rep = ISODateToOrd(report_date)
       
-      if '2021' == selection and (rep_ord < ord_end_2020 or rep_ord >= ord_end_2021):
-        continue
+      if 'latest' == selection:
+        ind = ord_rep - ord_today
+        if ind < -NB_LOOKBACK_DAYS:
+          continue
+        
+      if '2020' == selection:
+        ind = ord_rep - ord_end_2020
+        if ind >= 0:
+          continue
       
-      hist[county] += nb_cases
+      if '2021' == selection:
+        ind = ord_rep - ord_end_2021
+        if ind < (ord_end_2020 - ord_end_2021) or ind >= 0:
+          continue
+      
+      case_arr_dict['total'][ind] += nb_cases
+      case_arr_dict[county][ind] += nb_cases
     
-    return hist
+    return case_arr_dict
   
-  def makeAgeHist(self, selection='latest'):
+  def makeCountyHistList(self, selection='latest'):
+    report_date_list = self.getReportDate()
+    county_list = self.getCounty()
+    nb_cases_list = self.getNbCases()
+    
+    case_hist = {county: 0 for county in self.county_key_list}
+    case_hist_list = [case_hist.copy() for i in range(13)]
+    
+    ord_today = dtt.date.today().toordinal() + 1
+    ord_end_2020 = ISODateToOrd('2020-12-31') + 1
+    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
+    
+    for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):
+      if 'unknown' == county:
+        continue
+      
+      ord_rep = ISODateToOrd(report_date)
+      
+      if 'latest' == selection and ord_rep + NB_LOOKBACK_DAYS < ord_today:
+        continue
+        
+      if '2020' == selection and ord_rep >= ord_end_2020:
+        continue
+      
+      if '2021' == selection and (ord_rep < ord_end_2020 or ord_rep >= ord_end_2021):
+        continue
+      
+      case_hist_list[0][county] += nb_cases
+        
+      if 'latest' == selection:
+        lookback_week = (ord_rep - ord_today) // 7 ## ord_rep-ord_today in [-90, -1]
+        if lookback_week >= -12:
+          case_hist_list[lookback_week][county] += nb_cases
+        
+      else:
+        mm = int(report_date[5:7])
+        case_hist_list[mm][county] += nb_cases
+    
+    return case_hist_list
+  
+  def makeAgeHistList(self, selection='latest'):
     report_date_list = self.getReportDate()
     age_list = self.getAge()
     nb_cases_list = self.getNbCases()
     
-    key_list = [
-      '0-4', '5-9', '10-14', '15-19', '20-24', '25-29', '30-34', '35-39', 
-      '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70+',
-    ]
+    case_hist = {age: 0 for age in self.age_key_list}
+    case_hist_list = [case_hist.copy() for i in range(13)]
     
-    hist = {key: 0 for key in age_list}
     ord_today = dtt.date.today().toordinal() + 1
     ord_end_2020 = ISODateToOrd('2020-12-31') + 1
     ord_end_2021 = ISODateToOrd('2021-12-31') + 1
     
     for report_date, age, nb_cases in zip(report_date_list, age_list, nb_cases_list):
-      rep_ord = ISODateToOrd(report_date)
+      ord_rep = ISODateToOrd(report_date)
       
-      if 'latest' == selection and rep_ord + NB_LOOKBACK_DAYS < ord_today:
+      if 'latest' == selection and ord_rep + NB_LOOKBACK_DAYS < ord_today:
         continue
       
-      if '2020' == selection and rep_ord >= ord_end_2020:
+      if '2020' == selection and ord_rep >= ord_end_2020:
         continue
       
-      if '2021' == selection and (rep_ord < ord_end_2020 or rep_ord >= ord_end_2021):
+      if '2021' == selection and (ord_rep < ord_end_2020 or ord_rep >= ord_end_2021):
         continue
       
-      hist[age] += nb_cases
+      case_hist_list[0][age] += nb_cases
+        
+      if 'latest' == selection:
+        lookback_week = (ord_rep - ord_today) // 7 ## ord_rep-ord_today in [-90, -1]
+        if lookback_week >= -12:
+          case_hist_list[lookback_week][age] += nb_cases
+        
+      else:
+        mm = int(report_date[5:7])
+        case_hist_list[mm][age] += nb_cases
     
-    return hist
+    return case_hist_list
   
-  def saveCsv_localCaseByCounty(self, selection='latest'):
-    hist = self.makeCountyHist(selection=selection)
-    key_list = [key for key in hist.keys()]
-    value_list = [value for value in hist.values()]
+  def saveCsv_dailyCasePerCounty(self, selection='latest'):
+    case_list_dict = self.makeCountyListDict(selection=selection)
+    data = pd.DataFrame(case_list_dict)
     
-    data = {'county': key_list, 'nb_cases': value_list}
+    name = '%sprocessed_data/%s/daily_case_per_county.csv' % (DATA_PATH, selection)
+    saveCsv(name, data)
+    return
+
+  def saveCsv_localCaseByCounty(self, selection='latest'):
+    case_hist_list = self.makeCountyHistList(selection=selection)
+    county_list = list(case_hist_list[0].keys())
+    
+    if 'latest' == selection:
+      label_list = ['total', 'week_-12', 'week_-11', 'week_-10', 'week_-9', 'week_-8', 'week_-7', 'week_-6', 'week_5', 'week_-4', 'week_-3', 'week_-2', 'week_-1']
+    else:
+      label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+    
+    data = {'county': county_list}
+    data.update({label: case_hist.values() for label, case_hist in zip(label_list, case_hist_list)})
     data = pd.DataFrame(data)
         
     name = '%sprocessed_data/%s/local_case_by_county.csv' % (DATA_PATH, selection)
@@ -2639,11 +2720,16 @@ class CountySheet(Template):
     return
 
   def saveCsv_caseByAge(self, selection='latest'):
-    hist = self.makeAgeHist(selection=selection)
-    key_list = [key for key in hist.keys()]
-    value_list = [value for value in hist.values()]
+    case_hist_list = self.makeAgeHistList(selection=selection)
+    age_list = list(case_hist_list[0].keys())
     
-    data = {'county': key_list, 'nb_cases': value_list}
+    if 'latest' == selection:
+      label_list = ['total', 'week_-12', 'week_-11', 'week_-10', 'week_-9', 'week_-8', 'week_-7', 'week_-6', 'week_5', 'week_-4', 'week_-3', 'week_-2', 'week_-1']
+    else:
+      label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+    
+    data = {'age': age_list}
+    data.update({label: case_hist.values() for label, case_hist in zip(label_list, case_hist_list)})
     data = pd.DataFrame(data)
         
     name = '%sprocessed_data/%s/case_by_age.csv' % (DATA_PATH, selection)
@@ -2651,6 +2737,9 @@ class CountySheet(Template):
     return
 
   def saveCsv(self):
+    self.saveCsv_dailyCasePerCounty(selection='latest')
+    self.saveCsv_dailyCasePerCounty(selection='2020')
+    self.saveCsv_dailyCasePerCounty(selection='2021')
     self.saveCsv_localCaseByCounty(selection='latest')
     self.saveCsv_localCaseByCounty(selection='2020')
     self.saveCsv_localCaseByCounty(selection='2021')
@@ -3008,7 +3097,7 @@ def sandbox():
   
   county_sheet = CountySheet()
   #print(county_sheet)
-  county_sheet.test()
+  county_sheet.saveCsv()
   
   #vacc_sheet = VaccinationSheet()
   #print(vacc_sheet.makeUpdatedNew())

@@ -30,7 +30,7 @@ TBC_latest_wrap.legend_pos_x_0_ = {'zh-tw': 100, fr: 100, en: 100};
 TBC_latest_wrap.legend_pos_x_1_ = {'zh-tw': 100, fr: 100, en: 100};
 
 //-- Variables
-TBC_latest_wrap.do_cumul = 0;;
+TBC_latest_wrap.do_cumul = document.querySelector("input[name='" + TBC_latest_wrap.tag + "_cumul']:checked").value;
 
 //-- Plot
 function TBC_Latest_Plot() {
@@ -48,12 +48,10 @@ function TBC_Latest_Replot() {
 TBC_Latest_Plot();
 
 //-- Buttons
+GS_PressRadioButton(TBC_latest_wrap, 'cumul', 0, TBC_latest_wrap.do_cumul); //-- 0 from .html
+
 $(document).on("change", "input:radio[name='" + TBC_latest_wrap.tag + "_cumul']", function (event) {
-  var old_btn = document.getElementById(TBC_latest_wrap.tag + '_cumul_' + TBC_latest_wrap.do_cumul);
-  var new_btn = document.getElementById(TBC_latest_wrap.tag + '_cumul_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(TBC_latest_wrap, 'cumul', TBC_latest_wrap.do_cumul, this.value);
   TBC_latest_wrap.do_cumul = this.value;
   TBC_Latest_Replot();
 });
@@ -62,8 +60,10 @@ $(document).on("change", "input:radio[name='" + TBC_latest_wrap.tag + "_cumul']"
 d3.select(TBC_latest_wrap.id + '_save').on('click', function(){
   var tag1;
   
-  if (TBC_latest_wrap.do_cumul == 1) tag1 = 'cumulative';
-  else tag1 = 'daily';
+  if (TBC_latest_wrap.do_cumul == 1)
+    tag1 = 'cumulative';
+  else
+    tag1 = 'daily';
   
   name = TBC_latest_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(TBC_latest_wrap.id).select('svg').node(), name);

@@ -152,3 +152,11 @@ function GS_MouseOver3(wrap, d) {
   d3.select(d3.event.target)
     .style("opacity", 0.6)
 }
+
+function GS_PressRadioButton(wrap, btn_tag, old_value, new_value) {
+  var old_btn, new_btn;
+  old_btn = document.getElementById(wrap.tag + '_' + btn_tag + '_' + old_value);
+  new_btn = document.getElementById(wrap.tag + '_' + btn_tag + '_' + new_value);
+  old_btn.classList.remove("active");
+  new_btn.classList.add("active");
+}

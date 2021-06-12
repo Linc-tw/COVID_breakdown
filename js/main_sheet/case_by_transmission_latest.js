@@ -42,8 +42,8 @@ CBT_latest_wrap.legend_pos_x_1_i_ = {'zh-tw': 80, fr: 80, en: 80};
 CBT_latest_wrap.legend_pos_x1_ = {'zh-tw': 220, fr: 280, en: 240};
 
 //-- Variables
-CBT_latest_wrap.do_cumul = 0;
-CBT_latest_wrap.do_onset = 0;
+CBT_latest_wrap.do_cumul = document.querySelector("input[name='" + CBT_latest_wrap.tag + "_cumul']:checked").value;
+CBT_latest_wrap.do_onset = document.querySelector("input[name='" + CBT_latest_wrap.tag + "_onset']:checked").value;
 
 //-- Plot
 function CBT_Latest_Plot() {
@@ -62,22 +62,17 @@ function CBT_Latest_Replot() {
 CBT_Latest_Plot();
 
 //-- Buttons
+GS_PressRadioButton(CBT_latest_wrap, 'cumul', 0, CBT_latest_wrap.do_cumul); //-- 0 from .html
+GS_PressRadioButton(CBT_latest_wrap, 'onset', 0, CBT_latest_wrap.do_onset); //-- 0 from .html
+
 $(document).on("change", "input:radio[name='" + CBT_latest_wrap.tag + "_cumul']", function (event) {
-  var old_btn = document.getElementById(CBT_latest_wrap.tag + '_cumul_' + CBT_latest_wrap.do_cumul);
-  var new_btn = document.getElementById(CBT_latest_wrap.tag + '_cumul_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(CBT_latest_wrap, 'cumul', CBT_latest_wrap.do_cumul, this.value);
   CBT_latest_wrap.do_cumul = this.value;
   CBT_Latest_Replot();
 });
 
 $(document).on("change", "input:radio[name='" + CBT_latest_wrap.tag + "_onset']", function (event) {
-  var old_btn = document.getElementById(CBT_latest_wrap.tag + '_onset_' + CBT_latest_wrap.do_onset);
-  var new_btn = document.getElementById(CBT_latest_wrap.tag + '_onset_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(CBT_latest_wrap, 'onset', CBT_latest_wrap.do_onset, this.value);
   CBT_latest_wrap.do_onset = this.value
   CBT_Latest_Replot();
 });

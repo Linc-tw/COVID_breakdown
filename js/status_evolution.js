@@ -34,12 +34,13 @@ function SE_FormatData(wrap, data) {
   
   //-- Other variables
   var y_max = 0;
-  var i, j, x, y, height, block;
+  var i, j, x, y, height, h_list, block;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
-    y = 0;
+    h_list = [];
     x = data[i]["date"];
+    y = 0;
     date_list.push(x);
     
     //-- Determine whether to have xtick
@@ -49,19 +50,20 @@ function SE_FormatData(wrap, data) {
     }
     
     //-- Loop over column
+    for (j=0; j<nb_col; j++)
+      h_list.push(+data[i][col_tag_list[j]]);
+    
+    //-- Loop over column again
     for (j=0; j<nb_col; j++) {
       //-- Current value
-      height = +data[i][col_tag_list[j]];
+      height = h_list[j];
       
       //-- Make data block
       block = {
         'x': x,
         'y0': y,
-        'y1': y + height,
-        'height': height,
-        'h1': +data[i][col_tag_list[nb_col-1]],
-        'h2': +data[i][col_tag_list[nb_col-2]],
-        'h3': +data[i][col_tag_list[nb_col-3]],
+        'y1': y+height,
+        'h_list': h_list.slice().reverse(),
         'col': col_tag_list[j]
       };
       
@@ -97,17 +99,16 @@ function SE_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path) 
     ytick.push(i)
   
-  //-- Calculate respective sum
+  //-- Calculate last row which is not zero
   var last = data.length - 1;
-  var death = +data[last]['death'];
-  while (death == 0) { //-- Avoid training 0 in `death` column
+  while (+data[last][col_tag_list[0]] == 0)
     last -= 1;
-    death = +data[last]['death'];
-  }
-  var dis  = +data[last]['discharged'];
-  var hosp = +data[last]['hospitalized'];
-  var legend_value = [dis, hosp, death];
   
+  //-- Get latest value as legend value
+  var legend_value = [];
+  for (j=0; j<nb_col; j++)
+    legend_value.push(+data[last][col_tag_list[j]]);
+    
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
   wrap.date_list = date_list;
@@ -126,14 +127,32 @@ function SE_MouseMove(wrap, d) {
   var y_alpha = 0.5;
   var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
-  //-- Define tooltip texts
-  var tooltip_text;
+  //-- Get column tags
   if (GS_lang == 'zh-tw')
-    tooltip_text = d.x + "<br>解隔離 = " + d.h1+ "<br>隔離中 = " + d.h2 + "<br>死亡 = " + d.h3 + "<br>合計 = " + (+d.h1 + +d.h2 + +d.h3)
+    col_label_list = ['解隔離', '隔離中', '死亡']
   else if (GS_lang == 'fr')
-    tooltip_text = d.x + "<br>Rétablis = " + d.h1+ "<br>Hospitalisés = " + d.h2 + "<br>Décédés = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+    col_label_list = ['Rétablis', 'Hospitalisés', 'Décédés']
   else
-    tooltip_text = d.x + "<br>Discharged = " + d.h1+ "<br>Hospitalized = " + d.h2 + "<br>Deaths = " + d.h3 + "<br>Total = " + (+d.h1 + +d.h2 + +d.h3)
+    col_label_list = ['Discharged', 'Hospitalized', 'Deaths']
+  
+  //-- Define tooltip texts
+  var tooltip_text = d.x;
+  var sum = 0;
+  var i;
+  
+  for (i=0; i<wrap.nb_col; i++) {
+    tooltip_text += "<br>" + col_label_list[i] + " = " + d.h_list[i];
+    sum += d.h_list[i];
+  }
+  
+  //-- Add text for sum
+  if (GS_lang == 'zh-tw')
+    tooltip_text += "<br>合計 = ";
+  else if (GS_lang == 'fr')
+    tooltip_text += "<br>Total = ";
+  else
+    tooltip_text += "<br>Total = ";
+  tooltip_text += sum;
   
   //-- Generate tooltip
   wrap.tooltip

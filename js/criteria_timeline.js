@@ -692,8 +692,8 @@ CT_latest_wrap.tooltip = d3.select(CT_latest_wrap.id)
 //-- Parameters
 
 //-- Variables
-CT_latest_wrap.do_full = 0;
-CT_latest_wrap.do_timeline = 1;
+CT_latest_wrap.do_full = document.querySelector("input[name='" + CT_latest_wrap.tag + "_full']:checked").value;
+CT_latest_wrap.do_timeline = document.querySelector("input[name='" + CT_latest_wrap.tag + "_timeline']:checked").value;
 
 //-- Plot
 function CT_Latest_Plot() {
@@ -705,22 +705,17 @@ function CT_Latest_Plot() {
 CT_Latest_Plot();
 
 //-- Buttons
+GS_PressRadioButton(CT_latest_wrap, 'full', 0, CT_latest_wrap.do_full); //-- 0 from .html
+GS_PressRadioButton(CT_latest_wrap, 'timeline', 1, CT_latest_wrap.do_timeline); //-- 1 from .html
+
 $(document).on("change", "input:radio[name='" + CT_latest_wrap.tag + "_full']", function (event) {
-  var old_btn = document.getElementById(CT_latest_wrap.tag + '_full_' + CT_latest_wrap.do_full);
-  var new_btn = document.getElementById(CT_latest_wrap.tag + '_full_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(CT_latest_wrap, 'full', CT_latest_wrap.do_full, this.value);
   CT_latest_wrap.do_full = this.value;
   CT_Update(CT_latest_wrap);
 });
 
 $(document).on("change", "input:radio[name='" + CT_latest_wrap.tag + "_timeline']", function (event) {
-  var old_btn = document.getElementById(CT_latest_wrap.tag + '_timeline_' + CT_latest_wrap.do_timeline);
-  var new_btn = document.getElementById(CT_latest_wrap.tag + '_timeline_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(CT_latest_wrap, 'timeline', CT_latest_wrap.do_timeline, this.value);
   CT_latest_wrap.do_timeline = this.value;
   CT_Update(CT_latest_wrap);
 });
@@ -729,12 +724,17 @@ $(document).on("change", "input:radio[name='" + CT_latest_wrap.tag + "_timeline'
 d3.select(CT_latest_wrap.id + '_save').on('click', function () {
   var tag1, tag2;
   
-  if (CT_latest_wrap.do_timeline == 1) tag1 = 'timeline';
-  else tag1 = 'disks';
+  if (CT_latest_wrap.do_timeline == 1)
+    tag1 = 'timeline';
+  else
+    tag1 = 'disks';
   
-  if (CT_latest_wrap.do_full == 1) tag2 = 'full';
-  else if (CT_latest_wrap.do_full == 2) tag2 = 'custom';
-  else tag2 = 'selected';
+  if (CT_latest_wrap.do_full == 1)
+    tag2 = 'full';
+  else if (CT_latest_wrap.do_full == 2)
+    tag2 = 'custom';
+  else
+    tag2 = 'selected';
   
   name = CT_latest_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(CT_latest_wrap.id).select('svg').node(), name);

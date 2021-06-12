@@ -34,10 +34,12 @@ function VR_FormatData(wrap, data) {
   
   //-- Other variables
   var y_max = 0;
-  var i, j, x, y, height, block;
+  var y_list_list = [];
+  var i, j, x, y, y_list, block;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
+    y_list = [];
     x = data[i]["date"];
     date_list.push(x);
     
@@ -46,6 +48,20 @@ function VR_FormatData(wrap, data) {
       xtick.push(i) //-- No 0.5 due to points
       xticklabel.push(GS_ISODateToMDDate(x));
     }
+    
+    //-- Loop over column
+    for (j=0; j<nb_col; j++) {
+      col = col_tag_list[j];
+      
+      if ('' == data[i][col])
+        y = NaN;
+      else
+        y = +data[i][col];
+      
+      y_list.push(y);
+    }
+    
+    y_list_list.push(y_list)
   }
   
   //-- Loop over column
@@ -55,19 +71,14 @@ function VR_FormatData(wrap, data) {
     
     //-- Loop over row
     for (i=0; i<data.length; i++) {
-      //-- Current value
-      if ('' == data[i][col])
-        y = NaN;
-      else
-        y = +data[i][col];
-      
       //-- Make data block; redundant information is for toolpix text
       block = {
         'x': data[i]["date"],
-        'y': y,
-        'y1': +data[i][col_tag_list[0]],
-        'y2': +data[i][col_tag_list[1]],
-        'y3': +data[i][col_tag_list[2]]
+        'y': y_list_list[i][j],
+        'y1': y_list_list[i][0],
+        'y2': y_list_list[i][1],
+        'y3': y_list_list[i][2],
+        'y_list': y_list_list[i]
       };
       
       //-- Update y_max
@@ -111,15 +122,21 @@ function VR_MouseMove(wrap, d) {
   var y_alpha = 0.5;
   var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
+  //-- Get column tags
+  if (GS_lang == 'zh-tw')
+    col_label_list = ['陽性率', '入境盛行率', '本土盛行率']
+  else if (GS_lang == 'fr')
+    col_label_list = ['Taux de positivité', "Taux d'inci. front.", "Taux d'inci. local"]
+  else
+    col_label_list = ['Positive rate', 'Arrival inci. rate', 'Local inci. rate']
+  
   //-- Define tooltip texts
   var fct_format = d3.format(".2%");
-  var tooltip_text;
-  if (GS_lang == 'zh-tw')
-    tooltip_text = d.x + '<br>陽性率 = ' + fct_format(d.y1) + '<br>入境盛行率 = ' + fct_format(d.y2) + '<br>本土盛行率 = ' + fct_format(d.y3)
-  else if (GS_lang == 'fr')
-    tooltip_text = d.x + '<br>Taux de positivité = ' + fct_format(d.y1) + "<br>Taux d'inci. front. = " + fct_format(d.y2) + "<br>Taux d'inci. local = " + fct_format(d.y3)
-  else
-    tooltip_text = d.x + '<br>Positive rate = ' + fct_format(d.y1) + '<br>Arrival inci. rate = ' + fct_format(d.y2) + '<br>Local inci. rate = ' + fct_format(d.y3)
+  var tooltip_text = d.x;
+  var i;
+  
+  for (i=0; i<wrap.nb_col; i++)
+    tooltip_text += "<br>" + col_label_list[i] + " = " + fct_format(d.y_list[i]);
   
   //-- Generate tooltip
   wrap.tooltip

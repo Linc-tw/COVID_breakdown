@@ -22,7 +22,7 @@ ASC_latest_wrap.data_path_list = [
 //-- Parameters
 
 //-- Variables
-ASC_latest_wrap.do_count = 0;
+ASC_latest_wrap.do_count = document.querySelector("input[name='" + ASC_latest_wrap.tag + "_count']:checked").value;
 
 //-- Plot
 function ASC_Latest_Plot() {
@@ -41,12 +41,10 @@ function ASC_Latest_Replot() {
 ASC_Latest_Plot();
 
 //-- Buttons
+GS_PressRadioButton(ASC_latest_wrap, 'count', 0, ASC_latest_wrap.do_count); //-- 0 from .html
+
 $(document).on("change", "input:radio[name='" + ASC_latest_wrap.tag + "_count']", function (event) {
-  var old_btn = document.getElementById(ASC_latest_wrap.tag + '_count_' + ASC_latest_wrap.do_count);
-  var new_btn = document.getElementById(ASC_latest_wrap.tag + '_count_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(ASC_latest_wrap, 'count', ASC_latest_wrap.do_count, this.value);
   ASC_latest_wrap.do_count = this.value;
   ASC_Latest_Replot();
 });
@@ -55,8 +53,10 @@ $(document).on("change", "input:radio[name='" + ASC_latest_wrap.tag + "_count']"
 d3.select(ASC_latest_wrap.id + '_save').on('click', function(){
   var tag1;
   
-  if (ASC_latest_wrap.do_count == 1) tag1 = 'count';
-  else tag1 = 'coefficient';
+  if (ASC_latest_wrap.do_count == 1)
+    tag1 = 'count';
+  else
+    tag1 = 'coefficient';
   
   name = ASC_latest_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(ASC_latest_wrap.id).select('svg').node(), name);

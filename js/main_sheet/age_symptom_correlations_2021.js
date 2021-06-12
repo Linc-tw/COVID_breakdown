@@ -22,7 +22,7 @@ ASC_2021_wrap.data_path_list = [
 //-- Parameters
 
 //-- Variables
-ASC_2021_wrap.do_count = 0;
+ASC_2021_wrap.do_count = document.querySelector("input[name='" + ASC_2021_wrap.tag + "_count']:checked").value;
 
 //-- Plot
 function ASC_2021_Plot() {
@@ -41,12 +41,10 @@ function ASC_2021_Replot() {
 ASC_2021_Plot();
 
 //-- Buttons
+GS_PressRadioButton(ASC_2021_wrap, 'count', 0, ASC_2021_wrap.do_count); //-- 0 from .html
+
 $(document).on("change", "input:radio[name='" + ASC_2021_wrap.tag + "_count']", function (event) {
-  var old_btn = document.getElementById(ASC_2021_wrap.tag + '_count_' + ASC_2020_wrap.do_count);
-  var new_btn = document.getElementById(ASC_2021_wrap.tag + '_count_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(ASC_2021_wrap, 'count', ASC_2021_wrap.do_count, this.value);
   ASC_2021_wrap.do_count = this.value;
   ASC_2021_Replot();
 });
@@ -55,8 +53,10 @@ $(document).on("change", "input:radio[name='" + ASC_2021_wrap.tag + "_count']", 
 d3.select(ASC_2021_wrap.id + '_save').on('click', function(){
   var tag1;
   
-  if (ASC_2021_wrap.do_count == 1) tag1 = 'count';
-  else tag1 = 'coefficient';
+  if (ASC_2021_wrap.do_count == 1)
+    tag1 = 'count';
+  else
+    tag1 = 'coefficient';
   
   name = ASC_2021_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(ASC_2021_wrap.id).select('svg').node(), name);

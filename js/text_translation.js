@@ -389,8 +389,8 @@ function text_translation() {
     TT_Add_Str("difference_by_transmission_button_4", "Others");
     
     
-    
-    TT_Add_Str("case_by_county_title", "case_by_county");
+    //-- Case by age
+    TT_Add_Str("case_by_age_title", "Case by age");
     
     
     

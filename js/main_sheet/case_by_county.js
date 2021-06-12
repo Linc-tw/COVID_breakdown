@@ -5,47 +5,45 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function CBC_Make_Canvas(wrap) {
-  wrap.tot_width = 800;
-  wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 600;
-  wrap.tot_height_['fr'] = 600;
-  wrap.tot_height_['en'] = 600;
-  wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 90, right: 2, bottom: 105, top: 2};
-  wrap.margin_['fr'] = {left: 90, right: 2, bottom: 90, top: 2};
-  wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
-  
-  GS_MakeCanvas(wrap);
-}
-
-
-
-function CBC_Format_Data(wrap, data) {
-  var colorScale = d3.scaleThreshold()
-    .domain([0, 65, 70, 75, 80, 85, 90, 255])
-    .range(d3.schemeBlues[7]);
-  
-  
-  var scale = 160;
-  var ctr_ra = 120+58/60+55/3600;
-  var ctr_dec = 23+58/60+26/3600;
-  var projection = d3.geoGnomonic()
-    .rotate([-ctr_ra, -ctr_dec]).scale(scale*180/Math.PI).translate([0.5*wrap.width, 0.5*wrap.height]);
-
-  // Draw the map
-  wrap.svg.append("g")
-    .selectAll("path")
-    .data(data.features)
-    .enter()
-    .append("path")
-//       .attr("fill", "#660022")
-      .attr("fill", function (d) {
-        return colorScale(d.properties.COUNTYID.charCodeAt());
-      })
-      .attr("d", d3.geoPath().projection(projection))
-      .style("stroke", "#FFFFFF")
-}
+//-- For map
+// function CBC_Make_Canvas(wrap) {
+//   wrap.tot_width = 800;
+//   wrap.tot_height_ = {};
+//   wrap.tot_height_['zh-tw'] = 600;
+//   wrap.tot_height_['fr'] = 600;
+//   wrap.tot_height_['en'] = 600;
+//   wrap.margin_ = {};
+//   wrap.margin_['zh-tw'] = {left: 90, right: 2, bottom: 105, top: 2};
+//   wrap.margin_['fr'] = {left: 90, right: 2, bottom: 90, top: 2};
+//   wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
+//   
+//   GS_MakeCanvas(wrap);
+// }
+// 
+// function CBC_Format_Data(wrap, data) {
+//   var colorScale = d3.scaleThreshold()
+//     .domain([0, 65, 70, 75, 80, 85, 90, 255])
+//     .range(d3.schemeBlues[7]);
+//   
+//   
+//   var scale = 160;
+//   var ctr_ra = 120+58/60+55/3600;
+//   var ctr_dec = 23+58/60+26/3600;
+//   var projection = d3.geoGnomonic()
+//     .rotate([-ctr_ra, -ctr_dec]).scale(scale*180/Math.PI).translate([0.5*wrap.width, 0.5*wrap.height]);
+// 
+//   // Draw the map
+//   wrap.svg.append("g")
+//     .selectAll("path")
+//     .data(data.features)
+//     .enter()
+//     .append("path")
+//       .attr("fill", function (d) {
+//         return colorScale(d.properties.COUNTYID.charCodeAt());
+//       })
+//       .attr("d", d3.geoPath().projection(projection))
+//       .style("stroke", "#FFFFFF")
+// }
 
 
 // function CBC_Format_Data(wrap, data) {

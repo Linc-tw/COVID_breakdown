@@ -32,7 +32,7 @@ DBT_latest_wrap.y_path_2 = '4';
 DBT_latest_wrap.y_path_3 = '4';
 
 //-- Variables
-DBT_latest_wrap.col_ind = 0;
+DBT_latest_wrap.col_ind = document.querySelector("input[name='" + DBT_latest_wrap.tag + "_ind']:checked").value;
 
 //-- Plot
 function DBT_Latest_Plot() {
@@ -51,12 +51,10 @@ function DBT_Latest_Replot() {
 DBT_Latest_Plot();
 
 //-- Buttons
+GS_PressRadioButton(DBT_latest_wrap, 'ind', 0, DBT_latest_wrap.col_ind); //-- 0 from .html
+
 $(document).on("change", "input:radio[name='" + DBT_latest_wrap.tag + "_ind']", function (event) {
-  var old_btn = document.getElementById(DBT_latest_wrap.tag + '_ind_' + DBT_latest_wrap.col_ind);
-  var new_btn = document.getElementById(DBT_latest_wrap.tag + '_ind_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(DBT_latest_wrap, 'ind', DBT_latest_wrap.col_ind, this.value);
   DBT_latest_wrap.col_ind = this.value;
   DBT_Latest_Replot();
 });
@@ -65,10 +63,14 @@ $(document).on("change", "input:radio[name='" + DBT_latest_wrap.tag + "_ind']", 
 d3.select(DBT_latest_wrap.id + '_save').on('click', function () {
   var tag1;
   
-  if (DBT_latest_wrap.col_ind == 0) tag1 = 'all';
-  else if (DBT_latest_wrap.col_ind == 1) tag1 = 'imported';
-  else if (DBT_latest_wrap.col_ind == 2) tag1 = 'local';
-  else tag1 = 'others';
+  if (DBT_latest_wrap.col_ind == 0)
+    tag1 = 'all';
+  else if (DBT_latest_wrap.col_ind == 1)
+    tag1 = 'imported';
+  else if (DBT_latest_wrap.col_ind == 2)
+    tag1 = 'local';
+  else
+    tag1 = 'others';
   
   name = DBT_latest_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(DBT_latest_wrap.id).select('svg').node(), name);

@@ -33,13 +33,18 @@ function DBT_FormatData(wrap, data) {
   var diff_list = [];
   
   //-- Other variables
+  var h_sum = [];
   var y_max = 4.5;
   var i, j, x, y, height, block;
+  
+  //-- Initialize h_sum
+  for (j=0; j<nb_col; j++)
+    h_sum.push(0);
   
   //-- Loop over row
   for (i=0; i<31; i++) { //-- Was data.length; now hard-coded to 31 (days)
     x = data[i]["difference"];
-    y = data[i][col_tag];
+    y = +data[i][col_tag];
     diff_list.push(x);
     
     //-- Determine whether to have xtick
@@ -52,6 +57,10 @@ function DBT_FormatData(wrap, data) {
       xticklabel.push(x);
     }
     
+    //-- Update h_sum
+    for (j=0; j<nb_col; j++)
+      h_sum[j] += +data[i][col_tag_list[j]];
+      
     //-- Update y_max
     y_max = Math.max(y_max, y);
   }
@@ -87,12 +96,8 @@ function DBT_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
-  //-- Calculate respective sum
-  var all = d3.sum(data, function (d) {return d['all'];});
-  var imported = d3.sum(data, function (d) {return d['imported'];});
-  var local = d3.sum(data, function (d) {return d['indigenous'];});
-  var other = d3.sum(data, function (d) {return d['other'];});
-  var legend_value = [all, imported, local, other];
+  //-- Get respective sum
+  var legend_value = h_sum;
   
   //-- Save to wrapper
   wrap.formatted_data = data;
@@ -128,30 +133,22 @@ function DBT_MouseMove(wrap, d) {
   var y_alpha = 0.35;
   var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
-  //-- Define tooltip texts
-  var col_tag, col_tag_2, tooltip_text;
-  if (GS_lang == 'zh-tw') {
-    col_tag = wrap.col_tag_list[wrap.col_ind];
-    if (col_tag == 'all') col_tag_2 = '全部';
-    else if (col_tag == 'imported') col_tag_2 = '境外移入';
-    else if (col_tag == 'indigenous') col_tag_2 = '本土';
-    else if (col_tag == 'fleet') col_tag_2 = '其他';
-    tooltip_text = col_tag_2 + '案例中有' + d[col_tag] + '位<br>發病或入境後' + d['difference'] + '日確診';
-  }
-  else if (GS_lang == 'fr') {
-    col_tag = wrap.col_tag_list[wrap.col_ind];
-    if (col_tag == 'all') col_tag_2 = "de l'ensemble des cas";
-    else if (col_tag == 'imported') col_tag_2 = 'des cas importés';
-    else if (col_tag == 'indigenous') col_tag_2 = 'des cas locaux';
-    else if (col_tag == 'fleet') col_tag_2 = 'des autres cas';
-    tooltip_text = d[col_tag] + ' ' + col_tag_2 + ' attend(ent)<br>' + d['difference'] + " jour(s) avant d'être identifié(s)";
-  }
-  else {
-    col_tag = wrap.col_tag_list[wrap.col_ind];
-    if (col_tag == 'indigenous') col_tag_2 = 'local';
-    else col_tag_2 = col_tag;
-    tooltip_text = d[col_tag] + ' of ' + col_tag_2 + ' cases required<br>' + d['difference'] + ' day(s) to be identified'
-  }
+  //-- Get column tags
+  if (GS_lang == 'zh-tw')
+    col_label_list = ['全部', '境外移入', '本土', '其他']
+  else if (GS_lang == 'fr')
+    col_label_list = ["de l'ensemble des cas", 'des cas importés', 'des cas locaux', 'des autres cas']
+  else
+    col_label_list = ["all", 'imported', 'local', 'fleet']
+  
+  //-- Generate tooltip text
+  var tooltip_text;
+  if (GS_lang == 'zh-tw')
+    tooltip_text = col_label_list[wrap.col_ind] + '案例中有' + d[wrap.col_tag_list[wrap.col_ind]] + '位<br>發病或入境後' + d['difference'] + '日確診';
+  else if (GS_lang == 'fr')
+    tooltip_text = d[wrap.col_tag_list[wrap.col_ind]] + ' ' + col_label_list[wrap.col_ind] + ' attend(ent)<br>' + d['difference'] + " jour(s) avant d'être identifié(s)";
+  else
+    tooltip_text = d[wrap.col_tag_list[wrap.col_ind]] + ' of ' + col_label_list[wrap.col_ind] + ' cases required<br>' + d['difference'] + ' day(s) to be identified';
   
   //-- Generate tooltip
   wrap.tooltip

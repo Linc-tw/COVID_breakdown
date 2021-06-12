@@ -34,7 +34,7 @@ BS_latest_wrap.y_path_2 = '4';
 BS_latest_wrap.legend_pos_x = 500;
 
 //-- Variables
-BS_latest_wrap.do_exit = 0;
+BS_latest_wrap.do_exit = document.querySelector("input[name='" + BS_latest_wrap.tag + "_exit']:checked").value;
 
 //-- Plot
 function BS_Latest_Plot() {
@@ -52,12 +52,10 @@ function BS_Latest_Replot() {
 BS_Latest_Plot();
 
 //-- Buttons
+GS_PressRadioButton(BS_latest_wrap, 'exit', 0, BS_latest_wrap.do_exit); //-- 0 from .html
+
 $(document).on("change", "input:radio[name='" + BS_latest_wrap.tag + "_exit']", function (event) {
-  var old_btn = document.getElementById(BS_latest_wrap.tag + '_exit_' + BS_latest_wrap.do_exit);
-  var new_btn = document.getElementById(BS_latest_wrap.tag + '_exit_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(BS_latest_wrap, 'exit', BS_latest_wrap.do_exit, this.value);
   BS_latest_wrap.do_exit = this.value;
   BS_Latest_Replot();
 });
@@ -66,9 +64,12 @@ $(document).on("change", "input:radio[name='" + BS_latest_wrap.tag + "_exit']", 
 d3.select(BS_latest_wrap.id + '_save').on('click', function () {
   var tag1;
   
-  if (BS_latest_wrap.do_exit == 0)      tag1 = 'arrival';
-  else if (BS_latest_wrap.do_exit == 1) tag1 = 'departure';
-  else                                  tag1 = 'both';
+  if (BS_latest_wrap.do_exit == 0)
+    tag1 = 'arrival';
+  else if (BS_latest_wrap.do_exit == 1)
+    tag1 = 'departure';
+  else
+    tag1 = 'both';
 
   name = BS_latest_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(BS_latest_wrap.id).select('svg').node(), name);

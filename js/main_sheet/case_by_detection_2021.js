@@ -42,8 +42,8 @@ CBD_2021_wrap.legend_pos_x_1_i_ = {'zh-tw': 70, fr: 70, en: 70};
 CBD_2021_wrap.legend_pos_x1_ = {'zh-tw': 240, fr: 210, en: 190};
 
 //-- Variables
-CBD_2021_wrap.do_cumul = 0;
-CBD_2021_wrap.do_onset = 0;
+CBD_2021_wrap.do_cumul = document.querySelector("input[name='" + CBD_2021_wrap.tag + "_cumul']:checked").value;
+CBD_2021_wrap.do_onset = document.querySelector("input[name='" + CBD_2021_wrap.tag + "_onset']:checked").value;
 
 //-- Plot
 function CBD_2021_Plot() {
@@ -62,22 +62,17 @@ function CBD_2021_Replot() {
 CBD_2021_Plot();
 
 //-- Buttons
+GS_PressRadioButton(CBD_2021_wrap, 'cumul', 0, CBD_2021_wrap.do_cumul); //-- 0 from .html
+GS_PressRadioButton(CBD_2021_wrap, 'onset', 0, CBD_2021_wrap.do_onset); //-- 0 from .html
+
 $(document).on("change", "input:radio[name='" + CBD_2021_wrap.tag + "_cumul']", function (event) {
-  var old_btn = document.getElementById(CBD_2021_wrap.tag + '_cumul_' + CBD_2021_wrap.do_cumul);
-  var new_btn = document.getElementById(CBD_2021_wrap.tag + '_cumul_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(CBD_2021_wrap, 'cumul', CBD_2021_wrap.do_cumul, this.value);
   CBD_2021_wrap.do_cumul = this.value;
   CBD_2021_Replot();
 });
 
 $(document).on("change", "input:radio[name='" + CBD_2021_wrap.tag + "_onset']", function (event) {
-  var old_btn = document.getElementById(CBD_2021_wrap.tag + '_onset_' + CBD_2021_wrap.do_onset);
-  var new_btn = document.getElementById(CBD_2021_wrap.tag + '_onset_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(CBD_2021_wrap, 'onset', CBD_2021_wrap.do_onset, this.value);
   CBD_2021_wrap.do_onset = this.value
   CBD_2021_Replot();
 });
@@ -86,10 +81,15 @@ $(document).on("change", "input:radio[name='" + CBD_2021_wrap.tag + "_onset']", 
 d3.select(CBD_2021_wrap.id + '_save').on('click', function (){
   var tag1, tag2;
   
-  if (CBD_2021_wrap.do_cumul == 1) tag1 = 'cumulative';
-  else tag1 = 'daily';
-  if (CBD_2021_wrap.do_onset == 1) tag2 = 'onset';
-  else tag2 = 'report';
+  if (CBD_2021_wrap.do_cumul == 1)
+    tag1 = 'cumulative';
+  else
+    tag1 = 'daily';
+  
+  if (CBD_2021_wrap.do_onset == 1)
+    tag2 = 'onset';
+  else
+    tag2 = 'report';
   
   name = CBD_2021_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(CBD_2021_wrap.id).select('svg').node(), name);

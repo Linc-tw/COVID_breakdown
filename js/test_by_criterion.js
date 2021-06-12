@@ -33,17 +33,23 @@ function TBC_FormatData(wrap, data) {
   var formatted_data = [];
   
   //-- Other variables
+  var h_sum = [];
   var y_max = 0;
-  var i, j, x, y, height, block;
+  var i, j, x, y, height, h_list, block;
 
   //-- Convert data form
   if (wrap.do_cumul == 1)
     GS_CumSum(data, col_tag_list);
   
+  //-- Initialize h_sum
+  for (j=0; j<nb_col; j++)
+    h_sum.push(0);
+  
   //-- Loop over row
   for (i=0; i<data.length; i++) {
-    y = 0;
+    h_list = [];
     x = data[i]["date"];
+    y = 0;
     date_list.push(x);
     
     //-- Determine whether to have xtick
@@ -53,24 +59,31 @@ function TBC_FormatData(wrap, data) {
     }
     
     //-- Loop over column
+    for (j=0; j<nb_col; j++)
+      h_list.push(+data[i][col_tag_list[j]]);
+    
+    //-- Loop over column again
     for (j=0; j<nb_col; j++) {
       //-- Current value
-      height = +data[i][col_tag_list[j]];
+      height = h_list[j];
       
       //-- Make data block
       block = {
         'x': x,
         'y0': y,
-        'y1': y + height,
-        'height': height,
-        'h1': +data[i][col_tag_list[nb_col-1]],
-        'h2': +data[i][col_tag_list[nb_col-2]],
-        'h3': +data[i][col_tag_list[nb_col-3]],
+        'y1': y+height,
+        'h_list': h_list.slice(), //-- No reverse
         'col': col_tag_list[j]
       };
         
       //-- Update total height
       y += height;
+      
+      //-- Update sum
+      if (wrap.do_cumul == 1)
+        h_sum[j] = Math.max(height, h_sum[j]);
+      else
+        h_sum[j] += height;
       
       //-- Stock
       formatted_data.push(block);
@@ -107,19 +120,8 @@ function TBC_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
-  //-- Calculate respective sum
-  var ext, qt, clin;
-  if (wrap.do_cumul == 1) {
-    ext = d3.max(formatted_data, function (d) {if (d.col == 'extended') return +d.height;});
-    qt = d3.max(formatted_data, function (d) {if (d.col == 'quarantine') return +d.height;});
-    clin = d3.max(formatted_data, function (d) {if (d.col == 'clinical') return +d.height;});
-  }
-  else {
-    ext = d3.sum(formatted_data, function (d) {if (d.col == 'extended') return +d.height;});
-    qt = d3.sum(formatted_data, function (d) {if (d.col == 'quarantine') return +d.height;});
-    clin = d3.sum(formatted_data, function (d) {if (d.col == 'clinical') return +d.height;});
-  }
-  var legend_value = [ext, qt, clin];
+  //-- Get respective sum
+  var legend_value = h_sum.reverse();
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
@@ -139,39 +141,28 @@ function TBC_MouseMove(wrap, d) {
   var y_alpha = 0.5;
   var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
+  //-- Get column tags
+  if (GS_lang == 'zh-tw')
+    col_label_list = ['法定通報', '居家檢疫', '擴大監測']
+  else if (GS_lang == 'fr')
+    col_label_list = ['Clinique', 'Quarantaine', 'Communauté']
+  else
+    col_label_list = ['Clinical', 'Quarantine', 'Community']
+  
   //-- Define tooltip texts
   var tooltip_text = d.x;
   var sum = 0;
-  if (+d.h3 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>法定通報 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Clinique = ";
-    else
-      tooltip_text += "<br>Clinical = ";
-    tooltip_text += d.h3;
-    sum += +d.h3;
+  var i, h;
+  
+  for (i=0; i<wrap.nb_col; i++) {
+    h = d.h_list[i];
+    if (h > 0) {
+      tooltip_text += "<br>" + col_label_list[i] + " = " + h;
+      sum += h;
+    }
   }
-  if (+d.h2 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>居家檢疫 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Quarantaine = ";
-    else
-      tooltip_text += "<br>Quarantine = ";
-    tooltip_text += d.h2;
-    sum += +d.h2;
-  }
-  if (+d.h1 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>擴大監測 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Communauté = ";
-    else
-      tooltip_text += "<br>Community = ";
-    tooltip_text += d.h1;
-    sum += +d.h1;
-  }
+  
+  //-- Add text for sum
   if (GS_lang == 'zh-tw')
     tooltip_text += "<br>合計 = ";
   else if (GS_lang == 'fr')

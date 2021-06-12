@@ -33,17 +33,23 @@ function CBD_FormatData(wrap, data) {
   var formatted_data = [];
   
   //-- Other variables
+  var h_sum = [];
   var y_max = 0;
-  var i, j, x, y, height, block;
+  var i, j, x, y, height, h_list, block;
   
   //-- Convert data form
   if (wrap.do_cumul == 1)
     GS_CumSum(data, col_tag_list);
   
+  //-- Initialize h_sum
+  for (j=0; j<nb_col; j++)
+    h_sum.push(0);
+  
   //-- Loop over row
   for (i=0; i<data.length; i++) {
-    y = 0;
+    h_list = [];
     x = data[i]["date"];
+    y = 0;
     date_list.push(x);
     
     //-- Determine whether to have xtick
@@ -53,28 +59,31 @@ function CBD_FormatData(wrap, data) {
     }
     
     //-- Loop over column
+    for (j=0; j<nb_col; j++)
+      h_list.push(+data[i][col_tag_list[j]]);
+    
+    //-- Loop over column again
     for (j=0; j<nb_col; j++) {
       //-- Current value
-      height = +data[i][col_tag_list[j]];
+      height = h_list[j];
       
       //-- Make data block
       block = {
         'x': x,
         'y0': y,
-        'y1': y + height,
-        'height': height,
-        'h1': +data[i][col_tag_list[nb_col-1]],
-        'h2': +data[i][col_tag_list[nb_col-2]],
-        'h3': +data[i][col_tag_list[nb_col-3]],
-        'h4': +data[i][col_tag_list[nb_col-4]],
-        'h5': +data[i][col_tag_list[nb_col-5]],
-        'h6': +data[i][col_tag_list[nb_col-6]],
-        'h7': +data[i][col_tag_list[nb_col-7]],
+        'y1': y+height,
+        'h_list': h_list.slice().reverse(),
         'col': col_tag_list[j]
       };
         
       //-- Update total height
       y += height;
+      
+      //-- Update sum
+      if (wrap.do_cumul == 1)
+        h_sum[j] = Math.max(height, h_sum[j]);
+      else
+        h_sum[j] += height;
       
       //-- Stock
       formatted_data.push(block);
@@ -131,27 +140,8 @@ function CBD_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
-  //-- Calculate respective sum
-  var air, qt, iso, moni, hosp, over, no_data;
-  if (wrap.do_cumul == 1) {
-    air = d3.max(formatted_data, function (d) {if (d.col == 'airport') return +d.height;});
-    qt = d3.max(formatted_data, function (d) {if (d.col == 'quarantine') return +d.height;});
-    iso = d3.max(formatted_data, function (d) {if (d.col == 'isolation') return +d.height;});
-    moni = d3.max(formatted_data, function (d) {if (d.col == 'monitoring') return +d.height;});
-    hosp = d3.max(formatted_data, function (d) {if (d.col == 'hospital') return +d.height;});
-    over = d3.max(formatted_data, function (d) {if (d.col == 'overseas') return +d.height;});
-    no_data = d3.max(formatted_data, function (d) {if (d.col == 'no_data') return +d.height;});
-  }
-  else {
-    air = d3.sum(formatted_data, function (d) {if (d.col == 'airport') return +d.height;});
-    qt = d3.sum(formatted_data, function (d) {if (d.col == 'quarantine') return +d.height;});
-    iso = d3.sum(formatted_data, function (d) {if (d.col == 'isolation') return +d.height;});
-    moni = d3.sum(formatted_data, function (d) {if (d.col == 'monitoring') return +d.height;});
-    hosp = d3.sum(formatted_data, function (d) {if (d.col == 'hospital') return +d.height;});
-    over = d3.sum(formatted_data, function (d) {if (d.col == 'overseas') return +d.height;});
-    no_data = d3.sum(formatted_data, function (d) {if (d.col == 'no_data') return +d.height;});
-  }
-  var legend_value = [air, qt, iso, moni, hosp, over, no_data];
+  //-- Get respective sum
+  var legend_value = h_sum.reverse();
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
@@ -188,79 +178,28 @@ function CBD_MouseMove(wrap, d) {
   var y_alpha = 0.7;
   var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
+  //-- Get column tags
+  if (GS_lang == 'zh-tw')
+    col_label_list = ['機場', '檢疫', '隔離', '自主健康管理', '自費或自行就醫', '外國檢驗', '無管道資料']
+  else if (GS_lang == 'fr')
+    col_label_list = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', "À l'étranger", 'Pas annoncés']
+  else
+    col_label_list = ['Airports', 'Quarantine', 'Isolation', 'Monitoring', 'Hospitals', 'Overseas', 'Not announced']
+  
   //-- Define tooltip texts
   var tooltip_text = d.x;
   var sum = 0;
-  if (+d.h1 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>機場 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Aéroports = ";
-    else
-      tooltip_text += "<br>Airports = ";
-    tooltip_text += d.h1;
-    sum += +d.h1;
+  var i, h;
+  
+  for (i=0; i<wrap.nb_col; i++) {
+    h = d.h_list[i];
+    if (h > 0) {
+      tooltip_text += "<br>" + col_label_list[i] + " = " + h;
+      sum += h;
+    }
   }
-  if (+d.h2 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>居家或集中檢疫 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Quarantaine = ";
-    else
-      tooltip_text += "<br>Quarantine = ";
-    tooltip_text += d.h2;
-    sum += +d.h2;
-  }
-  if (+d.h3 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>居家隔離 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Isolation = ";
-    else
-      tooltip_text += "<br>Isolation = ";
-    tooltip_text += d.h3;
-    sum += +d.h3;
-  }
-  if (+d.h4 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>自主健康管理 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Auto-contrôle = ";
-    else
-      tooltip_text += "<br>Monitoring = ";
-    tooltip_text += d.h4;
-    sum += +d.h4;
-  }
-  if (+d.h5 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>自費或自行就醫 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Hôpitaux = ";
-    else
-      tooltip_text += "<br>Hospitals = ";
-    tooltip_text += d.h5;
-    sum += +d.h5;
-  }
-  if (+d.h6 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>外國檢驗 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>À l'étranger = ";
-    else
-      tooltip_text += "<br>Overseas = ";
-    tooltip_text += d.h6;
-    sum += +d.h6;
-  }
-  if (+d.h7 > 0) {
-    if (GS_lang == 'zh-tw')
-      tooltip_text += "<br>無管道資料 = ";
-    else if (GS_lang == 'fr')
-      tooltip_text += "<br>Pas annoncés = ";
-    else
-      tooltip_text += "<br>Not announced = ";
-    tooltip_text += d.h7;
-    sum += +d.h7;
-  }
+  
+  //-- Add text for sum
   if (GS_lang == 'zh-tw')
     tooltip_text += "<br>合計 = ";
   else if (GS_lang == 'fr')

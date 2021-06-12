@@ -22,7 +22,7 @@ THSC_2020_wrap.data_path_list = [
 //-- Parameters
 
 //-- Variables
-THSC_2020_wrap.do_count = 0;
+THSC_2020_wrap.do_count = document.querySelector("input[name='" + THSC_2020_wrap.tag + "_count']:checked").value;
 
 //-- Plot
 function THSC_2020_Plot() {
@@ -41,12 +41,10 @@ function THSC_2020_Replot() {
 THSC_2020_Plot();
 
 //-- Buttons
+GS_PressRadioButton(THSC_2020_wrap, 'count', 0, THSC_2020_wrap.do_count); //-- 0 from .html
+
 $(document).on("change", "input:radio[name='" + THSC_2020_wrap.tag + "_count']", function (event) {
-  var old_btn = document.getElementById(THSC_2020_wrap.tag + '_count_' + THSC_2020_wrap.do_count);
-  var new_btn = document.getElementById(THSC_2020_wrap.tag + '_count_' + this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(THSC_2020_wrap, 'count', THSC_2020_wrap.do_count, this.value);
   THSC_2020_wrap.do_count = this.value;
   THSC_2020_Replot();
 });
@@ -55,8 +53,10 @@ $(document).on("change", "input:radio[name='" + THSC_2020_wrap.tag + "_count']",
 d3.select(THSC_2020_wrap.id + '_save').on('click', function () {
   var tag1;
   
-  if (THSC_2020_wrap.do_count == 1) tag1 = 'count';
-  else tag1 = 'coefficient';
+  if (THSC_2020_wrap.do_count == 1)
+    tag1 = 'count';
+  else
+    tag1 = 'coefficient';
   
   name = THSC_2020_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
   saveSvgAsPng(d3.select(THSC_2020_wrap.id).select('svg').node(), name);
