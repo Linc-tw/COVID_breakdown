@@ -20,8 +20,8 @@ CBD_2020_wrap.data_path_list = [
 
 //-- Parameters
 CBD_2020_wrap.n_tot_key = 'n_2020';
-CBD_2020_wrap.xlabel_path = GS_var.xlabel_path_2020;
-CBD_2020_wrap.r_list = GS_var.r_list_2020;
+CBD_2020_wrap.xlabel_path = GS_wrap.xlabel_path_2020;
+CBD_2020_wrap.r_list = GS_wrap.r_list_2020;
 CBD_2020_wrap.y_max_factor = 1.3;
 CBD_2020_wrap.y_max_fix_1_1 = 0;
 CBD_2020_wrap.y_max_fix_1_0 = 0;

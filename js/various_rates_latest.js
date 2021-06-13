@@ -17,8 +17,8 @@ VR_latest_wrap.data_path_list = [
 ];
 
 //-- Parameters
-VR_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
-VR_latest_wrap.r_list = GS_var.r_list_latest;
+VR_latest_wrap.xlabel_path = GS_wrap.xlabel_path_latest;
+VR_latest_wrap.r_list = GS_wrap.r_list_latest;
 VR_latest_wrap.y_max_factor = 1.2;
 VR_latest_wrap.y_max_fix = 0.043;
 VR_latest_wrap.y_path = 0.01;

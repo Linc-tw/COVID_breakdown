@@ -581,15 +581,15 @@ function ET_Click(wrap, d, i) {
   
   //-- Update color
   for (j=0; j<split[1].length; j++)
-    color_list.push(GS_var.c_list[0]);
+    color_list.push(GS_wrap.c_list[0]);
   
   //-- Update color
   for (j=0; j<split[2].length; j++)
-    color_list.push(GS_var.c_list[1]);
+    color_list.push(GS_wrap.c_list[1]);
   
   //-- Update color
   for (j=0; j<split[3].length; j++)
-    color_list.push(GS_var.c_list[2]);
+    color_list.push(GS_wrap.c_list[2]);
   
   //-- Generate text
   var text = split[0].concat(split[1]).concat(split[2]).concat(split[3]);

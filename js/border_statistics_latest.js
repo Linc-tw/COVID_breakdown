@@ -19,8 +19,8 @@ BS_latest_wrap.data_path_list = [
 ];
 
 //-- Parameters
-BS_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
-BS_latest_wrap.r_list = GS_var.r_list_latest;
+BS_latest_wrap.xlabel_path = GS_wrap.xlabel_path_latest;
+BS_latest_wrap.r_list = GS_wrap.r_list_latest;
 BS_latest_wrap.y_max_factor = 1.99;
 BS_latest_wrap.y_path_0 = '4'; //-- 4 ticks
 BS_latest_wrap.y_path_1 = '4';

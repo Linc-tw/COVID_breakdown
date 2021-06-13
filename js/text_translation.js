@@ -123,6 +123,32 @@ function text_translation() {
     
     //-- Case by age
     TT_Add_Str("case_by_age_title", "確診個案年齡分布");
+    TT_Add_Str("case_by_age_button_total", "合計");
+    TT_Add_Str("case_by_age_button_w11", "0-6天前");
+    TT_Add_Str("case_by_age_button_w10", "7-13天前");
+    TT_Add_Str("case_by_age_button_w9", "14-20天前");
+    TT_Add_Str("case_by_age_button_w8", "21-27天前");
+    TT_Add_Str("case_by_age_button_w7", "28-34天前");
+    TT_Add_Str("case_by_age_button_w6", "35-41天前");
+    TT_Add_Str("case_by_age_button_w5", "42-48天前");
+    TT_Add_Str("case_by_age_button_w4", "49-55天前");
+    TT_Add_Str("case_by_age_button_w3", "56-62天前");
+    TT_Add_Str("case_by_age_button_w2", "63-69天前");
+    TT_Add_Str("case_by_age_button_w1", "70-76天前");
+    TT_Add_Str("case_by_age_button_w0", "77-83天前");
+    TT_Add_Str("case_by_age_button_m0", "1月");
+    TT_Add_Str("case_by_age_button_m1", "2月");
+    TT_Add_Str("case_by_age_button_m2", "3月");
+    TT_Add_Str("case_by_age_button_m3", "4月");
+    TT_Add_Str("case_by_age_button_m4", "5月");
+    TT_Add_Str("case_by_age_button_m5", "6月");
+    TT_Add_Str("case_by_age_button_m6", "7月");
+    TT_Add_Str("case_by_age_button_m7", "8月");
+    TT_Add_Str("case_by_age_button_m8", "9月");
+    TT_Add_Str("case_by_age_button_m9", "10月");
+    TT_Add_Str("case_by_age_button_m10", "11月");
+    TT_Add_Str("case_by_age_button_m11", "12月");
+    
     
     //-- Travel history-symptom correlations
     TT_Add_Str("travel_history_symptom_correlations_title", "旅遊史與症狀相關程度");
@@ -251,6 +277,31 @@ function text_translation() {
     
     //-- Case by age
     TT_Add_Str("case_by_age_title", "Cas confirmés par âge");
+    TT_Add_Str("case_by_age_button_total", "Total");
+    TT_Add_Str("case_by_age_button_w11", "0-6 jours plus tôt");
+    TT_Add_Str("case_by_age_button_w10", "7-13 jours plus tôt");
+    TT_Add_Str("case_by_age_button_w9", "14-20 jours plus tôt");
+    TT_Add_Str("case_by_age_button_w8", "21-27 jours plus tôt");
+    TT_Add_Str("case_by_age_button_w7", "28-34 jours plus tôt");
+    TT_Add_Str("case_by_age_button_w6", "35-41 jours plus tôt");
+    TT_Add_Str("case_by_age_button_w5", "42-48 jours plus tôt");
+    TT_Add_Str("case_by_age_button_w4", "49-55 jours plus tôt");
+    TT_Add_Str("case_by_age_button_w3", "56-62 jours plus tôt");
+    TT_Add_Str("case_by_age_button_w2", "63-69 jours plus tôt");
+    TT_Add_Str("case_by_age_button_w1", "70-76 jours plus tôt");
+    TT_Add_Str("case_by_age_button_w0", "77-83 jours plus tôt");
+    TT_Add_Str("case_by_age_button_m0", "Janvier");
+    TT_Add_Str("case_by_age_button_m1", "Février");
+    TT_Add_Str("case_by_age_button_m2", "Mars");
+    TT_Add_Str("case_by_age_button_m3", "Avril");
+    TT_Add_Str("case_by_age_button_m4", "Mai");
+    TT_Add_Str("case_by_age_button_m5", "Juin");
+    TT_Add_Str("case_by_age_button_m6", "Juillet");
+    TT_Add_Str("case_by_age_button_m7", "Août");
+    TT_Add_Str("case_by_age_button_m8", "Septembre");
+    TT_Add_Str("case_by_age_button_m9", "Octobre");
+    TT_Add_Str("case_by_age_button_m10", "Novembre");
+    TT_Add_Str("case_by_age_button_m11", "Décembre");
     
     //-- Travel history-symptom correlations
     TT_Add_Str("travel_history_symptom_correlations_title", "Corrélations entre antécédents de voyage & symptômes");
@@ -379,6 +430,31 @@ function text_translation() {
     
     //-- Case by age
     TT_Add_Str("case_by_age_title", "Case by age");
+    TT_Add_Str("case_by_age_button_total", "Total");
+    TT_Add_Str("case_by_age_button_w11", "0-6 days ago");
+    TT_Add_Str("case_by_age_button_w10", "7-13 days ago");
+    TT_Add_Str("case_by_age_button_w9", "14-20 days ago");
+    TT_Add_Str("case_by_age_button_w8", "21-27 days ago");
+    TT_Add_Str("case_by_age_button_w7", "28-34 days ago");
+    TT_Add_Str("case_by_age_button_w6", "35-41 days ago");
+    TT_Add_Str("case_by_age_button_w5", "42-48 days ago");
+    TT_Add_Str("case_by_age_button_w4", "49-55 days ago");
+    TT_Add_Str("case_by_age_button_w3", "56-62 days ago");
+    TT_Add_Str("case_by_age_button_w2", "63-69 days ago");
+    TT_Add_Str("case_by_age_button_w1", "70-76 days ago");
+    TT_Add_Str("case_by_age_button_w0", "77-83 days ago");
+    TT_Add_Str("case_by_age_button_m0", "January");
+    TT_Add_Str("case_by_age_button_m1", "February");
+    TT_Add_Str("case_by_age_button_m2", "March");
+    TT_Add_Str("case_by_age_button_m3", "April");
+    TT_Add_Str("case_by_age_button_m4", "May");
+    TT_Add_Str("case_by_age_button_m5", "June");
+    TT_Add_Str("case_by_age_button_m6", "July");
+    TT_Add_Str("case_by_age_button_m7", "August");
+    TT_Add_Str("case_by_age_button_m8", "September");
+    TT_Add_Str("case_by_age_button_m9", "October");
+    TT_Add_Str("case_by_age_button_m10", "November");
+    TT_Add_Str("case_by_age_button_m11", "December");
     
     //-- Travel history-symptom correlations
     TT_Add_Str("travel_history_symptom_correlations_title", "Correlations between Travel History & Symptoms");
@@ -415,31 +491,24 @@ function text_translation() {
 
 //-- Load key nb & print texts
 d3.csv("processed_data/key_numbers.csv", function (error, data) {
-  if (error) return console.warn(error);
+  if (error)
+    return console.warn(error);
   
-  var timestamp;
   var i;
-  
   for (i=0; i<data.length; i++) {
     if ('timestamp' == data[i]['key']) {
-      timestamp = data[i]['value'];
+      TT_wrap.timestamp = data[i]['value'];
+      break;
     }
   }
-  
-  TT_wrap.timestamp = timestamp;
 
   text_translation();
 });
 
 //-- Language button
 $(document).on("change", "input:radio[name='language']", function (event) {
-  var old_btn = document.getElementById('lang_'+GS_lang);
-  var new_btn = document.getElementById('lang_'+this.value);
-  old_btn.classList.remove("active");
-  new_btn.classList.add("active");
-  
+  GS_PressRadioButton(GS_wrap, 'lang', GS_lang, this.value)
   GS_lang = this.value;
   Cookies.set("lang", GS_lang, {sameSite: 'lax'});
-  
   text_translation();
 });

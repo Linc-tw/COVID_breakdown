@@ -5,6 +5,12 @@
 //-- Author:
 //--   Chieh-An Lin
 
+//-- Global variable
+var GS_wrap = {};
+
+//-- ID
+GS_wrap.tag = 'global';
+
 //-- Language settings
 var GS_lang = Cookies.get("lang"); // 'en', 'fr', 'zh-tw'
 if (!GS_lang) {
@@ -12,28 +18,30 @@ if (!GS_lang) {
   Cookies.set("lang", GS_lang, {sameSite: 'lax'});
 }
 
-var GS_lang_btn = document.getElementById('lang_'+GS_lang);
+var GS_lang_btn = document.getElementById('global_lang_'+GS_lang);
 GS_lang_btn.classList.add("active");
 
-//-- Global variables
-var GS_var = {};
-GS_var.xlabel_path_latest = 7;
-GS_var.r_list_latest = [3, 3, 4, 1, 1, 2, 2];
-GS_var.xlabel_path_2020 = 25;
-GS_var.r_list_2020 = [12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11];
-// GS_var.xlabel_path_2021 = 25;
-// GS_var.r_list_2021 = [12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11];
-GS_var.xlabel_path_2021 = 13;
-GS_var.r_list_2021 = [6, 6, 7, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5];
-GS_var.c_list = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022', '#117733', '#DD6622', '#7733AA', '#BB8811'];
-GS_var.trans_duration = 800;
+//-- Parameters
+GS_wrap.xlabel_path_latest = 7;
+GS_wrap.r_list_latest = [3, 3, 4, 1, 1, 2, 2];
+GS_wrap.xlabel_path_2020 = 25;
+GS_wrap.r_list_2020 = [12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11];
+// GS_wrap.xlabel_path_2021 = 25;
+// GS_wrap.r_list_2021 = [12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11];
+GS_wrap.xlabel_path_2021 = 15;
+GS_wrap.r_list_2021 = [7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6];
+GS_wrap.c_list = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022', '#117733', '#DD6622', '#7733AA', '#BB8811'];
+GS_wrap.trans_duration = 800;
 
 //-- General functions
 function GS_ISODateToMDDate(iso_date) {
   var md_date_format;
-  if (GS_lang == 'zh-tw')   md_date_format = d3.timeFormat("%-m月%-d日");
-  else if (GS_lang == 'fr') md_date_format = d3.timeFormat("%d/%m");
-  else md_date_format = d3.timeFormat("%b %d");
+  if (GS_lang == 'zh-tw')
+    md_date_format = d3.timeFormat("%-m月%-d日");
+  else if (GS_lang == 'fr')
+    md_date_format = d3.timeFormat("%d/%m");
+  else
+    md_date_format = d3.timeFormat("%b %d");
   
   var date = d3.isoParse(iso_date);
   return md_date_format(date);

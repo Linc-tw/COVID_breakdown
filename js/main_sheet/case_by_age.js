@@ -12,9 +12,9 @@ function CBA_MakeCanvas(wrap) {
   wrap.tot_height_['fr'] = 400;
   wrap.tot_height_['en'] = 400;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 90, right: 2, bottom: 105, top: 2};
-  wrap.margin_['fr'] = {left: 90, right: 2, bottom: 90, top: 2};
-  wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
+  wrap.margin_['zh-tw'] = {left: 70, right: 2, bottom: 90, top: 2};
+  wrap.margin_['fr'] = {left: 70, right: 2, bottom: 80, top: 2};
+  wrap.margin_['en'] = {left: 70, right: 2, bottom: 80, top: 2};
   
   GS_MakeCanvas(wrap);
 }
@@ -27,7 +27,7 @@ function CBA_FormatData(wrap, data) {
   
   //-- Variables for data
   var col_tag_list = data.columns.slice(1);
-  var col_tag = col_tag_list[wrap.col_ind];
+  var col_tag = col_tag_list[wrap.period];
   var nb_col = col_tag_list.length;
   var age_list = [];
   
@@ -109,31 +109,31 @@ function CBA_MouseMove(wrap, d) {
   //-- Generate tooltip text
   var col_label
   var tooltip_text;
-  if (wrap.col_ind < 12) {
-    col_label = (7*(wrap.nb_col-2-wrap.col_ind)) + '-' + (7*(wrap.nb_col-1-wrap.col_ind)-1);
+  if (wrap.period < 12) {
+    col_label = (7*(wrap.nb_col-2-wrap.period)) + '-' + (7*(wrap.nb_col-1-wrap.period)-1);
   
     if (GS_lang == 'zh-tw') {
       if (d['age'] == '70+')
-        tooltip_text = col_label + '天前的案例中<br>有' + d[wrap.col_tag_list[wrap.col_ind]] + '位年齡<br>在70歲以上';
+        tooltip_text = col_label + '天前的案例中<br>有' + d[wrap.col_tag_list[wrap.period]] + '位年齡<br>在70歲以上';
       else
-        tooltip_text = col_label + '天前的案例中<br>有' + d[wrap.col_tag_list[wrap.col_ind]] + '位年齡<br>在' + d['age'] + '歲之間';
+        tooltip_text = col_label + '天前的案例中<br>有' + d[wrap.col_tag_list[wrap.period]] + '位年齡<br>在' + d['age'] + '歲之間';
     }
     else if (GS_lang == 'fr')
-      tooltip_text = d[wrap.col_tag_list[wrap.col_ind]] + " cas confirmés<br>d'il y a " + col_label + ' jours<br>sont âgés de ' + d['age'] + ' ans';
+      tooltip_text = d[wrap.col_tag_list[wrap.period]] + " cas confirmés<br>de " + col_label + ' jours plus tôt<br>sont âgés de ' + d['age'] + ' ans';
     else
-      tooltip_text = d[wrap.col_tag_list[wrap.col_ind]] + ' confirmed cases<br>of ' + col_label + ' days ago<br>are ' + d['age'] + ' years old';
+      tooltip_text = d[wrap.col_tag_list[wrap.period]] + ' confirmed cases<br>of ' + col_label + ' days ago<br>are ' + d['age'] + ' years old';
   }
   else {
     if (GS_lang == 'zh-tw'){
       if (d['age'] == '70+')
-        tooltip_text = '全部案例中有' + d[wrap.col_tag_list[wrap.col_ind]] + '位<br>年齡在70歲以上';
+        tooltip_text = '全部案例中有' + d[wrap.col_tag_list[wrap.period]] + '位<br>年齡在70歲以上';
       else
-        tooltip_text = '全部案例中有' + d[wrap.col_tag_list[wrap.col_ind]] + '位<br>年齡在' + d['age'] + '歲之間';
+        tooltip_text = '全部案例中有' + d[wrap.col_tag_list[wrap.period]] + '位<br>年齡在' + d['age'] + '歲之間';
     }
     else if (GS_lang == 'fr')
-      tooltip_text = d[wrap.col_tag_list[wrap.col_ind]] + " de l'ensemble des cas<br>sont âgés de " + d['age'] + ' ans';
+      tooltip_text = d[wrap.col_tag_list[wrap.period]] + " de l'ensemble des cas<br>sont âgés de " + d['age'] + ' ans';
     else
-      tooltip_text = d[wrap.col_tag_list[wrap.col_ind]] + ' of all confirmed cases<br>are ' + d['age'] + ' years old';
+      tooltip_text = d[wrap.col_tag_list[wrap.period]] + ' of all confirmed cases<br>are ' + d['age'] + ' years old';
   }
   
   //-- Generate tooltip
@@ -227,7 +227,7 @@ function CBA_Initialize(wrap) {
   GS_MakeTooltip(wrap);
     
   //-- Define color
-  var color_list = GS_var.c_list.concat(['#999999']); 
+  var color_list = GS_wrap.c_list.concat(['#999999']); 
   var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
@@ -241,7 +241,7 @@ function CBA_Initialize(wrap) {
   //-- Update bar with dummy details
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', function (d) {return color(col_tag_list[wrap.col_ind]);})
+    .attr('fill', function (d) {return color(col_tag_list[wrap.period]);})
     .attr('x', function (d) {return x(d['age']);})
     .attr('y', function (d) {return y(0);})
     .attr('width', x.bandwidth())
@@ -271,7 +271,7 @@ function CBA_Update(wrap) {
   //-- Update y-axis
   wrap.svg.select('.yaxis')
     .transition()
-    .duration(GS_var.trans_duration)
+    .duration(GS_wrap.trans_duration)
     .call(y_axis);
   
   //-- Define xlabel
@@ -305,10 +305,10 @@ function CBA_Update(wrap) {
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GS_var.trans_duration)
-    .attr('fill', function (d) {return wrap.color(col_tag_list[wrap.col_ind]);})
-    .attr('y', function (d) {return y(d[col_tag_list[wrap.col_ind]]);})
-    .attr('height', function (d) {return y(0)-y(d[col_tag_list[wrap.col_ind]]);});
+    .duration(GS_wrap.trans_duration)
+    .attr('fill', function (d) {return wrap.color(col_tag_list[wrap.period]);})
+    .attr('y', function (d) {return y(d[col_tag_list[wrap.period]]);})
+    .attr('height', function (d) {return y(0)-y(d[col_tag_list[wrap.period]]);});
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -324,9 +324,9 @@ function CBA_Update(wrap) {
   var i, label_list;
   if (wrap.tag.includes('latest')) {
     if (GS_lang == 'zh-tw')
-      label_list = ['', '到', '天前', '合計'];
+      label_list = ['', '到', '天前之確診個案', '合計'];
     else if (GS_lang == 'fr')
-      label_list = ['Entre il y a ', ' & ', ' jours', 'Total'];
+      label_list = ['Entre ', ' & ', ' jours plus tôt', 'Total'];
     else 
       label_list = ['Between ', ' & ', ' days ago', 'Total'];
     
@@ -347,10 +347,10 @@ function CBA_Update(wrap) {
   var legend_color_list = [];
   var legend_label_2 = [];
   var legend_value_2 = [];
-  if (wrap.col_ind < 12) {
-    legend_color_list.push(wrap.color_list[wrap.col_ind]);
-    legend_label_2.push(legend_label[wrap.col_ind]);
-    legend_value_2.push(legend_value[wrap.col_ind]);
+  if (wrap.period < 12) {
+    legend_color_list.push(wrap.color_list[wrap.period]);
+    legend_label_2.push(legend_label[wrap.period]);
+    legend_value_2.push(legend_value[wrap.period]);
   }
   legend_color_list.push(wrap.color_list[12]);
   legend_label_2.push(legend_label[12]);
@@ -400,29 +400,37 @@ function CBA_Plot(wrap) {
     });
 }
 
-// function CBA_Replot(wrap) {
-//   d3.queue()
-//     .defer(d3.csv, wrap.data_path_list[0])
-//     .await(function (error, data) {
-//       if (error)
-//         return console.warn(error);
-//       
-//       CBA_FormatData(wrap, data);
-//       CBA_Update(wrap);
-//     });
-// }
+function CBA_Replot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path_list[0])
+    .await(function (error, data) {
+      if (error)
+        return console.warn(error);
+      
+      CBA_FormatData(wrap, data);
+      CBA_Update(wrap);
+    });
+}
 
 function CBA_ButtonListener(wrap) {
-//   //-- 
-//   $(document).on("change", "input:radio[name='" + wrap.tag + "_ind']", function (event) {
-//     GS_PressRadioButton(wrap, 'ind', wrap.col_ind, this.value);
-//     wrap.col_ind = this.value;
-//     CBA_Replot(wrap);
-//   });
+  //-- Period
+  d3.select(wrap.id +'_period').on('change', function() {
+    wrap.period = this.value;
+    CBA_Replot(wrap);
+  });
 
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
-    name = wrap.tag + '_' + GS_lang + '.png';
+    var tag1;
+    
+    if (wrap.period == 12)
+      tag1 = 'total';
+    else if (wrap.id.includes('latest'))
+      tag1 = 'w' + (+wrap.period-12);
+    else
+      tag1 = 'm' + (+wrap.period+1);
+    
+    name = wrap.tag + '_' + tag1 + '_' + GS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
@@ -440,9 +448,8 @@ function CBA_ButtonListener(wrap) {
 function CBA_Main(wrap) {
   wrap.id = '#' + wrap.tag;
 
-//   //-- Swap active to current value
-//   wrap.col_ind = document.querySelector("input[name='" + wrap.tag + "_ind']:checked").value;
-//   GS_PressRadioButton(wrap, 'ind', 0, wrap.col_ind); //-- 0 from .html
+  //-- Swap active to current value
+  wrap.period = document.getElementById(wrap.tag + "_period").value;
   
   //-- Plot
   CBA_Plot(wrap);

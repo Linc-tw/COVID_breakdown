@@ -180,7 +180,7 @@ function ASC_Initialize(wrap) {
   var legend_pos = {x: wrap.legend_pos_x, y: -0.8*wrap.margin.top, dx: 12, dy: 30};
   
   //-- Define legend color
-  var legend_color = [GS_var.c_list[0], '#999999', '#000000'];
+  var legend_color = [GS_wrap.c_list[0], '#999999', '#000000'];
   
   //-- Define legend value
   var legend_value = [wrap.n_data, wrap.n_total-wrap.n_data, wrap.n_total];

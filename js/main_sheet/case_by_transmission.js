@@ -289,7 +289,7 @@ function CBT_Initialize(wrap) {
   GS_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GS_var.c_list.slice(0, wrap.nb_col);
+  var color_list = GS_wrap.c_list.slice(0, wrap.nb_col);
   var col_tag_list = wrap.col_tag_list.slice().reverse();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
@@ -329,7 +329,7 @@ function CBT_Update(wrap) {
   //-- Add 2nd x-axis & adjust position
   wrap.svg.select('.xaxis')
     .transition()
-    .duration(GS_var.trans_duration)
+    .duration(GS_wrap.trans_duration)
     .call(x_axis_2)
     .selectAll("text")
       .attr("transform", "translate(-20,15) rotate(-90)")
@@ -356,7 +356,7 @@ function CBT_Update(wrap) {
   //-- Update y-axis
   wrap.svg.select('.yaxis')
     .transition()
-    .duration(GS_var.trans_duration)
+    .duration(GS_wrap.trans_duration)
     .call(y_axis);
   
   //-- Define ylabel
@@ -376,7 +376,7 @@ function CBT_Update(wrap) {
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GS_var.trans_duration)
+    .duration(GS_wrap.trans_duration)
     .attr('y', function (d) {return y(d.y1);})
     .attr('height', function (d) {return y(d.y0)-y(d.y1);});
     

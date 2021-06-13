@@ -36,13 +36,13 @@
                             <!-- Language buttons -->
                             <div class="sb-sidenav-menu-heading-nouppercase">
                                 <div class="btn-group-vertical btn-group-sm btn-group-toggle" data-toggle="buttons"> 
-                                    <label id="lang_en" class="btn btn-covid-white">
+                                    <label id="global_lang_en" class="btn btn-covid-white">
                                         <input type="radio" class="btn-check" name="language" value='en'>English<br>
                                     </label>
-                                    <label id="lang_fr" class="btn btn-covid-white">
+                                    <label id="global_lang_fr" class="btn btn-covid-white">
                                         <input type="radio" class="btn-check" name="language" value='fr'>Français<br>
                                     </label>
-                                    <label id="lang_zh-tw" class="btn btn-covid-white">
+                                    <label id="global_lang_zh-tw" class="btn btn-covid-white">
                                         <input type="radio" class="btn-check" name="language" value='zh-tw'>正體中文<br>
                                     </label>
                                 </div>
@@ -224,6 +224,75 @@
                                 </div>
                             </div>
                             
+                            <!-- Case by age -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-baby me-1"></i> <span id="case_by_age_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <select id="case_by_age_2021_period" class="form-select form-select-sm me-2" aria-label="case_by_age_2021_period">
+                                                <option value="12" id="case_by_age_button_total" selected></option>
+                                                <option value="0" id="case_by_age_button_m0"></option>
+                                                <option value="1" id="case_by_age_button_m1"></option>
+                                                <option value="2" id="case_by_age_button_m2"></option>
+                                                <option value="3" id="case_by_age_button_m3"></option>
+                                                <option value="4" id="case_by_age_button_m4"></option>
+                                                <option value="5" id="case_by_age_button_m5"></option>
+                                                <option value="6" id="case_by_age_button_m6"></option>
+                                                <option value="7" id="case_by_age_button_m7"></option>
+                                                <option value="8" id="case_by_age_button_m8"></option>
+                                                <option value="9" id="case_by_age_button_m9"></option>
+                                                <option value="10" id="case_by_age_button_m10"></option>
+                                                <option value="11" id="case_by_age_button_m11"></option>
+                                            </select>
+                                            
+                                            <button id='case_by_age_2021_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="case_by_age_2021"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Differnce by transimission -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-hospital-user me-1"></i> <span id="difference_by_transmission_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active" id="difference_by_transmission_2021_ind_0">
+                                                    <input type="radio" class="btn-check" name="difference_by_transmission_2021_ind" value=0 checked>
+                                                    <span id="difference_by_transmission_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="difference_by_transmission_2021_ind_1">
+                                                    <input type="radio" class="btn-check" name="difference_by_transmission_2021_ind" value=1>
+                                                    <span id="difference_by_transmission_button_2"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="difference_by_transmission_2021_ind_2">
+                                                    <input type="radio" class="btn-check" name="difference_by_transmission_2021_ind" value=2>
+                                                    <span id="difference_by_transmission_button_3"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="difference_by_transmission_2021_ind_3">
+                                                    <input type="radio" class="btn-check" name="difference_by_transmission_2021_ind" value=3>
+                                                    <span id="difference_by_transmission_button_4"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <button id='difference_by_transmission_2021_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="difference_by_transmission_2021"></div>
+                                </div>
+                            </div>
+                            
                             <!-- Travel history-symptom correlation -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
@@ -280,42 +349,6 @@
                                 </div>
                             </div>
                             
-                            <!-- Differnce by transimission -->
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-hospital-user me-1"></i> <span id="difference_by_transmission_title"></span>
-                                    </div>
-                                    
-                                    <div class="card-img">
-                                        <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active" id="difference_by_transmission_2021_ind_0">
-                                                    <input type="radio" class="btn-check" name="difference_by_transmission_2021_ind" value=0 checked>
-                                                    <span id="difference_by_transmission_button_1"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="difference_by_transmission_2021_ind_1">
-                                                    <input type="radio" class="btn-check" name="difference_by_transmission_2021_ind" value=1>
-                                                    <span id="difference_by_transmission_button_2"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="difference_by_transmission_2021_ind_2">
-                                                    <input type="radio" class="btn-check" name="difference_by_transmission_2021_ind" value=2>
-                                                    <span id="difference_by_transmission_button_3"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="difference_by_transmission_2021_ind_3">
-                                                    <input type="radio" class="btn-check" name="difference_by_transmission_2021_ind" value=3>
-                                                    <span id="difference_by_transmission_button_4"></span>
-                                                </label>
-                                            </div>
-                                            
-                                            <button id='difference_by_transmission_2021_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card-body" id="difference_by_transmission_2021"></div>
-                                </div>
-                            </div>
-                            
                         </div>
                     </div>
                 </main>
@@ -350,12 +383,14 @@
         <script src="js/main_sheet/case_by_transmission_2021.js"></script>
         <script src="js/main_sheet/case_by_detection.js"></script>
         <script src="js/main_sheet/case_by_detection_2021.js"></script>
+        <script src="js/main_sheet/case_by_age.js"></script>
+        <script src="js/main_sheet/case_by_age_2021.js"></script>
+        <script src="js/main_sheet/difference_by_transmission.js"></script>
+        <script src="js/main_sheet/difference_by_transmission_2021.js"></script>
         <script src="js/main_sheet/travel_history_symptom_correlations.js"></script>
         <script src="js/main_sheet/travel_history_symptom_correlations_2021.js"></script>
         <script src="js/main_sheet/age_symptom_correlations.js"></script>
         <script src="js/main_sheet/age_symptom_correlations_2021.js"></script>
-        <script src="js/main_sheet/difference_by_transmission.js"></script>
-        <script src="js/main_sheet/difference_by_transmission_2021.js"></script>
         
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58898441-4"></script>

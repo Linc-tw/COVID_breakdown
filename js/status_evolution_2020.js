@@ -17,8 +17,8 @@ SE_2020_wrap.data_path_list = [
 ];
 
 //-- Parameters
-SE_2020_wrap.xlabel_path = GS_var.xlabel_path_2020;
-SE_2020_wrap.r_list = GS_var.r_list_2020;
+SE_2020_wrap.xlabel_path = GS_wrap.xlabel_path_2020;
+SE_2020_wrap.r_list = GS_wrap.r_list_2020;
 SE_2020_wrap.y_max_factor = 1.15;
 SE_2020_wrap.y_path = '4'; //-- 4 ticks
 SE_2020_wrap.legend_pos_x = 70;

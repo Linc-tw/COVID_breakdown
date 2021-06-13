@@ -215,7 +215,7 @@ function VR_Initialize(wrap) {
   GS_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GS_var.c_list.slice(0, wrap.nb_col);
+  var color_list = GS_wrap.c_list.slice(0, wrap.nb_col);
   var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
@@ -284,7 +284,7 @@ function VR_Update(wrap) {
   //-- Add 2nd x-axis & adjust position
   wrap.svg.select('.xaxis')
     .transition()
-    .duration(GS_var.trans_duration)
+    .duration(GS_wrap.trans_duration)
     .call(x_axis_2)
     .selectAll("text")
       .attr("transform", "translate(-20,15) rotate(-90)")
@@ -304,7 +304,7 @@ function VR_Update(wrap) {
   //-- Update y-axis
   wrap.svg.select('.yaxis')
     .transition()
-    .duration(GS_var.trans_duration)
+    .duration(GS_wrap.trans_duration)
     .call(y_axis);
   
   //-- Define ylabel
@@ -323,13 +323,13 @@ function VR_Update(wrap) {
   //-- Update line
   wrap.line.selectAll('.content.line')
     .transition()
-    .duration(GS_var.trans_duration)
+    .duration(GS_wrap.trans_duration)
     .attr('d', function (d) {return wrap.draw_line(d.values);});
     
   //-- Update dot
   wrap.dot.selectAll('.content.dot')
     .transition()
-    .duration(GS_var.trans_duration)
+    .duration(GS_wrap.trans_duration)
     .attr("r", function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
 
   //-- Define legend position

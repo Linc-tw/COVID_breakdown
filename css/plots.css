@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 
+/* Overwrite template */
 body, 
 .title,
 .xlabel,
@@ -12,6 +13,7 @@ body,
   font-family: 'Roboto', 'Noto Sans TC', sans-serif;
 }
 
+/* New */
 .bg-gray-dark {
   background-color: #343a40 !important;
 }
@@ -20,6 +22,26 @@ body,
 .sb-topnav .navbar-brand {
   width: 190px;
 }
+
+/* Overwrite template */
+.form-select {
+  display: inline;
+  width: auto;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: rgba(0, 0, 0, 0.03);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.175);
+  border-radius: 0.25rem;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
 
 .xlabel,
 .ylabel,
@@ -169,7 +191,6 @@ body,
 
 
 /* Buttons */
-
 .sb-sidenav-menu-heading-nouppercase {
   padding: 1.75rem 1rem 0.75rem;
   font-size: 0.75rem;
@@ -255,8 +276,6 @@ body,
 }
 
 .icon {
-/*   font-size: 20px; */
-/*   color: #fff; */
   background-color: rgba(0, 0, 0, 0);
   text-align: center;
 }

@@ -20,8 +20,8 @@ CBD_latest_wrap.data_path_list = [
 
 //-- Parameters
 CBD_latest_wrap.n_tot_key = 'n_latest';
-CBD_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
-CBD_latest_wrap.r_list = GS_var.r_list_latest;
+CBD_latest_wrap.xlabel_path = GS_wrap.xlabel_path_latest;
+CBD_latest_wrap.r_list = GS_wrap.r_list_latest;
 CBD_latest_wrap.y_max_factor = 1.2;
 CBD_latest_wrap.y_max_fix_1_1 = 0;
 CBD_latest_wrap.y_max_fix_1_0 = 0;

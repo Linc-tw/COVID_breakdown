@@ -17,12 +17,9 @@ CBA_latest_wrap.data_path_list = [
 ];
 
 //-- Parameters
-CBA_latest_wrap.y_max_factor = 1.2;
+CBA_latest_wrap.y_max_factor = 1.4;
 CBA_latest_wrap.y_path = '4'; //-- 4 ticks
 CBA_latest_wrap.legend_pos_x = 90;
-
-//-- Variables
-CBA_latest_wrap.col_ind = 12; //document.querySelector("input[name='" + DBT_latest_wrap.tag + "_ind']:checked").value;
 
 //-- Main
 CBA_Main(CBA_latest_wrap);

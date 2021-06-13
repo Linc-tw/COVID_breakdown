@@ -15,8 +15,8 @@ TBC_latest_wrap.tag = "test_by_criterion_latest";
 TBC_latest_wrap.data_path = "processed_data/latest/test_by_criterion.csv";
 
 //-- Parameters
-TBC_latest_wrap.xlabel_path = GS_var.xlabel_path_latest;
-TBC_latest_wrap.r_list = GS_var.r_list_latest;
+TBC_latest_wrap.xlabel_path = GS_wrap.xlabel_path_latest;
+TBC_latest_wrap.r_list = GS_wrap.r_list_latest;
 TBC_latest_wrap.y_max_factor = 1.2;
 TBC_latest_wrap.y_path_1 = '4'; //-- 4 ticks
 TBC_latest_wrap.y_path_0 = '4';

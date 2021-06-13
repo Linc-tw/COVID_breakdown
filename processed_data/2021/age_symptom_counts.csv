@@ -1,24 +1,24 @@
 label,count,label_zh,label_fr
 N_total,12122,合計,Total
-N_data,1050,有資料案例數,Données complètes
-90s,32,90-99歲,90aine
-80s,96,80-89歲,80aine
-70s,133,70-79歲,70aine
-60s,177,60-69歲,60aine
-50s,119,50-59歲,50aine
+N_data,1074,有資料案例數,Données complètes
+90s,36,90-99歲,90aine
+80s,99,80-89歲,80aine
+70s,145,70-79歲,70aine
+60s,179,60-69歲,60aine
+50s,120,50-59歲,50aine
 40s,113,40-49歲,40aine
 30s,151,30-39歲,30aine
-20s,180,20-29歲,20aine
+20s,181,20-29歲,20aine
 10s,30,10-19歲,10aine
-100s,1,>100歲,100aine
+100s,2,>100歲,100aine
 0s,18,<10歲,< 10 ans
-fever,368,發燒,fièvre
-cough,332,咳嗽,toux
-asymptomatic,301,無症狀,asymptomatique
-dyspnea,171,呼吸困難,dyspnée
-throatache,159,喉嚨症狀,mal de gorge
+fever,380,發燒,fièvre
+cough,344,咳嗽,toux
+asymptomatic,302,無症狀,asymptomatique
+dyspnea,183,呼吸困難,dyspnée
+throatache,161,喉嚨症狀,mal de gorge
 sneezing,99,鼻腔症狀,éternuement
-fatigue,87,倦怠,fatigue
-diarrhea,75,腹瀉,diarrhée
+fatigue,89,倦怠,fatigue
+diarrhea,78,腹瀉,diarrhée
 headache,61,頭痛,mal de tête
-soreness,56,痠痛,myalgie
+soreness,58,痠痛,myalgie

@@ -241,7 +241,7 @@ function DBT_Initialize(wrap) {
   GS_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = [GS_var.c_list[4], GS_var.c_list[0], GS_var.c_list[1], GS_var.c_list[3], '#999999', '#000000']; 
+  var color_list = [GS_wrap.c_list[4], GS_wrap.c_list[0], GS_wrap.c_list[1], GS_wrap.c_list[3], '#999999', '#000000']; 
   var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
@@ -285,7 +285,7 @@ function DBT_Update(wrap) {
   //-- Update y-axis
   wrap.svg.select('.yaxis')
     .transition()
-    .duration(GS_var.trans_duration)
+    .duration(GS_wrap.trans_duration)
     .call(y_axis);
   
   //-- Update bar
@@ -293,7 +293,7 @@ function DBT_Update(wrap) {
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GS_var.trans_duration)
+    .duration(GS_wrap.trans_duration)
     .attr('fill', function (d) {return wrap.color(col_tag_list[wrap.col_ind]);})
     .attr('y', function (d) {return y(d[col_tag_list[wrap.col_ind]]);})
     .attr('height', function (d) {return y(0)-y(d[col_tag_list[wrap.col_ind]]);});
