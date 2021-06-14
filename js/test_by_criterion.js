@@ -188,7 +188,7 @@ function TBC_Initialize(wrap) {
   //-- No xtick or xticklabel 
   var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function (d, i) {return ""});
+    .tickFormat("");
   
   //-- Add x-axis & adjust position
   wrap.svg.append('g')
@@ -207,7 +207,7 @@ function TBC_Initialize(wrap) {
     .tickSize(10)
     .tickSizeOuter(0)
     .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return "";});
+    .tickFormat("");
   
   //-- Add 2nd x-axis & adjust position
   wrap.svg.append("g")
@@ -282,14 +282,14 @@ function TBC_Initialize(wrap) {
 }
 
 function TBC_Update(wrap) {
-  //-- Define xtick & update xticklabel later
+  //-- Define new xticklabels
   var x_axis_2 = d3.axisBottom(wrap.x_2)
     .tickSize(10)
     .tickSizeOuter(0)
     .tickValues(wrap.xtick)
     .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
   
-  //-- Add 2nd x-axis & adjust position
+  //-- Update 2nd x-axis
   wrap.svg.select('.xaxis')
     .transition()
     .duration(GS_wrap.trans_duration)
@@ -391,9 +391,9 @@ function TBC_Update(wrap) {
     .append("text")
       .attr("class", "legend value")
       .attr("x", legend_pos.x)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function (d, i) {return legend_color_list[i]})
-      .text(function (d) {return d})
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style("fill", function (d, i) {return legend_color_list[i];})
+      .text(function (d) {return d;})
       .attr("text-anchor", "end")
       
   //-- Update legend label
@@ -405,9 +405,9 @@ function TBC_Update(wrap) {
     .append("text")
       .attr("class", "legend label")
       .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function (d, i) {return legend_color_list[i]})
-      .text(function (d) {return d})
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style("fill", function (d, i) {return legend_color_list[i];})
+      .text(function (d) {return d;})
       .attr("text-anchor", "start")
 }
 

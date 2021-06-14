@@ -167,7 +167,7 @@ function DBT_Initialize(wrap) {
   //-- No xtick or xticklabel 
   var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function (d, i) {return ""});
+    .tickFormat("");
   
   //-- Add x-axis & adjust position
   wrap.svg.append('g')
@@ -183,9 +183,9 @@ function DBT_Initialize(wrap) {
   
   //-- Define xtick & xticklabel
   var x_axis_2 = d3.axisBottom(x_2)
-    .tickValues(wrap.xtick)
     .tickSize(10)
     .tickSizeOuter(0)
+    .tickValues(wrap.xtick)
     .tickFormat(function (d, i) {return wrap.xticklabel[i]});
   
   //-- Add 2nd x-axis & adjust position
@@ -255,9 +255,9 @@ function DBT_Initialize(wrap) {
   //-- Update bar with dummy details
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', function (d) {return color(col_tag_list[wrap.col_ind]);})
+    .attr('fill', color(col_tag_list[wrap.col_ind]))
     .attr('x', function (d) {return x(d['difference']);})
-    .attr('y', function (d) {return y(0);})
+    .attr('y', y(0))
     .attr('width', x.bandwidth())
     .attr('height', 0)
     .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
@@ -294,7 +294,7 @@ function DBT_Update(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(GS_wrap.trans_duration)
-    .attr('fill', function (d) {return wrap.color(col_tag_list[wrap.col_ind]);})
+    .attr('fill', wrap.color(col_tag_list[wrap.col_ind]))
     .attr('y', function (d) {return y(d[col_tag_list[wrap.col_ind]]);})
     .attr('height', function (d) {return y(0)-y(d[col_tag_list[wrap.col_ind]]);});
   
@@ -364,9 +364,9 @@ function DBT_Update(wrap) {
     .append("text")
       .attr("class", "legend value")
       .attr("x", legend_pos.x)
-      .attr("y", function (d,i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function (d, i) {return legend_color_list[i]})
-      .text(function (d) {return d})
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style("fill", function (d, i) {return legend_color_list[i];})
+      .text(function (d) {return d;})
       .attr("text-anchor", "end")
     
   //-- Update legend label
@@ -378,9 +378,9 @@ function DBT_Update(wrap) {
     .append("text")
       .attr("class", "legend label")
       .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function (d, i) {return legend_color_list[i]})
-      .text(function (d) {return d})
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style("fill", function (d, i) {return legend_color_list[i];})
+      .text(function (d) {return d;})
       .attr("text-anchor", "start")
 }
 

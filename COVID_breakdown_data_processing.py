@@ -708,7 +708,7 @@ class MainSheet(Template):
         '5/1-19', '5/2-13', '5/2-22', '5/2-6/1', '5/5-16', '5/5-17', '5/6-22', '5/6-27', '5/7-20', '5/7-24', '5/7-25', '5/7-28', '5/8-20', '5/8-25', 
         '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', '5/13-31',
         '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/19-6/10', 
-        '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', 
+        '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
         '6/1-2', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
@@ -764,7 +764,7 @@ class MainSheet(Template):
         
       elif channel in [
         '居家隔離', '住院隔離', '接觸患者', '同院患者', '框列採檢', '匡列篩檢', 
-        '接觸者回溯', '接觸者檢查', '接觸者採檢', '接觸者框列', '接觸者匡列', 
+        '接觸者回溯', '接觸者檢查', '接觸者採檢', '接觸者框列', '接觸者匡列', '匡列接觸者', 
         '確診者回溯', '確診者匡列', '居家隔離期滿後採檢', '居家隔離期滿後確診'
       ]:
         channel_list.append('isolation')
@@ -773,7 +773,7 @@ class MainSheet(Template):
         channel_list.append('monitoring')
         
       elif channel in [
-        '入院', '快篩站', '自行就醫', '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', '定期篩檢', 
+        '入院', '快篩站', '自行就醫', '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', '定期篩檢',
         '入院篩檢', '入院採檢', '院內採檢', '社區快篩', '社區專案', '社區篩檢', '專案篩檢', 
         '萬華專案', '擴大採檢', '擴大篩檢', '預防性快篩', '預防性採檢', '鄰家擴大採檢', '入院前預防性採檢'
       ]:
@@ -816,7 +816,7 @@ class MainSheet(Template):
       'eyes sore': ['結膜充血', '後眼窩痛', '眼睛癢', '眼睛痛', '眼壓高'], 
       'chest pain+backache': ['胸背痛'], 
       'chest pain': ['呼吸時胸痛', '心臟不舒服', '胸痛', '胸悶'],
-      'stomachache': ['腸胃不舒服', '腸胃道不適', '腸胃不適', '胃部不適', '肚子不適', '腹悶痛', '胃痛', '腹痛', '胃脹', '腹脹'],
+      'stomachache': ['腸胃不舒服', '腸胃道不適', '腸胃不適', '胃部不適', '腹部不適', '肚子不適', '腹悶痛', '胃痛', '腹痛', '胃脹', '腹脹'],
       'backache': ['腰酸背痛', '背痛'], 
       'toothache': ['牙痛'], 
       'rash': ['出疹'],
@@ -2580,17 +2580,23 @@ class CountySheet(Template):
     county_list = self.getCounty()
     nb_cases_list = self.getNbCases()
     
-    if 'latest' == selection:
-      case_arr = np.zeros(90, dtype=int)
-    elif '2020' == selection:
-      case_arr = np.zeros(365, dtype=int)
-    else:
-      case_arr = np.zeros(366, dtype=int)
-    case_arr_dict = {county: case_arr.copy() for county in ['total'] + self.county_key_list}
-      
     ord_today = dtt.date.today().toordinal() + 1
+    ord_end_2019 = ISODateToOrd('2019-12-31') + 1
     ord_end_2020 = ISODateToOrd('2020-12-31') + 1
     ord_end_2021 = ISODateToOrd('2021-12-31') + 1
+    
+    if 'latest' == selection:
+      date = [ordDateToISO(ord) for ord in range(ord_today-90, ord_today)]
+      case_arr = np.zeros_like(date, dtype=int)
+    elif '2020' == selection:
+      date = [ordDateToISO(ord) for ord in range(ord_end_2019, min(ord_end_2020, ord_today))]
+      case_arr = np.zeros_like(date, dtype=int)
+    else:
+      date = [ordDateToISO(ord) for ord in range(ord_end_2020, min(ord_end_2021, ord_today))]
+      case_arr = np.zeros_like(date, dtype=int)
+    
+    case_arr_dict = {'date': date}
+    case_arr_dict.update({county: case_arr.copy() for county in ['total'] + self.county_key_list})
     
     for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):
       if 'unknown' == county:
@@ -2604,13 +2610,13 @@ class CountySheet(Template):
           continue
         
       if '2020' == selection:
-        ind = ord_rep - ord_end_2020
-        if ind >= 0:
+        ind = ord_rep - ord_end_2019
+        if ind >= ord_end_2020 - ord_end_2019:
           continue
-      
+        
       if '2021' == selection:
-        ind = ord_rep - ord_end_2021
-        if ind < (ord_end_2020 - ord_end_2021) or ind >= 0:
+        ind = ord_rep - ord_end_2020
+        if ind >= ord_end_2021 - ord_end_2020 or ind < 0:
           continue
       
       case_arr_dict['total'][ind] += nb_cases
@@ -2648,9 +2654,9 @@ class CountySheet(Template):
       case_hist_list[-1][county] += nb_cases
         
       if 'latest' == selection:
-        lookback_week = (ord_rep - ord_today) // 7 ## ord_rep-ord_today in [-90, -1]
+        lookback_week = (ord_rep - ord_today) // 7 ## ord_rep-ord_today in [-90, -1]; this will be in [-13, -1]
         if lookback_week >= -12:
-          case_hist_list[lookback_week-1][county] += nb_cases
+          case_hist_list[-lookback_week][county] += nb_cases
         
       else:
         mm = int(report_date[5:7])
@@ -2682,16 +2688,16 @@ class CountySheet(Template):
       if '2021' == selection and (ord_rep < ord_end_2020 or ord_rep >= ord_end_2021):
         continue
       
-      case_hist_list[-1][age] += nb_cases
+      case_hist_list[0][age] += nb_cases
         
       if 'latest' == selection:
-        lookback_week = (ord_rep - ord_today) // 7 ## ord_rep-ord_today in [-90, -1]
+        lookback_week = (ord_rep - ord_today) // 7 ## ord_rep-ord_today in [-90, -1]; this will be in [-13, -1]
         if lookback_week >= -12:
-          case_hist_list[lookback_week-1][age] += nb_cases
+          case_hist_list[-lookback_week][age] += nb_cases
         
       else:
         mm = int(report_date[5:7])
-        case_hist_list[mm-1][age] += nb_cases
+        case_hist_list[mm][age] += nb_cases
     
     return case_hist_list
   
@@ -2708,9 +2714,9 @@ class CountySheet(Template):
     county_list = list(case_hist_list[0].keys())
     
     if 'latest' == selection:
-      label_list = ['week_-12', 'week_-11', 'week_-10', 'week_-9', 'week_-8', 'week_-7', 'week_-6', 'week_5', 'week_-4', 'week_-3', 'week_-2', 'week_-1', 'total']
+      label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
     else:
-      label_list = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec', 'total']
+      label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
     
     data = {'county': county_list}
     data.update({label: case_hist.values() for label, case_hist in zip(label_list, case_hist_list)})
@@ -2725,9 +2731,9 @@ class CountySheet(Template):
     age_list = list(case_hist_list[0].keys())
     
     if 'latest' == selection:
-      label_list = ['week_-12', 'week_-11', 'week_-10', 'week_-9', 'week_-8', 'week_-7', 'week_-6', 'week_5', 'week_-4', 'week_-3', 'week_-2', 'week_-1', 'total']
+      label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
     else:
-      label_list = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec', 'total']
+      label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
     
     data = {'age': age_list}
     data.update({label: case_hist.values() for label, case_hist in zip(label_list, case_hist_list)})
@@ -3098,7 +3104,7 @@ def sandbox():
   
   county_sheet = CountySheet()
   #print(county_sheet)
-  county_sheet.saveCsv_caseByAge()
+  county_sheet.saveCsv_dailyCasePerCounty()
   
   #vacc_sheet = VaccinationSheet()
   #print(vacc_sheet.makeUpdatedNew())

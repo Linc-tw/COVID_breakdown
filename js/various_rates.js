@@ -152,7 +152,7 @@ function VR_Initialize(wrap) {
   //-- No xtick or xticklabel 
   var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function (d, i) {return ""});
+    .tickFormat("");
   
   //-- Add x-axis & adjust position
   wrap.svg.append('g')
@@ -170,7 +170,7 @@ function VR_Initialize(wrap) {
     .tickSize(12)
     .tickSizeOuter(0)
     .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return "";});
+    .tickFormat("");
   
   //-- Add 2nd x-axis & adjust position
   wrap.svg.append("g")
@@ -224,7 +224,7 @@ function VR_Initialize(wrap) {
   //-- Define dummy line
   var draw_line_0 = d3.line()
     .x(function (d) {return x(d.x);})
-    .y(function (d) {return y(0);});
+    .y(y(0));
     
   //-- Define real line
   var draw_line = d3.line()
@@ -274,14 +274,14 @@ function VR_Initialize(wrap) {
 }
 
 function VR_Update(wrap) {
-  //-- Define xtick & update xticklabel later
+  //-- Define new xticklabel
   var x_axis_2 = d3.axisBottom(wrap.x_2)
     .tickSize(10)
     .tickSizeOuter(0)
     .tickValues(wrap.xtick)
     .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
   
-  //-- Add 2nd x-axis & adjust position
+  //-- Update 2nd x-axis
   wrap.svg.select('.xaxis')
     .transition()
     .duration(GS_wrap.trans_duration)

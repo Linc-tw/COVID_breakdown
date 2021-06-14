@@ -133,7 +133,7 @@ function THSC_Initialize(wrap) {
   //-- No xtick, only xticklabel 
   var x_axis = d3.axisTop(x)
     .tickSize(0)
-    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
+    .tickFormat(function (d, i) {return wrap.xticklabel[i];});
   
   //-- Add x-axis & adjust position
   wrap.svg.append('g')
@@ -146,7 +146,7 @@ function THSC_Initialize(wrap) {
   //-- Define a 2nd x-axis for the frameline at bottom
   var x_axis_2 = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function (d, i) {return ""});
+    .tickFormat("");
   
   //-- Add 2nd x-axis
   wrap.svg.append("g")
@@ -163,7 +163,7 @@ function THSC_Initialize(wrap) {
   //-- No ytick, only yticklabel 
   var y_axis = d3.axisLeft(y)
     .tickSize(0)
-    .tickFormat(function (d, i) {return wrap.yticklabel[i]});
+    .tickFormat(function (d, i) {return wrap.yticklabel[i];});
   
   //-- Add y-axis
   wrap.svg.append("g")
@@ -205,9 +205,9 @@ function THSC_Initialize(wrap) {
     .append("text")
       .attr("class", "legend value")
       .attr("x", -wrap.margin.left + legend_pos.x)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function (d, i) {return legend_color[i]})
-      .text(function (d) {return d})
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style("fill", function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;})
       .attr("text-anchor", "end");
   
   //-- Add square
@@ -280,9 +280,9 @@ function THSC_Update(wrap) {
     .append("text")
       .attr("class", "legend label")
       .attr("x", -wrap.margin.left + wrap.legend_pos.x + wrap.legend_pos.dx)
-      .attr("y", function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy})
-      .style("fill", function (d, i) {return wrap.legend_color[i]})
-      .text(function (d) {return d})
+      .attr("y", function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy;})
+      .style("fill", function (d, i) {return wrap.legend_color[i];})
+      .text(function (d) {return d;})
       .attr("text-anchor", "start")
 }
 

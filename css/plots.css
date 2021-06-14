@@ -176,9 +176,15 @@ body,
   margin-top: -72px;
   margin-bottom: -72px;
 }
-#case_by_age_latest .tooltip {  /* , #case_by_age_2020 .tooltip, #case_by_age_2021 .tooltip*/
+#daily_case_per_county_latest .tooltip , #daily_case_per_county_2020 .tooltip, #daily_case_per_county_2021 .tooltip {
   margin-left: -70px;
   margin-right: -70px;
+  margin-top: -35px;
+  margin-bottom: -35px;
+}
+#case_by_age_latest .tooltip , #case_by_age_2020 .tooltip, #case_by_age_2021 .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
   margin-top: -35px;
   margin-bottom: -35px;
 }

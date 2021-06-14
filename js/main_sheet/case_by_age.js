@@ -12,16 +12,15 @@ function CBA_MakeCanvas(wrap) {
   wrap.tot_height_['fr'] = 400;
   wrap.tot_height_['en'] = 400;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 70, right: 2, bottom: 90, top: 2};
-  wrap.margin_['fr'] = {left: 70, right: 2, bottom: 80, top: 2};
-  wrap.margin_['en'] = {left: 70, right: 2, bottom: 80, top: 2};
+  wrap.margin_['zh-tw'] = {left: 90, right: 2, bottom: 90, top: 2};
+  wrap.margin_['fr'] = {left: 90, right: 2, bottom: 80, top: 2};
+  wrap.margin_['en'] = {left: 90, right: 2, bottom: 80, top: 2};
   
   GS_MakeCanvas(wrap);
 }
 
 function CBA_FormatData(wrap, data) {
   //-- Variables for xtick
-  var r = 0;
   var xtick = [];
   var xticklabel = [];
   
@@ -32,13 +31,9 @@ function CBA_FormatData(wrap, data) {
   var age_list = [];
   
   //-- Other variables
-  var y_sum = [];
+  var y_sum = [0, 0]; //-- For 0 (total) & col_ind
   var y_max = 4.5;
   var i, j, x, y;
-  
-  //-- Initialize y_sum
-  for (j=0; j<nb_col; j++)
-    y_sum.push(0);
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
@@ -51,9 +46,9 @@ function CBA_FormatData(wrap, data) {
     xticklabel.push(i*5);
     
     //-- Update y_sum
-    for (j=0; j<nb_col; j++)
-      y_sum[j] += +data[i][col_tag_list[j]];
-      
+    y_sum[0] += +data[i][col_tag_list[0]];
+    y_sum[1] += +data[i][col_tag];
+    
     //-- Update y_max
     y_max = Math.max(y_max, y);
   }
@@ -106,34 +101,57 @@ function CBA_MouseMove(wrap, d) {
   var y_alpha = 0.35;
   var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
-  //-- Generate tooltip text
-  var col_label
-  var tooltip_text;
-  if (wrap.period < 12) {
-    col_label = (7*(wrap.nb_col-2-wrap.period)) + '-' + (7*(wrap.nb_col-1-wrap.period)-1);
+  if (GS_lang == 'fr')
+    month_label = ['Total', 'de janvier', 'de février', 'de mars', "d'avril", 'de mai', 'de juin', 'de juillet', "d'août", 'de septembre', "d'octobre", 'de novembre', 'de décembre'];
+  else
+    month_label = ['Total', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      
+  //-- Generate column label
+  var col_label;
+  if (wrap.tag.includes('latest'))
+    col_label = (7*(wrap.period-1)) + '-' + (7*wrap.period-1);
+  else
+    col_label = month_label[wrap.period];
   
-    if (GS_lang == 'zh-tw') {
-      if (d['age'] == '70+')
-        tooltip_text = col_label + '天前的案例中<br>有' + d[wrap.col_tag_list[wrap.period]] + '位年齡<br>在70歲以上';
-      else
-        tooltip_text = col_label + '天前的案例中<br>有' + d[wrap.col_tag_list[wrap.period]] + '位年齡<br>在' + d['age'] + '歲之間';
-    }
-    else if (GS_lang == 'fr')
-      tooltip_text = d[wrap.col_tag_list[wrap.period]] + " cas confirmés<br>de " + col_label + ' jours plus tôt<br>sont âgés de ' + d['age'] + ' ans';
+  //-- Generate tooltip text
+  var tooltip_text;
+  
+  if (GS_lang == 'zh-tw') {
+    if (wrap.period == 0)
+      tooltip_text = '全部案例中有';
+    else if (wrap.tag.includes('latest'))
+      tooltip_text = col_label + '天前之案例中有';
     else
-      tooltip_text = d[wrap.col_tag_list[wrap.period]] + ' confirmed cases<br>of ' + col_label + ' days ago<br>are ' + d['age'] + ' years old';
+      tooltip_text = wrap.period + '月案例中有';
+    
+    tooltip_text += d[wrap.col_tag_list[wrap.period]];
+    
+    if (d['age'] == '70+')
+      tooltip_text += '位<br>年齡在70歲以上';
+    else
+      tooltip_text += '位<br>年齡在' + d['age'] + '歲之間';
   }
-  else {
-    if (GS_lang == 'zh-tw'){
-      if (d['age'] == '70+')
-        tooltip_text = '全部案例中有' + d[wrap.col_tag_list[wrap.period]] + '位<br>年齡在70歲以上';
-      else
-        tooltip_text = '全部案例中有' + d[wrap.col_tag_list[wrap.period]] + '位<br>年齡在' + d['age'] + '歲之間';
-    }
-    else if (GS_lang == 'fr')
-      tooltip_text = d[wrap.col_tag_list[wrap.period]] + " de l'ensemble des cas<br>sont âgés de " + d['age'] + ' ans';
+  
+  else if (GS_lang == 'fr') {
+    if (wrap.period == 0)
+      tooltip_text = d[wrap.col_tag_list[wrap.period]] + " de l'ensemble des cas";
+    else if (wrap.tag.includes('latest'))
+      tooltip_text = d[wrap.col_tag_list[wrap.period]] + " cas confirmés<br>de " + col_label + ' jours plus tôt';
     else
-      tooltip_text = d[wrap.col_tag_list[wrap.period]] + ' of all confirmed cases<br>are ' + d['age'] + ' years old';
+      tooltip_text = d[wrap.col_tag_list[wrap.period]] + " cas " + col_label;
+    
+    tooltip_text += '<br>sont âgés de ' + d['age'] + ' ans';
+  }
+  
+  else {
+    if (wrap.period == 0)
+      tooltip_text = d[wrap.col_tag_list[wrap.period]] + ' of all confirmed cases';
+    else if (wrap.tag.includes('latest'))
+      tooltip_text = d[wrap.col_tag_list[wrap.period]] + ' confirmed cases<br>of ' + col_label + ' days ago';
+    else
+      tooltip_text = d[wrap.col_tag_list[wrap.period]] + ' cases from ' + col_label;
+    
+    tooltip_text += '<br>are ' + d['age'] + ' years old';
   }
   
   //-- Generate tooltip
@@ -153,7 +171,7 @@ function CBA_Initialize(wrap) {
   //-- No xtick or xticklabel 
   var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function (d, i) {return ""});
+    .tickFormat("");
   
   //-- Add x-axis & adjust position
   wrap.svg.append('g')
@@ -227,7 +245,7 @@ function CBA_Initialize(wrap) {
   GS_MakeTooltip(wrap);
     
   //-- Define color
-  var color_list = GS_wrap.c_list.concat(['#999999']); 
+  var color_list = ['#000000'].concat(GS_wrap.c_list); 
   var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
@@ -241,9 +259,9 @@ function CBA_Initialize(wrap) {
   //-- Update bar with dummy details
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', function (d) {return color(col_tag_list[wrap.period]);})
+    .attr('fill', color(col_tag_list[wrap.period]))
     .attr('x', function (d) {return x(d['age']);})
-    .attr('y', function (d) {return y(0);})
+    .attr('y', y(0))
     .attr('width', x.bandwidth())
     .attr('height', 0)
     .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
@@ -306,55 +324,49 @@ function CBA_Update(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(GS_wrap.trans_duration)
-    .attr('fill', function (d) {return wrap.color(col_tag_list[wrap.period]);})
+    .attr('fill', wrap.color(col_tag_list[wrap.period]))
     .attr('y', function (d) {return y(d[col_tag_list[wrap.period]]);})
     .attr('height', function (d) {return y(0)-y(d[col_tag_list[wrap.period]]);});
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   
-  //-- Calculate legend value
-  var legend_value = wrap.legend_value.slice(0);
-  var sum = wrap.legend_value.slice(1).reduce((a, b) => a + b, 0);
-  legend_value.push(wrap.n_tot-sum);
-  legend_value.push(wrap.n_tot);
-  
   //-- Define legend label
-  var legend_label = [];
+  var legend_label;
   var i, label_list;
   if (wrap.tag.includes('latest')) {
     if (GS_lang == 'zh-tw')
-      label_list = ['', '到', '天前之確診個案', '合計'];
+      label_list = ['合計', '', '到', '天前之確診個案'];
     else if (GS_lang == 'fr')
-      label_list = ['Entre ', ' & ', ' jours plus tôt', 'Total'];
+      label_list = ['Total', '', ' & ', ' jours plus tôt'];
     else 
-      label_list = ['Between ', ' & ', ' days ago', 'Total'];
+      label_list = ['Total', 'Between ', ' & ', ' days ago'];
     
-    for (i=0; i<wrap.nb_col-1; i++)
-      legend_label.push(label_list[0] + (7*(wrap.nb_col-2-i)) + label_list[1] + (7*(wrap.nb_col-1-i)-1) + label_list[2]);
-    legend_label.push(label_list[3]);
+    legend_label = [label_list[0]];
+    for (i=1; i<wrap.nb_col; i++)
+      legend_label.push(label_list[1] + (7*(i-1)) + label_list[2] + (7*i-1) + label_list[3]);
   }
   else {
     if (GS_lang == 'zh-tw')
-      legend_label = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月', '合計'];
+      legend_label = ['合計', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
     else if (GS_lang == 'fr')
-      legend_label = ['Janvier', 'Févr', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre', 'Total'];
+      legend_label = ['Total', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
     else
-      legend_label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Total'];
+      legend_label = ['Total', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   }
   
   //-- Update legend color, label, & value
   var legend_color_list = [];
   var legend_label_2 = [];
   var legend_value_2 = [];
-  if (wrap.period < 12) {
+  if (wrap.period > 0) {
     legend_color_list.push(wrap.color_list[wrap.period]);
     legend_label_2.push(legend_label[wrap.period]);
-    legend_value_2.push(legend_value[wrap.period]);
+    legend_value_2.push(wrap.legend_value[1]);
   }
-  legend_color_list.push(wrap.color_list[12]);
-  legend_label_2.push(legend_label[12]);
-  legend_value_2.push(legend_value[12]);
+  legend_color_list.push(wrap.color_list[0]);
+  legend_label_2.push(legend_label[0]);
+  legend_value_2.push(wrap.legend_value[0]);
   
   //-- Update legend value
   wrap.svg.selectAll(".legend.value")
@@ -365,9 +377,9 @@ function CBA_Update(wrap) {
     .append("text")
       .attr("class", "legend value")
       .attr("x", legend_pos.x)
-      .attr("y", function (d,i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function (d, i) {return legend_color_list[i]})
-      .text(function (d) {return d})
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style("fill", function (d, i) {return legend_color_list[i];})
+      .text(function (d) {return d;})
       .attr("text-anchor", "end")
     
   //-- Update legend label
@@ -379,9 +391,9 @@ function CBA_Update(wrap) {
     .append("text")
       .attr("class", "legend label")
       .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function (d, i) {return legend_color_list[i]})
-      .text(function (d) {return d})
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style("fill", function (d, i) {return legend_color_list[i];})
+      .text(function (d) {return d;})
       .attr("text-anchor", "start")
 }
 
@@ -423,12 +435,12 @@ function CBA_ButtonListener(wrap) {
   d3.select(wrap.id + '_save').on('click', function () {
     var tag1;
     
-    if (wrap.period == 12)
+    if (wrap.period == 0)
       tag1 = 'total';
-    else if (wrap.id.includes('latest'))
-      tag1 = 'w' + (+wrap.period-12);
+    else if (wrap.tag.includes('latest'))
+      tag1 = 'w' + (-wrap.period);
     else
-      tag1 = 'm' + (+wrap.period+1);
+      tag1 = 'm' + wrap.period;
     
     name = wrap.tag + '_' + tag1 + '_' + GS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);

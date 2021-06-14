@@ -140,7 +140,7 @@ function ASC_Initialize(wrap) {
   //-- Define a 2nd x-axis for the frameline at bottom
   var x_axis_2 = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function (d, i) {return ""});
+    .tickFormat("");
   
   //-- Add 2nd x-axis
   wrap.svg.append("g")
@@ -199,9 +199,9 @@ function ASC_Initialize(wrap) {
     .append("text")
       .attr("class", "legend value")
       .attr("x", -wrap.margin.left + legend_pos.x)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function (d, i) {return legend_color[i]})
-      .text(function (d) {return d})
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style("fill", function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;})
       .attr("text-anchor", "end")
   
   //-- Add square
@@ -274,9 +274,9 @@ function ASC_Update(wrap) {
     .append("text")
       .attr("class", "legend label")
       .attr("x", -wrap.margin.left + wrap.legend_pos.x + wrap.legend_pos.dx)
-      .attr("y", function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy})
-      .style("fill", function (d, i) {return wrap.legend_color[i]})
-      .text(function (d) {return d})
+      .attr("y", function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy;})
+      .style("fill", function (d, i) {return wrap.legend_color[i];})
+      .text(function (d) {return d;})
       .attr("text-anchor", "start")
 }
 

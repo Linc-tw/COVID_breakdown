@@ -194,7 +194,7 @@ function BS_Initialize(wrap) {
   //-- No xtick or xticklabel 
   var x_axis = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat(function (d, i) {return ""});
+    .tickFormat("");
   
   //-- Add x-axis & adjust position
   wrap.svg.append('g')
@@ -213,7 +213,7 @@ function BS_Initialize(wrap) {
     .tickSize(10)
     .tickSizeOuter(0)
     .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return "";});
+    .tickFormat("");
   
   //-- Add 2nd x-axis & adjust position
   wrap.svg.append("g")
@@ -274,7 +274,7 @@ function BS_Initialize(wrap) {
     .attr('class', 'content bar')
     .attr('fill', function (d) {return color(d.col);})
     .attr('x', function (d) {return x(d.x);})
-    .attr('y', function (d) {return y(0);})
+    .attr('y', y(0))
     .attr('width', x.bandwidth())
     .attr('height', 0)
     .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
@@ -288,14 +288,14 @@ function BS_Initialize(wrap) {
 }
 
 function BS_Update(wrap) {
-  //-- Define xtick & update xticklabel later
+  //-- Define new xticklabel
   var x_axis_2 = d3.axisBottom(wrap.x_2)
     .tickSize(10)
     .tickSizeOuter(0)
     .tickValues(wrap.xtick)
     .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
   
-  //-- Add 2nd x-axis & adjust position
+  //-- Update 2nd x-axis
   wrap.svg.select('.xaxis')
     .transition()
     .duration(GS_wrap.trans_duration)
@@ -392,9 +392,9 @@ function BS_Update(wrap) {
     .append("text")
       .attr("class", "legend value")
       .attr("x", legend_pos.x)
-      .attr("y", function (d,i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function (d, i) {return legend_color_list[i]})
-      .text(function (d) {return d})
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style("fill", function (d, i) {return legend_color_list[i];})
+      .text(function (d) {return d;})
       .attr("text-anchor", "end")
   
   //-- Update legend label
@@ -407,9 +407,9 @@ function BS_Update(wrap) {
       .attr("id", wrap.tag+"_legend_label")
       .attr("class", "legend label")
       .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy})
-      .style("fill", function (d, i) {return legend_color_list[i]})
-      .text(function (d) {return d})
+      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style("fill", function (d, i) {return legend_color_list[i];})
+      .text(function (d) {return d;})
       .attr("text-anchor", "start")
   
   //-- Define legend title
@@ -433,7 +433,7 @@ function BS_Update(wrap) {
       .attr("x", legend_pos.x+legend_pos.dx)
       .attr("y", legend_pos.y+(legend_value.length+0.25)*legend_pos.dy)
       .style("fill", '#000000')
-      .text(function (d) {return d})
+      .text(function (d) {return d;})
       .attr("text-anchor", "start")
 }
 

@@ -666,7 +666,7 @@ function ET_Initialize(wrap) {
     .append("text")
       .attr("class", "content text")
       .attr("x", x0+nb_squares*wrap.cell_size+dx1+dx2)
-      .attr("y", function (d, j) {return y0-28+j*dy2})
+      .attr("y", function (d, j) {return y0-28+j*dy2;})
       .attr("fill", 'black')
       .attr("id", function (d, j) {return wrap.tag+'_text';})
       .text(function (d) {return d;})
@@ -876,7 +876,7 @@ function ET_Update(wrap) {
       .attr("x", -20)
       .attr("y", function (d, i) {return (i+0.5)*wrap.cell_size;})
       .style("fill", 'black')
-      .text(function (d) {return d})
+      .text(function (d) {return d;})
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "middle")
 }
