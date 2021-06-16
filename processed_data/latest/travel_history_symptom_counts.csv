@@ -1,8 +1,8 @@
 label,count,label_zh,label_fr
-N_total,12243,合計,Total
-N_imported,276,境外移入總數,Importés
-N_data,224,有資料案例數,Données complètes
-Philippines,82,菲律賓,Philippines
+N_total,12411,合計,Total
+N_imported,279,境外移入總數,Importés
+N_data,227,有資料案例數,Données complètes
+Philippines,85,菲律賓,Philippines
 Indonesia,51,印尼,Indonésie
 India,28,印度,Inde
 USA,9,美國,États-Unis
@@ -12,9 +12,9 @@ Paraguay,4,巴拉圭,Paraguay
 Netherlands,4,荷蘭,Pays-Bas
 UAE,3,阿拉伯聯合大公國,EAU
 China,3,中國,Chine
-asymptomatic,161,無症狀,asymptomatique
-cough,31,咳嗽,toux
-fever,28,發燒,fièvre
+asymptomatic,163,無症狀,asymptomatique
+cough,32,咳嗽,toux
+fever,29,發燒,fièvre
 sneezing,18,鼻腔症狀,éternuement
 dysnosmia,16,嗅覺異常,dysosmie
 dysgeusia,14,味覺異常,dysgueusie
