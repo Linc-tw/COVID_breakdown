@@ -1,9 +1,9 @@
 label,count,label_zh,label_fr
 N_total,12785,合計,Total
-N_data,1141,有資料案例數,Données complètes
+N_data,1142,有資料案例數,Données complètes
 90s,41,90-99歲,90aine
 80s,111,80-89歲,80aine
-70s,160,70-79歲,70aine
+70s,161,70-79歲,70aine
 60s,195,60-69歲,60aine
 50s,125,50-59歲,50aine
 40s,117,40-49歲,40aine
@@ -15,7 +15,7 @@ N_data,1141,有資料案例數,Données complètes
 fever,417,發燒,fièvre
 cough,366,咳嗽,toux
 asymptomatic,314,無症狀,asymptomatique
-dyspnea,197,呼吸困難,dyspnée
+dyspnea,198,呼吸困難,dyspnée
 throatache,167,喉嚨症狀,mal de gorge
 sneezing,100,鼻腔症狀,éternuement
 fatigue,99,倦怠,fatigue
