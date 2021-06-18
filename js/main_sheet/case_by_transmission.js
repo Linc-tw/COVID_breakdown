@@ -445,7 +445,7 @@ function CBT_Update(wrap) {
       .attr("y", function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
       .style("fill", function (d, i) {return legend_color_list[i];})
       .text(function (d) {return d;})
-      .attr("text-anchor", "end")
+      .attr("text-anchor", "end");
   
   //-- Update legend label
   wrap.svg.selectAll(".legend.label")
@@ -459,7 +459,7 @@ function CBT_Update(wrap) {
       .attr("y", function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
       .style("fill", function (d, i) {return legend_color_list[i];})
       .text(function (d) {return d;})
-      .attr("text-anchor", "start")
+      .attr("text-anchor", "start");
 }
 
 //-- Plot

@@ -147,6 +147,34 @@ function text_translation() {
     TT_Add_Str("daily_case_per_county_button_kinmen", "金門");
     TT_Add_Str("daily_case_per_county_button_matsu", "馬祖");
     
+    //-- Case by county map
+    TT_Add_Str("incidence_map_title", "縣市確診地圖");
+    TT_Add_Str("incidence_map_button_total", "合計");
+    TT_Add_Str("incidence_map_button_w-1", "0-6天前");
+    TT_Add_Str("incidence_map_button_w-2", "7-13天前");
+    TT_Add_Str("incidence_map_button_w-3", "14-20天前");
+    TT_Add_Str("incidence_map_button_w-4", "21-27天前");
+    TT_Add_Str("incidence_map_button_w-5", "28-34天前");
+    TT_Add_Str("incidence_map_button_w-6", "35-41天前");
+    TT_Add_Str("incidence_map_button_w-7", "42-48天前");
+    TT_Add_Str("incidence_map_button_w-8", "49-55天前");
+    TT_Add_Str("incidence_map_button_w-9", "56-62天前");
+    TT_Add_Str("incidence_map_button_w-10", "63-69天前");
+    TT_Add_Str("incidence_map_button_w-11", "70-76天前");
+    TT_Add_Str("incidence_map_button_w-12", "77-83天前");
+    TT_Add_Str("incidence_map_button_m1", "1月");
+    TT_Add_Str("incidence_map_button_m2", "2月");
+    TT_Add_Str("incidence_map_button_m3", "3月");
+    TT_Add_Str("incidence_map_button_m4", "4月");
+    TT_Add_Str("incidence_map_button_m5", "5月");
+    TT_Add_Str("incidence_map_button_m6", "6月");
+    TT_Add_Str("incidence_map_button_m7", "7月");
+    TT_Add_Str("incidence_map_button_m8", "8月");
+    TT_Add_Str("incidence_map_button_m9", "9月");
+    TT_Add_Str("incidence_map_button_m10", "10月");
+    TT_Add_Str("incidence_map_button_m11", "11月");
+    TT_Add_Str("incidence_map_button_m12", "12月");
+    
     //-- Case by age
     TT_Add_Str("case_by_age_title", "確診個案年齡分布");
     TT_Add_Str("case_by_age_button_total", "合計");
@@ -327,6 +355,34 @@ function text_translation() {
     TT_Add_Str("daily_case_per_county_button_kinmen", "Kinmen");
     TT_Add_Str("daily_case_per_county_button_matsu", "Matsu");
     
+    //-- Case by county map
+    TT_Add_Str("incidence_map_title", "Carte d'incidence");
+    TT_Add_Str("incidence_map_button_total", "Total");
+    TT_Add_Str("incidence_map_button_w-1", "0-6 jours plus tôt");
+    TT_Add_Str("incidence_map_button_w-2", "7-13 jours plus tôt");
+    TT_Add_Str("incidence_map_button_w-3", "14-20 jours plus tôt");
+    TT_Add_Str("incidence_map_button_w-4", "21-27 jours plus tôt");
+    TT_Add_Str("incidence_map_button_w-5", "28-34 jours plus tôt");
+    TT_Add_Str("incidence_map_button_w-6", "35-41 jours plus tôt");
+    TT_Add_Str("incidence_map_button_w-7", "42-48 jours plus tôt");
+    TT_Add_Str("incidence_map_button_w-8", "49-55 jours plus tôt");
+    TT_Add_Str("incidence_map_button_w-9", "56-62 jours plus tôt");
+    TT_Add_Str("incidence_map_button_w-10", "63-69 jours plus tôt");
+    TT_Add_Str("incidence_map_button_w-11", "70-76 jours plus tôt");
+    TT_Add_Str("incidence_map_button_w-12", "77-83 jours plus tôt");
+    TT_Add_Str("incidence_map_button_m1", "Janvier");
+    TT_Add_Str("incidence_map_button_m2", "Février");
+    TT_Add_Str("incidence_map_button_m3", "Mars");
+    TT_Add_Str("incidence_map_button_m4", "Avril");
+    TT_Add_Str("incidence_map_button_m5", "Mai");
+    TT_Add_Str("incidence_map_button_m6", "Juin");
+    TT_Add_Str("incidence_map_button_m7", "Juillet");
+    TT_Add_Str("incidence_map_button_m8", "Août");
+    TT_Add_Str("incidence_map_button_m9", "Septembre");
+    TT_Add_Str("incidence_map_button_m10", "Octobre");
+    TT_Add_Str("incidence_map_button_m11", "Novembre");
+    TT_Add_Str("incidence_map_button_m12", "Décembre");
+    
     //-- Case by age
     TT_Add_Str("case_by_age_title", "Cas confirmés par âge");
     TT_Add_Str("case_by_age_button_total", "Total");
@@ -505,6 +561,34 @@ function text_translation() {
     TT_Add_Str("daily_case_per_county_button_penghu", "Penghu");
     TT_Add_Str("daily_case_per_county_button_kinmen", "Kinmen");
     TT_Add_Str("daily_case_per_county_button_matsu", "Matsu");
+    
+    //-- Case by county map
+    TT_Add_Str("incidence_map_title", "Incidence Map");
+    TT_Add_Str("incidence_map_button_total", "Total");
+    TT_Add_Str("incidence_map_button_w-1", "0-6 days ago");
+    TT_Add_Str("incidence_map_button_w-2", "7-13 days ago");
+    TT_Add_Str("incidence_map_button_w-3", "14-20 days ago");
+    TT_Add_Str("incidence_map_button_w-4", "21-27 days ago");
+    TT_Add_Str("incidence_map_button_w-5", "28-34 days ago");
+    TT_Add_Str("incidence_map_button_w-6", "35-41 days ago");
+    TT_Add_Str("incidence_map_button_w-7", "42-48 days ago");
+    TT_Add_Str("incidence_map_button_w-8", "49-55 days ago");
+    TT_Add_Str("incidence_map_button_w-9", "56-62 days ago");
+    TT_Add_Str("incidence_map_button_w-10", "63-69 days ago");
+    TT_Add_Str("incidence_map_button_w-11", "70-76 days ago");
+    TT_Add_Str("incidence_map_button_w-12", "77-83 days ago");
+    TT_Add_Str("incidence_map_button_m1", "January");
+    TT_Add_Str("incidence_map_button_m2", "February");
+    TT_Add_Str("incidence_map_button_m3", "March");
+    TT_Add_Str("incidence_map_button_m4", "April");
+    TT_Add_Str("incidence_map_button_m5", "May");
+    TT_Add_Str("incidence_map_button_m6", "June");
+    TT_Add_Str("incidence_map_button_m7", "July");
+    TT_Add_Str("incidence_map_button_m8", "August");
+    TT_Add_Str("incidence_map_button_m9", "September");
+    TT_Add_Str("incidence_map_button_m10", "October");
+    TT_Add_Str("incidence_map_button_m11", "November");
+    TT_Add_Str("incidence_map_button_m12", "December");
     
     //-- Case by age
     TT_Add_Str("case_by_age_title", "Case by age");

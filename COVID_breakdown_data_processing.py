@@ -182,6 +182,126 @@ AGE_DICT = {
   '100s': {'zh-tw': '>100歲', 'fr': '100aine'}
 }
 
+COUNTY_DICT = {
+  ## Metropole
+  '63000': dict( ## Taipei
+    tag = 'Taipei', 
+    label = ['Taipei', 'Taipei', '台北'], 
+    population = 2635286,
+  ),
+  '64000': dict( ## Kaohsiung
+    tag = 'Kaohsiung', 
+    label = ['Kaohsiung', 'Kaohsiung', '高雄'],
+    population = 2773984,
+  ),
+  '65000': dict( ## New_Taipei
+    tag = 'New_Taipei', 
+    label = ['New Taipei', 'Nouveau Taipei', '新北'],
+    population = 4023620,
+  ),
+  '66000': dict( ## Taichung
+    tag = 'Taichung',
+    label = ['Taichung', 'Taichung', '台中'],
+    population = 2816667,
+  ),
+  '67000': dict( ## Tainan
+    tag = 'Tainan', 
+    label = ['Tainan', 'Tainan', '台南'],
+    population = 1879115,
+  ),
+  '68000': dict( ## Taoyuan
+    tag = 'Taoyuan',
+    label = ['Taoyuan', 'Taoyuan', '桃園'],
+    population = 2254363,
+  ),
+  
+  ## County
+  '10002': dict( ## Yilan
+    tag = 'Yilan',
+    label = ['Yilan', 'Yilan', '宜蘭'],
+    population = 453951,
+  ),
+  '10004': dict( ## Hsinchu
+    tag = 'Hsinchu',
+    label = ['Hsinchu County', 'Comté de Hsinchu', '竹縣'],
+    population = 565272,
+  ),
+  '10005': dict( ## Miaoli
+    tag = 'Miaoli',
+    label = ['Miaoli', 'Miaoli', '苗栗'],
+    population = 544762,
+  ),
+  '10007': dict( ## Changhua
+    tag = 'Changhua',
+    label = ['Changhua', 'Changhua', '彰化'],
+    population = 1271015,
+  ),
+  '10008': dict( ## Nantou
+    tag = 'Nantou',
+    label = ['Nantou', 'Nantou', '南投'],
+    population = 493403,
+  ),
+  '10009': dict( ## Yunlin
+    tag = 'Yunlin',
+    label = ['Yunlin', 'Yunlin', '雲林'],
+    population = 680050,
+  ),
+  '10010': dict( ## Chiayi
+    tag = 'Chiayi',
+    label = ['Chiayi County', 'Comté de Chiayi', '嘉縣'],
+    population = 502007,
+  ),
+  '10013': dict( ## Pingtung
+    tag = 'Pingtung',
+    label = ['Pingtung', 'Pingtung', '屏東'],
+    population = 817193,
+  ),
+  '10014': dict( ## Taitung
+    tag = 'Taitung',
+    label = ['Taitung', 'Taitung', '台東'],
+    population = 216308,
+  ),
+  '10015': dict( ## Hualien
+    tag = 'Hualien',
+    label = ['Hualien', 'Hualien', '花蓮'],
+    population = 325706,
+  ),
+  '10016': dict( ## Penghu
+    tag = 'Penghu',
+    label = ['Penghu', 'Penghu', '澎湖'],
+    population = 105117,
+  ),
+  
+  ## City
+  '10017': dict( ## Keelung
+    tag = 'Keelung',
+    label = ['Keelung', 'Keelung', '基隆'],
+    population = 371878,
+  ),
+  '10018': dict( ## Hsinchu_C
+    tag = 'Hsinchu_C',
+    label = ['Hsinchu City', 'Ville de Hsinchu', '竹市'],
+    population = 448207,
+  ),
+  '10020': dict( ## Chiayi_C
+    tag = 'Chiayi_C',
+    label = ['Chiayi City', 'Ville de Chiayi', '嘉市'],
+    population = 270254,
+  ),
+  
+  ## 09
+  '09007': dict( ## Matsu
+    tag = 'Matsu',
+    label = ['Matsu', 'Matsu', '馬祖'],
+    population = 12716,
+  ),
+  '09020': dict( ## Kinmen
+    tag = 'Kinmen',
+    label = ['Kinmen', 'Kinmen', '金門'],
+    population = 127723,
+  ), 
+}
+
 ################################################################################
 ## Functions - utilities
 
@@ -705,11 +825,11 @@ class MainSheet(Template):
       
       elif onset_date in [
         '1月', '2/18-25', '3月', '4/1-6/3', '4/6-5/15', '4/25-5/22', '4/26-5/26', '4/28-6/2', '4/29-5/27', '4/29-5/30', '4/30-5/18', 
-        '5/1-19', '5/2-13', '5/2-22', '5/2-6/1', '5/5-16', '5/5-17', '5/6-22', '5/6-27', '5/7-20', '5/7-24', '5/7-25', '5/7-28', '5/8-20', '5/8-25', 
-        '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', '5/13-31',
+        '5/1-19', '5/2-13', '5/2-22', '5/2-6/1', '5/5-16', '5/5-17', '5/6-22', '5/6-27', '5/6-6/13', '5/7-20', '5/7-24', '5/7-25', '5/7-28', 
+        '5/8-20', '5/8-25', '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', '5/13-31',
         '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/19-6/10', 
         '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
-        '6/1-2', '6/1-14', '6/1-15', 
+        '6/1-2', '6/1-14', '6/1-15', '6/3-16', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
@@ -763,7 +883,7 @@ class MainSheet(Template):
         channel_list.append('quarantine')
         
       elif channel in [
-        '居家隔離', '住院隔離', '接觸患者', '同院患者', '框列採檢', '匡列篩檢', 
+        '居家隔離', '住院隔離', '接觸患者', '同院患者', '框列採檢', '匡列篩檢', '匡列居隔', 
         '接觸者回溯', '接觸者檢查', '接觸者採檢', '接觸者框列', '接觸者匡列', '匡列接觸者', 
         '確診者回溯', '確診者匡列', '居家隔離期滿後採檢', '居家隔離期滿後確診'
       ]:
@@ -774,8 +894,8 @@ class MainSheet(Template):
         
       elif channel in [
         '入院', '快篩站', '自行就醫', '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', '定期篩檢', '定期監測', 
-        '入院篩檢', '入院採檢', '院內採檢', '社區快篩', '社區專案', '社區篩檢', '專案篩檢', 
-        '萬華專案', '擴大採檢', '擴大篩檢', '預防性快篩', '預防性採檢', '鄰家擴大採檢', '入院前預防性採檢'
+        '入院篩檢', '入院採檢', '院內採檢', '社區快篩', '社區專案', '社區篩檢', '專案篩檢', '常規篩檢', 
+        '萬華專案', '擴大採檢', '擴大篩檢', '預防性快篩', '預防性採檢', '鄰家擴大採檢', '入院前預防性採檢', '解隔離後自行就醫'
       ]:
         channel_list.append('hospital')
         
@@ -802,7 +922,7 @@ class MainSheet(Template):
       ],
       'earache': [' 耳朵痛'],
       'dyspnea': [
-        '講話、呼吸吃力', '活動後呼吸喘', '重度呼吸窘迫', '些微呼吸急促', '呼吸喘 困難', '呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '走路會喘', 
+        '講話、呼吸吃力', '活動後呼吸喘', '重度呼吸窘迫', '些微呼吸急促', '呼吸喘 困難', '呼吸窘迫', '呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '走路會喘', 
         '走路喘', '呼吸喘', '輕微喘', '微喘', '氣喘', '喘嗚', '喘'
       ],
       'bronchitis': ['支氣管炎'],
@@ -818,7 +938,7 @@ class MainSheet(Template):
       'headache': ['頭暈目眩', '輕度頭痛', '頭骨痛', '偏頭痛', '頭痛', '頭暈', '頭脹', '暈眩', '頭重'],
       'eyes sore': ['結膜充血', '後眼窩痛', '眼睛癢', '眼睛痛', '眼壓高'], 
       'chest pain+backache': ['胸背痛'], 
-      'chest pain': ['呼吸時胸痛', '心臟不舒服', '胸痛', '胸悶'],
+      'chest pain': ['呼吸時胸痛', '心臟不舒服', '胸部不適', '胸痛', '胸悶'],
       'stomachache': ['腸胃不舒服', '腸胃道不適', '腸胃不適', '胃部不適', '腹部不適', '肚子不適', '腹悶痛', '胃痛', '腹痛', '胃脹', '腹脹'],
       'backache': ['腰酸背痛', '背痛'], 
       'toothache': ['牙痛'], 
@@ -940,7 +1060,7 @@ class MainSheet(Template):
         '養護中心', '照護中心', '護理之家', '朝陽夜唱', '金沙酒店', '泰安附幼', '成功市場', '洗腎診所', '豐原家庭', '立揚鞋業', '仁愛市場', 
         '銀河百家樂', '維納斯會館', '羅東遊藝場', '串門子餐廳', '彰化麻將團', 
         '中國醫K歌團', '小姑娘小吃店', '快樂城小吃店', '桃園觀音工地', '台北農產公司', 
-        '東方紅時尚會館', '梧棲區藥局家族', '加強型防疫旅館', 
+        '東方紅時尚會館', '梧棲區藥局家族', '加強型防疫旅館', '鳳山早餐店家族', 
         '南澳雜貨店傳播鏈', '復興區公所員工家族案關係圖', 
       ]:
         link_list.append('linked')
@@ -2469,6 +2589,13 @@ class CountySheet(Template):
       'Yilan', 'Hualien', 'Taitung', 
       'Penghu', 'Kinmen', 'Matsu', 
     ]
+    self.county_code_list = [
+      '10017', '63000', '65000', '68000', '10004', '10018', '10005', 
+      '66000', '10007', '10008', '10009', 
+      '10010' ,'10020', '67000', '64000', '10013', 
+      '10002', '10015', '10014', 
+      '10016', '09020', '09007', 
+    ]
     self.age_key_list = [
       '0-4', '5-9', '10-14', '15-19', '20-24', '25-29', '30-34', '35-39', 
       '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70+',
@@ -2654,7 +2781,7 @@ class CountySheet(Template):
       if '2021' == selection and (ord_rep < ord_end_2020 or ord_rep >= ord_end_2021):
         continue
       
-      case_hist_list[-1][county] += nb_cases
+      case_hist_list[0][county] += nb_cases
         
       if 'latest' == selection:
         lookback_week = (ord_rep - ord_today) // 7 ## ord_rep-ord_today in [-90, -1]; this will be in [-13, -1]
@@ -2721,12 +2848,25 @@ class CountySheet(Template):
     else:
       label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
     
-    data = {'county': county_list}
-    data.update({label: case_hist.values() for label, case_hist in zip(label_list, case_hist_list)})
-    data = pd.DataFrame(data)
-        
+    data_1 = {'county': county_list}
+    data_1.update({label: case_hist.values() for label, case_hist in zip(label_list, case_hist_list)})
+    data_1 = pd.DataFrame(data_1)
+    
+    inv_dict = {dict_['tag']: code for code, dict_ in COUNTY_DICT.items()}
+    code_list = [inv_dict[county] for county in county_list]
+    population = [COUNTY_DICT[code]['population'] for code in code_list]
+    label_list_en = [COUNTY_DICT[code]['label'][0] for code in code_list]
+    label_list_fr = [COUNTY_DICT[code]['label'][1] for code in code_list]
+    label_list_zh = [COUNTY_DICT[code]['label'][2] for code in code_list]
+    
+    data_2 = {'county': county_list, 'code': code_list, 'population': population, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+    data_2 = pd.DataFrame(data_2)
+    
     name = '%sprocessed_data/%s/local_case_by_county.csv' % (DATA_PATH, selection)
-    saveCsv(name, data)
+    saveCsv(name, data_1)
+    
+    name = '%sprocessed_data/%s/local_case_by_county_population.csv' % (DATA_PATH, selection)
+    saveCsv(name, data_2)
     return
 
   def saveCsv_caseByAge(self, selection='latest'):
@@ -3046,7 +3186,7 @@ def makeVariousRates(main_sheet, test_sheet, border_sheet):
   nb_tests_arr = signal.convolve(nb_tests_arr, kernel[::-1], mode='same')
   nb_arrival_arr = signal.convolve(nb_arrival_arr, kernel[::-1], mode='same')
   
-  population_twn = 23563356
+  population_twn = sum(v['population'] for v in COUNTY_DICT.values())
   
   with warnings.catch_warnings(): ## Avoid division by zero
     warnings.simplefilter("ignore")
