@@ -603,6 +603,9 @@ function ET_Click(wrap, d, i) {
 }
 
 function ET_Initialize(wrap) {
+  //-- Add tooltip
+  GS_MakeTooltip(wrap);
+  
   //-- Parameters for half year block
   var x0 = 35;
   var y0 = 45;
@@ -882,77 +885,81 @@ function ET_Update(wrap) {
 }
 
 //-- Plot
-function ET_Plot(wrap, error, data) {
-  if (error)
-    return console.warn(error);
+function ET_Plot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path_list[0])
+    .await(function (error, data) {
+      if (error)
+        return console.warn(error);
+      
+      ET_MakeCanvas(wrap);
+      ET_FormatData(wrap, data);
+      ET_Initialize(wrap);
+      ET_Update(wrap);
+    });
+}
+
+function ET_ButtonListener(wrap) {
+  //-- Start on Sunday or Monday
+  $(document).on("change", "input:radio[name='" + wrap.tag + "_start']", function (event) {
+    GS_PressRadioButton(wrap, 'start', wrap.week_start, this.value);
+    wrap.week_start = this.value;
+    ET_Update(wrap);
+  });
+
+  //-- Save
+  d3.select(wrap.id + '_save').on('click', function () {
+    var tag1, tag2;
+    
+    if (wrap.week_start == 1)
+      tag1 = 'start_on_Monday';
+    else
+      tag1 = 'start_on_Sunday';
+    
+    name = wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
+    saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
+  });
+
+  //-- Language
+  $(document).on("change", "input:radio[name='language']", function (event) {
+    GS_lang = this.value;
+    Cookies.set("lang", GS_lang);
+    
+    //-- Remove
+    d3.selectAll(wrap.id+' .plot').remove();
+    
+    //-- Replot
+    ET_Plot();
+  });
+}
+
+//-- Main
+function ET_Main(wrap) {
+  wrap.id = '#' + wrap.tag;
+
+  //-- Swap active to current value
+  wrap.week_start = document.querySelector("input[name='" + wrap.tag + "_start']:checked").value;
+  GS_PressRadioButton(wrap, 'start', 0, wrap.week_start); //-- 0 from .html
   
-  ET_MakeCanvas(wrap);
-  ET_FormatData(wrap, data);
-  ET_Initialize(wrap);
-  ET_Update(wrap);
+  //-- Plot
+  ET_Plot(wrap);
+  
+  //-- Setup button listeners
+  ET_ButtonListener(wrap);
 }
 
 //-- Global variable
-var ET_latest_wrap = {};
+var ET_wrap = {};
 
 //-- ID
-ET_latest_wrap.tag = 'event_timeline_latest';
-ET_latest_wrap.id = '#' + ET_latest_wrap.tag;
+ET_wrap.tag = 'event_timeline';
 
 //-- File path
-ET_latest_wrap.data_path_list = [
+ET_wrap.data_path_list = [
   "processed_data/event_timeline_zh-tw.csv"
 ];
 
-//-- Tooltip
-ET_latest_wrap.tooltip = d3.select(ET_latest_wrap.id)
-  .append("div")
-  .attr("class", "tooltip")
+//-- No parameters
 
-//-- Parameters
-
-//-- Variables
-ET_latest_wrap.week_start = document.querySelector("input[name='" + ET_latest_wrap.tag + "_start']:checked").value;
-
-//-- Plot
-function ET_Latest_Plot() {
-  d3.queue()
-    .defer(d3.csv, ET_latest_wrap.data_path_list[0])
-    .await(function (error, data) {ET_Plot(ET_latest_wrap, error, data);});
-}
-
-ET_Latest_Plot();
-
-//-- Buttons
-GS_PressRadioButton(ET_latest_wrap, 'start', 0, ET_latest_wrap.week_start); //-- 0 from .html
-
-$(document).on("change", "input:radio[name='" + ET_latest_wrap.tag + "_start']", function (event) {
-  GS_PressRadioButton(ET_latest_wrap, 'start', ET_latest_wrap.week_start, this.value);
-  ET_latest_wrap.week_start = this.value;
-  ET_Update(ET_latest_wrap);
-});
-
-//-- Save button
-d3.select(ET_latest_wrap.id + '_save').on('click', function () {
-  var tag1, tag2;
-  
-  if (ET_latest_wrap.week_start == 1)
-    tag1 = 'start_on_Monday';
-  else
-    tag1 = 'start_on_Sunday';
-  
-  name = ET_latest_wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
-  saveSvgAsPng(d3.select(ET_latest_wrap.id).select('svg').node(), name);
-});
-
-//-- Language button
-$(document).on("change", "input:radio[name='language']", function (event) {
-  GS_lang = this.value;
-  Cookies.set("lang", GS_lang);
-  
-  //-- Remove
-  d3.selectAll(ET_latest_wrap.id+' .plot').remove();
-  
-  //-- Replot
-  ET_Latest_Plot();
-});
+//-- Main
+ET_Main(ET_wrap);

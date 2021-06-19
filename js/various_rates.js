@@ -338,11 +338,11 @@ function VR_Update(wrap) {
   //-- Define legend label
   var legend_label;
   if (GS_lang == 'zh-tw')
-    legend_label = ["陽性率", "入境盛行率", "本土盛行率"];
+    legend_label = ["陽性率", "入境盛行率（逐月更新）", "本土盛行率"];
   else if (GS_lang == 'fr')
-    legend_label = ["Taux de positivité", "Taux d'incidence frontalier", "Taux d'incidence local"];
+    legend_label = ["Taux de positivité", "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local"];
   else
-    legend_label = ["Positive rate", "Arrival incidence rate", "Local incidence rate"];
+    legend_label = ["Positive rate", "Arrival incidence rate (updated monthly)", "Local incidence rate"];
   
   //-- Update legend label
   wrap.svg.selectAll(wrap.id+'_legend_label')

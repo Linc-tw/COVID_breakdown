@@ -21,7 +21,7 @@ SE_2021_wrap.xlabel_path = GS_wrap.xlabel_path_2021;
 SE_2021_wrap.r_list = GS_wrap.r_list_2021;
 SE_2021_wrap.y_max_factor = 1.2;
 SE_2021_wrap.y_path = '4'; //-- 4 ticks
-SE_2021_wrap.legend_pos_x = 80;
+SE_2021_wrap.legend_pos_x = 85;
 
 //-- Main
 SE_Main(SE_2021_wrap);

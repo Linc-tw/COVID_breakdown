@@ -180,7 +180,7 @@ function ASC_Initialize(wrap) {
   var legend_pos = {x: wrap.legend_pos_x, y: -0.8*wrap.margin.top, dx: 12, dy: 30};
   
   //-- Define legend color
-  var legend_color = [GS_wrap.c_list[0], '#999999', '#000000'];
+  var legend_color = [GS_wrap.c_list[0], GS_wrap.gray, '#000000'];
   
   //-- Define legend value
   var legend_value = [wrap.n_data, wrap.n_total-wrap.n_data, wrap.n_total];
@@ -283,7 +283,7 @@ function ASC_Update(wrap) {
 //-- Plot
 function ASC_Plot(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[wrap.do_count])
+    .defer(d3.csv, wrap.data_path_list[wrap.count])
     .defer(d3.csv, wrap.data_path_list[2])
     .await(function (error, data, data2) {
       if (error)
@@ -299,7 +299,7 @@ function ASC_Plot(wrap) {
 
 function ASC_Replot(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[wrap.do_count])
+    .defer(d3.csv, wrap.data_path_list[wrap.count])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
@@ -312,8 +312,8 @@ function ASC_Replot(wrap) {
 function ASC_ButtonListener(wrap) {
   //-- Correlation or count
   $(document).on("change", "input:radio[name='" + wrap.tag + "_count']", function (event) {
-    GS_PressRadioButton(wrap, 'count', wrap.do_count, this.value);
-    wrap.do_count = this.value;
+    GS_PressRadioButton(wrap, 'count', wrap.count, this.value);
+    wrap.count = this.value;
     ASC_Replot(wrap);
   });
 
@@ -321,7 +321,7 @@ function ASC_ButtonListener(wrap) {
   d3.select(wrap.id + '_save').on('click', function(){
     var tag1;
     
-    if (wrap.do_count == 1)
+    if (wrap.count == 1)
       tag1 = 'count';
     else
       tag1 = 'coefficient';
@@ -349,8 +349,8 @@ function ASC_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
   //-- Swap active to current value
-  wrap.do_count = document.querySelector("input[name='" + wrap.tag + "_count']:checked").value;
-  GS_PressRadioButton(wrap, 'count', 0, wrap.do_count); //-- 0 from .html
+  wrap.count = document.querySelector("input[name='" + wrap.tag + "_count']:checked").value;
+  GS_PressRadioButton(wrap, 'count', 0, wrap.count); //-- 0 from .html
 
   //-- Plot
   ASC_Plot(wrap);

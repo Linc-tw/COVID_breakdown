@@ -31,9 +31,9 @@ CBT_latest_wrap.y_path_1_1 = '4'; //-- 4 ticks
 CBT_latest_wrap.y_path_1_0 = '4';
 CBT_latest_wrap.y_path_0_1 = '4';
 CBT_latest_wrap.y_path_0_0 = '4';
-CBT_latest_wrap.legend_pos_x_0_i_ = {'zh-tw': 80, fr: 80, en: 80}; //800, 350, 380;
-CBT_latest_wrap.legend_pos_x_1_i_ = {'zh-tw': 80, fr: 80, en: 80};
-CBT_latest_wrap.legend_pos_x1_ = {'zh-tw': 220, fr: 280, en: 240};
+CBT_latest_wrap.legend_pos_x_0_i_ = {'zh-tw': 85, fr: 85, en: 85};
+CBT_latest_wrap.legend_pos_x_1_i_ = {'zh-tw': 85, fr: 85, en: 85};
+CBT_latest_wrap.legend_pos_x1_ = {'zh-tw': 230, fr: 290, en: 250};
 
 //-- Main
 CBT_Main(CBT_latest_wrap);

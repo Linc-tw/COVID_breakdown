@@ -38,7 +38,7 @@ function CBD_FormatData(wrap, data) {
   var i, j, x, y, height, h_list, block;
   
   //-- Convert data form
-  if (wrap.do_cumul == 1)
+  if (wrap.cumul == 1)
     GS_CumSum(data, col_tag_list);
   
   //-- Initialize h_sum
@@ -80,7 +80,7 @@ function CBD_FormatData(wrap, data) {
       y += height;
       
       //-- Update sum
-      if (wrap.do_cumul == 1)
+      if (wrap.cumul == 1)
         h_sum[j] = Math.max(height, h_sum[j]);
       else
         h_sum[j] += height;
@@ -98,8 +98,8 @@ function CBD_FormatData(wrap, data) {
   
   //-- Choose y_max & y_path
   var y_path;
-  if (wrap.do_cumul == 1) {
-    if (wrap.do_onset == 1) {
+  if (wrap.cumul == 1) {
+    if (wrap.onset == 1) {
       if (wrap.y_max_fix_1_1 > 0)
         y_max = wrap.y_max_fix_1_1;
       y_path = wrap.y_path_1_1;
@@ -111,7 +111,7 @@ function CBD_FormatData(wrap, data) {
     }
   }
   else {
-    if (wrap.do_onset == 1) {
+    if (wrap.onset == 1) {
       if (wrap.y_max_fix_0_1 > 0)
         y_max = wrap.y_max_fix_0_1;
       y_path = wrap.y_path_0_1;
@@ -383,7 +383,7 @@ function CBD_Update(wrap) {
     
   //-- Define legend position
   var legend_pos = {x: 70, y: 40, dx: 12, dy: 30, x1: 190};
-  if (wrap.do_cumul == 0) {
+  if (wrap.cumul == 0) {
     if (wrap.legend_pos_x_0_i_[GS_lang] != 0)
       legend_pos.x = wrap.legend_pos_x_0_i_[GS_lang];
   }
@@ -396,14 +396,14 @@ function CBD_Update(wrap) {
   
   //-- Define legend color
   var legend_color_list = wrap.color_list.slice();
-  if (wrap.do_onset == 1)
-    legend_color_list.push('#999999');
+  if (wrap.onset == 1)
+    legend_color_list.push(GS_wrap.gray);
   legend_color_list.push('#000000');
   
   //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
   var sum = legend_value.reduce((a, b) => a + b, 0);
-  if (wrap.do_onset == 1)
+  if (wrap.onset == 1)
     legend_value.push(wrap.n_tot-sum);
   legend_value.push(wrap.n_tot);
   
@@ -421,7 +421,7 @@ function CBD_Update(wrap) {
     legend_label = ["Airports", "Quarantine", "Isolation", "Monitoring", "Hospitals", 'Overseas', 'Not announced', 'Total'];
     legend_label_plus = 'No onset date';
   }
-  if (wrap.do_onset == 1)
+  if (wrap.onset == 1)
     legend_label.splice(wrap.nb_col, 0, legend_label_plus);
   
   //-- Remove from legend if value = 0
@@ -466,7 +466,7 @@ function CBD_Update(wrap) {
 //-- Plot
 function CBD_Plot(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[wrap.do_onset])
+    .defer(d3.csv, wrap.data_path_list[wrap.onset])
     .defer(d3.csv, wrap.data_path_list[2])
     .await(function (error, data, data2) {
       if (error)
@@ -482,7 +482,7 @@ function CBD_Plot(wrap) {
 
 function CBD_Replot(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[wrap.do_onset])
+    .defer(d3.csv, wrap.data_path_list[wrap.onset])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
@@ -495,15 +495,15 @@ function CBD_Replot(wrap) {
 function CBD_ButtonListener(wrap) {
   //-- Daily or cumulative
   $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
-    GS_PressRadioButton(wrap, 'cumul', wrap.do_cumul, this.value);
-    wrap.do_cumul = this.value;
+    GS_PressRadioButton(wrap, 'cumul', wrap.cumul, this.value);
+    wrap.cumul = this.value;
     CBD_Replot(wrap);
   });
 
   //-- Report date or onset date
   $(document).on("change", "input:radio[name='" + wrap.tag + "_onset']", function (event) {
-    GS_PressRadioButton(wrap, 'onset', wrap.do_onset, this.value);
-    wrap.do_onset = this.value
+    GS_PressRadioButton(wrap, 'onset', wrap.onset, this.value);
+    wrap.onset = this.value
     CBD_Replot(wrap);
   });
 
@@ -511,12 +511,12 @@ function CBD_ButtonListener(wrap) {
   d3.select(wrap.id + '_save').on('click', function() {
     var tag1, tag2;
     
-    if (wrap.do_cumul == 1)
+    if (wrap.cumul == 1)
       tag1 = 'cumulative';
     else
       tag1 = 'daily';
     
-    if (wrap.do_onset == 1)
+    if (wrap.onset == 1)
       tag2 = 'onset';
     else
       tag2 = 'report';
@@ -540,10 +540,10 @@ function CBD_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
     //-- Swap active to current value
-  wrap.do_cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
-  wrap.do_onset = document.querySelector("input[name='" + wrap.tag + "_onset']:checked").value;
-  GS_PressRadioButton(wrap, 'cumul', 0, wrap.do_cumul); //-- 0 from .html
-  GS_PressRadioButton(wrap, 'onset', 0, wrap.do_onset); //-- 0 from .html
+  wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
+  wrap.onset = document.querySelector("input[name='" + wrap.tag + "_onset']:checked").value;
+  GS_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
+  GS_PressRadioButton(wrap, 'onset', 0, wrap.onset); //-- 0 from .html
   
   //-- Plot
   CBD_Plot(wrap);

@@ -829,7 +829,7 @@ class MainSheet(Template):
         '5/8-20', '5/8-25', '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', '5/13-31',
         '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/19-6/10', 
         '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
-        '6/1-2', '6/1-14', '6/1-15', '6/3-16', 
+        '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
@@ -2839,7 +2839,7 @@ class CountySheet(Template):
     saveCsv(name, data)
     return
 
-  def saveCsv_localCaseByCounty(self, selection='latest'):
+  def saveCsv_incidenceMap(self, selection='latest'):
     case_hist_list = self.makeCountyHistList(selection=selection)
     county_list = list(case_hist_list[0].keys())
     
@@ -2862,10 +2862,10 @@ class CountySheet(Template):
     data_2 = {'county': county_list, 'code': code_list, 'population': population, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data_2 = pd.DataFrame(data_2)
     
-    name = '%sprocessed_data/%s/local_case_by_county.csv' % (DATA_PATH, selection)
+    name = '%sprocessed_data/%s/incidence_map.csv' % (DATA_PATH, selection)
     saveCsv(name, data_1)
     
-    name = '%sprocessed_data/%s/local_case_by_county_population.csv' % (DATA_PATH, selection)
+    name = '%sprocessed_data/%s/incidence_map_population.csv' % (DATA_PATH, selection)
     saveCsv(name, data_2)
     return
 
@@ -2890,9 +2890,9 @@ class CountySheet(Template):
     self.saveCsv_dailyCasePerCounty(selection='latest')
     self.saveCsv_dailyCasePerCounty(selection='2020')
     self.saveCsv_dailyCasePerCounty(selection='2021')
-    self.saveCsv_localCaseByCounty(selection='latest')
-    self.saveCsv_localCaseByCounty(selection='2020')
-    self.saveCsv_localCaseByCounty(selection='2021')
+    self.saveCsv_incidenceMap(selection='latest')
+    self.saveCsv_incidenceMap(selection='2020')
+    self.saveCsv_incidenceMap(selection='2021')
     self.saveCsv_caseByAge(selection='latest')
     self.saveCsv_caseByAge(selection='2020')
     self.saveCsv_caseByAge(selection='2021')

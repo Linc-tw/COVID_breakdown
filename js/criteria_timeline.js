@@ -87,7 +87,7 @@ function CT_Click_Circle(wrap, d, i) {
     .attr("opacity", wrap.line_alpha*alpha)
   
   //-- Save to wrapper
-  wrap.do_full = 2;
+  wrap.full = 2;
   wrap['circle_text_'+j] = alpha;
 }
 
@@ -108,11 +108,14 @@ function CT_Click_Timeline(wrap, d, j) {
     .attr("opacity", wrap.line_alpha*alpha)
   
   //-- Save to wrapper
-  wrap.do_full = 2;
+  wrap.full = 2;
   wrap['timeline_text_'+j] = alpha;
 }
 
 function CT_Initialize(wrap) {
+  //-- Add tooltip
+  GS_MakeTooltip(wrap);
+  
   //-- Define title
   var title;
   if (GS_lang == 'zh-tw')
@@ -138,7 +141,7 @@ function CT_Initialize(wrap) {
   //-- Define color
   var color = d3.scaleLinear()
     .domain([0, 0.25*(wrap.length-1), 0.5*(wrap.length-1), 0.75*(wrap.length-1), wrap.length-1])
-    .range(['#aa0033', '#bb8866', '#aaaa99', '#5588aa', '#002299']);
+    .range(['#AA0033', '#BB8866', '#AAAA99', '#5588AA', '#002299']);
   
   //-- Timeline
   
@@ -259,7 +262,7 @@ function CT_Initialize(wrap) {
         .attr("points", (x0_t+0.75*dx_t)+','+y1+' '+(x0_t+0.5*dx_t+x_list_t[i])+','+y2)
         .attr("opacity", line_alpha*wrap['timeline_text_'+i])
         .attr("id", function (d, j) {return wrap.tag+'_timeline_line_'+i;})
-        .attr("stroke", '#bbb')
+        .attr("stroke", GS_wrap.gray)
         .attr("stroke-width", 1)
         .attr('fill', 'none')
     }
@@ -475,7 +478,7 @@ function CT_Initialize(wrap) {
         .attr("points", x0_c+','+y1+' '+(x1-60)+','+y2+' '+(x1-5)+','+y2)
         .attr("opacity", line_alpha*wrap['circle_text_'+i])
         .attr("id", function (d, j) {return wrap.tag+'_circle_line_'+i;})
-        .attr("stroke", '#bbb')
+        .attr("stroke", GS_wrap.gray)
         .attr("stroke-width", 1)
         .attr('fill', 'none')
     }
@@ -491,11 +494,11 @@ function CT_Update(wrap) {
   var i, active_list;
   
   //-- Switch state to selected
-  if (wrap.do_full == 0)
+  if (wrap.full == 0)
     active_list = [1,0,0,1,0,  0,1,1,0,1,  0,0,1,1,1,  0,1,1,1];
   
   //-- Switch state to full
-  else if (wrap.do_full == 1)
+  else if (wrap.full == 1)
     active_list = [1,1,1,1,1,  1,1,1,1,1,  1,1,1,1,1,  1,1,1,1];
   
   //-- Switch state to custom
@@ -503,7 +506,7 @@ function CT_Update(wrap) {
     active_list = []
     
     //-- Was circle before
-    if (wrap.do_timeline == 1) {
+    if (wrap.timeline == 1) {
       for (i=0; i<wrap.length; i++)
         active_list.push(wrap['circle_text_'+i])
     }
@@ -516,7 +519,7 @@ function CT_Update(wrap) {
   }
   
   //-- If timeline
-  if (wrap.do_timeline == 1) {
+  if (wrap.timeline == 1) {
     //-- Update circle
     wrap.svg.selectAll('.circle')
       .data(wrap.formatted_data)
@@ -662,92 +665,97 @@ function CT_Update(wrap) {
 }
 
 //-- Plot
-function CT_Plot(wrap, error, data) {
-  if (error)
-    return console.warn(error);
+function CT_Plot(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path_list[0])
+    .await(function (error, data) {
+      if (error)
+        return console.warn(error);
+      
+      CT_MakeCanvas(wrap);
+      CT_FormatData(wrap, data);
+      CT_Initialize(wrap);
+      CT_Update(wrap);
+    });
+}
+
+function CT_ButtonListener(wrap) {
+  //-- Selected or full
+  $(document).on("change", "input:radio[name='" + wrap.tag + "_full']", function (event) {
+    GS_PressRadioButton(wrap, 'full', wrap.full, this.value);
+    wrap.full = this.value;
+    CT_Update(wrap);
+  });
+
+  //-- Timeline or disks
+  $(document).on("change", "input:radio[name='" + wrap.tag + "_timeline']", function (event) {
+    GS_PressRadioButton(wrap, 'timeline', wrap.timeline, this.value);
+    wrap.timeline = this.value;
+    CT_Update(wrap);
+  });
+
+  //-- Save
+  d3.select(wrap.id + '_save').on('click', function () {
+    var tag1, tag2;
+    
+    if (wrap.timeline == 1)
+      tag1 = 'timeline';
+    else
+      tag1 = 'disks';
+    
+    if (wrap.full == 1)
+      tag2 = 'full';
+    else if (wrap.full == 2)
+      tag2 = 'custom';
+    else
+      tag2 = 'selected';
+    
+    name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + GS_lang + '.png'
+    saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
+  });
+
+  //-- Language button
+  $(document).on("change", "input:radio[name='language']", function (event) {
+    GS_lang = this.value;
+    Cookies.set("lang", GS_lang);
+    
+    //-- Remove
+    d3.selectAll(wrap.id+' .plot').remove();
+    
+    //-- Replot
+    CT_Plot();
+  });
+}
+
+//-- Main
+function CT_Main(wrap) {
+  wrap.id = '#' + wrap.tag;
+
+  //-- Swap active to current value
+  wrap.full = document.querySelector("input[name='" + wrap.tag + "_full']:checked").value;
+  wrap.timeline = document.querySelector("input[name='" + wrap.tag + "_timeline']:checked").value;
+  GS_PressRadioButton(wrap, 'full', 0, wrap.full); //-- 0 from .html
+  GS_PressRadioButton(wrap, 'timeline', 1, wrap.timeline); //-- 1 from .html
   
-  CT_MakeCanvas(wrap);
-  CT_FormatData(wrap, data);
-  CT_Initialize(wrap);
-  CT_Update(wrap);
+  //-- Plot
+  CT_Plot(wrap);
+  
+  //-- Setup button listeners
+  CT_ButtonListener(wrap);
 }
 
 //-- Global variable
-var CT_latest_wrap = {};
+var CT_wrap = {};
 
 //-- ID
-CT_latest_wrap.tag = 'criteria_timeline_latest'
-CT_latest_wrap.id = '#' + CT_latest_wrap.tag
+CT_wrap.tag = 'criteria_timeline'
 
 //-- File path
-CT_latest_wrap.data_path_list = [
+CT_wrap.data_path_list = [
   "processed_data/criteria_timeline.csv"
 ];
 
-//-- Tooltip
-CT_latest_wrap.tooltip = d3.select(CT_latest_wrap.id)
-  .append("div")
-  .attr("class", "tooltip")
+//-- No parameters
 
-//-- Parameters
-
-//-- Variables
-CT_latest_wrap.do_full = document.querySelector("input[name='" + CT_latest_wrap.tag + "_full']:checked").value;
-CT_latest_wrap.do_timeline = document.querySelector("input[name='" + CT_latest_wrap.tag + "_timeline']:checked").value;
-
-//-- Plot
-function CT_Latest_Plot() {
-  d3.queue()
-    .defer(d3.csv, CT_latest_wrap.data_path_list[0])
-    .await(function (error, data) {CT_Plot(CT_latest_wrap, error, data);});
-}
-
-CT_Latest_Plot();
-
-//-- Buttons
-GS_PressRadioButton(CT_latest_wrap, 'full', 0, CT_latest_wrap.do_full); //-- 0 from .html
-GS_PressRadioButton(CT_latest_wrap, 'timeline', 1, CT_latest_wrap.do_timeline); //-- 1 from .html
-
-$(document).on("change", "input:radio[name='" + CT_latest_wrap.tag + "_full']", function (event) {
-  GS_PressRadioButton(CT_latest_wrap, 'full', CT_latest_wrap.do_full, this.value);
-  CT_latest_wrap.do_full = this.value;
-  CT_Update(CT_latest_wrap);
-});
-
-$(document).on("change", "input:radio[name='" + CT_latest_wrap.tag + "_timeline']", function (event) {
-  GS_PressRadioButton(CT_latest_wrap, 'timeline', CT_latest_wrap.do_timeline, this.value);
-  CT_latest_wrap.do_timeline = this.value;
-  CT_Update(CT_latest_wrap);
-});
-
-//-- Save button
-d3.select(CT_latest_wrap.id + '_save').on('click', function () {
-  var tag1, tag2;
-  
-  if (CT_latest_wrap.do_timeline == 1)
-    tag1 = 'timeline';
-  else
-    tag1 = 'disks';
-  
-  if (CT_latest_wrap.do_full == 1)
-    tag2 = 'full';
-  else if (CT_latest_wrap.do_full == 2)
-    tag2 = 'custom';
-  else
-    tag2 = 'selected';
-  
-  name = CT_latest_wrap.tag + '_' + tag1 + '_' + tag2 + '_' + GS_lang + '.png'
-  saveSvgAsPng(d3.select(CT_latest_wrap.id).select('svg').node(), name);
-});
-
-//-- Language button
-$(document).on("change", "input:radio[name='language']", function (event) {
-  GS_lang = this.value;
-  Cookies.set("lang", GS_lang);
-  
-  //-- Remove
-  d3.selectAll(CT_latest_wrap.id+' .plot').remove();
-  
-  //-- Replot
-  CT_Latest_Plot();
-});
+//-- Main
+CT_Main(CT_wrap);

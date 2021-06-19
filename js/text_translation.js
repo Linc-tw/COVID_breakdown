@@ -147,8 +147,10 @@ function text_translation() {
     TT_Add_Str("daily_case_per_county_button_kinmen", "金門");
     TT_Add_Str("daily_case_per_county_button_matsu", "馬祖");
     
-    //-- Case by county map
+    //-- Incidence map
     TT_Add_Str("incidence_map_title", "縣市確診地圖");
+    TT_Add_Str("incidence_map_button_1", "案例數");
+    TT_Add_Str("incidence_map_button_2", "確診率");
     TT_Add_Str("incidence_map_button_total", "合計");
     TT_Add_Str("incidence_map_button_w-1", "0-6天前");
     TT_Add_Str("incidence_map_button_w-2", "7-13天前");
@@ -355,8 +357,10 @@ function text_translation() {
     TT_Add_Str("daily_case_per_county_button_kinmen", "Kinmen");
     TT_Add_Str("daily_case_per_county_button_matsu", "Matsu");
     
-    //-- Case by county map
+    //-- Incidence map
     TT_Add_Str("incidence_map_title", "Carte d'incidence");
+    TT_Add_Str("incidence_map_button_1", "Nombre");
+    TT_Add_Str("incidence_map_button_2", "Taux");
     TT_Add_Str("incidence_map_button_total", "Total");
     TT_Add_Str("incidence_map_button_w-1", "0-6 jours plus tôt");
     TT_Add_Str("incidence_map_button_w-2", "7-13 jours plus tôt");
@@ -562,8 +566,10 @@ function text_translation() {
     TT_Add_Str("daily_case_per_county_button_kinmen", "Kinmen");
     TT_Add_Str("daily_case_per_county_button_matsu", "Matsu");
     
-    //-- Case by county map
+    //-- Incidence map
     TT_Add_Str("incidence_map_title", "Incidence Map");
+    TT_Add_Str("incidence_map_button_1", "Counts");
+    TT_Add_Str("incidence_map_button_2", "Rate");
     TT_Add_Str("incidence_map_button_total", "Total");
     TT_Add_Str("incidence_map_button_w-1", "0-6 days ago");
     TT_Add_Str("incidence_map_button_w-2", "7-13 days ago");

@@ -1,8 +1,8 @@
 label,count,label_zh,label_fr
 N_total,13097,合計,Total
-N_data,1186,有資料案例數,Données complètes
+N_data,1187,有資料案例數,Données complètes
 90s,45,90-99歲,90aine
-80s,119,80-89歲,80aine
+80s,120,80-89歲,80aine
 70s,175,70-79歲,70aine
 60s,206,60-69歲,60aine
 50s,129,50-59歲,50aine
@@ -12,7 +12,7 @@ N_data,1186,有資料案例數,Données complètes
 10s,31,10-19歲,10aine
 100s,2,>100歲,100aine
 0s,20,<10歲,< 10 ans
-fever,443,發燒,fièvre
+fever,444,發燒,fièvre
 cough,384,咳嗽,toux
 asymptomatic,320,無症狀,asymptomatique
 dyspnea,211,呼吸困難,dyspnée

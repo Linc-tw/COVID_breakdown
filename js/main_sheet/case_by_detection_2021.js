@@ -31,8 +31,8 @@ CBD_2021_wrap.y_path_1_1 = '4'; //-- 4 ticks
 CBD_2021_wrap.y_path_1_0 = '4';
 CBD_2021_wrap.y_path_0_1 = '4';
 CBD_2021_wrap.y_path_0_0 = '4';
-CBD_2021_wrap.legend_pos_x_0_i_ = {'zh-tw': 70, fr: 70, en: 70};
-CBD_2021_wrap.legend_pos_x_1_i_ = {'zh-tw': 70, fr: 70, en: 70};
+CBD_2021_wrap.legend_pos_x_0_i_ = {'zh-tw': 65, fr: 65, en: 65};
+CBD_2021_wrap.legend_pos_x_1_i_ = {'zh-tw': 65, fr: 65, en: 65};
 CBD_2021_wrap.legend_pos_x1_ = {'zh-tw': 240, fr: 210, en: 190};
 
 //-- Main

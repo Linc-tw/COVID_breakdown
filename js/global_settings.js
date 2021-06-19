@@ -31,6 +31,7 @@ GS_wrap.r_list_2020 = [12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 
 GS_wrap.xlabel_path_2021 = 15;
 GS_wrap.r_list_2021 = [7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6];
 GS_wrap.c_list = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022', '#117733', '#DD6622', '#7733AA', '#BB8811'];
+GS_wrap.gray = '#999999';
 GS_wrap.trans_duration = 800;
 
 //-- General functions

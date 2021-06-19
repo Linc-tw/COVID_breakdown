@@ -241,7 +241,7 @@ function DBT_Initialize(wrap) {
   GS_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = [GS_wrap.c_list[4], GS_wrap.c_list[0], GS_wrap.c_list[1], GS_wrap.c_list[3], '#999999', '#000000']; 
+  var color_list = [GS_wrap.c_list[4], GS_wrap.c_list[0], GS_wrap.c_list[1], GS_wrap.c_list[3], GS_wrap.gray, '#000000']; 
   var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
