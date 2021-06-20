@@ -219,6 +219,50 @@
                                 </div>
                             </div>
                             
+                            <!-- Incidence map -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-map me-1"></i> <span id="incidence_map_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active" id="incidence_map_2020_rate_0">
+                                                    <input type="radio" class="btn-check" name="incidence_map_2020_rate" value=0 checked>
+                                                    <span id="incidence_map_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="incidence_map_2020_rate_1">
+                                                    <input type="radio" class="btn-check" name="incidence_map_2020_rate" value=1>
+                                                    <span id="incidence_map_button_2"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <select id="incidence_map_2020_period" class="form-select form-select-sm me-2" aria-label="incidence_map_2020_period">
+                                                <option value="0" id="incidence_map_button_total" selected></option>
+                                                <option value="1" id="incidence_map_button_m1"></option>
+                                                <option value="2" id="incidence_map_button_m2"></option>
+                                                <option value="3" id="incidence_map_button_m3"></option>
+                                                <option value="4" id="incidence_map_button_m4"></option>
+                                                <option value="5" id="incidence_map_button_m5"></option>
+                                                <option value="6" id="incidence_map_button_m6"></option>
+                                                <option value="7" id="incidence_map_button_m7"></option>
+                                                <option value="8" id="incidence_map_button_m8"></option>
+                                                <option value="9" id="incidence_map_button_m9"></option>
+                                                <option value="10" id="incidence_map_button_m10"></option>
+                                                <option value="11" id="incidence_map_button_m11"></option>
+                                                <option value="12" id="incidence_map_button_m12"></option>
+                                            </select>
+                                            
+                                            <button id='incidence_map_2020_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="incidence_map_2020"></div>
+                                </div>
+                            </div>
+                            
                             <!-- Test by criterion -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
@@ -320,6 +364,8 @@
         <script src="js/various_rates_2020.js"></script>
         <script src="js/main_sheet/case_by_transmission.js"></script>
         <script src="js/main_sheet/case_by_transmission_2020.js"></script>
+        <script src="js/main_sheet/incidence_map.js"></script>
+        <script src="js/main_sheet/incidence_map_2020.js"></script>
         <script src="js/test_by_criterion.js"></script>        
         <script src="js/test_by_criterion_2020.js"></script>
         <script src="js/border_statistics.js"></script>

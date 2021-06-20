@@ -28,7 +28,7 @@ function IM_FormatData(wrap, data) {
 //-- Label
 function IM_FormatData2(wrap, data2) {
   var code_dict = {}
-  var label_list_dict = {'en': [], 'fr': [], 'zh-tw': []};
+  var label_list_dict = {'tag': [], 'en': [], 'fr': [], 'zh-tw': []};
   var i, code, tag, population; 
   
   //-- Loop over row
@@ -37,6 +37,7 @@ function IM_FormatData2(wrap, data2) {
     code = data2[i]['code'];
     population = +data2[i]['population'];
     code_dict[tag] = {'code': code, 'population': population/100000};
+    label_list_dict['tag'].push(tag);
     label_list_dict['en'].push(data2[i]['label']);
     label_list_dict['fr'].push(data2[i]['label_fr']);
     label_list_dict['zh-tw'].push(data2[i]['label_zh']);
@@ -85,13 +86,27 @@ function IM_FormatData3(wrap, data3) {
   wrap.value_list = value_list;
 }
 
+//-- Tooltip
+function IM_MouseOver(wrap, d, i) {
+  d3.select(d3.event.target)
+    .style("opacity", 0.8);
+    
+  wrap.svg.selectAll(wrap.id+'_label_'+d.properties.COUNTYCODE)
+    .style("font-size", '20px')
+}
+
+function IM_MouseLeave(wrap, d, i) {
+  d3.select(d3.event.target)
+    .style("opacity", 1);
+    
+  wrap.svg.selectAll(wrap.id+'_label_'+d.properties.COUNTYCODE)
+    .style("font-size", '16px')
+}
+
 function IM_Initialize(wrap) {
-  //-- Add tooltip
-  GS_MakeTooltip(wrap);
-  
   //-- Define projection
   var scale = 150;
-  var ctr_ra = 120+30/60; //-- Center was 120 58' 55"
+  var ctr_ra = 120+38/60; //-- Center was 120 58' 55"
   var ctr_dec = 23+40/60; //-- Center was  23 58' 26"
   var projection = d3.geoGnomonic()
     .rotate([-ctr_ra, -ctr_dec]).scale(scale*180/Math.PI).translate([0.5*wrap.width, 0.5*wrap.height]);
@@ -106,7 +121,9 @@ function IM_Initialize(wrap) {
     .attr('class', 'content map')
     .attr("d", d3.geoPath().projection(projection))
     .attr("fill", function (d) {return '#FFFFFF';})
-    .style("stroke", GS_wrap.gray);
+    .style("stroke", GS_wrap.gray)
+      .on("mouseover", function (d, i) {IM_MouseOver(wrap, d, i);})
+      .on("mouseleave", function (d, i) {IM_MouseLeave(wrap, d, i);});
     
   //-- Save to wrapper
   wrap.projection = projection;
@@ -116,7 +133,7 @@ function IM_Initialize(wrap) {
 function IM_Update(wrap) {
   //-- Define color
   var color = d3.scaleSequential()
-    .domain([0, Math.log10(1.00001+wrap.y_max)])
+    .domain([0, Math.log10(1.000001+wrap.y_max)])
     .interpolator(t => d3.interpolateMagma(1-0.75*t));
   
   //-- Update map
@@ -128,16 +145,16 @@ function IM_Update(wrap) {
     
   //-- Define legend position
   var legend_dy = 25;
-  var legend_n = {x: 660, y: 50};
+  var legend_n = {x: 645, y: 110};
   var legend_nw = {x: 420, y: 50};
   var legend_c = {x: 350, y: 170};
   var legend_s = {x: 290, y: 420};
-  var legend_e = {x: 620, y: 300};
-  var offset = {x: -22, y: 0};
+  var legend_e = {x: 615, y: 300};
+  var offset = {x: -40, y: 0};
   
   var legend_pos = [
-      {lab_x: legend_n.x, lab_y: legend_n.y,             sign: -1, zone_x: 585, zone_y: 78}, //-- Keelung
-      {lab_x: legend_n.x, lab_y: legend_n.y+legend_dy,   sign: -1, zone_x: 566, zone_y: 90}, //-- Taipei
+      {lab_x: legend_n.x, lab_y: legend_n.y,             sign: -1, zone_x: 585, zone_y: 80}, //-- Keelung
+      {lab_x: legend_n.x, lab_y: legend_n.y+legend_dy,   sign: -1, zone_x: 565, zone_y: 90}, //-- Taipei
       {lab_x: legend_n.x, lab_y: legend_n.y+2*legend_dy, sign: -1, zone_x: 560, zone_y: 115}, //-- New_Taipei
       
     {lab_x: legend_nw.x, lab_y: legend_nw.y,             sign: 1, zone_x: 510, zone_y: 100}, //-- Taoyuan
@@ -178,6 +195,7 @@ function IM_Update(wrap) {
       .style("fill", '#000000')
       .text(function (d, i) {if (wrap.rate == 1) return d+' '+wrap.value_list[i].toFixed(1); return d+' '+wrap.value_list[i];})
       .style("font-size", '16px')
+      .attr("id", function (d, i) {return wrap.tag+'_label_'+wrap.code_dict[wrap.label_list_dict.tag[i]]['code'];})
       .attr("text-anchor", function (d, i) {if (legend_pos[i].sign > 0) return 'end'; return 'start';})
       .attr("dominant-baseline", "middle");
       
@@ -186,7 +204,10 @@ function IM_Update(wrap) {
   var dx = 15;
   var i, row, points;
   
-  for (i=0; i<19; i++) {
+  for (i=0; i<wrap.list_length; i++) {
+    if ((i == 19) || (i == 20) || (i == 21))
+      continue;
+    
     row = legend_pos[i];
     points = (offset.x+row.lab_x+row.sign*eps) + ',' + (offset.y+row.lab_y) + ' ' +
              (offset.x+row.lab_x+row.sign*(eps+dx)) + ',' + (offset.y+row.lab_y) + ' ' +
@@ -197,7 +218,8 @@ function IM_Update(wrap) {
       .attr("opacity", 1)
       .attr("stroke", GS_wrap.gray)
       .attr("stroke-width", 1)
-      .attr('fill', 'none')
+      .attr("id", wrap.tag+'_line_'+i)
+      .attr('fill', 'none');
   }
   
   if (wrap.rate == 1) {

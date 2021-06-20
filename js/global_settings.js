@@ -150,16 +150,19 @@ function GS_GetTooltipPos(wrap, y_alpha, d) {
   return [x_pos, y_pos];
 }
 
+//-- For THSC & ASC (no tooltip)
 function GS_MouseOver2(wrap, d) {
   d3.select(d3.event.target)
     .style("opacity", 0.8)
 }
 
+//-- For THSC & ASC (no tooltip)
 function GS_MouseLeave2(wrap, d) {
   d3.select(d3.event.target)
     .style("opacity", 1)
 }
 
+//-- For CT & ET
 function GS_MouseOver3(wrap, d) {
   wrap.tooltip.transition()
     .duration(200)

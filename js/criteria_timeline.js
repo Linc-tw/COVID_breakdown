@@ -293,10 +293,10 @@ function CT_Initialize(wrap) {
       .attr("fill-opacity", 1)
       .attr("stroke", "black")
       .attr("stroke-width", 1)
-      .on("click", function (d, j) {CT_Click_Timeline(wrap, d, j);})
-      .on("mouseover", function (d) {GS_MouseOver3(wrap, d);})
-      .on("mousemove", function (d) {CT_MouseMove(wrap, d);})
-      .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
+        .on("click", function (d, j) {CT_Click_Timeline(wrap, d, j);})
+        .on("mouseover", function (d) {GS_MouseOver3(wrap, d);})
+        .on("mousemove", function (d) {CT_MouseMove(wrap, d);})
+        .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);});
   
   //-- Circle
   
@@ -321,10 +321,10 @@ function CT_Initialize(wrap) {
       .attr("fill-opacity", 1)
       .attr("stroke", "black")
       .attr("stroke-width", 0.3)
-      .on("click", function (d, i) {CT_Click_Circle(wrap, d, i);})
-      .on("mouseover", function (d) {GS_MouseOver3(wrap, d);})
-      .on("mousemove", function (d) {CT_MouseMove(wrap, d);})
-      .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
+        .on("click", function (d, i) {CT_Click_Circle(wrap, d, i);})
+        .on("mouseover", function (d) {GS_MouseOver3(wrap, d);})
+        .on("mousemove", function (d) {CT_MouseMove(wrap, d);})
+        .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);});
   
   //-- Define circle text position
   var x_list_c, y_list_c;
