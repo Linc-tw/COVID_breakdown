@@ -107,7 +107,7 @@ function IM_Initialize(wrap) {
   //-- Define projection
   var scale = 150;
   var ctr_ra = 120+38/60; //-- Center was 120 58' 55"
-  var ctr_dec = 23+40/60; //-- Center was  23 58' 26"
+  var ctr_dec = 23+50/60; //-- Center was  23 58' 26"
   var projection = d3.geoGnomonic()
     .rotate([-ctr_ra, -ctr_dec]).scale(scale*180/Math.PI).translate([0.5*wrap.width, 0.5*wrap.height]);
     
@@ -150,7 +150,7 @@ function IM_Update(wrap) {
   var legend_c = {x: 350, y: 170};
   var legend_s = {x: 290, y: 420};
   var legend_e = {x: 615, y: 300};
-  var offset = {x: -40, y: 0};
+  var offset = {x: -40, y: 25};
   
   var legend_pos = [
       {lab_x: legend_n.x, lab_y: legend_n.y,             sign: -1, zone_x: 585, zone_y: 80}, //-- Keelung
@@ -231,7 +231,12 @@ function IM_Update(wrap) {
       caption = ['Per 100k inhabitants'];
   }
   else 
-    caption = [''];
+    if (GS_lang == 'zh-tw')
+      caption = ['確診案例數'];
+    else if (GS_lang == 'fr')
+      caption = ['Nombre des cas confirmés'];
+    else 
+      caption = ['Confirmed case counts'];
   
   //-- Update legend caption
   wrap.svg.selectAll(".legend.caption")
@@ -295,16 +300,21 @@ function IM_ButtonListener(wrap) {
   
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
-    var tag1;
+    var tag1, tag2;
+    
+    if (wrap.rate == 0)
+      tag1 = 'count';
+    else
+      tag1 = 'rate';
     
     if (wrap.period == 0)
-      tag1 = 'total';
+      tag2 = 'total';
     else if (wrap.tag.includes('latest'))
-      tag1 = 'w' + (-wrap.period);
+      tag2 = 'w' + (-wrap.period);
     else
-      tag1 = 'm' + wrap.period;
+      tag2 = 'm' + wrap.period;
     
-    name = wrap.tag + '_' + tag1 + '_' + GS_lang + '.png';
+    name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + GS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
