@@ -74,7 +74,7 @@ function text_translation() {
     TT_Add_Str("footer_last_update", '最後更新：' + TT_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3');
     
     //-- Data source page
-    TT_Add_Str("data_source_original_title", "原始資料");
+    TT_Add_Str("data_source_original_title", str_source);
     TT_Add_Html("data_source_original_body", "<p><a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>原始資料 <i class='fas fa-external-link-alt'></i></a> 乃由PTT網友們所整理，需從每天疾管署新聞稿及指揮中心記者會將單獨個案資料彙整成統一表單。作者由衷感謝資料整理團隊，若無如此熱心之舉本站勢必難以完成。</p>");
     TT_Add_Str("data_source_raw_title", "初階資料");
     TT_Add_Html("data_source_raw_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>初階資料 <i class='fas fa-external-link-alt'></i></a> 則是原始資料中本站所使用的五個分頁，其中最主要者為所有確診者及其相關流行病學資訊之清單。檔案格式為csv。</p>");
@@ -123,7 +123,7 @@ function text_translation() {
     
     //-- Daily case per county
     TT_Add_Str("daily_case_per_county_title", "各縣市每日確診人數");
-    TT_Add_Str("daily_case_per_county_button_total", "合計");
+    TT_Add_Str("daily_case_per_county_button_total", "本土合計");
     TT_Add_Str("daily_case_per_county_button_keelung", "基隆");
     TT_Add_Str("daily_case_per_county_button_taipei", "台北");
     TT_Add_Str("daily_case_per_county_button_new_taipei", "新北");
@@ -151,7 +151,7 @@ function text_translation() {
     TT_Add_Str("incidence_map_title", "縣市確診地圖");
     TT_Add_Str("incidence_map_button_1", "案例數");
     TT_Add_Str("incidence_map_button_2", "確診率");
-    TT_Add_Str("incidence_map_button_total", "合計");
+    TT_Add_Str("incidence_map_button_total", "本土合計");
     TT_Add_Str("incidence_map_button_w-1", "0-6天前");
     TT_Add_Str("incidence_map_button_w-2", "7-13天前");
     TT_Add_Str("incidence_map_button_w-3", "14-20天前");
@@ -179,6 +179,7 @@ function text_translation() {
     
     //-- Case by age
     TT_Add_Str("case_by_age_title", "確診個案年齡分布");
+    TT_Add_Str("case_by_age_text", "資料遲一日更新");
     TT_Add_Str("case_by_age_button_total", "合計");
     TT_Add_Str("case_by_age_button_w-1", "0-6天前");
     TT_Add_Str("case_by_age_button_w-2", "7-13天前");
@@ -246,7 +247,7 @@ function text_translation() {
     var str_breakdown = "Analyse des cas";
     var str_vaccination = "Vaccination";
     var str_timeline = "Chronologie";
-    var str_source = "Source des données";
+    var str_source = "Sources des données";
     var str_copyleft = "Sans droit d'auteur";
     var str_slow = "chargement lent";
     
@@ -284,7 +285,7 @@ function text_translation() {
     TT_Add_Str("footer_last_update", 'Dernière mise à jour : ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3');
     
     //-- Data source page
-    TT_Add_Str("data_source_original_title", "Données d'origine");
+    TT_Add_Str("data_source_original_title", str_source);
     TT_Add_Html("data_source_original_body", "<p>Les <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>données d'origine <i class='fas fa-external-link-alt'></i></a> sont mises à jour par de nombreux internautes anonymes du forum PTT, qui est souvent considéré comme le <i>Reddit</i> taïwanais. Ils rassemblent les informations à partir des communiqués et des conférences de presse quotidiens, pour produire des feuilles de calcul consolidées.</p><p>Bien évidemment, ce site n'aurait pas pu voir le jour sans le travail de ces bénévoles bienveillants. Je leur en suis très reconnaissant.</p><p>Le jeu de données est en mandarin.</p>");
     TT_Add_Str("data_source_raw_title", "Données brutes");
     TT_Add_Html("data_source_raw_body", "<p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>données brutes <i class='fas fa-external-link-alt'></i></a> sont 5 feuilles de calcul parmi les données d'origine. La feuille principale est une liste exhaustive des cas confirmés avec certains détails épidémiologiques.</p><p>Ces données sont en format csv et contiennent beaucoup de caractères en mandarin.</p>");
@@ -333,7 +334,7 @@ function text_translation() {
     
     //-- Daily case per county
     TT_Add_Str("daily_case_per_county_title", "Nombre des cas par ville et comté");
-    TT_Add_Str("daily_case_per_county_button_total", "Total");
+    TT_Add_Str("daily_case_per_county_button_total", "Locaux totaux");
     TT_Add_Str("daily_case_per_county_button_keelung", "Keelung");
     TT_Add_Str("daily_case_per_county_button_taipei", "Taipei");
     TT_Add_Str("daily_case_per_county_button_new_taipei", "Nouveau Taipei");
@@ -361,7 +362,7 @@ function text_translation() {
     TT_Add_Str("incidence_map_title", "Carte d'incidence");
     TT_Add_Str("incidence_map_button_1", "Nombre");
     TT_Add_Str("incidence_map_button_2", "Taux");
-    TT_Add_Str("incidence_map_button_total", "Total");
+    TT_Add_Str("incidence_map_button_total", "Locaux totaux");
     TT_Add_Str("incidence_map_button_w-1", "0-6 jours plus tôt");
     TT_Add_Str("incidence_map_button_w-2", "7-13 jours plus tôt");
     TT_Add_Str("incidence_map_button_w-3", "14-20 jours plus tôt");
@@ -389,6 +390,7 @@ function text_translation() {
     
     //-- Case by age
     TT_Add_Str("case_by_age_title", "Cas confirmés par âge");
+    TT_Add_Str("case_by_age_text", "Mise à jour avec 1 jour de retard");
     TT_Add_Str("case_by_age_button_total", "Total");
     TT_Add_Str("case_by_age_button_w-1", "0-6 jours plus tôt");
     TT_Add_Str("case_by_age_button_w-2", "7-13 jours plus tôt");
@@ -455,7 +457,7 @@ function text_translation() {
     var str_breakdown = "Case breakdown";
     var str_vaccination = "Vaccination";
     var str_timeline = "Timeline";
-    var str_source = "Data Source";
+    var str_source = "Data Sources";
     var str_copyleft = "No right reserved";
     var str_slow = "slow loading";
     
@@ -493,10 +495,10 @@ function text_translation() {
     TT_Add_Str("footer_last_update", 'Last update: ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3');
     
     //-- Data source page
-    TT_Add_Str("data_source_original_title", "Original dataset");
-    TT_Add_Html("data_source_original_body", "<p>The <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>original dataset <i class='fas fa-external-link-alt'></i></a> is maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit. They collect information from daily press releases and conferences, and sort them into comprehensive worksheets.</p><p>Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.</p><p>This dataset has been edited in Mandarin.</p>");
+    TT_Add_Str("data_source_original_title", str_source);
+    TT_Add_Html("data_source_original_body", "<p>At this stage, this website collects data from 2 sources.</p><p>The principle source is a <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>Google Spreadsheet <i class='fas fa-external-link-alt'></i></a> maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit. They crawl to harvest data from official sites. They also collect fragmental information from daily press releases and conferences, and sort them into comprehensive worksheets.</p> <p>Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.</p> <p>The second source is Taiwan CDC's <a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'>official data platform <i class='fas fa-external-link-alt'></i></a>, which unfortunately doesn't provide many meaningful datasets. This is why the principle source is not the offical one.</p><p>Both sources provide data in Mandarin.</p>");
     TT_Add_Str("data_source_raw_title", "Raw data");
-    TT_Add_Html("data_source_raw_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>Raw data <i class='fas fa-external-link-alt'></i></a> are 5 worksheets from the original set that are used here. The main one is a list of each confirmed cases with available details.</p><p>These are csv files containing Mandarin strings.</p>");
+    TT_Add_Html("data_source_raw_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>Raw data <i class='fas fa-external-link-alt'></i></a> are a subset of files or spreadsheets from 2 data sources mentioned earlier that have been used by this website.</p><p>There are 6 csv files at this stage. The main one is a list of every single confirmed cases with their epidemiological details.</p><p>These files contain abundant Mandarin strings.</p>");
     TT_Add_Str("data_source_processed_title", "Processed data");
     TT_Add_Html("data_source_processed_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>Processed data <i class='fas fa-external-link-alt'></i></a> contain various files that are directly used by Javascript for plotting.</p><p>These are csv files. Except for timeline data & label lists for matrices, they are ASCII-compatible.</p>");
     
@@ -541,8 +543,8 @@ function text_translation() {
     TT_Add_Str("case_by_detection_button_4", "Onset date");
     
     //-- Daily case per county
-    TT_Add_Str("daily_case_per_county_title", "Daily case per county");
-    TT_Add_Str("daily_case_per_county_button_total", "Total");
+    TT_Add_Str("daily_case_per_county_title", "Daily Case per County");
+    TT_Add_Str("daily_case_per_county_button_total", "Total local");
     TT_Add_Str("daily_case_per_county_button_keelung", "Keelung");
     TT_Add_Str("daily_case_per_county_button_taipei", "Taipei");
     TT_Add_Str("daily_case_per_county_button_new_taipei", "New Taipei");
@@ -570,7 +572,7 @@ function text_translation() {
     TT_Add_Str("incidence_map_title", "Incidence Map");
     TT_Add_Str("incidence_map_button_1", "Counts");
     TT_Add_Str("incidence_map_button_2", "Rate");
-    TT_Add_Str("incidence_map_button_total", "Total");
+    TT_Add_Str("incidence_map_button_total", "Total local");
     TT_Add_Str("incidence_map_button_w-1", "0-6 days ago");
     TT_Add_Str("incidence_map_button_w-2", "7-13 days ago");
     TT_Add_Str("incidence_map_button_w-3", "14-20 days ago");
@@ -597,7 +599,8 @@ function text_translation() {
     TT_Add_Str("incidence_map_button_m12", "December");
     
     //-- Case by age
-    TT_Add_Str("case_by_age_title", "Case by age");
+    TT_Add_Str("case_by_age_title", "Case by Age");
+    TT_Add_Str("case_by_age_text", "Updated typically with 1 day delay");
     TT_Add_Str("case_by_age_button_total", "Total");
     TT_Add_Str("case_by_age_button_w-1", "0-6 days ago");
     TT_Add_Str("case_by_age_button_w-2", "7-13 days ago");

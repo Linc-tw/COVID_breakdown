@@ -245,7 +245,8 @@ function CBA_Initialize(wrap) {
   GS_MakeTooltip(wrap);
     
   //-- Define color
-  var color_list = ['#000000'].concat(GS_wrap.c_list); 
+  var color_list = GS_wrap.c_list.slice(7).concat(GS_wrap.c_list.slice(0, 7));
+  color_list = color_list.concat(color_list.slice(1));
   var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)

@@ -106,8 +106,8 @@ function IM_MouseLeave(wrap, d, i) {
 function IM_Initialize(wrap) {
   //-- Define projection
   var scale = 150;
-  var ctr_ra = 120+38/60; //-- Center was 120 58' 55"
-  var ctr_dec = 23+50/60; //-- Center was  23 58' 26"
+  var ctr_ra = 120+48/60; //-- Center was 120 58' 55"
+  var ctr_dec = 23+48/60; //-- Center was  23 58' 26"
   var projection = d3.geoGnomonic()
     .rotate([-ctr_ra, -ctr_dec]).scale(scale*180/Math.PI).translate([0.5*wrap.width, 0.5*wrap.height]);
     
@@ -150,7 +150,7 @@ function IM_Update(wrap) {
   var legend_c = {x: 350, y: 170};
   var legend_s = {x: 290, y: 420};
   var legend_e = {x: 615, y: 300};
-  var offset = {x: -40, y: 25};
+  var offset = {x: -63, y: 20};
   
   var legend_pos = [
       {lab_x: legend_n.x, lab_y: legend_n.y,             sign: -1, zone_x: 585, zone_y: 80}, //-- Keelung
@@ -178,8 +178,8 @@ function IM_Update(wrap) {
       {lab_x: legend_e.x, lab_y: legend_e.y+2*legend_dy, sign: -1, zone_x: 510, zone_y: 400}, //-- Taitung
       
     {lab_x: 260, lab_y: 310, sign: 1, zone_x: 285, zone_y: 305}, //-- Penghu
-    {lab_x: 135, lab_y: 180, sign: 1, zone_x: 175, zone_y: 185}, //-- Kinmen
-    {lab_x: 155, lab_y: 30,  sign: 1, zone_x: 180, zone_y: 30}, //-- Matsu
+    {lab_x: 190, lab_y: 220, sign: 1, zone_x: 175, zone_y: 185}, //-- Kinmen
+    {lab_x: 215, lab_y: 90,  sign: 1, zone_x: 180, zone_y: 30}, //-- Matsu
   ];
   
   //-- Update legend label
@@ -226,9 +226,9 @@ function IM_Update(wrap) {
     if (GS_lang == 'zh-tw')
       caption = ['每十萬人確診率'];
     else if (GS_lang == 'fr')
-      caption = ['Par 100k habitants'];
+      caption = ["Taux d'incidence", 'par 100k habitants'];
     else 
-      caption = ['Per 100k inhabitants'];
+      caption = ['Incidence rate', 'per 100k inhabitants'];
   }
   else 
     if (GS_lang == 'zh-tw')
@@ -247,9 +247,10 @@ function IM_Update(wrap) {
     .append("text")
       .attr("class", "legend caption")
       .attr("x", 780)
-      .attr("y", 580)
+      .attr("y", function (d, i) {return 580-(caption.length-1-i)*25;})
       .style("fill", '#000000')
       .text(function (d) {return d;})
+      .style("font-size", '18px')
       .attr("text-anchor", 'end');
 }
    

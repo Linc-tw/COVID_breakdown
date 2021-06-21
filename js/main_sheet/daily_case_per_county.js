@@ -102,32 +102,38 @@ function DCPC_MouseMove(wrap, d) {
   var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Generate tooltip text
-  var tooltip_text;
+  var tooltip_text = d.date + '<br>';
   
   //-- Define legend label
   var legend_label;
   if (GS_lang == 'zh-tw') {
     legend_label = [
-      '合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
+      '本土合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
       '嘉縣', '嘉市', '台南', '高雄', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '馬祖'
     ];
-    tooltip_text = d.date + '<br>' + legend_label[wrap.county] + d[wrap.col_tag_list[wrap.county]] + '例';
+    tooltip_text += legend_label[wrap.county] + d[wrap.col_tag_list[wrap.county]] + '例';
   }
   
   else if (GS_lang == 'fr') {
     legend_label = [
-      'Total', 'Keelung', 'Taipei', 'Nouveau Taipei', 'Taoyuan', 'Comté de Hsinchu', 'Ville de Hsinchu', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
-      'Comté de Chiayi', 'Ville de Chiayi', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
+      'Locaux totaux', 'à Keelung', 'à Taipei', 'à Nouveau Taipei', 'à Taoyuan', 'au comté de Hsinchu', 'à la ville de Hsinchu', 'à Miaoli', 'à Taichung', 'à Changhua', 'à Nantou', 'à Yunlin', 
+      'au comté de Chiayi', 'à la ville de Chiayi', 'à Tainan', 'à Kaohsiung', 'à Pingtung', 'à Yilan', 'à Hualien', 'à Taitung', 'à Penghu', 'à Kinmen', 'à Matsu'
     ];
-    tooltip_text = d.date + '<br>' + d[wrap.col_tag_list[wrap.county]] + ' cas à ' + legend_label[wrap.county];
+    if (wrap.county == 0)
+      tooltip_text += d[wrap.col_tag_list[wrap.county]] + ' cas locaux au total';
+    else
+      tooltip_text += d[wrap.col_tag_list[wrap.county]] + ' cas ' + legend_label[wrap.county];
   }
   
   else {
     legend_label = [
-      'Total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Total local', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
-    tooltip_text = d.date + '<br>' + d[wrap.col_tag_list[wrap.county]] + ' cases in ' + legend_label[wrap.county];
+    if (wrap.county == 0)
+      tooltip_text += d[wrap.col_tag_list[wrap.county]] + 'local cases in total';
+    else
+      tooltip_text += d[wrap.col_tag_list[wrap.county]] + ' cases in ' + legend_label[wrap.county];
   }
   
   //-- Generate tooltip
@@ -211,7 +217,8 @@ function DCPC_Initialize(wrap) {
   GS_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = ['#000000'].concat(GS_wrap.c_list).concat(GS_wrap.c_list); 
+  var color_list = GS_wrap.c_list.slice(6).concat(GS_wrap.c_list.slice(0, 6));
+  color_list = color_list.concat(color_list.slice(1));
   var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
@@ -305,17 +312,17 @@ function DCPC_Update(wrap) {
   var legend_label;
   if (GS_lang == 'zh-tw')
     legend_label = [
-      '合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
+      '本土合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
       '嘉縣', '嘉市', '台南', '高雄', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '馬祖'
     ];
   else if (GS_lang == 'fr')
     legend_label = [
-      'Total', 'Keelung', 'Taipei', 'Nouveau Taipei', 'Taoyuan', 'Comté de Hsinchu', 'Ville de Hsinchu', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Locaux totaux', 'Keelung', 'Taipei', 'Nouveau Taipei', 'Taoyuan', 'Comté de Hsinchu', 'Ville de Hsinchu', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Comté de Chiayi', 'Ville de Chiayi', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
   else
     legend_label = [
-      'Total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Total local', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
   

@@ -17,24 +17,28 @@ Features
 --------
 
 The most recent statisitcs can be found in _Last 90 days_.
-In total, 9 charts are shown on 2 pages, _Highlight_ & _Case breakdown_.
+In total, 12 charts are shown on 2 pages, _Highlight_ & _Case breakdown_.
 
 In _Highlight_:
 - Status Evolution
 - 7-day Average of Various Rates
 - Confirmed Cases by Transmission Type
+- Incidence Map
 - Number of Tests by Reporting Criterion
 - Border Crossing
 
 In _Case breakdown_:
 - Confirmed Cases by Transmission Type (repeated)
 - Confirmed Cases by Detection Channel
+- Daily Case per County
+- Incidence Map (repeated)
+- Case by Age
+- How many days to identify cases?
 - Correlations between Travel History & Symptoms
 - Correlations between Age & Symptoms
-- How many days to identify cases?
 
 The above charts are all generated with data of last 90 days.
-The same 9 charts made from all-year statistics can be found in _Stats 2020_ & _Stats 2021_.
+The same 12 charts made from all-year statistics can be found in _Stats 2020_ & _Stats 2021_.
 Loading can be slow for the 4 pages of these categories due to large files.
 
 There are also 2 charts in _Timeline_:
