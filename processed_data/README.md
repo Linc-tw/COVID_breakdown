@@ -2,20 +2,44 @@ processed_data/
 ===============
 
 
-Summary
--------
+Processed data
+--------------
 
-- This folder & its sub-folders contain csv files which are directly used for plotting.
-- These csv files are processed & calculated from big csv files in `raw_data`.
-- Unless specified, all files here only contain ASCII strings.
+This folder & its sub-folders contain processed data files that are directly used for plotting.
+
+All `csv` files were generated from files in `raw_data/`, by
+calling 
+```python
+python COVID_breakdown_data_processing.py
+```
+A `geojson` file containing a modified version of Taiwan map is also present.
+
+All files here only contain ASCII strings unless specified.
 
 
 Contents
 --------
 
-- `2020`: contain data for year 2020
-- `2021`: contain data for year 2021
-- `latest`: contain data for last 90 days
-- `criteria_timeline.csv`: data for testing criteria evolution timeline; contain Mandarin strings
-- `event_timeline_zh-tw.csv`: data for pandemic event timeline; contain Mandarin strings
-- `key_numbers.csv`: table for total case counts & timestamp
+`2020/`
+- Contains statistics of 2020
+
+`2021/`
+- Contains statistics of 2021
+
+`latest/`
+- Contains statistics of last 90 days
+
+`adminMap_byCounties_offsetIslands_sphe.geojson`
+- Map of Taiwan with its islands rearranged
+- With non-ASCII strings
+
+`criteria_timeline.csv`
+- Timeline table for testing criteria evolution in Taiwan
+- With non-ASCII strings
+
+`event_timeline_zh-tw.csv`
+- Timeline table for major pandemic events
+- With non-ASCII strings
+
+`key_numbers.csv`
+- Contains case counts & timestamp
