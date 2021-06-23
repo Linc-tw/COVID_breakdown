@@ -1,5 +1,5 @@
 label,count,label_zh,label_fr
-N_total,13358,合計,Total
+N_total,13461,合計,Total
 N_imported,462,境外移入總數,Importés
 N_data,401,有資料案例數,Données complètes
 Philippines,132,菲律賓,Philippines
@@ -21,4 +21,4 @@ dysnosmia,31,嗅覺異常,dysosmie
 dysgeusia,23,味覺異常,dysgueusie
 headache,17,頭痛,mal de tête
 diarrhea,15,腹瀉,diarrhée
-fatigue,12,倦怠,fatigue
+fatigue,13,倦怠,fatigue

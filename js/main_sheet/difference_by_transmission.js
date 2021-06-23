@@ -303,9 +303,9 @@ function DBT_Update(wrap) {
   if (GS_lang == 'zh-tw')
     xlabel = '發病或入境後到確診所需天數';
   else if (GS_lang == 'fr')
-    xlabel = "Nombre de jours avant identification";
+    xlabel = "Délai en nombre de jours avant d'identifier une transmission";
   else
-    xlabel = "Days required for each case to be identified";
+    xlabel = "Delay in number of days before identifying a transmission";
   
   //-- Update xlabel
   wrap.svg.select(".xlabel")

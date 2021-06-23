@@ -17,7 +17,8 @@ Features
 --------
 
 The most recent statisitcs can be found in _Last 90 days_.
-In total, 12 charts are shown on 2 pages, _Highlight_ & _Case breakdown_.
+In total, 12 charts are shown on 2 pages, [_Highlight_](https://linc-tw.github.io/COVID_breakdown/index.html) & 
+[_Case breakdown_](https://linc-tw.github.io/COVID_breakdown/latest_breakdown.html).
 
 In _Highlight_:
 - Status Evolution
@@ -30,10 +31,10 @@ In _Highlight_:
 In _Case breakdown_:
 - Confirmed Cases by Transmission Type (repeated)
 - Confirmed Cases by Detection Channel
-- Daily Case per County
+- Local Confirmed Cases per City & County
 - Incidence Map (repeated)
-- Case by Age
-- How many days to identify cases?
+- Confirmed Cases by Age
+- Delay Before Identifying a Transmission
 - Correlations between Travel History & Symptoms
 - Correlations between Age & Symptoms
 
@@ -59,9 +60,9 @@ Language support
 Current workflow
 ----------------
 
-Daily automatic update is resumed now & is executed at 14:30 everyday.
+An automatic update is scheduled at 14:40 everyday.
 This is done by executing `upload.sh`. It will:
-- download raw data from the original dataset (a publicly accessible online Google worksheet);
+- download raw data from the sources;
 - execute `python COVID_breakdown_data_processing.py` to generate processed data; and
 - commit & push the data to the repository.
 
@@ -71,11 +72,16 @@ Manual data regularization will be done from time to time in late evening.
 Credits
 -------
 
-The [original dataset](https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#) 
-is maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit.
-They collect information from daily press releases and conferences, and sort them into comprehensive worksheets.
+The principle data source of this website is 
+maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit. 
+They crawl to harvest data from official sites. 
+They also collect fragmental information from daily press releases and conferences, and sort them into comprehensive worksheets.
 
-Obviously this project cannot be done without the goodwill of these volunteers that I am fully grateful to.
+Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.
+
+See [_Data Sources_](https://linc-tw.github.io/COVID_breakdown/data_source.html) or 
+`README.md` of [`raw_data`](https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data)
+for details.
 
 
 Licenses
@@ -83,7 +89,7 @@ Licenses
 
 The codes & scripts are released under MIT License © Chieh-An Lin.
 
-This repository contains a [piece of code](https://github.com/Linc-tw/COVID_breakdown/blob/master/js/saveSvgAsPng.js) 
+This repository contains a [piece of code](https://github.com/Linc-tw/COVID_breakdown/blob/master/js/utility/saveSvgAsPng.js) 
 taken from [here](https://github.com/exupero/saveSvgAsPng) and is released under [MIT License © Eric Shull](https://github.com/exupero/saveSvgAsPng/blob/gh-pages/LICENSE).
 
 The website template is released under [MIT License © Blackrock Digital LLC](https://github.com/BlackrockDigital/startbootstrap-sb-admin/blob/gh-pages/LICENSE).

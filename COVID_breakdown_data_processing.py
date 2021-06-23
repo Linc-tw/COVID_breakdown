@@ -18,6 +18,13 @@ import matplotlib as mpl
 import pandas as pd
 
 ################################################################################
+## TODO
+
+#README 2020, 2021, latest
+#delayed loading
+#fr & zh versions of new data sources
+
+################################################################################
 ## Parameters
 
 DATA_PATH = '/home/linc/21_Codes/COVID_breakdown/'
@@ -829,7 +836,7 @@ class MainSheet(Template):
         '5/8-20', '5/8-25', '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', '5/13-31',
         '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/19-6/10', 
         '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
-        '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', '6/4-19', '6/8-20', '6/14-21', 
+        '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', '6/4-19', '6/8-20', '6/10-22', '6/14-21', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
@@ -932,7 +939,7 @@ class MainSheet(Template):
       'chills': ['忽冷忽熱症狀', '忽冷忽熱', '冒冷汗', '畏寒', '發冷', '寒顫'], 
       
       'nausea': ['噁心', '想吐'],
-      'vomiting': ['嘔吐'],
+      'vomiting': ['嘔吐感', '嘔吐'],
       'diarrhea': ['腹瀉'], 
       
       'headache': ['頭暈目眩', '輕度頭痛', '頭骨痛', '偏頭痛', '頭痛', '頭暈', '頭脹', '暈眩', '頭重'],
@@ -1632,7 +1639,7 @@ class MainSheet(Template):
     saveCsv(name, data1)
     name = '%sprocessed_data/%s/travel_history_symptom_correlations_counts.csv' % (DATA_PATH, selection)
     saveCsv(name, data2)
-    name = '%sprocessed_data/%s/travel_history_symptom_counts.csv' % (DATA_PATH, selection)
+    name = '%sprocessed_data/%s/travel_history_symptom_correlations_total.csv' % (DATA_PATH, selection)
     saveCsv(name, data3)
     return
   
@@ -1676,7 +1683,7 @@ class MainSheet(Template):
     saveCsv(name, data1)
     name = '%sprocessed_data/%s/age_symptom_correlations_counts.csv' % (DATA_PATH, selection)
     saveCsv(name, data2)
-    name = '%sprocessed_data/%s/age_symptom_counts.csv' % (DATA_PATH, selection)
+    name = '%sprocessed_data/%s/age_symptom_correlations_total.csv' % (DATA_PATH, selection)
     saveCsv(name, data3)
     return
   
@@ -2906,257 +2913,349 @@ class VaccinationSheet(Template):
   def __init__(self, verbose=True):
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_vaccination.json' % DATA_PATH
     data = loadJson(name, verbose=verbose)
+    #https://covid-19.nchc.org.tw/dt_002-csse_covid_19_daily_reports_vaccine.php?countryCode=TW/taiwan
     
     self.key_row_id = 'DT_RowId'
     self.key_id = 'id'
-    self.key_report_date = 'a01'
-    self.key_county = 'a02'
-    self.key_population = 'a03'
-    self.key_updated_tot = 'a04'
-    self.key_new_vacc = 'a05'
-    self.key_tot_vacc = 'a06'
-    self.key_vacc_rate = 'a07'
-    self.key_nb_doses = 'a08'
-    self.key_remaining_ratio = 'a09'
-    
-    self.report_date_list = []
-    self.county_list = []
-    self.population_list = []
-    self.updated_tot_list = []
-    self.new_vacc_list = []
-    self.tot_vacc_list = []
-    self.vacc_rate_list = []
-    self.nb_doses_list = []
-    self.remaining_ratio_list = []
+    self.key_location = 'a01'
+    self.key_iso_code = 'a02'
+    self.key_date = 'a03'
+    self.key_tot_vacc = 'a04'
+    self.key_tot_vacc_per_100 = 'a05'
+    self.key_daily_vacc_raw = 'a06'
+    self.key_daily_vacc = 'a07'
+    self.key_daily_vacc_per_1m = 'a08'
+    self.key_ppl_vacc = 'a09'
+    self.key_ppl_vacc_per_100 = 'a10'
+    self.key_ppl_fully_vacc = 'a11'
+    self.key_ppl_fully_vacc_per_100 = 'a12'
+    self.key_manu = 'a13'
+    self.key_jj = 'a14'
+    self.key_moderna = 'a15'
+    self.key_az = 'a16'
+    self.key_pfizer = 'a17'
+    self.key_sinovac = 'a18'
+    self.key_sputnik = 'a19'
+    self.key_sinopharm = 'a20'
     
     self.data = data
-    self.processed_data = {}
-    self.process()
-    self.applyCorrections()
+    self.n_total = len(self.data['data'])
     
     if verbose:
-      print('N_total = %d' % len(self.processed_data))
+      print('N_total = %d' % self.n_total)
     return
   
-  def getCountyLabel(self, county):
-    if county == '基隆市':
-      return 'Keelung'
-    if county == '臺北市':
-      return 'Taipei'
-    if county == '新北市':
-      return 'New_Taipei'
-    if county == '桃園市':
-      return 'Taoyuan'
-    if county == '新竹縣':
-      return 'Hsinchu'
-    if county == '新竹市':
-      return 'Hsinchu_C'
-    if county == '苗栗縣':
-      return 'Miaoli'
-      
-    if county == '臺中市':
-      return 'Taichung'
-    if county == '彰化縣':
-      return 'Changhua'
-    if county == '南投縣':
-      return 'Nantou'
-    if county == '雲林縣':
-      return 'Yunlin'
-    
-    if county == '嘉義縣':
-      return 'Chiayi'
-    if county == '嘉義市':
-      return 'Chiayi_C'
-    if county == '臺南市':
-      return 'Tainan'
-    if county == '高雄市':
-      return 'Kaohsiung'
-    if county == '屏東縣':
-      return 'Pingtung'
-      
-    if county == '宜蘭縣':
-      return 'Yilan'
-    if county == '花蓮縣':
-      return 'Hualien'
-    if county == '臺東縣':
-      return 'Taitung'
-      
-    if county == '澎湖縣':
-      return 'Penghu'
-    if county == '金門縣':
-      return 'Kinmen'
-    if county == '連江縣':
-      return 'Matsu'
-      
-    print('County label, %s' % county)
-    return 'unknown'
-    
-  def process(self):
-    for row in self.data['data']:
-      report_date = row[self.key_report_date]
-      county = self.getCountyLabel(row[self.key_county])
-      try:
-        self.processed_data[report_date][county] = row
-      except KeyError:
-        self.processed_data[report_date] = {county: row}
-    
-    self.processed_data = dict(sorted(self.processed_data.items()))
-    return
-      
-  def applyCorrections(self):
-    corr_list = [
-      ['2021-05-06', 'Taipei', 15884, 1251, 17135], 
-      ['2021-05-06', 'Kaohsiung', 10159, 676, 10835], 
-      ['2021-05-18', 'Pingtung', 5311, 496, 5807], 
-    ]
-    
-    ## Correct bad crawling numbers
-    for corr in corr_list:
-      row = self.processed_data[corr[0]][corr[1]]
-      row[self.key_updated_tot] = corr[2]
-      row[self.key_new_vacc] = corr[3]
-      row[self.key_tot_vacc] = corr[4]
-      
-    ## Remove repeated data
-    corr_list = ['2021-04-03', '2021-04-04', '2021-04-14']
-    
-    for corr in corr_list:
-      self.processed_data.pop(corr)
-    return
-    
-  def getReportDate(self, county='total'):
-    if 'total' == county:
-      return list(self.processed_data.keys())
-    
-    report_date_list = []
-    for report_date, county_dict in self.processed_data.items():
-      if county in county_dict:
-        report_date_list.append(report_date)
-    return report_date_list
+  def getColData(self, key):
+    return [row[key] for row in self.data['data']]
   
-  def getUpdatedTot(self, county='total'):
-    updated_tot_list = []
-    
-    for report_date, county_dict in self.processed_data.items():
-      if 'total' == county:
-        updated_tot_list.append(0)
-        for _, row in county_dict.items():
-          updated_tot_list[-1] += int(row[self.key_updated_tot])
-      
-      try:
-        row = county_dict[county]
-        updated_tot_list.append(int(row[self.key_updated_tot]))
-      except KeyError:
-        pass
-        
-    return updated_tot_list
+  def getDate(self):
+    return [row[self.key_date] for row in self.data['data']]
   
-  def getNewVacc(self, county='total'):
-    new_vacc_list = []
-    
-    for report_date, county_dict in self.processed_data.items():
-      if 'total' == county:
-        new_vacc_list.append(0)
-        for _, row in county_dict.items():
-          new_vacc_list[-1] += int(row[self.key_new_vacc])
-      
-      try:
-        row = county_dict[county]
-        new_vacc_list.append(int(row[self.key_new_vacc]))
-      except KeyError:
-        pass
-        
-    return new_vacc_list
-    
-  def getTotVacc(self, county='total'):
-    tot_vacc_list = []
-    
-    for report_date, county_dict in self.processed_data.items():
-      if 'total' == county:
-        tot_vacc_list.append(0)
-        for _, row in county_dict.items():
-          tot_vacc_list[-1] += int(row[self.key_tot_vacc])
-      
-      try:
-        row = county_dict[county]
-        tot_vacc_list.append(int(row[self.key_tot_vacc]))
-      except KeyError:
-        pass
-    
-    return tot_vacc_list
-    
-  def makeUpdatedNew(self, county='total'):
-    report_date_list = self.getReportDate(county=county)
-    updated_tot_list = self.getUpdatedTot(county=county)
-    new_vacc_list = self.getNewVacc(county=county)
-    
-    ## Calculate array length
-    ord_begin = ISODateToOrd('2021-03-21') ## Pretend to start on 2021-03-21 for easier reshape later
-    ord_today = dtt.date.today().toordinal() + 1
-    nb_days = ord_today - ord_begin
-    ind = nb_days % 7 - 1 ## Get remainer; will be used later
-    nb_days = ((nb_days - 1) // 7 + 1) * 7 ## Ceiling function for 7
-    
-    ## Prepare array
-    new_vax_arr = np.zeros(nb_days, dtype=float) + np.nan
-    tot_vax_arr = np.zeros(nb_days, dtype=float) + np.nan
-    date_arr = ord_begin + np.arange(nb_days, dtype=int)
-    date_arr = [ordDateToISO(ord) for ord in date_arr]
-    
-    ## Fill values
-    ord_rep_list = [ISODateToOrd(report_date)-ord_begin for report_date in report_date_list]
-    for ord_rep, updated_tot, new_vacc in zip(ord_rep_list, updated_tot_list, new_vacc_list):
-      new_vax_arr[ord_rep] = new_vacc
-      tot_vax_arr[ord_rep] = updated_tot
-      
-    ## Reshape to mask Saturdays
-    new_vax_arr = new_vax_arr.reshape(-1, 7)
-    tot_vax_arr = tot_vax_arr.reshape(-1, 7)
-    new_vax_arr_2 = new_vax_arr[:, :6].flatten()
-    tot_vax_arr_2 = tot_vax_arr[:, :6].flatten()
-    
-    ## Calculate the correct new_vax
-    for i in range(len(new_vax_arr_2)-1):
-      if tot_vax_arr_2[i] == tot_vax_arr_2[i] and tot_vax_arr_2[i+1] == tot_vax_arr_2[i+1]:
-        new_vax_arr_2[i] = tot_vax_arr_2[i+1] - tot_vax_arr_2[i]
-      elif new_vax_arr_2[i] == new_vax_arr_2[i]:
-        tot_vax_arr_2[i+1] = new_vax_arr_2[i] + tot_vax_arr_2[i]
-    
-    ## Offset tot_vax
-    tot_vax_arr_2[:-1] = tot_vax_arr_2[1:]
-    
-    ## Add the current day's value to tot_vax
-    if ind < 6:
-      tot_vax_arr_2[ind-6] = new_vax_arr_2[ind-6] + tot_vax_arr_2[ind-7]
-    
-    ## Return to 7 columns
-    new_vax_arr[:, :6] = new_vax_arr_2.reshape(-1, 6)
-    tot_vax_arr[:, :6] = tot_vax_arr_2.reshape(-1, 6)
-    
-    ## Remove 2021-03-21 & trailing NaN
-    if ind < 6:
-      new_vax_arr = new_vax_arr.flatten()[1:ind-6]
-      tot_vax_arr = tot_vax_arr.flatten()[1:ind-6]
-      date_arr = date_arr[1:ind-6]
-    else:
-      new_vax_arr = new_vax_arr.flatten()[1:]
-      tot_vax_arr = tot_vax_arr.flatten()[1:]
-      date_arr = date_arr[1:]
-    return date_arr, new_vax_arr, tot_vax_arr
-    
+  def getTotVacc(self):
+    return [int(row[self.key_tot_vacc]) for row in self.data['data']]
+  
+  def getDailyVacc(self):
+    return [int(row[self.key_daily_vacc]) for row in self.data['data']]
+  
+  def getAZ(self):
+    return [int(row[self.key_az]) for row in self.data['data']]
+  
+  def getModerna(self):
+    return [int(row[self.key_moderna]) for row in self.data['data']]
+  
   def saveCsv_vaccinationByDay(self):
-    date_arr, new_vax_arr, tot_vax_arr = self.makeUpdatedNew(county='total')
+    date_list = self.getDate()
+    az_list = self.getAZ()
+    moderna_list = self.getModerna()
     
-    data = {'date': date_arr, 'updated_new': new_vax_arr, 'updated_tot': tot_vax_arr}
-    data = pd.DataFrame(data)
+    daily_vacc_list = self.getDailyVacc()
+    tot_vacc_list = self.getTotVacc()
     
-    name = '%sprocessed_data/2021/vaccination_by_day.csv' % DATA_PATH
-    saveCsv(name, data)
+    
+    #for date, az, moderna in zip(date_list, az_list, moderna_list):
+      #print(date, az, moderna)
+    
+    for date, daily_vacc, tot_vacc in zip(date_list, daily_vacc_list, tot_vacc_list):
+      print(date, daily_vacc, tot_vacc)
+    
+    #print(date_list)
+    #az_list = np.array(az_list, dtype=int)
+    #moderna_list = np.array(moderna_list, dtype=int)
+    #print(az_list)
+    
+    ## From cumulative to daily
+    #az_list = [j-i for i, j in zip([0]+az_list[:-1], az_list)]
+    #print(az_list)
+    
+    #date_arr, new_vax_arr, tot_vax_arr = self.makeUpdatedNew(county='total')
+    
+    #data = {'date': date_arr, 'updated_new': new_vax_arr, 'updated_tot': tot_vax_arr}
+    #data = pd.DataFrame(data)
+    
+    #name = '%sprocessed_data/2021/vaccination_by_day.csv' % DATA_PATH
+    #saveCsv(name, data)
     return
 
   def saveCsv(self):
     self.saveCsv_vaccinationByDay()
     return
+  
+#class VaccinationSheet(Template):
+  
+  #def __init__(self, verbose=True):
+    #name = '%sraw_data/COVID-19_in_Taiwan_raw_data_vaccination.json' % DATA_PATH
+    #data = loadJson(name, verbose=verbose)
+    
+    #self.key_row_id = 'DT_RowId'
+    #self.key_id = 'id'
+    #self.key_report_date = 'a01'
+    #self.key_county = 'a02'
+    #self.key_population = 'a03'
+    #self.key_updated_tot = 'a04'
+    #self.key_new_vacc = 'a05'
+    #self.key_tot_vacc = 'a06'
+    #self.key_vacc_rate = 'a07'
+    #self.key_nb_doses = 'a08'
+    #self.key_remaining_ratio = 'a09'
+    
+    #self.report_date_list = []
+    #self.county_list = []
+    #self.population_list = []
+    #self.updated_tot_list = []
+    #self.new_vacc_list = []
+    #self.tot_vacc_list = []
+    #self.vacc_rate_list = []
+    #self.nb_doses_list = []
+    #self.remaining_ratio_list = []
+    
+    #self.data = data
+    #self.processed_data = {}
+    #self.process()
+    #self.applyCorrections()
+    
+    #if verbose:
+      #print('N_total = %d' % len(self.processed_data))
+    #return
+  
+  #def getCountyLabel(self, county):
+    #if county == '基隆市':
+      #return 'Keelung'
+    #if county == '臺北市':
+      #return 'Taipei'
+    #if county == '新北市':
+      #return 'New_Taipei'
+    #if county == '桃園市':
+      #return 'Taoyuan'
+    #if county == '新竹縣':
+      #return 'Hsinchu'
+    #if county == '新竹市':
+      #return 'Hsinchu_C'
+    #if county == '苗栗縣':
+      #return 'Miaoli'
+      
+    #if county == '臺中市':
+      #return 'Taichung'
+    #if county == '彰化縣':
+      #return 'Changhua'
+    #if county == '南投縣':
+      #return 'Nantou'
+    #if county == '雲林縣':
+      #return 'Yunlin'
+    
+    #if county == '嘉義縣':
+      #return 'Chiayi'
+    #if county == '嘉義市':
+      #return 'Chiayi_C'
+    #if county == '臺南市':
+      #return 'Tainan'
+    #if county == '高雄市':
+      #return 'Kaohsiung'
+    #if county == '屏東縣':
+      #return 'Pingtung'
+      
+    #if county == '宜蘭縣':
+      #return 'Yilan'
+    #if county == '花蓮縣':
+      #return 'Hualien'
+    #if county == '臺東縣':
+      #return 'Taitung'
+      
+    #if county == '澎湖縣':
+      #return 'Penghu'
+    #if county == '金門縣':
+      #return 'Kinmen'
+    #if county == '連江縣':
+      #return 'Matsu'
+      
+    #print('County label, %s' % county)
+    #return 'unknown'
+    
+  #def process(self):
+    #for row in self.data['data']:
+      #report_date = row[self.key_report_date]
+      #county = self.getCountyLabel(row[self.key_county])
+      #try:
+        #self.processed_data[report_date][county] = row
+      #except KeyError:
+        #self.processed_data[report_date] = {county: row}
+    
+    #self.processed_data = dict(sorted(self.processed_data.items()))
+    #return
+      
+  #def applyCorrections(self):
+    #corr_list = [
+      #['2021-05-06', 'Taipei', 15884, 1251, 17135], 
+      #['2021-05-06', 'Kaohsiung', 10159, 676, 10835], 
+      #['2021-05-18', 'Pingtung', 5311, 496, 5807], 
+    #]
+    
+    ### Correct bad crawling numbers
+    #for corr in corr_list:
+      #row = self.processed_data[corr[0]][corr[1]]
+      #row[self.key_updated_tot] = corr[2]
+      #row[self.key_new_vacc] = corr[3]
+      #row[self.key_tot_vacc] = corr[4]
+      
+    ### Remove repeated data
+    #corr_list = ['2021-04-03', '2021-04-04', '2021-04-14']
+    
+    #for corr in corr_list:
+      #self.processed_data.pop(corr)
+    #return
+    
+  #def getReportDate(self, county='total'):
+    #if 'total' == county:
+      #return list(self.processed_data.keys())
+    
+    #report_date_list = []
+    #for report_date, county_dict in self.processed_data.items():
+      #if county in county_dict:
+        #report_date_list.append(report_date)
+    #return report_date_list
+  
+  #def getUpdatedTot(self, county='total'):
+    #updated_tot_list = []
+    
+    #for report_date, county_dict in self.processed_data.items():
+      #if 'total' == county:
+        #updated_tot_list.append(0)
+        #for _, row in county_dict.items():
+          #updated_tot_list[-1] += int(row[self.key_updated_tot])
+      
+      #try:
+        #row = county_dict[county]
+        #updated_tot_list.append(int(row[self.key_updated_tot]))
+      #except KeyError:
+        #pass
+        
+    #return updated_tot_list
+  
+  #def getNewVacc(self, county='total'):
+    #new_vacc_list = []
+    
+    #for report_date, county_dict in self.processed_data.items():
+      #if 'total' == county:
+        #new_vacc_list.append(0)
+        #for _, row in county_dict.items():
+          #new_vacc_list[-1] += int(row[self.key_new_vacc])
+      
+      #try:
+        #row = county_dict[county]
+        #new_vacc_list.append(int(row[self.key_new_vacc]))
+      #except KeyError:
+        #pass
+        
+    #return new_vacc_list
+    
+  #def getTotVacc(self, county='total'):
+    #tot_vacc_list = []
+    
+    #for report_date, county_dict in self.processed_data.items():
+      #if 'total' == county:
+        #tot_vacc_list.append(0)
+        #for _, row in county_dict.items():
+          #tot_vacc_list[-1] += int(row[self.key_tot_vacc])
+      
+      #try:
+        #row = county_dict[county]
+        #tot_vacc_list.append(int(row[self.key_tot_vacc]))
+      #except KeyError:
+        #pass
+    
+    #return tot_vacc_list
+    
+  #def makeUpdatedNew(self, county='total'):
+    #report_date_list = self.getReportDate(county=county)
+    #updated_tot_list = self.getUpdatedTot(county=county)
+    #new_vacc_list = self.getNewVacc(county=county)
+    
+    ### Calculate array length
+    #ord_begin = ISODateToOrd('2021-03-21') ## Pretend to start on 2021-03-21 for easier reshape later
+    #ord_today = dtt.date.today().toordinal() + 1
+    #nb_days = ord_today - ord_begin
+    #ind = nb_days % 7 - 1 ## Get remainer; will be used later
+    #nb_days = ((nb_days - 1) // 7 + 1) * 7 ## Ceiling function for 7
+    
+    ### Prepare array
+    #new_vax_arr = np.zeros(nb_days, dtype=float) + np.nan
+    #tot_vax_arr = np.zeros(nb_days, dtype=float) + np.nan
+    #date_arr = ord_begin + np.arange(nb_days, dtype=int)
+    #date_arr = [ordDateToISO(ord) for ord in date_arr]
+    
+    ### Fill values
+    #ord_rep_list = [ISODateToOrd(report_date)-ord_begin for report_date in report_date_list]
+    #for ord_rep, updated_tot, new_vacc in zip(ord_rep_list, updated_tot_list, new_vacc_list):
+      #new_vax_arr[ord_rep] = new_vacc
+      #tot_vax_arr[ord_rep] = updated_tot
+      
+    ### Reshape to mask Saturdays
+    #new_vax_arr = new_vax_arr.reshape(-1, 7)
+    #tot_vax_arr = tot_vax_arr.reshape(-1, 7)
+    #new_vax_arr_2 = new_vax_arr[:, :6].flatten()
+    #tot_vax_arr_2 = tot_vax_arr[:, :6].flatten()
+    
+    ### Calculate the correct new_vax
+    #for i in range(len(new_vax_arr_2)-1):
+      #if tot_vax_arr_2[i] == tot_vax_arr_2[i] and tot_vax_arr_2[i+1] == tot_vax_arr_2[i+1]:
+        #new_vax_arr_2[i] = tot_vax_arr_2[i+1] - tot_vax_arr_2[i]
+      #elif new_vax_arr_2[i] == new_vax_arr_2[i]:
+        #tot_vax_arr_2[i+1] = new_vax_arr_2[i] + tot_vax_arr_2[i]
+    
+    ### Offset tot_vax
+    #tot_vax_arr_2[:-1] = tot_vax_arr_2[1:]
+    
+    ### Add the current day's value to tot_vax
+    #if ind < 6:
+      #tot_vax_arr_2[ind-6] = new_vax_arr_2[ind-6] + tot_vax_arr_2[ind-7]
+    
+    ### Return to 7 columns
+    #new_vax_arr[:, :6] = new_vax_arr_2.reshape(-1, 6)
+    #tot_vax_arr[:, :6] = tot_vax_arr_2.reshape(-1, 6)
+    
+    ### Remove 2021-03-21 & trailing NaN
+    #if ind < 6:
+      #new_vax_arr = new_vax_arr.flatten()[1:ind-6]
+      #tot_vax_arr = tot_vax_arr.flatten()[1:ind-6]
+      #date_arr = date_arr[1:ind-6]
+    #else:
+      #new_vax_arr = new_vax_arr.flatten()[1:]
+      #tot_vax_arr = tot_vax_arr.flatten()[1:]
+      #date_arr = date_arr[1:]
+    #return date_arr, new_vax_arr, tot_vax_arr
+    
+  #def saveCsv_vaccinationByDay(self):
+    #date_arr, new_vax_arr, tot_vax_arr = self.makeUpdatedNew(county='total')
+    
+    #data = {'date': date_arr, 'updated_new': new_vax_arr, 'updated_tot': tot_vax_arr}
+    #data = pd.DataFrame(data)
+    
+    #name = '%sprocessed_data/2021/vaccination_by_day.csv' % DATA_PATH
+    #saveCsv(name, data)
+    #return
+
+  #def saveCsv(self):
+    #self.saveCsv_vaccinationByDay()
+    #return
   
 ################################################################################
 ## Functions - cross-sheet operations
@@ -3245,13 +3344,13 @@ def sandbox():
   #print(timeline_sheet.saveCriteria())
   #timeline_sheet.saveCsv_evtTimeline()
   
-  county_sheet = CountySheet()
+  #county_sheet = CountySheet()
   #print(county_sheet)
-  county_sheet.saveCsv_dailyCasePerCounty()
+  #county_sheet.saveCsv_dailyCasePerCounty()
   
-  #vacc_sheet = VaccinationSheet()
+  vacc_sheet = VaccinationSheet()
   #print(vacc_sheet.makeUpdatedNew())
-  #vacc_sheet.makeUpdatedNew()
+  vacc_sheet.saveCsv_vaccinationByDay()
   return
 
 ################################################################################
@@ -3286,8 +3385,8 @@ def saveCsv_all():
   county_sheet.saveCsv()
   
   print()
-  vacc_sheet = VaccinationSheet()
-  vacc_sheet.saveCsv()
+  #vacc_sheet = VaccinationSheet()
+  #vacc_sheet.saveCsv()
   print()
   return
 

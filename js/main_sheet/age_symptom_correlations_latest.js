@@ -15,7 +15,7 @@ ASC_latest_wrap.tag = 'age_symptom_correlations_latest'
 ASC_latest_wrap.data_path_list = [
   "processed_data/latest/age_symptom_correlations_coefficient.csv",
   "processed_data/latest/age_symptom_correlations_counts.csv", 
-  "processed_data/latest/age_symptom_counts.csv"
+  "processed_data/latest/age_symptom_correlations_total.csv"
 ];
 
 //-- Parameters

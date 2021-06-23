@@ -108,21 +108,40 @@ function text_translation() {
     
     
     //-- Case by transmission
-    TT_Add_Str("case_by_transmission_title", "確診數依感染源區分");
+    TT_Add_Str("case_by_transmission_title", "各感染源之每日確診人數");
     TT_Add_Str("case_by_transmission_button_1", "逐日");
     TT_Add_Str("case_by_transmission_button_2", "累計");
     TT_Add_Str("case_by_transmission_button_3", "確診日");
     TT_Add_Str("case_by_transmission_button_4", "發病日");
     
     //-- Case by detection
-    TT_Add_Str("case_by_detection_title", "確診個案依檢驗管道區分");
+    TT_Add_Str("case_by_detection_title", "各檢驗管道之每日確診人數");
     TT_Add_Str("case_by_detection_button_1", "逐日");
     TT_Add_Str("case_by_detection_button_2", "累計");
     TT_Add_Str("case_by_detection_button_3", "確診日");
     TT_Add_Str("case_by_detection_button_4", "發病日");
     
+    //-- Travel history-symptom correlations
+    TT_Add_Str("travel_history_symptom_correlations_title", "旅遊史與症狀相關程度");
+    TT_Add_Str("travel_history_symptom_correlations_button_1", "相關係數");
+    TT_Add_Str("travel_history_symptom_correlations_button_2", "案例數");
+    
+    //-- Age-symptom correlations
+    TT_Add_Str("age_symptom_correlations_title", "個案年齡與症狀相關程度");
+    TT_Add_Str("age_symptom_correlations_button_1", "相關係數");
+    TT_Add_Str("age_symptom_correlations_button_2", "案例數");
+    
+    //-- Difference by transmission
+    TT_Add_Str("difference_by_transmission_title", "發現個案所需時間分布");
+    TT_Add_Str("difference_by_transmission_button_1", "全部");
+    TT_Add_Str("difference_by_transmission_button_2", "境外移入");
+    TT_Add_Str("difference_by_transmission_button_3", "本土");
+    TT_Add_Str("difference_by_transmission_button_4", "其他");
+    
+    
+    
     //-- Daily case per county
-    TT_Add_Str("daily_case_per_county_title", "各縣市每日確診人數");
+    TT_Add_Str("daily_case_per_county_title", "各縣市之每日確診人數");
     TT_Add_Str("daily_case_per_county_button_total", "本土合計");
     TT_Add_Str("daily_case_per_county_button_keelung", "基隆");
     TT_Add_Str("daily_case_per_county_button_taipei", "台北");
@@ -205,24 +224,6 @@ function text_translation() {
     TT_Add_Str("case_by_age_button_m10", "10月");
     TT_Add_Str("case_by_age_button_m11", "11月");
     TT_Add_Str("case_by_age_button_m12", "12月");
-    
-    
-    //-- Travel history-symptom correlations
-    TT_Add_Str("travel_history_symptom_correlations_title", "旅遊史與症狀相關程度");
-    TT_Add_Str("travel_history_symptom_correlations_button_1", "相關係數");
-    TT_Add_Str("travel_history_symptom_correlations_button_2", "案例數");
-    
-    //-- Age-symptom correlations
-    TT_Add_Str("age_symptom_correlations_title", "個案年齡與症狀相關程度");
-    TT_Add_Str("age_symptom_correlations_button_1", "相關係數");
-    TT_Add_Str("age_symptom_correlations_button_2", "案例數");
-    
-    //-- Difference by transmission
-    TT_Add_Str("difference_by_transmission_title", "發現個案所需時間分布");
-    TT_Add_Str("difference_by_transmission_button_1", "全部");
-    TT_Add_Str("difference_by_transmission_button_2", "境外移入");
-    TT_Add_Str("difference_by_transmission_button_3", "本土");
-    TT_Add_Str("difference_by_transmission_button_4", "其他");
     
     
     
@@ -332,8 +333,27 @@ function text_translation() {
     TT_Add_Str("case_by_detection_button_3", "Date du diagnostic");
     TT_Add_Str("case_by_detection_button_4", "Date du début des sympt.");
     
+    //-- Difference by transmission
+    TT_Add_Str("difference_by_transmission_title", "Délai avant d'identifier une transmission");
+    TT_Add_Str("difference_by_transmission_button_1", "Tous");
+    TT_Add_Str("difference_by_transmission_button_2", "Importés");
+    TT_Add_Str("difference_by_transmission_button_3", "Locaux");
+    TT_Add_Str("difference_by_transmission_button_4", "Divers");
+    
+    //-- Travel history-symptom correlations
+    TT_Add_Str("travel_history_symptom_correlations_title", "Corrélations entre antécédents de voyage & symptômes");
+    TT_Add_Str("travel_history_symptom_correlations_button_1", "Coefficients");
+    TT_Add_Str("travel_history_symptom_correlations_button_2", "Nombres");
+    
+    //-- Age-symptom correlations
+    TT_Add_Str("age_symptom_correlations_title", "Corrélations entre âge & symptômes");
+    TT_Add_Str("age_symptom_correlations_button_1", "Coefficients");
+    TT_Add_Str("age_symptom_correlations_button_2", "Nombres");
+    
+    
+    
     //-- Daily case per county
-    TT_Add_Str("daily_case_per_county_title", "Nombre des cas par ville et comté");
+    TT_Add_Str("daily_case_per_county_title", "Cas confirmés locaux par ville et comté");
     TT_Add_Str("daily_case_per_county_button_total", "Locaux totaux");
     TT_Add_Str("daily_case_per_county_button_keelung", "Keelung");
     TT_Add_Str("daily_case_per_county_button_taipei", "Taipei");
@@ -416,23 +436,6 @@ function text_translation() {
     TT_Add_Str("case_by_age_button_m10", "Octobre");
     TT_Add_Str("case_by_age_button_m11", "Novembre");
     TT_Add_Str("case_by_age_button_m12", "Décembre");
-    
-    //-- Travel history-symptom correlations
-    TT_Add_Str("travel_history_symptom_correlations_title", "Corrélations entre antécédents de voyage & symptômes");
-    TT_Add_Str("travel_history_symptom_correlations_button_1", "Coefficients");
-    TT_Add_Str("travel_history_symptom_correlations_button_2", "Nombres");
-    
-    //-- Age-symptom correlations
-    TT_Add_Str("age_symptom_correlations_title", "Corrélations entre âge & symptômes");
-    TT_Add_Str("age_symptom_correlations_button_1", "Coefficients");
-    TT_Add_Str("age_symptom_correlations_button_2", "Nombres");
-    
-    //-- Difference by transmission
-    TT_Add_Str("difference_by_transmission_title", "Combien de temps pour identifier un cas ?");
-    TT_Add_Str("difference_by_transmission_button_1", "Tous");
-    TT_Add_Str("difference_by_transmission_button_2", "Importés");
-    TT_Add_Str("difference_by_transmission_button_3", "Locaux");
-    TT_Add_Str("difference_by_transmission_button_4", "Divers");
     
     
     
@@ -542,8 +545,27 @@ function text_translation() {
     TT_Add_Str("case_by_detection_button_3", "Report date");
     TT_Add_Str("case_by_detection_button_4", "Onset date");
     
+    //-- Difference by transmission
+    TT_Add_Str("difference_by_transmission_title", "Delay Before Identifying a Transmission");
+    TT_Add_Str("difference_by_transmission_button_1", "All");
+    TT_Add_Str("difference_by_transmission_button_2", "Imported");
+    TT_Add_Str("difference_by_transmission_button_3", "Local");
+    TT_Add_Str("difference_by_transmission_button_4", "Others");
+    
+    //-- Travel history-symptom correlations
+    TT_Add_Str("travel_history_symptom_correlations_title", "Correlations between Travel History & Symptoms");
+    TT_Add_Str("travel_history_symptom_correlations_button_1", "Coefficients");
+    TT_Add_Str("travel_history_symptom_correlations_button_2", "Counts");
+    
+    //-- Age-symptom correlations
+    TT_Add_Str("age_symptom_correlations_title", "Correlations between Age & Symptoms");
+    TT_Add_Str("age_symptom_correlations_button_1", "Coefficients");
+    TT_Add_Str("age_symptom_correlations_button_2", "Counts");
+    
+    
+    
     //-- Daily case per county
-    TT_Add_Str("daily_case_per_county_title", "Daily Case per County");
+    TT_Add_Str("daily_case_per_county_title", "Local Confirmed Cases per City & County");
     TT_Add_Str("daily_case_per_county_button_total", "Total local");
     TT_Add_Str("daily_case_per_county_button_keelung", "Keelung");
     TT_Add_Str("daily_case_per_county_button_taipei", "Taipei");
@@ -599,7 +621,7 @@ function text_translation() {
     TT_Add_Str("incidence_map_button_m12", "December");
     
     //-- Case by age
-    TT_Add_Str("case_by_age_title", "Case by Age");
+    TT_Add_Str("case_by_age_title", "Confirmed Cases by Age");
     TT_Add_Str("case_by_age_text", "Updated typically with 1 day delay");
     TT_Add_Str("case_by_age_button_total", "Total");
     TT_Add_Str("case_by_age_button_w-1", "0-6 days ago");
@@ -626,23 +648,6 @@ function text_translation() {
     TT_Add_Str("case_by_age_button_m10", "October");
     TT_Add_Str("case_by_age_button_m11", "November");
     TT_Add_Str("case_by_age_button_m12", "December");
-    
-    //-- Travel history-symptom correlations
-    TT_Add_Str("travel_history_symptom_correlations_title", "Correlations between Travel History & Symptoms");
-    TT_Add_Str("travel_history_symptom_correlations_button_1", "Coefficients");
-    TT_Add_Str("travel_history_symptom_correlations_button_2", "Counts");
-    
-    //-- Age-symptom correlations
-    TT_Add_Str("age_symptom_correlations_title", "Correlations between Age & Symptoms");
-    TT_Add_Str("age_symptom_correlations_button_1", "Coefficients");
-    TT_Add_Str("age_symptom_correlations_button_2", "Counts");
-    
-    //-- Difference by transmission
-    TT_Add_Str("difference_by_transmission_title", "How many days to identify cases?");
-    TT_Add_Str("difference_by_transmission_button_1", "All");
-    TT_Add_Str("difference_by_transmission_button_2", "Imported");
-    TT_Add_Str("difference_by_transmission_button_3", "Local");
-    TT_Add_Str("difference_by_transmission_button_4", "Others");
     
     
     
