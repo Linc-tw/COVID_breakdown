@@ -48,7 +48,7 @@ Contents
 `COVID-19_in_Taiwan_raw_data_number_of_tests.csv`
 - Daily test statistics
 - Shows date of tests when they were administrated, which is **not** necessary the same date as when they were analyzed
-- This is just a table version of an offical `json` file that can be found [here](https://covid19dashboard.cdc.gov.tw/dash4)
+- This is just a table version of an offical `json` file that can be found [here](https://covid19dashboard.cdc.gov.tw/dash4).
 
 `COVID-19_in_Taiwan_raw_data_status_evolution.csv`
 - Evolution of numbers of confirmed cases, discharged cases, & deaths

@@ -504,7 +504,7 @@ function BS_Main(wrap) {
   //-- Swap active to current value
   wrap.do_exit = document.querySelector("input[name='" + wrap.tag + "_exit']:checked").value;
   GS_PressRadioButton(wrap, 'exit', 0, wrap.do_exit); //-- 0 from .html
-  
+
   //-- Plot
   BS_Plot(wrap);
   

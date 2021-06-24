@@ -5,14 +5,13 @@ processed_data/
 Processed data
 --------------
 
-This folder & its sub-folders contain processed data files that are directly used for plotting.
+Processed data contain various files that are directly used for plotting.
 
-All `csv` files were generated from files in `raw_data/`, by
-executing 
+All `csv` files were generated from files in `raw_data/` by executing 
 ```python
 python COVID_breakdown_data_processing.py
 ```
-A `geojson` file containing a modified version of Taiwan map is also present.
+A `geojson` file containing a modified version of Taiwan map is also added.
 
 All files here only contain ASCII characters unless specified.
 
@@ -21,13 +20,13 @@ Contents
 --------
 
 `2020/`
-- Contain statistics of 2020
+- Contains statistics of 2020
 
 `2021/`
-- Contain statistics of 2021
+- Contains statistics of 2021
 
 `latest/`
-- Contain statistics of last 90 days
+- Contains statistics of last 90 days
 
 `adminMap_byCounties_offsetIslands_sphe.geojson`
 - Map of Taiwan with its islands rearranged
@@ -54,7 +53,7 @@ Contents
   - `fr`
   - `zh-tw`
 - Timeline table for evolution of testing criteria in Taiwan
-- Contain non-ASCII characters
+- Contains non-ASCII characters
 
 `event_timeline_zh-tw.csv`
 - Row = date
@@ -63,4 +62,4 @@ Contents
   - `global_event`
   - `key_event`
 - Timeline table for major pandemic events
-- Contain non-ASCII characters
+- Contains non-ASCII characters

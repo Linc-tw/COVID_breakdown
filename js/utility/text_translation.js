@@ -75,15 +75,35 @@ function text_translation() {
     
     //-- Data source page
     TT_Add_Str("data_source_original_title", str_source);
-    TT_Add_Html("data_source_original_body", "<p><a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>原始資料 <i class='fas fa-external-link-alt'></i></a> 乃由PTT網友們所整理，需從每天疾管署新聞稿及指揮中心記者會將單獨個案資料彙整成統一表單。作者由衷感謝資料整理團隊，若無如此熱心之舉本站勢必難以完成。</p>");
+    TT_Add_Html("data_source_original_body", "\
+      <p>目前本站資料是由兩種不同管道所取得。</p>\
+      <p>主要來源為一份由PTT網友們所整理的線上\
+      <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'> \
+      Google表單 <i class='fas fa-external-link-alt'></i></a> 。作者們利用網路爬蟲獲取資料，同時也從官方新聞稿及記者會收集瑣碎資訊，整理後彙整至表單內。</p>\
+      <p>在此由衷感謝資料整理團隊，若無如此熱心之舉本站勢必難以完成。</p>\
+      <p>另一資料來源為疾管署<a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'> \
+      官方資料平台 <i class='fas fa-external-link-alt'></i></a> 。很可惜平台上的資料多半乏善可陳，因此才以非官方表單作為主要資料來源。</p>\
+    ");
     TT_Add_Str("data_source_raw_title", "初階資料");
-    TT_Add_Html("data_source_raw_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>初階資料 <i class='fas fa-external-link-alt'></i></a> 則是原始資料中本站所使用的五個分頁，其中最主要者為所有確診者及其相關流行病學資訊之清單。檔案格式為csv。</p>");
+    TT_Add_Html("data_source_raw_body", "\
+      <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'> \
+      初階資料 <i class='fas fa-external-link-alt'></i></a> 是前面所提資料來源之部份分頁或檔案。目前共有6個csv檔，最主要者為一記有所有確診者及其相關流行病學資訊之表單。</p>\
+    ");
     TT_Add_Str("data_source_processed_title", "高階資料");
-    TT_Add_Html("data_source_processed_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>高階資料 <i class='fas fa-external-link-alt'></i></a> 為整理過後，讓Javascript直接用來畫圖的檔案。除時間軸以及矩陣標籤檔之外，其他都只使用ASCII編碼。檔案格式皆為csv。</p>");
+    TT_Add_Html("data_source_processed_body", "\
+      <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'> \
+      高階資料 <i class='fas fa-external-link-alt'></i></a> 為整理過後直接用來畫圖的檔案。絕大多數為csv檔，由低階資料處理後生成，另有一geojson檔為微調過之台灣地圖。</p>\
+      <p>除經特殊標示外，所有高階資料編碼皆符合ASCII格式。</p>\
+    ");
     
     //-- Copyleft page
     TT_Add_Str("no_right_reserved_title", "啊就真的沒有版權");
-    TT_Add_Html("no_right_reserved_body", "<p>本站所創作之所有文字及圖像均以<a href='https://creativecommons.org/publicdomain/zero/1.0/deed.zh_TW' target='_blank'>CC0 1.0 通用 公眾領域貢獻宣告 <i class='fas fa-external-link-alt'></i></a> 條款發布。</p><p>意即使用者可自由用作營利或非營利之途，且不需經許可或標示來源。</p><p>原始碼授權條款請洽此<a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>連結 <i class='fas fa-external-link-alt'></i></a>。</p>");
+    TT_Add_Html("no_right_reserved_body", "\
+      <p>本站所創作之所有文字及圖像均以<a href='https://creativecommons.org/publicdomain/zero/1.0/deed.zh_TW' target='_blank'>\
+      CC0 1.0 通用 公眾領域貢獻宣告 <i class='fas fa-external-link-alt'></i></a> 條款發布。</p>\
+      <p>意即使用者可自由用作營利或非營利之途，且不需經許可或標示來源。</p>\
+      <p>原始碼授權條款請洽此<a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>連結 <i class='fas fa-external-link-alt'></i></a>。</p>\
+    ");
     
     
     
@@ -287,15 +307,50 @@ function text_translation() {
     
     //-- Data source page
     TT_Add_Str("data_source_original_title", str_source);
-    TT_Add_Html("data_source_original_body", "<p>Les <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>données d'origine <i class='fas fa-external-link-alt'></i></a> sont mises à jour par de nombreux internautes anonymes du forum PTT, qui est souvent considéré comme le <i>Reddit</i> taïwanais. Ils rassemblent les informations à partir des communiqués et des conférences de presse quotidiens, pour produire des feuilles de calcul consolidées.</p><p>Bien évidemment, ce site n'aurait pas pu voir le jour sans le travail de ces bénévoles bienveillants. Je leur en suis très reconnaissant.</p><p>Le jeu de données est en mandarin.</p>");
+    TT_Add_Html("data_source_original_body", "\
+      <p>À ce stade, ce site recueille les données à partir de 2 sources.</p>\
+      <p>La source principale est un \
+      <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>\
+      Google Spreadsheet <i class='fas fa-external-link-alt'></i></a> \
+      entretenu par de nombreux internautes anonymes du forum PTT, souvent considéré comme le <i>Reddit</i> taïwanais. \
+      Ils font du crawling pour récolter des données. \
+      Ils rassemblent également des informations fragmentées à partir des communiqués et des conférences de presse. \
+      Ils les trient ensuite avant de les mettre dans un tableau bien taillé.</p>\
+      <p>Bien évidemment, ce site n'aurait pas pu voir le jour sans le travail de ces bénévoles bienveillants. Je leur en suis très reconnaissant.</p>\
+      <p>La source secondaire est le <a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'>\
+      plateform des données officiel <i class='fas fa-external-link-alt'></i></a> du CDC taïwanais, qui fournit malheureusement peu de données intéressantes. \
+      C'est pour cette raison que la source principale n'est pas celle qui est officielle.</p>\
+      <p>Les données des 2 sources sont toutes en mandarin.</p>\
+    ");
     TT_Add_Str("data_source_raw_title", "Données brutes");
-    TT_Add_Html("data_source_raw_body", "<p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>données brutes <i class='fas fa-external-link-alt'></i></a> sont 5 feuilles de calcul parmi les données d'origine. La feuille principale est une liste exhaustive des cas confirmés avec certains détails épidémiologiques.</p><p>Ces données sont en format csv et contiennent beaucoup de caractères en mandarin.</p>");
+    TT_Add_Html("data_source_raw_body", "\
+      <p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
+      données brutes <i class='fas fa-external-link-alt'></i></a> \
+      sont un sous-ensemble des fichiers provenant des 2 sources des données mentionnées auparavant.</p>\
+      <p>À ce stade, 6 fichiers csv y figurent. Le fichier principal est une liste de tous cas confirmés avec leurs détails épidémiologiques respectifs.</p>\
+      <p>Ces données contiennent des caractères mandarins en abondance.</p>\
+    ");
     TT_Add_Str("data_source_processed_title", "Données traitées");
-    TT_Add_Html("data_source_processed_body", "<p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>données traitées <i class='fas fa-external-link-alt'></i></a> comprennent de nombreux fichiers directement utilisés par Javascript pour afficher les figures.</p><p>Ces données sont en format csv. La plupart d'entre elles contient seulement des caractères ASCII.</p>");
+    TT_Add_Html("data_source_processed_body", "\
+      <p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>\
+      données traitées <i class='fas fa-external-link-alt'></i></a> \
+      comprennent de nombreux fichiers directement utilisés pour afficher les figures.</p>\
+      <p>Tous les fichiers csv sont générés à partir des données brutes par un script. \
+      Une carte de Taïwan retouchée sous format geojson est également ajoutée.</p>\
+      <p>Sauf précision, tous les fichiers ici ne contiennent que les caractères ASCII.</p>\
+    ");
     
     //-- Copyleft page
     TT_Add_Str("no_right_reserved_title", "Fièrement sans droit d'auteur");
-    TT_Add_Html("no_right_reserved_body", "<p>Tous les textes et les graphes créés sur ce site sont distribués sous <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.fr' target='_blank'>CC0 1.0 universel Transfert dans le Domaine Public <i class='fas fa-external-link-alt'></i></a>.</p><p>Cela signifie que vous pouvez en faire presque tout ce que vous voulez : usages personnel et/ou commercial, sans avoir besoin d'autorisation ou d'attribution d'auteur.</p><p>La license pour les codes et les scripts se trouve <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>ici <i class='fas fa-external-link-alt'></i></a>.</p>");
+    TT_Add_Html("no_right_reserved_body", "\
+      <p>Tous les textes et les graphes créés sur ce site sont distribués sous \
+      <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.fr' target='_blank'>\
+      CC0 1.0 universel Transfert dans le Domaine Public <i class='fas fa-external-link-alt'></i></a>.</p>\
+      <p>Cela signifie que vous pouvez en faire presque tout ce que vous voulez : usages personnel et/ou commercial, sans avoir besoin d'autorisation ou d'attribution d'auteur.</p>\
+      <p>La license pour les codes et les scripts se trouve \
+      <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>\
+      ici <i class='fas fa-external-link-alt'></i></a>.</p>\
+    ");
     
     
     
@@ -499,17 +554,49 @@ function text_translation() {
     
     //-- Data source page
     TT_Add_Str("data_source_original_title", str_source);
-    TT_Add_Html("data_source_original_body", "<p>At this stage, this website collects data from 2 sources.</p><p>The principle source is a <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>Google Spreadsheet <i class='fas fa-external-link-alt'></i></a> maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit. They crawl to harvest data from official sites. They also collect fragmental information from daily press releases and conferences, and sort them into comprehensive worksheets.</p> <p>Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.</p> <p>The second source is Taiwan CDC's <a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'>official data platform <i class='fas fa-external-link-alt'></i></a>, which unfortunately doesn't provide many meaningful datasets. This is why the principle source is not the offical one.</p><p>Both sources provide data in Mandarin.</p>");
+    TT_Add_Html("data_source_original_body", "\
+      <p>At this stage, this website collects data from 2 sources.</p>\
+      <p>The principle source is a \
+      <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>\
+      Google Spreadsheet <i class='fas fa-external-link-alt'></i></a> \
+      maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit. \
+      They crawl to harvest data from official sites. \
+      They also collect fragmental information from daily press releases and conferences, and sort them into comprehensive worksheets.</p>\
+      <p>Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.</p>\
+      <p>The second source is Taiwan CDC's <a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'>\
+      official data platform <i class='fas fa-external-link-alt'></i></a>, which unfortunately doesn't provide many meaningful datasets. \
+      This is why the principle source is not the offical one.</p>\
+      <p>Both sources provide data in Mandarin.</p>\
+    ");
     TT_Add_Str("data_source_raw_title", "Raw data");
-    TT_Add_Html("data_source_raw_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>Raw data <i class='fas fa-external-link-alt'></i></a> are a subset of files or spreadsheets from 2 data sources mentioned earlier that have been used by this website.</p><p>There are 6 csv files at this stage. The main one is a list of every single confirmed cases with their epidemiological details.</p><p>These files contain abundant Mandarin strings.</p>");
+    TT_Add_Html("data_source_raw_body", "\
+      <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
+      Raw data <i class='fas fa-external-link-alt'></i></a> \
+      are a subset of files or spreadsheets from 2 data sources mentioned earlier that have been used by this website.</p>\
+      <p>There are 6 csv files at this stage. The main one is a list of every single confirmed cases with their epidemiological details.</p>\
+      <p>These files contain abundant Mandarin strings.</p>\
+    ");
     TT_Add_Str("data_source_processed_title", "Processed data");
-    TT_Add_Html("data_source_processed_body", "<p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>Processed data <i class='fas fa-external-link-alt'></i></a> contain various files that are directly used by Javascript for plotting.</p><p>These are csv files. Except for timeline data & label lists for matrices, they are ASCII-compatible.</p>");
+    TT_Add_Html("data_source_processed_body", "\
+      <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>\
+      Processed data <i class='fas fa-external-link-alt'></i></a> \
+      contain various files that are directly used for plotting.</p>\
+      <p>All csv files were generated from raw data by executing a script. \
+      A geojson file containing a modified version of Taiwan map is also added.</p>\
+      <p>All files here only contain ASCII characters unless specified.</p>\
+    ");
     
     //-- Copyleft page
     TT_Add_Str("no_right_reserved_title", "Proudly No Right Reserved");
-    TT_Add_Html("no_right_reserved_body", "<p>All texts and plots created by this site are released under <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en' target='_blank'>CC0 1.0 Universal Public Domain Dedication <i class='fas fa-external-link-alt'></i></a>.</p><p>That basically means you can do almost whatever you want with them: personal and commercial use, no permission or attribution needed.</p><p>The license for codes and scripts can be found <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>here <i class='fas fa-external-link-alt'></i></a>.</p>");
-    
-    
+    TT_Add_Html("no_right_reserved_body", "\
+      <p>All texts and plots created by this site are released under \
+      <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en' target='_blank'>\
+      CC0 1.0 Universal Public Domain Dedication <i class='fas fa-external-link-alt'></i></a>.</p>\
+      <p>That basically means you can do almost whatever you want with them: personal and commercial use, no permission or attribution needed.</p>\
+      <p>The license for codes and scripts can be found \
+      <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>\
+      here <i class='fas fa-external-link-alt'></i></a>.</p>\
+    ");
     
     //-- Status evolution
     TT_Add_Str("status_evolution_title", "Status Evolution");

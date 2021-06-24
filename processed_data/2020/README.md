@@ -41,11 +41,11 @@ Contents
 
 `age_symptom_correlations_total.csv`
 - Row = matrix symptom & age
-- Column = `label`, `count`, `label_zh`, & `label_fr`
+- Column
   - `label` = symptom & age in English
   - `count` = confirmed case counts of the group
-  - `label_zh` = symptom & age in Mandarin (contain non-ASCII characters)
-  - `label_fr` = symptom & age in French (contain non-ASCII characters)
+  - `label_zh` = symptom & age in Mandarin (contains non-ASCII characters)
+  - `label_fr` = symptom & age in French (contains non-ASCII characters)
 
 `case_by_detection_by_onset_day.csv`
 - Row = onset date
@@ -109,11 +109,11 @@ Contents
 
 `travel_history_symptom_correlations_total.csv`
 - Row = symptom & travel history
-- Column = `label`, `count`, `label_zh`, & `label_fr`
+- Column
   - `label` = symptom & travel history in English
   - `count` = confirmed case counts of the group
-  - `label_zh` = symptom & travel history in Mandarin (contain non-ASCII characters)
-  - `label_fr` = symptom & travel history in French (contain non-ASCII characters)
+  - `label_zh` = symptom & travel history in Mandarin (contains non-ASCII characters)
+  - `label_fr` = symptom & travel history in French (contains non-ASCII characters)
 
 ### From `COVID-19_in_Taiwan_raw_data_county_age.csv`
 
@@ -143,30 +143,16 @@ Contents
 `incidence_map_population.csv`
 - Row = city or county
 - Column
-  - `code` = 5-digit code given by Ministry of the Interior
+  - `code` = 5-digit code given by the Ministry of the Interior
   - `population`
   - `label` = city or county name in English
-  - `label_fr` = city or county name in French (contain non-ASCII characters)
-  - `label_zh` = city or county name in Mandarin (contain non-ASCII characters)
+  - `label_fr` = city or county name in French (contains non-ASCII characters)
+  - `label_zh` = city or county name in Mandarin (contains non-ASCII characters)
 
 ### From `COVID-19_in_Taiwan_raw_data_number_of_tests.csv`
 
-`border_statistics_both.csv`
-- Row = date
-- Column
-  - `airports`
-  - `seaports`
-  - `not specified`
-- Value = passenger counts
-
-`border_statistics_entry.csv`
-- Row = date
-- Column
-  - `airports`
-  - `seaports`
-  - `not specified`
-- Value = passenger counts
-
+`border_statistics_both.csv`  
+`border_statistics_entry.csv`  
 `border_statistics_exit.csv`
 - Row = date
 - Column
@@ -180,7 +166,7 @@ Contents
 `status_evolution.csv`
 - Row = date
 - Column
-  - `discharged` = number of people who recovered
+  - `discharged` = number of people discharged from isolation
   - `hospitalized`
   - `death`
 - Value = number counts

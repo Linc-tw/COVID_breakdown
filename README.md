@@ -80,7 +80,7 @@ They also collect fragmental information from daily press releases and conferenc
 Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.
 
 See [_Data Sources_](https://linc-tw.github.io/COVID_breakdown/data_source.html) or 
-`README.md` of [`raw_data`](https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data)
+`README.md` of [`raw_data/`](https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data)
 for details.
 
 
