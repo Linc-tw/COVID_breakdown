@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function THSC_MakeCanvas(wrap) {
+function THSC_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 540;
@@ -17,6 +17,26 @@ function THSC_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 250, right: 2, bottom: 2, top: 200};
   
   GS_MakeCanvas(wrap);
+}
+
+function THSC_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("travel_history_symptom_correlations_title", "旅遊史與症狀相關程度");
+    TT_AddStr("travel_history_symptom_correlations_button_1", "相關係數");
+    TT_AddStr("travel_history_symptom_correlations_button_2", "案例數");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("travel_history_symptom_correlations_title", "Corrélations entre antécédents de voyage & symptômes");
+    TT_AddStr("travel_history_symptom_correlations_button_1", "Coefficients");
+    TT_AddStr("travel_history_symptom_correlations_button_2", "Nombres");
+  }
+  
+  else { //-- En
+    TT_AddStr("travel_history_symptom_correlations_title", "Correlations between Travel History & Symptoms");
+    TT_AddStr("travel_history_symptom_correlations_button_1", "Coefficients");
+    TT_AddStr("travel_history_symptom_correlations_button_2", "Counts");
+  }
 }
 
 function THSC_FormatData(wrap, data) {
@@ -123,7 +143,7 @@ function THSC_FormatData2(wrap, data2) {
   wrap.yticklabel = yticklabel;
 }
 
-function THSC_Initialize(wrap) {
+function THSC_Plot(wrap) {
   //-- Define x-axis
   var x = d3.scaleBand()
     .domain(wrap.symptom_list)
@@ -246,7 +266,7 @@ function THSC_Initialize(wrap) {
   wrap.legend_pos = legend_pos;
 }
 
-function THSC_Update(wrap) {
+function THSC_Replot(wrap) {
   //-- Define legend label
   var legend_label;
   if (GS_lang == 'zh-tw')
@@ -286,8 +306,8 @@ function THSC_Update(wrap) {
       .attr("text-anchor", "start")
 }
 
-//-- Plot
-function THSC_Plot(wrap) {
+//-- Load
+function THSC_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.do_count])
     .defer(d3.csv, wrap.data_path_list[2])
@@ -295,15 +315,14 @@ function THSC_Plot(wrap) {
       if (error)
         return console.warn(error);
       
-      THSC_MakeCanvas(wrap);
       THSC_FormatData(wrap, data);
       THSC_FormatData2(wrap, data2);
-      THSC_Initialize(wrap);
-      THSC_Update(wrap);
+      THSC_Plot(wrap);
+      THSC_Replot(wrap);
     });
 }
 
-function THSC_Replot(wrap) {
+function THSC_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.do_count])
     .await(function (error, data) {
@@ -311,7 +330,7 @@ function THSC_Replot(wrap) {
         return console.warn(error);
       
       THSC_FormatData(wrap, data);
-      THSC_Update(wrap);
+      THSC_Replot(wrap);
     });
 }
 
@@ -320,7 +339,7 @@ function THSC_ButtonListener(wrap) {
   $(document).on("change", "input:radio[name='" + wrap.tag + "_count']", function (event) {
     GS_PressRadioButton(wrap, 'count', wrap.do_count, this.value);
     wrap.do_count = this.value;
-    THSC_Replot(wrap);
+    THSC_Reload(wrap);
   });
 
   //-- Save
@@ -344,8 +363,10 @@ function THSC_ButtonListener(wrap) {
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove()
     
-    //-- Replot
-    THSC_Plot(wrap);
+    //-- Reload
+    THSC_InitFig(wrap);
+    THSC_ResetText();
+    THSC_Load(wrap);
   });
 }
 
@@ -358,8 +379,10 @@ function THSC_Main(wrap) {
   wrap.do_count = document.querySelector("input[name='" + wrap.tag + "_count']:checked").value;
   GS_PressRadioButton(wrap, 'count', 0, wrap.do_count); //-- 0 from .html
 
-  //-- Plot
-  THSC_Plot(wrap);
+  //-- Load
+  THSC_InitFig(wrap);
+  THSC_ResetText();
+  THSC_Load(wrap);
   
   //-- Setup button listeners
   THSC_ButtonListener(wrap);

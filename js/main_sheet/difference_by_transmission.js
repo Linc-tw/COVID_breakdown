@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function DBT_MakeCanvas(wrap) {
+function DBT_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -17,6 +17,32 @@ function DBT_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 70, right: 2, bottom: 80, top: 2};
   
   GS_MakeCanvas(wrap);
+}
+
+function DBT_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("difference_by_transmission_title", "發現個案所需時間分布");
+    TT_AddStr("difference_by_transmission_button_1", "全部");
+    TT_AddStr("difference_by_transmission_button_2", "境外移入");
+    TT_AddStr("difference_by_transmission_button_3", "本土");
+    TT_AddStr("difference_by_transmission_button_4", "其他");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("difference_by_transmission_title", "Délai avant d'identifier une transmission");
+    TT_AddStr("difference_by_transmission_button_1", "Tous");
+    TT_AddStr("difference_by_transmission_button_2", "Importés");
+    TT_AddStr("difference_by_transmission_button_3", "Locaux");
+    TT_AddStr("difference_by_transmission_button_4", "Divers");
+  }
+  
+  else { //-- En
+    TT_AddStr("difference_by_transmission_title", "Delay Before Identifying a Transmission");
+    TT_AddStr("difference_by_transmission_button_1", "All");
+    TT_AddStr("difference_by_transmission_button_2", "Imported");
+    TT_AddStr("difference_by_transmission_button_3", "Local");
+    TT_AddStr("difference_by_transmission_button_4", "Others");
+  }
 }
 
 function DBT_FormatData(wrap, data) {
@@ -157,7 +183,7 @@ function DBT_MouseMove(wrap, d) {
     .style("top", new_pos[1] + "px")
 }
 
-function DBT_Initialize(wrap) {
+function DBT_Plot(wrap) {
   //-- Define x-axis
   var x = d3.scaleBand()
     .domain(wrap.diff_list)
@@ -270,7 +296,7 @@ function DBT_Initialize(wrap) {
   wrap.bar = bar;
 }
 
-function DBT_Update(wrap) {
+function DBT_Replot(wrap) {
   //-- Define y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
@@ -384,8 +410,8 @@ function DBT_Update(wrap) {
       .attr("text-anchor", "start")
 }
 
-//-- Plot
-function DBT_Plot(wrap) {
+//-- Load
+function DBT_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .defer(d3.csv, wrap.data_path_list[1])
@@ -393,15 +419,14 @@ function DBT_Plot(wrap) {
       if (error)
         return console.warn(error);
       
-      DBT_MakeCanvas(wrap);
       DBT_FormatData(wrap, data);
       DBT_FormatData2(wrap, data2);
-      DBT_Initialize(wrap);
-      DBT_Update(wrap);
+      DBT_Plot(wrap);
+      DBT_Replot(wrap);
     });
 }
 
-function DBT_Replot(wrap) {
+function DBT_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
@@ -409,7 +434,7 @@ function DBT_Replot(wrap) {
         return console.warn(error);
       
       DBT_FormatData(wrap, data);
-      DBT_Update(wrap);
+      DBT_Replot(wrap);
     });
 }
 
@@ -418,7 +443,7 @@ function DBT_ButtonListener(wrap) {
   $(document).on("change", "input:radio[name='" + wrap.tag + "_ind']", function (event) {
     GS_PressRadioButton(wrap, 'ind', wrap.col_ind, this.value);
     wrap.col_ind = this.value;
-    DBT_Replot(wrap);
+    DBT_Reload(wrap);
   });
 
   //-- Save
@@ -443,8 +468,9 @@ function DBT_ButtonListener(wrap) {
     GS_lang = this.value;
     Cookies.set("lang", GS_lang);
     
-    //-- Update
-    DBT_Update(wrap);
+    //-- Replot
+    DBT_ResetText();
+    DBT_Replot(wrap);
   });
 }
 
@@ -456,8 +482,10 @@ function DBT_Main(wrap) {
   wrap.col_ind = document.querySelector("input[name='" + wrap.tag + "_ind']:checked").value;
   GS_PressRadioButton(wrap, 'ind', 0, wrap.col_ind); //-- 0 from .html
   
-  //-- Plot
-  DBT_Plot(wrap);
+  //-- Load
+  DBT_InitFig(wrap);
+  DBT_ResetText();
+  DBT_Load(wrap);
   
   //-- Setup button listeners
   DBT_ButtonListener(wrap);

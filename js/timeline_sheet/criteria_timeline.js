@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function CT_MakeCanvas(wrap) {
+function CT_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 540;
@@ -17,6 +17,32 @@ function CT_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 0, right: 0, bottom: 0, top: 0};
   
   GS_MakeCanvas(wrap);
+}
+
+function CT_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("criteria_timeline_title", "檢驗通報標準演進圖");
+    TT_AddStr("criteria_timeline_button_1", "精選");
+    TT_AddStr("criteria_timeline_button_2", "完整");
+    TT_AddStr("criteria_timeline_button_3", "軸狀");
+    TT_AddStr("criteria_timeline_button_4", "碟狀");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("criteria_timeline_title", "Chronologie des dépistages systématiques");
+    TT_AddStr("criteria_timeline_button_1", "Selectionnée");
+    TT_AddStr("criteria_timeline_button_2", "Complète");
+    TT_AddStr("criteria_timeline_button_3", "Frise");
+    TT_AddStr("criteria_timeline_button_4", "Disques");
+  }
+  
+  else { //-- En
+    TT_AddStr("criteria_timeline_title", "Chronology of Systematic Testing");
+    TT_AddStr("criteria_timeline_button_1", "Selected");
+    TT_AddStr("criteria_timeline_button_2", "Full");
+    TT_AddStr("criteria_timeline_button_3", "Timeline");
+    TT_AddStr("criteria_timeline_button_4", "Disks");
+  }
 }
 
 function CT_FormatData(wrap, data) {
@@ -112,7 +138,7 @@ function CT_Click_Timeline(wrap, d, j) {
   wrap['timeline_text_'+j] = alpha;
 }
 
-function CT_Initialize(wrap) {
+function CT_Plot(wrap) {
   //-- Add tooltip
   GS_MakeTooltip(wrap);
   
@@ -490,7 +516,7 @@ function CT_Initialize(wrap) {
   wrap.line_alpha = line_alpha;
 }
 
-function CT_Update(wrap) {
+function CT_Replot(wrap) {
   var i, active_list;
   
   //-- Switch state to selected
@@ -664,18 +690,17 @@ function CT_Update(wrap) {
   }
 }
 
-//-- Plot
-function CT_Plot(wrap) {
+//-- Load
+function CT_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      CT_MakeCanvas(wrap);
       CT_FormatData(wrap, data);
-      CT_Initialize(wrap);
-      CT_Update(wrap);
+      CT_Plot(wrap);
+      CT_Replot(wrap);
     });
 }
 
@@ -684,14 +709,14 @@ function CT_ButtonListener(wrap) {
   $(document).on("change", "input:radio[name='" + wrap.tag + "_full']", function (event) {
     GS_PressRadioButton(wrap, 'full', wrap.full, this.value);
     wrap.full = this.value;
-    CT_Update(wrap);
+    CT_Replot(wrap);
   });
 
   //-- Timeline or disks
   $(document).on("change", "input:radio[name='" + wrap.tag + "_timeline']", function (event) {
     GS_PressRadioButton(wrap, 'timeline', wrap.timeline, this.value);
     wrap.timeline = this.value;
-    CT_Update(wrap);
+    CT_Replot(wrap);
   });
 
   //-- Save
@@ -722,8 +747,10 @@ function CT_ButtonListener(wrap) {
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove();
     
-    //-- Replot
-    CT_Plot();
+    //-- Reload
+    CT_InitFig(wrap);
+    CT_ResetText();
+    CT_Load(wrap);
   });
 }
 
@@ -737,25 +764,11 @@ function CT_Main(wrap) {
   GS_PressRadioButton(wrap, 'full', 0, wrap.full); //-- 0 from .html
   GS_PressRadioButton(wrap, 'timeline', 1, wrap.timeline); //-- 1 from .html
   
-  //-- Plot
-  CT_Plot(wrap);
+  //-- Load
+  CT_InitFig(wrap);
+  CT_ResetText();
+  CT_Load(wrap);
   
   //-- Setup button listeners
   CT_ButtonListener(wrap);
 }
-
-//-- Global variable
-var CT_wrap = {};
-
-//-- ID
-CT_wrap.tag = 'criteria_timeline'
-
-//-- File path
-CT_wrap.data_path_list = [
-  "processed_data/criteria_timeline.csv"
-];
-
-//-- No parameters
-
-//-- Main
-CT_Main(CT_wrap);

@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function TBC_MakeCanvas(wrap) {
+function TBC_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -17,6 +17,26 @@ function TBC_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
   
   GS_MakeCanvas(wrap);
+}
+
+function TBC_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("test_by_criterion_title", "檢驗數量");
+    TT_AddStr("test_by_criterion_button_1", "逐日");
+    TT_AddStr("test_by_criterion_button_2", "累計");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("test_by_criterion_title", "Nombre de tests par critère");
+    TT_AddStr("test_by_criterion_button_1", "Quotidiens");
+    TT_AddStr("test_by_criterion_button_2", "Cumulés");
+  }
+  
+  else { //-- En
+    TT_AddStr("test_by_criterion_title", "Number of Tests by Reporting Criterion");
+    TT_AddStr("test_by_criterion_button_1", "Daily");
+    TT_AddStr("test_by_criterion_button_2", "Cumulative");
+  }
 }
 
 function TBC_FormatData(wrap, data) {
@@ -178,7 +198,7 @@ function TBC_MouseMove(wrap, d) {
     .style("top", new_pos[1] + "px")
 }
 
-function TBC_Initialize(wrap) {
+function TBC_Plot(wrap) {
   //-- Define x-axis
   var x = d3.scaleBand()
     .domain(wrap.date_list)
@@ -281,7 +301,7 @@ function TBC_Initialize(wrap) {
   wrap.bar = bar;
 }
 
-function TBC_Update(wrap) {
+function TBC_Replot(wrap) {
   //-- Define new xticklabels
   var x_axis_2 = d3.axisBottom(wrap.x_2)
     .tickSize(10)
@@ -411,22 +431,21 @@ function TBC_Update(wrap) {
       .attr("text-anchor", "start")
 }
 
-//-- Plot
-function TBC_Plot(wrap) {
+//-- Load
+function TBC_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      TBC_MakeCanvas(wrap);
       TBC_FormatData(wrap, data);
-      TBC_Initialize(wrap);
-      TBC_Update(wrap);
+      TBC_Plot(wrap);
+      TBC_Replot(wrap);
     });
 }
 
-function TBC_Replot(wrap) {
+function TBC_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path[0])
     .await(function (error, data) {
@@ -434,7 +453,7 @@ function TBC_Replot(wrap) {
         return console.warn(error);
       
       TBC_FormatData(wrap, data);
-      TBC_Update(wrap);
+      TBC_Replot(wrap);
     });
 }
 
@@ -443,7 +462,7 @@ function TBC_ButtonListener(wrap) {
   $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
     GS_PressRadioButton(wrap, 'cumul', wrap.do_cumul, this.value);
     wrap.do_cumul = this.value;
-    TBC_Replot(wrap);
+    TBC_Reload(wrap);
   });
 
   //-- Save
@@ -465,7 +484,8 @@ function TBC_ButtonListener(wrap) {
     Cookies.set("lang", GS_lang);
     
     //-- Replot
-    TBC_Update(wrap);
+    TBC_ResetText();
+    TBC_Replot(wrap);
   });
 }
 
@@ -477,8 +497,10 @@ function TBC_Main(wrap) {
   wrap.do_cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
   GS_PressRadioButton(wrap, 'cumul', 0, wrap.do_cumul); //-- 0 from .html
   
-  //-- Plot
-  TBC_Plot(wrap);
+  //-- Load
+  TBC_InitFig(wrap);
+  TBC_ResetText();
+  TBC_Load(wrap);
   
   //-- Setup button listeners
   TBC_ButtonListener(wrap);

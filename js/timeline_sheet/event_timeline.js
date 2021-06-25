@@ -1,11 +1,11 @@
 
 //-- Filename:
-//--   criteria_timeline.js
+//--   event_timeline.js
 //--
 //-- Author:
 //--   Chieh-An Lin
 
-function ET_MakeCanvas(wrap) {
+function ET_InitFig(wrap) {
   wrap.tot_width = 1200;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 720;
@@ -18,6 +18,26 @@ function ET_MakeCanvas(wrap) {
   wrap.cell_size = 20; //-- Cell size
   
   GS_MakeCanvas(wrap);
+}
+
+function ET_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("event_timeline_title", "疫情時間軸");
+    TT_AddStr("event_timeline_button_1", "週日為首");
+    TT_AddStr("event_timeline_button_2", "週一為首");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("event_timeline_title", "Chronologie de la pandémie");
+    TT_AddStr("event_timeline_button_1", "1er jour dimanche");
+    TT_AddStr("event_timeline_button_2", "1er jour lundi");
+  }
+  
+  else { //-- En
+    TT_AddStr("event_timeline_title", "Pandemic Timeline");
+    TT_AddStr("event_timeline_button_1", "1st day Sunday");
+    TT_AddStr("event_timeline_button_2", "1st day Monday");
+  }
 }
 
 function ET_FormatData(wrap, data) {
@@ -602,7 +622,7 @@ function ET_Click(wrap, d, i) {
     .attr('fill', function (d2, j) {return color_list[j];});
 }
 
-function ET_Initialize(wrap) {
+function ET_Plot(wrap) {
   //-- Add tooltip
   GS_MakeTooltip(wrap);
   
@@ -683,7 +703,7 @@ function ET_Initialize(wrap) {
   wrap.dy0 = dy0;
 }
 
-function ET_Update(wrap) {
+function ET_Replot(wrap) {
   //-- Function to get day index
   var get_day = function (day, start) {
     return (day.getDay() + 7 - start) % 7;
@@ -884,18 +904,17 @@ function ET_Update(wrap) {
       .attr("dominant-baseline", "middle")
 }
 
-//-- Plot
-function ET_Plot(wrap) {
+//-- Load
+function ET_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      ET_MakeCanvas(wrap);
       ET_FormatData(wrap, data);
-      ET_Initialize(wrap);
-      ET_Update(wrap);
+      ET_Plot(wrap);
+      ET_Replot(wrap);
     });
 }
 
@@ -904,7 +923,7 @@ function ET_ButtonListener(wrap) {
   $(document).on("change", "input:radio[name='" + wrap.tag + "_start']", function (event) {
     GS_PressRadioButton(wrap, 'start', wrap.week_start, this.value);
     wrap.week_start = this.value;
-    ET_Update(wrap);
+    ET_Replot(wrap);
   });
 
   //-- Save
@@ -928,8 +947,10 @@ function ET_ButtonListener(wrap) {
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove();
     
-    //-- Replot
-    ET_Plot();
+    //-- Reload
+    ET_InitFig(wrap);
+    ET_ResetText();
+    ET_Load(wrap);
   });
 }
 
@@ -941,25 +962,11 @@ function ET_Main(wrap) {
   wrap.week_start = document.querySelector("input[name='" + wrap.tag + "_start']:checked").value;
   GS_PressRadioButton(wrap, 'start', 0, wrap.week_start); //-- 0 from .html
   
-  //-- Plot
-  ET_Plot(wrap);
+  //-- Load
+  ET_InitFig(wrap);
+  ET_ResetText();
+  ET_Load(wrap);
   
   //-- Setup button listeners
   ET_ButtonListener(wrap);
 }
-
-//-- Global variable
-var ET_wrap = {};
-
-//-- ID
-ET_wrap.tag = 'event_timeline';
-
-//-- File path
-ET_wrap.data_path_list = [
-  "processed_data/event_timeline_zh-tw.csv"
-];
-
-//-- No parameters
-
-//-- Main
-ET_Main(ET_wrap);

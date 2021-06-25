@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function DCPC_MakeCanvas(wrap) {
+function DCPC_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -17,6 +17,89 @@ function DCPC_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
   
   GS_MakeCanvas(wrap);
+}
+
+function DCPC_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("daily_case_per_county_title", "各縣市之每日確診人數");
+    TT_AddStr("daily_case_per_county_button_total", "本土合計");
+    TT_AddStr("daily_case_per_county_button_keelung", "基隆");
+    TT_AddStr("daily_case_per_county_button_taipei", "台北");
+    TT_AddStr("daily_case_per_county_button_new_taipei", "新北");
+    TT_AddStr("daily_case_per_county_button_taoyuan", "桃園");
+    TT_AddStr("daily_case_per_county_button_hsinchu", "竹縣");
+    TT_AddStr("daily_case_per_county_button_hsinchu_city", "竹市");
+    TT_AddStr("daily_case_per_county_button_miaoli", "苗栗");
+    TT_AddStr("daily_case_per_county_button_taichung", "台中");
+    TT_AddStr("daily_case_per_county_button_changhua", "彰化");
+    TT_AddStr("daily_case_per_county_button_nantou", "南投");
+    TT_AddStr("daily_case_per_county_button_yunlin", "雲林");
+    TT_AddStr("daily_case_per_county_button_chiayi", "嘉縣");
+    TT_AddStr("daily_case_per_county_button_chiayi_city", "嘉市");
+    TT_AddStr("daily_case_per_county_button_tainan", "台南");
+    TT_AddStr("daily_case_per_county_button_kaohsiung", "高雄");
+    TT_AddStr("daily_case_per_county_button_pingtung", "屏東");
+    TT_AddStr("daily_case_per_county_button_yilan", "宜蘭");
+    TT_AddStr("daily_case_per_county_button_hualien", "花蓮");
+    TT_AddStr("daily_case_per_county_button_taitung", "台東");
+    TT_AddStr("daily_case_per_county_button_penghu", "澎湖");
+    TT_AddStr("daily_case_per_county_button_kinmen", "金門");
+    TT_AddStr("daily_case_per_county_button_matsu", "馬祖");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("daily_case_per_county_title", "Cas confirmés locaux par ville et comté");
+    TT_AddStr("daily_case_per_county_button_total", "Locaux totaux");
+    TT_AddStr("daily_case_per_county_button_keelung", "Keelung");
+    TT_AddStr("daily_case_per_county_button_taipei", "Taipei");
+    TT_AddStr("daily_case_per_county_button_new_taipei", "Nouveau Taipei");
+    TT_AddStr("daily_case_per_county_button_taoyuan", "Taoyuan");
+    TT_AddStr("daily_case_per_county_button_hsinchu", "Comté de Hsinchu");
+    TT_AddStr("daily_case_per_county_button_hsinchu_city", "Ville de Hsinchu");
+    TT_AddStr("daily_case_per_county_button_miaoli", "Miaoli");
+    TT_AddStr("daily_case_per_county_button_taichung", "Taichung");
+    TT_AddStr("daily_case_per_county_button_changhua", "Changhua");
+    TT_AddStr("daily_case_per_county_button_nantou", "Nantou");
+    TT_AddStr("daily_case_per_county_button_yunlin", "Yunlin");
+    TT_AddStr("daily_case_per_county_button_chiayi", "Comté de Chiayi");
+    TT_AddStr("daily_case_per_county_button_chiayi_city", "Ville de Chiayi");
+    TT_AddStr("daily_case_per_county_button_tainan", "Tainan");
+    TT_AddStr("daily_case_per_county_button_kaohsiung", "Kaohsiung");
+    TT_AddStr("daily_case_per_county_button_pingtung", "Pingtung");
+    TT_AddStr("daily_case_per_county_button_yilan", "Yilan");
+    TT_AddStr("daily_case_per_county_button_hualien", "Hualien");
+    TT_AddStr("daily_case_per_county_button_taitung", "Taitung");
+    TT_AddStr("daily_case_per_county_button_penghu", "Penghu");
+    TT_AddStr("daily_case_per_county_button_kinmen", "Kinmen");
+    TT_AddStr("daily_case_per_county_button_matsu", "Matsu");
+  }
+  
+  else { //-- En
+    TT_AddStr("daily_case_per_county_title", "Local Confirmed Cases per City & County");
+    TT_AddStr("daily_case_per_county_button_total", "Total local");
+    TT_AddStr("daily_case_per_county_button_keelung", "Keelung");
+    TT_AddStr("daily_case_per_county_button_taipei", "Taipei");
+    TT_AddStr("daily_case_per_county_button_new_taipei", "New Taipei");
+    TT_AddStr("daily_case_per_county_button_taoyuan", "Taoyuan");
+    TT_AddStr("daily_case_per_county_button_hsinchu", "Hsinchu County");
+    TT_AddStr("daily_case_per_county_button_hsinchu_city", "Hsinchu City");
+    TT_AddStr("daily_case_per_county_button_miaoli", "Miaoli");
+    TT_AddStr("daily_case_per_county_button_taichung", "Taichung");
+    TT_AddStr("daily_case_per_county_button_changhua", "Changhua");
+    TT_AddStr("daily_case_per_county_button_nantou", "Nantou");
+    TT_AddStr("daily_case_per_county_button_yunlin", "Yunlin");
+    TT_AddStr("daily_case_per_county_button_chiayi", "Chiayi County");
+    TT_AddStr("daily_case_per_county_button_chiayi_city", "Chiayi City");
+    TT_AddStr("daily_case_per_county_button_tainan", "Tainan");
+    TT_AddStr("daily_case_per_county_button_kaohsiung", "Kaohsiung");
+    TT_AddStr("daily_case_per_county_button_pingtung", "Pingtung");
+    TT_AddStr("daily_case_per_county_button_yilan", "Yilan");
+    TT_AddStr("daily_case_per_county_button_hualien", "Hualien");
+    TT_AddStr("daily_case_per_county_button_taitung", "Taitung");
+    TT_AddStr("daily_case_per_county_button_penghu", "Penghu");
+    TT_AddStr("daily_case_per_county_button_kinmen", "Kinmen");
+    TT_AddStr("daily_case_per_county_button_matsu", "Matsu");
+  }
 }
 
 function DCPC_FormatData(wrap, data) {
@@ -143,7 +226,7 @@ function DCPC_MouseMove(wrap, d) {
     .style("top", new_pos[1] + "px")
 }
 
-function DCPC_Initialize(wrap) {
+function DCPC_Plot(wrap) {
   //-- Define x-axis
   var x = d3.scaleBand()
     .domain(wrap.date_list)
@@ -248,7 +331,7 @@ function DCPC_Initialize(wrap) {
   wrap.bar = bar;
 }
 
-function DCPC_Update(wrap) {
+function DCPC_Replot(wrap) {
   //-- Define new xticklabel
   var x_axis_2 = d3.axisBottom(wrap.x_2)
     .tickSize(10)
@@ -368,22 +451,21 @@ function DCPC_Update(wrap) {
       .attr("text-anchor", "start")
 }
 
-//-- Plot
-function DCPC_Plot(wrap) {
+//-- Load
+function DCPC_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      DCPC_MakeCanvas(wrap);
       DCPC_FormatData(wrap, data);
-      DCPC_Initialize(wrap);
-      DCPC_Update(wrap);
+      DCPC_Plot(wrap);
+      DCPC_Replot(wrap);
     });
 }
 
-function DCPC_Replot(wrap) {
+function DCPC_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
@@ -391,7 +473,7 @@ function DCPC_Replot(wrap) {
         return console.warn(error);
       
       DCPC_FormatData(wrap, data);
-      DCPC_Update(wrap);
+      DCPC_Replot(wrap);
     });
 }
 
@@ -399,7 +481,7 @@ function DCPC_ButtonListener(wrap) {
   //-- Period
   d3.select(wrap.id +'_county').on('change', function() {
     wrap.county = this.value;
-    DCPC_Replot(wrap);
+    DCPC_Reload(wrap);
   });
   
   //-- Save
@@ -419,8 +501,9 @@ function DCPC_ButtonListener(wrap) {
     GS_lang = this.value;
     Cookies.set("lang", GS_lang);
     
-    //-- Update
-    DCPC_Update(wrap);
+    //-- Replot
+    DCPC_ResetText();
+    DCPC_Replot(wrap);
   });
 }
 
@@ -431,8 +514,10 @@ function DCPC_Main(wrap) {
   //-- Swap active to current value
   wrap.county = document.getElementById(wrap.tag + "_county").value;
   
-  //-- Plot
-  DCPC_Plot(wrap);
+  //-- Load
+  DCPC_InitFig(wrap);
+  DCPC_ResetText();
+  DCPC_Load(wrap);
   
   //-- Setup button listeners
   DCPC_ButtonListener(wrap);

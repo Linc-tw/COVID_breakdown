@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function CBT_MakeCanvas(wrap) {
+function CBT_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -17,6 +17,32 @@ function CBT_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
   
   GS_MakeCanvas(wrap);
+}
+
+function CBT_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("case_by_transmission_title", "各感染源之每日確診人數");
+    TT_AddStr("case_by_transmission_button_1", "逐日");
+    TT_AddStr("case_by_transmission_button_2", "累計");
+    TT_AddStr("case_by_transmission_button_3", "確診日");
+    TT_AddStr("case_by_transmission_button_4", "發病日");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("case_by_transmission_title", "Cas confirmés par moyen de transmission");
+    TT_AddStr("case_by_transmission_button_1", "Quotidiens");
+    TT_AddStr("case_by_transmission_button_2", "Cumulés");
+    TT_AddStr("case_by_transmission_button_3", "Date du diagnostic");
+    TT_AddStr("case_by_transmission_button_4", "Date du début des sympt.");
+  }
+  
+  else { //-- En
+    TT_AddStr("case_by_transmission_title", "Confirmed Cases by Transmission Type");
+    TT_AddStr("case_by_transmission_button_1", "Daily");
+    TT_AddStr("case_by_transmission_button_2", "Cumulative");
+    TT_AddStr("case_by_transmission_button_3", "Report date");
+    TT_AddStr("case_by_transmission_button_4", "Onset date");
+  }
 }
 
 function CBT_FormatData(wrap, data) {
@@ -215,7 +241,7 @@ function CBT_MouseMove(wrap, d) {
     .style("top", new_pos[1] + "px")
 }
 
-function CBT_Initialize(wrap) {
+function CBT_Plot(wrap) {
   //-- Define x-axis
   var x = d3.scaleBand()
     .domain(wrap.date_list)
@@ -318,7 +344,7 @@ function CBT_Initialize(wrap) {
   wrap.bar = bar;
 }
 
-function CBT_Update(wrap) {
+function CBT_Replot(wrap) {
   //-- Define new xticklabel
   var x_axis_2 = d3.axisBottom(wrap.x_2)
     .tickSize(10)
@@ -462,8 +488,8 @@ function CBT_Update(wrap) {
       .attr("text-anchor", "start");
 }
 
-//-- Plot
-function CBT_Plot(wrap) {
+//-- Load
+function CBT_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.onset])
     .defer(d3.csv, wrap.data_path_list[2])
@@ -471,15 +497,14 @@ function CBT_Plot(wrap) {
       if (error)
         return console.warn(error);
       
-      CBT_MakeCanvas(wrap);
       CBT_FormatData(wrap, data);
       CBT_FormatData2(wrap, data2);
-      CBT_Initialize(wrap);
-      CBT_Update(wrap);
+      CBT_Plot(wrap);
+      CBT_Replot(wrap);
     });
 }
 
-function CBT_Replot(wrap) {
+function CBT_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.onset])
     .await(function (error, data) {
@@ -487,7 +512,7 @@ function CBT_Replot(wrap) {
         return console.warn(error);
       
       CBT_FormatData(wrap, data);
-      CBT_Update(wrap);
+      CBT_Replot(wrap);
     });
 }
 
@@ -496,14 +521,14 @@ function CBT_ButtonListener(wrap) {
   $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
     GS_PressRadioButton(wrap, 'cumul', wrap.cumul, this.value);
     wrap.cumul = this.value;
-    CBT_Replot(wrap);
+    CBT_Reload(wrap);
   });
 
   //-- Report date or onset date
   $(document).on("change", "input:radio[name='" + wrap.tag + "_onset']", function (event) {
     GS_PressRadioButton(wrap, 'onset', wrap.onset, this.value);
     wrap.onset = this.value
-    CBT_Replot(wrap);
+    CBT_Reload(wrap);
   });
 
   //-- Save
@@ -530,7 +555,8 @@ function CBT_ButtonListener(wrap) {
     Cookies.set("lang", GS_lang);
     
     //-- Replot
-    CBT_Update(wrap);
+    CBT_ResetText();
+    CBT_Replot(wrap);
   });
 }
 
@@ -544,8 +570,10 @@ function CBT_Main(wrap) {
   GS_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
   GS_PressRadioButton(wrap, 'onset', 0, wrap.onset); //-- 0 from .html
   
-  //-- Plot
-  CBT_Plot(wrap);
+  //-- Load
+  CBT_InitFig(wrap);
+  CBT_ResetText();
+  CBT_Load(wrap);
   
   //-- Setup button listeners
   CBT_ButtonListener(wrap);

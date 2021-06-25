@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function VR_MakeCanvas(wrap) {
+function VR_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -17,6 +17,20 @@ function VR_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 70, right: 2, bottom: 90, top: 2};
   
   GS_MakeCanvas(wrap);
+}
+
+function VR_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("various_rates_title", "各種比率之七日平均");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("various_rates_title", "Taux en moyenne glissante sur 7 jours");
+  }
+  
+  else { //-- En
+    TT_AddStr("various_rates_title", "7-day Average of Various Rates");
+  }
 }
 
 function VR_FormatData(wrap, data) {
@@ -142,7 +156,7 @@ function VR_MouseMove(wrap, d) {
     .style("top", new_pos[1] + "px")
 }
 
-function VR_Initialize(wrap) {
+function VR_Plot(wrap) {
   //-- Define x-axis
   var x = d3.scalePoint()
     .domain(wrap.date_list)
@@ -273,7 +287,7 @@ function VR_Initialize(wrap) {
   wrap.dot = dot;
 }
 
-function VR_Update(wrap) {
+function VR_Replot(wrap) {
   //-- Define new xticklabel
   var x_axis_2 = d3.axisBottom(wrap.x_2)
     .tickSize(10)
@@ -360,18 +374,17 @@ function VR_Update(wrap) {
       .attr("text-anchor", "start");
 }
 
-//-- Plot
-function VR_Plot(wrap) {
+//-- Load
+function VR_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      VR_MakeCanvas(wrap);
       VR_FormatData(wrap, data);
-      VR_Initialize(wrap);
-      VR_Update(wrap);
+      VR_Plot(wrap);
+      VR_Replot(wrap);
     });
 }
 
@@ -388,7 +401,8 @@ function VR_ButtonListener(wrap) {
     Cookies.set("lang", GS_lang);
     
     //-- Replot
-    VR_Update(wrap);
+    VR_ResetText();
+    VR_Replot(wrap);
   });
 }
 
@@ -396,8 +410,10 @@ function VR_ButtonListener(wrap) {
 function VR_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
-  //-- Plot
-  VR_Plot(wrap);
+  //-- Load
+  VR_InitFig(wrap);
+  VR_ResetText();
+  VR_Load(wrap);
   
   //-- Setup button listeners
   VR_ButtonListener(wrap);

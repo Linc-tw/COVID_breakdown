@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function CBA_MakeCanvas(wrap) {
+function CBA_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -17,6 +17,98 @@ function CBA_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 90, right: 2, bottom: 80, top: 2};
   
   GS_MakeCanvas(wrap);
+}
+
+function CBA_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("case_by_age_title", "確診個案年齡分布");
+    TT_AddStr("case_by_age_text", "資料遲一日更新");
+    TT_AddStr("case_by_age_button_total", "合計");
+    TT_AddStr("case_by_age_button_w-1", "0-6天前");
+    TT_AddStr("case_by_age_button_w-2", "7-13天前");
+    TT_AddStr("case_by_age_button_w-3", "14-20天前");
+    TT_AddStr("case_by_age_button_w-4", "21-27天前");
+    TT_AddStr("case_by_age_button_w-5", "28-34天前");
+    TT_AddStr("case_by_age_button_w-6", "35-41天前");
+    TT_AddStr("case_by_age_button_w-7", "42-48天前");
+    TT_AddStr("case_by_age_button_w-8", "49-55天前");
+    TT_AddStr("case_by_age_button_w-9", "56-62天前");
+    TT_AddStr("case_by_age_button_w-10", "63-69天前");
+    TT_AddStr("case_by_age_button_w-11", "70-76天前");
+    TT_AddStr("case_by_age_button_w-12", "77-83天前");
+    TT_AddStr("case_by_age_button_m1", "1月");
+    TT_AddStr("case_by_age_button_m2", "2月");
+    TT_AddStr("case_by_age_button_m3", "3月");
+    TT_AddStr("case_by_age_button_m4", "4月");
+    TT_AddStr("case_by_age_button_m5", "5月");
+    TT_AddStr("case_by_age_button_m6", "6月");
+    TT_AddStr("case_by_age_button_m7", "7月");
+    TT_AddStr("case_by_age_button_m8", "8月");
+    TT_AddStr("case_by_age_button_m9", "9月");
+    TT_AddStr("case_by_age_button_m10", "10月");
+    TT_AddStr("case_by_age_button_m11", "11月");
+    TT_AddStr("case_by_age_button_m12", "12月");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("case_by_age_title", "Cas confirmés par âge");
+    TT_AddStr("case_by_age_text", "Mise à jour avec 1 jour de retard");
+    TT_AddStr("case_by_age_button_total", "Total");
+    TT_AddStr("case_by_age_button_w-1", "0-6 jours plus tôt");
+    TT_AddStr("case_by_age_button_w-2", "7-13 jours plus tôt");
+    TT_AddStr("case_by_age_button_w-3", "14-20 jours plus tôt");
+    TT_AddStr("case_by_age_button_w-4", "21-27 jours plus tôt");
+    TT_AddStr("case_by_age_button_w-5", "28-34 jours plus tôt");
+    TT_AddStr("case_by_age_button_w-6", "35-41 jours plus tôt");
+    TT_AddStr("case_by_age_button_w-7", "42-48 jours plus tôt");
+    TT_AddStr("case_by_age_button_w-8", "49-55 jours plus tôt");
+    TT_AddStr("case_by_age_button_w-9", "56-62 jours plus tôt");
+    TT_AddStr("case_by_age_button_w-10", "63-69 jours plus tôt");
+    TT_AddStr("case_by_age_button_w-11", "70-76 jours plus tôt");
+    TT_AddStr("case_by_age_button_w-12", "77-83 jours plus tôt");
+    TT_AddStr("case_by_age_button_m1", "Janvier");
+    TT_AddStr("case_by_age_button_m2", "Février");
+    TT_AddStr("case_by_age_button_m3", "Mars");
+    TT_AddStr("case_by_age_button_m4", "Avril");
+    TT_AddStr("case_by_age_button_m5", "Mai");
+    TT_AddStr("case_by_age_button_m6", "Juin");
+    TT_AddStr("case_by_age_button_m7", "Juillet");
+    TT_AddStr("case_by_age_button_m8", "Août");
+    TT_AddStr("case_by_age_button_m9", "Septembre");
+    TT_AddStr("case_by_age_button_m10", "Octobre");
+    TT_AddStr("case_by_age_button_m11", "Novembre");
+    TT_AddStr("case_by_age_button_m12", "Décembre");
+  }
+  
+  else { //-- En
+    TT_AddStr("case_by_age_title", "Confirmed Cases by Age");
+    TT_AddStr("case_by_age_text", "Updated typically with 1 day delay");
+    TT_AddStr("case_by_age_button_total", "Total");
+    TT_AddStr("case_by_age_button_w-1", "0-6 days ago");
+    TT_AddStr("case_by_age_button_w-2", "7-13 days ago");
+    TT_AddStr("case_by_age_button_w-3", "14-20 days ago");
+    TT_AddStr("case_by_age_button_w-4", "21-27 days ago");
+    TT_AddStr("case_by_age_button_w-5", "28-34 days ago");
+    TT_AddStr("case_by_age_button_w-6", "35-41 days ago");
+    TT_AddStr("case_by_age_button_w-7", "42-48 days ago");
+    TT_AddStr("case_by_age_button_w-8", "49-55 days ago");
+    TT_AddStr("case_by_age_button_w-9", "56-62 days ago");
+    TT_AddStr("case_by_age_button_w-10", "63-69 days ago");
+    TT_AddStr("case_by_age_button_w-11", "70-76 days ago");
+    TT_AddStr("case_by_age_button_w-12", "77-83 days ago");
+    TT_AddStr("case_by_age_button_m1", "January");
+    TT_AddStr("case_by_age_button_m2", "February");
+    TT_AddStr("case_by_age_button_m3", "March");
+    TT_AddStr("case_by_age_button_m4", "April");
+    TT_AddStr("case_by_age_button_m5", "May");
+    TT_AddStr("case_by_age_button_m6", "June");
+    TT_AddStr("case_by_age_button_m7", "July");
+    TT_AddStr("case_by_age_button_m8", "August");
+    TT_AddStr("case_by_age_button_m9", "September");
+    TT_AddStr("case_by_age_button_m10", "October");
+    TT_AddStr("case_by_age_button_m11", "November");
+    TT_AddStr("case_by_age_button_m12", "December");
+  }
 }
 
 function CBA_FormatData(wrap, data) {
@@ -161,7 +253,7 @@ function CBA_MouseMove(wrap, d) {
     .style("top", new_pos[1] + "px")
 }
 
-function CBA_Initialize(wrap) {
+function CBA_Plot(wrap) {
   //-- Define x-axis
   var x = d3.scaleBand()
     .domain(wrap.age_list)
@@ -275,7 +367,7 @@ function CBA_Initialize(wrap) {
   wrap.bar = bar;
 }
 
-function CBA_Update(wrap) {
+function CBA_Replot(wrap) {
   //-- Define y-axis
   var y = d3.scaleLinear()
     .domain([0, wrap.y_max])
@@ -398,22 +490,21 @@ function CBA_Update(wrap) {
       .attr("text-anchor", "start")
 }
 
-//-- Plot
-function CBA_Plot(wrap) {
+//-- Load
+function CBA_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      CBA_MakeCanvas(wrap);
       CBA_FormatData(wrap, data);
-      CBA_Initialize(wrap);
-      CBA_Update(wrap);
+      CBA_Plot(wrap);
+      CBA_Replot(wrap);
     });
 }
 
-function CBA_Replot(wrap) {
+function CBA_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
@@ -421,7 +512,7 @@ function CBA_Replot(wrap) {
         return console.warn(error);
       
       CBA_FormatData(wrap, data);
-      CBA_Update(wrap);
+      CBA_Replot(wrap);
     });
 }
 
@@ -429,7 +520,7 @@ function CBA_ButtonListener(wrap) {
   //-- Period
   d3.select(wrap.id +'_period').on('change', function() {
     wrap.period = this.value;
-    CBA_Replot(wrap);
+    CBA_Reload(wrap);
   });
 
   //-- Save
@@ -452,8 +543,9 @@ function CBA_ButtonListener(wrap) {
     GS_lang = this.value;
     Cookies.set("lang", GS_lang);
     
-    //-- Update
-    CBA_Update(wrap);
+    //-- Replot
+    CBA_ResetText();
+    CBA_Replot(wrap);
   });
 }
 
@@ -464,8 +556,10 @@ function CBA_Main(wrap) {
   //-- Swap active to current value
   wrap.period = document.getElementById(wrap.tag + "_period").value;
   
-  //-- Plot
-  CBA_Plot(wrap);
+  //-- Load
+  CBA_InitFig(wrap);
+  CBA_ResetText();
+  CBA_Load(wrap);
   
   //-- Setup button listeners
   CBA_ButtonListener(wrap);

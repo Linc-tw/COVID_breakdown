@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function IM_MakeCanvas(wrap) {
+function IM_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 600;
@@ -17,6 +17,101 @@ function IM_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 2, right: 2, bottom: 2, top: 2};
   
   GS_MakeCanvas(wrap);
+}
+
+function IM_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("incidence_map_title", "縣市確診地圖");
+    TT_AddStr("incidence_map_button_1", "案例數");
+    TT_AddStr("incidence_map_button_2", "確診率");
+    TT_AddStr("incidence_map_button_total", "本土合計");
+    TT_AddStr("incidence_map_button_w-1", "0-6天前");
+    TT_AddStr("incidence_map_button_w-2", "7-13天前");
+    TT_AddStr("incidence_map_button_w-3", "14-20天前");
+    TT_AddStr("incidence_map_button_w-4", "21-27天前");
+    TT_AddStr("incidence_map_button_w-5", "28-34天前");
+    TT_AddStr("incidence_map_button_w-6", "35-41天前");
+    TT_AddStr("incidence_map_button_w-7", "42-48天前");
+    TT_AddStr("incidence_map_button_w-8", "49-55天前");
+    TT_AddStr("incidence_map_button_w-9", "56-62天前");
+    TT_AddStr("incidence_map_button_w-10", "63-69天前");
+    TT_AddStr("incidence_map_button_w-11", "70-76天前");
+    TT_AddStr("incidence_map_button_w-12", "77-83天前");
+    TT_AddStr("incidence_map_button_m1", "1月");
+    TT_AddStr("incidence_map_button_m2", "2月");
+    TT_AddStr("incidence_map_button_m3", "3月");
+    TT_AddStr("incidence_map_button_m4", "4月");
+    TT_AddStr("incidence_map_button_m5", "5月");
+    TT_AddStr("incidence_map_button_m6", "6月");
+    TT_AddStr("incidence_map_button_m7", "7月");
+    TT_AddStr("incidence_map_button_m8", "8月");
+    TT_AddStr("incidence_map_button_m9", "9月");
+    TT_AddStr("incidence_map_button_m10", "10月");
+    TT_AddStr("incidence_map_button_m11", "11月");
+    TT_AddStr("incidence_map_button_m12", "12月");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("incidence_map_title", "Carte d'incidence");
+    TT_AddStr("incidence_map_button_1", "Nombre");
+    TT_AddStr("incidence_map_button_2", "Taux");
+    TT_AddStr("incidence_map_button_total", "Locaux totaux");
+    TT_AddStr("incidence_map_button_w-1", "0-6 jours plus tôt");
+    TT_AddStr("incidence_map_button_w-2", "7-13 jours plus tôt");
+    TT_AddStr("incidence_map_button_w-3", "14-20 jours plus tôt");
+    TT_AddStr("incidence_map_button_w-4", "21-27 jours plus tôt");
+    TT_AddStr("incidence_map_button_w-5", "28-34 jours plus tôt");
+    TT_AddStr("incidence_map_button_w-6", "35-41 jours plus tôt");
+    TT_AddStr("incidence_map_button_w-7", "42-48 jours plus tôt");
+    TT_AddStr("incidence_map_button_w-8", "49-55 jours plus tôt");
+    TT_AddStr("incidence_map_button_w-9", "56-62 jours plus tôt");
+    TT_AddStr("incidence_map_button_w-10", "63-69 jours plus tôt");
+    TT_AddStr("incidence_map_button_w-11", "70-76 jours plus tôt");
+    TT_AddStr("incidence_map_button_w-12", "77-83 jours plus tôt");
+    TT_AddStr("incidence_map_button_m1", "Janvier");
+    TT_AddStr("incidence_map_button_m2", "Février");
+    TT_AddStr("incidence_map_button_m3", "Mars");
+    TT_AddStr("incidence_map_button_m4", "Avril");
+    TT_AddStr("incidence_map_button_m5", "Mai");
+    TT_AddStr("incidence_map_button_m6", "Juin");
+    TT_AddStr("incidence_map_button_m7", "Juillet");
+    TT_AddStr("incidence_map_button_m8", "Août");
+    TT_AddStr("incidence_map_button_m9", "Septembre");
+    TT_AddStr("incidence_map_button_m10", "Octobre");
+    TT_AddStr("incidence_map_button_m11", "Novembre");
+    TT_AddStr("incidence_map_button_m12", "Décembre");
+  }
+  
+  else { //-- En
+    TT_AddStr("incidence_map_title", "Incidence Map");
+    TT_AddStr("incidence_map_button_1", "Counts");
+    TT_AddStr("incidence_map_button_2", "Rate");
+    TT_AddStr("incidence_map_button_total", "Total local");
+    TT_AddStr("incidence_map_button_w-1", "0-6 days ago");
+    TT_AddStr("incidence_map_button_w-2", "7-13 days ago");
+    TT_AddStr("incidence_map_button_w-3", "14-20 days ago");
+    TT_AddStr("incidence_map_button_w-4", "21-27 days ago");
+    TT_AddStr("incidence_map_button_w-5", "28-34 days ago");
+    TT_AddStr("incidence_map_button_w-6", "35-41 days ago");
+    TT_AddStr("incidence_map_button_w-7", "42-48 days ago");
+    TT_AddStr("incidence_map_button_w-8", "49-55 days ago");
+    TT_AddStr("incidence_map_button_w-9", "56-62 days ago");
+    TT_AddStr("incidence_map_button_w-10", "63-69 days ago");
+    TT_AddStr("incidence_map_button_w-11", "70-76 days ago");
+    TT_AddStr("incidence_map_button_w-12", "77-83 days ago");
+    TT_AddStr("incidence_map_button_m1", "January");
+    TT_AddStr("incidence_map_button_m2", "February");
+    TT_AddStr("incidence_map_button_m3", "March");
+    TT_AddStr("incidence_map_button_m4", "April");
+    TT_AddStr("incidence_map_button_m5", "May");
+    TT_AddStr("incidence_map_button_m6", "June");
+    TT_AddStr("incidence_map_button_m7", "July");
+    TT_AddStr("incidence_map_button_m8", "August");
+    TT_AddStr("incidence_map_button_m9", "September");
+    TT_AddStr("incidence_map_button_m10", "October");
+    TT_AddStr("incidence_map_button_m11", "November");
+    TT_AddStr("incidence_map_button_m12", "December");
+  }
 }
 
 //-- Map
@@ -103,7 +198,7 @@ function IM_MouseLeave(wrap, d, i) {
     .style("font-size", '16px')
 }
 
-function IM_Initialize(wrap) {
+function IM_Plot(wrap) {
   //-- Define projection
   var scale = 150;
   var ctr_ra = 120+48/60; //-- Center was 120 58' 55"
@@ -130,7 +225,7 @@ function IM_Initialize(wrap) {
   wrap.map = map;
 }
 
-function IM_Update(wrap) {
+function IM_Replot(wrap) {
   //-- Define color
   var color = d3.scaleSequential()
     .domain([0, Math.log10(1.000001+wrap.y_max)])
@@ -254,8 +349,8 @@ function IM_Update(wrap) {
       .attr("text-anchor", 'end');
 }
    
-//-- Plot
-function IM_Plot(wrap) {
+//-- Load
+function IM_Load(wrap) {
   d3.queue()
     .defer(d3.json, wrap.data_path_list[0])
     .defer(d3.csv, wrap.data_path_list[1])
@@ -264,16 +359,15 @@ function IM_Plot(wrap) {
       if (error)
         return console.warn(error);
       
-      IM_MakeCanvas(wrap);
       IM_FormatData(wrap, data);
       IM_FormatData2(wrap, data2);
       IM_FormatData3(wrap, data3);
-      IM_Initialize(wrap);
-      IM_Update(wrap);
+      IM_Plot(wrap);
+      IM_Replot(wrap);
     });
 }
 
-function IM_Replot(wrap) {
+function IM_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[2])
     .await(function (error, data3) {
@@ -281,7 +375,7 @@ function IM_Replot(wrap) {
         return console.warn(error);
       
       IM_FormatData3(wrap, data3);
-      IM_Update(wrap);
+      IM_Replot(wrap);
     });
 }
 
@@ -290,13 +384,13 @@ function IM_ButtonListener(wrap) {
   $(document).on("change", "input:radio[name='" + wrap.tag + "_rate']", function (event) {
     GS_PressRadioButton(wrap, 'rate', wrap.rate, this.value);
     wrap.rate = this.value;
-    IM_Replot(wrap);
+    IM_Reload(wrap);
   });
   
   //-- Period
   d3.select(wrap.id +'_period').on('change', function() {
     wrap.period = this.value;
-    IM_Replot(wrap);
+    IM_Reload(wrap);
   });
   
   //-- Save
@@ -324,8 +418,9 @@ function IM_ButtonListener(wrap) {
     GS_lang = this.value;
     Cookies.set("lang", GS_lang);
     
-    //-- Update
-    IM_Update(wrap);
+    //-- Replot
+    IM_ResetText();
+    IM_Replot(wrap);
   });
 }
 
@@ -338,8 +433,10 @@ function IM_Main(wrap) {
   GS_PressRadioButton(wrap, 'rate', 0, wrap.rate); //-- 0 from .html
   wrap.period = document.getElementById(wrap.tag + "_period").value;
   
-  //-- Plot
-  IM_Plot(wrap);
+  //-- Load
+  IM_InitFig(wrap);
+  IM_ResetText();
+  IM_Load(wrap);
   
   //-- Setup button listeners
   IM_ButtonListener(wrap);

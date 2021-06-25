@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function CBD_MakeCanvas(wrap) {
+function CBD_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -17,6 +17,32 @@ function CBD_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
   
   GS_MakeCanvas(wrap);
+}
+
+function CBD_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("case_by_detection_title", "各檢驗管道之每日確診人數");
+    TT_AddStr("case_by_detection_button_1", "逐日");
+    TT_AddStr("case_by_detection_button_2", "累計");
+    TT_AddStr("case_by_detection_button_3", "確診日");
+    TT_AddStr("case_by_detection_button_4", "發病日");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("case_by_detection_title", "Cas confirmés par canal de détection");
+    TT_AddStr("case_by_detection_button_1", "Quotidiens");
+    TT_AddStr("case_by_detection_button_2", "Cumulés");
+    TT_AddStr("case_by_detection_button_3", "Date du diagnostic");
+    TT_AddStr("case_by_detection_button_4", "Date du début des sympt.");
+  }
+  
+  else { //-- En
+    TT_AddStr("case_by_detection_title", "Confirmed Cases by Detection Channel");
+    TT_AddStr("case_by_detection_button_1", "Daily");
+    TT_AddStr("case_by_detection_button_2", "Cumulative");
+    TT_AddStr("case_by_detection_button_3", "Report date");
+    TT_AddStr("case_by_detection_button_4", "Onset date");
+  }
 }
 
 function CBD_FormatData(wrap, data) {
@@ -215,7 +241,7 @@ function CBD_MouseMove(wrap, d) {
     .style("top", new_pos[1] + "px")
 }
 
-function CBD_Initialize(wrap) {
+function CBD_Plot(wrap) {
   //-- Define x-axis
   var x = d3.scaleBand()
     .domain(wrap.date_list)
@@ -319,7 +345,7 @@ function CBD_Initialize(wrap) {
   wrap.bar = bar;
 }
 
-function CBD_Update(wrap) {
+function CBD_Replot(wrap) {
   //-- Define new xticklabel
   var x_axis_2 = d3.axisBottom(wrap.x_2)
     .tickSize(10)
@@ -463,8 +489,8 @@ function CBD_Update(wrap) {
       .attr("text-anchor", "start")
 }
 
-//-- Plot
-function CBD_Plot(wrap) {
+//-- Load
+function CBD_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.onset])
     .defer(d3.csv, wrap.data_path_list[2])
@@ -472,15 +498,14 @@ function CBD_Plot(wrap) {
       if (error)
         return console.warn(error);
       
-      CBD_MakeCanvas(wrap);
       CBD_FormatData(wrap, data);
       CBD_FormatData2(wrap, data2);
-      CBD_Initialize(wrap);
-      CBD_Update(wrap);
+      CBD_Plot(wrap);
+      CBD_Replot(wrap);
     });
 }
 
-function CBD_Replot(wrap) {
+function CBD_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.onset])
     .await(function (error, data) {
@@ -488,7 +513,7 @@ function CBD_Replot(wrap) {
         return console.warn(error);
       
       CBD_FormatData(wrap, data);
-      CBD_Update(wrap);
+      CBD_Replot(wrap);
     });
 }
 
@@ -497,14 +522,14 @@ function CBD_ButtonListener(wrap) {
   $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
     GS_PressRadioButton(wrap, 'cumul', wrap.cumul, this.value);
     wrap.cumul = this.value;
-    CBD_Replot(wrap);
+    CBD_Reload(wrap);
   });
 
   //-- Report date or onset date
   $(document).on("change", "input:radio[name='" + wrap.tag + "_onset']", function (event) {
     GS_PressRadioButton(wrap, 'onset', wrap.onset, this.value);
     wrap.onset = this.value
-    CBD_Replot(wrap);
+    CBD_Reload(wrap);
   });
 
   //-- Save
@@ -531,7 +556,8 @@ function CBD_ButtonListener(wrap) {
     Cookies.set("lang", GS_lang);
     
     //-- Replot
-    CBD_Update(wrap);
+    CBD_ResetText();
+    CBD_Replot(wrap);
   });
 }
 
@@ -539,14 +565,16 @@ function CBD_ButtonListener(wrap) {
 function CBD_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
-    //-- Swap active to current value
+  //-- Swap active to current value
   wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
   wrap.onset = document.querySelector("input[name='" + wrap.tag + "_onset']:checked").value;
   GS_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
   GS_PressRadioButton(wrap, 'onset', 0, wrap.onset); //-- 0 from .html
   
-  //-- Plot
-  CBD_Plot(wrap);
+  //-- Load
+  CBD_InitFig(wrap);
+  CBD_ResetText();
+  CBD_Load(wrap);
   
   //-- Setup button listeners
   CBD_ButtonListener(wrap);

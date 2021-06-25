@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function ASC_MakeCanvas(wrap) {
+function ASC_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 540;
@@ -17,6 +17,26 @@ function ASC_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 250, right: 2, bottom: 2, top: 200};
   
   GS_MakeCanvas(wrap);
+}
+
+function ASC_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("age_symptom_correlations_title", "個案年齡與症狀相關程度");
+    TT_AddStr("age_symptom_correlations_button_1", "相關係數");
+    TT_AddStr("age_symptom_correlations_button_2", "案例數");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("age_symptom_correlations_title", "Corrélations entre âge & symptômes");
+    TT_AddStr("age_symptom_correlations_button_1", "Coefficients");
+    TT_AddStr("age_symptom_correlations_button_2", "Nombres");
+  }
+  
+  else { //-- En
+    TT_AddStr("age_symptom_correlations_title", "Correlations between Age & Symptoms");
+    TT_AddStr("age_symptom_correlations_button_1", "Coefficients");
+    TT_AddStr("age_symptom_correlations_button_2", "Counts");
+  }
 }
 
 function ASC_FormatData(wrap, data) {
@@ -117,7 +137,7 @@ function ASC_FormatData2(wrap, data2) {
   wrap.yticklabel = yticklabel;
 }
 
-function ASC_Initialize(wrap) {
+function ASC_Plot(wrap) {
   //-- Define x-axis
   var x = d3.scaleBand()
     .domain(wrap.symptom_list)
@@ -240,7 +260,7 @@ function ASC_Initialize(wrap) {
   wrap.legend_pos = legend_pos;
 }
 
-function ASC_Update(wrap) {
+function ASC_Replot(wrap) {
   //-- Define legend label
   var legend_label;
   if (GS_lang == 'zh-tw')
@@ -280,8 +300,8 @@ function ASC_Update(wrap) {
       .attr("text-anchor", "start")
 }
 
-//-- Plot
-function ASC_Plot(wrap) {
+//-- Load
+function ASC_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.count])
     .defer(d3.csv, wrap.data_path_list[2])
@@ -289,15 +309,14 @@ function ASC_Plot(wrap) {
       if (error)
         return console.warn(error);
       
-      ASC_MakeCanvas(wrap);
       ASC_FormatData(wrap, data);
       ASC_FormatData2(wrap, data2);
-      ASC_Initialize(wrap);
-      ASC_Update(wrap);      
+      ASC_Plot(wrap);
+      ASC_Replot(wrap);      
     });
 }
 
-function ASC_Replot(wrap) {
+function ASC_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.count])
     .await(function (error, data) {
@@ -305,7 +324,7 @@ function ASC_Replot(wrap) {
         return console.warn(error);
       
       ASC_FormatData(wrap, data);
-      ASC_Update(wrap);
+      ASC_Replot(wrap);
     });
 }
 
@@ -314,7 +333,7 @@ function ASC_ButtonListener(wrap) {
   $(document).on("change", "input:radio[name='" + wrap.tag + "_count']", function (event) {
     GS_PressRadioButton(wrap, 'count', wrap.count, this.value);
     wrap.count = this.value;
-    ASC_Replot(wrap);
+    ASC_Reload(wrap);
   });
 
   //-- Save
@@ -338,22 +357,25 @@ function ASC_ButtonListener(wrap) {
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove()
     
-    //-- Replot
-    ASC_Plot(wrap);
+    //-- Reload
+    ASC_InitFig(wrap);
+    ASC_ResetText();
+    ASC_Load(wrap);
   });
 }
 
 //-- Main
 function ASC_Main(wrap) {
-  //-- Variables
   wrap.id = '#' + wrap.tag
   
   //-- Swap active to current value
   wrap.count = document.querySelector("input[name='" + wrap.tag + "_count']:checked").value;
   GS_PressRadioButton(wrap, 'count', 0, wrap.count); //-- 0 from .html
 
-  //-- Plot
-  ASC_Plot(wrap);
+  //-- Load
+  ASC_InitFig(wrap);
+  ASC_ResetText();
+  ASC_Load(wrap);
   
   //-- Setup button listeners
   ASC_ButtonListener(wrap);

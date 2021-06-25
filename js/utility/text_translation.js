@@ -9,7 +9,7 @@
 var TT_wrap = {};
 
 //-- Insert plain text
-function TT_Add_Str(id, string) {
+function TT_AddStr(id, string) {
   var node = document.getElementById(id)
   if (null !== node) {
     node.textContent = '';
@@ -18,7 +18,7 @@ function TT_Add_Str(id, string) {
 }
 
 //-- Insert html
-function TT_Add_Html(id, string) {
+function TT_AddHtml(id, string) {
   var node = document.getElementById(id)
   if (null !== node) {
     node.textContent = '';
@@ -27,7 +27,7 @@ function TT_Add_Html(id, string) {
 }
 
 //-- Text content
-function text_translation() {
+function TT_FillText_Menu() {
   if (GS_lang == 'zh-tw') {
     var str_latest = "近90日統計";
     var str_2021 = "2021統計";
@@ -41,223 +41,37 @@ function text_translation() {
     var str_slow = "載入費時";
     
     //-- Menu
-    TT_Add_Str("menu_latest", str_latest);
-    TT_Add_Str("menu_latest_highlight", str_highlight);
-    TT_Add_Str("menu_latest_breakdown", str_breakdown);
-    TT_Add_Str("menu_latest_vaccination", str_vaccination);
-    TT_Add_Str("menu_2021", str_2021);
-    TT_Add_Str("menu_2021_highlight", str_highlight);
-    TT_Add_Str("menu_2021_breakdown", str_breakdown);
-    TT_Add_Str("menu_2021_vaccination", str_vaccination);
-    TT_Add_Html("menu_2020", "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
-    TT_Add_Str("menu_2020_highlight", str_highlight);
-    TT_Add_Str("menu_2020_breakdown", str_breakdown);
-    TT_Add_Str("menu_2020_vaccination", str_vaccination);
-    TT_Add_Str("menu_timeline", str_timeline);
-    TT_Add_Str("menu_source", str_source);
-    TT_Add_Str("menu_copyleft", str_copyleft);
+    TT_AddStr("menu_latest", str_latest);
+    TT_AddStr("menu_latest_highlight", str_highlight);
+    TT_AddStr("menu_latest_breakdown", str_breakdown);
+    TT_AddStr("menu_latest_vaccination", str_vaccination);
+    TT_AddStr("menu_2021", str_2021);
+    TT_AddStr("menu_2021_highlight", str_highlight);
+    TT_AddStr("menu_2021_breakdown", str_breakdown);
+    TT_AddStr("menu_2021_vaccination", str_vaccination);
+    TT_AddHtml("menu_2020", "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
+    TT_AddStr("menu_2020_highlight", str_highlight);
+    TT_AddStr("menu_2020_breakdown", str_breakdown);
+    TT_AddStr("menu_2020_vaccination", str_vaccination);
+    TT_AddStr("menu_timeline", str_timeline);
+    TT_AddStr("menu_source", str_source);
+    TT_AddStr("menu_copyleft", str_copyleft);
     
     //-- Header + footer
-    TT_Add_Str("title", "嚴重特殊傳染性肺炎 台灣疫情");
-    TT_Add_Str("title_latest_highlight", str_latest + " - " + str_highlight);
-    TT_Add_Str("title_latest_breakdown", str_latest + " - " + str_breakdown);
-    TT_Add_Str("title_latest_vaccination", str_latest + " - " + str_vaccination);
-    TT_Add_Str("title_2021_highlight", str_2021 + " - " + str_highlight);
-    TT_Add_Str("title_2021_breakdown", str_2021 + " - " + str_breakdown);
-    TT_Add_Str("title_2021_vaccination", str_2021 + " - " + str_vaccination);
-    TT_Add_Str("title_2020_highlight", str_2020 + " - " + str_highlight);
-    TT_Add_Str("title_2020_breakdown", str_2020 + " - " + str_breakdown);
-    TT_Add_Str("title_2020_vaccination", str_2020 + " - " + str_vaccination);
-    TT_Add_Str("title_timeline", str_timeline);
-    TT_Add_Str("title_source", str_source);
-    TT_Add_Str("title_copyleft", str_copyleft);
-    TT_Add_Str("footer_last_update", '最後更新：' + TT_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3');
-    
-    //-- Data source page
-    TT_Add_Str("data_source_original_title", str_source);
-    TT_Add_Html("data_source_original_body", "\
-      <p>目前本站資料是由兩種不同管道所取得。</p>\
-      <p>主要來源為一份由PTT網友們所整理的線上\
-      <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'> \
-      Google表單 <i class='fas fa-external-link-alt'></i></a> 。作者們利用網路爬蟲獲取資料，同時也從官方新聞稿及記者會收集瑣碎資訊，整理後彙整至表單內。</p>\
-      <p>在此由衷感謝資料整理團隊，若無如此熱心之舉本站勢必難以完成。</p>\
-      <p>另一資料來源為疾管署<a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'> \
-      官方資料平台 <i class='fas fa-external-link-alt'></i></a> 。很可惜平台上的資料多半乏善可陳，因此才以非官方表單作為主要資料來源。</p>\
-    ");
-    TT_Add_Str("data_source_raw_title", "初階資料");
-    TT_Add_Html("data_source_raw_body", "\
-      <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'> \
-      初階資料 <i class='fas fa-external-link-alt'></i></a> 是前面所提資料來源之部份分頁或檔案。目前共有6個csv檔，最主要者為一記有所有確診者及其相關流行病學資訊之表單。</p>\
-    ");
-    TT_Add_Str("data_source_processed_title", "高階資料");
-    TT_Add_Html("data_source_processed_body", "\
-      <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'> \
-      高階資料 <i class='fas fa-external-link-alt'></i></a> 為整理過後直接用來畫圖的檔案。絕大多數為csv檔，由低階資料處理後生成，另有一geojson檔為微調過之台灣地圖。</p>\
-      <p>除經特殊標示外，所有高階資料編碼皆符合ASCII格式。</p>\
-    ");
-    
-    //-- Copyleft page
-    TT_Add_Str("no_right_reserved_title", "啊就真的沒有版權");
-    TT_Add_Html("no_right_reserved_body", "\
-      <p>本站所創作之所有文字及圖像均以<a href='https://creativecommons.org/publicdomain/zero/1.0/deed.zh_TW' target='_blank'>\
-      CC0 1.0 通用 公眾領域貢獻宣告 <i class='fas fa-external-link-alt'></i></a> 條款發布。</p>\
-      <p>意即使用者可自由用作營利或非營利之途，且不需經許可或標示來源。</p>\
-      <p>原始碼授權條款請洽此<a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>連結 <i class='fas fa-external-link-alt'></i></a>。</p>\
-    ");
-    
-    
-    
-    //-- Status evolution
-    TT_Add_Str("status_evolution_title", "疫情變化");
-    
-    //-- Various rates
-    TT_Add_Str("various_rates_title", "各種比率之七日平均");
-    
-    //-- Test by criterion
-    TT_Add_Str("test_by_criterion_title", "檢驗數量");
-    TT_Add_Str("test_by_criterion_button_1", "逐日");
-    TT_Add_Str("test_by_criterion_button_2", "累計");
-    
-    //-- Border statistics
-    TT_Add_Str("border_statistics_title", "入出境人數統計");
-    TT_Add_Str("border_statistics_text", "逐月更新");
-    TT_Add_Str("border_statistics_button_1", "入境");
-    TT_Add_Str("border_statistics_button_2", "出境");
-    TT_Add_Str("border_statistics_button_3", "合計");
-    
-    
-    
-    //-- Case by transmission
-    TT_Add_Str("case_by_transmission_title", "各感染源之每日確診人數");
-    TT_Add_Str("case_by_transmission_button_1", "逐日");
-    TT_Add_Str("case_by_transmission_button_2", "累計");
-    TT_Add_Str("case_by_transmission_button_3", "確診日");
-    TT_Add_Str("case_by_transmission_button_4", "發病日");
-    
-    //-- Case by detection
-    TT_Add_Str("case_by_detection_title", "各檢驗管道之每日確診人數");
-    TT_Add_Str("case_by_detection_button_1", "逐日");
-    TT_Add_Str("case_by_detection_button_2", "累計");
-    TT_Add_Str("case_by_detection_button_3", "確診日");
-    TT_Add_Str("case_by_detection_button_4", "發病日");
-    
-    //-- Travel history-symptom correlations
-    TT_Add_Str("travel_history_symptom_correlations_title", "旅遊史與症狀相關程度");
-    TT_Add_Str("travel_history_symptom_correlations_button_1", "相關係數");
-    TT_Add_Str("travel_history_symptom_correlations_button_2", "案例數");
-    
-    //-- Age-symptom correlations
-    TT_Add_Str("age_symptom_correlations_title", "個案年齡與症狀相關程度");
-    TT_Add_Str("age_symptom_correlations_button_1", "相關係數");
-    TT_Add_Str("age_symptom_correlations_button_2", "案例數");
-    
-    //-- Difference by transmission
-    TT_Add_Str("difference_by_transmission_title", "發現個案所需時間分布");
-    TT_Add_Str("difference_by_transmission_button_1", "全部");
-    TT_Add_Str("difference_by_transmission_button_2", "境外移入");
-    TT_Add_Str("difference_by_transmission_button_3", "本土");
-    TT_Add_Str("difference_by_transmission_button_4", "其他");
-    
-    
-    
-    //-- Daily case per county
-    TT_Add_Str("daily_case_per_county_title", "各縣市之每日確診人數");
-    TT_Add_Str("daily_case_per_county_button_total", "本土合計");
-    TT_Add_Str("daily_case_per_county_button_keelung", "基隆");
-    TT_Add_Str("daily_case_per_county_button_taipei", "台北");
-    TT_Add_Str("daily_case_per_county_button_new_taipei", "新北");
-    TT_Add_Str("daily_case_per_county_button_taoyuan", "桃園");
-    TT_Add_Str("daily_case_per_county_button_hsinchu", "竹縣");
-    TT_Add_Str("daily_case_per_county_button_hsinchu_city", "竹市");
-    TT_Add_Str("daily_case_per_county_button_miaoli", "苗栗");
-    TT_Add_Str("daily_case_per_county_button_taichung", "台中");
-    TT_Add_Str("daily_case_per_county_button_changhua", "彰化");
-    TT_Add_Str("daily_case_per_county_button_nantou", "南投");
-    TT_Add_Str("daily_case_per_county_button_yunlin", "雲林");
-    TT_Add_Str("daily_case_per_county_button_chiayi", "嘉縣");
-    TT_Add_Str("daily_case_per_county_button_chiayi_city", "嘉市");
-    TT_Add_Str("daily_case_per_county_button_tainan", "台南");
-    TT_Add_Str("daily_case_per_county_button_kaohsiung", "高雄");
-    TT_Add_Str("daily_case_per_county_button_pingtung", "屏東");
-    TT_Add_Str("daily_case_per_county_button_yilan", "宜蘭");
-    TT_Add_Str("daily_case_per_county_button_hualien", "花蓮");
-    TT_Add_Str("daily_case_per_county_button_taitung", "台東");
-    TT_Add_Str("daily_case_per_county_button_penghu", "澎湖");
-    TT_Add_Str("daily_case_per_county_button_kinmen", "金門");
-    TT_Add_Str("daily_case_per_county_button_matsu", "馬祖");
-    
-    //-- Incidence map
-    TT_Add_Str("incidence_map_title", "縣市確診地圖");
-    TT_Add_Str("incidence_map_button_1", "案例數");
-    TT_Add_Str("incidence_map_button_2", "確診率");
-    TT_Add_Str("incidence_map_button_total", "本土合計");
-    TT_Add_Str("incidence_map_button_w-1", "0-6天前");
-    TT_Add_Str("incidence_map_button_w-2", "7-13天前");
-    TT_Add_Str("incidence_map_button_w-3", "14-20天前");
-    TT_Add_Str("incidence_map_button_w-4", "21-27天前");
-    TT_Add_Str("incidence_map_button_w-5", "28-34天前");
-    TT_Add_Str("incidence_map_button_w-6", "35-41天前");
-    TT_Add_Str("incidence_map_button_w-7", "42-48天前");
-    TT_Add_Str("incidence_map_button_w-8", "49-55天前");
-    TT_Add_Str("incidence_map_button_w-9", "56-62天前");
-    TT_Add_Str("incidence_map_button_w-10", "63-69天前");
-    TT_Add_Str("incidence_map_button_w-11", "70-76天前");
-    TT_Add_Str("incidence_map_button_w-12", "77-83天前");
-    TT_Add_Str("incidence_map_button_m1", "1月");
-    TT_Add_Str("incidence_map_button_m2", "2月");
-    TT_Add_Str("incidence_map_button_m3", "3月");
-    TT_Add_Str("incidence_map_button_m4", "4月");
-    TT_Add_Str("incidence_map_button_m5", "5月");
-    TT_Add_Str("incidence_map_button_m6", "6月");
-    TT_Add_Str("incidence_map_button_m7", "7月");
-    TT_Add_Str("incidence_map_button_m8", "8月");
-    TT_Add_Str("incidence_map_button_m9", "9月");
-    TT_Add_Str("incidence_map_button_m10", "10月");
-    TT_Add_Str("incidence_map_button_m11", "11月");
-    TT_Add_Str("incidence_map_button_m12", "12月");
-    
-    //-- Case by age
-    TT_Add_Str("case_by_age_title", "確診個案年齡分布");
-    TT_Add_Str("case_by_age_text", "資料遲一日更新");
-    TT_Add_Str("case_by_age_button_total", "合計");
-    TT_Add_Str("case_by_age_button_w-1", "0-6天前");
-    TT_Add_Str("case_by_age_button_w-2", "7-13天前");
-    TT_Add_Str("case_by_age_button_w-3", "14-20天前");
-    TT_Add_Str("case_by_age_button_w-4", "21-27天前");
-    TT_Add_Str("case_by_age_button_w-5", "28-34天前");
-    TT_Add_Str("case_by_age_button_w-6", "35-41天前");
-    TT_Add_Str("case_by_age_button_w-7", "42-48天前");
-    TT_Add_Str("case_by_age_button_w-8", "49-55天前");
-    TT_Add_Str("case_by_age_button_w-9", "56-62天前");
-    TT_Add_Str("case_by_age_button_w-10", "63-69天前");
-    TT_Add_Str("case_by_age_button_w-11", "70-76天前");
-    TT_Add_Str("case_by_age_button_w-12", "77-83天前");
-    TT_Add_Str("case_by_age_button_m1", "1月");
-    TT_Add_Str("case_by_age_button_m2", "2月");
-    TT_Add_Str("case_by_age_button_m3", "3月");
-    TT_Add_Str("case_by_age_button_m4", "4月");
-    TT_Add_Str("case_by_age_button_m5", "5月");
-    TT_Add_Str("case_by_age_button_m6", "6月");
-    TT_Add_Str("case_by_age_button_m7", "7月");
-    TT_Add_Str("case_by_age_button_m8", "8月");
-    TT_Add_Str("case_by_age_button_m9", "9月");
-    TT_Add_Str("case_by_age_button_m10", "10月");
-    TT_Add_Str("case_by_age_button_m11", "11月");
-    TT_Add_Str("case_by_age_button_m12", "12月");
-    
-    
-    
-    //-- Criteria timeline
-    TT_Add_Str("criteria_timeline_title", "檢驗通報標準演進圖");
-    TT_Add_Str("criteria_timeline_button_1", "精選");
-    TT_Add_Str("criteria_timeline_button_2", "完整");
-    TT_Add_Str("criteria_timeline_button_3", "軸狀");
-    TT_Add_Str("criteria_timeline_button_4", "碟狀");
-    
-    //-- Event timeline
-    TT_Add_Str("event_timeline_title", "疫情時間軸");
-    TT_Add_Str("event_timeline_button_1", "週日為首");
-    TT_Add_Str("event_timeline_button_2", "週一為首");
+    TT_AddStr("title", "嚴重特殊傳染性肺炎 台灣疫情");
+    TT_AddStr("title_latest_highlight", str_latest + " - " + str_highlight);
+    TT_AddStr("title_latest_breakdown", str_latest + " - " + str_breakdown);
+    TT_AddStr("title_latest_vaccination", str_latest + " - " + str_vaccination);
+    TT_AddStr("title_2021_highlight", str_2021 + " - " + str_highlight);
+    TT_AddStr("title_2021_breakdown", str_2021 + " - " + str_breakdown);
+    TT_AddStr("title_2021_vaccination", str_2021 + " - " + str_vaccination);
+    TT_AddStr("title_2020_highlight", str_2020 + " - " + str_highlight);
+    TT_AddStr("title_2020_breakdown", str_2020 + " - " + str_breakdown);
+    TT_AddStr("title_2020_vaccination", str_2020 + " - " + str_vaccination);
+    TT_AddStr("title_timeline", str_timeline);
+    TT_AddStr("title_source", str_source);
+    TT_AddStr("title_copyleft", str_copyleft);
+    TT_AddStr("footer_last_update", '最後更新：' + TT_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3');
   }
   
   else if (GS_lang == 'fr') {
@@ -273,238 +87,37 @@ function text_translation() {
     var str_slow = "chargement lent";
     
     //-- Menu
-    TT_Add_Str("menu_latest", str_latest);
-    TT_Add_Str("menu_latest_highlight", str_highlight);
-    TT_Add_Str("menu_latest_breakdown", str_breakdown);
-    TT_Add_Str("menu_latest_vaccination", str_vaccination);
-    TT_Add_Str("menu_2021", str_2021);
-    TT_Add_Str("menu_2021_highlight", str_highlight);
-    TT_Add_Str("menu_2021_breakdown", str_breakdown);
-    TT_Add_Str("menu_2021_vaccination", str_vaccination);
-    TT_Add_Html("menu_2020", "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
-    TT_Add_Str("menu_2020_highlight", str_highlight);
-    TT_Add_Str("menu_2020_breakdown", str_breakdown);
-    TT_Add_Str("menu_2020_vaccination", str_vaccination);
-    TT_Add_Str("menu_timeline", str_timeline);
-    TT_Add_Str("menu_source", str_source);
-    TT_Add_Str("menu_copyleft", str_copyleft);
+    TT_AddStr("menu_latest", str_latest);
+    TT_AddStr("menu_latest_highlight", str_highlight);
+    TT_AddStr("menu_latest_breakdown", str_breakdown);
+    TT_AddStr("menu_latest_vaccination", str_vaccination);
+    TT_AddStr("menu_2021", str_2021);
+    TT_AddStr("menu_2021_highlight", str_highlight);
+    TT_AddStr("menu_2021_breakdown", str_breakdown);
+    TT_AddStr("menu_2021_vaccination", str_vaccination);
+    TT_AddHtml("menu_2020", "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
+    TT_AddStr("menu_2020_highlight", str_highlight);
+    TT_AddStr("menu_2020_breakdown", str_breakdown);
+    TT_AddStr("menu_2020_vaccination", str_vaccination);
+    TT_AddStr("menu_timeline", str_timeline);
+    TT_AddStr("menu_source", str_source);
+    TT_AddStr("menu_copyleft", str_copyleft);
     
     //-- Header + footer
-    TT_Add_Str("title", "Statistiques de COVID-19 à Taïwan");
-    TT_Add_Str("title_latest_highlight", str_latest + " - " + str_highlight);
-    TT_Add_Str("title_latest_breakdown", str_latest + " - " + str_breakdown);
-    TT_Add_Str("title_latest_vaccination", str_latest + " - " + str_vaccination);
-    TT_Add_Str("title_2021_highlight", str_2021 + " - " + str_highlight);
-    TT_Add_Str("title_2021_breakdown", str_2021 + " - " + str_breakdown);
-    TT_Add_Str("title_2021_vaccination", str_2021 + " - " + str_vaccination);
-    TT_Add_Str("title_2020_highlight", str_2020 + " - " + str_highlight);
-    TT_Add_Str("title_2020_breakdown", str_2020 + " - " + str_breakdown);
-    TT_Add_Str("title_2020_vaccination", str_2020 + " - " + str_vaccination);
-    TT_Add_Str("title_timeline", str_timeline);
-    TT_Add_Str("title_source", str_source);
-    TT_Add_Str("title_copyleft", str_copyleft);
-    TT_Add_Str("footer_last_update", 'Dernière mise à jour : ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3');
-    
-    //-- Data source page
-    TT_Add_Str("data_source_original_title", str_source);
-    TT_Add_Html("data_source_original_body", "\
-      <p>À ce stade, ce site recueille les données à partir de 2 sources.</p>\
-      <p>La source principale est un \
-      <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>\
-      Google Spreadsheet <i class='fas fa-external-link-alt'></i></a> \
-      entretenu par de nombreux internautes anonymes du forum PTT, souvent considéré comme le <i>Reddit</i> taïwanais. \
-      Ils font du crawling pour récolter des données. \
-      Ils rassemblent également des informations fragmentées à partir des communiqués et des conférences de presse. \
-      Ils les trient ensuite avant de les mettre dans un tableau bien taillé.</p>\
-      <p>Bien évidemment, ce site n'aurait pas pu voir le jour sans le travail de ces bénévoles bienveillants. Je leur en suis très reconnaissant.</p>\
-      <p>La source secondaire est le <a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'>\
-      plateform des données officiel <i class='fas fa-external-link-alt'></i></a> du CDC taïwanais, qui fournit malheureusement peu de données intéressantes. \
-      C'est pour cette raison que la source principale n'est pas celle qui est officielle.</p>\
-      <p>Les données des 2 sources sont toutes en mandarin.</p>\
-    ");
-    TT_Add_Str("data_source_raw_title", "Données brutes");
-    TT_Add_Html("data_source_raw_body", "\
-      <p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
-      données brutes <i class='fas fa-external-link-alt'></i></a> \
-      sont un sous-ensemble des fichiers provenant des 2 sources des données mentionnées auparavant.</p>\
-      <p>À ce stade, 6 fichiers csv y figurent. Le fichier principal est une liste de tous cas confirmés avec leurs détails épidémiologiques respectifs.</p>\
-      <p>Ces données contiennent des caractères mandarins en abondance.</p>\
-    ");
-    TT_Add_Str("data_source_processed_title", "Données traitées");
-    TT_Add_Html("data_source_processed_body", "\
-      <p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>\
-      données traitées <i class='fas fa-external-link-alt'></i></a> \
-      comprennent de nombreux fichiers directement utilisés pour afficher les figures.</p>\
-      <p>Tous les fichiers csv sont générés à partir des données brutes par un script. \
-      Une carte de Taïwan retouchée sous format geojson est également ajoutée.</p>\
-      <p>Sauf précision, tous les fichiers ici ne contiennent que les caractères ASCII.</p>\
-    ");
-    
-    //-- Copyleft page
-    TT_Add_Str("no_right_reserved_title", "Fièrement sans droit d'auteur");
-    TT_Add_Html("no_right_reserved_body", "\
-      <p>Tous les textes et les graphes créés sur ce site sont distribués sous \
-      <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.fr' target='_blank'>\
-      CC0 1.0 universel Transfert dans le Domaine Public <i class='fas fa-external-link-alt'></i></a>.</p>\
-      <p>Cela signifie que vous pouvez en faire presque tout ce que vous voulez : usages personnel et/ou commercial, sans avoir besoin d'autorisation ou d'attribution d'auteur.</p>\
-      <p>La license pour les codes et les scripts se trouve \
-      <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>\
-      ici <i class='fas fa-external-link-alt'></i></a>.</p>\
-    ");
-    
-    
-    
-    //-- Status evolution
-    TT_Add_Str("status_evolution_title", "Évolution de la situation");
-    
-    //-- Various rates
-    TT_Add_Str("various_rates_title", "Taux en moyenne glissante sur 7 jours");
-    
-    //-- Test by criterion
-    TT_Add_Str("test_by_criterion_title", "Nombre de tests par critère");
-    TT_Add_Str("test_by_criterion_button_1", "Quotidiens");
-    TT_Add_Str("test_by_criterion_button_2", "Cumulés");
-    
-    //-- Border statistics
-    TT_Add_Str("border_statistics_title", "Statistiques frontalières");
-    TT_Add_Str("border_statistics_text", "Mise à jour mensuellement");
-    TT_Add_Str("border_statistics_button_1", "Arrivée");
-    TT_Add_Str("border_statistics_button_2", "Départ");
-    TT_Add_Str("border_statistics_button_3", "Total");
-    
-    
-    
-    //-- Case by transmission
-    TT_Add_Str("case_by_transmission_title", "Cas confirmés par moyen de transmission");
-    TT_Add_Str("case_by_transmission_button_1", "Quotidiens");
-    TT_Add_Str("case_by_transmission_button_2", "Cumulés");
-    TT_Add_Str("case_by_transmission_button_3", "Date du diagnostic");
-    TT_Add_Str("case_by_transmission_button_4", "Date du début des sympt.");
-    
-    //-- Case by detection
-    TT_Add_Str("case_by_detection_title", "Cas confirmés par canal de détection");
-    TT_Add_Str("case_by_detection_button_1", "Quotidiens");
-    TT_Add_Str("case_by_detection_button_2", "Cumulés");
-    TT_Add_Str("case_by_detection_button_3", "Date du diagnostic");
-    TT_Add_Str("case_by_detection_button_4", "Date du début des sympt.");
-    
-    //-- Difference by transmission
-    TT_Add_Str("difference_by_transmission_title", "Délai avant d'identifier une transmission");
-    TT_Add_Str("difference_by_transmission_button_1", "Tous");
-    TT_Add_Str("difference_by_transmission_button_2", "Importés");
-    TT_Add_Str("difference_by_transmission_button_3", "Locaux");
-    TT_Add_Str("difference_by_transmission_button_4", "Divers");
-    
-    //-- Travel history-symptom correlations
-    TT_Add_Str("travel_history_symptom_correlations_title", "Corrélations entre antécédents de voyage & symptômes");
-    TT_Add_Str("travel_history_symptom_correlations_button_1", "Coefficients");
-    TT_Add_Str("travel_history_symptom_correlations_button_2", "Nombres");
-    
-    //-- Age-symptom correlations
-    TT_Add_Str("age_symptom_correlations_title", "Corrélations entre âge & symptômes");
-    TT_Add_Str("age_symptom_correlations_button_1", "Coefficients");
-    TT_Add_Str("age_symptom_correlations_button_2", "Nombres");
-    
-    
-    
-    //-- Daily case per county
-    TT_Add_Str("daily_case_per_county_title", "Cas confirmés locaux par ville et comté");
-    TT_Add_Str("daily_case_per_county_button_total", "Locaux totaux");
-    TT_Add_Str("daily_case_per_county_button_keelung", "Keelung");
-    TT_Add_Str("daily_case_per_county_button_taipei", "Taipei");
-    TT_Add_Str("daily_case_per_county_button_new_taipei", "Nouveau Taipei");
-    TT_Add_Str("daily_case_per_county_button_taoyuan", "Taoyuan");
-    TT_Add_Str("daily_case_per_county_button_hsinchu", "Comté de Hsinchu");
-    TT_Add_Str("daily_case_per_county_button_hsinchu_city", "Ville de Hsinchu");
-    TT_Add_Str("daily_case_per_county_button_miaoli", "Miaoli");
-    TT_Add_Str("daily_case_per_county_button_taichung", "Taichung");
-    TT_Add_Str("daily_case_per_county_button_changhua", "Changhua");
-    TT_Add_Str("daily_case_per_county_button_nantou", "Nantou");
-    TT_Add_Str("daily_case_per_county_button_yunlin", "Yunlin");
-    TT_Add_Str("daily_case_per_county_button_chiayi", "Comté de Chiayi");
-    TT_Add_Str("daily_case_per_county_button_chiayi_city", "Ville de Chiayi");
-    TT_Add_Str("daily_case_per_county_button_tainan", "Tainan");
-    TT_Add_Str("daily_case_per_county_button_kaohsiung", "Kaohsiung");
-    TT_Add_Str("daily_case_per_county_button_pingtung", "Pingtung");
-    TT_Add_Str("daily_case_per_county_button_yilan", "Yilan");
-    TT_Add_Str("daily_case_per_county_button_hualien", "Hualien");
-    TT_Add_Str("daily_case_per_county_button_taitung", "Taitung");
-    TT_Add_Str("daily_case_per_county_button_penghu", "Penghu");
-    TT_Add_Str("daily_case_per_county_button_kinmen", "Kinmen");
-    TT_Add_Str("daily_case_per_county_button_matsu", "Matsu");
-    
-    //-- Incidence map
-    TT_Add_Str("incidence_map_title", "Carte d'incidence");
-    TT_Add_Str("incidence_map_button_1", "Nombre");
-    TT_Add_Str("incidence_map_button_2", "Taux");
-    TT_Add_Str("incidence_map_button_total", "Locaux totaux");
-    TT_Add_Str("incidence_map_button_w-1", "0-6 jours plus tôt");
-    TT_Add_Str("incidence_map_button_w-2", "7-13 jours plus tôt");
-    TT_Add_Str("incidence_map_button_w-3", "14-20 jours plus tôt");
-    TT_Add_Str("incidence_map_button_w-4", "21-27 jours plus tôt");
-    TT_Add_Str("incidence_map_button_w-5", "28-34 jours plus tôt");
-    TT_Add_Str("incidence_map_button_w-6", "35-41 jours plus tôt");
-    TT_Add_Str("incidence_map_button_w-7", "42-48 jours plus tôt");
-    TT_Add_Str("incidence_map_button_w-8", "49-55 jours plus tôt");
-    TT_Add_Str("incidence_map_button_w-9", "56-62 jours plus tôt");
-    TT_Add_Str("incidence_map_button_w-10", "63-69 jours plus tôt");
-    TT_Add_Str("incidence_map_button_w-11", "70-76 jours plus tôt");
-    TT_Add_Str("incidence_map_button_w-12", "77-83 jours plus tôt");
-    TT_Add_Str("incidence_map_button_m1", "Janvier");
-    TT_Add_Str("incidence_map_button_m2", "Février");
-    TT_Add_Str("incidence_map_button_m3", "Mars");
-    TT_Add_Str("incidence_map_button_m4", "Avril");
-    TT_Add_Str("incidence_map_button_m5", "Mai");
-    TT_Add_Str("incidence_map_button_m6", "Juin");
-    TT_Add_Str("incidence_map_button_m7", "Juillet");
-    TT_Add_Str("incidence_map_button_m8", "Août");
-    TT_Add_Str("incidence_map_button_m9", "Septembre");
-    TT_Add_Str("incidence_map_button_m10", "Octobre");
-    TT_Add_Str("incidence_map_button_m11", "Novembre");
-    TT_Add_Str("incidence_map_button_m12", "Décembre");
-    
-    //-- Case by age
-    TT_Add_Str("case_by_age_title", "Cas confirmés par âge");
-    TT_Add_Str("case_by_age_text", "Mise à jour avec 1 jour de retard");
-    TT_Add_Str("case_by_age_button_total", "Total");
-    TT_Add_Str("case_by_age_button_w-1", "0-6 jours plus tôt");
-    TT_Add_Str("case_by_age_button_w-2", "7-13 jours plus tôt");
-    TT_Add_Str("case_by_age_button_w-3", "14-20 jours plus tôt");
-    TT_Add_Str("case_by_age_button_w-4", "21-27 jours plus tôt");
-    TT_Add_Str("case_by_age_button_w-5", "28-34 jours plus tôt");
-    TT_Add_Str("case_by_age_button_w-6", "35-41 jours plus tôt");
-    TT_Add_Str("case_by_age_button_w-7", "42-48 jours plus tôt");
-    TT_Add_Str("case_by_age_button_w-8", "49-55 jours plus tôt");
-    TT_Add_Str("case_by_age_button_w-9", "56-62 jours plus tôt");
-    TT_Add_Str("case_by_age_button_w-10", "63-69 jours plus tôt");
-    TT_Add_Str("case_by_age_button_w-11", "70-76 jours plus tôt");
-    TT_Add_Str("case_by_age_button_w-12", "77-83 jours plus tôt");
-    TT_Add_Str("case_by_age_button_m1", "Janvier");
-    TT_Add_Str("case_by_age_button_m2", "Février");
-    TT_Add_Str("case_by_age_button_m3", "Mars");
-    TT_Add_Str("case_by_age_button_m4", "Avril");
-    TT_Add_Str("case_by_age_button_m5", "Mai");
-    TT_Add_Str("case_by_age_button_m6", "Juin");
-    TT_Add_Str("case_by_age_button_m7", "Juillet");
-    TT_Add_Str("case_by_age_button_m8", "Août");
-    TT_Add_Str("case_by_age_button_m9", "Septembre");
-    TT_Add_Str("case_by_age_button_m10", "Octobre");
-    TT_Add_Str("case_by_age_button_m11", "Novembre");
-    TT_Add_Str("case_by_age_button_m12", "Décembre");
-    
-    
-    
-    //-- Criteria timeline
-    TT_Add_Str("criteria_timeline_title", "Chronologie des dépistages systématiques");
-    TT_Add_Str("criteria_timeline_button_1", "Selectionnée");
-    TT_Add_Str("criteria_timeline_button_2", "Complète");
-    TT_Add_Str("criteria_timeline_button_3", "Frise");
-    TT_Add_Str("criteria_timeline_button_4", "Disques");
-    
-    //-- Event timeline
-    TT_Add_Str("event_timeline_title", "Chronologie de la pandémie");
-    TT_Add_Str("event_timeline_button_1", "1er jour dimanche");
-    TT_Add_Str("event_timeline_button_2", "1er jour lundi");
+    TT_AddStr("title", "Statistiques de COVID-19 à Taïwan");
+    TT_AddStr("title_latest_highlight", str_latest + " - " + str_highlight);
+    TT_AddStr("title_latest_breakdown", str_latest + " - " + str_breakdown);
+    TT_AddStr("title_latest_vaccination", str_latest + " - " + str_vaccination);
+    TT_AddStr("title_2021_highlight", str_2021 + " - " + str_highlight);
+    TT_AddStr("title_2021_breakdown", str_2021 + " - " + str_breakdown);
+    TT_AddStr("title_2021_vaccination", str_2021 + " - " + str_vaccination);
+    TT_AddStr("title_2020_highlight", str_2020 + " - " + str_highlight);
+    TT_AddStr("title_2020_breakdown", str_2020 + " - " + str_breakdown);
+    TT_AddStr("title_2020_vaccination", str_2020 + " - " + str_vaccination);
+    TT_AddStr("title_timeline", str_timeline);
+    TT_AddStr("title_source", str_source);
+    TT_AddStr("title_copyleft", str_copyleft);
+    TT_AddStr("footer_last_update", 'Dernière mise à jour : ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3');
   }
   
   else { //-- En
@@ -520,41 +133,104 @@ function text_translation() {
     var str_slow = "slow loading";
     
     //-- Menu
-    TT_Add_Str("menu_latest", str_latest);
-    TT_Add_Str("menu_latest_highlight", str_highlight);
-    TT_Add_Str("menu_latest_breakdown", str_breakdown);
-    TT_Add_Str("menu_latest_vaccination", str_vaccination);
-    TT_Add_Str("menu_2021", str_2021);
-    TT_Add_Str("menu_2021_highlight", str_highlight);
-    TT_Add_Str("menu_2021_breakdown", str_breakdown);
-    TT_Add_Str("menu_2021_vaccination", str_vaccination);
-    TT_Add_Html("menu_2020", "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
-    TT_Add_Str("menu_2020_highlight", str_highlight);
-    TT_Add_Str("menu_2020_breakdown", str_breakdown);
-    TT_Add_Str("menu_2020_vaccination", str_vaccination);
-    TT_Add_Str("menu_timeline", str_timeline);
-    TT_Add_Str("menu_source", str_source);
-    TT_Add_Str("menu_copyleft", str_copyleft);
+    TT_AddStr("menu_latest", str_latest);
+    TT_AddStr("menu_latest_highlight", str_highlight);
+    TT_AddStr("menu_latest_breakdown", str_breakdown);
+    TT_AddStr("menu_latest_vaccination", str_vaccination);
+    TT_AddStr("menu_2021", str_2021);
+    TT_AddStr("menu_2021_highlight", str_highlight);
+    TT_AddStr("menu_2021_breakdown", str_breakdown);
+    TT_AddStr("menu_2021_vaccination", str_vaccination);
+    TT_AddHtml("menu_2020", "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
+    TT_AddStr("menu_2020_highlight", str_highlight);
+    TT_AddStr("menu_2020_breakdown", str_breakdown);
+    TT_AddStr("menu_2020_vaccination", str_vaccination);
+    TT_AddStr("menu_timeline", str_timeline);
+    TT_AddStr("menu_source", str_source);
+    TT_AddStr("menu_copyleft", str_copyleft);
     
     //-- Header + footer
-    TT_Add_Str("title", "COVID-19 Statistics in Taiwan");
-    TT_Add_Str("title_latest_highlight", str_latest + " - " + str_highlight);
-    TT_Add_Str("title_latest_breakdown", str_latest + " - " + str_breakdown);
-    TT_Add_Str("title_latest_vaccination", str_latest + " - " + str_vaccination);
-    TT_Add_Str("title_2021_highlight", str_2021 + " - " + str_highlight);
-    TT_Add_Str("title_2021_breakdown", str_2021 + " - " + str_breakdown);
-    TT_Add_Str("title_2021_vaccination", str_2021 + " - " + str_vaccination);
-    TT_Add_Str("title_2020_highlight", str_2020 + " - " + str_highlight);
-    TT_Add_Str("title_2020_breakdown", str_2020 + " - " + str_breakdown);
-    TT_Add_Str("title_2020_vaccination", str_2020 + " - " + str_vaccination);
-    TT_Add_Str("title_timeline", str_timeline);
-    TT_Add_Str("title_source", str_source);
-    TT_Add_Str("title_copyleft", str_copyleft);
-    TT_Add_Str("footer_last_update", 'Last update: ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3');
-    
-    //-- Data source page
-    TT_Add_Str("data_source_original_title", str_source);
-    TT_Add_Html("data_source_original_body", "\
+    TT_AddStr("title", "COVID-19 Statistics in Taiwan");
+    TT_AddStr("title_latest_highlight", str_latest + " - " + str_highlight);
+    TT_AddStr("title_latest_breakdown", str_latest + " - " + str_breakdown);
+    TT_AddStr("title_latest_vaccination", str_latest + " - " + str_vaccination);
+    TT_AddStr("title_2021_highlight", str_2021 + " - " + str_highlight);
+    TT_AddStr("title_2021_breakdown", str_2021 + " - " + str_breakdown);
+    TT_AddStr("title_2021_vaccination", str_2021 + " - " + str_vaccination);
+    TT_AddStr("title_2020_highlight", str_2020 + " - " + str_highlight);
+    TT_AddStr("title_2020_breakdown", str_2020 + " - " + str_breakdown);
+    TT_AddStr("title_2020_vaccination", str_2020 + " - " + str_vaccination);
+    TT_AddStr("title_timeline", str_timeline);
+    TT_AddStr("title_source", str_source);
+    TT_AddStr("title_copyleft", str_copyleft);
+    TT_AddStr("footer_last_update", 'Last update: ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3');
+  }
+}
+
+function TT_FillText_Source() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("data_source_original_title", "資料來源");
+    TT_AddHtml("data_source_original_body", "\
+      <p>目前本站資料是由兩種不同管道所取得。</p>\
+      <p>主要來源為一份由PTT網友們所整理的線上\
+      <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'> \
+      Google表單 <i class='fas fa-external-link-alt'></i></a> 。作者們利用網路爬蟲獲取資料，同時也從官方新聞稿及記者會收集瑣碎資訊，整理後彙整至表單內。</p>\
+      <p>在此由衷感謝資料整理團隊，若無如此熱心之舉本站勢必難以完成。</p>\
+      <p>另一資料來源為疾管署<a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'> \
+      官方資料平台 <i class='fas fa-external-link-alt'></i></a> 。很可惜平台上的資料多半乏善可陳，因此才以非官方表單作為主要資料來源。</p>\
+    ");
+    TT_AddStr("data_source_raw_title", "初階資料");
+    TT_AddHtml("data_source_raw_body", "\
+      <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'> \
+      初階資料 <i class='fas fa-external-link-alt'></i></a> 是前面所提資料來源之部份分頁或檔案。目前共有6個csv檔，最主要者為一記有所有確診者及其相關流行病學資訊之表單。</p>\
+    ");
+    TT_AddStr("data_source_processed_title", "高階資料");
+    TT_AddHtml("data_source_processed_body", "\
+      <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'> \
+      高階資料 <i class='fas fa-external-link-alt'></i></a> 為整理過後直接用來畫圖的檔案。絕大多數為csv檔，由低階資料處理後生成，另有一geojson檔為微調過之台灣地圖。</p>\
+      <p>除經特殊標示外，所有高階資料編碼皆符合ASCII格式。</p>\
+    ");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("data_source_original_title", "Sources des données");
+    TT_AddHtml("data_source_original_body", "\
+      <p>À ce stade, ce site recueille les données à partir de 2 sources.</p>\
+      <p>La source principale est un \
+      <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>\
+      Google Spreadsheet <i class='fas fa-external-link-alt'></i></a> \
+      entretenu par de nombreux internautes anonymes du forum PTT, souvent considéré comme le <i>Reddit</i> taïwanais. \
+      Ils font du crawling pour récolter des données. \
+      Ils rassemblent également des informations fragmentées à partir des communiqués et des conférences de presse. \
+      Ils les trient ensuite avant de les mettre dans un tableau bien taillé.</p>\
+      <p>Bien évidemment, ce site n'aurait pas pu voir le jour sans le travail de ces bénévoles bienveillants. Je leur en suis très reconnaissant.</p>\
+      <p>La source secondaire est le <a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'>\
+      plateform des données officiel <i class='fas fa-external-link-alt'></i></a> du CDC taïwanais, qui fournit malheureusement peu de données intéressantes. \
+      C'est pour cette raison que la source principale n'est pas celle qui est officielle.</p>\
+      <p>Les données des 2 sources sont toutes en mandarin.</p>\
+    ");
+    TT_AddStr("data_source_raw_title", "Données brutes");
+    TT_AddHtml("data_source_raw_body", "\
+      <p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
+      données brutes <i class='fas fa-external-link-alt'></i></a> \
+      sont un sous-ensemble des fichiers provenant des 2 sources des données mentionnées auparavant.</p>\
+      <p>À ce stade, 6 fichiers csv y figurent. Le fichier principal est une liste de tous cas confirmés avec leurs détails épidémiologiques respectifs.</p>\
+      <p>Ces données contiennent des caractères mandarins en abondance.</p>\
+    ");
+    TT_AddStr("data_source_processed_title", "Données traitées");
+    TT_AddHtml("data_source_processed_body", "\
+      <p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>\
+      données traitées <i class='fas fa-external-link-alt'></i></a> \
+      comprennent de nombreux fichiers directement utilisés pour afficher les figures.</p>\
+      <p>Tous les fichiers csv sont générés à partir des données brutes par un script. \
+      Une carte de Taïwan retouchée sous format geojson est également ajoutée.</p>\
+      <p>Sauf précision, tous les fichiers ici ne contiennent que les caractères ASCII.</p>\
+    ");
+  }
+  
+  else { //-- En
+    TT_AddStr("data_source_original_title", "Data Sources");
+    TT_AddHtml("data_source_original_body", "\
       <p>At this stage, this website collects data from 2 sources.</p>\
       <p>The principle source is a \
       <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>\
@@ -568,16 +244,16 @@ function text_translation() {
       This is why the principle source is not the offical one.</p>\
       <p>Both sources provide data in Mandarin.</p>\
     ");
-    TT_Add_Str("data_source_raw_title", "Raw data");
-    TT_Add_Html("data_source_raw_body", "\
+    TT_AddStr("data_source_raw_title", "Raw data");
+    TT_AddHtml("data_source_raw_body", "\
       <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
       Raw data <i class='fas fa-external-link-alt'></i></a> \
       are a subset of files or spreadsheets from 2 data sources mentioned earlier that have been used by this website.</p>\
       <p>There are 6 csv files at this stage. The main one is a list of every single confirmed cases with their epidemiological details.</p>\
       <p>These files contain abundant Mandarin strings.</p>\
     ");
-    TT_Add_Str("data_source_processed_title", "Processed data");
-    TT_Add_Html("data_source_processed_body", "\
+    TT_AddStr("data_source_processed_title", "Processed data");
+    TT_AddHtml("data_source_processed_body", "\
       <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>\
       Processed data <i class='fas fa-external-link-alt'></i></a> \
       contain various files that are directly used for plotting.</p>\
@@ -585,10 +261,36 @@ function text_translation() {
       A geojson file containing a modified version of Taiwan map is also added.</p>\
       <p>All files here only contain ASCII characters unless specified.</p>\
     ");
-    
-    //-- Copyleft page
-    TT_Add_Str("no_right_reserved_title", "Proudly No Right Reserved");
-    TT_Add_Html("no_right_reserved_body", "\
+  }
+}
+
+function TT_FillText_Copyleft() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("no_right_reserved_title", "啊就真的沒有版權");
+    TT_AddHtml("no_right_reserved_body", "\
+      <p>本站所創作之所有文字及圖像均以<a href='https://creativecommons.org/publicdomain/zero/1.0/deed.zh_TW' target='_blank'>\
+      CC0 1.0 通用 公眾領域貢獻宣告 <i class='fas fa-external-link-alt'></i></a> 條款發布。</p>\
+      <p>意即使用者可自由用作營利或非營利之途，且不需經許可或標示來源。</p>\
+      <p>原始碼授權條款請洽此<a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>連結 <i class='fas fa-external-link-alt'></i></a>。</p>\
+    ");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("no_right_reserved_title", "Fièrement sans droit d'auteur");
+    TT_AddHtml("no_right_reserved_body", "\
+      <p>Tous les textes et les graphes créés sur ce site sont distribués sous \
+      <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.fr' target='_blank'>\
+      CC0 1.0 universel Transfert dans le Domaine Public <i class='fas fa-external-link-alt'></i></a>.</p>\
+      <p>Cela signifie que vous pouvez en faire presque tout ce que vous voulez : usages personnel et/ou commercial, sans avoir besoin d'autorisation ou d'attribution d'auteur.</p>\
+      <p>La license pour les codes et les scripts se trouve \
+      <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>\
+      ici <i class='fas fa-external-link-alt'></i></a>.</p>\
+    ");
+  }
+  
+  else { //-- En
+    TT_AddStr("no_right_reserved_title", "Proudly No Right Reserved");
+    TT_AddHtml("no_right_reserved_body", "\
       <p>All texts and plots created by this site are released under \
       <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en' target='_blank'>\
       CC0 1.0 Universal Public Domain Dedication <i class='fas fa-external-link-alt'></i></a>.</p>\
@@ -597,159 +299,17 @@ function text_translation() {
       <a href='https://github.com/Linc-tw/COVID_breakdown/blob/master/README.md' target='_blank'>\
       here <i class='fas fa-external-link-alt'></i></a>.</p>\
     ");
-    
-    //-- Status evolution
-    TT_Add_Str("status_evolution_title", "Status Evolution");
-    
-    //-- Various rates
-    TT_Add_Str("various_rates_title", "7-day Average of Various Rates");
-    
-    //-- Test by criterion
-    TT_Add_Str("test_by_criterion_title", "Number of Tests by Reporting Criterion");
-    TT_Add_Str("test_by_criterion_button_1", "Daily");
-    TT_Add_Str("test_by_criterion_button_2", "Cumulative");
-    
-    //-- Border statistics
-    TT_Add_Str("border_statistics_title", "Border Crossing");
-    TT_Add_Str("border_statistics_text", "Updated monthly");
-    TT_Add_Str("border_statistics_button_1", "Arrival");
-    TT_Add_Str("border_statistics_button_2", "Departure");
-    TT_Add_Str("border_statistics_button_3", "Both");
-    
-    
-    
-    //-- Case by transmission
-    TT_Add_Str("case_by_transmission_title", "Confirmed Cases by Transmission Type");
-    TT_Add_Str("case_by_transmission_button_1", "Daily");
-    TT_Add_Str("case_by_transmission_button_2", "Cumulative");
-    TT_Add_Str("case_by_transmission_button_3", "Report date");
-    TT_Add_Str("case_by_transmission_button_4", "Onset date");
-    
-    //-- Case by detection
-    TT_Add_Str("case_by_detection_title", "Confirmed Cases by Detection Channel");
-    TT_Add_Str("case_by_detection_button_1", "Daily");
-    TT_Add_Str("case_by_detection_button_2", "Cumulative");
-    TT_Add_Str("case_by_detection_button_3", "Report date");
-    TT_Add_Str("case_by_detection_button_4", "Onset date");
-    
-    //-- Difference by transmission
-    TT_Add_Str("difference_by_transmission_title", "Delay Before Identifying a Transmission");
-    TT_Add_Str("difference_by_transmission_button_1", "All");
-    TT_Add_Str("difference_by_transmission_button_2", "Imported");
-    TT_Add_Str("difference_by_transmission_button_3", "Local");
-    TT_Add_Str("difference_by_transmission_button_4", "Others");
-    
-    //-- Travel history-symptom correlations
-    TT_Add_Str("travel_history_symptom_correlations_title", "Correlations between Travel History & Symptoms");
-    TT_Add_Str("travel_history_symptom_correlations_button_1", "Coefficients");
-    TT_Add_Str("travel_history_symptom_correlations_button_2", "Counts");
-    
-    //-- Age-symptom correlations
-    TT_Add_Str("age_symptom_correlations_title", "Correlations between Age & Symptoms");
-    TT_Add_Str("age_symptom_correlations_button_1", "Coefficients");
-    TT_Add_Str("age_symptom_correlations_button_2", "Counts");
-    
-    
-    
-    //-- Daily case per county
-    TT_Add_Str("daily_case_per_county_title", "Local Confirmed Cases per City & County");
-    TT_Add_Str("daily_case_per_county_button_total", "Total local");
-    TT_Add_Str("daily_case_per_county_button_keelung", "Keelung");
-    TT_Add_Str("daily_case_per_county_button_taipei", "Taipei");
-    TT_Add_Str("daily_case_per_county_button_new_taipei", "New Taipei");
-    TT_Add_Str("daily_case_per_county_button_taoyuan", "Taoyuan");
-    TT_Add_Str("daily_case_per_county_button_hsinchu", "Hsinchu County");
-    TT_Add_Str("daily_case_per_county_button_hsinchu_city", "Hsinchu City");
-    TT_Add_Str("daily_case_per_county_button_miaoli", "Miaoli");
-    TT_Add_Str("daily_case_per_county_button_taichung", "Taichung");
-    TT_Add_Str("daily_case_per_county_button_changhua", "Changhua");
-    TT_Add_Str("daily_case_per_county_button_nantou", "Nantou");
-    TT_Add_Str("daily_case_per_county_button_yunlin", "Yunlin");
-    TT_Add_Str("daily_case_per_county_button_chiayi", "Chiayi County");
-    TT_Add_Str("daily_case_per_county_button_chiayi_city", "Chiayi City");
-    TT_Add_Str("daily_case_per_county_button_tainan", "Tainan");
-    TT_Add_Str("daily_case_per_county_button_kaohsiung", "Kaohsiung");
-    TT_Add_Str("daily_case_per_county_button_pingtung", "Pingtung");
-    TT_Add_Str("daily_case_per_county_button_yilan", "Yilan");
-    TT_Add_Str("daily_case_per_county_button_hualien", "Hualien");
-    TT_Add_Str("daily_case_per_county_button_taitung", "Taitung");
-    TT_Add_Str("daily_case_per_county_button_penghu", "Penghu");
-    TT_Add_Str("daily_case_per_county_button_kinmen", "Kinmen");
-    TT_Add_Str("daily_case_per_county_button_matsu", "Matsu");
-    
-    //-- Incidence map
-    TT_Add_Str("incidence_map_title", "Incidence Map");
-    TT_Add_Str("incidence_map_button_1", "Counts");
-    TT_Add_Str("incidence_map_button_2", "Rate");
-    TT_Add_Str("incidence_map_button_total", "Total local");
-    TT_Add_Str("incidence_map_button_w-1", "0-6 days ago");
-    TT_Add_Str("incidence_map_button_w-2", "7-13 days ago");
-    TT_Add_Str("incidence_map_button_w-3", "14-20 days ago");
-    TT_Add_Str("incidence_map_button_w-4", "21-27 days ago");
-    TT_Add_Str("incidence_map_button_w-5", "28-34 days ago");
-    TT_Add_Str("incidence_map_button_w-6", "35-41 days ago");
-    TT_Add_Str("incidence_map_button_w-7", "42-48 days ago");
-    TT_Add_Str("incidence_map_button_w-8", "49-55 days ago");
-    TT_Add_Str("incidence_map_button_w-9", "56-62 days ago");
-    TT_Add_Str("incidence_map_button_w-10", "63-69 days ago");
-    TT_Add_Str("incidence_map_button_w-11", "70-76 days ago");
-    TT_Add_Str("incidence_map_button_w-12", "77-83 days ago");
-    TT_Add_Str("incidence_map_button_m1", "January");
-    TT_Add_Str("incidence_map_button_m2", "February");
-    TT_Add_Str("incidence_map_button_m3", "March");
-    TT_Add_Str("incidence_map_button_m4", "April");
-    TT_Add_Str("incidence_map_button_m5", "May");
-    TT_Add_Str("incidence_map_button_m6", "June");
-    TT_Add_Str("incidence_map_button_m7", "July");
-    TT_Add_Str("incidence_map_button_m8", "August");
-    TT_Add_Str("incidence_map_button_m9", "September");
-    TT_Add_Str("incidence_map_button_m10", "October");
-    TT_Add_Str("incidence_map_button_m11", "November");
-    TT_Add_Str("incidence_map_button_m12", "December");
-    
-    //-- Case by age
-    TT_Add_Str("case_by_age_title", "Confirmed Cases by Age");
-    TT_Add_Str("case_by_age_text", "Updated typically with 1 day delay");
-    TT_Add_Str("case_by_age_button_total", "Total");
-    TT_Add_Str("case_by_age_button_w-1", "0-6 days ago");
-    TT_Add_Str("case_by_age_button_w-2", "7-13 days ago");
-    TT_Add_Str("case_by_age_button_w-3", "14-20 days ago");
-    TT_Add_Str("case_by_age_button_w-4", "21-27 days ago");
-    TT_Add_Str("case_by_age_button_w-5", "28-34 days ago");
-    TT_Add_Str("case_by_age_button_w-6", "35-41 days ago");
-    TT_Add_Str("case_by_age_button_w-7", "42-48 days ago");
-    TT_Add_Str("case_by_age_button_w-8", "49-55 days ago");
-    TT_Add_Str("case_by_age_button_w-9", "56-62 days ago");
-    TT_Add_Str("case_by_age_button_w-10", "63-69 days ago");
-    TT_Add_Str("case_by_age_button_w-11", "70-76 days ago");
-    TT_Add_Str("case_by_age_button_w-12", "77-83 days ago");
-    TT_Add_Str("case_by_age_button_m1", "January");
-    TT_Add_Str("case_by_age_button_m2", "February");
-    TT_Add_Str("case_by_age_button_m3", "March");
-    TT_Add_Str("case_by_age_button_m4", "April");
-    TT_Add_Str("case_by_age_button_m5", "May");
-    TT_Add_Str("case_by_age_button_m6", "June");
-    TT_Add_Str("case_by_age_button_m7", "July");
-    TT_Add_Str("case_by_age_button_m8", "August");
-    TT_Add_Str("case_by_age_button_m9", "September");
-    TT_Add_Str("case_by_age_button_m10", "October");
-    TT_Add_Str("case_by_age_button_m11", "November");
-    TT_Add_Str("case_by_age_button_m12", "December");
-    
-    
-    
-    //-- Criteria timeline
-    TT_Add_Str("criteria_timeline_title", "Chronology of Systematic Testing");
-    TT_Add_Str("criteria_timeline_button_1", "Selected");
-    TT_Add_Str("criteria_timeline_button_2", "Full");
-    TT_Add_Str("criteria_timeline_button_3", "Timeline");
-    TT_Add_Str("criteria_timeline_button_4", "Disks");
-    
-    //-- Event timeline
-    TT_Add_Str("event_timeline_title", "Pandemic Timeline");
-    TT_Add_Str("event_timeline_button_1", "1st day Sunday");
-    TT_Add_Str("event_timeline_button_2", "1st day Monday");
   }
+}
+
+function TT_FillText_Main() {
+  TT_FillText_Menu();
+  
+  if (window.location.pathname.includes('data_source.htm'))
+    TT_FillText_Source();
+  
+  else if (window.location.pathname.includes('no_right_reserved.htm'))
+    TT_FillText_Copyleft();
 }
 
 //-- Load key nb & print texts
@@ -765,7 +325,7 @@ d3.csv("processed_data/key_numbers.csv", function (error, data) {
     }
   }
 
-  text_translation();
+  TT_FillText_Main();
 });
 
 //-- Language button
@@ -773,5 +333,6 @@ $(document).on("change", "input:radio[name='language']", function (event) {
   GS_PressRadioButton(GS_wrap, 'lang', GS_lang, this.value)
   GS_lang = this.value;
   Cookies.set("lang", GS_lang, {sameSite: 'lax'});
-  text_translation();
+
+  TT_FillText_Main();
 });

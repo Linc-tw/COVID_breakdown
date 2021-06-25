@@ -21,7 +21,6 @@ import pandas as pd
 ## TODO
 
 #delayed loading
-#index redirection
 #screenshot
 
 ################################################################################

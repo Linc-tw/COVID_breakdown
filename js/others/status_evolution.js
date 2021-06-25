@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function SE_MakeCanvas(wrap) {
+function SE_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -17,6 +17,20 @@ function SE_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
   
   GS_MakeCanvas(wrap);
+}
+
+function SE_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("status_evolution_title", "疫情變化");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("status_evolution_title", "Évolution de la situation");
+  }
+  
+  else { //-- En
+    TT_AddStr("status_evolution_title", "Status Evolution");
+  }
 }
 
 function SE_FormatData(wrap, data) {
@@ -162,7 +176,7 @@ function SE_MouseMove(wrap, d) {
     .style("top", new_pos[1] + "px")
 }
 
-function SE_Initialize(wrap) {
+function SE_Plot(wrap) {
   //-- Define x-axis
   var x = d3.scaleBand()
     .domain(wrap.date_list)
@@ -265,7 +279,7 @@ function SE_Initialize(wrap) {
   wrap.bar = bar;
 }
 
-function SE_Update(wrap) {
+function SE_Replot(wrap) {
   //-- Define new xticklabel
   var x_axis_2 = d3.axisBottom(wrap.x_2)
     .tickSize(10)
@@ -377,18 +391,17 @@ function SE_Update(wrap) {
       .attr("text-anchor", "start")
 }
 
-//-- Plot
-function SE_Plot(wrap) {
+//-- Load
+function SE_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      SE_MakeCanvas(wrap);
       SE_FormatData(wrap, data);
-      SE_Initialize(wrap);
-      SE_Update(wrap);
+      SE_Plot(wrap);
+      SE_Replot(wrap);
     });
 }
 
@@ -405,17 +418,19 @@ function SE_ButtonListener(wrap) {
     Cookies.set("lang", GS_lang);
     
     //-- Replot
-    SE_Update(wrap);
+    SE_ResetText();
+    SE_Replot(wrap);
   });
 }
-
 
 //-- Main
 function SE_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
-  //-- Plot
-  SE_Plot(wrap);
+  //-- Load
+  SE_InitFig(wrap);
+  SE_ResetText();
+  SE_Load(wrap);
   
   //-- Setup button listeners
   SE_ButtonListener(wrap);

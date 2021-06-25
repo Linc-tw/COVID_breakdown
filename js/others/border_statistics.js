@@ -5,7 +5,7 @@
 //-- Author:
 //--   Chieh-An Lin
 
-function BS_MakeCanvas(wrap) {
+function BS_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 415;
@@ -17,6 +17,32 @@ function BS_MakeCanvas(wrap) {
   wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
   
   GS_MakeCanvas(wrap);
+}
+
+function BS_ResetText() {
+  if (GS_lang == 'zh-tw') {
+    TT_AddStr("border_statistics_title", "入出境人數統計");
+    TT_AddStr("border_statistics_text", "逐月更新");
+    TT_AddStr("border_statistics_button_1", "入境");
+    TT_AddStr("border_statistics_button_2", "出境");
+    TT_AddStr("border_statistics_button_3", "合計");
+  }
+  
+  else if (GS_lang == 'fr') {
+    TT_AddStr("border_statistics_title", "Statistiques frontalières");
+    TT_AddStr("border_statistics_text", "Mise à jour mensuellement");
+    TT_AddStr("border_statistics_button_1", "Arrivée");
+    TT_AddStr("border_statistics_button_2", "Départ");
+    TT_AddStr("border_statistics_button_3", "Total");
+  }
+  
+  else { //-- En
+    TT_AddStr("border_statistics_title", "Border Crossing");
+    TT_AddStr("border_statistics_text", "Updated monthly");
+    TT_AddStr("border_statistics_button_1", "Arrival");
+    TT_AddStr("border_statistics_button_2", "Departure");
+    TT_AddStr("border_statistics_button_3", "Both");
+  }
 }
 
 function BS_FormatData(wrap, data) {
@@ -184,7 +210,7 @@ function BS_MouseMove(wrap, d) {
     .style("top", new_pos[1] + "px")
 }
 
-function BS_Initialize(wrap) {
+function BS_Plot(wrap) {
   //-- Define x-axis
   var x = d3.scaleBand()
     .domain(wrap.date_list)
@@ -287,7 +313,7 @@ function BS_Initialize(wrap) {
   wrap.bar = bar;
 }
 
-function BS_Update(wrap) {
+function BS_Replot(wrap) {
   //-- Define new xticklabel
   var x_axis_2 = d3.axisBottom(wrap.x_2)
     .tickSize(10)
@@ -437,22 +463,21 @@ function BS_Update(wrap) {
       .attr("text-anchor", "start")
 }
 
-//-- Plot
-function BS_Plot(wrap) {
+//-- Load
+function BS_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.do_exit])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      BS_MakeCanvas(wrap);
       BS_FormatData(wrap, data);
-      BS_Initialize(wrap);
-      BS_Update(wrap);
+      BS_Plot(wrap);
+      BS_Replot(wrap);
     });
 }
 
-function BS_Replot(wrap) {
+function BS_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.do_exit])
     .await(function (error, data) {
@@ -460,7 +485,7 @@ function BS_Replot(wrap) {
         return console.warn(error);
       
       BS_FormatData(wrap, data);
-      BS_Update(wrap);
+      BS_Replot(wrap);
     });
 }
 
@@ -469,7 +494,7 @@ function BS_ButtonListener(wrap) {
   $(document).on("change", "input:radio[name='" + wrap.tag + "_exit']", function (event) {
     GS_PressRadioButton(wrap, 'exit', wrap.do_exit, this.value);
     wrap.do_exit = this.value;
-    BS_Replot(wrap);
+    BS_Reload(wrap);
   });
 
   //-- Save
@@ -493,7 +518,8 @@ function BS_ButtonListener(wrap) {
     Cookies.set("lang", GS_lang);
     
     //-- Replot
-    BS_Update(wrap);
+    BS_ResetText();
+    BS_Replot(wrap);
   });
 }
 
@@ -505,8 +531,10 @@ function BS_Main(wrap) {
   wrap.do_exit = document.querySelector("input[name='" + wrap.tag + "_exit']:checked").value;
   GS_PressRadioButton(wrap, 'exit', 0, wrap.do_exit); //-- 0 from .html
 
-  //-- Plot
-  BS_Plot(wrap);
+  //-- Load
+  BS_InitFig(wrap);
+  BS_ResetText();
+  BS_Load(wrap);
   
   //-- Setup button listeners
   BS_ButtonListener(wrap);
