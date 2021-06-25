@@ -414,7 +414,7 @@ function TBC_Update(wrap) {
 //-- Plot
 function TBC_Plot(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path)
+    .defer(d3.csv, wrap.data_path[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
@@ -428,7 +428,7 @@ function TBC_Plot(wrap) {
 
 function TBC_Replot(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path)
+    .defer(d3.csv, wrap.data_path[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
