@@ -28,149 +28,102 @@ function TT_AddHtml(id, string) {
 
 //-- Text content
 function TT_FillText_Menu() {
+  var str_title;
+  var str_latest;
+  var str_2021;
+  var str_2020;
+  var str_highlight;
+  var str_breakdown;
+  var str_vaccination;
+  var str_timeline;
+  var str_source;
+  var str_copyleft;
+  var str_slow;
+  
   if (GS_lang == 'zh-tw') {
-    var str_latest = "近90日統計";
-    var str_2021 = "2021統計";
-    var str_2020 = "2020統計";
-    var str_highlight = "儀表板";
-    var str_breakdown = "個案統計";
-    var str_vaccination = "疫苗接種";
-    var str_timeline = "時間軸";
-    var str_source = "資料來源";
-    var str_copyleft = "版權沒有";
-    var str_slow = "載入費時";
-    
-    //-- Menu
-    TT_AddStr("menu_latest", str_latest);
-    TT_AddStr("menu_latest_highlight", str_highlight);
-    TT_AddStr("menu_latest_breakdown", str_breakdown);
-    TT_AddStr("menu_latest_vaccination", str_vaccination);
-    TT_AddStr("menu_2021", str_2021);
-    TT_AddStr("menu_2021_highlight", str_highlight);
-    TT_AddStr("menu_2021_breakdown", str_breakdown);
-    TT_AddStr("menu_2021_vaccination", str_vaccination);
-    TT_AddHtml("menu_2020", "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
-    TT_AddStr("menu_2020_highlight", str_highlight);
-    TT_AddStr("menu_2020_breakdown", str_breakdown);
-    TT_AddStr("menu_2020_vaccination", str_vaccination);
-    TT_AddStr("menu_timeline", str_timeline);
-    TT_AddStr("menu_source", str_source);
-    TT_AddStr("menu_copyleft", str_copyleft);
-    
-    //-- Header + footer
-    TT_AddStr("title", "嚴重特殊傳染性肺炎 台灣疫情");
-    TT_AddStr("title_latest_highlight", str_latest + " - " + str_highlight);
-    TT_AddStr("title_latest_breakdown", str_latest + " - " + str_breakdown);
-    TT_AddStr("title_latest_vaccination", str_latest + " - " + str_vaccination);
-    TT_AddStr("title_2021_highlight", str_2021 + " - " + str_highlight);
-    TT_AddStr("title_2021_breakdown", str_2021 + " - " + str_breakdown);
-    TT_AddStr("title_2021_vaccination", str_2021 + " - " + str_vaccination);
-    TT_AddStr("title_2020_highlight", str_2020 + " - " + str_highlight);
-    TT_AddStr("title_2020_breakdown", str_2020 + " - " + str_breakdown);
-    TT_AddStr("title_2020_vaccination", str_2020 + " - " + str_vaccination);
-    TT_AddStr("title_timeline", str_timeline);
-    TT_AddStr("title_source", str_source);
-    TT_AddStr("title_copyleft", str_copyleft);
-    TT_AddStr("footer_last_update", '最後更新：' + TT_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3');
+    str_title = '嚴重特殊傳染性肺炎 台灣疫情';
+    str_latest = '近90日統計';
+    str_2021 = '2021統計';
+    str_2020 = '2020統計';
+    str_highlight = '儀表板';
+    str_breakdown = '個案統計';
+    str_vaccination = '疫苗接種';
+    str_timeline = '時間軸';
+    str_source = '資料來源';
+    str_copyleft = '版權沒有';
+    str_slow = '載入費時';
+    str_update = '最後更新：' + TT_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3';
   }
   
   else if (GS_lang == 'fr') {
-    var str_latest = "Derniers 90 jours";
-    var str_2021 = "Stat 2021";
-    var str_2020 = "Stat 2020";
-    var str_highlight = "Mise au point";
-    var str_breakdown = "Analyse des cas";
-    var str_vaccination = "Vaccination";
-    var str_timeline = "Chronologie";
-    var str_source = "Sources des données";
-    var str_copyleft = "Sans droit d'auteur";
-    var str_slow = "chargement lent";
-    
-    //-- Menu
-    TT_AddStr("menu_latest", str_latest);
-    TT_AddStr("menu_latest_highlight", str_highlight);
-    TT_AddStr("menu_latest_breakdown", str_breakdown);
-    TT_AddStr("menu_latest_vaccination", str_vaccination);
-    TT_AddStr("menu_2021", str_2021);
-    TT_AddStr("menu_2021_highlight", str_highlight);
-    TT_AddStr("menu_2021_breakdown", str_breakdown);
-    TT_AddStr("menu_2021_vaccination", str_vaccination);
-    TT_AddHtml("menu_2020", "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
-    TT_AddStr("menu_2020_highlight", str_highlight);
-    TT_AddStr("menu_2020_breakdown", str_breakdown);
-    TT_AddStr("menu_2020_vaccination", str_vaccination);
-    TT_AddStr("menu_timeline", str_timeline);
-    TT_AddStr("menu_source", str_source);
-    TT_AddStr("menu_copyleft", str_copyleft);
-    
-    //-- Header + footer
-    TT_AddStr("title", "Statistiques de COVID-19 à Taïwan");
-    TT_AddStr("title_latest_highlight", str_latest + " - " + str_highlight);
-    TT_AddStr("title_latest_breakdown", str_latest + " - " + str_breakdown);
-    TT_AddStr("title_latest_vaccination", str_latest + " - " + str_vaccination);
-    TT_AddStr("title_2021_highlight", str_2021 + " - " + str_highlight);
-    TT_AddStr("title_2021_breakdown", str_2021 + " - " + str_breakdown);
-    TT_AddStr("title_2021_vaccination", str_2021 + " - " + str_vaccination);
-    TT_AddStr("title_2020_highlight", str_2020 + " - " + str_highlight);
-    TT_AddStr("title_2020_breakdown", str_2020 + " - " + str_breakdown);
-    TT_AddStr("title_2020_vaccination", str_2020 + " - " + str_vaccination);
-    TT_AddStr("title_timeline", str_timeline);
-    TT_AddStr("title_source", str_source);
-    TT_AddStr("title_copyleft", str_copyleft);
-    TT_AddStr("footer_last_update", 'Dernière mise à jour : ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3');
+    str_title = 'Statistiques de COVID-19 à Taïwan';
+    str_latest = 'Derniers 90 jours';
+    str_2021 = 'Stat 2021';
+    str_2020 = 'Stat 2020';
+    str_highlight = 'Mise au point';
+    str_breakdown = 'Analyse des cas';
+    str_vaccination = 'Vaccination';
+    str_timeline = 'Chronologie';
+    str_source = 'Sources des données';
+    str_copyleft = "Sans droit d'auteur";
+    str_slow = 'chargement lent';
+    str_update = 'Dernière mise à jour : ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3';
   }
   
   else { //-- En
-    var str_latest = "Last 90 days";
-    var str_2021 = "Stats 2021";
-    var str_2020 = "Stats 2020";
-    var str_highlight = "Highlight";
-    var str_breakdown = "Case breakdown";
-    var str_vaccination = "Vaccination";
-    var str_timeline = "Timeline";
-    var str_source = "Data Sources";
-    var str_copyleft = "No right reserved";
-    var str_slow = "slow loading";
-    
-    //-- Menu
-    TT_AddStr("menu_latest", str_latest);
-    TT_AddStr("menu_latest_highlight", str_highlight);
-    TT_AddStr("menu_latest_breakdown", str_breakdown);
-    TT_AddStr("menu_latest_vaccination", str_vaccination);
-    TT_AddStr("menu_2021", str_2021);
-    TT_AddStr("menu_2021_highlight", str_highlight);
-    TT_AddStr("menu_2021_breakdown", str_breakdown);
-    TT_AddStr("menu_2021_vaccination", str_vaccination);
-    TT_AddHtml("menu_2020", "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
-    TT_AddStr("menu_2020_highlight", str_highlight);
-    TT_AddStr("menu_2020_breakdown", str_breakdown);
-    TT_AddStr("menu_2020_vaccination", str_vaccination);
-    TT_AddStr("menu_timeline", str_timeline);
-    TT_AddStr("menu_source", str_source);
-    TT_AddStr("menu_copyleft", str_copyleft);
-    
-    //-- Header + footer
-    TT_AddStr("title", "COVID-19 Statistics in Taiwan");
-    TT_AddStr("title_latest_highlight", str_latest + " - " + str_highlight);
-    TT_AddStr("title_latest_breakdown", str_latest + " - " + str_breakdown);
-    TT_AddStr("title_latest_vaccination", str_latest + " - " + str_vaccination);
-    TT_AddStr("title_2021_highlight", str_2021 + " - " + str_highlight);
-    TT_AddStr("title_2021_breakdown", str_2021 + " - " + str_breakdown);
-    TT_AddStr("title_2021_vaccination", str_2021 + " - " + str_vaccination);
-    TT_AddStr("title_2020_highlight", str_2020 + " - " + str_highlight);
-    TT_AddStr("title_2020_breakdown", str_2020 + " - " + str_breakdown);
-    TT_AddStr("title_2020_vaccination", str_2020 + " - " + str_vaccination);
-    TT_AddStr("title_timeline", str_timeline);
-    TT_AddStr("title_source", str_source);
-    TT_AddStr("title_copyleft", str_copyleft);
-    TT_AddStr("footer_last_update", 'Last update: ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3');
+    str_title = 'COVID-19 Statistics in Taiwan';
+    str_latest = 'Last 90 days';
+    str_2021 = 'Stats 2021';
+    str_2020 = 'Stats 2020';
+    str_highlight = 'Highlight';
+    str_breakdown = 'Case breakdown';
+    str_vaccination = 'Vaccination';
+    str_timeline = 'Timeline';
+    str_source = 'Data Sources';
+    str_copyleft = 'No right reserved';
+    str_slow = 'slow loading';
+    str_update = 'Last update: ' + TT_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3';
   }
+  
+  //-- Menu
+  TT_AddStr('menu_latest', str_latest);
+  TT_AddStr('menu_latest_highlight', str_highlight);
+  TT_AddStr('menu_latest_breakdown', str_breakdown);
+  TT_AddStr('menu_latest_vaccination', str_vaccination);
+  TT_AddStr('menu_2021', str_2021);
+  TT_AddStr('menu_2021_highlight', str_highlight);
+  TT_AddStr('menu_2021_breakdown', str_breakdown);
+  TT_AddStr('menu_2021_vaccination', str_vaccination);
+//   TT_AddHtml('menu_2020', "<p style='margin-bottom: 0em'>" + str_2020 + "<br/>(" + str_slow + ")</p>");
+  TT_AddStr('menu_2020', str_2020);
+  TT_AddStr('menu_2020_highlight', str_highlight);
+  TT_AddStr('menu_2020_breakdown', str_breakdown);
+  TT_AddStr('menu_2020_vaccination', str_vaccination);
+  TT_AddStr('menu_timeline', str_timeline);
+  TT_AddStr('menu_source', str_source);
+  TT_AddStr('menu_copyleft', str_copyleft);
+  
+  //-- Header + footer
+  TT_AddStr('title', str_title);
+  TT_AddStr('title_latest_highlight', str_latest + ' - ' + str_highlight);
+  TT_AddStr('title_latest_breakdown', str_latest + ' - ' + str_breakdown);
+  TT_AddStr('title_latest_vaccination', str_latest + ' - ' + str_vaccination);
+  TT_AddStr('title_2021_highlight', str_2021 + ' - ' + str_highlight);
+  TT_AddStr('title_2021_breakdown', str_2021 + ' - ' + str_breakdown);
+  TT_AddStr('title_2021_vaccination', str_2021 + ' - ' + str_vaccination);
+  TT_AddStr('title_2020_highlight', str_2020 + ' - ' + str_highlight);
+  TT_AddStr('title_2020_breakdown', str_2020 + ' - ' + str_breakdown);
+  TT_AddStr('title_2020_vaccination', str_2020 + ' - ' + str_vaccination);
+  TT_AddStr('title_timeline', str_timeline);
+  TT_AddStr('title_source', str_source);
+  TT_AddStr('title_copyleft', str_copyleft);
+  TT_AddStr('footer_last_update', str_update);
 }
 
 function TT_FillText_Source() {
   if (GS_lang == 'zh-tw') {
-    TT_AddStr("data_source_original_title", "資料來源");
-    TT_AddHtml("data_source_original_body", "\
+    TT_AddStr('data_source_original_title', '資料來源');
+    TT_AddHtml('data_source_original_body', "\
       <p>目前本站資料是由兩種不同管道所取得。</p>\
       <p>主要來源為一份由PTT網友們所整理的線上\
       <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'> \
@@ -179,13 +132,13 @@ function TT_FillText_Source() {
       <p>另一資料來源為疾管署<a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'> \
       官方資料平台 <i class='fas fa-external-link-alt'></i></a> 。很可惜平台上的資料多半乏善可陳，因此才以非官方表單作為主要資料來源。</p>\
     ");
-    TT_AddStr("data_source_raw_title", "初階資料");
-    TT_AddHtml("data_source_raw_body", "\
+    TT_AddStr('data_source_raw_title', '初階資料');
+    TT_AddHtml('data_source_raw_body', "\
       <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'> \
       初階資料 <i class='fas fa-external-link-alt'></i></a> 是前面所提資料來源之部份分頁或檔案。目前共有6個csv檔，最主要者為一記有所有確診者及其相關流行病學資訊之表單。</p>\
     ");
-    TT_AddStr("data_source_processed_title", "高階資料");
-    TT_AddHtml("data_source_processed_body", "\
+    TT_AddStr('data_source_processed_title', '高階資料');
+    TT_AddHtml('data_source_processed_body', "\
       <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'> \
       高階資料 <i class='fas fa-external-link-alt'></i></a> 為整理過後直接用來畫圖的檔案。絕大多數為csv檔，由低階資料處理後生成，另有一geojson檔為微調過之台灣地圖。</p>\
       <p>除經特殊標示外，所有高階資料編碼皆符合ASCII格式。</p>\
@@ -193,8 +146,8 @@ function TT_FillText_Source() {
   }
   
   else if (GS_lang == 'fr') {
-    TT_AddStr("data_source_original_title", "Sources des données");
-    TT_AddHtml("data_source_original_body", "\
+    TT_AddStr('data_source_original_title', 'Sources des données');
+    TT_AddHtml('data_source_original_body', "\
       <p>À ce stade, ce site recueille les données à partir de 2 sources.</p>\
       <p>La source principale est un \
       <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>\
@@ -209,16 +162,16 @@ function TT_FillText_Source() {
       C'est pour cette raison que la source principale n'est pas celle qui est officielle.</p>\
       <p>Les données des 2 sources sont toutes en mandarin.</p>\
     ");
-    TT_AddStr("data_source_raw_title", "Données brutes");
-    TT_AddHtml("data_source_raw_body", "\
+    TT_AddStr('data_source_raw_title', 'Données brutes');
+    TT_AddHtml('data_source_raw_body', "\
       <p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
       données brutes <i class='fas fa-external-link-alt'></i></a> \
       sont un sous-ensemble des fichiers provenant des 2 sources des données mentionnées auparavant.</p>\
       <p>À ce stade, 6 fichiers csv y figurent. Le fichier principal est une liste de tous cas confirmés avec leurs détails épidémiologiques respectifs.</p>\
       <p>Ces données contiennent des caractères mandarins en abondance.</p>\
     ");
-    TT_AddStr("data_source_processed_title", "Données traitées");
-    TT_AddHtml("data_source_processed_body", "\
+    TT_AddStr('data_source_processed_title', 'Données traitées');
+    TT_AddHtml('data_source_processed_body', "\
       <p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>\
       données traitées <i class='fas fa-external-link-alt'></i></a> \
       comprennent de nombreux fichiers directement utilisés pour afficher les figures.</p>\
@@ -229,8 +182,8 @@ function TT_FillText_Source() {
   }
   
   else { //-- En
-    TT_AddStr("data_source_original_title", "Data Sources");
-    TT_AddHtml("data_source_original_body", "\
+    TT_AddStr('data_source_original_title', 'Data Sources');
+    TT_AddHtml('data_source_original_body', "\
       <p>At this stage, this website collects data from 2 sources.</p>\
       <p>The principle source is a \
       <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>\
@@ -313,7 +266,7 @@ function TT_FillText_Main() {
 }
 
 //-- Load key nb & print texts
-d3.csv("processed_data/key_numbers.csv", function (error, data) {
+d3.csv('processed_data/key_numbers.csv', function (error, data) {
   if (error)
     return console.warn(error);
   
@@ -329,7 +282,7 @@ d3.csv("processed_data/key_numbers.csv", function (error, data) {
 });
 
 //-- Language button
-$(document).on("change", "input:radio[name='language']", function (event) {
+$(document).on('change', "input:radio[name='language']", function (event) {
   GS_PressRadioButton(GS_wrap, 'lang', GS_lang, this.value)
   GS_lang = this.value;
   Cookies.set("lang", GS_lang, {sameSite: 'lax'});

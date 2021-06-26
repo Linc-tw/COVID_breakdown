@@ -16,7 +16,7 @@ function DCPC_InitFig(wrap) {
   wrap.margin_['fr'] = {left: 90, right: 2, bottom: 90, top: 2};
   wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
   
-  GS_MakeCanvas(wrap);
+  GS_InitFig(wrap);
 }
 
 function DCPC_ResetText() {
@@ -342,7 +342,7 @@ function DCPC_Replot(wrap) {
   //-- Update 2nd x-axis
   wrap.svg.select('.xaxis')
     .transition()
-    .duration(GS_wrap.trans_duration)
+    .duration(GS_wrap.trans_delay)
     .call(x_axis_2)
     .selectAll("text")
       .attr("transform", "translate(-20,15) rotate(-90)")
@@ -362,7 +362,7 @@ function DCPC_Replot(wrap) {
   //-- Update y-axis
   wrap.svg.select('.yaxis')
     .transition()
-    .duration(GS_wrap.trans_duration)
+    .duration(GS_wrap.trans_delay)
     .call(y_axis);
   
   //-- Define ylabel
@@ -383,7 +383,7 @@ function DCPC_Replot(wrap) {
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GS_wrap.trans_duration)
+    .duration(GS_wrap.trans_delay)
     .attr('fill', wrap.color(col_tag_list[wrap.county]))
     .attr('y', function (d) {return y(d[col_tag_list[wrap.county]]);})
     .attr('height', function (d) {return y(0)-y(d[col_tag_list[wrap.county]]);});

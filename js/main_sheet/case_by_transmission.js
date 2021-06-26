@@ -16,7 +16,7 @@ function CBT_InitFig(wrap) {
   wrap.margin_['fr'] = {left: 90, right: 2, bottom: 90, top: 2};
   wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
   
-  GS_MakeCanvas(wrap);
+  GS_InitFig(wrap);
 }
 
 function CBT_ResetText() {
@@ -355,7 +355,7 @@ function CBT_Replot(wrap) {
   //-- Update 2nd x-axis
   wrap.svg.select('.xaxis')
     .transition()
-    .duration(GS_wrap.trans_duration)
+    .duration(wrap.trans_delay)
     .call(x_axis_2)
     .selectAll("text")
       .attr("transform", "translate(-20,15) rotate(-90)")
@@ -382,7 +382,7 @@ function CBT_Replot(wrap) {
   //-- Update y-axis
   wrap.svg.select('.yaxis')
     .transition()
-    .duration(GS_wrap.trans_duration)
+    .duration(wrap.trans_delay)
     .call(y_axis);
   
   //-- Define ylabel
@@ -402,7 +402,7 @@ function CBT_Replot(wrap) {
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GS_wrap.trans_duration)
+    .duration(wrap.trans_delay)
     .attr('y', function (d) {return y(d.y1);})
     .attr('height', function (d) {return y(d.y0)-y(d.y1);});
     

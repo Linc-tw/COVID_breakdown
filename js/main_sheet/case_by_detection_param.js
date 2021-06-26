@@ -28,6 +28,7 @@ var CBD_latest_wrap = {
   legend_pos_x_0_i_: {'zh-tw': 65, fr: 65, en: 65}, //320, 280, 320
   legend_pos_x_1_i_: {'zh-tw': 65, fr: 65, en: 65},
   legend_pos_x1_: {'zh-tw': 240, fr: 210, en: 190},
+  trans_delay: GS_wrap.trans_delay,
 };
 
 var CBD_2021_wrap = {
@@ -53,6 +54,7 @@ var CBD_2021_wrap = {
   legend_pos_x_0_i_: {'zh-tw': 65, fr: 65, en: 65},
   legend_pos_x_1_i_: {'zh-tw': 65, fr: 65, en: 65},
   legend_pos_x1_: {'zh-tw': 240, fr: 210, en: 190},
+  trans_delay: GS_wrap.trans_delay_long,
 };
 
 var CBD_2020_wrap = {
@@ -78,4 +80,5 @@ var CBD_2020_wrap = {
   legend_pos_x_0_i_: {'zh-tw': 280, fr: 290, en: 290},
   legend_pos_x_1_i_: {'zh-tw': 0, fr: 0, en: 0},
   legend_pos_x1_: {'zh-tw': 0, fr: 0, en: 0},
+  trans_delay: GS_wrap.trans_delay_long,
 };

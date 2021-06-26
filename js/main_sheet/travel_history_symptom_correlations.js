@@ -16,7 +16,7 @@ function THSC_InitFig(wrap) {
   wrap.margin_['fr'] = {left: 280, right: 2, bottom: 2, top: 220};
   wrap.margin_['en'] = {left: 250, right: 2, bottom: 2, top: 200};
   
-  GS_MakeCanvas(wrap);
+  GS_InitFig(wrap);
 }
 
 function THSC_ResetText() {

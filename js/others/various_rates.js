@@ -16,7 +16,7 @@ function VR_InitFig(wrap) {
   wrap.margin_['fr'] = {left: 70, right: 2, bottom: 90, top: 2};
   wrap.margin_['en'] = {left: 70, right: 2, bottom: 90, top: 2};
   
-  GS_MakeCanvas(wrap);
+  GS_InitFig(wrap);
 }
 
 function VR_ResetText() {
@@ -298,7 +298,7 @@ function VR_Replot(wrap) {
   //-- Update 2nd x-axis
   wrap.svg.select('.xaxis')
     .transition()
-    .duration(GS_wrap.trans_duration)
+    .duration(GS_wrap.trans_delay)
     .call(x_axis_2)
     .selectAll("text")
       .attr("transform", "translate(-20,15) rotate(-90)")
@@ -318,7 +318,7 @@ function VR_Replot(wrap) {
   //-- Update y-axis
   wrap.svg.select('.yaxis')
     .transition()
-    .duration(GS_wrap.trans_duration)
+    .duration(GS_wrap.trans_delay)
     .call(y_axis);
   
   //-- Define ylabel
@@ -337,13 +337,13 @@ function VR_Replot(wrap) {
   //-- Update line
   wrap.line.selectAll('.content.line')
     .transition()
-    .duration(GS_wrap.trans_duration)
+    .duration(GS_wrap.trans_delay)
     .attr('d', function (d) {return wrap.draw_line(d.values);});
     
   //-- Update dot
   wrap.dot.selectAll('.content.dot')
     .transition()
-    .duration(GS_wrap.trans_duration)
+    .duration(GS_wrap.trans_delay)
     .attr("r", function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
 
   //-- Define legend position

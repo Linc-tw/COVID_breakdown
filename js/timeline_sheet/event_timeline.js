@@ -17,7 +17,7 @@ function ET_InitFig(wrap) {
   wrap.margin_['en'] = {left: 0, right: 0, bottom: 0, top: 0};
   wrap.cell_size = 20; //-- Cell size
   
-  GS_MakeCanvas(wrap);
+  GS_InitFig(wrap);
 }
 
 function ET_ResetText() {
@@ -583,13 +583,13 @@ function ET_MouseMove(wrap, d) {
 
 //-- Click
 function ET_Click(wrap, d, i) {
-  var trans_duration = 0;
+  var trans_delay = 0;
   
   //-- Click on empty square
   if (!(d in wrap.formatted_data)) {
     wrap.svg.selectAll(wrap.id+'_text')
       .transition()
-      .duration(trans_duration)
+      .duration(trans_delay)
       .text('');
     return;
   }
@@ -617,7 +617,7 @@ function ET_Click(wrap, d, i) {
   //-- Update text
   wrap.svg.selectAll(wrap.id+'_text')
     .transition()
-    .duration(trans_duration)
+    .duration(trans_delay)
     .text(function (d2, j) {return text[j];})
     .attr('fill', function (d2, j) {return color_list[j];});
 }

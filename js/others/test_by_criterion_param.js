@@ -18,6 +18,7 @@ var TBC_latest_wrap = {
   y_path_0: '4', 
   legend_pos_x_0_: {'zh-tw': 110, fr: 110, en: 110},
   legend_pos_x_1_: {'zh-tw': 110, fr: 110, en: 110}, 
+  trans_delay: GS_wrap.trans_delay,
 };
 
 var TBC_2021_wrap = {
@@ -33,6 +34,7 @@ var TBC_2021_wrap = {
   y_path_0: '4',
   legend_pos_x_0_: {'zh-tw': 110, fr: 110, en: 110},
   legend_pos_x_1_: {'zh-tw': 110, fr: 110, en: 110},
+  trans_delay: GS_wrap.trans_delay,
 };
 
 var TBC_2020_wrap = {
@@ -48,4 +50,5 @@ var TBC_2020_wrap = {
   y_path_0: '4', //-- 4 ticks
   legend_pos_x_0_: {'zh-tw': 510, fr: 320, en: 350},
   legend_pos_x_1_: {'zh-tw': 0, fr: 0, en: 0},
+  trans_delay: GS_wrap.trans_delay_long,
 };

@@ -5,5 +5,9 @@
 //-- Author:
 //--   Chieh-An Lin
 
-CT_Main(CT_wrap);
-ET_Main(ET_wrap);
+var PT_plot_list = [
+  [CT_Main, CT_wrap, 1500],
+  [ET_Main, ET_wrap, 1500],
+];
+
+GS_Cascade(PT_plot_list);

@@ -20,6 +20,7 @@ var BS_latest_wrap = {
   y_path_1: '4', 
   y_path_2: '4', 
   legend_pos_x: 500, 
+  trans_delay: GS_wrap.trans_delay,
 };
 
 var BS_2021_wrap = {
@@ -37,6 +38,7 @@ var BS_2021_wrap = {
   y_path_1: '4',
   y_path_2: '4',
   legend_pos_x: 500,
+  trans_delay: GS_wrap.trans_delay,
 };
 
 
@@ -55,5 +57,6 @@ var BS_2020_wrap = {
   y_path_1: '4',
   y_path_2: '4',
   legend_pos_x: 500,
+  trans_delay: GS_wrap.trans_delay_long,
 };
 

@@ -18,12 +18,6 @@ import matplotlib as mpl
 import pandas as pd
 
 ################################################################################
-## TODO
-
-#delayed loading
-#screenshot
-
-################################################################################
 ## Parameters
 
 DATA_PATH = '/home/linc/21_Codes/COVID_breakdown/'

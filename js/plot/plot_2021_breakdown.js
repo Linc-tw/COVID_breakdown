@@ -5,11 +5,15 @@
 //-- Author:
 //--   Chieh-An Lin
 
-CBT_Main(CBT_2021_wrap);
-CBD_Main(CBD_2021_wrap);
-DCPC_Main(DCPC_2021_wrap);
-IM_Main(IM_2021_wrap);
-CBA_Main(CBA_2021_wrap);
-DBT_Main(DBT_2021_wrap);
-THSC_Main(THSC_2021_wrap);
-ASC_Main(ASC_2021_wrap);
+var P1B_plot_list = [
+  [CBT_Main, CBT_2021_wrap, 1200],
+  [CBD_Main, CBD_2021_wrap, 1200],
+  [DCPC_Main, DCPC_2021_wrap, 1000],
+  [IM_Main, IM_2021_wrap, 1200],
+  [CBA_Main, CBA_2021_wrap, 1000],
+  [DBT_Main, DBT_2021_wrap, 1000],
+  [THSC_Main, THSC_2021_wrap, 1000],
+  [ASC_Main, ASC_2021_wrap, 1000],
+];
+
+GS_Cascade(P1B_plot_list);

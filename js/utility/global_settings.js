@@ -5,13 +5,35 @@
 //-- Author:
 //--   Chieh-An Lin
 
-//-- Global variable
-var GS_wrap = {};
+//------------------------------------------------------------------------------
+//-- Variable declarations - global variable
 
-//-- ID
-GS_wrap.tag = 'global';
+var GS_wrap = {
+  //-- ID
+  tag: 'global',
+  
+  //-- xlabel
+  xlabel_path_latest: 7,
+  r_list_latest: [3, 3, 4, 1, 1, 2, 2],
+  xlabel_path_2020: 25,
+  r_list_2020: [12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11],
+  // xlabel_path_2021: 25,
+  // r_list_2021: [12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11],
+  xlabel_path_2021: 15,
+  r_list_2021: [7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6],
+  
+  //-- Color
+  c_list: ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022', '#117733', '#DD6622', '#7733AA', '#BB8811'],
+  gray: '#999999',
+  
+  //-- Transition delay
+  trans_delay: 800,
+  trans_delay_long: 1600,
+};
 
-//-- Language settings
+//------------------------------------------------------------------------------
+//-- Variable declarations - language setting
+
 var GS_lang = Cookies.get("lang"); // 'en', 'fr', 'zh-tw'
 if (!GS_lang) {
   GS_lang = "en";
@@ -21,20 +43,11 @@ if (!GS_lang) {
 var GS_lang_btn = document.getElementById('global_lang_'+GS_lang);
 GS_lang_btn.classList.add("active");
 
-//-- Parameters
-GS_wrap.xlabel_path_latest = 7;
-GS_wrap.r_list_latest = [3, 3, 4, 1, 1, 2, 2];
-GS_wrap.xlabel_path_2020 = 25;
-GS_wrap.r_list_2020 = [12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11];
-// GS_wrap.xlabel_path_2021 = 25;
-// GS_wrap.r_list_2021 = [12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11];
-GS_wrap.xlabel_path_2021 = 15;
-GS_wrap.r_list_2021 = [7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6];
-GS_wrap.c_list = ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022', '#117733', '#DD6622', '#7733AA', '#BB8811'];
-GS_wrap.gray = '#999999';
-GS_wrap.trans_duration = 800;
+//TODO
 
-//-- General functions
+//------------------------------------------------------------------------------
+//-- Function declarations - general
+
 function GS_ISODateToMDDate(iso_date) {
   var md_date_format;
   if (GS_lang == 'zh-tw')
@@ -57,8 +70,10 @@ function GS_CumSum(data, col_tag_list) {
   }
 }
 
-//-- Canvas functions
-function GS_MakeCanvas(wrap) {
+//------------------------------------------------------------------------------
+//-- Function declarations - figure
+
+function GS_InitFig(wrap) {
   //-- Parameters for canvas
   var tot_height = wrap.tot_height_[GS_lang];
   var margin = wrap.margin_[GS_lang];
@@ -91,7 +106,9 @@ function GS_MakeCanvas(wrap) {
   wrap.svg = svg;
 }
 
-//-- Tooltip functions
+//------------------------------------------------------------------------------
+//-- Function declarations - tooltip
+
 function GS_MakeTooltip(wrap) {
   wrap.tooltip = d3.select(wrap.id)
     .append("div")
@@ -171,7 +188,9 @@ function GS_MouseOver3(wrap, d) {
     .style("opacity", 0.6)
 }
 
-//-- Button functions
+//------------------------------------------------------------------------------
+//-- Function declarations - button
+
 function GS_PressRadioButton(wrap, btn_tag, old_value, new_value) {
   var old_btn, new_btn;
   old_btn = document.getElementById(wrap.tag + '_' + btn_tag + '_' + old_value);
@@ -179,3 +198,30 @@ function GS_PressRadioButton(wrap, btn_tag, old_value, new_value) {
   old_btn.classList.remove("active");
   new_btn.classList.add("active");
 }
+
+//------------------------------------------------------------------------------
+//-- Function declarations - cascade plotting
+
+function GS_Delay(delay) {
+  return new Promise(resolve => {
+    setTimeout(() => {resolve(delay);}, delay);
+  });
+}
+
+async function GS_Cascade(plot_list) {
+  var plot_list_r = plot_list.reverse();
+  var plot, fct, wrap, delay;
+  
+  while (plot_list_r.length > 0) {
+    plot = plot_list_r.pop();
+    fct = plot[0];
+    wrap = plot[1];
+    delay = plot[2];
+    
+    fct(wrap);
+    await GS_Delay(delay);
+  }
+}
+
+//-- End of file
+//------------------------------------------------------------------------------

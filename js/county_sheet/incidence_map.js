@@ -16,7 +16,7 @@ function IM_InitFig(wrap) {
   wrap.margin_['fr'] = {left: 2, right: 2, bottom: 2, top: 2};
   wrap.margin_['en'] = {left: 2, right: 2, bottom: 2, top: 2};
   
-  GS_MakeCanvas(wrap);
+  GS_InitFig(wrap);
 }
 
 function IM_ResetText() {
@@ -235,7 +235,7 @@ function IM_Replot(wrap) {
   wrap.map.selectAll('.content.map')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GS_wrap.trans_duration)
+    .duration(GS_wrap.trans_delay)
     .attr("fill", function (d) {return color(Math.log10(1+d.properties.value));})
     
   //-- Define legend position
