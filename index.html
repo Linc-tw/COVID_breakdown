@@ -50,6 +50,7 @@
                             
                             <!-- Menu -->
                             <div class="sb-sidenav-menu-heading"></div>
+                            
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_latest" aria-expanded="false" aria-controls="collapse_latest">
                                 <div class="sb-nav-link-icon"><i class="fas fa-calendar-times"></i></div>
                                 <span id="menu_latest"></span>
@@ -63,9 +64,12 @@
                                     <a class="nav-link" href="latest_breakdown.html">
                                         <span id="menu_latest_breakdown"></span>
                                     </a>
-<!--                                    <a class="nav-link" href="latest_vaccination.html">
-                                        <span id="menu_latest_vaccination"></span>
-                                    </a>-->
+                                    <a class="nav-link" href="latest_incidence.html">
+                                        <span id="menu_latest_incidence"></span>
+                                    </a>
+                                    <a class="nav-link" href="latest_others.html">
+                                        <span id="menu_latest_others"></span>
+                                    </a>
                                 </nav>
                             </div>
                             
@@ -76,15 +80,15 @@
                             </a>
                             <div class="collapse" id="collapse_2021" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="2021_highlight.html">
-                                        <span id="menu_2021_highlight"></span>
-                                    </a>
                                     <a class="nav-link" href="2021_breakdown.html">
                                         <span id="menu_2021_breakdown"></span>
                                     </a>
-<!--                                    <a class="nav-link" href="2021_vaccination.html">
-                                        <span id="menu_2021_vaccination"></span>
-                                    </a>-->
+                                    <a class="nav-link" href="2021_incidence.html">
+                                        <span id="menu_2021_incidence"></span>
+                                    </a>
+                                    <a class="nav-link" href="2021_others.html">
+                                        <span id="menu_2021_others"></span>
+                                    </a>
                                 </nav>
                             </div>
                             
@@ -95,15 +99,15 @@
                             </a>
                             <div class="collapse" id="collapse_2020" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="2020_highlight.html">
-                                        <span id="menu_2020_highlight"></span>
-                                    </a>
                                     <a class="nav-link" href="2020_breakdown.html">
                                         <span id="menu_2020_breakdown"></span>
                                     </a>
-<!--                                    <a class="nav-link" href="2020_vaccination.html">
-                                        <span id="menu_2020_vaccination"></span>
-                                    </a>-->
+                                    <a class="nav-link" href="2020_incidence.html">
+                                        <span id="menu_2020_incidence"></span>
+                                    </a>
+                                    <a class="nav-link" href="2020_others.html">
+                                        <span id="menu_2020_others"></span>
+                                    </a>
                                 </nav>
                             </div>
                             
@@ -144,9 +148,9 @@
                     <div class="container-fluid px-4">
                         <h1 id="title" class="mt-4"></h1>
                         <h4 id="title_latest_highlight" class="mb-4"></h4>
-                        <div class="row"">
+                        <div class="row">
                         
-                            <!-- Status evolution -->
+                            <!-- status_evolution -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -163,7 +167,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Various rates -->
+                            <!-- various_rates -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -180,7 +184,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Case by transmission -->
+                            <!-- case_by_transmission -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -219,7 +223,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Incidence map -->
+                            <!-- incidence_map -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -263,7 +267,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Test by criterion -->
+                            <!-- test_by_criterion -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -291,7 +295,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Border entry -->
+                            <!-- border_statistics -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -326,11 +330,6 @@
                                     <div class="card-body" id="border_statistics_latest"></div>
                                 </div>
                             </div>
-                            
-                            <div class="col-xl-6">
-                                <span id="index_test"></span>
-                            </div>
-                            
                             
                         </div>
                     </div>

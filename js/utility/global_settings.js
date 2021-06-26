@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//incidence page
 //`incidence_evolution_by_county.js` TODO
 //`incidence_evolution_by_age.js` TODO
 //`vaccination_by_brand.js` TODO

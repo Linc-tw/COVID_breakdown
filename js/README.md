@@ -33,8 +33,9 @@ Structure by page
 `index.html` (repeated)
   - `status_evolution.js`
   - `various_rates.js`
-  - `test_by_criterion.js`
   - `case_by_transmission.js`
+  - `test_by_criterion.js`
+  - `incidence_evolution_by_county.js` TODO
   - `vaccination_by_brand.js` TODO
 
 `breakdown.html`

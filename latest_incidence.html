@@ -5,13 +5,13 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="This site informs general public about COVID-19 with data visualization. It shows cases, testing, & vaccination statistics in Taiwan." />
-        <meta property="og:title" content="Data source | COVID-19 Statistics in Taiwan" />
+        <meta property="og:title" content="Latest incidence rates | COVID-19 Statistics in Taiwan" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://linc-tw.github.io/COVID_breakdown/timeline.html" />
+        <meta property="og:url" content="https://linc-tw.github.io/COVID_breakdown/index.html" />
         <meta property="og:image" content="https://linc-tw.github.io/COVID_breakdown/figures/screenshot.png" />
         <meta property="og:description" content="This site informs general public about COVID-19 with data visualization. It shows cases, testing, & vaccination statistics in Taiwan." />
         
-        <title>Data source | COVID-19 Statistics in Taiwan</title>
+        <title>Latest incidence rates | COVID-19 Statistics in Taiwan</title>
         
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&family=Roboto&display=swap" rel="stylesheet"> 
         <link href="css/template.css" rel="stylesheet" />
@@ -130,7 +130,7 @@
                     </div>
                     
                     <!-- Social media -->
-                   <div class="sb-sidenav-footer-covid icon">
+                    <div class="sb-sidenav-footer-covid icon">
                         <a href="https://github.com/Linc-tw/COVID_breakdown" target="_blank">
                             <img src="figures/GitHub-Mark-Light-64px.png" alt="GitHub"></img>
                         </a>
@@ -147,39 +147,67 @@
                 <main>
                     <div class="container-fluid px-4">
                         <h1 id="title" class="mt-4"></h1>
-                        <h4 id="title_source" class="mb-4"></h4>
+                        <h4 id="title_latest_incidence" class="mb-4"></h4>
                         <div class="row">
                         
-                            <div class="col-lg-6 col-xl-4">
+                            <!-- various_rates -->
+                            <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-server me-1"></i> 
-                                        <span id="data_source_original_title"></span>
+                                        <i class="fas fa-chart-line me-1"></i> <span id="various_rates_title"></span>
                                     </div>
                                     
-                                    <div id="data_source_original_body" class="card-body" style="text-align: justify;"></div>
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <button id='various_rates_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="various_rates_latest"></div>
                                 </div>
                             </div>
                             
-                            <div class="col-lg-6 col-xl-4">
+                            <!-- incidence_map -->
+                            <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-box me-1"></i>
-                                        <span id="data_source_raw_title"></span>
+                                        <i class="fas fa-map me-1"></i> <span id="incidence_map_title"></span>
                                     </div>
                                     
-                                    <div id="data_source_raw_body" class="card-body" style="text-align: justify;"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-lg-6 col-xl-4">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-archive me-1"></i>
-                                        <span id="data_source_processed_title"></span>
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active" id="incidence_map_latest_rate_0">
+                                                    <input type="radio" class="btn-check" name="incidence_map_latest_rate" value=0 checked>
+                                                    <span id="incidence_map_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="incidence_map_latest_rate_1">
+                                                    <input type="radio" class="btn-check" name="incidence_map_latest_rate" value=1>
+                                                    <span id="incidence_map_button_2"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <select id="incidence_map_latest_period" class="form-select form-select-sm me-2" aria-label="incidence_map_latest_period">
+                                                <option value="0" id="incidence_map_button_total" selected></option>
+                                                <option value="1" id="incidence_map_button_w-1"></option>
+                                                <option value="2" id="incidence_map_button_w-2"></option>
+                                                <option value="3" id="incidence_map_button_w-3"></option>
+                                                <option value="4" id="incidence_map_button_w-4"></option>
+                                                <option value="5" id="incidence_map_button_w-5"></option>
+                                                <option value="6" id="incidence_map_button_w-6"></option>
+                                                <option value="7" id="incidence_map_button_w-7"></option>
+                                                <option value="8" id="incidence_map_button_w-8"></option>
+                                                <option value="9" id="incidence_map_button_w-9"></option>
+                                                <option value="10" id="incidence_map_button_w-10"></option>
+                                                <option value="11" id="incidence_map_button_w-11"></option>
+                                                <option value="12" id="incidence_map_button_w-12"></option>
+                                            </select>
+                                            
+                                            <button id='incidence_map_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
                                     </div>
                                     
-                                    <div id="data_source_processed_body" class="card-body" style="text-align: justify;"></div>
+                                    <div class="card-body" id="incidence_map_latest"></div>
                                 </div>
                             </div>
                             
@@ -213,14 +241,23 @@
         <script src="js/utility/toggle_sidebar.js"></script>
         <script src="js/utility/text_translation.js"></script>
         
+        <script src="js/others/various_rates.js"></script>
+        <script src="js/others/various_rates_param.js"></script>
+        <script src="js/county_sheet/incidence_map.js"></script>
+        <script src="js/county_sheet/incidence_map_param.js"></script>
+        
+        <script src="js/plot/plot_latest_incidence.js"></script>
+        
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58898441-4"></script>
         <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'UA-58898441-4');
+          var host = window.location.hostname;
+          if (!host in ["localhost", "127.0.0.1"]) {	
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-58898441-4');
+          }
         </script>
     </body>
 </html>
-

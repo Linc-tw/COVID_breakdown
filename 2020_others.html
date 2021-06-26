@@ -5,13 +5,13 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="This site informs general public about COVID-19 with data visualization. It shows cases, testing, & vaccination statistics in Taiwan." />
-        <meta property="og:title" content="Data source | COVID-19 Statistics in Taiwan" />
+        <meta property="og:title" content="Other stats 2020 | COVID-19 Statistics in Taiwan" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://linc-tw.github.io/COVID_breakdown/timeline.html" />
+        <meta property="og:url" content="https://linc-tw.github.io/COVID_breakdown/2020_highlight.html" />
         <meta property="og:image" content="https://linc-tw.github.io/COVID_breakdown/figures/screenshot.png" />
         <meta property="og:description" content="This site informs general public about COVID-19 with data visualization. It shows cases, testing, & vaccination statistics in Taiwan." />
         
-        <title>Data source | COVID-19 Statistics in Taiwan</title>
+        <title>Other stats 2020 | COVID-19 Statistics in Taiwan</title>
         
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&family=Roboto&display=swap" rel="stylesheet"> 
         <link href="css/template.css" rel="stylesheet" />
@@ -130,7 +130,7 @@
                     </div>
                     
                     <!-- Social media -->
-                   <div class="sb-sidenav-footer-covid icon">
+                    <div class="sb-sidenav-footer-covid icon">
                         <a href="https://github.com/Linc-tw/COVID_breakdown" target="_blank">
                             <img src="figures/GitHub-Mark-Light-64px.png" alt="GitHub"></img>
                         </a>
@@ -147,39 +147,87 @@
                 <main>
                     <div class="container-fluid px-4">
                         <h1 id="title" class="mt-4"></h1>
-                        <h4 id="title_source" class="mb-4"></h4>
+                        <h4 id="title_2020_others" class="mb-4"></h4>
                         <div class="row">
                         
-                            <div class="col-lg-6 col-xl-4">
+                            <!-- status_evolution -->
+                            <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-server me-1"></i> 
-                                        <span id="data_source_original_title"></span>
+                                        <i class="fas fa-thermometer-half me-1"></i> <span id="status_evolution_title"></span>
                                     </div>
                                     
-                                    <div id="data_source_original_body" class="card-body" style="text-align: justify;"></div>
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <button id='status_evolution_2020_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="status_evolution_2020"></div>
                                 </div>
                             </div>
                             
-                            <div class="col-lg-6 col-xl-4">
+                            <!-- test_by_criterion -->
+                            <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-box me-1"></i>
-                                        <span id="data_source_raw_title"></span>
+                                        <i class="fas fa-vial me-1"></i> <span id="test_by_criterion_title"></span>
                                     </div>
                                     
-                                    <div id="data_source_raw_body" class="card-body" style="text-align: justify;"></div>
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active" id="test_by_criterion_2020_cumul_0">
+                                                    <input type="radio" class="btn-check" name="test_by_criterion_2020_cumul" value=0 checked>
+                                                    <span id="test_by_criterion_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="test_by_criterion_2020_cumul_1">
+                                                    <input type="radio" class="btn-check" name="test_by_criterion_2020_cumul" value=1>
+                                                    <span id="test_by_criterion_button_2"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <button id='test_by_criterion_2020_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="test_by_criterion_2020"></div>
                                 </div>
                             </div>
                             
-                            <div class="col-lg-6 col-xl-4">
+                            <!-- border_statistics -->
+                            <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-archive me-1"></i>
-                                        <span id="data_source_processed_title"></span>
+                                        <i class="fas fa-plane-slash me-1"></i> <span id="border_statistics_title"></span>
                                     </div>
                                     
-                                    <div id="data_source_processed_body" class="card-body" style="text-align: justify;"></div>
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm me-3"> 
+                                              <span id="border_statistics_text"></span>
+                                            </div>
+                                            
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active" id="border_statistics_2020_exit_0">
+                                                    <input type="radio" class="btn-check" name="border_statistics_2020_exit" value=0 checked>
+                                                    <span id="border_statistics_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="border_statistics_2020_exit_1">
+                                                    <input type="radio" class="btn-check" name="border_statistics_2020_exit" value=1>
+                                                    <span id="border_statistics_button_2"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="border_statistics_2020_exit_2">
+                                                    <input type="radio" class="btn-check" name="border_statistics_2020_exit" value=2>
+                                                    <span id="border_statistics_button_3"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <button id='border_statistics_2020_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="border_statistics_2020"></div>
                                 </div>
                             </div>
                             
@@ -213,14 +261,25 @@
         <script src="js/utility/toggle_sidebar.js"></script>
         <script src="js/utility/text_translation.js"></script>
         
+        <script src="js/others/status_evolution.js"></script>
+        <script src="js/others/status_evolution_param.js"></script>
+        <script src="js/others/test_by_criterion.js"></script>        
+        <script src="js/others/test_by_criterion_param.js"></script>
+        <script src="js/others/border_statistics.js"></script>
+        <script src="js/others/border_statistics_param.js"></script>
+        
+        <script src="js/plot/plot_2020_others.js"></script>
+        
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58898441-4"></script>
         <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'UA-58898441-4');
+          var host = window.location.hostname;
+          if (!host in ["localhost", "127.0.0.1"]) {	
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-58898441-4');
+          }
         </script>
     </body>
 </html>
-

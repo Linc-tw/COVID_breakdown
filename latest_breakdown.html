@@ -50,6 +50,7 @@
                             
                             <!-- Menu -->
                             <div class="sb-sidenav-menu-heading"></div>
+                            
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_latest" aria-expanded="false" aria-controls="collapse_latest">
                                 <div class="sb-nav-link-icon"><i class="fas fa-calendar-times"></i></div>
                                 <span id="menu_latest"></span>
@@ -63,9 +64,12 @@
                                     <a class="nav-link" href="latest_breakdown.html">
                                         <span id="menu_latest_breakdown"></span>
                                     </a>
-<!--                                    <a class="nav-link" href="latest_vaccination.html">
-                                        <span id="menu_latest_vaccination"></span>
-                                    </a>-->
+                                    <a class="nav-link" href="latest_incidence.html">
+                                        <span id="menu_latest_incidence"></span>
+                                    </a>
+                                    <a class="nav-link" href="latest_others.html">
+                                        <span id="menu_latest_others"></span>
+                                    </a>
                                 </nav>
                             </div>
                             
@@ -76,15 +80,15 @@
                             </a>
                             <div class="collapse" id="collapse_2021" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="2021_highlight.html">
-                                        <span id="menu_2021_highlight"></span>
-                                    </a>
                                     <a class="nav-link" href="2021_breakdown.html">
                                         <span id="menu_2021_breakdown"></span>
                                     </a>
-<!--                                    <a class="nav-link" href="2021_vaccination.html">
-                                        <span id="menu_2021_vaccination"></span>
-                                    </a>-->
+                                    <a class="nav-link" href="2021_incidence.html">
+                                        <span id="menu_2021_incidence"></span>
+                                    </a>
+                                    <a class="nav-link" href="2021_others.html">
+                                        <span id="menu_2021_others"></span>
+                                    </a>
                                 </nav>
                             </div>
                             
@@ -95,15 +99,15 @@
                             </a>
                             <div class="collapse" id="collapse_2020" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="2020_highlight.html">
-                                        <span id="menu_2020_highlight"></span>
-                                    </a>
                                     <a class="nav-link" href="2020_breakdown.html">
                                         <span id="menu_2020_breakdown"></span>
                                     </a>
-<!--                                    <a class="nav-link" href="2020_vaccination.html">
-                                        <span id="menu_2020_vaccination"></span>
-                                    </a>-->
+                                    <a class="nav-link" href="2020_incidence.html">
+                                        <span id="menu_2020_incidence"></span>
+                                    </a>
+                                    <a class="nav-link" href="2020_others.html">
+                                        <span id="menu_2020_others"></span>
+                                    </a>
                                 </nav>
                             </div>
                             
@@ -146,7 +150,7 @@
                         <h4 id="title_latest_breakdown" class="mb-4"></h4>
                         <div class="row">
                         
-                            <!-- Case by transmission -->
+                            <!-- case_by_transmission -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -185,7 +189,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Case by detection -->
+                            <!-- case_by_detection -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -224,7 +228,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Daily case per county -->
+                            <!-- local_case_per_county -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -267,51 +271,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Incidence map -->
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-map me-1"></i> <span id="incidence_map_title"></span>
-                                    </div>
-                                    
-                                    <div class="card-img">
-                                        <div class="btn-pos">
-                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active" id="incidence_map_latest_rate_0">
-                                                    <input type="radio" class="btn-check" name="incidence_map_latest_rate" value=0 checked>
-                                                    <span id="incidence_map_button_1"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="incidence_map_latest_rate_1">
-                                                    <input type="radio" class="btn-check" name="incidence_map_latest_rate" value=1>
-                                                    <span id="incidence_map_button_2"></span>
-                                                </label>
-                                            </div>
-                                            
-                                            <select id="incidence_map_latest_period" class="form-select form-select-sm me-2" aria-label="incidence_map_latest_period">
-                                                <option value="0" id="incidence_map_button_total" selected></option>
-                                                <option value="1" id="incidence_map_button_w-1"></option>
-                                                <option value="2" id="incidence_map_button_w-2"></option>
-                                                <option value="3" id="incidence_map_button_w-3"></option>
-                                                <option value="4" id="incidence_map_button_w-4"></option>
-                                                <option value="5" id="incidence_map_button_w-5"></option>
-                                                <option value="6" id="incidence_map_button_w-6"></option>
-                                                <option value="7" id="incidence_map_button_w-7"></option>
-                                                <option value="8" id="incidence_map_button_w-8"></option>
-                                                <option value="9" id="incidence_map_button_w-9"></option>
-                                                <option value="10" id="incidence_map_button_w-10"></option>
-                                                <option value="11" id="incidence_map_button_w-11"></option>
-                                                <option value="12" id="incidence_map_button_w-12"></option>
-                                            </select>
-                                            
-                                            <button id='incidence_map_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card-body" id="incidence_map_latest"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- Case by age -->
+                            <!-- case_by_age -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -348,7 +308,63 @@
                                 </div>
                             </div>
                             
-                            <!-- Differnce by transimission -->
+                            <!-- travel_history_symptom_correlations -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-luggage-cart me-1"></i> <span id="travel_history_symptom_correlations_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active" id="travel_history_symptom_correlations_latest_count_0">
+                                                    <input type="radio" class="btn-check" name="travel_history_symptom_correlations_latest_count" value=0 checked>
+                                                    <span id="travel_history_symptom_correlations_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="travel_history_symptom_correlations_latest_count_1">
+                                                    <input type="radio" class="btn-check" name="travel_history_symptom_correlations_latest_count" value=1>
+                                                    <span id="travel_history_symptom_correlations_button_2"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <button id='travel_history_symptom_correlations_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="travel_history_symptom_correlations_latest"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- age_symptom_correlations -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-birthday-cake me-1"></i> <span id="age_symptom_correlations_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active" id="age_symptom_correlations_latest_count_0">
+                                                    <input type="radio" class="btn-check" name="age_symptom_correlations_latest_count" value=0 checked>
+                                                    <span id="age_symptom_correlations_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="age_symptom_correlations_latest_count_1">
+                                                    <input type="radio" class="btn-check" name="age_symptom_correlations_latest_count" value=1>
+                                                    <span id="age_symptom_correlations_button_2"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <button id='age_symptom_correlations_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="age_symptom_correlations_latest"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- difference_by_transmission -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -381,62 +397,6 @@
                                     </div>
                                     
                                     <div class="card-body" id="difference_by_transmission_latest"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- Travel history-symptom correlation -->
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-luggage-cart me-1"></i> <span id="travel_history_symptom_correlations_title"></span>
-                                    </div>
-                                    
-                                    <div class="card-img">
-                                        <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active" id="travel_history_symptom_correlations_latest_count_0">
-                                                    <input type="radio" class="btn-check" name="travel_history_symptom_correlations_latest_count" value=0 checked>
-                                                    <span id="travel_history_symptom_correlations_button_1"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="travel_history_symptom_correlations_latest_count_1">
-                                                    <input type="radio" class="btn-check" name="travel_history_symptom_correlations_latest_count" value=1>
-                                                    <span id="travel_history_symptom_correlations_button_2"></span>
-                                                </label>
-                                            </div>
-                                            
-                                            <button id='travel_history_symptom_correlations_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card-body" id="travel_history_symptom_correlations_latest"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- Age-symptom correlation -->
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-birthday-cake me-1"></i> <span id="age_symptom_correlations_title"></span>
-                                    </div>
-                                    
-                                    <div class="card-img">
-                                        <div class="btn-pos"> 
-                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active" id="age_symptom_correlations_latest_count_0">
-                                                    <input type="radio" class="btn-check" name="age_symptom_correlations_latest_count" value=0 checked>
-                                                    <span id="age_symptom_correlations_button_1"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="age_symptom_correlations_latest_count_1">
-                                                    <input type="radio" class="btn-check" name="age_symptom_correlations_latest_count" value=1>
-                                                    <span id="age_symptom_correlations_button_2"></span>
-                                                </label>
-                                            </div>
-                                            
-                                            <button id='age_symptom_correlations_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card-body" id="age_symptom_correlations_latest"></div>
                                 </div>
                             </div>
                             
@@ -476,16 +436,14 @@
         <script src="js/main_sheet/case_by_detection_param.js"></script>
         <script src="js/county_sheet/local_case_per_county.js"></script>
         <script src="js/county_sheet/local_case_per_county_param.js"></script>
-        <script src="js/county_sheet/incidence_map.js"></script>
-        <script src="js/county_sheet/incidence_map_param.js"></script>
         <script src="js/county_sheet/case_by_age.js"></script>
         <script src="js/county_sheet/case_by_age_param.js"></script>
-        <script src="js/main_sheet/difference_by_transmission.js"></script>
-        <script src="js/main_sheet/difference_by_transmission_param.js"></script>
         <script src="js/main_sheet/travel_history_symptom_correlations.js"></script>
         <script src="js/main_sheet/travel_history_symptom_correlations_param.js"></script>
         <script src="js/main_sheet/age_symptom_correlations.js"></script>
         <script src="js/main_sheet/age_symptom_correlations_param.js"></script>
+        <script src="js/main_sheet/difference_by_transmission.js"></script>
+        <script src="js/main_sheet/difference_by_transmission_param.js"></script>
         
         <script src="js/plot/plot_latest_breakdown.js"></script>
         
