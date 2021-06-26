@@ -6,6 +6,15 @@
 //--   Chieh-An Lin
 
 //------------------------------------------------------------------------------
+//-- TODO
+
+//incidence rate, county-date matrix (only for latest)
+//vaccination (only for latest)
+//incidence page (new matrix, VR, IM)
+//2020 & 2021 by week (data, plot, text)
+
+
+//------------------------------------------------------------------------------
 //-- Variable declarations - global variable
 
 var GS_wrap = {
@@ -42,8 +51,6 @@ if (!GS_lang) {
 
 var GS_lang_btn = document.getElementById('global_lang_'+GS_lang);
 GS_lang_btn.classList.add("active");
-
-//TODO
 
 //------------------------------------------------------------------------------
 //-- Function declarations - general
