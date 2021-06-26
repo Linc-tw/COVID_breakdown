@@ -1,14 +1,14 @@
 
 //-- Filename:
-//--   daily_case_per_county_param.js
+//--   local_case_per_county_param.js
 //--
 //-- Author:
 //--   Chieh-An Lin
 
-var DCPC_latest_wrap = {
-  tag: 'daily_case_per_county_latest',
+var LCPC_latest_wrap = {
+  tag: 'local_case_per_county_latest',
   data_path_list: [
-    'processed_data/latest/daily_case_per_county.csv',
+    'processed_data/latest/local_case_per_county.csv',
   ],
 
   xlabel_path: GS_wrap.xlabel_path_latest,
@@ -18,10 +18,10 @@ var DCPC_latest_wrap = {
   legend_pos_x: 90,
 };
 
-var DCPC_2021_wrap = {
-  tag: 'daily_case_per_county_2021',
+var LCPC_2021_wrap = {
+  tag: 'local_case_per_county_2021',
   data_path_list: [
-    'processed_data/2021/daily_case_per_county.csv',
+    'processed_data/2021/local_case_per_county.csv',
   ],
 
   xlabel_path: GS_wrap.xlabel_path_2021,
@@ -31,10 +31,10 @@ var DCPC_2021_wrap = {
   legend_pos_x: 90,
 };
 
-var DCPC_2020_wrap = {
-  tag: 'daily_case_per_county_2020',
+var LCPC_2020_wrap = {
+  tag: 'local_case_per_county_2020',
   data_path_list: [
-    'processed_data/2020/daily_case_per_county.csv',
+    'processed_data/2020/local_case_per_county.csv',
   ],
 
   xlabel_path: GS_wrap.xlabel_path_2020,

@@ -8,7 +8,7 @@
 var PLB_plot_list = [
   [CBT_Main, CBT_latest_wrap, 1000],
   [CBD_Main, CBD_latest_wrap, 1000],
-  [DCPC_Main, DCPC_latest_wrap, 1000],
+  [LCPC_Main, LCPC_latest_wrap, 1000],
   [IM_Main, IM_latest_wrap, 1200],
   [CBA_Main, CBA_latest_wrap, 1000],
   [DBT_Main, DBT_latest_wrap, 1000],

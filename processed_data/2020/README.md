@@ -126,11 +126,6 @@ Contents
   - etc.
 - Value = confirmed case counts
 
-`daily_case_per_county.csv`
-- Row = report date
-- Column = city or county
-- Value = confirmed case counts
-
 `incidence_map.csv`
 - Row = city or county
 - Column = time period
@@ -148,6 +143,11 @@ Contents
   - `label` = city or county name in English
   - `label_fr` = city or county name in French (contains non-ASCII characters)
   - `label_zh` = city or county name in Mandarin (contains non-ASCII characters)
+
+`local_case_per_county.csv`
+- Row = report date
+- Column = city or county
+- Value = confirmed case counts
 
 ### From `COVID-19_in_Taiwan_raw_data_number_of_tests.csv`
 

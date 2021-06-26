@@ -8,7 +8,7 @@
 var P1B_plot_list = [
   [CBT_Main, CBT_2021_wrap, 1200],
   [CBD_Main, CBD_2021_wrap, 1200],
-  [DCPC_Main, DCPC_2021_wrap, 1000],
+  [LCPC_Main, LCPC_2021_wrap, 1000],
   [IM_Main, IM_2021_wrap, 1200],
   [CBA_Main, CBA_2021_wrap, 1000],
   [DBT_Main, DBT_2021_wrap, 1000],

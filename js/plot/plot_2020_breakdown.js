@@ -8,7 +8,7 @@
 var P0B_plot_list = [
   [CBT_Main, CBT_2020_wrap, 3000],
   [CBD_Main, CBD_2020_wrap, 3000],
-  [DCPC_Main, DCPC_2020_wrap, 1000],
+  [LCPC_Main, LCPC_2020_wrap, 1000],
   [IM_Main, IM_2020_wrap, 1200],
   [CBA_Main, CBA_2020_wrap, 1000],
   [DBT_Main, DBT_2020_wrap, 1000],

@@ -7,7 +7,7 @@ Structure by raw data
 
 `county_sheet/`
   - `case_by_age.js`
-  - `daily_case_per_county.js`
+  - `local_case_per_county.js`
   - `incidence_evolution_by_age.js` TODO
   - `incidence_evolution_by_county.js` TODO
   - `incidence_map.js`
@@ -31,12 +31,16 @@ Structure by page
 -----------------
 
 `index.html` (repeated)
-  -
+  - `status_evolution.js`
+  - `various_rates.js`
+  - `test_by_criterion.js`
+  - `case_by_transmission.js`
+  - `vaccination_by_brand.js` TODO
 
 `breakdown.html`
   - `case_by_transmission.js`
   - `case_by_detection.js`
-  - `daily_case_per_county.js`
+  - `local_case_per_county.js`
   - `case_by_age.js`
   - `travel_history_symptom_correlations.js`
   - `age_symptom_correlations.js`
