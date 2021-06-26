@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.06.24                  ##
+    ##  Version 2021.06.26                  ##
     ##########################################
 
 import os
@@ -10,10 +10,12 @@ import sys
 import warnings
 import collections as clt
 import datetime as dtt
+import copy
 import json
 
 import numpy as np
 import scipy as sp
+import scipy.signal as signal
 import matplotlib as mpl
 import pandas as pd
 
@@ -23,6 +25,12 @@ import pandas as pd
 DATA_PATH = '/home/linc/21_Codes/COVID_breakdown/'
 ISO_DATE_REF = '2020-01-01'
 NB_LOOKBACK_DAYS = 90
+RANGE_2020 = [0, 366]
+RANGE_2021 = [366, 731]
+PAGE_LATEST = 'latest'
+PAGE_2021 = '2021'
+PAGE_2020 = '2020'
+PAGE_LIST = [PAGE_LATEST, PAGE_2021, PAGE_2020]
 
 SYMPTOM_DICT = {
   'sneezing': {'zh-tw': '鼻腔症狀', 'fr': 'éternuement'},
@@ -388,11 +396,20 @@ def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
   
   return n_arr, ctr_bins
 
+def getTodayOrdinal():
+  today = dtt.datetime.today()
+  delta = dtt.timedelta(hours=12)
+  ord_today = (today - delta).toordinal() + 1
+  return ord_today
+
+################################################################################
+## Functions - utilities
+
 def adjustDateRange(data):
   ord_ref = ISODateToOrd(ISO_DATE_REF)
   ord_begin = ISODateToOrd(data['date'].values[0])
   ord_end = ISODateToOrd(data['date'].values[-1]) + 1
-  ord_today = dtt.date.today().toordinal() + 1
+  ord_today = getTodayOrdinal()
   
   zero = [0] * (len(data.columns) - 1)
   stock1 = []
@@ -413,6 +430,69 @@ def adjustDateRange(data):
   data2 = pd.DataFrame(stock2, columns=data.columns)
   data = pd.concat([data1, data, data2])
   return data
+
+def indexForLatest(iso):
+  ord_today = getTodayOrdinal()
+  ind = ISODateToOrd(iso) - ord_today + NB_LOOKBACK_DAYS
+  if ind < 0 or ind >= NB_LOOKBACK_DAYS:
+    return np.nan
+  return ind
+
+def indexFor2020(iso):
+  ord_begin_2020 = ISODateToOrd('2020-01-01')
+  ind = ISODateToOrd(iso) - ord_begin_2020
+  if ind < 0 or ind >= 366:
+    return np.nan
+  return ind
+
+def indexFor2021(iso):
+  ord_begin_2021 = ISODateToOrd('2021-01-01')
+  ind = ISODateToOrd(iso) - ord_begin_2021
+  if ind < 0 or ind >= 365:
+    return np.nan
+  return ind
+
+#def indexFor2020(iso):
+  #if iso[:4] != '2020':
+    #return np.nan
+  #week_nb = dtt.date.fromisoformat(iso).isocalendar()[1]
+  #return week_nb
+
+#def indexFor2021(iso):
+  #if iso[:4] != '2021':
+    #return np.nan
+  #week_nb = dtt.date.fromisoformat(iso).isocalendar()[1]
+  #return week_nb
+
+def initializeStockDict_general(stock):
+  stock_dict = {PAGE_LATEST: copy.deepcopy(stock), PAGE_2021: copy.deepcopy(stock), PAGE_2020: copy.deepcopy(stock)}
+  return stock_dict
+
+def initializeStockDict_dailyCounts(col_tag_list):
+  ord_today = getTodayOrdinal()
+  date_list = [ordDateToISO(ord) for ord in range(ord_today-NB_LOOKBACK_DAYS, ord_today)]
+  nb_weeks_2021 = dtt.date.fromisoformat('2021-12-31').isocalendar()[1]
+  nb_weeks_2020 = dtt.date.fromisoformat('2020-12-31').isocalendar()[1]
+  
+  stock_latest = {'date': date_list}
+  stock_latest.update({col_tag: np.zeros(NB_LOOKBACK_DAYS, dtype=int) for col_tag in col_tag_list})
+  
+  date_list = [ordDateToISO(ord) for ord in range(ISODateToOrd('2021-01-01'), ISODateToOrd('2021-06-26')+1)]
+  stock_2021 = {'date': date_list}
+  stock_2021.update({col_tag: np.zeros(len(date_list), dtype=int) for col_tag in col_tag_list})
+  
+  date_list = [ordDateToISO(ord) for ord in range(ISODateToOrd('2020-01-01'), ISODateToOrd('2020-12-31')+1)]
+  stock_2020 = {'date': date_list}
+  stock_2020.update({col_tag: np.zeros(len(date_list), dtype=int) for col_tag in col_tag_list})
+  
+  #stock_2021 = {'week_nb': np.arange(1, nb_weeks_2021+1, dtype=int)}
+  #stock_2021.update({col_tag: np.zeros(nb_weeks_2021, dtype=int) for col_tag in col_tag_list})
+  
+  #stock_2020 = {'week_nb': np.arange(1, nb_weeks_2020+1, dtype=int)}
+  #stock_2020.update({col_tag: np.zeros(nb_weeks_2020, dtype=int) for col_tag in col_tag_list})
+  
+  stock_dict = {PAGE_LATEST: stock_latest, PAGE_2021: stock_2021, PAGE_2020: stock_2020}
+  return stock_dict
 
 ################################################################################
 ## Classes - template
@@ -477,7 +557,7 @@ class MainSheet(Template):
     return 
     
   def getReportDate(self):
-    ord_today = dtt.date.today().toordinal() + 1
+    ord_today = getTodayOrdinal()
     ord_end_2020 = ISODateToOrd('2020-12-31') + 1
     ord_end_2021 = ISODateToOrd('2021-12-31') + 1
     ord_end_2022 = ISODateToOrd('2022-12-31') + 1
@@ -505,17 +585,18 @@ class MainSheet(Template):
       report_date_list.append(report_date)
       n_total += 1
       
-      ord_rep = ISODateToOrd(report_date)
+      ind_latest = indexForLatest(report_date)
+      ind_2021 = indexFor2021(report_date)
+      ind_2020 = indexFor2020(report_date)
       
-      if ord_rep + NB_LOOKBACK_DAYS >= ord_today:
+      ## If not NaN
+      if ind_latest == ind_latest:
         n_latest += 1
-        
-      if ord_rep < ord_end_2020:
+      if ind_2021 == ind_2021:
+        n_2021 += 1
+      if ind_2020 == ind_2020:
         n_2020 += 1
         
-      if ord_rep >= ord_end_2020 and ord_rep < ord_end_2021:
-        n_2021 += 1
-    
     self.n_total = n_total
     self.n_latest = n_latest
     self.n_2020 = n_2020
@@ -841,7 +922,6 @@ class MainSheet(Template):
       elif onset_date in ['6/8 發燒']:
         onset_date_list.append('2021-06-08')
         
-
       elif onset_date in ['7月、11/1']:
         onset_date_list.append('2020-11-01')
         
@@ -851,12 +931,17 @@ class MainSheet(Template):
       else:
         try:
           mmdd = onset_date.split('/')
-          y = 2020
           m = int(mmdd[0])
           d = int(mmdd[1])
           if i+1 < 100 and m > 6:
             y = 2019
-          elif i+1 >= 800 and m <= 6:
+          elif i+1 < 800:
+            y = 2020
+          elif i+1 < 10000 and m > 6:
+            y = 2020
+          elif i+1 < 14000:
+            y = 2021
+          else:
             y = 2021
           onset_date = '%04d-%02d-%02d' % (y, m, d)
           onset_date_list.append(onset_date)
@@ -1072,14 +1157,479 @@ class MainSheet(Template):
         link_list.append(np.nan)
     return link_list
     
+  def saveCsv_keyNb(self):
+    self.getReportDate()
+    timestamp = dtt.datetime.now().astimezone()
+    timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
+    
+    key = ['n_total', 'n_latest', 'n_2020', 'n_2021', 'n_empty', 'timestamp']
+    value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_empty, timestamp]
+    
+    ## Make data frame
+    data = {'key': key, 'value': value}
+    data = pd.DataFrame(data)
+    
+    name = '%sprocessed_data/key_numbers.csv' % DATA_PATH
+    saveCsv(name, data)
+    return
+    
+  def makeStockDict_caseByTransmission(self):
+    report_date_list = self.getReportDate()
+    onset_date_list = self.getOnsetDate()
+    trans_list = self.getTransmission()
+    link_list = self.getLink()
+    
+    ## Initialize stock dict
+    col_tag_list = ['imported', 'linked', 'unlinked', 'fleet', 'plane', 'unknown']
+    stock_dict_r = initializeStockDict_dailyCounts(col_tag_list[::-1]) ## Reversed order
+    stock_dict_o = initializeStockDict_dailyCounts(col_tag_list[::-1]) ## Reversed order
+    
+    ## Loop over cases
+    for report_date, onset_date, trans, link in zip(report_date_list, onset_date_list, trans_list, link_list):
+      if trans != trans:
+        continue
+      
+      ## Determine column tag
+      if trans == 'indigenous':
+        if link == 'unlinked':
+          col_tag = link
+        else:
+          col_tag = 'linked'
+      else:
+        col_tag = trans
+        
+      ### Regroup by report date
+      ind_latest = indexForLatest(report_date)
+      ind_2021 = indexFor2021(report_date)
+      ind_2020 = indexFor2020(report_date)
+      
+      for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict_r.values()):
+        try:
+          stock[col_tag][ind] += 1
+        except IndexError: ## If NaN
+          pass
+        
+      ## If onset date is not NaN, regroup by onset date
+      if onset_date == onset_date:
+        ind_latest = indexForLatest(onset_date)
+        ind_2021 = indexFor2021(onset_date)
+        ind_2020 = indexFor2020(onset_date)
+        
+        for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict_o.values()):
+          try:
+            stock[col_tag][ind] += 1
+          except IndexError: ## If NaN
+            pass
+    
+    return stock_dict_r, stock_dict_o
+    
+  def saveCsv_caseByTransmission(self):
+    stock_dict_r, stock_dict_o = self.makeStockDict_caseByTransmission()
+    
+    ## Save data by report day
+    for page, stock in stock_dict_r.items():
+      data = pd.DataFrame(stock)
+      name = '%sprocessed_data/%s/case_by_transmission_by_report_day.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
+      
+    ## Save data by onset day
+    for page, stock in stock_dict_o.items():
+      data = pd.DataFrame(stock)
+      name = '%sprocessed_data/%s/case_by_transmission_by_onset_day.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
+    return
+  
+  def makeStockDict_caseByDetection(self):
+    report_date_list = self.getReportDate()
+    onset_date_list = self.getOnsetDate()
+    trans_list = self.getTransmission()
+    channel_list = self.getChannel()
+    
+    ## Initialize data dict
+    col_tag_list = ['airport', 'quarantine', 'isolation', 'monitoring', 'hospital', 'overseas', 'no_data']
+    stock_dict_r = initializeStockDict_dailyCounts(col_tag_list[::-1]) ## Reversed order
+    stock_dict_o = initializeStockDict_dailyCounts(col_tag_list[::-1]) ## Reversed order
+    
+    ## Loop over cases
+    for report_date, onset_date, trans, channel in zip(report_date_list, onset_date_list, trans_list, channel_list):
+      if trans != trans:
+        continue
+      
+      ## Determine column tag
+      if channel != channel: ## Is nan
+        col_tag = 'no_data'
+      else:
+        col_tag = channel
+      
+      ### Regroup by report date
+      ind_latest = indexForLatest(report_date)
+      ind_2021 = indexFor2021(report_date)
+      ind_2020 = indexFor2020(report_date)
+      
+      try:
+        stock_dict_r['latest'][col_tag][ind_latest] += 1
+      except IndexError:
+        pass
+      
+      try:
+        stock_dict_r['2021'][col_tag][ind_2021] += 1
+      except IndexError:
+        pass
+      
+      try:
+        stock_dict_r['2020'][col_tag][ind_2020] += 1
+      except IndexError:
+        pass
+        
+      ## If onset date is not NaN, regroup by onset date
+      if onset_date == onset_date:
+        ind_latest = indexForLatest(onset_date)
+        ind_2021 = indexFor2021(onset_date)
+        ind_2020 = indexFor2020(onset_date)
+        
+        try:
+          stock_dict_o['latest'][col_tag][ind_latest] += 1
+        except IndexError:
+          pass
+        
+        try:
+          stock_dict_o['2021'][col_tag][ind_2021] += 1
+        except IndexError:
+          pass
+        
+        try:
+          stock_dict_o['2020'][col_tag][ind_2020] += 1
+        except IndexError:
+          pass
+        
+    return stock_dict_r, stock_dict_o
+    
+  def saveCsv_caseByDetection(self):
+    stock_dict_r, stock_dict_o = self.makeStockDict_caseByDetection()
+    
+    ## Save data by report day
+    for page, stock in stock_dict_r.items():
+      data = pd.DataFrame(stock)
+      name = '%sprocessed_data/%s/case_by_detection_by_report_day.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
+      
+    ## Save data by onset day
+    for page, stock in stock_dict_o.items():
+      data = pd.DataFrame(stock)
+      name = '%sprocessed_data/%s/case_by_detection_by_onset_day.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
+    return
+  
+  def makeStockDict1_travHistSymptomCorr(self):
+    report_date_list = self.getReportDate()
+    trans_list = self.getTransmission()
+    trav_hist_list = self.getTravHist()
+    symp_list = self.getSymptom()
+    
+    stock = {'x_list_list': [], 'y_list_list': [], 'nb_dict': {'N_total': 0, 'N_imported': 0, 'N_data': 0}}
+    stock_dict = initializeStockDict_general(stock)
+    
+    ## Loop over case
+    for report_date, trans, trav_hist, symp in zip(report_date_list, trans_list, trav_hist_list, symp_list):
+      if trans != trans:
+        continue
+      
+      ind_latest = indexForLatest(report_date)
+      ind_2021 = indexFor2021(report_date)
+      ind_2020 = indexFor2020(report_date)
+      
+      for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.values()):
+        if ind == ind: ## If not NaN
+          stock['nb_dict']['N_total'] += 1
+          
+          if trans == 'imported':
+            stock['nb_dict']['N_imported'] += 1
+            
+            if trav_hist == trav_hist and symp == symp: ## If not NaN
+              stock['nb_dict']['N_data'] += 1
+              stock['x_list_list'].append(symp)
+              stock['y_list_list'].append(trav_hist)
+    return stock_dict
+  
+  def makeStockDict2_travHistSymptomCorr(self):
+    stock_dict = self.makeStockDict1_travHistSymptomCorr()
+    
+    ## Loop over page
+    for stock in stock_dict.values():
+      assert len(stock['x_list_list']) == len(stock['y_list_list'])
+      
+      ## Make histogram
+      x_hist = clt.Counter([x for x_list in stock['x_list_list'] for x in x_list])
+      x_hist = sorted(x_hist.items(), key=lambda t: t[1], reverse=True)
+      
+      ## Make histogram
+      y_hist = clt.Counter([y for y_list in stock['y_list_list'] for y in y_list])
+      y_hist = sorted(y_hist.items(), key=lambda t: t[1], reverse=True)
+      
+      ## Make boolean matrix
+      x_bool_mat = []
+      for x_pair in x_hist:
+        x_bool_arr = [int(x_pair[0] in x_list) for x_list in stock['x_list_list']]
+        x_bool_mat.append(x_bool_arr)
+      x_bool_mat = np.array(x_bool_mat)
+      
+      ## Make boolean matrix
+      y_bool_mat = []
+      for y_pair in y_hist:
+        y_bool_arr = [int(y_pair[0] in y_list) for y_list in stock['y_list_list']]
+        y_bool_mat.append(y_bool_arr)
+      y_bool_mat = np.array(y_bool_mat)
+      
+      x_norm_mat = np.array([normalizeBoolArr(x_bool_arr) for x_bool_arr in x_bool_mat])
+      y_norm_mat = np.array([normalizeBoolArr(y_bool_arr) for y_bool_arr in y_bool_mat])
+      
+      stock['x_hist'] = x_hist
+      stock['y_hist'] = y_hist
+      stock['corr_mat'] = y_norm_mat.dot(x_norm_mat.T);
+      stock['count_mat'] = y_bool_mat.dot(x_bool_mat.T);
+    return stock_dict
+  
+  def saveCsv_travHistSymptomCorr(self):
+    stock_dict = self.makeStockDict2_travHistSymptomCorr()
+    
+    n_trav = 10 ## For y
+    n_symp = 10 ## For x
+    
+    for page, stock in stock_dict.items():
+      ## Truncate
+      corr_mat = stock['corr_mat'][:n_trav, :n_symp]
+      count_mat = stock['count_mat'][:n_trav, :n_symp]
+      x_dict = dict(stock['x_hist'][:n_symp])
+      y_dict = dict(stock['y_hist'][:n_trav])
+      
+      ## Make matrix grid
+      x_list = list(x_dict.keys())
+      y_list = list(y_dict.keys())
+      grid = np.meshgrid(x_list, y_list)
+      
+      ## Data for coefficient
+      symp_arr = grid[0].flatten()
+      trav_hist_arr = grid[1].flatten()
+      value_arr_r = corr_mat.flatten()
+      label_arr_r = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_arr_r]
+      
+      ## Data for counts
+      label_arr_n = count_mat.flatten()
+      
+      ## Data for total
+      tot_dict = stock['nb_dict'].copy()
+      tot_dict.update(y_dict)
+      tot_dict.update(x_dict)
+      label_arr_en = list(tot_dict.keys())
+      value_arr_t = list(tot_dict.values())
+      label_arr_zh = ['合計', '境外移入總數', '有資料案例數'] + [TRAVEL_HISTORY_DICT[y]['zh-tw'] for y in y_list] + [SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
+      label_arr_fr = ['Total', 'Importés', 'Données complètes'] + [TRAVEL_HISTORY_DICT[y]['fr'] for y in y_list] + [SYMPTOM_DICT[x]['fr'] for x in x_list]
+      
+      ## Make data frame
+      data_r = {'symptom': symp_arr, 'trav_hist': trav_hist_arr, 'value': value_arr_r, 'label': label_arr_r}
+      data_r = pd.DataFrame(data_r)
+      data_n = {'symptom': symp_arr, 'trav_hist': trav_hist_arr, 'value': value_arr_r, 'label': label_arr_n}
+      data_n = pd.DataFrame(data_n)
+      data_t = {'label': label_arr_en, 'count': value_arr_t, 'label_zh': label_arr_zh, 'label_fr': label_arr_fr}
+      data_t = pd.DataFrame(data_t)
+      
+      ## Save
+      name = '%sprocessed_data/%s/travel_history_symptom_correlations_coefficient.csv' % (DATA_PATH, page)
+      saveCsv(name, data_r)
+      name = '%sprocessed_data/%s/travel_history_symptom_correlations_counts.csv' % (DATA_PATH, page)
+      saveCsv(name, data_n)
+      name = '%sprocessed_data/%s/travel_history_symptom_correlations_total.csv' % (DATA_PATH, page)
+      saveCsv(name, data_t)
+    return
+  
+  def makeStockDict1_ageSymptomCorr(self):
+    report_date_list = self.getReportDate()
+    trans_list = self.getTransmission()
+    age_list = self.getAge()
+    symp_list = self.getSymptom()
+    
+    stock = {'x_list_list': [], 'y_list_list': [], 'nb_dict': {'N_total': 0, 'N_data': 0}}
+    stock_dict = initializeStockDict_general(stock)
+    
+    ## Loop over case
+    for report_date, trans, age, symp in zip(report_date_list, trans_list, age_list, symp_list):
+      if trans != trans:
+        continue
+      
+      ind_latest = indexForLatest(report_date)
+      ind_2021 = indexFor2021(report_date)
+      ind_2020 = indexFor2020(report_date)
+      
+      for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.values()):
+        if ind == ind: ## If not NaN
+          stock['nb_dict']['N_total'] += 1
+          
+          if age == age and symp == symp: ## If not NaN
+            stock['nb_dict']['N_data'] += 1
+            stock['x_list_list'].append(symp)
+            stock['y_list_list'].append(age)
+    return stock_dict
+  
+  def makeStockDict2_ageSymptomCorr(self):
+    stock_dict = self.makeStockDict1_ageSymptomCorr()
+    
+    ## Loop over page
+    for stock in stock_dict.values():
+      assert len(stock['x_list_list']) == len(stock['y_list_list'])
+      
+      ## Make histogram
+      x_hist = clt.Counter([x for x_list in stock['x_list_list'] for x in x_list])
+      x_hist = sorted(x_hist.items(), key=lambda t: t[1], reverse=True)
+      
+      ## Make histogram
+      y_hist = clt.Counter(stock['y_list_list'])
+      for age in AGE_DICT:
+        y_hist[age] = y_hist.get(age, 0)
+      y_hist = sorted(y_hist.items(), key=lambda t: t[0], reverse=True)
+    
+      ## Make boolean matrix
+      x_bool_mat = []
+      for x_pair in x_hist:
+        x_bool_arr = [int(x_pair[0] in x_list) for x_list in stock['x_list_list']]
+        x_bool_mat.append(x_bool_arr)
+      x_bool_mat = np.array(x_bool_mat)
+      
+      ## Make boolean matrix
+      y_bool_mat = []
+      for y_pair in y_hist:
+        y_bool_arr = [int(y_pair[0] == y_list) for y_list in stock['y_list_list']]
+        y_bool_mat.append(y_bool_arr)
+      y_bool_mat = np.array(y_bool_mat)
+      
+      x_norm_mat = np.array([normalizeBoolArr(x_bool_arr) for x_bool_arr in x_bool_mat])
+      y_norm_mat = np.array([normalizeBoolArr(y_bool_arr) for y_bool_arr in y_bool_mat])
+      
+      stock['x_hist'] = x_hist
+      stock['y_hist'] = y_hist
+      stock['corr_mat'] = y_norm_mat.dot(x_norm_mat.T);
+      stock['count_mat'] = y_bool_mat.dot(x_bool_mat.T);
+    return stock_dict
+  
+  def saveCsv_ageSymptomCorr(self):
+    stock_dict = self.makeStockDict2_ageSymptomCorr()
+    
+    for page, stock in stock_dict.items():
+      n_age = stock['corr_mat'].shape[0] ## For y
+      n_symp = 10 ## For x
+    
+      ## Truncate
+      corr_mat = stock['corr_mat'][:n_age, :n_symp]
+      count_mat = stock['count_mat'][:n_age, :n_symp]
+      x_dict = dict(stock['x_hist'][:n_symp])
+      y_dict = dict(stock['y_hist'][:n_age])
+      
+      ## Make matrix grid
+      x_list = list(x_dict.keys())
+      y_list = list(y_dict.keys())
+      grid = np.meshgrid(x_list, y_list)
+      
+      ## Data for coefficient
+      symp_arr = grid[0].flatten()
+      age_arr = grid[1].flatten()
+      value_arr_r = corr_mat.flatten()
+      label_arr_r = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_arr_r]
+      
+      ## Data for counts
+      label_arr_n = count_mat.flatten()
+      
+      ## Data for total
+      tot_dict = stock['nb_dict'].copy()
+      tot_dict.update(y_dict)
+      tot_dict.update(x_dict)
+      label_arr_en = list(tot_dict.keys())
+      value_arr_t = list(tot_dict.values())
+      label_arr_zh = ['合計', '有資料案例數'] + [AGE_DICT[y]['zh-tw'] for y in y_list] + [SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
+      label_arr_fr = ['Total', 'Données complètes'] + [AGE_DICT[y]['fr'] for y in y_list] + [SYMPTOM_DICT[x]['fr'] for x in x_list]
+      
+      ## Make data frame
+      data_r = {'symptom': symp_arr, 'age': age_arr, 'value': value_arr_r, 'label': label_arr_r}
+      data_r = pd.DataFrame(data_r)
+      data_n = {'symptom': symp_arr, 'age': age_arr, 'value': value_arr_r, 'label': label_arr_n}
+      data_n = pd.DataFrame(data_n)
+      data_t = {'label': label_arr_en, 'count': value_arr_t, 'label_zh': label_arr_zh, 'label_fr': label_arr_fr}
+      data_t = pd.DataFrame(data_t)
+      
+      ## Save
+      name = '%sprocessed_data/%s/age_symptom_correlations_coefficient.csv' % (DATA_PATH, page)
+      saveCsv(name, data_r)
+      name = '%sprocessed_data/%s/age_symptom_correlations_counts.csv' % (DATA_PATH, page)
+      saveCsv(name, data_n)
+      name = '%sprocessed_data/%s/age_symptom_correlations_total.csv' % (DATA_PATH, page)
+      saveCsv(name, data_t)
+    return
+  
+  def makeStockDict_diffByTransmission(self):
+    report_date_list = self.getReportDate()
+    entry_date_list = self.getEntryDate()
+    onset_date_list = self.getOnsetDate()
+    trans_list = self.getTransmission()
+    
+    stock = {'imported': [], 'indigenous': [], 'other': []}
+    stock_dict = initializeStockDict_general(stock)
+
+    for report_date, entry_date, onset_date, trans in zip(report_date_list, entry_date_list, onset_date_list, trans_list):
+      if trans != trans:
+        continue
+      
+      if trans in ['imported', 'indigenous']:
+        col_tag = trans
+      else:
+        col_tag = 'other'
+        
+      ord_rep = ISODateToOrd(report_date)
+      ord_entry = ISODateToOrd(entry_date) if entry_date == entry_date else 0
+      ord_onset = ISODateToOrd(onset_date) if onset_date == onset_date else 0
+      diff = min(ord_rep-ord_entry, ord_rep-ord_onset)
+      
+      ind_latest = indexForLatest(report_date)
+      ind_2021 = indexFor2021(report_date)
+      ind_2020 = indexFor2020(report_date)
+      
+      for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.values()):
+        if ind == ind: ## If not NaN
+          stock[col_tag].append(diff)
+    return stock_dict
+  
+  def saveCsv_diffByTransmission(self):
+    stock_dict = self.makeStockDict_diffByTransmission()
+    
+    ## Histogram bins
+    bins = np.arange(-0.5, 31, 1)
+    bins[-1] = 999
+    
+    for page, stock in stock_dict.items():
+      n_imp, ctr_bins = makeHist(stock['imported'], bins)
+      n_indi, ctr_bins = makeHist(stock['indigenous'], bins)
+      n_other, ctr_bins = makeHist(stock['other'], bins)
+      n_tot = n_imp + n_indi + n_other
+      
+      n_imp = n_imp.round(0).astype(int)
+      n_indi = n_indi.round(0).astype(int)
+      n_other = n_other.round(0).astype(int)
+      n_tot = n_tot.round(0).astype(int)
+      ctr_bins = ctr_bins.round(0).astype(int)
+      ctr_bins[-1] = 30
+      
+      data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'other': n_other}
+      data = pd.DataFrame(data)
+      
+      name = '%sprocessed_data/%s/difference_by_transmission.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
+    return
+  
   def makeDailyCaseCounts(self):
     report_date_list = self.getReportDate()
     trans_list = self.getTransmission()
     
     ord_ref = ISODateToOrd(ISO_DATE_REF)
-    ord_today = dtt.date.today().toordinal() + 1
+    ord_today = getTodayOrdinal()
     
-    date_arr = [ordDateToISO(i) for i in range(ord_ref, ord_today)]
+    date_arr = [ordDateToISO(ord) for ord in range(ord_ref, ord_today)]
     nb_days = ord_today - ord_ref
     nb_imp_arr = np.zeros(nb_days, dtype=int)
     nb_indi_arr = np.zeros(nb_days, dtype=int)
@@ -1103,596 +1653,13 @@ class MainSheet(Template):
       
     return date_arr, nb_imp_arr, nb_indi_arr, nb_cases_arr
     
-  def makeTravHistHist(self):
-    trans_list = self.getTransmission()
-    trav_hist_list = self.getTravHist()
-    trav_hist_list_2 = []
-    
-    for trans, trav_hist in zip(trans_list, trav_hist_list):
-      if trans == 'imported' and trav_hist == trav_hist: ## Not NaN
-        for trav in trav_hist:
-          trav_hist_list_2.append(trav)
-    
-    hist = clt.Counter(trav_hist_list_2)
-    hist = sorted(hist.items(), key=lambda x: x[1], reverse=True)
-    return hist
-
-  def makeSymptomHist(self):
-    symp_list = self.getSymptom()
-    symp_list_2 = []
-    
-    for symp in symp_list:
-      if symp == symp: ## Not NaN
-        for s in symp:
-          symp_list_2.append(s)
-    
-    hist = clt.Counter(symp_list_2)
-    hist = sorted(hist.items(), key=lambda x: x[1], reverse=True)
-    return hist
-  
-  def makeTravHistSymptomMat(self, selection='latest'):
-    report_date_list = self.getReportDate()
-    trans_list = self.getTransmission()
-    trav_hist_list = self.getTravHist()
-    symp_list = self.getSymptom()
-    
-    ord_today = dtt.date.today().toordinal() + 1
-    ord_end_2020 = ISODateToOrd('2020-12-31') + 1
-    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
-    trav_hist_list_2 = []
-    symp_list_2 = []
-    n_total = 0
-    n_imported = 0
-    
-    for report_date, trans, trav_hist, symp in zip(report_date_list, trans_list, trav_hist_list, symp_list):
-      if trans != trans:
-        continue
-      
-      ord_rep = ISODateToOrd(report_date)
-      
-      if 'latest' == selection and ord_rep + NB_LOOKBACK_DAYS < ord_today:
-        continue
-      
-      if '2020' == selection and ord_rep >= ord_end_2020:
-        continue
-      
-      if '2021' == selection and (ord_rep < ord_end_2020 or ord_rep >= ord_end_2021):
-        continue
-      
-      n_total += 1
-      if trans == 'imported':
-        n_imported += 1
-        if trav_hist == trav_hist and symp == symp: ## Not NaN
-          trav_hist_list_2.append(trav_hist)
-          symp_list_2.append(symp)
-    
-    assert len(trav_hist_list_2) == len(symp_list_2)
-    n_data = len(trav_hist_list_2)
-    
-    trav_hist_hist = clt.Counter([trav for trav_hist in trav_hist_list_2 for trav in trav_hist])
-    trav_hist_hist = sorted(trav_hist_hist.items(), key=lambda x: x[1], reverse=True)
-    symp_hist = clt.Counter([s for symp in symp_list_2 for s in symp])
-    symp_hist = sorted(symp_hist.items(), key=lambda x: x[1], reverse=True)
-    
-    trav_bool_mat = []
-    for trav_hist_pair in trav_hist_hist:
-      trav_bool_arr = [1 if trav_hist_pair[0] in trav_hist else 0 for trav_hist in trav_hist_list_2]
-      trav_bool_mat.append(trav_bool_arr)
-    trav_bool_mat = np.array(trav_bool_mat)
-    
-    symp_bool_mat = []
-    for symp_pair in symp_hist:
-      symp_bool_arr = [1 if symp_pair[0] in symp else 0 for symp in symp_list_2]
-      symp_bool_mat.append(symp_bool_arr)
-    symp_bool_mat = np.array(symp_bool_mat)
-    
-    return n_total, n_imported, n_data, trav_hist_hist, symp_hist, trav_bool_mat, symp_bool_mat
-  
-  def makeTravHistSymptomCorr(self, selection='latest'):
-    n_total, n_imported, n_data, trav_hist_hist, symp_hist, trav_bool_mat, symp_bool_mat = self.makeTravHistSymptomMat(selection=selection)
-    
-    travBoolMat_n = np.array([normalizeBoolArr(trav_bool_arr) for trav_bool_arr in trav_bool_mat])
-    symp_bool_mat_n = np.array([normalizeBoolArr(symp_bool_arr) for symp_bool_arr in symp_bool_mat])
-    
-    corr_mat  = travBoolMat_n.dot(symp_bool_mat_n.T)
-    count_mat = trav_bool_mat.dot(symp_bool_mat.T)
-    return n_total, n_imported, n_data, trav_hist_hist, symp_hist, corr_mat, count_mat
-  
-  def makeAgeSymptomMat(self, selection='latest'):
-    report_date_list = self.getReportDate()
-    trans_list = self.getTransmission()
-    age_list = self.getAge()
-    symp_list = self.getSymptom()
-    
-    ord_today = dtt.date.today().toordinal() + 1
-    ord_end_2020 = ISODateToOrd('2020-12-31') + 1
-    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
-    age_list_2 = []
-    symp_list_2 = []
-    n_total = 0
-    
-    for report_date, trans, age, symp in zip(report_date_list, trans_list, age_list, symp_list):
-      if trans != trans:
-        continue
-      
-      ord_rep = ISODateToOrd(report_date)
-      
-      if 'latest' == selection and ord_rep + NB_LOOKBACK_DAYS < ord_today:
-        continue
-      
-      if '2020' == selection and ord_rep >= ord_end_2020:
-        continue
-      
-      if '2021' == selection and (ord_rep < ord_end_2020 or ord_rep >= ord_end_2021):
-        continue
-      
-      n_total += 1
-      if age == age and symp == symp: ## Not NaN
-        age_list_2.append(age)
-        symp_list_2.append(symp)
-    
-    assert len(age_list_2) == len(symp_list_2)
-    n_data = len(age_list_2)
-        
-    age_hist = clt.Counter(age_list_2)
-    for age in AGE_DICT:
-      age_hist[age] = age_hist.get(age, 0)
-    age_hist = sorted(age_hist.items(), key=lambda x: x[0], reverse=True)
-    symp_hist = clt.Counter([s for symp in symp_list_2 for s in symp])
-    symp_hist = sorted(symp_hist.items(), key=lambda x: x[1], reverse=True)
-    
-    age_bool_mat = []
-    for age_pair in age_hist:
-      age_bool_arr = [1 if age_pair[0] == age_hist else 0 for age_hist in age_list_2]
-      age_bool_mat.append(age_bool_arr)
-    age_bool_mat = np.array(age_bool_mat)
-    
-    symp_bool_mat = []
-    for symp_pair in symp_hist:
-      symp_bool_arr = [1 if symp_pair[0] in symp else 0 for symp in symp_list_2]
-      symp_bool_mat.append(symp_bool_arr)
-    symp_bool_mat = np.array(symp_bool_mat)
-    
-    return n_total, n_data, age_hist, symp_hist, age_bool_mat, symp_bool_mat
-  
-  def makeAgeSymptomCorr(self, selection='latest'):
-    n_total, n_data, age_hist, symp_hist, age_bool_mat, symp_bool_mat = self.makeAgeSymptomMat(selection=selection)
-    
-    age_bool_mat_n = np.array([normalizeBoolArr(age_bool_arr) for age_bool_arr in age_bool_mat])
-    symp_bool_mat_n = np.array([normalizeBoolArr(symp_bool_arr) for symp_bool_arr in symp_bool_mat])
-    
-    corr_mat = age_bool_mat_n.dot(symp_bool_mat_n.T)
-    count_mat = age_bool_mat.dot(symp_bool_mat.T)
-    return n_total, n_data, age_hist, symp_hist, corr_mat, count_mat
-  
-  def saveCsv_keyNb(self):
-    self.getReportDate()
-    timestamp = dtt.datetime.now().astimezone()
-    timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
-    
-    key = ['n_total', 'n_latest', 'n_2020', 'n_2021', 'n_empty', 'timestamp']
-    value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_empty, timestamp]
-    
-    data = {'key': key, 'value': value}
-    data = pd.DataFrame(data)
-    
-    name = '%sprocessed_data/key_numbers.csv' % DATA_PATH
-    saveCsv(name, data)
-    return
-    
-  def saveCsv_caseByTrans(self):
-    report_date_list = self.getReportDate()
-    onset_date_list = self.getOnsetDate()
-    trans_list = self.getTransmission()
-    link_list = self.getLink()
-    
-    ord_ref = ISODateToOrd(ISO_DATE_REF)
-    ord_today = dtt.date.today().toordinal() + 1
-    
-    date = [ordDateToISO(i) for i in range(ord_ref, ord_today)]
-    nb_days = ord_today - ord_ref
-    imported_r = np.zeros(nb_days, dtype=int)
-    linked_r   = np.zeros(nb_days, dtype=int)
-    unlinked_r = np.zeros(nb_days, dtype=int)
-    fleet_r    = np.zeros(nb_days, dtype=int)
-    plane_r    = np.zeros(nb_days, dtype=int)
-    unknown_r  = np.zeros(nb_days, dtype=int)
-    imported_o = np.zeros(nb_days, dtype=int)
-    linked_o   = np.zeros(nb_days, dtype=int)
-    unlinked_o = np.zeros(nb_days, dtype=int)
-    fleet_o    = np.zeros(nb_days, dtype=int)
-    plane_o    = np.zeros(nb_days, dtype=int)
-    unknown_o  = np.zeros(nb_days, dtype=int)
-    
-    for report_date, onset_date, trans, link in zip(report_date_list, onset_date_list, trans_list, link_list):
-      if trans != trans:
-        continue
-      
-      ## Regroup by report date
-      ind_r = ISODateToOrd(report_date) - ord_ref
-      if ind_r < 0 or ind_r >= nb_days:
-        print('Bad ind_r = %d' % ind_r)
-        continue
-      
-      if trans == 'imported':
-        imported_r[ind_r] += 1
-      elif trans == 'fleet':
-        fleet_r[ind_r] += 1
-      elif trans == 'plane':
-        plane_r[ind_r] += 1
-      elif trans == 'unknown':
-        unknown_r[ind_r] += 1
-      elif link == 'unlinked':
-        unlinked_r[ind_r] += 1
-      else:
-        linked_r[ind_r] += 1
-      
-      ## Regroup by onset date
-      if onset_date == onset_date: ## Not NaN
-        ind_o = ISODateToOrd(onset_date) - ord_ref
-        if ind_o < 0 or ind_o >= nb_days:
-          print('Bad ind_o = %d' % ind_o)
-          continue
-        
-        if trans == 'imported':
-          imported_o[ind_o] += 1
-        elif trans == 'fleet':
-          fleet_o[ind_o] += 1
-        elif trans == 'plane':
-          plane_o[ind_o] += 1
-        elif trans == 'unknown':
-          unknown_o[ind_o] += 1
-        elif link == 'unlinked':
-          unlinked_o[ind_o] += 1
-        else:
-          linked_o[ind_o] += 1
-    
-    data_r = {'date': date, 'unknown': unknown_r, 'plane': plane_r, 'fleet': fleet_r, 'unlinked': unlinked_r, 'linked': linked_r, 'imported': imported_r}
-    data_r = pd.DataFrame(data_r)
-    data_o = {'date': date, 'unknown': unknown_o, 'plane': plane_o, 'fleet': fleet_o, 'unlinked': unlinked_o, 'linked': linked_o, 'imported': imported_o}
-    data_o = pd.DataFrame(data_o)
-    
-    data_latest_r = data_r.iloc[-NB_LOOKBACK_DAYS:]
-    data_latest_o = data_o.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020_r = data_r.iloc[:366]
-    data_2020_o = data_o.iloc[:366]
-    data_2021_r = data_r.iloc[366:731]
-    data_2021_o = data_o.iloc[366:731]
-    
-    name = '%sprocessed_data/latest/case_by_transmission_by_report_day.csv' % DATA_PATH
-    saveCsv(name, data_latest_r)
-    name = '%sprocessed_data/latest/case_by_transmission_by_onset_day.csv' % DATA_PATH
-    saveCsv(name, data_latest_o)
-    
-    name = '%sprocessed_data/2020/case_by_transmission_by_report_day.csv' % DATA_PATH
-    saveCsv(name, data_2020_r)
-    name = '%sprocessed_data/2020/case_by_transmission_by_onset_day.csv' % DATA_PATH
-    saveCsv(name, data_2020_o)
-    
-    name = '%sprocessed_data/2021/case_by_transmission_by_report_day.csv' % DATA_PATH
-    saveCsv(name, data_2021_r)
-    name = '%sprocessed_data/2021/case_by_transmission_by_onset_day.csv' % DATA_PATH
-    saveCsv(name, data_2021_o)
-    return
-  
-  def saveCsv_caseByDetection(self):
-    report_date_list = self.getReportDate()
-    onset_date_list = self.getOnsetDate()
-    trans_list = self.getTransmission()
-    channel_list = self.getChannel()
-    
-    ord_ref = ISODateToOrd(ISO_DATE_REF)
-    ord_today = dtt.date.today().toordinal() + 1
-    
-    date = [ordDateToISO(i) for i in range(ord_ref, ord_today)]
-    nb_days = ord_today - ord_ref
-    airport_r  = np.zeros(nb_days, dtype=int)
-    qt_r       = np.zeros(nb_days, dtype=int)
-    iso_r      = np.zeros(nb_days, dtype=int)
-    monitor_r  = np.zeros(nb_days, dtype=int)
-    hospital_r = np.zeros(nb_days, dtype=int)
-    overseas_r = np.zeros(nb_days, dtype=int)
-    no_data_r  = np.zeros(nb_days, dtype=int)
-    airport_o  = np.zeros(nb_days, dtype=int)
-    qt_o       = np.zeros(nb_days, dtype=int)
-    iso_o      = np.zeros(nb_days, dtype=int)
-    monitor_o  = np.zeros(nb_days, dtype=int)
-    hospital_o = np.zeros(nb_days, dtype=int)
-    overseas_o = np.zeros(nb_days, dtype=int)
-    no_data_o  = np.zeros(nb_days, dtype=int)
-    
-    for report_date, onset_date, trans, channel in zip(report_date_list, onset_date_list, trans_list, channel_list):
-      if trans != trans:
-        continue
-      
-      ind_r = ISODateToOrd(report_date) - ord_ref
-      if ind_r < 0 or ind_r >= nb_days:
-        print('Bad ind_r = %d' % ind_r)
-        continue
-      
-      if channel == 'airport':
-        airport_r[ind_r] += 1
-      elif channel == 'quarantine':
-        qt_r[ind_r] += 1
-      elif channel == 'isolation':
-        iso_r[ind_r] += 1
-      elif channel == 'monitoring':
-        monitor_r[ind_r] += 1
-      elif channel == 'hospital':
-        hospital_r[ind_r] += 1
-      elif channel == 'overseas':
-        overseas_r[ind_r] += 1
-      elif channel != channel: ## Is nan
-        no_data_r[ind_r] += 1
-      
-      if onset_date == onset_date: ## Not NaN
-        ind_o = ISODateToOrd(onset_date) - ord_ref
-        if ind_o < 0 or ind_o >= nb_days:
-          print('Bad ind_o = %d' % ind_o)
-          continue
-        
-        if channel == 'airport':
-          airport_o[ind_o] += 1
-        elif channel == 'quarantine':
-          qt_o[ind_o] += 1
-        elif channel == 'isolation':
-          iso_o[ind_o] += 1
-        elif channel == 'monitoring':
-          monitor_o[ind_o] += 1
-        elif channel == 'hospital':
-          hospital_o[ind_o] += 1
-        elif channel == 'overseas':
-          overseas_o[ind_o] += 1
-        elif channel != channel: ## Is nan
-          no_data_o[ind_o] += 1
-    
-    data_r = {'date': date, 'no_data': no_data_r, 'overseas': overseas_r, 'hospital': hospital_r, 
-              'monitoring': monitor_r, 'isolation': iso_r, 'quarantine': qt_r, 'airport': airport_r}
-    data_r = pd.DataFrame(data_r)
-    data_o = {'date': date, 'no_data': no_data_o, 'overseas': overseas_o, 'hospital': hospital_o, 
-              'monitoring': monitor_o, 'isolation': iso_o, 'quarantine': qt_o, 'airport': airport_o}
-    data_o = pd.DataFrame(data_o)
-    
-    data_latest_r = data_r.iloc[-NB_LOOKBACK_DAYS:]
-    data_latest_o = data_o.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020_r = data_r.iloc[:366]
-    data_2020_o = data_o.iloc[:366]
-    data_2021_r = data_r.iloc[366:731]
-    data_2021_o = data_o.iloc[366:731]
-    
-    name = '%sprocessed_data/latest/case_by_detection_by_report_day.csv' % DATA_PATH
-    saveCsv(name, data_latest_r)
-    name = '%sprocessed_data/latest/case_by_detection_by_onset_day.csv' % DATA_PATH
-    saveCsv(name, data_latest_o)
-    
-    name = '%sprocessed_data/2020/case_by_detection_by_report_day.csv' % DATA_PATH
-    saveCsv(name, data_2020_r)
-    name = '%sprocessed_data/2020/case_by_detection_by_onset_day.csv' % DATA_PATH
-    saveCsv(name, data_2020_o)
-    
-    name = '%sprocessed_data/2021/case_by_detection_by_report_day.csv' % DATA_PATH
-    saveCsv(name, data_2021_r)
-    name = '%sprocessed_data/2021/case_by_detection_by_onset_day.csv' % DATA_PATH
-    saveCsv(name, data_2021_o)
-    return
-  
-  def saveCsv_diffByTrans(self):
-    report_date_list = self.getReportDate()
-    entry_date_list  = self.getEntryDate()
-    onset_date_list  = self.getOnsetDate()
-    trans_list       = self.getTransmission()
-    
-    ord_today = dtt.date.today().toordinal() + 1
-    ord_end_2020 = ISODateToOrd('2020-12-31') + 1
-    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
-    stock_latest_imp = []
-    stock_latest_indi = []
-    stock_latest_other = []
-    stock_2020_imp = []
-    stock_2020_indi = []
-    stock_2020_other = []
-    stock_2021_imp = []
-    stock_2021_indi = []
-    stock_2021_other = []
-    
-    for i, report_date, entry_date, onset_date, trans in zip(range(len(report_date_list)), report_date_list, entry_date_list, onset_date_list, trans_list):
-      if trans != trans:
-        continue
-      
-      if trans == 'imported':
-        stock_latest = stock_latest_imp
-        stock_2020 = stock_2020_imp
-        stock_2021 = stock_2021_imp
-      elif trans == 'indigenous':
-        stock_latest = stock_latest_indi
-        stock_2020 = stock_2020_indi
-        stock_2021 = stock_2021_indi
-      elif trans in ['fleet', 'plane', 'unknown']:
-        stock_latest = stock_latest_other
-        stock_2020 = stock_2020_other
-        stock_2021 = stock_2021_other
-      else:
-        print('diffByTrans, Case %d, %s' % (i+1, trans))
-      
-      ord_rep = ISODateToOrd(report_date)
-      ord_entry = ISODateToOrd(entry_date) if entry_date == entry_date else 0
-      ord_onset = ISODateToOrd(onset_date) if onset_date == onset_date else 0
-      
-      if ord_entry + ord_onset == 0:
-        continue
-      
-      diff = min(ord_rep-ord_entry, ord_rep-ord_onset)
-      
-      if ord_rep + NB_LOOKBACK_DAYS > ord_today:
-        stock_latest.append(diff)
-      
-      if ord_rep < ord_end_2020:
-        stock_2020.append(diff)
-        
-      if ord_rep >= ord_end_2020 and ord_rep < ord_end_2021:
-        stock_2021.append(diff)
-    
-    ## Histogram bins
-    bins = np.arange(-0.5, 31, 1)
-    bins[-1] = 999
-    
-    ## Latest
-    n_imp, ctr_bins = makeHist(stock_latest_imp, bins)
-    n_indi, ctr_bins = makeHist(stock_latest_indi, bins)
-    n_other, ctr_bins = makeHist(stock_latest_other, bins)
-    n_tot = n_imp + n_indi + n_other
-    
-    n_imp = n_imp.round(0).astype(int)
-    n_indi = n_indi.round(0).astype(int)
-    n_other = n_other.round(0).astype(int)
-    n_tot = n_tot.round(0).astype(int)
-    ctr_bins = ctr_bins.round(0).astype(int)
-    ctr_bins[-1] = 30
-    
-    data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'other': n_other}
-    data = pd.DataFrame(data)
-    
-    name = '%sprocessed_data/latest/difference_by_transmission.csv' % DATA_PATH
-    saveCsv(name, data)
-    
-    ## 2020
-    n_imp, ctr_bins = makeHist(stock_2020_imp, bins)
-    n_indi, ctr_bins = makeHist(stock_2020_indi, bins)
-    n_other, ctr_bins = makeHist(stock_2020_other, bins)
-    n_tot = n_imp + n_indi + n_other
-    
-    n_imp = n_imp.round(0).astype(int)
-    n_indi = n_indi.round(0).astype(int)
-    n_other = n_other.round(0).astype(int)
-    n_tot = n_tot.round(0).astype(int)
-    ctr_bins = ctr_bins.round(0).astype(int)
-    ctr_bins[-1] = 30
-    
-    data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'other': n_other}
-    data = pd.DataFrame(data)
-    
-    name = '%sprocessed_data/2020/difference_by_transmission.csv' % DATA_PATH
-    saveCsv(name, data)
-    
-    ## 2021
-    n_imp, ctr_bins = makeHist(stock_2021_imp, bins)
-    n_indi, ctr_bins = makeHist(stock_2021_indi, bins)
-    n_other, ctr_bins = makeHist(stock_2021_other, bins)
-    n_tot = n_imp + n_indi + n_other
-    
-    n_imp = n_imp.round(0).astype(int)
-    n_indi = n_indi.round(0).astype(int)
-    n_other = n_other.round(0).astype(int)
-    n_tot = n_tot.round(0).astype(int)
-    ctr_bins = ctr_bins.round(0).astype(int)
-    ctr_bins[-1] = 30
-    
-    data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'other': n_other}
-    data = pd.DataFrame(data)
-    
-    name = '%sprocessed_data/2021/difference_by_transmission.csv' % DATA_PATH
-    saveCsv(name, data)
-    return
-  
-  def saveCsv_travHistSymptomCorr(self, selection='latest'):
-    n_total, n_imported, n_data, trav_hist_hist, symp_hist, corr_mat, count_mat = self.makeTravHistSymptomCorr(selection=selection)
-    
-    n_trav = 10
-    n_symp = 10
-    
-    corr_mat = corr_mat[:n_trav, :n_symp]
-    count_mat = count_mat[:n_trav, :n_symp]
-    trav_hist_hist = trav_hist_hist[:n_trav]
-    symp_hist = symp_hist[:n_symp]
-    
-    trav_hist_list = [trav[0] for trav in trav_hist_hist]
-    symp_list = [symp[0] for symp in symp_hist]
-    grid = np.meshgrid(symp_list, trav_hist_list)
-    
-    symp = grid[0].flatten()
-    trav_hist = grid[1].flatten()
-    value_r = corr_mat.flatten()
-    label_r = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_r]
-    label_n = count_mat.flatten()
-    
-    data1 = {'symptom': symp, 'trav_hist': trav_hist, 'value': value_r, 'label': label_r}
-    data1 = pd.DataFrame(data1)
-    
-    data2 = {'symptom': symp, 'trav_hist': trav_hist, 'value': value_r, 'label': label_n}
-    data2 = pd.DataFrame(data2)
-    
-    pairList = [('N_total', n_total), ('N_imported', n_imported), ('N_data', n_data)] + trav_hist_hist + symp_hist
-    label = [pair[0] for pair in pairList]
-    count = [pair[1] for pair in pairList]
-    label_zh = ['合計', '境外移入總數', '有資料案例數'] + [TRAVEL_HISTORY_DICT[trav]['zh-tw'] for trav in trav_hist_list] + [SYMPTOM_DICT[symp]['zh-tw'] for symp in symp_list]
-    label_fr = ['Total', 'Importés', 'Données complètes'] + [TRAVEL_HISTORY_DICT[trav]['fr'] for trav in trav_hist_list] + [SYMPTOM_DICT[symp]['fr'] for symp in symp_list]
-    
-    data3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
-    data3 = pd.DataFrame(data3)
-    
-    name = '%sprocessed_data/%s/travel_history_symptom_correlations_coefficient.csv' % (DATA_PATH, selection)
-    saveCsv(name, data1)
-    name = '%sprocessed_data/%s/travel_history_symptom_correlations_counts.csv' % (DATA_PATH, selection)
-    saveCsv(name, data2)
-    name = '%sprocessed_data/%s/travel_history_symptom_correlations_total.csv' % (DATA_PATH, selection)
-    saveCsv(name, data3)
-    return
-  
-  def saveCsv_ageSymptomCorr(self, selection='latest'):
-    n_total, n_data, age_hist, symp_hist, corr_mat, count_mat = self.makeAgeSymptomCorr(selection=selection)
-    
-    n_age  = corr_mat.shape[0]
-    n_symp = 10
-    
-    corr_mat = corr_mat[:n_age, :n_symp]
-    count_mat = count_mat[:n_age, :n_symp]
-    age_hist = age_hist[:n_age]
-    symp_hist = symp_hist[:n_symp]
-    
-    age_list = [age[0] for age in age_hist]
-    symp_list = [symp[0] for symp in symp_hist]
-    grid = np.meshgrid(symp_list, age_list)
-    
-    symp = grid[0].flatten()
-    age = grid[1].flatten()
-    value_r = corr_mat.flatten()
-    label_r = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_r]
-    label_n = count_mat.flatten()
-    
-    data1 = {'symptom': symp, 'age': age, 'value': value_r, 'label': label_r}
-    data1 = pd.DataFrame(data1)
-    
-    data2 = {'symptom': symp, 'age': age, 'value': value_r, 'label': label_n}
-    data2 = pd.DataFrame(data2)
-    
-    pair_list = [('N_total', n_total), ('N_data', n_data)] + age_hist + symp_hist
-    label = [pair[0] for pair in pair_list]
-    count = [pair[1] for pair in pair_list]
-    label_zh = ['合計', '有資料案例數'] + [AGE_DICT[age]['zh-tw'] for age in age_list] + [SYMPTOM_DICT[symp]['zh-tw'] for symp in symp_list]
-    label_fr = ['Total', 'Données complètes'] + [AGE_DICT[age]['fr'] for age in age_list] + [SYMPTOM_DICT[symp]['fr'] for symp in symp_list]
-    
-    data3 = {'label': label, 'count': count, 'label_zh': label_zh, 'label_fr': label_fr}
-    data3 = pd.DataFrame(data3)
-    
-    name = '%sprocessed_data/%s/age_symptom_correlations_coefficient.csv' % (DATA_PATH, selection)
-    saveCsv(name, data1)
-    name = '%sprocessed_data/%s/age_symptom_correlations_counts.csv' % (DATA_PATH, selection)
-    saveCsv(name, data2)
-    name = '%sprocessed_data/%s/age_symptom_correlations_total.csv' % (DATA_PATH, selection)
-    saveCsv(name, data3)
-    return
-  
   def saveCsv(self):
     self.saveCsv_keyNb()
-    self.saveCsv_caseByTrans()
+    self.saveCsv_caseByTransmission()
     self.saveCsv_caseByDetection()
-    self.saveCsv_diffByTrans()
-    self.saveCsv_travHistSymptomCorr(selection='latest')
-    self.saveCsv_travHistSymptomCorr(selection='2020')
-    self.saveCsv_travHistSymptomCorr(selection='2021')
-    self.saveCsv_ageSymptomCorr(selection='latest')
-    self.saveCsv_ageSymptomCorr(selection='2020')
-    self.saveCsv_ageSymptomCorr(selection='2021')
+    self.saveCsv_travHistSymptomCorr()
+    self.saveCsv_ageSymptomCorr()
+    self.saveCsv_diffByTransmission()
     return
 
 ################################################################################
@@ -1751,11 +1718,11 @@ class StatusSheet(Template):
   
   def getDate(self):
     date_list = []
-    y = 2020 #WARNING
+    y = 2020
     
     for i, date in enumerate(self.getCol(self.coltag_date)):
       if i >= self.ind_2021:
-        y = 2021
+        y = 2021 #WARNING
         
       mmdd_zh = date.split('月')
       m = int(mmdd_zh[0])
@@ -1791,8 +1758,8 @@ class StatusSheet(Template):
     data = adjustDateRange(data)
     
     data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020 = data.iloc[:366]
-    data_2021 = data.iloc[366:731]
+    data_2020 = data.iloc[RANGE_2020[0]:RANGE_2020[1]]
+    data_2021 = data.iloc[RANGE_2021[0]:RANGE_2021[1]]
     
     name = '%sprocessed_data/latest/status_evolution.csv' % DATA_PATH
     saveCsv(name, data_latest)
@@ -1919,7 +1886,7 @@ class TestSheet(Template):
   
   def makeDailyTestCounts(self):
     ord_ref = ISODateToOrd(ISO_DATE_REF)
-    ord_today = dtt.date.today().toordinal() + 1
+    ord_today = getTodayOrdinal()
     
     nb_days = ord_today - ord_ref
     nb_tests_arr = np.zeros(nb_days, dtype=int)
@@ -1949,15 +1916,13 @@ class TestSheet(Template):
     data = adjustDateRange(data)
     
     data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020 = data.iloc[:366]
-    data_2021 = data.iloc[366:731]
+    data_2020 = data.iloc[RANGE_2020[0]:RANGE_2020[1]]
+    data_2021 = data.iloc[RANGE_2021[0]:RANGE_2021[1]]
     
     name = '%sprocessed_data/latest/test_by_criterion.csv' % DATA_PATH
     saveCsv(name, data_latest)
-    
     name = '%sprocessed_data/2020/test_by_criterion.csv' % DATA_PATH
     saveCsv(name, data_2020)
-    
     name = '%sprocessed_data/2021/test_by_criterion.csv' % DATA_PATH
     saveCsv(name, data_2021)
     return
@@ -2131,121 +2096,121 @@ class BorderSheet(Template):
   def __init__(self, verbose=True):
     self.coltag_date = '日期 '
     self.tag_dict = {
-      'in': '資料來源：各機場、港口入出境人數統計資料 入境總人數',
-      'out': '資料來源：各機場、港口入出境人數統計資料 出境總人數',
-      'total': '入出境總人數_小計 ',
-      'Taoyuan A1 in': '桃園一期 入境查驗', 
-      'Taoyuan A1 out': '桃園一期 出境查驗', 
-      'Taoyuan A1 total': '桃園一期 小計', 
-      'Taoyuan A2 in': '桃園二期 入境查驗', 
-      'Taoyuan A2 out': '桃園二期 出境查驗', 
-      'Taoyuan A2 total': '桃園二期 小計', 
-      'Taoyuan A total': '桃園一_二期 合計', 
-      'Kaohsiung A in': '高雄機場 入境查驗', 
-      'Kaohsiung A out': '高雄機場 出境查驗', 
-      'Kaohsiung A total': '高雄機場 小計', 
-      'Keelung S in': '基隆港 入境查驗', 
-      'Keelung S out': '基隆港 出境查驗', 
-      'Keelung S total': '基隆港 小計', 
-      'Taichung S in': '台中港 入境查驗', 
-      'Taichung S out': '台中港 出境查驗', 
-      'Taichung S total': '台中港 小計', 
-      'Kaohsiung S in': '高雄港 入境查驗', 
-      'Kaohsiung S out': '高雄港 出境查驗', 
-      'Kaohsiung S total': '高雄港 小計', 
-      'Hualien S in': '花蓮港 入境查驗', 
-      'Hualien S out': '花蓮港 出境查驗', 
-      'Hualien S total': '花蓮港 小計', 
-      'Yilan S in': '蘇澳港 入境查驗', 
-      'Yilan S out': '蘇澳港 出境查驗', 
-      'Yilan S total': '蘇澳港 小計', 
-      'Penghu X in': '澎湖港 入境查驗', 
-      'Penghu X out': '澎湖港 出境查驗', 
-      'Penghu X total': '澎湖港 小計', 
-      'Tainan A in': '台南機場 入境查驗', 
-      'Tainan A out': '台南機場 出境查驗', 
-      'Tainan A total': '台南機場 小計', 
-      'Tainan S in': '安平港 入境查驗', 
-      'Tainan S out': '安平港 出境查驗', 
-      'Tainan S total': '安平港 小計', 
-      'Taipei A in': '松山機場 入境查驗', 
-      'Taipei A out': '松山機場 出境查驗', 
-      'Taipei A total': '松山機場 小計', 
-      'Kinmen SW in': '金門港_水頭 入境查驗', 
-      'Kinmen SW out': '金門港_水頭 出境查驗', 
-      'Kinmen SW total': '金門港_水頭 小計', 
-      'Mazu X in': '馬祖 入境查驗', 
-      'Mazu X out': '馬祖 出境查驗', 
-      'Mazu X total': '馬祖 小計', 
-      'Hualien A in': '花蓮機場 入境查驗', 
-      'Hualien A out': '花蓮機場 出境查驗', 
-      'Hualien A total': '花蓮機場 小計', 
-      'Yunlin S in': '麥寮港 入境查驗', 
-      'Yunlin S out': '麥寮港 出境查驗', 
-      'Yunlin S total': '麥寮港 小計', 
-      'Penghu A in': '馬公機場 入境查驗', 
-      'Penghu A out': '馬公機場 出境查驗', 
-      'Penghu A total': '馬公機場 小計', 
-      'Taichung A in': '台中機場 入境查驗', 
-      'Taichung A out': '台中機場 出境查驗', 
-      'Taichung A total': '台中機場 小計', 
-      'Hualien SN in': '和平港 入境查驗', 
-      'Hualien SN out': '和平港 出境查驗', 
-      'Hualien SN total': '和平港 小計', 
-      'Kinmen A in': '金門機場 入境查驗', 
-      'Kinmen A out': '金門機場 出境查驗', 
-      'Kinmen A total': '金門機場 小計', 
-      'Mazu AS in': '南竿機場 入境查驗', 
-      'Mazu AS out': '南竿機場 出境查驗', 
-      'Mazu AS total': '南竿機場 小計', 
-      'Mazu AN in': '北竿機場 入境查驗', 
-      'Mazu AN out': '北竿機場 出境查驗', 
-      'Mazu AN total': '北竿機場 小計', 
-      'Chiayi A in': '嘉義機場 入境查驗', 
-      'Chiayi A out': '嘉義機場 出境查驗', 
-      'Chiayi A total': '嘉義機場 小計', 
-      'Taipei S in': '台北港 入境查驗', 
-      'Taipei S out': '台北港 出境查驗', 
-      'Taipei S total': '台北港 小計', 
-      'Pintung SN1 in': '東港 入境查驗', 
-      'Pintung SN1 out': '東港 出境查驗', 
-      'Pintung SN1 total': '東港 小計', 
-      'Taitung A in': '台東機場 入境查驗', 
-      'Taitung A out': '台東機場 出境查驗', 
-      'Taitung A total': '台東機場 小計', 
-      'Mazu S in': '北竿白沙港 入境查驗', 
-      'Mazu S out': '北竿白沙港 出境查驗', 
-      'Mazu S total': '北竿白沙港 小計', 
-      'Chiayi S in': '布袋港 入境查驗', 
-      'Chiayi S out': '布袋港 出境查驗', 
-      'Chiayi S total': '布袋港 小計', 
-      'Taoyuan SS in': '大園沙崙港 入境查驗', 
-      'Taoyuan SS out': '大園沙崙港 出境查驗', 
-      'Taoyuan SS total': '大園沙崙港 小計', 
-      'Taitung S in': '台東富岡港 入境查驗', 
-      'Taitung S out': '台東富岡港 出境查驗', 
-      'Taitung S total': '台東富岡港 小計', 
-      'Penghu S in': '馬公港 入境查驗', 
-      'Penghu S out': '馬公港 出境查驗', 
-      'Penghu S total': '馬公港 小計', 
-      'Taoyuan SN in': '桃園竹圍港 入境查驗', 
-      'Taoyuan SN out': '桃園竹圍港 出境查驗', 
-      'Taoyuan SN total': '桃園竹圍港 小計', 
-      'Kinmen SE in': '金門港_料羅 入境查驗', 
-      'Kinmen SE out': '金門港_料羅 出境查驗', 
-      'Kinmen SE total': '金門港_料羅 小計', 
-      'Pintung SS in': '後壁湖遊艇港 入境查驗', 
-      'Pintung SS out': '後壁湖遊艇港 出境查驗', 
-      'Pintung SS total': '後壁湖遊艇港 小計', 
-      'New Taipei S in': '淡水第二漁港遊艇碼頭 入境查驗', 
-      'New Taipei S out': '淡水第二漁港遊艇碼頭 出境查驗', 
-      'New Taipei S total': '淡水第二漁港遊艇碼頭 小計', 
-      'Pintung SN2 in': '屏東大鵬灣遊艇港 入境查驗', 
-      'Pintung SN2 out': '屏東大鵬灣遊艇港 出境查驗', 
-      'Pintung SN2 total': '屏東大鵬灣遊艇港 小計', 
-      'Pintung A in': '屏東機場 入境查驗', 
-      'Pintung A out': '屏東機場 出境查驗', 
-      'Pintung A total': '屏東機場 小計'
+      'entry': '資料來源：各機場、港口入出境人數統計資料 入境總人數',
+      'exit': '資料來源：各機場、港口入出境人數統計資料 出境總人數',
+      'both': '入出境總人數_小計 ',
+      'Taoyuan A1 entry': '桃園一期 入境查驗', 
+      'Taoyuan A1 exit': '桃園一期 出境查驗', 
+      'Taoyuan A1 both': '桃園一期 小計', 
+      'Taoyuan A2 entry': '桃園二期 入境查驗', 
+      'Taoyuan A2 exit': '桃園二期 出境查驗', 
+      'Taoyuan A2 both': '桃園二期 小計', 
+      'Taoyuan A both': '桃園一_二期 合計', 
+      'Kaohsiung A entry': '高雄機場 入境查驗', 
+      'Kaohsiung A exit': '高雄機場 出境查驗', 
+      'Kaohsiung A both': '高雄機場 小計', 
+      'Keelung S entry': '基隆港 入境查驗', 
+      'Keelung S exit': '基隆港 出境查驗', 
+      'Keelung S both': '基隆港 小計', 
+      'Taichung S entry': '台中港 入境查驗', 
+      'Taichung S exit': '台中港 出境查驗', 
+      'Taichung S both': '台中港 小計', 
+      'Kaohsiung S entry': '高雄港 入境查驗', 
+      'Kaohsiung S exit': '高雄港 出境查驗', 
+      'Kaohsiung S both': '高雄港 小計', 
+      'Hualien S entry': '花蓮港 入境查驗', 
+      'Hualien S exit': '花蓮港 出境查驗', 
+      'Hualien S both': '花蓮港 小計', 
+      'Yilan S entry': '蘇澳港 入境查驗', 
+      'Yilan S exit': '蘇澳港 出境查驗', 
+      'Yilan S both': '蘇澳港 小計', 
+      'Penghu X entry': '澎湖港 入境查驗', 
+      'Penghu X exit': '澎湖港 出境查驗', 
+      'Penghu X both': '澎湖港 小計', 
+      'Tainan A entry': '台南機場 入境查驗', 
+      'Tainan A exit': '台南機場 出境查驗', 
+      'Tainan A both': '台南機場 小計', 
+      'Tainan S entry': '安平港 入境查驗', 
+      'Tainan S exit': '安平港 出境查驗', 
+      'Tainan S both': '安平港 小計', 
+      'Taipei A entry': '松山機場 入境查驗', 
+      'Taipei A exit': '松山機場 出境查驗', 
+      'Taipei A both': '松山機場 小計', 
+      'Kinmen SW entry': '金門港_水頭 入境查驗', 
+      'Kinmen SW exit': '金門港_水頭 出境查驗', 
+      'Kinmen SW both': '金門港_水頭 小計', 
+      'Mazu X entry': '馬祖 入境查驗', 
+      'Mazu X exit': '馬祖 出境查驗', 
+      'Mazu X both': '馬祖 小計', 
+      'Hualien A entry': '花蓮機場 入境查驗', 
+      'Hualien A exit': '花蓮機場 出境查驗', 
+      'Hualien A both': '花蓮機場 小計', 
+      'Yunlin S entry': '麥寮港 入境查驗', 
+      'Yunlin S exit': '麥寮港 出境查驗', 
+      'Yunlin S both': '麥寮港 小計', 
+      'Penghu A entry': '馬公機場 入境查驗', 
+      'Penghu A exit': '馬公機場 出境查驗', 
+      'Penghu A both': '馬公機場 小計', 
+      'Taichung A entry': '台中機場 入境查驗', 
+      'Taichung A exit': '台中機場 出境查驗', 
+      'Taichung A both': '台中機場 小計', 
+      'Hualien SN entry': '和平港 入境查驗', 
+      'Hualien SN exit': '和平港 出境查驗', 
+      'Hualien SN both': '和平港 小計', 
+      'Kinmen A entry': '金門機場 入境查驗', 
+      'Kinmen A exit': '金門機場 出境查驗', 
+      'Kinmen A both': '金門機場 小計', 
+      'Mazu AS entry': '南竿機場 入境查驗', 
+      'Mazu AS exit': '南竿機場 出境查驗', 
+      'Mazu AS both': '南竿機場 小計', 
+      'Mazu AN entry': '北竿機場 入境查驗', 
+      'Mazu AN exit': '北竿機場 出境查驗', 
+      'Mazu AN both': '北竿機場 小計', 
+      'Chiayi A entry': '嘉義機場 入境查驗', 
+      'Chiayi A exit': '嘉義機場 出境查驗', 
+      'Chiayi A both': '嘉義機場 小計', 
+      'Taipei S entry': '台北港 入境查驗', 
+      'Taipei S exit': '台北港 出境查驗', 
+      'Taipei S both': '台北港 小計', 
+      'Pintung SN1 entry': '東港 入境查驗', 
+      'Pintung SN1 exit': '東港 出境查驗', 
+      'Pintung SN1 both': '東港 小計', 
+      'Taitung A entry': '台東機場 入境查驗', 
+      'Taitung A exit': '台東機場 出境查驗', 
+      'Taitung A both': '台東機場 小計', 
+      'Mazu S entry': '北竿白沙港 入境查驗', 
+      'Mazu S exit': '北竿白沙港 出境查驗', 
+      'Mazu S both': '北竿白沙港 小計', 
+      'Chiayi S entry': '布袋港 入境查驗', 
+      'Chiayi S exit': '布袋港 出境查驗', 
+      'Chiayi S both': '布袋港 小計', 
+      'Taoyuan SS entry': '大園沙崙港 入境查驗', 
+      'Taoyuan SS exit': '大園沙崙港 出境查驗', 
+      'Taoyuan SS both': '大園沙崙港 小計', 
+      'Taitung S entry': '台東富岡港 入境查驗', 
+      'Taitung S exit': '台東富岡港 出境查驗', 
+      'Taitung S both': '台東富岡港 小計', 
+      'Penghu S entry': '馬公港 入境查驗', 
+      'Penghu S exit': '馬公港 出境查驗', 
+      'Penghu S both': '馬公港 小計', 
+      'Taoyuan SN entry': '桃園竹圍港 入境查驗', 
+      'Taoyuan SN exit': '桃園竹圍港 出境查驗', 
+      'Taoyuan SN both': '桃園竹圍港 小計', 
+      'Kinmen SE entry': '金門港_料羅 入境查驗', 
+      'Kinmen SE exit': '金門港_料羅 出境查驗', 
+      'Kinmen SE both': '金門港_料羅 小計', 
+      'Pintung SS entry': '後壁湖遊艇港 入境查驗', 
+      'Pintung SS exit': '後壁湖遊艇港 出境查驗', 
+      'Pintung SS both': '後壁湖遊艇港 小計', 
+      'New Taipei S entry': '淡水第二漁港遊艇碼頭 入境查驗', 
+      'New Taipei S exit': '淡水第二漁港遊艇碼頭 出境查驗', 
+      'New Taipei S both': '淡水第二漁港遊艇碼頭 小計', 
+      'Pintung SN2 entry': '屏東大鵬灣遊艇港 入境查驗', 
+      'Pintung SN2 exit': '屏東大鵬灣遊艇港 出境查驗', 
+      'Pintung SN2 both': '屏東大鵬灣遊艇港 小計', 
+      'Pintung A entry': '屏東機場 入境查驗', 
+      'Pintung A exit': '屏東機場 出境查驗', 
+      'Pintung A both': '屏東機場 小計'
     }
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_border_statistics.csv' % DATA_PATH
@@ -2280,16 +2245,16 @@ class BorderSheet(Template):
     nb_list = [int(out.replace(',', '')) for out in self.getCol(self.tag_dict[tag])]
     return nb_list
     
-  def getIn(self):
-    return self.getNumbers('in')
+  def getEntry(self):
+    return self.getNumbers('entry')
     
-  def getOut(self):
-    return self.getNumbers('out')
+  def getExit(self):
+    return self.getNumbers('exit')
     
-  def getTotal(self):
-    return self.getNumbers('total')
+  def getBoth(self):
+    return self.getNumbers('both')
     
-  def getAirportBreakdown(self, tag='total'):
+  def getAirportBreakdown(self, tag='both'):
     label_list = [
       'Taipei A',
       'Taoyuan A1',
@@ -2313,7 +2278,7 @@ class BorderSheet(Template):
       air_list_break.append((label, self.getNumbers(label+' '+tag)))
     return air_list_break
   
-  def getSeaportBreakdown(self, tag='total'):
+  def getSeaportBreakdown(self, tag='both'):
     label_list = [
       'Keelung S',
       'New Taipei S',
@@ -2344,7 +2309,7 @@ class BorderSheet(Template):
       sea_list_break.append((label, self.getNumbers(label+' '+tag)))
     return sea_list_break
   
-  def getNotSpecifiedBreakdown(self, tag='total'):
+  def getNotSpecifiedBreakdown(self, tag='both'):
     label_list = [
       'Penghu X',
       'Mazu X'
@@ -2355,19 +2320,19 @@ class BorderSheet(Template):
       not_spec_list_break.append((label, self.getNumbers(label+' '+tag)))
     return not_spec_list_break
   
-  def getAirport(self, tag='total'):
+  def getAirport(self, tag='both'):
     air_list_break = self.getAirportBreakdown(tag=tag)
     air_list_break = [air_list[1] for air_list in air_list_break]
     air_list = np.array(air_list_break).sum(axis=0)
     return air_list
   
-  def getSeaport(self, tag='total'):
+  def getSeaport(self, tag='both'):
     sea_list_break = self.getSeaportBreakdown(tag=tag)
     sea_list_break = [sea_list[1] for sea_list in sea_list_break]
     sea_list = np.array(sea_list_break).sum(axis=0)
     return sea_list
   
-  def getNotSpecified(self, tag='total'):
+  def getNotSpecified(self, tag='both'):
     not_spec_list_break = self.getNotSpecifiedBreakdown(tag=tag)
     not_spec_list_break = [not_spec_list[1] for not_spec_list in not_spec_list_break]
     not_spec_list = np.array(not_spec_list_break).sum(axis=0)
@@ -2375,13 +2340,13 @@ class BorderSheet(Template):
   
   def makeDailyArrivalCounts(self):
     ord_ref = ISODateToOrd(ISO_DATE_REF)
-    ord_today = dtt.date.today().toordinal() + 1
+    ord_today = getTodayOrdinal()
     
     nb_days = ord_today - ord_ref
     nb_arrival_arr = np.zeros(nb_days, dtype=int)
     
     date_list = self.getDate()
-    in_list = self.getIn()
+    in_list = self.getEntry()
     
     for date, in_ in zip(date_list, in_list):
       ind = ISODateToOrd(date) - ord_ref
@@ -2393,74 +2358,27 @@ class BorderSheet(Template):
     return nb_arrival_arr
   
   def saveCsv_borderStats(self):
-    pass 
-    
-    ## In
     date_list = self.getDate()
-    air_list = self.getAirport(tag='in')
-    sea_list = self.getSeaport(tag='in')
-    not_spec_list = self.getNotSpecified(tag='in')
     
-    data = {'date': date_list, 'not_specified': not_spec_list, 'seaport': sea_list, 'airport': air_list}
-    data = pd.DataFrame(data)
-    data = adjustDateRange(data)
-    
-    data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020 = data.iloc[:366]
-    data_2021 = data.iloc[366:731]
-    
-    name = '%sprocessed_data/latest/border_statistics_entry.csv' % DATA_PATH
-    saveCsv(name, data_latest)
-    
-    name = '%sprocessed_data/2020/border_statistics_entry.csv' % DATA_PATH
-    saveCsv(name, data_2020)
-    
-    name = '%sprocessed_data/2021/border_statistics_entry.csv' % DATA_PATH
-    saveCsv(name, data_2021)
-    
-    ## Out
-    air_list = self.getAirport(tag='out')
-    sea_list = self.getSeaport(tag='out')
-    not_spec_list = self.getNotSpecified(tag='out')
-    
-    data = {'date': date_list, 'not_specified': not_spec_list, 'seaport': sea_list, 'airport': air_list}
-    data = pd.DataFrame(data)
-    data = adjustDateRange(data)
-    
-    data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020 = data.iloc[:366]
-    data_2021 = data.iloc[366:731]
-    
-    name = '%sprocessed_data/latest/border_statistics_exit.csv' % DATA_PATH
-    saveCsv(name, data_latest)
-    
-    name = '%sprocessed_data/2020/border_statistics_exit.csv' % DATA_PATH
-    saveCsv(name, data_2020)
-    
-    name = '%sprocessed_data/2021/border_statistics_exit.csv' % DATA_PATH
-    saveCsv(name, data_2021)
-    
-    ## Both
-    air_list = self.getAirport(tag='total')
-    sea_list = self.getSeaport(tag='total')
-    not_spec_list = self.getNotSpecified(tag='total')
-    
-    data = {'date': date_list, 'not_specified': not_spec_list, 'seaport': sea_list, 'airport': air_list}
-    data = pd.DataFrame(data)
-    data = adjustDateRange(data)
-    
-    data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
-    data_2020 = data.iloc[:366]
-    data_2021 = data.iloc[366:731]
-    
-    name = '%sprocessed_data/latest/border_statistics_both.csv' % DATA_PATH
-    saveCsv(name, data_latest)
-    
-    name = '%sprocessed_data/2020/border_statistics_both.csv' % DATA_PATH
-    saveCsv(name, data_2020)
-    
-    name = '%sprocessed_data/2021/border_statistics_both.csv' % DATA_PATH
-    saveCsv(name, data_2021)
+    for save_tag in ['entry', 'exit', 'both']:
+      air_list = self.getAirport(tag=save_tag)
+      sea_list = self.getSeaport(tag=save_tag)
+      not_spec_list = self.getNotSpecified(tag=save_tag)
+      
+      data = {'date': date_list, 'not_specified': not_spec_list, 'seaport': sea_list, 'airport': air_list}
+      data = pd.DataFrame(data)
+      data = adjustDateRange(data)
+      
+      data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
+      data_2020 = data.iloc[RANGE_2020[0]:RANGE_2020[1]]
+      data_2021 = data.iloc[RANGE_2021[0]:RANGE_2021[1]]
+      
+      name = '%sprocessed_data/latest/border_statistics_%s.csv' % (DATA_PATH, save_tag)
+      saveCsv(name, data_latest)
+      name = '%sprocessed_data/2020/border_statistics_%s.csv' % (DATA_PATH, save_tag)
+      saveCsv(name, data_2020)
+      name = '%sprocessed_data/2021/border_statistics_%s.csv' % (DATA_PATH, save_tag)
+      saveCsv(name, data_2021)
     return
       
   def saveCsv(self):
@@ -2707,197 +2625,160 @@ class CountySheet(Template):
     return self.getCol(self.coltag_nb_cases).astype(int)
   
   ## In date order
-  def makeCountyListDict(self, selection='latest'):
+  def makeStockDict_localCasePerCounty(self):
     report_date_list = self.getReportDate()
     county_list = self.getCounty()
     nb_cases_list = self.getNbCases()
     
-    ord_today = dtt.date.today().toordinal() + 1
-    ord_end_2019 = ISODateToOrd('2019-12-31') + 1
-    ord_end_2020 = ISODateToOrd('2020-12-31') + 1
-    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
+    ## Initialize stock dict
+    col_tag_list = ['total'] + self.county_key_list
+    stock_dict = initializeStockDict_dailyCounts(col_tag_list)
     
-    if 'latest' == selection:
-      date = [ordDateToISO(ord) for ord in range(ord_today-90, ord_today)]
-      case_arr = np.zeros_like(date, dtype=int)
-    elif '2020' == selection:
-      date = [ordDateToISO(ord) for ord in range(ord_end_2019, min(ord_end_2020, ord_today))]
-      case_arr = np.zeros_like(date, dtype=int)
-    else:
-      date = [ordDateToISO(ord) for ord in range(ord_end_2020, min(ord_end_2021, ord_today))]
-      case_arr = np.zeros_like(date, dtype=int)
-    
-    case_arr_dict = {'date': date}
-    case_arr_dict.update({county: case_arr.copy() for county in ['total'] + self.county_key_list})
-    
+    ## Loop over series
     for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):
       if 'unknown' == county:
         continue
       
-      ord_rep = ISODateToOrd(report_date)
+      ind_latest = indexForLatest(report_date)
+      ind_2021 = indexFor2021(report_date)
+      ind_2020 = indexFor2020(report_date)
       
-      if 'latest' == selection:
-        ind = ord_rep - ord_today
-        if ind < -NB_LOOKBACK_DAYS:
-          continue
+      for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.values()):
+        try:
+          stock['total'][ind] += nb_cases
+          stock[county][ind] += nb_cases
+        except IndexError: ## If NaN
+          pass
         
-      if '2020' == selection:
-        ind = ord_rep - ord_end_2019
-        if ind >= ord_end_2020 - ord_end_2019:
-          continue
-        
-      if '2021' == selection:
-        ind = ord_rep - ord_end_2020
-        if ind >= ord_end_2021 - ord_end_2020 or ind < 0:
-          continue
-      
-      case_arr_dict['total'][ind] += nb_cases
-      case_arr_dict[county][ind] += nb_cases
-    
-    return case_arr_dict
+    return stock_dict
   
-  def makeCountyHistList(self, selection='latest'):
+  def saveCsv_localCasePerCounty(self):
+    stock_dict = self.makeStockDict_localCasePerCounty()
+    
+    for page, stock in stock_dict.items():
+      data = pd.DataFrame(stock)
+      name = '%sprocessed_data/%s/local_case_per_county.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
+    return
+
+  def makeStockDict_incidenceMap(self):
     report_date_list = self.getReportDate()
     county_list = self.getCounty()
     nb_cases_list = self.getNbCases()
     
+    ## Initialize stock dict
     case_hist = {county: 0 for county in self.county_key_list}
-    case_hist_list = [case_hist.copy() for i in range(13)]
+    stock = [case_hist.copy() for i in range(13)]
+    stock_dict = initializeStockDict_general(stock)
     
-    ord_today = dtt.date.today().toordinal() + 1
-    ord_end_2020 = ISODateToOrd('2020-12-31') + 1
-    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
-    
+    ## Loop over series
     for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):
       if 'unknown' == county:
         continue
       
-      ord_rep = ISODateToOrd(report_date)
+      ind_latest = indexForLatest(report_date)
+      ind_2021 = indexFor2021(report_date)
+      ind_2020 = indexFor2020(report_date)
       
-      if 'latest' == selection and ord_rep + NB_LOOKBACK_DAYS < ord_today:
-        continue
+      for ind, page, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.keys(), stock_dict.values()):
+        if ind == ind:
+          stock[0][county] += nb_cases
         
-      if '2020' == selection and ord_rep >= ord_end_2020:
-        continue
-      
-      if '2021' == selection and (ord_rep < ord_end_2020 or ord_rep >= ord_end_2021):
-        continue
-      
-      case_hist_list[0][county] += nb_cases
-        
-      if 'latest' == selection:
-        lookback_week = (ord_rep - ord_today) // 7 ## ord_rep-ord_today in [-90, -1]; this will be in [-13, -1]
-        if lookback_week >= -12:
-          case_hist_list[-lookback_week][county] += nb_cases
-        
-      else:
-        mm = int(report_date[5:7])
-        case_hist_list[mm][county] += nb_cases
+          if page == PAGE_LATEST:
+            lookback_week = (ind - NB_LOOKBACK_DAYS) // 7 ## ind - NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
+            if lookback_week >= -12:
+              stock[-lookback_week][county] += nb_cases
+          else:
+            mm = int(report_date[5:7])
+            stock[mm][county] += nb_cases
     
-    return case_hist_list
+    return stock_dict
   
-  def makeAgeHistList(self, selection='latest'):
+  def saveCsv_incidenceMap(self):
+    stock_dict = self.makeStockDict_incidenceMap()
+    
+    ## Loop over page
+    for page, stock in stock_dict.items():
+      if 'latest' == page:
+        label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
+      else:
+        label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+    
+      ## Data for population & label
+      inv_dict = {dict_['tag']: code for code, dict_ in COUNTY_DICT.items()}
+      code_list = [inv_dict[county] for county in self.county_key_list]
+      population = [COUNTY_DICT[code]['population'] for code in code_list]
+      label_list_en = [COUNTY_DICT[code]['label'][0] for code in code_list]
+      label_list_fr = [COUNTY_DICT[code]['label'][1] for code in code_list]
+      label_list_zh = [COUNTY_DICT[code]['label'][2] for code in code_list]
+      
+      data_c = {'county': self.county_key_list}
+      data_c.update({label: case_hist.values() for label, case_hist in zip(label_list, stock)})
+      data_c = pd.DataFrame(data_c)
+      
+      data_p = {'county': self.county_key_list, 'code': code_list, 'population': population, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+      data_p = pd.DataFrame(data_p)
+      
+      ## Save
+      name = '%sprocessed_data/%s/incidence_map.csv' % (DATA_PATH, page)
+      saveCsv(name, data_c)
+      name = '%sprocessed_data/%s/incidence_map_population.csv' % (DATA_PATH, page)
+      saveCsv(name, data_p)
+    return
+
+  def makeStockDict_caseByAge(self):
     report_date_list = self.getReportDate()
     age_list = self.getAge()
     nb_cases_list = self.getNbCases()
     
+    ## Initialize stock dict
     case_hist = {age: 0 for age in self.age_key_list}
-    case_hist_list = [case_hist.copy() for i in range(13)]
+    stock = [case_hist.copy() for i in range(13)]
+    stock_dict = initializeStockDict_general(stock)
     
-    ord_today = dtt.date.today().toordinal() + 1
-    ord_end_2020 = ISODateToOrd('2020-12-31') + 1
-    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
-    
+    ## Loop over series
     for report_date, age, nb_cases in zip(report_date_list, age_list, nb_cases_list):
-      ord_rep = ISODateToOrd(report_date)
+      ind_latest = indexForLatest(report_date)
+      ind_2021 = indexFor2021(report_date)
+      ind_2020 = indexFor2020(report_date)
       
-      if 'latest' == selection and ord_rep + NB_LOOKBACK_DAYS < ord_today:
-        continue
-      
-      if '2020' == selection and ord_rep >= ord_end_2020:
-        continue
-      
-      if '2021' == selection and (ord_rep < ord_end_2020 or ord_rep >= ord_end_2021):
-        continue
-      
-      case_hist_list[0][age] += nb_cases
+      for ind, page, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.keys(), stock_dict.values()):
+        if ind == ind:
+          stock[0][age] += nb_cases
         
-      if 'latest' == selection:
-        lookback_week = (ord_rep - ord_today) // 7 ## ord_rep-ord_today in [-90, -1]; this will be in [-13, -1]
-        if lookback_week >= -12:
-          case_hist_list[-lookback_week][age] += nb_cases
-        
-      else:
-        mm = int(report_date[5:7])
-        case_hist_list[mm][age] += nb_cases
-    
-    return case_hist_list
+          if page == PAGE_LATEST:
+            lookback_week = (ind - NB_LOOKBACK_DAYS) // 7 ## ind - NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
+            if lookback_week >= -12:
+              stock[-lookback_week][age] += nb_cases
+          else:
+            mm = int(report_date[5:7])
+            stock[mm][age] += nb_cases
+            
+    return stock_dict
   
-  def saveCsv_localCasePerCounty(self, selection='latest'):
-    case_list_dict = self.makeCountyListDict(selection=selection)
-    data = pd.DataFrame(case_list_dict)
+  def saveCsv_caseByAge(self):
+    stock_dict = self.makeStockDict_caseByAge()
     
-    name = '%sprocessed_data/%s/local_case_per_county.csv' % (DATA_PATH, selection)
-    saveCsv(name, data)
-    return
-
-  def saveCsv_incidenceMap(self, selection='latest'):
-    case_hist_list = self.makeCountyHistList(selection=selection)
-    county_list = list(case_hist_list[0].keys())
-    
-    if 'latest' == selection:
-      label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
-    else:
-      label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
-    
-    data_1 = {'county': county_list}
-    data_1.update({label: case_hist.values() for label, case_hist in zip(label_list, case_hist_list)})
-    data_1 = pd.DataFrame(data_1)
-    
-    inv_dict = {dict_['tag']: code for code, dict_ in COUNTY_DICT.items()}
-    code_list = [inv_dict[county] for county in county_list]
-    population = [COUNTY_DICT[code]['population'] for code in code_list]
-    label_list_en = [COUNTY_DICT[code]['label'][0] for code in code_list]
-    label_list_fr = [COUNTY_DICT[code]['label'][1] for code in code_list]
-    label_list_zh = [COUNTY_DICT[code]['label'][2] for code in code_list]
-    
-    data_2 = {'county': county_list, 'code': code_list, 'population': population, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
-    data_2 = pd.DataFrame(data_2)
-    
-    name = '%sprocessed_data/%s/incidence_map.csv' % (DATA_PATH, selection)
-    saveCsv(name, data_1)
-    
-    name = '%sprocessed_data/%s/incidence_map_population.csv' % (DATA_PATH, selection)
-    saveCsv(name, data_2)
-    return
-
-  def saveCsv_caseByAge(self, selection='latest'):
-    case_hist_list = self.makeAgeHistList(selection=selection)
-    age_list = list(case_hist_list[0].keys())
-    
-    if 'latest' == selection:
-      label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
-    else:
-      label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
-    
-    data = {'age': age_list}
-    data.update({label: case_hist.values() for label, case_hist in zip(label_list, case_hist_list)})
-    data = pd.DataFrame(data)
-    
-    name = '%sprocessed_data/%s/case_by_age.csv' % (DATA_PATH, selection)
-    saveCsv(name, data)
+    ## Loop over page
+    for page, stock in stock_dict.items():
+      if 'latest' == page:
+        label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
+      else:
+        label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+      
+      data = {'age': self.age_key_list}
+      data.update({label: case_hist.values() for label, case_hist in zip(label_list, stock)})
+      data = pd.DataFrame(data)
+      
+      ## Save
+      name = '%sprocessed_data/%s/case_by_age.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
     return
 
   def saveCsv(self):
-    self.saveCsv_localCasePerCounty(selection='latest')
-    self.saveCsv_localCasePerCounty(selection='2020')
-    self.saveCsv_localCasePerCounty(selection='2021')
-    self.saveCsv_incidenceMap(selection='latest')
-    self.saveCsv_incidenceMap(selection='2020')
-    self.saveCsv_incidenceMap(selection='2021')
-    self.saveCsv_caseByAge(selection='latest')
-    self.saveCsv_caseByAge(selection='2020')
-    self.saveCsv_caseByAge(selection='2021')
+    self.saveCsv_localCasePerCounty()
+    self.saveCsv_incidenceMap()
+    self.saveCsv_caseByAge()
     return
   
 ################################################################################
@@ -2957,48 +2838,53 @@ class VaccinationSheet(Template):
   
   def getModerna(self):
     return [int(row[self.key_moderna]) for row in self.data['data']]
-  
-  def saveCsv_vaccinationByDay(self):
+   
+  def makeStockDict_vaccinationByBrand(self):
     date_list = self.getDate()
     az_list = self.getAZ()
     moderna_list = self.getModerna()
     
-    daily_vacc_list = self.getDailyVacc()
-    tot_vacc_list = self.getTotVacc()
+    ## Initialize stock dict
+    stock = {'index': [], 'date': [], 'AZ': [], 'Moderna': []}
+    stock_dict = initializeStockDict_general(stock)
     
+    ## Loop over day
+    for date, az, moderna in zip(date_list, az_list, moderna_list):
+      if 0 == az + moderna:
+        continue
+      
+      ind_latest = indexForLatest(date)
+      ind_2021 = indexFor2021(date)
+      ind_2020 = indexFor2020(date)
+      
+      for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.values()):
+        if ind == ind:
+          stock['index'].append(ind)
+          stock['date'].append(date)
+          stock['AZ'].append(az)
+          stock['Moderna'].append(moderna)
+          
+    return stock_dict
+      
+  def saveCsv_vaccinationByBrand(self):
+    stock_dict = self.makeStockDict_vaccinationByBrand()
     
-    #for date, az, moderna in zip(date_list, az_list, moderna_list):
-      #print(date, az, moderna)
-    
-    for date, daily_vacc, tot_vacc in zip(date_list, daily_vacc_list, tot_vacc_list):
-      print(date, daily_vacc, tot_vacc)
-    
-    #print(date_list)
-    #az_list = np.array(az_list, dtype=int)
-    #moderna_list = np.array(moderna_list, dtype=int)
-    #print(az_list)
-    
-    ## From cumulative to daily
-    #az_list = [j-i for i, j in zip([0]+az_list[:-1], az_list)]
-    #print(az_list)
-    
-    #date_arr, new_vax_arr, tot_vax_arr = self.makeUpdatedNew(county='total')
-    
-    #data = {'date': date_arr, 'updated_new': new_vax_arr, 'updated_tot': tot_vax_arr}
-    #data = pd.DataFrame(data)
-    
-    #name = '%sprocessed_data/2021/vaccination_by_brand.csv' % DATA_PATH
-    #saveCsv(name, data)
+    ## Loop over page
+    for page, stock in stock_dict.items():
+      if page == PAGE_2020:
+        continue
+      
+      data = pd.DataFrame(stock)
+      name = '%sprocessed_data/%s/vaccination_by_brand.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
     return
-
+    
   def saveCsv(self):
-    self.saveCsv_vaccinationByDay()
+    self.saveCsv_vaccinationByBrand()
     return
   
 ################################################################################
 ## Functions - cross-sheet operations
-
-import scipy.signal as signal
 
 def makeVariousRates(main_sheet, test_sheet, border_sheet):
   date_arr, nb_imp_arr, nb_indi_arr, nb_cases_arr = main_sheet.makeDailyCaseCounts()
@@ -3023,7 +2909,7 @@ def makeVariousRates(main_sheet, test_sheet, border_sheet):
   nb_tests_arr = signal.convolve(nb_tests_arr, kernel[::-1], mode='same')
   nb_arrival_arr = signal.convolve(nb_arrival_arr, kernel[::-1], mode='same')
   
-  population_twn = sum(v['population'] for v in COUNTY_DICT.values())
+  population_twn = sum(value['population'] for value in COUNTY_DICT.values())
   
   with warnings.catch_warnings(): ## Avoid division by zero
     warnings.simplefilter("ignore")
@@ -3045,15 +2931,13 @@ def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
   data = pd.DataFrame(data)
   
   data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
-  data_2020 = data.iloc[:366]
-  data_2021 = data.iloc[366:731]
+  data_2020 = data.iloc[RANGE_2020[0]:RANGE_2020[1]]
+  data_2021 = data.iloc[RANGE_2021[0]:RANGE_2021[1]]
   
   name = '%sprocessed_data/latest/various_rates.csv' % DATA_PATH
   saveCsv(name, data_latest)
-  
   name = '%sprocessed_data/2020/various_rates.csv' % DATA_PATH
   saveCsv(name, data_2020)
-  
   name = '%sprocessed_data/2021/various_rates.csv' % DATA_PATH
   saveCsv(name, data_2021)
   return
@@ -3064,7 +2948,7 @@ def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
 def sandbox():
   #main_sheet = MainSheet()
   #print(main_sheet.getReportDate())
-  #main_sheet.saveCsv_keyNb()
+  #main_sheet.saveCsv()
   
   #status_sheet = StatusSheet()
   #print(status_sheet.getCumHosp())
@@ -3084,11 +2968,11 @@ def sandbox():
   
   #county_sheet = CountySheet()
   #print(county_sheet)
-  #county_sheet.saveCsv_dailyCasePerCounty()
+  #county_sheet.saveCsv_caseByAge()
   
   vacc_sheet = VaccinationSheet()
   #print(vacc_sheet.makeUpdatedNew())
-  vacc_sheet.saveCsv_vaccinationByDay()
+  vacc_sheet.saveCsv_vaccinationByBrand()
   return
 
 ################################################################################

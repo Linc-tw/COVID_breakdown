@@ -11,9 +11,12 @@
 //`incidence_evolution_by_county.js` TODO
 //`incidence_evolution_by_age.js` TODO
 //`vaccination_by_brand.js` TODO
-//2020 & 2021 by week (data, plot, text)
-//7-day average for BS, TBC, CBT, DCPC
+//7-day average for BS, TBC, CBT, DCPC ?
 
+//Zh date xticklabels
+//ASC 100s 
+//Cut continuous data with index
+//2020 & 2021 by week (data, plot, text)
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
