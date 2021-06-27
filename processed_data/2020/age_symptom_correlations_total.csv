@@ -1,6 +1,7 @@
 label,count,label_zh,label_fr
 N_total,799,合計,Total
 N_data,688,有資料案例數,Données complètes
+>100s,0,>100歲,>100aine
 90s,1,90-99歲,90aine
 80s,3,80-89歲,80aine
 70s,18,70-79歲,70aine
@@ -10,8 +11,7 @@ N_data,688,有資料案例數,Données complètes
 30s,177,30-39歲,30aine
 20s,249,20-29歲,20aine
 10s,31,10-19歲,10aine
-100s,0,>100歲,100aine
-0s,5,<10歲,< 10 ans
+0s,5,<10歲,<10 ans
 cough,265,咳嗽,toux
 fever,245,發燒,fièvre
 sneezing,181,鼻腔症狀,éternuement
