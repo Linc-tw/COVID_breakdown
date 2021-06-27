@@ -35,7 +35,7 @@ function VBB_ResetText() {
   }
   
   else { //-- En
-    TT_AddStr("vaccination_by_brand_title", "Administrated Vaccins by Brand");
+    TT_AddStr("vaccination_by_brand_title", "Administrated Vaccines by Brand");
     TT_AddStr("vaccination_by_brand_text", "Incomplete data");
     TT_AddStr("vaccination_by_brand_button_1", "Daily");
     TT_AddStr("vaccination_by_brand_button_2", "Cumulative");
@@ -112,7 +112,7 @@ function VBB_FormatData(wrap, data) {
       if (wrap.do_cumul == 1)
         h_sum[j] = Math.max(height, h_sum[j]);
       else
-        h_sum[j] += height;
+        h_sum[j] += h_list[j]; //-- Add value anyway
       
       //-- Stock
       formatted_data.push(block);
@@ -390,9 +390,9 @@ function VBB_Replot(wrap) {
   //-- Define legend label
   var legend_label = ['AstraZeneca', 'Moderna'];
   if (GS_lang == 'zh-tw')
-    legend_label.push('合計');
+    legend_label.push('合計 '+TT_GetYearLabel(wrap));
   else
-    legend_label.push('Total');
+    legend_label.push('Total '+TT_GetYearLabel(wrap));
   
   //-- Remove from legend if value = 0
   var i;

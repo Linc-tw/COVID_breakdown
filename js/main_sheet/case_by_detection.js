@@ -409,7 +409,7 @@ function CBD_Replot(wrap) {
     .attr('height', function (d) {return y(d.y0)-y(d.y1);});
     
   //-- Define legend position
-  var legend_pos = {x: 70, y: 40, dx: 12, dy: 30, x1: 190};
+  var legend_pos = {x: 70, y: 40, dx: 10, dy: 30, x1: 190};
   if (wrap.cumul == 0) {
     if (wrap.legend_pos_x_0_i_[GS_lang] != 0)
       legend_pos.x = wrap.legend_pos_x_0_i_[GS_lang];
@@ -437,15 +437,15 @@ function CBD_Replot(wrap) {
   //-- Define legend label
   var legend_label, legend_label_plus;
   if (GS_lang == 'zh-tw') {
-    legend_label = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自費或自行就醫', '外國檢驗', '無檢驗管道資料', '合計'];
+    legend_label = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自費或自行就醫', '外國檢驗', '無檢驗管道資料', '合計 '+TT_GetYearLabel(wrap)];
     legend_label_plus = '無發病日資料';
   }
   else if (GS_lang == 'fr') {
-    legend_label = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', "À l'étranger", 'Pas annoncés', 'Total'];
+    legend_label = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', "À l'étranger", 'Pas annoncés', 'Total '+TT_GetYearLabel(wrap)];
     legend_label_plus = "Sans date début sympt.";
   }
   else {
-    legend_label = ["Airports", "Quarantine", "Isolation", "Monitoring", "Hospitals", 'Overseas', 'Not announced', 'Total'];
+    legend_label = ["Airports", "Quarantine", "Isolation", "Monitoring", "Hospitals", 'Overseas', 'Not announced', 'Total '+TT_GetYearLabel(wrap)];
     legend_label_plus = 'No onset date';
   }
   if (wrap.onset == 1)
@@ -473,6 +473,7 @@ function CBD_Replot(wrap) {
       .attr("y", function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
       .style("fill", function (d, i) {return legend_color_list[i];})
       .text(function (d) {return d;})
+      .style("font-size", '20px')
       .attr("text-anchor", "end")
   
   //-- Update legend label
@@ -487,6 +488,7 @@ function CBD_Replot(wrap) {
       .attr("y", function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
       .style("fill", function (d, i) {return legend_color_list[i];})
       .text(function (d) {return d;})
+      .style("font-size", '20px')
       .attr("text-anchor", "start")
 }
 

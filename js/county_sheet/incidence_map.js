@@ -319,20 +319,20 @@ function IM_Replot(wrap) {
   
   if (wrap.rate == 1) {
     if (GS_lang == 'zh-tw')
-      caption = ['每十萬人確診率'];
+      caption = ['每十萬人確診率 '+TT_GetYearLabel(wrap)];
     else if (GS_lang == 'fr')
-      caption = ["Taux d'incidence", 'par 100k habitants'];
+      caption = ["Taux d'incidence", 'par 100k habitants', TT_GetYearLabel(wrap)];
     else 
-      caption = ['Incidence rate', 'per 100k inhabitants'];
+      caption = ['Incidence rate', 'per 100k inhabitants', TT_GetYearLabel(wrap)];
   }
   else 
     if (GS_lang == 'zh-tw')
-      caption = ['確診案例數'];
+      caption = ['確診案例數 '+TT_GetYearLabel(wrap)];
     else if (GS_lang == 'fr')
-      caption = ['Nombre des cas confirmés'];
+      caption = ['Nombre des cas confirmés', TT_GetYearLabel(wrap)];
     else 
-      caption = ['Confirmed case counts'];
-  
+      caption = ['Confirmed case counts', TT_GetYearLabel(wrap)];
+    
   //-- Update legend caption
   wrap.svg.selectAll(".legend.caption")
     .remove()
@@ -345,7 +345,7 @@ function IM_Replot(wrap) {
       .attr("y", function (d, i) {return 580-(caption.length-1-i)*25;})
       .style("fill", '#000000')
       .text(function (d) {return d;})
-      .style("font-size", '18px')
+      .style("font-size", '20px')
       .attr("text-anchor", 'end');
 }
    

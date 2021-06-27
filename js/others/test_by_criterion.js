@@ -387,11 +387,11 @@ function TBC_Replot(wrap) {
   //-- Define legend label
   var legend_label;
   if (GS_lang == 'zh-tw')
-    legend_label = ["法定定義通報", "居家檢疫", "擴大社區監測", "合計"];
+    legend_label = ['法定定義通報', '居家檢疫', '擴大社區監測', '合計 '+TT_GetYearLabel(wrap)];
   else if (GS_lang == 'fr')
-    legend_label = ["Critères cliniques", "Quarantaine (fusionnée dans clinique)", "Recherche dans la communauté", "Total"];
+    legend_label = ['Critères cliniques', 'Quarantaine (fusionnée dans clinique)', 'Recherche dans la communauté', 'Total '+TT_GetYearLabel(wrap)];
   else
-    legend_label = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', "Total"];
+    legend_label = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', 'Total '+TT_GetYearLabel(wrap)];
   
   //-- Remove from legend if value = 0
   var i;

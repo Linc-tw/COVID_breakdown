@@ -381,15 +381,12 @@ function BS_Replot(wrap) {
   
   //-- Define legend label
   var legend_label;
-  if (GS_lang == 'zh-tw') {
-    legend_label = ["機場", "港口", "無細節", "合計"];
-  }
-  else if (GS_lang == 'fr') {
-    legend_label = ["Aéroports", "Ports maritimes", "Sans précisions", "Total"];
-  }
-  else {
-    legend_label = ["Airports", "Seaports", "Not specified", 'Total'];
-  }
+  if (GS_lang == 'zh-tw')
+    legend_label = ['機場', '港口', '無細節', '合計'];
+  else if (GS_lang == 'fr')
+    legend_label = ['Aéroports', 'Ports maritimes', 'Sans précisions', 'Total'];
+  else
+    legend_label = ['Airports', 'Seaports', 'Not specified', 'Total'];
   
   //-- Remove from legend if value = 0
   var i;

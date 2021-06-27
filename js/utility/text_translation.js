@@ -26,6 +26,29 @@ function TT_AddHtml(id, string) {
   }
 }
 
+//------------------------------------------------------------------------------
+//-- Function declarations - label
+
+function TT_GetYearLabel(wrap) {
+  if (wrap.tag.includes('2021'))
+    return '(2021)';
+  
+  if (wrap.tag.includes('2020'))
+    return '(2020)';
+  
+  if (wrap.tag.includes('latest')) {
+    if (GS_lang == 'zh-tw')
+      return '(近90日)';
+    
+    if (GS_lang == 'fr')
+      return '(90 jours)';
+    
+    return '(last 90 days)';
+  }
+  
+  return '';
+}
+
 //-- Text content
 function TT_FillText_Menu() {
   var str_title;
@@ -59,7 +82,7 @@ function TT_FillText_Menu() {
   
   else if (GS_lang == 'fr') {
     str_title = 'Statistiques de COVID-19 à Taïwan';
-    str_latest = 'Derniers 90 jours';
+    str_latest = '90 derniers jours';
     str_2021 = 'Stat 2021';
     str_2020 = 'Stat 2020';
     str_highlight = 'Mise au point';

@@ -160,19 +160,20 @@ function THSC_Plot(wrap) {
   wrap.svg.append('g')
     .attr('class', 'xaxis')
     .call(x_axis)
-    .selectAll("text")
-      .attr("transform", "translate(8,-5) rotate(-90)")
-      .style("text-anchor", "start");
+    .selectAll('text')
+      .attr('transform', 'translate(8,-5) rotate(-90)')
+      .style('font-size', '20px')
+      .style('text-anchor', 'start');
     
   //-- Define a 2nd x-axis for the frameline at bottom
   var x_axis_2 = d3.axisBottom(x)
     .tickSize(0)
-    .tickFormat("");
+    .tickFormat('');
   
   //-- Add 2nd x-axis
-  wrap.svg.append("g")
-    .attr("transform", "translate(0," + wrap.height + ")")
-    .attr("class", "xaxis")
+  wrap.svg.append('g')
+    .attr('transform', 'translate(0,' + wrap.height + ')')
+    .attr('class', 'xaxis')
     .call(x_axis_2);
   
   //-- Define y-axis
@@ -187,11 +188,12 @@ function THSC_Plot(wrap) {
     .tickFormat(function (d, i) {return wrap.yticklabel[i];});
   
   //-- Add y-axis
-  wrap.svg.append("g")
-    .attr("class", "yaxis")
+  wrap.svg.append('g')
+    .attr('class', 'yaxis')
     .call(y_axis)
-    .selectAll("text")
-      .attr("transform", "translate(-3,0)");
+    .selectAll('text')
+      .attr('transform', 'translate(-3,0)')
+      .style('font-size', '20px');
 
   //-- Define a 2nd y-axis for the frameline at right
   var y_axis_2 = d3.axisRight(y)
@@ -229,6 +231,7 @@ function THSC_Plot(wrap) {
       .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
       .style("fill", function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
+      .style("font-size", '20px')
       .attr("text-anchor", "end");
   
   //-- Add square
@@ -245,7 +248,7 @@ function THSC_Plot(wrap) {
       .attr("height", y.bandwidth())
       .style("fill", function (d) {return color(d['value']);})
       .on("mouseover", function (d) {GS_MouseOver2(wrap, d);})
-      .on("mouseleave", function (d) {GS_MouseLeave2(wrap, d);})
+      .on("mouseleave", function (d) {GS_MouseLeave2(wrap, d);});
     
   //-- Add text
   wrap.svg.selectAll()
@@ -258,7 +261,7 @@ function THSC_Plot(wrap) {
       .style("fill", function (d) {if (Math.abs(d['value'])<0.205) return '#000000'; return '#FFFFFF';})
       .text(function (d) {return d['label'];})
       .attr("text-anchor", "middle")
-      .attr("dominant-baseline", "central")
+      .attr("dominant-baseline", "central");
   
   //-- Save to wrapper
   wrap.x = x;
@@ -271,11 +274,11 @@ function THSC_Replot(wrap) {
   //-- Define legend label
   var legend_label;
   if (GS_lang == 'zh-tw')
-    legend_label = ['有資料案例數', '資料不全', '無旅遊史', '合計'];
+    legend_label = ['有資料案例數', '資料不全', '無旅遊史', '合計 '+TT_GetYearLabel(wrap)];
   else if (GS_lang == 'fr')
-    legend_label = ['Données complètes', 'Données incomplètes', 'Sans anté. de voyage', 'Total'];
+    legend_label = ['Données complètes', 'Données incomplètes', 'Sans anté. de voyage', 'Total '+TT_GetYearLabel(wrap)];
   else
-    legend_label = ['Data complete', 'Data incomplete', 'No travel history', 'Total'];
+    legend_label = ['Data complete', 'Data incomplete', 'No travel history', 'Total '+TT_GetYearLabel(wrap)];
   
   //-- Update text
   wrap.svg.selectAll(".content.text")
@@ -287,10 +290,10 @@ function THSC_Replot(wrap) {
       .attr("class", "content text")
       .attr("x", function (d) {return wrap.x(d['symptom']) + 0.5*+wrap.x.bandwidth();})
       .attr("y", function (d) {return wrap.y(d['trav_hist']) + 0.5*+wrap.y.bandwidth();})
-      .style("fill", function (d) {if (Math.abs(d['value'])<0.205) return '#000'; return '#fff';})
+      .style("fill", function (d) {if (Math.abs(d['value'])<0.205) return '#000000'; return '#FFFFFF';})
       .text(function (d) {return d['label'];})
       .attr("text-anchor", "middle")
-      .attr("dominant-baseline", "central")
+      .attr("dominant-baseline", "central");
   
   //-- Update legend label
   wrap.svg.selectAll(".legend.label")
@@ -304,7 +307,8 @@ function THSC_Replot(wrap) {
       .attr("y", function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy;})
       .style("fill", function (d, i) {return wrap.legend_color[i];})
       .text(function (d) {return d;})
-      .attr("text-anchor", "start")
+      .style("font-size", '20px')
+      .attr("text-anchor", "start");
 }
 
 //-- Load

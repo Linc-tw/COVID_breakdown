@@ -13,7 +13,7 @@ var THSC_latest_wrap = {
     'processed_data/latest/travel_history_symptom_correlations_total.csv',
   ],
 
-  legend_pos_x: 65,
+  legend_pos_x: 70,
 };
 
 var THSC_2021_wrap = {
@@ -24,7 +24,7 @@ var THSC_2021_wrap = {
     'processed_data/2021/travel_history_symptom_correlations_total.csv',
   ],
 
-  legend_pos_x: 65,
+  legend_pos_x: 70,
 };
 
 var THSC_2020_wrap = {

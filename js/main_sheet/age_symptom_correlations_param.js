@@ -13,7 +13,7 @@ var ASC_latest_wrap = {
     'processed_data/latest/age_symptom_correlations_total.csv'
   ],
 
-  legend_pos_x: 65,
+  legend_pos_x: 70,
 };
 
 var ASC_2021_wrap = {
@@ -24,7 +24,7 @@ var ASC_2021_wrap = {
     'processed_data/2021/age_symptom_correlations_total.csv'
   ],
 
-  legend_pos_x: 65,
+  legend_pos_x: 70,
 };
 
 var ASC_2020_wrap = {

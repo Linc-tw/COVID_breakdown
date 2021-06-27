@@ -436,15 +436,15 @@ function CBT_Replot(wrap) {
   //-- Define legend label
   var legend_label, legend_label_plus;
   if (GS_lang == 'zh-tw') {
-    legend_label = ["境外移入", "本土感染源已知", "本土感染源未知", '敦睦艦隊', '航空器', '未知', "合計"];
+    legend_label = ['境外移入', '本土感染源已知', '本土感染源未知', '敦睦艦隊', '航空器', '未知', '合計 '+TT_GetYearLabel(wrap)];
     legend_label_plus = '無發病日資料';
   }
   else if (GS_lang == 'fr') {
-    legend_label = ["Importés", "Locaux & lien connu", "Locaux & lien inconnu", "En bateau", "En avion", "Inconnus", "Total"];
-    legend_label_plus = "Sans date début sympt.";
+    legend_label = ['Importés', 'Locaux & lien connu', 'Locaux & lien inconnu', 'En bateau', 'En avion', 'Inconnus', 'Total '+TT_GetYearLabel(wrap)];
+    legend_label_plus = 'Sans date début sympt.';
   }
   else {
-    legend_label = ["Imported", "Local & linked", "Local & unlinked", 'On boat', "On plane", "Unknown", "Total"];
+    legend_label = ['Imported', 'Local & linked', 'Local & unlinked', 'On boat', 'On plane', 'Unknown', 'Total '+TT_GetYearLabel(wrap)];
     legend_label_plus = 'No onset date';
   }
   if (wrap.onset == 1)

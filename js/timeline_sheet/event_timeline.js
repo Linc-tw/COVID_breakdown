@@ -8,9 +8,9 @@
 function ET_InitFig(wrap) {
   wrap.tot_width = 1200;
   wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 720;
-  wrap.tot_height_['fr'] = 720;
-  wrap.tot_height_['en'] = 720;
+  wrap.tot_height_['zh-tw'] = 920;
+  wrap.tot_height_['fr'] = 920;
+  wrap.tot_height_['en'] = 920;
   wrap.margin_ = {};
   wrap.margin_['zh-tw'] = {left: 0, right: 0, bottom: 0, top: 0};
   wrap.margin_['fr'] = {left: 0, right: 0, bottom: 0, top: 0};

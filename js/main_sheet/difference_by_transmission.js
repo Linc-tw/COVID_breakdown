@@ -363,11 +363,11 @@ function DBT_Replot(wrap) {
   //-- Define legend label
   var legend_label;
   if (GS_lang == 'zh-tw')
-    legend_label = ['有資料案例數', "境外移入", "本土", '其他', '資料不全', '合計'];
+    legend_label = ['有資料案例數', "境外移入", "本土", '其他', '資料不全', '合計 '+TT_GetYearLabel(wrap)];
   else if (GS_lang == 'fr')
-    legend_label = ['Données complètes', "Importés", "Locaux", 'Divers', 'Données incomplètes', 'Total'];
+    legend_label = ['Données complètes', "Importés", "Locaux", 'Divers', 'Données incomplètes', 'Total '+TT_GetYearLabel(wrap)];
   else 
-    legend_label = ['Data complete', 'Imported', 'Local', 'Others', 'Data incomplete', 'Total'];
+    legend_label = ['Data complete', 'Imported', 'Local', 'Others', 'Data incomplete', 'Total '+TT_GetYearLabel(wrap)];
   
   //-- Update legend color, label, & value
   var legend_color_list, legend_label_2, legend_value_2;
