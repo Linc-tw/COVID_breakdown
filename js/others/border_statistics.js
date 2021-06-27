@@ -53,22 +53,26 @@ function BS_FormatData(wrap, data) {
   var xticklabel = [];
   
   //-- Variables for data
-  var col_tag_list = data.columns.slice(1);
+  var col_tag_list = data.columns.slice(1); //-- 0 = date
   var nb_col = col_tag_list.length;
-  var date_list = [];
-  var formatted_data = [];
+  var x_list = []; //-- For date
+  var row;
+  
+  //-- Variables for bar
+  var y_max = 0;
+  var h, h_list;
   
   //-- Other variables
-  var y_max = 0;
-  var i, j, x, y, row, height, h_list, block;
+  var formatted_data = [];
+  var i, j, x, y, block;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
     h_list = [];
-    x = row["date"];
+    x = row['date'];
     y = 0;
-    date_list.push(x);
+    x_list.push(x);
     
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
@@ -83,19 +87,19 @@ function BS_FormatData(wrap, data) {
     //-- Loop over column again (reversed order)
     for (j=nb_col-1; j>=0; j--) {
       //-- Current value
-      height = h_list[j];
+      h = h_list[j];
       
       //-- Make data block
       block = {
         'x': x,
         'y0': y,
-        'y1': y+height,
+        'y1': y+h,
         'h_list': h_list.slice(),
         'col': col_tag_list[j]
       };
         
       //-- Update total height
-      y += height;
+      y += h;
       
       //-- Stock
       formatted_data.push(block);
@@ -148,12 +152,12 @@ function BS_FormatData(wrap, data) {
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
-  wrap.date_list = date_list;
   wrap.col_tag_list = col_tag_list;
   wrap.nb_col = nb_col;
-  wrap.y_max = y_max;
+  wrap.x_list = x_list;
   wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
+  wrap.y_max = y_max;
   wrap.ytick = ytick;
   wrap.last_date = last_date;
   wrap.legend_value = legend_value;
@@ -203,83 +207,69 @@ function BS_MouseMove(wrap, d) {
 }
 
 function BS_Plot(wrap) {
-  //-- Define x-axis
-  var x = d3.scaleBand()
-    .domain(wrap.date_list)
+  //-- Define xscale
+  var xscale = d3.scaleBand()
+    .domain(wrap.x_list)
     .range([0, wrap.width])
     .padding(0.2);
     
-  //-- No xtick or xticklabel 
-  var x_axis = d3.axisBottom(x)
-    .tickSize(0)
-    .tickFormat("");
+  //-- Define xscale_2 for xtick & xticklabel
+  var eps = 0.1
+  var xscale_2 = d3.scaleLinear()
+    .domain([-eps, wrap.x_list.length+eps])
+    .range([0, wrap.width]);
   
-  //-- Add x-axis & adjust position
+  //-- Define xaxis & update xtick or xticklabel later
+  var xaxis = d3.axisBottom(xscale_2)
+    .tickSize(0)
+    .tickFormat('');
+  
+  //-- Add xaxis & adjust position
   wrap.svg.append('g')
     .attr('class', 'xaxis')
     .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(x_axis)
+    .call(xaxis);
     
-  //-- Define a 2nd x-axis for xtick & xticklabel
-  var eps = 0.1
-  var x_2 = d3.scaleLinear()
-    .domain([-eps, wrap.date_list.length+eps])
-    .range([0, wrap.width])
-  
-  //-- Define xtick & update xticklabel later
-  var x_axis_2 = d3.axisBottom(x_2)
-    .tickSize(10)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xtick)
-    .tickFormat("");
-  
-  //-- Add 2nd x-axis & adjust position
-  wrap.svg.append("g")
-    .attr("class", "xaxis")
-    .attr("transform", "translate(0," + wrap.height + ")")
-    .call(x_axis_2);
-  
-  //-- Define y-axis
-  var y = d3.scaleLinear()
+  //-- Define yscale
+  var yscale = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
-  //-- Define ytick & yticklabel
-  var y_axis = d3.axisLeft(y)
+  //-- Define yaxis for ytick & yticklabel
+  var yaxis = d3.axisLeft(yscale)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
-    .tickFormat(d3.format("d"));
+    .tickFormat(d3.format('d'));
   
-  //-- Add y-axis
-  wrap.svg.append("g")
-    .attr("class", "yaxis")
-    .call(y_axis);
+  //-- Add yaxis
+  wrap.svg.append('g')
+    .attr('class', 'yaxis')
+    .call(yaxis);
 
-  //-- Define a 2nd y-axis for the frameline at right
-  var y_axis_2 = d3.axisRight(y)
+  //-- Define yaxis_2 for the frameline at right
+  var yaxis_2 = d3.axisRight(yscale)
     .ticks(0)
     .tickSize(0);
   
-  //-- Add 2nd y-axis
-  wrap.svg.append("g")
-    .attr("class", "yaxis")
-    .attr("transform", "translate(" + wrap.width + ",0)")
-    .call(y_axis_2);
+  //-- Add yaxis_2 & adjust position
+  wrap.svg.append('g')
+    .attr('class', 'yaxis')
+    .attr('transform', 'translate(' + wrap.width + ',0)')
+    .call(yaxis_2);
     
   //-- Add ylabel & update value later
-  wrap.svg.append("text")
-    .attr("class", "ylabel")
-    .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)");
+  wrap.svg.append('text')
+    .attr('class', 'ylabel')
+    .attr('text-anchor', 'middle')
+    .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (wrap.height/2).toString() + ')rotate(-90)');
     
   //-- Add tooltip
   GS_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GS_wrap.c_list.slice(10, 10+wrap.nb_col);
-  var col_tag_list = wrap.col_tag_list.slice();
+  var color_list = GS_wrap.c_list.concat(GS_wrap.c_list).slice(10, 10+wrap.nb_col);
   var color = d3.scaleOrdinal()
-    .domain(col_tag_list)
+    .domain(wrap.col_tag_list)
     .range(color_list);
   
   //-- Add bar
@@ -291,60 +281,60 @@ function BS_Plot(wrap) {
   bar.append('rect')
     .attr('class', 'content bar')
     .attr('fill', function (d) {return color(d.col);})
-    .attr('x', function (d) {return x(d.x);})
-    .attr('y', y(0))
-    .attr('width', x.bandwidth())
+    .attr('x', function (d) {return xscale(d.x);})
+    .attr('y', yscale(0))
+    .attr('width', xscale.bandwidth())
     .attr('height', 0)
-    .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
-    .on("mousemove", function (d) {BS_MouseMove(wrap, d);})
-    .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
+    .on('mouseover', function (d) {GS_MouseOver(wrap, d);})
+    .on('mousemove', function (d) {BS_MouseMove(wrap, d);})
+    .on('mouseleave', function (d) {GS_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
-  wrap.x_2 = x_2;
+  wrap.xscale_2 = xscale_2;
   wrap.color_list = color_list;
   wrap.bar = bar;
 }
 
 function BS_Replot(wrap) {
-  //-- Define new xticklabel
-  var x_axis_2 = d3.axisBottom(wrap.x_2)
+  //-- Define new xaxis for xticklabel
+  var xaxis = d3.axisBottom(wrap.xscale_2)
     .tickSize(10)
     .tickSizeOuter(0)
     .tickValues(wrap.xtick)
     .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
   
-  //-- Update 2nd x-axis
+  //-- Update xaxis
   wrap.svg.select('.xaxis')
     .transition()
     .duration(wrap.trans_delay)
-    .call(x_axis_2)
-    .selectAll("text")
-      .attr("transform", "translate(-20,15) rotate(-90)")
-      .style("text-anchor", "end");
+    .call(xaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(-20,15) rotate(-90)')
+      .style('text-anchor', 'end');
   
-  //-- Define y-axis
-  var y = d3.scaleLinear()
+  //-- Define new yscale
+  var yscale = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
-  //-- Decide yticklabel format
+  //-- Define yticklabel format
   var yticklabel_format;
   if (wrap.ytick[wrap.ytick.length-1] > 9999) 
-    yticklabel_format = ".2s";
+    yticklabel_format = '.2s';
   else
-    yticklabel_format = "d";
+    yticklabel_format = 'd';
   
-  //-- Define ytick
-  var y_axis = d3.axisLeft(y)
+  //-- Define new yaxis for ytick
+  var yaxis = d3.axisLeft(yscale)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
     .tickFormat(d3.format(yticklabel_format));
   
-  //-- Update y-axis
+  //-- Update yaxis
   wrap.svg.select('.yaxis')
     .transition()
     .duration(wrap.trans_delay)
-    .call(y_axis);
+    .call(yaxis);
   
   //-- Define ylabel
   var ylabel;
@@ -364,8 +354,8 @@ function BS_Replot(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(wrap.trans_delay)
-    .attr('y', function (d) {return y(d.y1);})
-    .attr('height', function (d) {return y(d.y0)-y(d.y1);});
+    .attr('y', function (d) {return yscale(d.y1);})
+    .attr('height', function (d) {return yscale(d.y0)-yscale(d.y1);});
     
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -399,18 +389,18 @@ function BS_Replot(wrap) {
   }
   
   //-- Update legend value
-  wrap.svg.selectAll(".legend.value")
+  wrap.svg.selectAll('.legend.value')
     .remove()
     .exit()
     .data(legend_value)
     .enter()
-    .append("text")
-      .attr("class", "legend value")
-      .attr("x", legend_pos.x)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style("fill", function (d, i) {return legend_color_list[i];})
+    .append('text')
+      .attr('class', 'legend value')
+      .attr('x', legend_pos.x)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color_list[i];})
       .text(function (d) {return d;})
-      .attr("text-anchor", "end")
+      .attr('text-anchor', 'end')
   
   //-- Update legend label
   wrap.svg.selectAll(wrap.id+'_legend_label')
@@ -418,14 +408,14 @@ function BS_Replot(wrap) {
     .exit()
     .data(legend_label)
     .enter()
-    .append("text")
-      .attr("id", wrap.tag+"_legend_label")
-      .attr("class", "legend label")
-      .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style("fill", function (d, i) {return legend_color_list[i];})
+    .append('text')
+      .attr('id', wrap.tag+'_legend_label')
+      .attr('class', 'legend label')
+      .attr('x', legend_pos.x+legend_pos.dx)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color_list[i];})
       .text(function (d) {return d;})
-      .attr("text-anchor", "start")
+      .attr('text-anchor', 'start')
   
   //-- Define legend title
   var legend_title;
@@ -442,14 +432,14 @@ function BS_Replot(wrap) {
     .exit()
     .data(legend_title)
     .enter()
-    .append("text")
-      .attr("id", wrap.tag+"_legend_title")
-      .attr("class", "legend label")
-      .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", legend_pos.y+(legend_value.length+0.25)*legend_pos.dy)
-      .style("fill", '#000000')
+    .append('text')
+      .attr('id', wrap.tag+'_legend_title')
+      .attr('class', 'legend label')
+      .attr('x', legend_pos.x+legend_pos.dx)
+      .attr('y', legend_pos.y+(legend_value.length+0.25)*legend_pos.dy)
+      .style('fill', '#000000')
       .text(function (d) {return d;})
-      .attr("text-anchor", "start")
+      .attr('text-anchor', 'start')
 }
 
 //-- Load

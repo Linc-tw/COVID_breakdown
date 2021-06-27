@@ -41,22 +41,23 @@ function VR_FormatData(wrap, data) {
   var xticklabel = [];
   
   //-- Variables for data
-  var col_tag_list = data.columns.slice(1);
+  var col_tag_list = data.columns.slice(1); //-- 0 = date
   var nb_col = col_tag_list.length;
-  var date_list = [];
-  var formatted_data = [];
+  var x_list = []; //-- For date
+  var row;
   
   //-- Other variables
-  var y_max = 0;
+  var formatted_data = [];
   var y_list_list = [];
-  var i, j, x, y, row, y_list, block;
+  var y_max = 0;
+  var i, j, x, y, y_list, block;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
     y_list = [];
     x = row['date'];
-    date_list.push(x);
+    x_list.push(x);
     
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
@@ -119,12 +120,12 @@ function VR_FormatData(wrap, data) {
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
-  wrap.date_list = date_list;
   wrap.col_tag_list = col_tag_list;
   wrap.nb_col = nb_col;
-  wrap.y_max = y_max;
+  wrap.x_list = x_list;
   wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
+  wrap.y_max = y_max;
   wrap.ytick = ytick;
 }
 
@@ -158,94 +159,81 @@ function VR_MouseMove(wrap, d) {
 }
 
 function VR_Plot(wrap) {
-  //-- Define x-axis
-  var x = d3.scalePoint()
-    .domain(wrap.date_list)
+  //-- Define xscale
+  var xscale = d3.scaleBand()
+    .domain(wrap.x_list)
     .range([0, wrap.width])
-    .padding(0.5);
+    .padding(0.2);
     
-  //-- No xtick or xticklabel 
-  var x_axis = d3.axisBottom(x)
-    .tickSize(0)
-    .tickFormat("");
+  //-- Define xscale_2 for xtick & xticklabel
+  var eps = 0.1
+  var xscale_2 = d3.scaleLinear()
+    .domain([-eps, wrap.x_list.length+eps])
+    .range([0, wrap.width]);
   
-  //-- Add x-axis & adjust position
+  //-- Define xaxis & update xtick or xticklabel later
+  var xaxis = d3.axisBottom(xscale_2)
+    .tickSize(0)
+    .tickFormat('');
+  
+  //-- Add xaxis & adjust position
   wrap.svg.append('g')
     .attr('class', 'xaxis')
     .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(x_axis)
+    .call(xaxis);
     
-  //-- Define a 2nd x-axis for xtick & xticklabel
-  var x_2 = d3.scaleLinear()
-    .domain([0, wrap.date_list.length])
-    .range([0, wrap.width])
-  
-  //-- Define xtick & update xticklabel later
-  var x_axis_2 = d3.axisBottom(x_2)
-    .tickSize(12)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xtick)
-    .tickFormat("");
-  
-  //-- Add 2nd x-axis & adjust position
-  wrap.svg.append("g")
-    .attr("class", "xaxis")
-    .attr("transform", "translate(0," + wrap.height + ")")
-    .call(x_axis_2)
-  
-  //-- Define y-axis
-  var y = d3.scaleLinear()
+  //-- Define yscale
+  var yscale = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
-  //-- Define ytick & yticklabel
-  var y_axis = d3.axisLeft(y)
+  //-- Define yaxis for ytick & yticklabel
+  var yaxis = d3.axisLeft(yscale)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
     .tickFormat(d3.format(".0%"));
   
-  //-- Add y-axis
-  wrap.svg.append("g")
-    .attr("class", "yaxis")
-    .call(y_axis)
+  //-- Add yaxis
+  wrap.svg.append('g')
+    .attr('class', 'yaxis')
+    .call(yaxis);
 
-  //-- Define a 2nd y-axis for the frameline at right
-  var y_axis_2 = d3.axisRight(y)
+  //-- Define yaxis_2 for the frameline at right
+  var yaxis_2 = d3.axisRight(yscale)
     .ticks(0)
     .tickSize(0);
   
-  //-- Add 2nd y-axis
-  wrap.svg.append("g")
-    .attr("class", "yaxis")
-    .attr("transform", "translate(" + wrap.width + ",0)")
-    .call(y_axis_2);
+  //-- Add yaxis_2 & adjust position
+  wrap.svg.append('g')
+    .attr('class', 'yaxis')
+    .attr('transform', 'translate(' + wrap.width + ',0)')
+    .call(yaxis_2);
     
   //-- Add ylabel & update value later
-  wrap.svg.append("text")
-    .attr("class", "ylabel")
-    .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)");
+  wrap.svg.append('text')
+    .attr('class', 'ylabel')
+    .attr('text-anchor', 'middle')
+    .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (wrap.height/2).toString() + ')rotate(-90)');
     
   //-- Add tooltip
   GS_MakeTooltip(wrap);
   
   //-- Define color
   var color_list = GS_wrap.c_list.slice(3, 3+wrap.nb_col);
-  var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
-    .domain(col_tag_list)
+    .domain(wrap.col_tag_list)
     .range(color_list);
   
   //-- Define dummy line
   var draw_line_0 = d3.line()
-    .x(function (d) {return x(d.x);})
-    .y(y(0));
+    .x(function (d) {return xscale(d.x);})
+    .y(yscale(0));
     
   //-- Define real line
   var draw_line = d3.line()
     .defined(d => !isNaN(d.y))//-- Don't show line if NaN
-    .x(function (d) {return x(d.x);})
-    .y(function (d) {return y(d.y);});
+    .x(function (d) {return xscale(d.x);})
+    .y(function (d) {return yscale(d.y);});
   
   //-- Add line
   var line = wrap.svg.selectAll('.content.line')
@@ -267,21 +255,21 @@ function VR_Plot(wrap) {
     
   //-- Update dot with dummy details
   dot.append('g')
-    .style("fill", function (d) {return color(d.col);})
-    .selectAll(".content.dot")
+    .style('fill', function (d) {return color(d.col);})
+    .selectAll('.content.dot')
     .data(function (d) {return d.values;})
     .enter()
-    .append("circle")
+    .append('circle')
       .attr('class', 'content dot')
-      .attr("cx", function (d) {return x(d.x);})
-      .attr("cy", function (d) {return y(d.y);})
-      .attr("r", 0)
-      .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
-      .on("mousemove", function (d) {VR_MouseMove(wrap, d);})
-      .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);});
+      .attr('cx', function (d) {return xscale(d.x);})
+      .attr('cy', function (d) {return yscale(d.y);})
+      .attr('r', 0)
+      .on('mouseover', function (d) {GS_MouseOver(wrap, d);})
+      .on('mousemove', function (d) {VR_MouseMove(wrap, d);})
+      .on('mouseleave', function (d) {GS_MouseLeave(wrap, d);});
       
   //-- Save to wrapper
-  wrap.x_2 = x_2;
+  wrap.xscale_2 = xscale_2;
   wrap.color_list = color_list;
   wrap.draw_line = draw_line;
   wrap.line = line;
@@ -289,38 +277,38 @@ function VR_Plot(wrap) {
 }
 
 function VR_Replot(wrap) {
-  //-- Define new xticklabel
-  var x_axis_2 = d3.axisBottom(wrap.x_2)
+  //-- Define new xaxis for xticklabel
+  var xaxis = d3.axisBottom(wrap.xscale_2)
     .tickSize(10)
     .tickSizeOuter(0)
     .tickValues(wrap.xtick)
     .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
   
-  //-- Update 2nd x-axis
+  //-- Update xaxis
   wrap.svg.select('.xaxis')
     .transition()
     .duration(GS_wrap.trans_delay)
-    .call(x_axis_2)
-    .selectAll("text")
-      .attr("transform", "translate(-20,15) rotate(-90)")
-      .style("text-anchor", "end");
+    .call(xaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(-20,15) rotate(-90)')
+      .style('text-anchor', 'end');
   
-  //-- Define y-axis
-  var y = d3.scaleLinear()
+  //-- Define new yscale
+  var yscale = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
-  //-- Define ytick
-  var y_axis = d3.axisLeft(y)
+  //-- Define new yaxis for ytick
+  var yaxis = d3.axisLeft(yscale)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
-    .tickFormat(d3.format(".0%"));
+    .tickFormat(d3.format('.0%'));
   
-  //-- Update y-axis
+  //-- Update yaxis
   wrap.svg.select('.yaxis')
     .transition()
     .duration(GS_wrap.trans_delay)
-    .call(y_axis);
+    .call(yaxis);
   
   //-- Define ylabel
   var ylabel;
@@ -332,7 +320,7 @@ function VR_Replot(wrap) {
     ylabel = 'Rate';
   
   //-- Update ylabel
-  wrap.svg.select(".ylabel")
+  wrap.svg.select('.ylabel')
     .text(ylabel);
     
   //-- Update line

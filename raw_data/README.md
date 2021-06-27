@@ -5,7 +5,7 @@ raw_data/
 Data sources
 ------------
 
-At this stage, this website collects data from 2 sources. 
+At this stage, this website collects data from 3 sources. 
 
 The principle source is a [Google Spreadsheet](https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#)
 maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit. 
@@ -14,19 +14,21 @@ They also collect fragmental information from daily press releases and conferenc
 
 Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.
 
-The second source is Taiwan CDC's [official data platform](https://data.cdc.gov.tw/zh_TW/), which unfortunately doesn't provide many meaningful datasets.
+The second source is Taiwan Centers for Disease Control (CDC)'s [official data platform](https://data.cdc.gov.tw/zh_TW/), which unfortunately doesn't provide many meaningful datasets.
 This is why the principle source is not the offical one.
 
-Both sources provide data in Mandarin.
+The third source is National Center for High-performance Computing (NCHC)'s [dashboard](https://covid-19.nchc.org.tw/index.php). The site redistributes ephemeral official data, possibly also by crawling. 
+
+All sources provide data in Mandarin.
 
 
 Raw data
 --------
 
-Raw data are a subset of files or spreadsheets from 2 data sources mentioned earlier
+Raw data are a subset of files or spreadsheets from 3 data sources mentioned earlier
 that have been used by this website.
 
-There are 6 `csv` files at this stage. 
+There are 6 `csv` files & 1 `json` file at this stage. 
 The main one is a list of every single confirmed cases with their epidemiological details.
 
 These files contain abundant Mandarin strings.
@@ -56,9 +58,16 @@ Contents
 `COVID-19_in_Taiwan_raw_data_timeline.csv`
 - Timeline of major pandemic events for Taiwan & the world
 
-### From the official data platform
+### From CDC' official data platform
 
 `COVID-19_in_Taiwan_raw_data_county_age.csv`
 - Table of confirmed cases as were reported by local health authorities
 - Contains report date, county/city, village/district, gender, age, whether imported, & number of cases
 - Downloaded from [here](https://data.cdc.gov.tw/zh_TW/dataset/aagsdctable-day-19cov)
+
+### From NCHC's dashboard
+
+`COVID-19_in_Taiwan_raw_data_vaccination.json`
+- Table of administrated doses of different vaccine brands
+- Downloaded from [here](https://covid-19.nchc.org.tw/dt_002-csse_covid_19_daily_reports_vaccine.php?countryCode=TW/taiwan)
+

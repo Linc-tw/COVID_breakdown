@@ -1043,7 +1043,7 @@ class MainSheet(Template):
         '疲倦感', '倦怠情', '體力差', '沒精神', '倦怠', '疲憊', '疲倦', '疲勞', '疲累', '無力', '虛弱'
       ],
       'soreness': [
-        '全身肌肉痠痛', '上半身骨頭刺痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉關節痠痛', '肌肉 痠痛', '肌肉酸痛', '肌肉痠痛', '肩膀痠痛', 
+        '全身肌肉痠痛', '上半身骨頭刺痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉關節痠痛', '手部肌肉痠痛', '肌肉 痠痛', '肌肉酸痛', '肌肉痠痛', '肩膀痠痛', 
         '全身痠痛', '全身酸痛', '骨頭痠痛', '骨頭酸痛', '關節痠痛', '身體痠痛', '肌肉痛', '骨頭酸', '關節痛', '身體痛', '痠痛'
       ],
       'hypersomnia': ['嗜睡'],
@@ -2748,10 +2748,58 @@ class CountySheet(Template):
       saveCsv(name, data)
     return
 
+  def makeStock1_incidenceEvolutionByCounty(self):
+    report_date_list = self.getReportDate()
+    county_list = self.getCounty()
+    nb_cases_list = self.getNbCases()
+    
+    ## Initialize stock dict
+    stock_dict = initializeStockDict_dailyCounts(self.county_key_list)
+    stock = stock_dict[PAGE_LATEST]
+    
+    ## Loop over series
+    for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):
+      if 'unknown' == county:
+        continue
+      
+      ind_latest = indexForLatest(report_date)
+      
+      try:
+        stock[county][ind_latest] += nb_cases
+      except IndexError:
+        pass
+    return stock
+  
+  def makeStock2_incidenceEvolutionByCounty(self):
+    stock = self.makeStock1_incidenceEvolutionByCounty()
+    population_dict = {county['tag']: county['population'] * 0.00001 for code, county in COUNTY_DICT.items()}
+    nb_lookback_days = 60
+    
+    for county, nb_cases_arr in stock.items():
+      if 'date' == county:
+        stock[county] = nb_cases_arr[-nb_lookback_days:]
+        continue
+      
+      nb_cases_arr = nb_cases_arr.astype(float)
+      kernel = [1.0] * 7 + [0.0] * 6 ## Sum not mean
+      nb_cases_arr = signal.convolve(nb_cases_arr, kernel[::-1], mode='same')
+      nb_cases_arr = nb_cases_arr[-nb_lookback_days:] / population_dict[county]
+      stock[county] = np.around(nb_cases_arr, decimals=2)
+      
+    return stock
+  
+  def saveCsv_incidenceEvolutionByCounty(self):
+    stock = self.makeStock2_incidenceEvolutionByCounty()
+    data = pd.DataFrame(stock)
+    name = '%sprocessed_data/%s/incidence_evolution_by_county.csv' % (DATA_PATH, PAGE_LATEST)
+    saveCsv(name, data)
+    return
+  
   def saveCsv(self):
     self.saveCsv_localCasePerCounty()
-    self.saveCsv_incidenceMap()
     self.saveCsv_caseByAge()
+    self.saveCsv_incidenceMap()
+    self.saveCsv_incidenceEvolutionByCounty()
     return
   
 ################################################################################
@@ -2994,13 +3042,13 @@ def sandbox():
   #print(timeline_sheet.saveCriteria())
   #timeline_sheet.saveCsv_evtTimeline()
   
-  #county_sheet = CountySheet()
+  county_sheet = CountySheet()
   #print(county_sheet)
-  #county_sheet.saveCsv_caseByAge()
+  county_sheet.saveCsv_incidenceEvolutionByCounty()
   
-  vacc_sheet = VaccinationSheet()
+  #vacc_sheet = VaccinationSheet()
   #print(vacc_sheet.getDailyVacc())
-  vacc_sheet.saveCsv_vaccinationByBrand()
+  #vacc_sheet.saveCsv_vaccinationByBrand()
   return
 
 ################################################################################

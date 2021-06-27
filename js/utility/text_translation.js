@@ -152,18 +152,21 @@ function TT_FillText_Source() {
   if (GS_lang == 'zh-tw') {
     TT_AddStr('data_source_original_title', '資料來源');
     TT_AddHtml('data_source_original_body', "\
-      <p>目前本站資料是由兩種不同管道所取得。</p>\
+      <p>目前本站資料是由三種不同管道所取得。</p>\
       <p>主要來源為一份由PTT網友們所整理的線上\
       <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'> \
       Google表單 <i class='fas fa-external-link-alt'></i></a> 。作者們利用網路爬蟲獲取資料，同時也從官方新聞稿及記者會收集瑣碎資訊，整理後彙整至表單內。</p>\
       <p>在此由衷感謝資料整理團隊，若無如此熱心之舉本站勢必難以完成。</p>\
-      <p>另一資料來源為疾管署<a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'> \
+      <p>資料來源二是疾管署<a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'> \
       官方資料平台 <i class='fas fa-external-link-alt'></i></a> 。很可惜平台上的資料多半乏善可陳，因此才以非官方表單作為主要資料來源。</p>\
+      <p>第三來源是國網中心的\
+      <a href='https://covid-19.nchc.org.tw/index.php' target='_blank'>\
+      疫情儀表板 <i class='fas fa-external-link-alt'></i></a> 。國網中心會將部份官方資料整理後開放下載，有些可能也是透過爬蟲取得的。</p>\
     ");
     TT_AddStr('data_source_raw_title', '初階資料');
     TT_AddHtml('data_source_raw_body', "\
       <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'> \
-      初階資料 <i class='fas fa-external-link-alt'></i></a> 是前面所提資料來源之部份分頁或檔案。目前共有6個csv檔，最主要者為一記有所有確診者及其相關流行病學資訊之表單。</p>\
+      初階資料 <i class='fas fa-external-link-alt'></i></a> 是前面所提資料來源之部份分頁或檔案。目前共有6個csv和1個json檔，最主要者為一記有所有確診者及其相關流行病學資訊之表單。</p>\
     ");
     TT_AddStr('data_source_processed_title', '高階資料');
     TT_AddHtml('data_source_processed_body', "\
@@ -176,7 +179,7 @@ function TT_FillText_Source() {
   else if (GS_lang == 'fr') {
     TT_AddStr('data_source_original_title', 'Sources des données');
     TT_AddHtml('data_source_original_body', "\
-      <p>À ce stade, ce site recueille les données à partir de 2 sources.</p>\
+      <p>À ce stade, ce site recueille les données à partir de 3 sources.</p>\
       <p>La source principale est un \
       <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>\
       Google Spreadsheet <i class='fas fa-external-link-alt'></i></a> \
@@ -186,16 +189,20 @@ function TT_FillText_Source() {
       Ils les trient ensuite avant de les mettre dans un tableau bien taillé.</p>\
       <p>Bien évidemment, ce site n'aurait pas pu voir le jour sans le travail de ces bénévoles bienveillants. Je leur en suis très reconnaissant.</p>\
       <p>La source secondaire est le <a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'>\
-      plateform des données officiel <i class='fas fa-external-link-alt'></i></a> du CDC taïwanais, qui fournit malheureusement peu de données intéressantes. \
+      plateform des données officiel <i class='fas fa-external-link-alt'></i></a> du Centre du contrôle des maladies (CDC) taïwanais, \
+      qui fournit malheureusement peu de données intéressantes. \
       C'est pour cette raison que la source principale n'est pas celle qui est officielle.</p>\
-      <p>Les données des 2 sources sont toutes en mandarin.</p>\
+      <p>La 3e source est le <a href='https://covid-19.nchc.org.tw/index.php' target='_blank'>\
+      tableau de bord <i class='fas fa-external-link-alt'></i></a> du Centre national de calcul de haute performance (NCHC).\
+      Le site redistribue les données officielles qui sont parfois éphémères, peut-être aussi récoltées grâce au crawling.</p>\
+      <p>Les données des 3 sources sont toutes en mandarin.</p>\
     ");
     TT_AddStr('data_source_raw_title', 'Données brutes');
     TT_AddHtml('data_source_raw_body', "\
       <p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
       données brutes <i class='fas fa-external-link-alt'></i></a> \
       sont un sous-ensemble des fichiers provenant des 2 sources des données mentionnées auparavant.</p>\
-      <p>À ce stade, 6 fichiers csv y figurent. Le fichier principal est une liste de tous cas confirmés avec leurs détails épidémiologiques respectifs.</p>\
+      <p>À ce stade, 6 fichiers csv et 1 fichier json y figurent. Le fichier principal est une liste de tous cas confirmés avec leurs détails épidémiologiques respectifs.</p>\
       <p>Ces données contiennent des caractères mandarins en abondance.</p>\
     ");
     TT_AddStr('data_source_processed_title', 'Données traitées');
@@ -212,7 +219,7 @@ function TT_FillText_Source() {
   else { //-- En
     TT_AddStr('data_source_original_title', 'Data Sources');
     TT_AddHtml('data_source_original_body', "\
-      <p>At this stage, this website collects data from 2 sources.</p>\
+      <p>At this stage, this website collects data from 3 sources.</p>\
       <p>The principle source is a \
       <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>\
       Google Spreadsheet <i class='fas fa-external-link-alt'></i></a> \
@@ -220,17 +227,21 @@ function TT_FillText_Source() {
       They crawl to harvest data from official sites. \
       They also collect fragmental information from daily press releases and conferences, and sort them into comprehensive worksheets.</p>\
       <p>Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.</p>\
-      <p>The second source is Taiwan CDC's <a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'>\
+      <p>The second source is Taiwan Centers for Disease Control (CDC)'s <a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'>\
       official data platform <i class='fas fa-external-link-alt'></i></a>, which unfortunately doesn't provide many meaningful datasets. \
-      This is why the principle source is not the offical one.</p>\
-      <p>Both sources provide data in Mandarin.</p>\
+      This is why the principle source is not the official one.</p>\
+      <p>The third source is National Center for High-performance Computing (NCHC)'s \
+      <a href='https://covid-19.nchc.org.tw/index.php' target='_blank'>\
+      dashboard <i class='fas fa-external-link-alt'></i></a>.\
+      The site redistributes ephemeral official data, possibly also by crawling.</p>\
+      <p>All sources provide data in Mandarin.</p>\
     ");
     TT_AddStr("data_source_raw_title", "Raw data");
     TT_AddHtml("data_source_raw_body", "\
       <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
       Raw data <i class='fas fa-external-link-alt'></i></a> \
       are a subset of files or spreadsheets from 2 data sources mentioned earlier that have been used by this website.</p>\
-      <p>There are 6 csv files at this stage. The main one is a list of every single confirmed cases with their epidemiological details.</p>\
+      <p>There are 6 csv files & 1 json file at this stage. The main one is a list of every single confirmed cases with their epidemiological details.</p>\
       <p>These files contain abundant Mandarin strings.</p>\
     ");
     TT_AddStr("data_source_processed_title", "Processed data");

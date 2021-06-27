@@ -17,30 +17,36 @@ Features
 --------
 
 The most recent statisitcs can be found in _Last 90 days_.
-In total, 12 charts are shown on 2 pages, [_Highlight_](https://linc-tw.github.io/COVID_breakdown/index.html) & 
-[_Case breakdown_](https://linc-tw.github.io/COVID_breakdown/latest_breakdown.html).
-
-In _Highlight_:
-- Status Evolution
-- 7-day Average of Various Rates
-- Confirmed Cases by Transmission Type
-- Incidence Map
-- Number of Tests by Reporting Criterion
-- Border Crossing
+In total, 13 charts are shown on 3 pages, 
+[_Case breakdown_](https://linc-tw.github.io/COVID_breakdown/latest_breakdown.html),
+[_Incidence rates_](https://linc-tw.github.io/COVID_breakdown/latest_incidence.html), & 
+[_Other stats_](https://linc-tw.github.io/COVID_breakdown/latest_others.html).
 
 In _Case breakdown_:
-- Confirmed Cases by Transmission Type (repeated)
+- Confirmed Cases by Transmission Type
 - Confirmed Cases by Detection Channel
 - Local Confirmed Cases per City & County
-- Incidence Map (repeated)
 - Confirmed Cases by Age
-- Delay Before Identifying a Transmission
 - Correlations between Travel History & Symptoms
 - Correlations between Age & Symptoms
+- Delay Before Identifying a Transmission
+
+In _Incidence rates_:
+- 7-day Average of Various Rates
+- Incidence Map
+
+In _Other stats_:
+- Status Evolution
+- Number of Tests by Reporting Criterion
+- Administrated Vaccines by Brand
+- Border Crossing
 
 The above charts are all generated with data of last 90 days.
-The same 12 charts made from all-year statistics can be found in _Stats 2020_ & _Stats 2021_.
-Loading can be slow for the 4 pages of these categories due to large files.
+A selection of these figures can be found in _Highlight_, constituting a dashboard.
+
+The same charts made from all-year statistics & can be found in _Stats 2020_ & _Stats 2021_,
+except for _Administrated Vaccines by Brand_ which only exists for _Stats 2021_.
+Loading can be slow for some pages of these categories due to large files.
 
 There are also 2 charts in _Timeline_:
 - Chronology of Systematic Testing

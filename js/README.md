@@ -37,6 +37,7 @@ Structure by page
   - `incidence_map.js`
   - `test_by_criterion.js`
   - `vaccination_by_brand.js`
+  - `vaccination_progress.js` (replace `vaccination_by_brand.js`)
   - `incidence_evolution_by_county.js` TODO (replace `incidence_map.js`)
 
 `breakdown.html`

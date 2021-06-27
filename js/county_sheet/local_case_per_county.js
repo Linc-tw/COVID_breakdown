@@ -110,22 +110,23 @@ function LCPC_FormatData(wrap, data) {
   var xticklabel = [];
   
   //-- Variables for data
-  var col_tag_list = data.columns.slice(1);
+  var col_tag_list = data.columns.slice(1); //-- 0 = date
   var col_tag = col_tag_list[wrap.county];
   var nb_col = col_tag_list.length;
-  var date_list = [];
+  var x_list = []; //-- date
+  var row;
   
   //-- Other variables
-  var y_sum = [0, 0]; //-- For 0 (total) & col_ind
+  var y_sum = [0, 0]; //-- For legend: 0 (total) & county
   var y_max = 4.5;
-  var i, j, x, y, row;
+  var i, j, x, y;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
     x = row['date'];
     y = +row[col_tag];
-    date_list.push(x);
+    x_list.push(x);
     
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
@@ -164,19 +165,17 @@ function LCPC_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
-  //-- Get respective sum
-  var legend_value = y_sum;
-  
   //-- Save to wrapper
   wrap.formatted_data = data;
-  wrap.date_list = date_list;
   wrap.col_tag_list = col_tag_list;
+  wrap.col_tag = col_tag;
   wrap.nb_col = nb_col;
-  wrap.y_max = y_max;
+  wrap.x_list = x_list;
   wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
+  wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = legend_value;
+  wrap.legend_value = y_sum;
 }
 
 //-- Tooltip
@@ -195,7 +194,7 @@ function LCPC_MouseMove(wrap, d) {
       '本土合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
       '嘉縣', '嘉市', '台南', '高雄', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '馬祖'
     ];
-    tooltip_text += legend_label[wrap.county] + d[wrap.col_tag_list[wrap.county]] + '例';
+    tooltip_text += legend_label[wrap.county] + d[wrap.col_tag] + '例';
   }
   
   else if (GS_lang == 'fr') {
@@ -204,9 +203,9 @@ function LCPC_MouseMove(wrap, d) {
       'au comté de Chiayi', 'à la ville de Chiayi', 'à Tainan', 'à Kaohsiung', 'à Pingtung', 'à Yilan', 'à Hualien', 'à Taitung', 'à Penghu', 'à Kinmen', 'à Matsu'
     ];
     if (wrap.county == 0)
-      tooltip_text += d[wrap.col_tag_list[wrap.county]] + ' cas locaux au total';
+      tooltip_text += d[wrap.col_tag] + ' cas locaux au total';
     else
-      tooltip_text += d[wrap.col_tag_list[wrap.county]] + ' cas ' + legend_label[wrap.county];
+      tooltip_text += d[wrap.col_tag] + ' cas ' + legend_label[wrap.county];
   }
   
   else {
@@ -215,9 +214,9 @@ function LCPC_MouseMove(wrap, d) {
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
     if (wrap.county == 0)
-      tooltip_text += d[wrap.col_tag_list[wrap.county]] + 'local cases in total';
+      tooltip_text += d[wrap.col_tag] + 'local cases in total';
     else
-      tooltip_text += d[wrap.col_tag_list[wrap.county]] + ' cases in ' + legend_label[wrap.county];
+      tooltip_text += d[wrap.col_tag] + ' cases in ' + legend_label[wrap.county];
   }
   
   //-- Generate tooltip
@@ -228,74 +227,61 @@ function LCPC_MouseMove(wrap, d) {
 }
 
 function LCPC_Plot(wrap) {
-  //-- Define x-axis
-  var x = d3.scaleBand()
-    .domain(wrap.date_list)
+  //-- Define xscale
+  var xscale = d3.scaleBand()
+    .domain(wrap.x_list)
     .range([0, wrap.width])
     .padding(0.2);
     
-  //-- No xtick or xticklabel 
-  var x_axis = d3.axisBottom(x)
-    .tickSize(0)
-    .tickFormat(function (d, i) {return "";});
+  //-- Define xscale_2 for xtick & xticklabel
+  var eps = 0.1
+  var xscale_2 = d3.scaleLinear()
+    .domain([-eps, wrap.x_list.length+eps])
+    .range([0, wrap.width]);
   
-  //-- Add x-axis & adjust position
+  //-- Define xaxis & update xtick or xticklabel later
+  var xaxis = d3.axisBottom(xscale_2)
+    .tickSize(0)
+    .tickFormat('');
+  
+  //-- Add xaxis & adjust position
   wrap.svg.append('g')
     .attr('class', 'xaxis')
     .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(x_axis)
+    .call(xaxis);
     
-  //-- Define a 2nd x-axis for xtick & xticklabel
-  var eps = 0.1
-  var x_2 = d3.scaleLinear()
-    .domain([-eps, wrap.date_list.length+eps])
-    .range([0, wrap.width])
-  
-  //-- Define xtick & update xticklabel later
-  var x_axis_2 = d3.axisBottom(x_2)
-    .tickSize(10)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return "";});
-  
-  //-- Add 2nd x-axis & adjust position
-  wrap.svg.append("g")
-    .attr("class", "xaxis")
-    .attr("transform", "translate(0," + wrap.height + ")")
-    .call(x_axis_2);
-  
-  //-- Define y-axis
-  var y = d3.scaleLinear()
+  //-- Define yscale
+  var yscale = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
-  //-- Define ytick & yticklabel
-  var y_axis = d3.axisLeft(y)
+  //-- Define yaxis for ytick & yticklabel
+  var yaxis = d3.axisLeft(yscale)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
-    .tickFormat(d3.format("d"));
+    .tickFormat(d3.format('d'));
   
-  //-- Add y-axis
-  wrap.svg.append("g")
-    .attr("class", "yaxis")
-    .call(y_axis);
+  //-- Add yaxis
+  wrap.svg.append('g')
+    .attr('class', 'yaxis')
+    .call(yaxis);
 
-  //-- Define a 2nd y-axis for the frameline at right
-  var y_axis_2 = d3.axisRight(y)
+  //-- Define yaxis_2 for the frameline at right
+  var yaxis_2 = d3.axisRight(yscale)
     .ticks(0)
     .tickSize(0);
   
-  //-- Add 2nd y-axis
-  wrap.svg.append("g")
-    .attr("class", "yaxis")
-    .attr("transform", "translate(" + wrap.width + ",0)")
-    .call(y_axis_2);
+  //-- Add yaxis_2 & adjust position
+  wrap.svg.append('g')
+    .attr('class', 'yaxis')
+    .attr('transform', 'translate(' + wrap.width + ',0)')
+    .call(yaxis_2);
     
   //-- Add ylabel & update value later
-  wrap.svg.append("text")
-    .attr("class", "ylabel")
-    .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)");
+  wrap.svg.append('text')
+    .attr('class', 'ylabel')
+    .attr('text-anchor', 'middle')
+    .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (wrap.height/2).toString() + ')rotate(-90)');
     
   //-- Add tooltip
   GS_MakeTooltip(wrap);
@@ -303,9 +289,8 @@ function LCPC_Plot(wrap) {
   //-- Define color
   var color_list = GS_wrap.c_list.slice(6).concat(GS_wrap.c_list.slice(0, 6));
   color_list = color_list.concat(color_list.slice(1));
-  var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
-    .domain(col_tag_list)
+    .domain(wrap.col_tag_list)
     .range(color_list);
   
   //-- Add bar
@@ -316,55 +301,62 @@ function LCPC_Plot(wrap) {
   //-- Update bar with dummy details
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', color(col_tag_list[wrap.county]))
-    .attr('x', function (d) {return x(d.date);})
-    .attr('y', y(0))
-    .attr('width', x.bandwidth())
+    .attr('fill', color(wrap.col_tag))
+    .attr('x', function (d) {return xscale(d.date);})
+    .attr('y', yscale(0))
+    .attr('width', xscale.bandwidth())
     .attr('height', 0)
     .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
     .on("mousemove", function (d) {LCPC_MouseMove(wrap, d);})
     .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
-  wrap.x_2 = x_2;
+  wrap.xscale_2 = xscale_2;
   wrap.color_list = color_list;
   wrap.color = color;
   wrap.bar = bar;
 }
 
 function LCPC_Replot(wrap) {
-  //-- Define new xticklabel
-  var x_axis_2 = d3.axisBottom(wrap.x_2)
+  //-- Define new xaxis for xticklabel
+  var xaxis = d3.axisBottom(wrap.xscale_2)
     .tickSize(10)
     .tickSizeOuter(0)
     .tickValues(wrap.xtick)
     .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
   
-  //-- Update 2nd x-axis
+  //-- Update xaxis
   wrap.svg.select('.xaxis')
     .transition()
     .duration(GS_wrap.trans_delay)
-    .call(x_axis_2)
-    .selectAll("text")
-      .attr("transform", "translate(-20,15) rotate(-90)")
-      .style("text-anchor", "end");
+    .call(xaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(-20,15) rotate(-90)')
+      .style('text-anchor', 'end');
   
-  //-- Define y-axis
-  var y = d3.scaleLinear()
+  //-- Define new yscale
+  var yscale = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
-  //-- Define ytick
-  var y_axis = d3.axisLeft(y)
+  //-- Define yticklabel format
+  var yticklabel_format;
+  if (wrap.ytick[wrap.ytick.length-1] > 9999) 
+    yticklabel_format = '.2s';
+  else
+    yticklabel_format = 'd';
+  
+  //-- Define new yaxis for ytick
+  var yaxis = d3.axisLeft(yscale)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
-    .tickFormat(d3.format("d"));
+    .tickFormat(d3.format(yticklabel_format));
   
-  //-- Update y-axis
+  //-- Update yaxis
   wrap.svg.select('.yaxis')
     .transition()
     .duration(GS_wrap.trans_delay)
-    .call(y_axis);
+    .call(yaxis);
   
   //-- Define ylabel
   var ylabel;
@@ -380,14 +372,13 @@ function LCPC_Replot(wrap) {
     .text(ylabel);
     
   //-- Update bar
-  var col_tag_list = wrap.col_tag_list.slice();
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
     .duration(GS_wrap.trans_delay)
-    .attr('fill', wrap.color(col_tag_list[wrap.county]))
-    .attr('y', function (d) {return y(d[col_tag_list[wrap.county]]);})
-    .attr('height', function (d) {return y(0)-y(d[col_tag_list[wrap.county]]);});
+    .attr('fill', wrap.color(wrap.col_tag))
+    .attr('y', function (d) {return yscale(d[wrap.col_tag]);})
+    .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);});
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};

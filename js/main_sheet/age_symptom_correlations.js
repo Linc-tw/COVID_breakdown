@@ -156,8 +156,8 @@ function ASC_Plot(wrap) {
     .call(x_axis)
     .selectAll('text')
       .attr('transform', 'translate(8,-5) rotate(-90)')
-      .style('text-anchor', 'start')
-      .style('font-size', '20px');
+      .style('font-size', '20px')
+      .style('text-anchor', 'start');
     
   //-- Define a 2nd x-axis for the frameline at bottom
   var x_axis_2 = d3.axisBottom(x)
@@ -191,6 +191,7 @@ function ASC_Plot(wrap) {
 
   //-- Define a 2nd y-axis for the frameline at right
   var y_axis_2 = d3.axisRight(y)
+    .ticks(0)
     .tickSize(0);
   
   //-- Add 2nd y-axis
@@ -214,48 +215,48 @@ function ASC_Plot(wrap) {
     .interpolator(t => d3.interpolateRdBu(1-t));
   
   //-- Add legend value
-  wrap.svg.selectAll(".legend.value")
+  wrap.svg.selectAll('.legend.value')
     .remove()
     .exit()
     .data(legend_value)
     .enter()
-    .append("text")
-      .attr("class", "legend value")
-      .attr("x", -wrap.margin.left + legend_pos.x)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style("fill", function (d, i) {return legend_color[i];})
+    .append('text')
+      .attr('class', 'legend value')
+      .attr('x', -wrap.margin.left + legend_pos.x)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
-      .style("font-size", '20px')
-      .attr("text-anchor", "end");
+      .style('font-size', '20px')
+      .attr('text-anchor', 'end');
   
   //-- Add square
   wrap.svg.selectAll()
     .data(wrap.formatted_data)
     .enter()
-    .append("rect")
-      .attr("class", "content square")
-      .attr("x", function (d) {return x(d['symptom']);})
-      .attr("y", function (d) {return y(d['age']);})
-      .attr("rx", 3)
-      .attr("ry", 3)
-      .attr("width", x.bandwidth())
-      .attr("height", y.bandwidth())
-      .style("fill", function (d) {return color(d['value']);})  
-      .on("mouseover", function (d) {GS_MouseOver2(wrap, d);})
-      .on("mouseleave", function (d) {GS_MouseLeave2(wrap, d);});
+    .append('rect')
+      .attr('class', 'content square')
+      .attr('x', function (d) {return x(d['symptom']);})
+      .attr('y', function (d) {return y(d['age']);})
+      .attr('rx', 3)
+      .attr('ry', 3)
+      .attr('width', x.bandwidth())
+      .attr('height', y.bandwidth())
+      .style('fill', function (d) {return color(d['value']);})  
+      .on('mouseover', function (d) {GS_MouseOver2(wrap, d);})
+      .on('mouseleave', function (d) {GS_MouseLeave2(wrap, d);});
     
   //-- Add text
   wrap.svg.selectAll()
     .data(wrap.formatted_data)
     .enter()
-    .append("text")
-      .attr("class", "content text")
-      .attr("x", function (d) {return x(d['symptom']) + 0.5*+x.bandwidth();})
-      .attr("y", function (d) {return y(d['age']) + 0.5*+y.bandwidth();})
-      .style("fill", function (d) {if (Math.abs(d['value'])<0.205) return '#000000'; return '#FFFFFF';})
+    .append('text')
+      .attr('class', 'content text')
+      .attr('x', function (d) {return x(d['symptom']) + 0.5*+x.bandwidth();})
+      .attr('y', function (d) {return y(d['age']) + 0.5*+y.bandwidth();})
+      .style('fill', function (d) {if (Math.abs(d['value'])<0.205) return '#000000'; return '#FFFFFF';})
       .text(function (d) {return d['label'];})
-      .attr("text-anchor", "middle")
-      .attr("dominant-baseline", "central");
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'central');
   
   //-- Save to wrapper
   wrap.x = x;
