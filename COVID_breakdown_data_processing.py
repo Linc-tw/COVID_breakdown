@@ -312,7 +312,7 @@ COUNTY_DICT = {
 }
 
 ################################################################################
-## Functions - utilities
+## Functions - general utilities
 
 def saveCsv(name, data, verbose=True):
   data.to_csv(name, index=False)
@@ -334,6 +334,12 @@ def ISODateToOrd(iso):
 
 def ordDateToISO(ord):
   return dtt.date.fromordinal(ord).isoformat()
+
+def getTodayOrdinal():
+  today = dtt.datetime.today()
+  delta = dtt.timedelta(hours=12)
+  ord_today = (today - delta).toordinal() + 1
+  return ord_today
 
 def normalizeBoolArr(bool_arr):
   bool_arr = bool_arr.astype(float)
@@ -396,14 +402,21 @@ def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
   
   return n_arr, ctr_bins
 
-def getTodayOrdinal():
-  today = dtt.datetime.today()
-  delta = dtt.timedelta(hours=12)
-  ord_today = (today - delta).toordinal() + 1
-  return ord_today
+def itpFromCumul(begin, end, length):
+  if length == 1:
+    return [end-begin]
+  
+  q = (end - begin) // length
+  r = (end - begin) % length
+  list_ = [q] * length
+  
+  for i in range(r):
+    list_[i] += 1
+  
+  return list_
 
 ################################################################################
-## Functions - utilities
+## Functions - utilities specific to this file
 
 def adjustDateRange(data):
   ord_ref = ISODateToOrd(ISO_DATE_REF)
@@ -463,6 +476,12 @@ def indexFor2021(iso):
     #return np.nan
   #week_nb = dtt.date.fromisoformat(iso).isocalendar()[1]
   #return week_nb
+
+def makeIndexList(iso):
+  ind_latest = indexForLatest(iso)
+  ind_2021 = indexFor2021(iso)
+  ind_2020 = indexFor2020(iso)
+  return [ind_latest, ind_2021, ind_2020]
 
 def initializeStockDict_general(stock):
   stock_dict = {PAGE_LATEST: copy.deepcopy(stock), PAGE_2021: copy.deepcopy(stock), PAGE_2020: copy.deepcopy(stock)}
@@ -534,8 +553,9 @@ class MainSheet(Template):
     
     self.n_total = 0
     self.n_latest = 0
-    self.n_2020 = 0
+    self.n_2022 = 0
     self.n_2021 = 0
+    self.n_2020 = 0
     self.n_empty = 0
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv' % DATA_PATH
@@ -551,28 +571,18 @@ class MainSheet(Template):
       print('Loaded \"%s\"' % name)
       print('N_total = %d' % self.n_total)
       print('N_latest = %d' % self.n_latest)
-      print('N_2020 = %d' % self.n_2020)
       print('N_2021 = %d' % self.n_2021)
+      print('N_2020 = %d' % self.n_2020)
       print('N_empty = %d' % self.n_empty)
     return 
     
   def getReportDate(self):
-    ord_today = getTodayOrdinal()
-    ord_end_2020 = ISODateToOrd('2020-12-31') + 1
-    ord_end_2021 = ISODateToOrd('2021-12-31') + 1
-    ord_end_2022 = ISODateToOrd('2022-12-31') + 1
-    
     report_date_list = []
-    n_total = 0
-    n_latest = 0
-    n_2020 = 0
-    n_2021 = 0
-    n_empty = 0
     
     for report_date, trans in zip(self.getCol(self.coltag_report_date), self.getCol(self.coltag_transmission)):
       if trans != trans: ## NaN
         report_date_list.append(np.nan)
-        n_empty += 1
+        self.n_empty += 1
         continue
       
       yyyymdday_zh = report_date.split('年')
@@ -583,25 +593,23 @@ class MainSheet(Template):
       d = int(dday_zh[0])
       report_date = '%04d-%02d-%02d' % (y, m, d)
       report_date_list.append(report_date)
-      n_total += 1
+      self.n_total += 1
       
       ind_latest = indexForLatest(report_date)
+      ind_2022 = np.nan
       ind_2021 = indexFor2021(report_date)
       ind_2020 = indexFor2020(report_date)
       
       ## If not NaN
       if ind_latest == ind_latest:
-        n_latest += 1
+        self.n_latest += 1
+      if ind_2022 == ind_2022:
+        self.n_2022 += 1
       if ind_2021 == ind_2021:
-        n_2021 += 1
+        self.n_2021 += 1
       if ind_2020 == ind_2020:
-        n_2020 += 1
+        self.n_2020 += 1
         
-    self.n_total = n_total
-    self.n_latest = n_latest
-    self.n_2020 = n_2020
-    self.n_2021 = n_2021
-    self.n_empty = n_empty
     return report_date_list
   
   def getAge(self):
@@ -1199,11 +1207,9 @@ class MainSheet(Template):
         col_tag = trans
         
       ### Regroup by report date
-      ind_latest = indexForLatest(report_date)
-      ind_2021 = indexFor2021(report_date)
-      ind_2020 = indexFor2020(report_date)
+      index_list = makeIndexList(report_date)
       
-      for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict_r.values()):
+      for ind, stock in zip(index_list, stock_dict_r.values()):
         try:
           stock[col_tag][ind] += 1
         except IndexError: ## If NaN
@@ -1211,11 +1217,9 @@ class MainSheet(Template):
         
       ## If onset date is not NaN, regroup by onset date
       if onset_date == onset_date:
-        ind_latest = indexForLatest(onset_date)
-        ind_2021 = indexFor2021(onset_date)
-        ind_2020 = indexFor2020(onset_date)
+        index_list = makeIndexList(onset_date)
         
-        for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict_o.values()):
+        for ind, stock in zip(index_list, stock_dict_o.values()):
           try:
             stock[col_tag][ind] += 1
           except IndexError: ## If NaN
@@ -1262,45 +1266,23 @@ class MainSheet(Template):
         col_tag = channel
       
       ### Regroup by report date
-      ind_latest = indexForLatest(report_date)
-      ind_2021 = indexFor2021(report_date)
-      ind_2020 = indexFor2020(report_date)
+      index_list = makeIndexList(report_date)
       
-      try:
-        stock_dict_r['latest'][col_tag][ind_latest] += 1
-      except IndexError:
-        pass
-      
-      try:
-        stock_dict_r['2021'][col_tag][ind_2021] += 1
-      except IndexError:
-        pass
-      
-      try:
-        stock_dict_r['2020'][col_tag][ind_2020] += 1
-      except IndexError:
-        pass
+      for ind, stock in zip(index_list, stock_dict_r.values()):
+        try:
+          stock[col_tag][ind] += 1
+        except IndexError: ## If NaN
+          pass
         
       ## If onset date is not NaN, regroup by onset date
       if onset_date == onset_date:
-        ind_latest = indexForLatest(onset_date)
-        ind_2021 = indexFor2021(onset_date)
-        ind_2020 = indexFor2020(onset_date)
+        index_list = makeIndexList(onset_date)
         
-        try:
-          stock_dict_o['latest'][col_tag][ind_latest] += 1
-        except IndexError:
-          pass
-        
-        try:
-          stock_dict_o['2021'][col_tag][ind_2021] += 1
-        except IndexError:
-          pass
-        
-        try:
-          stock_dict_o['2020'][col_tag][ind_2020] += 1
-        except IndexError:
-          pass
+        for ind, stock in zip(index_list, stock_dict_o.values()):
+          try:
+            stock[col_tag][ind] += 1
+          except IndexError: ## If NaN
+            pass
         
     return stock_dict_r, stock_dict_o
     
@@ -1334,11 +1316,9 @@ class MainSheet(Template):
       if trans != trans:
         continue
       
-      ind_latest = indexForLatest(report_date)
-      ind_2021 = indexFor2021(report_date)
-      ind_2020 = indexFor2020(report_date)
+      index_list = makeIndexList(report_date)
       
-      for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.values()):
+      for ind, stock in zip(index_list, stock_dict.values()):
         if ind == ind: ## If not NaN
           stock['nb_dict']['N_total'] += 1
           
@@ -1349,6 +1329,7 @@ class MainSheet(Template):
               stock['nb_dict']['N_data'] += 1
               stock['x_list_list'].append(symp)
               stock['y_list_list'].append(trav_hist)
+              
     return stock_dict
   
   def makeStockDict2_travHistSymptomCorr(self):
@@ -1456,11 +1437,9 @@ class MainSheet(Template):
       if trans != trans:
         continue
       
-      ind_latest = indexForLatest(report_date)
-      ind_2021 = indexFor2021(report_date)
-      ind_2020 = indexFor2020(report_date)
+      index_list = makeIndexList(report_date)
       
-      for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.values()):
+      for ind, stock in zip(index_list, stock_dict.values()):
         if ind == ind: ## If not NaN
           stock['nb_dict']['N_total'] += 1
           
@@ -1468,6 +1447,7 @@ class MainSheet(Template):
             stock['nb_dict']['N_data'] += 1
             stock['x_list_list'].append(symp)
             stock['y_list_list'].append(age)
+            
     return stock_dict
   
   def makeStockDict2_ageSymptomCorr(self):
@@ -1586,13 +1566,12 @@ class MainSheet(Template):
       ord_onset = ISODateToOrd(onset_date) if onset_date == onset_date else 0
       diff = min(ord_rep-ord_entry, ord_rep-ord_onset)
       
-      ind_latest = indexForLatest(report_date)
-      ind_2021 = indexFor2021(report_date)
-      ind_2020 = indexFor2020(report_date)
+      index_list = makeIndexList(report_date)
       
-      for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.values()):
+      for ind, stock in zip(index_list, stock_dict.values()):
         if ind == ind: ## If not NaN
           stock[col_tag].append(diff)
+          
     return stock_dict
   
   def saveCsv_diffByTransmission(self):
@@ -2639,11 +2618,9 @@ class CountySheet(Template):
       if 'unknown' == county:
         continue
       
-      ind_latest = indexForLatest(report_date)
-      ind_2021 = indexFor2021(report_date)
-      ind_2020 = indexFor2020(report_date)
+      index_list = makeIndexList(report_date)
       
-      for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.values()):
+      for ind, stock in zip(index_list, stock_dict.values()):
         try:
           stock['total'][ind] += nb_cases
           stock[county][ind] += nb_cases
@@ -2676,11 +2653,9 @@ class CountySheet(Template):
       if 'unknown' == county:
         continue
       
-      ind_latest = indexForLatest(report_date)
-      ind_2021 = indexFor2021(report_date)
-      ind_2020 = indexFor2020(report_date)
+      index_list = makeIndexList(report_date)
       
-      for ind, page, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.keys(), stock_dict.values()):
+      for ind, page, stock in zip(index_list, stock_dict.keys(), stock_dict.values()):
         if ind == ind:
           stock[0][county] += nb_cases
         
@@ -2738,11 +2713,9 @@ class CountySheet(Template):
     
     ## Loop over series
     for report_date, age, nb_cases in zip(report_date_list, age_list, nb_cases_list):
-      ind_latest = indexForLatest(report_date)
-      ind_2021 = indexFor2021(report_date)
-      ind_2020 = indexFor2020(report_date)
+      index_list = makeIndexList(report_date)
       
-      for ind, page, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.keys(), stock_dict.values()):
+      for ind, page, stock in zip(index_list, stock_dict.keys(), stock_dict.values()):
         if ind == ind:
           stock[0][age] += nb_cases
         
@@ -2839,30 +2812,68 @@ class VaccinationSheet(Template):
   def getModerna(self):
     return [int(row[self.key_moderna]) for row in self.data['data']]
    
-  def makeStockDict_vaccinationByBrand(self):
+  def makeStock_vaccinationByBrand(self):
     date_list = self.getDate()
-    az_list = self.getAZ()
-    moderna_list = self.getModerna()
+    cum_az_list = self.getAZ()
+    cum_moderna_list = self.getModerna()
     
-    ## Initialize stock dict
-    stock = {'index': [], 'date': [], 'AZ': [], 'Moderna': []}
+    ## Declare all brands
+    brand_list = ['AZ', 'Moderna']
+    cum_doses_list = [cum_az_list, cum_moderna_list]
+    cum_doses_list = np.array(cum_doses_list).T
+    
+    ## Make stock dict
+    stock = {'date': date_list, 'interpolated': [], 'brand_list': brand_list, 'new_doses': [[] for brand in brand_list]}
+    
+    ## For recording last non-missing data
+    prev = [0] * len(brand_list)
+    ord_prev = ISODateToOrd(date_list[0]) - 1
+    
+    ## Loop over day
+    for date, cum in zip(date_list, cum_doses_list):
+      ## If data non-missing
+      if 0 < sum(cum):
+        ord = ISODateToOrd(date)
+        length = ord - ord_prev
+        
+        for i, _ in enumerate(brand_list):
+          stock['new_doses'][i] += itpFromCumul(prev[i], cum[i], length)
+          
+        stock['interpolated'].append(int(1 < length))
+        prev = cum
+        ord_prev = ord
+        
+      ## If data are missing
+      else:
+        stock['interpolated'].append(1)
+      
+    ## This contains daily doses & a column indicating whether it's interpolated or not.
+    return stock
+          
+  def makeStockDict_vaccinationByBrand(self):
+    prev_stock = self.makeStock_vaccinationByBrand()
+    brand_list = prev_stock['brand_list']
+    new_doses_mat = prev_stock['new_doses']
+    new_doses_mat = np.array(new_doses_mat).T
+    
+    ### Initialize stock dict
+    stock = {'index': [], 'date': [], 'interpolated': []}
+    stock.update({brand: [] for brand in brand_list})
     stock_dict = initializeStockDict_general(stock)
     
     ## Loop over day
-    for date, az, moderna in zip(date_list, az_list, moderna_list):
-      if 0 == az + moderna:
-        continue
+    for date, itp, nb_doses_arr in zip(prev_stock['date'], prev_stock['interpolated'], new_doses_mat):
+      index_list = makeIndexList(date)
       
-      ind_latest = indexForLatest(date)
-      ind_2021 = indexFor2021(date)
-      ind_2020 = indexFor2020(date)
-      
-      for ind, stock in zip([ind_latest, ind_2021, ind_2020], stock_dict.values()):
-        if ind == ind:
+      ## Loop over page
+      for ind, stock in zip(index_list, stock_dict.values()):
+        if ind == ind: ## If not NaN
           stock['index'].append(ind)
           stock['date'].append(date)
-          stock['AZ'].append(az)
-          stock['Moderna'].append(moderna)
+          stock['interpolated'].append(itp)
+          
+          for brand, nb_doses in zip(brand_list, nb_doses_arr):
+            stock[brand].append(nb_doses)
           
     return stock_dict
       
@@ -2971,7 +2982,7 @@ def sandbox():
   #county_sheet.saveCsv_caseByAge()
   
   vacc_sheet = VaccinationSheet()
-  #print(vacc_sheet.makeUpdatedNew())
+  #print(vacc_sheet.getDailyVacc())
   vacc_sheet.saveCsv_vaccinationByBrand()
   return
 
@@ -3007,8 +3018,8 @@ def saveCsv_all():
   county_sheet.saveCsv()
   
   print()
-  #vacc_sheet = VaccinationSheet()
-  #vacc_sheet.saveCsv()
+  vacc_sheet = VaccinationSheet()
+  vacc_sheet.saveCsv()
   print()
   return
 

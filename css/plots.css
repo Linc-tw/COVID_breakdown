@@ -140,59 +140,68 @@ body,
   border-radius: 5px;
   padding: 5px;
 }
-#status_evolution_latest .tooltip, #status_evolution_2020 .tooltip, #status_evolution_2021 .tooltip {
-  margin-left: -65px;
-  margin-right: -65px;
-  margin-top: -55px;
-  margin-bottom: -55px;
-}
-#various_rates_latest .tooltip, #various_rates_2020 .tooltip, #various_rates_2021 .tooltip {
-  margin-left: -75px;
-  margin-right: -75px;
-  margin-top: -45px;
-  margin-bottom: -45px;
-}
-#test_by_criterion_latest .tooltip, #test_by_criterion_2020 .tooltip, #test_by_criterion_2021 .tooltip {
-  margin-left: -75px;
-  margin-right: -75px;
-  margin-top: -55px;
-  margin-bottom: -55px;
-}
-#border_statistics_latest .tooltip, #border_statistics_2020 .tooltip, #border_statistics_2021 .tooltip {
-  margin-left: -75px;
-  margin-right: -75px;
-  margin-top: -55px;
-  margin-bottom: -55px;
-}
-#case_by_transmission_latest .tooltip, #case_by_transmission_2020 .tooltip, #case_by_transmission_2021 .tooltip {
+
+#case_by_transmission_latest .tooltip, #case_by_transmission_2021 .tooltip, #case_by_transmission_2020 .tooltip {
   margin-left: -56px;
   margin-right: -56px;
   margin-top: -58px;
   margin-bottom: -58px;
 }
-#case_by_detection_latest .tooltip, #case_by_detection_2020 .tooltip, #case_by_detection_2021 .tooltip {
+#case_by_detection_latest .tooltip, #case_by_detection_2021 .tooltip, #case_by_detection_2020 .tooltip {
   margin-left: -50px;
   margin-right: -50px;
   margin-top: -72px;
   margin-bottom: -72px;
 }
-#daily_case_per_county_latest .tooltip , #daily_case_per_county_2020 .tooltip, #daily_case_per_county_2021 .tooltip {
+#difference_by_transmission_latest .tooltip, #difference_by_transmission_2021 .tooltip, #difference_by_transmission_2020 .tooltip {
+  margin-left: -90px;
+  margin-right: -90px;
+  margin-top: -25px;
+  margin-bottom: -25px;
+}
+
+#local_case_per_county_latest .tooltip , #local_case_per_county_2021 .tooltip, #local_case_per_county_2020 .tooltip {
   margin-left: -70px;
   margin-right: -70px;
   margin-top: -35px;
   margin-bottom: -35px;
 }
-#case_by_age_latest .tooltip , #case_by_age_2020 .tooltip, #case_by_age_2021 .tooltip {
+#case_by_age_latest .tooltip , #case_by_age_2021 .tooltip, #case_by_age_2020 .tooltip {
   margin-left: -75px;
   margin-right: -75px;
   margin-top: -35px;
   margin-bottom: -35px;
 }
-#difference_by_transmission_latest .tooltip, #difference_by_transmission_2020 .tooltip, #difference_by_transmission_2021 .tooltip {
-  margin-left: -90px;
-  margin-right: -90px;
-  margin-top: -25px;
-  margin-bottom: -25px;
+
+#status_evolution_latest .tooltip, #status_evolution_2021 .tooltip, #status_evolution_2020 .tooltip {
+  margin-left: -65px;
+  margin-right: -65px;
+  margin-top: -55px;
+  margin-bottom: -55px;
+}
+#various_rates_latest .tooltip, #various_rates_2021 .tooltip, #various_rates_2020 .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
+  margin-top: -45px;
+  margin-bottom: -45px;
+}
+#test_by_criterion_latest .tooltip, #test_by_criterion_2021 .tooltip, #test_by_criterion_2020 .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
+  margin-top: -55px;
+  margin-bottom: -55px;
+}
+#border_statistics_latest .tooltip, #border_statistics_2021 .tooltip, #border_statistics_2020 .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
+  margin-top: -55px;
+  margin-bottom: -55px;
+}
+#vaccination_by_brand_latest .tooltip, #vaccination_by_brand_2021 .tooltip, #vaccination_by_brand_2020 .tooltip {
+  margin-left: -60px;
+  margin-right: -60px;
+  margin-top: -45px;
+  margin-bottom: -45px;
 }
 
 

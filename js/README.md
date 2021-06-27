@@ -24,7 +24,7 @@ Structure by raw data
   - `status_evolution.js`
   - `test_by_criterion.js`
   - `various_rates.js`
-  - `vaccination_by_brand.js` TODO
+  - `vaccination_by_brand.js`
 
   
 Structure by page
@@ -34,9 +34,10 @@ Structure by page
   - `status_evolution.js`
   - `various_rates.js`
   - `case_by_transmission.js`
+  - `incidence_map.js`
   - `test_by_criterion.js`
-  - `incidence_evolution_by_county.js` TODO
-  - `vaccination_by_brand.js` TODO
+  - `vaccination_by_brand.js`
+  - `incidence_evolution_by_county.js` TODO (replace `incidence_map.js`)
 
 `breakdown.html`
   - `case_by_transmission.js`
@@ -56,5 +57,5 @@ Structure by page
 `others.html`
   - `status_evolution.js`
   - `test_by_criterion.js`
-  - `vaccination_by_brand.js` TODO
+  - `vaccination_by_brand.js`
   - `border_statistics.js`

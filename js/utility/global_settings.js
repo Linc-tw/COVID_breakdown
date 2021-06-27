@@ -8,10 +8,12 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
+//unify column order
+//row = data[i]
 //`incidence_evolution_by_county.js` TODO
 //`incidence_evolution_by_age.js` TODO
-//`vaccination_by_brand.js` TODO
 //7-day average for BS, TBC, CBT, DCPC ?
+//Real cumulative for all
 
 //Zh date xticklabels
 //ASC 100s 
