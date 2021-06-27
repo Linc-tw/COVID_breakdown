@@ -42,12 +42,13 @@ function THSC_ResetText() {
 function THSC_FormatData(wrap, data) {
   var symptom_list = [];
   var trav_hist_list = [];
-  var i, j, trav_hist, symptom;
+  var i, j, row, trav_hist, symptom;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
-    trav_hist = data[i]["trav_hist"];
-    symptom = data[i]["symptom"];
+    row = data[i];
+    trav_hist = row["trav_hist"];
+    symptom = row["symptom"];
     
     //-- Search if `trav_hist` is already there
     for (j=0; j<trav_hist_list.length; j++) {

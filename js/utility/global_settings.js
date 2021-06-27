@@ -8,15 +8,11 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//unify column order
-//row = data[i]
 //`incidence_evolution_by_county.js` TODO
 //`incidence_evolution_by_age.js` TODO
 //7-day average for BS, TBC, CBT, DCPC ?
-//Real cumulative for all
 
-//Zh date xticklabels
-//ASC 100s 
+//label sum: 2020, 2021, latest
 //Cut continuous data with index
 //2020 & 2021 by week (data, plot, text)
 

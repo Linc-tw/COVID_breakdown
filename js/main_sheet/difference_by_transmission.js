@@ -61,7 +61,7 @@ function DBT_FormatData(wrap, data) {
   //-- Other variables
   var y_sum = [];
   var y_max = 4.5;
-  var i, j, x, y;
+  var i, j, x, y, row;
   
   //-- Initialize y_sum
   for (j=0; j<nb_col; j++)
@@ -69,8 +69,9 @@ function DBT_FormatData(wrap, data) {
   
   //-- Loop over row
   for (i=0; i<31; i++) { //-- Was data.length; now hard-coded to 31 (days)
-    x = data[i]["difference"];
-    y = +data[i][col_tag];
+    row = data[i];
+    x = row["difference"];
+    y = +row[col_tag];
     diff_list.push(x);
     
     //-- Determine whether to have xtick
@@ -85,7 +86,7 @@ function DBT_FormatData(wrap, data) {
     
     //-- Update y_sum
     for (j=0; j<nb_col; j++)
-      y_sum[j] += +data[i][col_tag_list[j]];
+      y_sum[j] += +row[col_tag_list[j]];
       
     //-- Update y_max
     y_max = Math.max(y_max, y);
@@ -267,7 +268,7 @@ function DBT_Plot(wrap) {
   GS_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = [GS_wrap.c_list[4], GS_wrap.c_list[0], GS_wrap.c_list[1], GS_wrap.c_list[3], GS_wrap.gray, '#000000']; 
+  var color_list = [GS_wrap.c_list[8], GS_wrap.c_list[0], GS_wrap.c_list[1], GS_wrap.c_list[3], GS_wrap.gray, '#000000']; 
   var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)

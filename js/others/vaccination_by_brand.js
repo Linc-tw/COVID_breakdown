@@ -58,7 +58,7 @@ function VBB_FormatData(wrap, data) {
   //-- Other variables
   var h_sum = [];
   var y_max = 0;
-  var i, j, y, row, date, height, h_list, block;
+  var i, j, x, y, row, date, height, h_list, block;
 
   //-- Convert data form
   if (wrap.do_cumul == 1)
@@ -101,7 +101,7 @@ function VBB_FormatData(wrap, data) {
         'date': date,
         'y0': y,
         'y1': y+height,
-        'h_list': h_list.slice(), //-- No reverse
+        'h_list': h_list.slice(),
         'col': col_tag_list[j]
       };
         
@@ -150,7 +150,7 @@ function VBB_FormatData(wrap, data) {
     ytick.push(i)
   
   //-- Get respective sum
-  var legend_value = h_sum.reverse();
+  var legend_value = h_sum;
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
@@ -276,11 +276,11 @@ function VBB_Plot(wrap) {
   GS_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GS_wrap.c_list.slice(0, wrap.nb_col);
-  var col_tag_list = wrap.col_tag_list.slice().reverse();
+  var color_list = GS_wrap.c_list.slice(3, 3+wrap.nb_col);
+  var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
-    .range(color_list.slice().reverse());
+    .range(color_list.slice());
   
   //-- Add bar
   var bar = wrap.svg.selectAll('.content.bar')
@@ -383,7 +383,7 @@ function VBB_Replot(wrap) {
   legend_color_list.push('#000000');
   
   //-- Calculate legend value
-  var legend_value = wrap.legend_value.slice().reverse();
+  var legend_value = wrap.legend_value.slice();
   var sum = legend_value.reduce((a, b) => a + b, 0);
   legend_value.push(sum);
   

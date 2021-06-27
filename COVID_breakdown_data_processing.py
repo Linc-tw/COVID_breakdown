@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.06.26                  ##
+    ##  Version 2021.06.27                  ##
     ##########################################
 
 import os
@@ -178,7 +178,7 @@ TRAVEL_HISTORY_DICT = {
 }
 
 AGE_DICT = {
-  '0s': {'zh-tw': '<10歲', 'fr': '< 10 ans'},
+  '0s': {'zh-tw': '<10歲', 'fr': '<10 ans'},
   '10s': {'zh-tw': '10-19歲', 'fr': '10aine'},
   '20s': {'zh-tw': '20-29歲', 'fr': '20aine'},
   '30s': {'zh-tw': '30-39歲', 'fr': '30aine'},
@@ -188,7 +188,7 @@ AGE_DICT = {
   '70s': {'zh-tw': '70-79歲', 'fr': '70aine'},
   '80s': {'zh-tw': '80-89歲', 'fr': '80aine'},
   '90s': {'zh-tw': '90-99歲', 'fr': '90aine'},
-  '100s': {'zh-tw': '>100歲', 'fr': '100aine'}
+  '>100s': {'zh-tw': '>100歲', 'fr': '>100aine'}
 }
 
 COUNTY_DICT = {
@@ -329,11 +329,11 @@ def loadJson(name, verbose=True):
   return data
 
 def ISODateToOrd(iso):
-  ord = dtt.date.fromisoformat(iso).toordinal()
-  return ord
+  ord_ = dtt.date.fromisoformat(iso).toordinal()
+  return ord_
 
-def ordDateToISO(ord):
-  return dtt.date.fromordinal(ord).isoformat()
+def ordDateToISO(ord_):
+  return dtt.date.fromordinal(ord_).isoformat()
 
 def getTodayOrdinal():
   today = dtt.datetime.today()
@@ -428,12 +428,12 @@ def adjustDateRange(data):
   stock1 = []
   stock2 = []
   
-  for ord in range(ord_ref, ord_begin):
-    iso = ordDateToISO(ord)
+  for ord_ in range(ord_ref, ord_begin):
+    iso = ordDateToISO(ord_)
     stock1.append([iso] + zero)
     
-  for ord in range(ord_end, ord_today):
-    iso = ordDateToISO(ord)
+  for ord_ in range(ord_end, ord_today):
+    iso = ordDateToISO(ord_)
     stock2.append([iso] + zero)
   
   if ord_ref > ord_begin:
@@ -489,18 +489,18 @@ def initializeStockDict_general(stock):
 
 def initializeStockDict_dailyCounts(col_tag_list):
   ord_today = getTodayOrdinal()
-  date_list = [ordDateToISO(ord) for ord in range(ord_today-NB_LOOKBACK_DAYS, ord_today)]
+  date_list = [ordDateToISO(ord_) for ord_ in range(ord_today-NB_LOOKBACK_DAYS, ord_today)]
   nb_weeks_2021 = dtt.date.fromisoformat('2021-12-31').isocalendar()[1]
   nb_weeks_2020 = dtt.date.fromisoformat('2020-12-31').isocalendar()[1]
   
   stock_latest = {'date': date_list}
   stock_latest.update({col_tag: np.zeros(NB_LOOKBACK_DAYS, dtype=int) for col_tag in col_tag_list})
   
-  date_list = [ordDateToISO(ord) for ord in range(ISODateToOrd('2021-01-01'), ISODateToOrd('2021-06-26')+1)]
+  date_list = [ordDateToISO(ord_) for ord_ in range(ISODateToOrd('2021-01-01'), ISODateToOrd('2021-06-26')+1)]
   stock_2021 = {'date': date_list}
   stock_2021.update({col_tag: np.zeros(len(date_list), dtype=int) for col_tag in col_tag_list})
   
-  date_list = [ordDateToISO(ord) for ord in range(ISODateToOrd('2020-01-01'), ISODateToOrd('2020-12-31')+1)]
+  date_list = [ordDateToISO(ord_) for ord_ in range(ISODateToOrd('2020-01-01'), ISODateToOrd('2020-12-31')+1)]
   stock_2020 = {'date': date_list}
   stock_2020.update({col_tag: np.zeros(len(date_list), dtype=int) for col_tag in col_tag_list})
   
@@ -621,7 +621,7 @@ class MainSheet(Template):
       ]:
         age_list.append(age[0]+'0s')
       elif age in ['1XX', '10X', '11X', '100s', '102']:
-        age_list.append('100s')
+        age_list.append('>100s')
         
       elif age in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '<10', '<1', '<5', '<6', '8月大']:
         age_list.append('0s')
@@ -919,7 +919,7 @@ class MainSheet(Template):
         '5/8-20', '5/8-25', '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', '5/13-31',
         '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/18-6/24', '5/19-6/10', 
         '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
-        '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', '6/4-19', '6/4-23', '6/8-20', '6/10-22', '6/14-21', 
+        '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', '6/4-19', '6/4-23', '6/8-20', '6/10-22', '6/10-26', '6/11-25', '6/14-21', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
         onset_date_list.append(np.nan)
         
@@ -1189,8 +1189,8 @@ class MainSheet(Template):
     
     ## Initialize stock dict
     col_tag_list = ['imported', 'linked', 'unlinked', 'fleet', 'plane', 'unknown']
-    stock_dict_r = initializeStockDict_dailyCounts(col_tag_list[::-1]) ## Reversed order
-    stock_dict_o = initializeStockDict_dailyCounts(col_tag_list[::-1]) ## Reversed order
+    stock_dict_r = initializeStockDict_dailyCounts(col_tag_list)
+    stock_dict_o = initializeStockDict_dailyCounts(col_tag_list)
     
     ## Loop over cases
     for report_date, onset_date, trans, link in zip(report_date_list, onset_date_list, trans_list, link_list):
@@ -1251,8 +1251,8 @@ class MainSheet(Template):
     
     ## Initialize data dict
     col_tag_list = ['airport', 'quarantine', 'isolation', 'monitoring', 'hospital', 'overseas', 'no_data']
-    stock_dict_r = initializeStockDict_dailyCounts(col_tag_list[::-1]) ## Reversed order
-    stock_dict_o = initializeStockDict_dailyCounts(col_tag_list[::-1]) ## Reversed order
+    stock_dict_r = initializeStockDict_dailyCounts(col_tag_list)
+    stock_dict_o = initializeStockDict_dailyCounts(col_tag_list)
     
     ## Loop over cases
     for report_date, onset_date, trans, channel in zip(report_date_list, onset_date_list, trans_list, channel_list):
@@ -1465,7 +1465,7 @@ class MainSheet(Template):
       y_hist = clt.Counter(stock['y_list_list'])
       for age in AGE_DICT:
         y_hist[age] = y_hist.get(age, 0)
-      y_hist = sorted(y_hist.items(), key=lambda t: t[0], reverse=True)
+      y_hist = sorted(y_hist.items(), key=lambda t: str(len(t[0]))+t[0], reverse=True)
     
       ## Make boolean matrix
       x_bool_mat = []
@@ -1608,7 +1608,7 @@ class MainSheet(Template):
     ord_ref = ISODateToOrd(ISO_DATE_REF)
     ord_today = getTodayOrdinal()
     
-    date_arr = [ordDateToISO(ord) for ord in range(ord_ref, ord_today)]
+    date_arr = [ordDateToISO(ord_) for ord_ in range(ord_ref, ord_today)]
     nb_days = ord_today - ord_ref
     nb_imp_arr = np.zeros(nb_days, dtype=int)
     nb_indi_arr = np.zeros(nb_days, dtype=int)
@@ -1732,7 +1732,7 @@ class StatusSheet(Template):
     cum_dis_list = self.getCumDischarged()
     cum_hosp_list = self.getCumHospitalized()
     
-    data = {'date': date_list, 'death': cum_deaths_list, 'hospitalized': cum_hosp_list, 'discharged': cum_dis_list}
+    data = {'date': date_list, 'discharged': cum_dis_list, 'hospitalized': cum_hosp_list, 'death': cum_deaths_list}
     data = pd.DataFrame(data)
     data = adjustDateRange(data)
     
@@ -2344,7 +2344,7 @@ class BorderSheet(Template):
       sea_list = self.getSeaport(tag=save_tag)
       not_spec_list = self.getNotSpecified(tag=save_tag)
       
-      data = {'date': date_list, 'not_specified': not_spec_list, 'seaport': sea_list, 'airport': air_list}
+      data = {'date': date_list, 'airport': air_list, 'seaport': sea_list, 'not_specified': not_spec_list}
       data = pd.DataFrame(data)
       data = adjustDateRange(data)
       
@@ -2819,29 +2819,46 @@ class VaccinationSheet(Template):
     
     ## Declare all brands
     brand_list = ['AZ', 'Moderna']
-    cum_doses_list = [cum_az_list, cum_moderna_list]
-    cum_doses_list = np.array(cum_doses_list).T
+    cum_doses_dict = {}
+    for date, cum_az, cum_moderna in zip(date_list, cum_az_list, cum_moderna_list):
+      cum_doses_dict[date] = [cum_az, cum_moderna]
     
     ## Make stock dict
-    stock = {'date': date_list, 'interpolated': [], 'brand_list': brand_list, 'new_doses': [[] for brand in brand_list]}
+    stock = {'date': [], 'interpolated': [], 'brand_list': brand_list, 'new_doses': [[] for brand in brand_list]}
     
     ## For recording last non-missing data
     prev = [0] * len(brand_list)
     ord_prev = ISODateToOrd(date_list[0]) - 1
     
-    ## Loop over day
-    for date, cum in zip(date_list, cum_doses_list):
+    ord_ref = ISODateToOrd(ISO_DATE_REF)
+    ord_today = getTodayOrdinal()
+    
+    ## Loop over ordinal
+    for ord_ in range(ord_ref, ord_today):
+      date = ordDateToISO(ord_)
+      stock['date'].append(date)
+      
+      ## Out of provided range
+      if date not in cum_doses_dict:
+        stock['interpolated'].append(1)
+        for i, _ in enumerate(brand_list):
+          stock['new_doses'][i].append(0)
+        continue
+      
+      ## In range
+      cum_doses = cum_doses_dict[date]
+      
       ## If data non-missing
-      if 0 < sum(cum):
-        ord = ISODateToOrd(date)
-        length = ord - ord_prev
+      if 0 < sum(cum_doses):
+        ord_ = ISODateToOrd(date)
+        length = ord_ - ord_prev
         
         for i, _ in enumerate(brand_list):
-          stock['new_doses'][i] += itpFromCumul(prev[i], cum[i], length)
+          stock['new_doses'][i] += itpFromCumul(prev[i], cum_doses[i], length)
           
         stock['interpolated'].append(int(1 < length))
-        prev = cum
-        ord_prev = ord
+        prev = cum_doses
+        ord_prev = ord_
         
       ## If data are missing
       else:
@@ -2959,7 +2976,7 @@ def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
 def sandbox():
   #main_sheet = MainSheet()
   #print(main_sheet.getReportDate())
-  #main_sheet.saveCsv()
+  #main_sheet.saveCsv_ageSymptomCorr()
   
   #status_sheet = StatusSheet()
   #print(status_sheet.getCumHosp())

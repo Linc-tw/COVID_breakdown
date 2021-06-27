@@ -67,8 +67,9 @@ function TBC_FormatData(wrap, data) {
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
+    row = data[i];
     h_list = [];
-    x = data[i]["date"];
+    x = row['date'];
     y = 0;
     date_list.push(x);
     
@@ -80,9 +81,9 @@ function TBC_FormatData(wrap, data) {
     
     //-- Loop over column
     for (j=0; j<nb_col; j++)
-      h_list.push(+data[i][col_tag_list[j]]);
+      h_list.push(+row[col_tag_list[j]]);
     
-    //-- Loop over column again
+    //-- Loop over column again (no reverse, so displayed upside down)
     for (j=0; j<nb_col; j++) {
       //-- Current value
       height = h_list[j];
@@ -92,7 +93,7 @@ function TBC_FormatData(wrap, data) {
         'x': x,
         'y0': y,
         'y1': y+height,
-        'h_list': h_list.slice(), //-- No reverse
+        'h_list': h_list.slice(),
         'col': col_tag_list[j]
       };
         
@@ -141,7 +142,7 @@ function TBC_FormatData(wrap, data) {
     ytick.push(i)
   
   //-- Get respective sum
-  var legend_value = h_sum.reverse();
+  var legend_value = h_sum;
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
@@ -273,10 +274,10 @@ function TBC_Plot(wrap) {
   
   //-- Define color
   var color_list = GS_wrap.c_list.slice(0, wrap.nb_col);
-  var col_tag_list = wrap.col_tag_list.slice().reverse();
+  var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
-    .range(color_list.slice().reverse());
+    .range(color_list.slice());
   
   //-- Add bar
   var bar = wrap.svg.selectAll('.content.bar')
@@ -379,7 +380,7 @@ function TBC_Replot(wrap) {
   legend_color_list.push('#000000');
   
   //-- Calculate legend value
-  var legend_value = wrap.legend_value.slice().reverse();
+  var legend_value = wrap.legend_value.slice();
   var sum = legend_value.reduce((a, b) => a + b, 0);
   legend_value.push(sum);
   

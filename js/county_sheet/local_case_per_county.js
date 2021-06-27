@@ -118,12 +118,13 @@ function LCPC_FormatData(wrap, data) {
   //-- Other variables
   var y_sum = [0, 0]; //-- For 0 (total) & col_ind
   var y_max = 4.5;
-  var i, j, x, y;
+  var i, j, x, y, row;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
-    x = data[i]["date"];
-    y = +data[i][col_tag];
+    row = data[i];
+    x = row['date'];
+    y = +row[col_tag];
     date_list.push(x);
     
     //-- Determine whether to have xtick
@@ -133,8 +134,8 @@ function LCPC_FormatData(wrap, data) {
     }
     
     //-- Update y_sum
-    y_sum[0] += +data[i][col_tag_list[0]];
-    y_sum[1] += +data[i][col_tag];
+    y_sum[0] += +row[col_tag_list[0]];
+    y_sum[1] += y;
     
     //-- Update y_max
     y_max = Math.max(y_max, y);

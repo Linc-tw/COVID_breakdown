@@ -49,12 +49,13 @@ function VR_FormatData(wrap, data) {
   //-- Other variables
   var y_max = 0;
   var y_list_list = [];
-  var i, j, x, y, y_list, block;
+  var i, j, x, y, row, y_list, block;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
+    row = data[i];
     y_list = [];
-    x = data[i]["date"];
+    x = row['date'];
     date_list.push(x);
     
     //-- Determine whether to have xtick
@@ -67,10 +68,10 @@ function VR_FormatData(wrap, data) {
     for (j=0; j<nb_col; j++) {
       col = col_tag_list[j];
       
-      if ('' == data[i][col])
+      if ('' == row[col])
         y = NaN;
       else
-        y = +data[i][col];
+        y = +row[col];
       
       y_list.push(y);
     }
@@ -87,7 +88,7 @@ function VR_FormatData(wrap, data) {
     for (i=0; i<data.length; i++) {
       //-- Make data block; redundant information is for toolpix text
       block = {
-        'x': data[i]["date"],
+        'x': data[i]['date'],
         'y': y_list_list[i][j],
         'y_list': y_list_list[i]
       };
@@ -229,7 +230,7 @@ function VR_Plot(wrap) {
   GS_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GS_wrap.c_list.slice(0, wrap.nb_col);
+  var color_list = GS_wrap.c_list.slice(3, 3+wrap.nb_col);
   var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)

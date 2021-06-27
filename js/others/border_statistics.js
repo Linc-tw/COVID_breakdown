@@ -60,12 +60,13 @@ function BS_FormatData(wrap, data) {
   
   //-- Other variables
   var y_max = 0;
-  var i, j, x, y, height, h_list, block;
+  var i, j, x, y, row, height, h_list, block;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
+    row = data[i];
     h_list = [];
-    x = data[i]["date"];
+    x = row["date"];
     y = 0;
     date_list.push(x);
     
@@ -77,10 +78,10 @@ function BS_FormatData(wrap, data) {
     
     //-- Loop over column
     for (j=0; j<nb_col; j++)
-      h_list.push(+data[i][col_tag_list[j]]);
+      h_list.push(+row[col_tag_list[j]]);
     
-    //-- Loop over column again
-    for (j=0; j<nb_col; j++) {
+    //-- Loop over column again (reversed order)
+    for (j=nb_col-1; j>=0; j--) {
       //-- Current value
       height = h_list[j];
       
@@ -89,7 +90,7 @@ function BS_FormatData(wrap, data) {
         'x': x,
         'y0': y,
         'y1': y+height,
-        'h_list': h_list.slice().reverse(),
+        'h_list': h_list.slice(),
         'col': col_tag_list[j]
       };
         
@@ -135,24 +136,15 @@ function BS_FormatData(wrap, data) {
   
   //-- Calculate last row which is not zero
   var last = data.length - 1;
-  while (+data[last][col_tag_list[2]] == 0)
+  while (+data[last][col_tag_list[0]] == 0)
     last -= 1;
   
   //-- Get latest value as legend value
   var legend_value = [];
   for (j=0; j<nb_col; j++)
     legend_value.push(+data[last][col_tag_list[j]]);
-    
-  //-- Calculate latest value as legend value
-  var air = +data[last]['airport'];
-  while (air == 0) { //-- Avoid trailing 0 in `airport` column
-    last -= 1;
-    air = +data[last]['airport'];
-  }
-  var sea = +data[last]['seaport'];
-  var ns  = +data[last]['not_specified'];
+  
   var last_date = data[last]['date'];
-  var legend_value = [air, sea, ns];
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
@@ -284,8 +276,8 @@ function BS_Plot(wrap) {
   GS_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GS_wrap.c_list.slice(0, wrap.nb_col);
-  var col_tag_list = wrap.col_tag_list.slice().reverse();
+  var color_list = GS_wrap.c_list.slice(10, 10+wrap.nb_col);
+  var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
     .domain(col_tag_list)
     .range(color_list);

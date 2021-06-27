@@ -42,12 +42,13 @@ function ASC_ResetText() {
 function ASC_FormatData(wrap, data) {
   var symptom_list = [];
   var age_list = [];
-  var i, j, age, symptom;
+  var i, j, row, age, symptom;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
-    age = data[i]["age"];
-    symptom = data[i]["symptom"];
+    row = data[i];
+    age = row["age"];
+    symptom = row["symptom"];
     
     //-- Search if `age` is already there
     for (j=0; j<age_list.length; j++) {
