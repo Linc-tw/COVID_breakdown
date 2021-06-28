@@ -39,12 +39,13 @@ echo
 
 echo "## Process data"
 echo
-/usr/bin/python3.8 COVID_breakdown_data_processing.py & sleep 2
+/usr/bin/python3.8 COVID_breakdown_data_processing.py & sleep 7
 echo
 
 echo "## Push to repo"
 echo
 git add raw_data/*.csv
+git add raw_data/*.json
 git add processed_data/*.csv
 git add processed_data/latest/*.csv
 git add processed_data/2021/*.csv
