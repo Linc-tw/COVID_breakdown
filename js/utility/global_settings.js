@@ -7,10 +7,8 @@
 
 //------------------------------------------------------------------------------
 //-- TODO
-//Revise js for simple x-axis files
-//Revise corr js & data
+
 //Vaccine progress with line
-//`incidence_evolution_by_county.js` TODO
 //`incidence_evolution_by_age.js` TODO
 
 //7-day average for CBT, CBD, LCPC, TBC, VBB, BS, 

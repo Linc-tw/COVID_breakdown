@@ -225,12 +225,11 @@ function SE_Plot(wrap) {
     .ticks(0)
     .tickSize(0);
   
-  //-- Add yaxis_2 & adjust position
+  //-- Add yaxis_2 & adjust position (no yaxis class)
   wrap.svg.append('g')
-    .attr('class', 'yaxis')
     .attr('transform', 'translate(' + wrap.width + ',0)')
     .call(yaxis_2);
-    
+  
   //-- Add ylabel & update value later
   wrap.svg.append('text')
     .attr('class', 'ylabel')
@@ -259,9 +258,9 @@ function SE_Plot(wrap) {
     .attr('y', yscale(0))
     .attr('width', xscale.bandwidth())
     .attr('height', 0)
-    .on('mouseover', function (d) {GS_MouseOver(wrap, d);})
-    .on('mousemove', function (d) {SE_MouseMove(wrap, d);})
-    .on('mouseleave', function (d) {GS_MouseLeave(wrap, d);})
+      .on('mouseover', function (d) {GS_MouseOver(wrap, d);})
+      .on('mousemove', function (d) {SE_MouseMove(wrap, d);})
+      .on('mouseleave', function (d) {GS_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
   wrap.xscale_2 = xscale_2;

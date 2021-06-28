@@ -21,84 +21,84 @@ function LCPC_InitFig(wrap) {
 
 function LCPC_ResetText() {
   if (GS_lang == 'zh-tw') {
-    TT_AddStr("local_case_per_county_title", "各縣市之每日確診人數");
-    TT_AddStr("local_case_per_county_button_total", "本土合計");
-    TT_AddStr("local_case_per_county_button_keelung", "基隆");
-    TT_AddStr("local_case_per_county_button_taipei", "台北");
-    TT_AddStr("local_case_per_county_button_new_taipei", "新北");
-    TT_AddStr("local_case_per_county_button_taoyuan", "桃園");
-    TT_AddStr("local_case_per_county_button_hsinchu", "竹縣");
-    TT_AddStr("local_case_per_county_button_hsinchu_city", "竹市");
-    TT_AddStr("local_case_per_county_button_miaoli", "苗栗");
-    TT_AddStr("local_case_per_county_button_taichung", "台中");
-    TT_AddStr("local_case_per_county_button_changhua", "彰化");
-    TT_AddStr("local_case_per_county_button_nantou", "南投");
-    TT_AddStr("local_case_per_county_button_yunlin", "雲林");
-    TT_AddStr("local_case_per_county_button_chiayi", "嘉縣");
-    TT_AddStr("local_case_per_county_button_chiayi_city", "嘉市");
-    TT_AddStr("local_case_per_county_button_tainan", "台南");
-    TT_AddStr("local_case_per_county_button_kaohsiung", "高雄");
-    TT_AddStr("local_case_per_county_button_pingtung", "屏東");
-    TT_AddStr("local_case_per_county_button_yilan", "宜蘭");
-    TT_AddStr("local_case_per_county_button_hualien", "花蓮");
-    TT_AddStr("local_case_per_county_button_taitung", "台東");
-    TT_AddStr("local_case_per_county_button_penghu", "澎湖");
-    TT_AddStr("local_case_per_county_button_kinmen", "金門");
-    TT_AddStr("local_case_per_county_button_matsu", "馬祖");
+    TT_AddStr('local_case_per_county_title', '各縣市之每日確診人數');
+    TT_AddStr('local_case_per_county_button_total', '本土合計');
+    TT_AddStr('local_case_per_county_button_keelung', '基隆');
+    TT_AddStr('local_case_per_county_button_taipei', '台北');
+    TT_AddStr('local_case_per_county_button_new_taipei', '新北');
+    TT_AddStr('local_case_per_county_button_taoyuan', '桃園');
+    TT_AddStr('local_case_per_county_button_hsinchu', '竹縣');
+    TT_AddStr('local_case_per_county_button_hsinchu_city', '竹市');
+    TT_AddStr('local_case_per_county_button_miaoli', '苗栗');
+    TT_AddStr('local_case_per_county_button_taichung', '台中');
+    TT_AddStr('local_case_per_county_button_changhua', '彰化');
+    TT_AddStr('local_case_per_county_button_nantou', '南投');
+    TT_AddStr('local_case_per_county_button_yunlin', '雲林');
+    TT_AddStr('local_case_per_county_button_chiayi', '嘉縣');
+    TT_AddStr('local_case_per_county_button_chiayi_city', '嘉市');
+    TT_AddStr('local_case_per_county_button_tainan', '台南');
+    TT_AddStr('local_case_per_county_button_kaohsiung', '高雄');
+    TT_AddStr('local_case_per_county_button_pingtung', '屏東');
+    TT_AddStr('local_case_per_county_button_yilan', '宜蘭');
+    TT_AddStr('local_case_per_county_button_hualien', '花蓮');
+    TT_AddStr('local_case_per_county_button_taitung', '台東');
+    TT_AddStr('local_case_per_county_button_penghu', '澎湖');
+    TT_AddStr('local_case_per_county_button_kinmen', '金門');
+    TT_AddStr('local_case_per_county_button_matsu', '馬祖');
   }
   
   else if (GS_lang == 'fr') {
-    TT_AddStr("local_case_per_county_title", "Cas confirmés locaux par ville et comté");
-    TT_AddStr("local_case_per_county_button_total", "Locaux totaux");
-    TT_AddStr("local_case_per_county_button_keelung", "Keelung");
-    TT_AddStr("local_case_per_county_button_taipei", "Taipei");
-    TT_AddStr("local_case_per_county_button_new_taipei", "Nouveau Taipei");
-    TT_AddStr("local_case_per_county_button_taoyuan", "Taoyuan");
-    TT_AddStr("local_case_per_county_button_hsinchu", "Comté de Hsinchu");
-    TT_AddStr("local_case_per_county_button_hsinchu_city", "Ville de Hsinchu");
-    TT_AddStr("local_case_per_county_button_miaoli", "Miaoli");
-    TT_AddStr("local_case_per_county_button_taichung", "Taichung");
-    TT_AddStr("local_case_per_county_button_changhua", "Changhua");
-    TT_AddStr("local_case_per_county_button_nantou", "Nantou");
-    TT_AddStr("local_case_per_county_button_yunlin", "Yunlin");
-    TT_AddStr("local_case_per_county_button_chiayi", "Comté de Chiayi");
-    TT_AddStr("local_case_per_county_button_chiayi_city", "Ville de Chiayi");
-    TT_AddStr("local_case_per_county_button_tainan", "Tainan");
-    TT_AddStr("local_case_per_county_button_kaohsiung", "Kaohsiung");
-    TT_AddStr("local_case_per_county_button_pingtung", "Pingtung");
-    TT_AddStr("local_case_per_county_button_yilan", "Yilan");
-    TT_AddStr("local_case_per_county_button_hualien", "Hualien");
-    TT_AddStr("local_case_per_county_button_taitung", "Taitung");
-    TT_AddStr("local_case_per_county_button_penghu", "Penghu");
-    TT_AddStr("local_case_per_county_button_kinmen", "Kinmen");
-    TT_AddStr("local_case_per_county_button_matsu", "Matsu");
+    TT_AddStr('local_case_per_county_title', 'Cas confirmés locaux par ville et comté');
+    TT_AddStr('local_case_per_county_button_total', 'Locaux totaux');
+    TT_AddStr('local_case_per_county_button_keelung', 'Keelung');
+    TT_AddStr('local_case_per_county_button_taipei', 'Taipei');
+    TT_AddStr('local_case_per_county_button_new_taipei', 'Nouveau Taipei');
+    TT_AddStr('local_case_per_county_button_taoyuan', 'Taoyuan');
+    TT_AddStr('local_case_per_county_button_hsinchu', 'Comté de Hsinchu');
+    TT_AddStr('local_case_per_county_button_hsinchu_city', 'Ville de Hsinchu');
+    TT_AddStr('local_case_per_county_button_miaoli', 'Miaoli');
+    TT_AddStr('local_case_per_county_button_taichung', 'Taichung');
+    TT_AddStr('local_case_per_county_button_changhua', 'Changhua');
+    TT_AddStr('local_case_per_county_button_nantou', 'Nantou');
+    TT_AddStr('local_case_per_county_button_yunlin', 'Yunlin');
+    TT_AddStr('local_case_per_county_button_chiayi', 'Comté de Chiayi');
+    TT_AddStr('local_case_per_county_button_chiayi_city', 'Ville de Chiayi');
+    TT_AddStr('local_case_per_county_button_tainan', 'Tainan');
+    TT_AddStr('local_case_per_county_button_kaohsiung', 'Kaohsiung');
+    TT_AddStr('local_case_per_county_button_pingtung', 'Pingtung');
+    TT_AddStr('local_case_per_county_button_yilan', 'Yilan');
+    TT_AddStr('local_case_per_county_button_hualien', 'Hualien');
+    TT_AddStr('local_case_per_county_button_taitung', 'Taitung');
+    TT_AddStr('local_case_per_county_button_penghu', 'Penghu');
+    TT_AddStr('local_case_per_county_button_kinmen', 'Kinmen');
+    TT_AddStr('local_case_per_county_button_matsu', 'Matsu');
   }
   
   else { //-- En
-    TT_AddStr("local_case_per_county_title", "Local Confirmed Cases per City & County");
-    TT_AddStr("local_case_per_county_button_total", "Total local");
-    TT_AddStr("local_case_per_county_button_keelung", "Keelung");
-    TT_AddStr("local_case_per_county_button_taipei", "Taipei");
-    TT_AddStr("local_case_per_county_button_new_taipei", "New Taipei");
-    TT_AddStr("local_case_per_county_button_taoyuan", "Taoyuan");
-    TT_AddStr("local_case_per_county_button_hsinchu", "Hsinchu County");
-    TT_AddStr("local_case_per_county_button_hsinchu_city", "Hsinchu City");
-    TT_AddStr("local_case_per_county_button_miaoli", "Miaoli");
-    TT_AddStr("local_case_per_county_button_taichung", "Taichung");
-    TT_AddStr("local_case_per_county_button_changhua", "Changhua");
-    TT_AddStr("local_case_per_county_button_nantou", "Nantou");
-    TT_AddStr("local_case_per_county_button_yunlin", "Yunlin");
-    TT_AddStr("local_case_per_county_button_chiayi", "Chiayi County");
-    TT_AddStr("local_case_per_county_button_chiayi_city", "Chiayi City");
-    TT_AddStr("local_case_per_county_button_tainan", "Tainan");
-    TT_AddStr("local_case_per_county_button_kaohsiung", "Kaohsiung");
-    TT_AddStr("local_case_per_county_button_pingtung", "Pingtung");
-    TT_AddStr("local_case_per_county_button_yilan", "Yilan");
-    TT_AddStr("local_case_per_county_button_hualien", "Hualien");
-    TT_AddStr("local_case_per_county_button_taitung", "Taitung");
-    TT_AddStr("local_case_per_county_button_penghu", "Penghu");
-    TT_AddStr("local_case_per_county_button_kinmen", "Kinmen");
-    TT_AddStr("local_case_per_county_button_matsu", "Matsu");
+    TT_AddStr('local_case_per_county_title', 'Local Confirmed Cases per City & County');
+    TT_AddStr('local_case_per_county_button_total', 'Total local');
+    TT_AddStr('local_case_per_county_button_keelung', 'Keelung');
+    TT_AddStr('local_case_per_county_button_taipei', 'Taipei');
+    TT_AddStr('local_case_per_county_button_new_taipei', 'New Taipei');
+    TT_AddStr('local_case_per_county_button_taoyuan', 'Taoyuan');
+    TT_AddStr('local_case_per_county_button_hsinchu', 'Hsinchu County');
+    TT_AddStr('local_case_per_county_button_hsinchu_city', 'Hsinchu City');
+    TT_AddStr('local_case_per_county_button_miaoli', 'Miaoli');
+    TT_AddStr('local_case_per_county_button_taichung', 'Taichung');
+    TT_AddStr('local_case_per_county_button_changhua', 'Changhua');
+    TT_AddStr('local_case_per_county_button_nantou', 'Nantou');
+    TT_AddStr('local_case_per_county_button_yunlin', 'Yunlin');
+    TT_AddStr('local_case_per_county_button_chiayi', 'Chiayi County');
+    TT_AddStr('local_case_per_county_button_chiayi_city', 'Chiayi City');
+    TT_AddStr('local_case_per_county_button_tainan', 'Tainan');
+    TT_AddStr('local_case_per_county_button_kaohsiung', 'Kaohsiung');
+    TT_AddStr('local_case_per_county_button_pingtung', 'Pingtung');
+    TT_AddStr('local_case_per_county_button_yilan', 'Yilan');
+    TT_AddStr('local_case_per_county_button_hualien', 'Hualien');
+    TT_AddStr('local_case_per_county_button_taitung', 'Taitung');
+    TT_AddStr('local_case_per_county_button_penghu', 'Penghu');
+    TT_AddStr('local_case_per_county_button_kinmen', 'Kinmen');
+    TT_AddStr('local_case_per_county_button_matsu', 'Matsu');
   }
 }
 
@@ -113,7 +113,7 @@ function LCPC_FormatData(wrap, data) {
   var col_tag_list = data.columns.slice(1); //-- 0 = date
   var col_tag = col_tag_list[wrap.county];
   var nb_col = col_tag_list.length;
-  var x_list = []; //-- date
+  var x_list = []; //-- For date
   var row;
   
   //-- Other variables
@@ -271,12 +271,11 @@ function LCPC_Plot(wrap) {
     .ticks(0)
     .tickSize(0);
   
-  //-- Add yaxis_2 & adjust position
+  //-- Add yaxis_2 & adjust position (no yaxis class)
   wrap.svg.append('g')
-    .attr('class', 'yaxis')
     .attr('transform', 'translate(' + wrap.width + ',0)')
     .call(yaxis_2);
-    
+  
   //-- Add ylabel & update value later
   wrap.svg.append('text')
     .attr('class', 'ylabel')
@@ -306,9 +305,9 @@ function LCPC_Plot(wrap) {
     .attr('y', yscale(0))
     .attr('width', xscale.bandwidth())
     .attr('height', 0)
-    .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
-    .on("mousemove", function (d) {LCPC_MouseMove(wrap, d);})
-    .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
+      .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
+      .on("mousemove", function (d) {LCPC_MouseMove(wrap, d);})
+      .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
   wrap.xscale_2 = xscale_2;
@@ -415,32 +414,32 @@ function LCPC_Replot(wrap) {
   legend_value_2.push(wrap.legend_value[0]);
   
   //-- Update legend value
-  wrap.svg.selectAll(".legend.value")
+  wrap.svg.selectAll('.legend.value')
     .remove()
     .exit()
     .data(legend_value_2)
     .enter()
-    .append("text")
-      .attr("class", "legend value")
-      .attr("x", legend_pos.x)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style("fill", function (d, i) {return legend_color_list[i];})
+    .append('text')
+      .attr('class', 'legend value')
+      .attr('x', legend_pos.x)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color_list[i];})
       .text(function (d) {return d;})
-      .attr("text-anchor", "end")
+      .attr('text-anchor', 'end')
     
   //-- Update legend label
-  wrap.svg.selectAll(".legend.label")
+  wrap.svg.selectAll('.legend.label')
     .remove()
     .exit()
     .data(legend_label_2)
     .enter()
-    .append("text")
-      .attr("class", "legend label")
-      .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style("fill", function (d, i) {return legend_color_list[i];})
+    .append('text')
+      .attr('class', 'legend label')
+      .attr('x', legend_pos.x+legend_pos.dx)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color_list[i];})
       .text(function (d) {return d;})
-      .attr("text-anchor", "start")
+      .attr('text-anchor', 'start')
 }
 
 //-- Load

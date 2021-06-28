@@ -21,27 +21,27 @@ function CBD_InitFig(wrap) {
 
 function CBD_ResetText() {
   if (GS_lang == 'zh-tw') {
-    TT_AddStr("case_by_detection_title", "各檢驗管道之每日確診人數");
-    TT_AddStr("case_by_detection_button_1", "逐日");
-    TT_AddStr("case_by_detection_button_2", "累計");
-    TT_AddStr("case_by_detection_button_3", "確診日");
-    TT_AddStr("case_by_detection_button_4", "發病日");
+    TT_AddStr('case_by_detection_title', '各檢驗管道之每日確診人數');
+    TT_AddStr('case_by_detection_button_1', '逐日');
+    TT_AddStr('case_by_detection_button_2', '累計');
+    TT_AddStr('case_by_detection_button_3', '確診日');
+    TT_AddStr('case_by_detection_button_4', '發病日');
   }
   
   else if (GS_lang == 'fr') {
-    TT_AddStr("case_by_detection_title", "Cas confirmés par canal de détection");
-    TT_AddStr("case_by_detection_button_1", "Quotidiens");
-    TT_AddStr("case_by_detection_button_2", "Cumulés");
-    TT_AddStr("case_by_detection_button_3", "Date du diagnostic");
-    TT_AddStr("case_by_detection_button_4", "Date du début des sympt.");
+    TT_AddStr('case_by_detection_title', 'Cas confirmés par canal de détection');
+    TT_AddStr('case_by_detection_button_1', 'Quotidiens');
+    TT_AddStr('case_by_detection_button_2', 'Cumulés');
+    TT_AddStr('case_by_detection_button_3', 'Date du diagnostic');
+    TT_AddStr('case_by_detection_button_4', 'Date du début des sympt.');
   }
   
   else { //-- En
-    TT_AddStr("case_by_detection_title", "Confirmed Cases by Detection Channel");
-    TT_AddStr("case_by_detection_button_1", "Daily");
-    TT_AddStr("case_by_detection_button_2", "Cumulative");
-    TT_AddStr("case_by_detection_button_3", "Report date");
-    TT_AddStr("case_by_detection_button_4", "Onset date");
+    TT_AddStr('case_by_detection_title', 'Confirmed Cases by Detection Channel');
+    TT_AddStr('case_by_detection_button_1', 'Daily');
+    TT_AddStr('case_by_detection_button_2', 'Cumulative');
+    TT_AddStr('case_by_detection_button_3', 'Report date');
+    TT_AddStr('case_by_detection_button_4', 'Onset date');
   }
 }
 
@@ -288,12 +288,11 @@ function CBD_Plot(wrap) {
     .ticks(0)
     .tickSize(0);
   
-  //-- Add yaxis_2 & adjust position
+  //-- Add yaxis_2 & adjust position (no yaxis class)
   wrap.svg.append('g')
-    .attr('class', 'yaxis')
     .attr('transform', 'translate(' + wrap.width + ',0)')
     .call(yaxis_2);
-    
+  
   //-- Add ylabel & update value later
   wrap.svg.append('text')
     .attr('class', 'ylabel')
@@ -323,9 +322,9 @@ function CBD_Plot(wrap) {
     .attr('y', yscale(0))
     .attr('width', xscale.bandwidth())
     .attr('height', 0)
-    .on('mouseover', function (d) {GS_MouseOver(wrap, d);})
-    .on('mousemove', function (d) {CBD_MouseMove(wrap, d);})
-    .on('mouseleave', function (d) {GS_MouseLeave(wrap, d);});
+      .on('mouseover', function (d) {GS_MouseOver(wrap, d);})
+      .on('mousemove', function (d) {CBD_MouseMove(wrap, d);})
+      .on('mouseleave', function (d) {GS_MouseLeave(wrap, d);});
   
   //-- Save to wrapper
   wrap.xscale_2 = xscale_2;

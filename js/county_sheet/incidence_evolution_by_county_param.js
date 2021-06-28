@@ -9,10 +9,9 @@ var IEBC_latest_wrap = {
   tag: 'incidence_evolution_by_county_latest',
   data_path_list: [
     'processed_data/latest/incidence_evolution_by_county.csv',
+    'processed_data/latest/incidence_evolution_by_county_label.csv',
   ],
 
-  xlabel_path: 3,
-  r_list: [1, 0, 0],
-  y_path: '4', //-- 4 ticks
-  legend_pos_x: 90,
+  xlabel_path: 7,
+  r_list: [0, 6, 5, 4, 3, 2, 1],
 };

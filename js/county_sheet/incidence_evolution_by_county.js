@@ -6,33 +6,30 @@
 //--   Chieh-An Lin
 
 function IEBC_InitFig(wrap) {
-  wrap.tot_width = 1200;
+  wrap.tot_width = 960;
   wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 540;
-  wrap.tot_height_['fr'] = 540;
-  wrap.tot_height_['en'] = 540;
+  wrap.tot_height_['zh-tw'] = 400;
+  wrap.tot_height_['fr'] = 400;
+  wrap.tot_height_['en'] = 400;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 110, right: 2, bottom: 105, top: 2};
-  wrap.margin_['fr'] = {left: 110, right: 2, bottom: 90, top: 2};
-  wrap.margin_['en'] = {left: 110, right: 2, bottom: 90, top: 2};
+  wrap.margin_['zh-tw'] = {left: 35, right: 2, bottom: 55, top: 25};
+  wrap.margin_['fr'] = {left: 105, right: 2, bottom: 40, top: 25};
+  wrap.margin_['en'] = {left: 90, right: 2, bottom: 50, top: 25};
   
   GS_InitFig(wrap);
 }
 
 function IEBC_ResetText() {
   if (GS_lang == 'zh-tw') {
-//     TT_AddStr("incidence_evolution_by_county_title", "各縣市之每日確診人數"); //WARNING
-//     TT_AddStr("incidence_evolution_by_county_button_total", "本土合計");
+    TT_AddStr('incidence_evolution_by_county_title', '各縣市確診率變化');
   }
   
   else if (GS_lang == 'fr') {
-//     TT_AddStr("incidence_evolution_by_county_title", "Cas confirmés locaux par ville et comté");
-//     TT_AddStr("incidence_evolution_by_county_button_total", "Locaux totaux");
+    TT_AddStr('incidence_evolution_by_county_title', "Évolution du taux d'incidence par ville et comté");
   }
   
   else { //-- En
-    TT_AddStr("incidence_evolution_by_county_title", "Evolution of Incidence Rate by City & County");
-//     TT_AddStr("incidence_evolution_by_county_button_total", "Total local");
+    TT_AddStr('incidence_evolution_by_county_title', 'Evolution of Incidence Rate by City & County');
   }
 }
 
@@ -44,14 +41,14 @@ function IEBC_FormatData(wrap, data) {
   var xticklabel = [];
   
   //-- Variables for data
-  var col_tag_list = data.columns.slice(1);
+  var col_tag_list = data.columns.slice(1); //-- 0 = date
   var nb_col = col_tag_list.length;
   var x_list = []; //-- For date
   var row, col_tag;
   
   //-- Other variables
   var formatted_data = [];
-  var i, j, x, y, value, block;
+  var i, j, x, y, block;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
@@ -96,6 +93,22 @@ function IEBC_FormatData(wrap, data) {
   wrap.ytick = ytick;
 }
 
+function IEBC_FormatData2(wrap, data2) {
+  var y_list_dict = {'tag': [], 'en': [], 'fr': [], 'zh-tw': []};
+  var i, tag; 
+  
+  //-- Loop over row
+  for (i=0; i<data2.length; i++) {
+    y_list_dict['tag'].push(data2[i]['county']);
+    y_list_dict['en'].push(data2[i]['label']);
+    y_list_dict['fr'].push(data2[i]['label_fr']);
+    y_list_dict['zh-tw'].push(data2[i]['label_zh']);
+  }
+  
+  //-- Save to wrapper
+  wrap.y_list_dict = y_list_dict;
+}
+
 function IEBC_Plot(wrap) {
   //-- Define xscale
   var xscale = d3.scaleBand()
@@ -103,22 +116,18 @@ function IEBC_Plot(wrap) {
     .range([0, wrap.width])
     .padding(0.04);
     
-  //-- Define xscale_2 for xtick & xticklabel
-  var eps = 0.1
-  var xscale_2 = d3.scaleLinear()
-    .domain([-eps, wrap.x_list.length+eps])
-    .range([0, wrap.width]);
-  
   //-- Define xaxis & update xtick or xticklabel later
-  var xaxis = d3.axisBottom(xscale_2)
+  var xaxis = d3.axisBottom(xscale)
     .tickSize(0)
     .tickFormat('');
   
   //-- Add xaxis & adjust position
   wrap.svg.append('g')
-    .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + wrap.height + ')')
     .call(xaxis);
+    
+  wrap.svg.append('g')
+    .attr('class', 'xaxis')
+    .attr('transform', 'translate(0,' + wrap.height + ')');
     
   //-- Define yscale
   var yscale = d3.scaleBand()
@@ -126,34 +135,30 @@ function IEBC_Plot(wrap) {
     .range([0, wrap.height])
     .padding(0.04);
   
-  //-- Define yaxis for only yticklabel, no ytick
+  //-- Define yaxis & update yticklabel later
   var yaxis = d3.axisLeft(yscale)
     .tickSize(0)
-    .tickFormat(function (d, i) {return wrap.col_tag_list[i]});
+    .tickFormat('');
   
   //-- Add yaxis
   wrap.svg.append('g')
     .attr('class', 'yaxis')
     .call(yaxis)
-    .selectAll('text')
-      .attr('transform', 'translate(-3,0)')
-      .style('font-size', '12px');
 
   //-- Define yaxis_2 for the frameline at right
   var yaxis_2 = d3.axisRight(yscale)
     .ticks(0)
     .tickSize(0);
   
-  //-- Add yaxis_2 & adjust position
+  //-- Add yaxis_2 & adjust position (no yaxis class)
   wrap.svg.append('g')
-    .attr('class', 'yaxis')
     .attr('transform', 'translate(' + wrap.width + ',0)')
     .call(yaxis_2);
     
   //-- Define square color
   var color = d3.scaleSequential()
-    .domain([0, 60]) //WARNING use y_max
-    .interpolator(t => d3.interpolateMagma(1-0.75*t));
+    .domain([0, 61]) //WARNING use y_max
+    .interpolator(t => d3.interpolatePuRd(t));
   
   //-- Add square
   wrap.svg.selectAll()
@@ -163,13 +168,13 @@ function IEBC_Plot(wrap) {
       .attr('class', 'content square')
       .attr('x', function (d) {return xscale(d.x);})
       .attr('y', function (d) {return yscale(d.y);})
-      .attr('rx', 2)
-      .attr('ry', 2)
+      .attr('rx', 1.2)
+      .attr('ry', 1.2)
       .attr('width', xscale.bandwidth())
       .attr('height', yscale.bandwidth())
       .style('fill', function (d) {return color(d.value);})
-      .on('mouseover', function (d) {GS_MouseOver2(wrap, d);})
-      .on('mouseleave', function (d) {GS_MouseLeave2(wrap, d);});
+        .on('mouseover', function (d) {GS_MouseOver2(wrap, d);})
+        .on('mouseleave', function (d) {GS_MouseLeave2(wrap, d);});
     
   //-- Add text
   wrap.svg.selectAll()
@@ -180,19 +185,28 @@ function IEBC_Plot(wrap) {
       .attr('x', function (d) {return xscale(d.x) + 0.5*+xscale.bandwidth();})
       .attr('y', function (d) {return yscale(d.y) + 0.5*+yscale.bandwidth();})
       .style('fill', function (d) {if (d.value<25) return '#000000'; return '#FFFFFF';})
-      .text(function (d) {return d.value.toFixed(0);})
-      .style('font-size', '10px')
+      .text(function (d) {if (d.value<0.5001) return ''; return d.value.toFixed(0);})
+      .style('font-size', '8px')
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central');
   
+  wrap.svg.append('text')
+    .attr('class', 'legend caption');
+  
   //-- Save to wrapper
-  wrap.xscale_2 = xscale_2;
   wrap.yscale = yscale;
 }
 
 function IEBC_Replot(wrap) {
+  //-- Define xscale_2 for xtick & xticklabel
+  var eps = 0
+  var xscale_2 = d3.scaleLinear()
+    .domain([-eps, wrap.x_list.length+eps])
+    .range([0, wrap.width]);
+  
   //-- Define new xaxis for xticklabel
-  var x_axis = d3.axisBottom(wrap.xscale_2)
+  var x_axis = d3.axisBottom(xscale_2)
+    .ticks(0)
     .tickSize(0)
     .tickValues(wrap.xtick)
     .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
@@ -203,69 +217,69 @@ function IEBC_Replot(wrap) {
     .duration(GS_wrap.trans_delay)
     .call(x_axis)
     .selectAll('text')
-      .attr('transform', 'translate(-20,15) rotate(-90)')
-      .style('font-size', '14px')
+      .attr('transform', 'translate(-8,7) rotate(-90)')
+      .style('font-size', '11px')
       .style('text-anchor', 'end');
   
-//   //-- Define y-axis
-//   var yscale = d3.scaleLinear()
-//     .domain([0, wrap.y_max])
-//     .range([wrap.height, 0]);
-//   
-//   //-- Define ytick
-//   var yaxis = d3.axisLeft(yscale)
-//     .tickSize(-wrap.width)
-//     .tickValues(wrap.ytick)
-//     .tickFormat(d3.format('d'));
-//   
-//   //-- Update y-axis
-//   wrap.svg.select('.yaxis')
-//     .transition()
-//     .duration(GS_wrap.trans_delay)
-//     .call(yaxis);
+  //-- Define yaxis
+  var yaxis = d3.axisLeft(wrap.yscale)
+    .tickSize(0)
+    .tickFormat(function (d, i) {return wrap.y_list_dict[GS_lang][i]});
+  
+  //-- Update y-axis
+  wrap.svg.select('.yaxis')
+    .transition()
+    .duration(GS_wrap.trans_delay)
+    .call(yaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(-2,0)')
+      .style('font-size', '11px')
+      .style('text-anchor', 'end');
+      
+  if (GS_lang == 'zh-tw')
+    caption = '各縣市每十萬人過去七日總確診數合';
+  else if (GS_lang == 'fr')
+    caption = 'Nombre de cas confirmés sur 7 jours par 100k habitants, par ville & comté';
+  else 
+    caption = 'Number of confirmed cased over 7 days per 100k inhabitants, by city & county';
+    
+  var offset;
+  if (GS_lang == 'zh-tw')
+    offset = {x: -45, y: -8};
+  else if (GS_lang == 'fr')
+    offset = {x: -115, y: -8};
+  else 
+    offset = {x: -100, y: -8};
+  
+  //-- Update legend caption
+  wrap.svg.selectAll('.legend.caption')
+    .attr('x', wrap.tot_width+offset.x)
+    .attr('y', offset.y)
+    .style('fill', '#000000')
+    .text(caption)
+    .style('font-size', '12px')
+    .attr('text-anchor', 'end');
 }
 
 //-- Load
 function IEBC_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       IEBC_FormatData(wrap, data);
+      IEBC_FormatData2(wrap, data2);
       IEBC_Plot(wrap);
       IEBC_Replot(wrap);
     });
 }
 
-function IEBC_Reload(wrap) {
-  d3.queue()
-    .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
-      if (error)
-        return console.warn(error);
-      
-      IEBC_FormatData(wrap, data);
-      IEBC_Replot(wrap);
-    });
-}
-
 function IEBC_ButtonListener(wrap) {
-  //-- Period
-//   d3.select(wrap.id +'_county').on('change', function() {
-//     wrap.county = this.value;
-//     IEBC_Reload(wrap);
-//   });
-  
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
-//     col_label = [
-//       'Total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
-//       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
-//     ];
-//     var tag1 = col_label[wrap.county];
-    
     name = wrap.tag + '_' + GS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
@@ -285,9 +299,6 @@ function IEBC_ButtonListener(wrap) {
 function IEBC_Main(wrap) {
   wrap.id = '#' + wrap.tag;
 
-  //-- Swap active to current value
-//   wrap.county = document.getElementById(wrap.tag + "_county").value;
-  
   //-- Load
   IEBC_InitFig(wrap);
   IEBC_ResetText();

@@ -21,93 +21,93 @@ function CBA_InitFig(wrap) {
 
 function CBA_ResetText() {
   if (GS_lang == 'zh-tw') {
-    TT_AddStr("case_by_age_title", "確診個案年齡分布");
-    TT_AddStr("case_by_age_text", "資料遲一日更新");
-    TT_AddStr("case_by_age_button_total", "合計");
-    TT_AddStr("case_by_age_button_w-1", "0-6天前");
-    TT_AddStr("case_by_age_button_w-2", "7-13天前");
-    TT_AddStr("case_by_age_button_w-3", "14-20天前");
-    TT_AddStr("case_by_age_button_w-4", "21-27天前");
-    TT_AddStr("case_by_age_button_w-5", "28-34天前");
-    TT_AddStr("case_by_age_button_w-6", "35-41天前");
-    TT_AddStr("case_by_age_button_w-7", "42-48天前");
-    TT_AddStr("case_by_age_button_w-8", "49-55天前");
-    TT_AddStr("case_by_age_button_w-9", "56-62天前");
-    TT_AddStr("case_by_age_button_w-10", "63-69天前");
-    TT_AddStr("case_by_age_button_w-11", "70-76天前");
-    TT_AddStr("case_by_age_button_w-12", "77-83天前");
-    TT_AddStr("case_by_age_button_m1", "1月");
-    TT_AddStr("case_by_age_button_m2", "2月");
-    TT_AddStr("case_by_age_button_m3", "3月");
-    TT_AddStr("case_by_age_button_m4", "4月");
-    TT_AddStr("case_by_age_button_m5", "5月");
-    TT_AddStr("case_by_age_button_m6", "6月");
-    TT_AddStr("case_by_age_button_m7", "7月");
-    TT_AddStr("case_by_age_button_m8", "8月");
-    TT_AddStr("case_by_age_button_m9", "9月");
-    TT_AddStr("case_by_age_button_m10", "10月");
-    TT_AddStr("case_by_age_button_m11", "11月");
-    TT_AddStr("case_by_age_button_m12", "12月");
+    TT_AddStr('case_by_age_title', '確診個案年齡分布');
+    TT_AddStr('case_by_age_text', '資料遲一日更新');
+    TT_AddStr('case_by_age_button_total', '合計');
+    TT_AddStr('case_by_age_button_w-1', '0-6天前');
+    TT_AddStr('case_by_age_button_w-2', '7-13天前');
+    TT_AddStr('case_by_age_button_w-3', '14-20天前');
+    TT_AddStr('case_by_age_button_w-4', '21-27天前');
+    TT_AddStr('case_by_age_button_w-5', '28-34天前');
+    TT_AddStr('case_by_age_button_w-6', '35-41天前');
+    TT_AddStr('case_by_age_button_w-7', '42-48天前');
+    TT_AddStr('case_by_age_button_w-8', '49-55天前');
+    TT_AddStr('case_by_age_button_w-9', '56-62天前');
+    TT_AddStr('case_by_age_button_w-10', '63-69天前');
+    TT_AddStr('case_by_age_button_w-11', '70-76天前');
+    TT_AddStr('case_by_age_button_w-12', '77-83天前');
+    TT_AddStr('case_by_age_button_m1', '1月');
+    TT_AddStr('case_by_age_button_m2', '2月');
+    TT_AddStr('case_by_age_button_m3', '3月');
+    TT_AddStr('case_by_age_button_m4', '4月');
+    TT_AddStr('case_by_age_button_m5', '5月');
+    TT_AddStr('case_by_age_button_m6', '6月');
+    TT_AddStr('case_by_age_button_m7', '7月');
+    TT_AddStr('case_by_age_button_m8', '8月');
+    TT_AddStr('case_by_age_button_m9', '9月');
+    TT_AddStr('case_by_age_button_m10', '10月');
+    TT_AddStr('case_by_age_button_m11', '11月');
+    TT_AddStr('case_by_age_button_m12', '12月');
   }
   
   else if (GS_lang == 'fr') {
-    TT_AddStr("case_by_age_title", "Cas confirmés par âge");
-    TT_AddStr("case_by_age_text", "Mise à jour avec 1 jour de retard");
-    TT_AddStr("case_by_age_button_total", "Total");
-    TT_AddStr("case_by_age_button_w-1", "0-6 jours plus tôt");
-    TT_AddStr("case_by_age_button_w-2", "7-13 jours plus tôt");
-    TT_AddStr("case_by_age_button_w-3", "14-20 jours plus tôt");
-    TT_AddStr("case_by_age_button_w-4", "21-27 jours plus tôt");
-    TT_AddStr("case_by_age_button_w-5", "28-34 jours plus tôt");
-    TT_AddStr("case_by_age_button_w-6", "35-41 jours plus tôt");
-    TT_AddStr("case_by_age_button_w-7", "42-48 jours plus tôt");
-    TT_AddStr("case_by_age_button_w-8", "49-55 jours plus tôt");
-    TT_AddStr("case_by_age_button_w-9", "56-62 jours plus tôt");
-    TT_AddStr("case_by_age_button_w-10", "63-69 jours plus tôt");
-    TT_AddStr("case_by_age_button_w-11", "70-76 jours plus tôt");
-    TT_AddStr("case_by_age_button_w-12", "77-83 jours plus tôt");
-    TT_AddStr("case_by_age_button_m1", "Janvier");
-    TT_AddStr("case_by_age_button_m2", "Février");
-    TT_AddStr("case_by_age_button_m3", "Mars");
-    TT_AddStr("case_by_age_button_m4", "Avril");
-    TT_AddStr("case_by_age_button_m5", "Mai");
-    TT_AddStr("case_by_age_button_m6", "Juin");
-    TT_AddStr("case_by_age_button_m7", "Juillet");
-    TT_AddStr("case_by_age_button_m8", "Août");
-    TT_AddStr("case_by_age_button_m9", "Septembre");
-    TT_AddStr("case_by_age_button_m10", "Octobre");
-    TT_AddStr("case_by_age_button_m11", "Novembre");
-    TT_AddStr("case_by_age_button_m12", "Décembre");
+    TT_AddStr('case_by_age_title', 'Cas confirmés par âge');
+    TT_AddStr('case_by_age_text', 'Mise à jour avec 1 jour de retard');
+    TT_AddStr('case_by_age_button_total', 'Total');
+    TT_AddStr('case_by_age_button_w-1', '0-6 jours plus tôt');
+    TT_AddStr('case_by_age_button_w-2', '7-13 jours plus tôt');
+    TT_AddStr('case_by_age_button_w-3', '14-20 jours plus tôt');
+    TT_AddStr('case_by_age_button_w-4', '21-27 jours plus tôt');
+    TT_AddStr('case_by_age_button_w-5', '28-34 jours plus tôt');
+    TT_AddStr('case_by_age_button_w-6', '35-41 jours plus tôt');
+    TT_AddStr('case_by_age_button_w-7', '42-48 jours plus tôt');
+    TT_AddStr('case_by_age_button_w-8', '49-55 jours plus tôt');
+    TT_AddStr('case_by_age_button_w-9', '56-62 jours plus tôt');
+    TT_AddStr('case_by_age_button_w-10', '63-69 jours plus tôt');
+    TT_AddStr('case_by_age_button_w-11', '70-76 jours plus tôt');
+    TT_AddStr('case_by_age_button_w-12', '77-83 jours plus tôt');
+    TT_AddStr('case_by_age_button_m1', 'Janvier');
+    TT_AddStr('case_by_age_button_m2', 'Février');
+    TT_AddStr('case_by_age_button_m3', 'Mars');
+    TT_AddStr('case_by_age_button_m4', 'Avril');
+    TT_AddStr('case_by_age_button_m5', 'Mai');
+    TT_AddStr('case_by_age_button_m6', 'Juin');
+    TT_AddStr('case_by_age_button_m7', 'Juillet');
+    TT_AddStr('case_by_age_button_m8', 'Août');
+    TT_AddStr('case_by_age_button_m9', 'Septembre');
+    TT_AddStr('case_by_age_button_m10', 'Octobre');
+    TT_AddStr('case_by_age_button_m11', 'Novembre');
+    TT_AddStr('case_by_age_button_m12', 'Décembre');
   }
   
   else { //-- En
-    TT_AddStr("case_by_age_title", "Confirmed Cases by Age");
-    TT_AddStr("case_by_age_text", "Updated typically with 1 day delay");
-    TT_AddStr("case_by_age_button_total", "Total");
-    TT_AddStr("case_by_age_button_w-1", "0-6 days ago");
-    TT_AddStr("case_by_age_button_w-2", "7-13 days ago");
-    TT_AddStr("case_by_age_button_w-3", "14-20 days ago");
-    TT_AddStr("case_by_age_button_w-4", "21-27 days ago");
-    TT_AddStr("case_by_age_button_w-5", "28-34 days ago");
-    TT_AddStr("case_by_age_button_w-6", "35-41 days ago");
-    TT_AddStr("case_by_age_button_w-7", "42-48 days ago");
-    TT_AddStr("case_by_age_button_w-8", "49-55 days ago");
-    TT_AddStr("case_by_age_button_w-9", "56-62 days ago");
-    TT_AddStr("case_by_age_button_w-10", "63-69 days ago");
-    TT_AddStr("case_by_age_button_w-11", "70-76 days ago");
-    TT_AddStr("case_by_age_button_w-12", "77-83 days ago");
-    TT_AddStr("case_by_age_button_m1", "January");
-    TT_AddStr("case_by_age_button_m2", "February");
-    TT_AddStr("case_by_age_button_m3", "March");
-    TT_AddStr("case_by_age_button_m4", "April");
-    TT_AddStr("case_by_age_button_m5", "May");
-    TT_AddStr("case_by_age_button_m6", "June");
-    TT_AddStr("case_by_age_button_m7", "July");
-    TT_AddStr("case_by_age_button_m8", "August");
-    TT_AddStr("case_by_age_button_m9", "September");
-    TT_AddStr("case_by_age_button_m10", "October");
-    TT_AddStr("case_by_age_button_m11", "November");
-    TT_AddStr("case_by_age_button_m12", "December");
+    TT_AddStr('case_by_age_title', 'Confirmed Cases by Age');
+    TT_AddStr('case_by_age_text', 'Updated typically with 1 day delay');
+    TT_AddStr('case_by_age_button_total', 'Total');
+    TT_AddStr('case_by_age_button_w-1', '0-6 days ago');
+    TT_AddStr('case_by_age_button_w-2', '7-13 days ago');
+    TT_AddStr('case_by_age_button_w-3', '14-20 days ago');
+    TT_AddStr('case_by_age_button_w-4', '21-27 days ago');
+    TT_AddStr('case_by_age_button_w-5', '28-34 days ago');
+    TT_AddStr('case_by_age_button_w-6', '35-41 days ago');
+    TT_AddStr('case_by_age_button_w-7', '42-48 days ago');
+    TT_AddStr('case_by_age_button_w-8', '49-55 days ago');
+    TT_AddStr('case_by_age_button_w-9', '56-62 days ago');
+    TT_AddStr('case_by_age_button_w-10', '63-69 days ago');
+    TT_AddStr('case_by_age_button_w-11', '70-76 days ago');
+    TT_AddStr('case_by_age_button_w-12', '77-83 days ago');
+    TT_AddStr('case_by_age_button_m1', 'January');
+    TT_AddStr('case_by_age_button_m2', 'February');
+    TT_AddStr('case_by_age_button_m3', 'March');
+    TT_AddStr('case_by_age_button_m4', 'April');
+    TT_AddStr('case_by_age_button_m5', 'May');
+    TT_AddStr('case_by_age_button_m6', 'June');
+    TT_AddStr('case_by_age_button_m7', 'July');
+    TT_AddStr('case_by_age_button_m8', 'August');
+    TT_AddStr('case_by_age_button_m9', 'September');
+    TT_AddStr('case_by_age_button_m10', 'October');
+    TT_AddStr('case_by_age_button_m11', 'November');
+    TT_AddStr('case_by_age_button_m12', 'December');
   }
 }
 
@@ -120,19 +120,20 @@ function CBA_FormatData(wrap, data) {
   var col_tag_list = data.columns.slice(1);
   var col_tag = col_tag_list[wrap.period];
   var nb_col = col_tag_list.length;
-  var age_list = [];
+  var x_list = []; //-- For age
+  var row;
   
   //-- Other variables
-  var y_sum = [0, 0]; //-- For 0 (total) & col_ind
+  var y_sum = [0, 0]; //-- For legend, 0 (total) & period
   var y_max = 4.5;
-  var i, j, x, y, row;
+  var i, j, x, y;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
     x = row['age'];
     y = +row[col_tag];
-    age_list.push(x);
+    x_list.push(x);
     
     //-- Determine whether to have xtick
     xtick.push(i);
@@ -173,19 +174,17 @@ function CBA_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
-  //-- Get respective sum
-  var legend_value = y_sum;
-  
   //-- Save to wrapper
   wrap.formatted_data = data;
-  wrap.age_list = age_list;
   wrap.col_tag_list = col_tag_list;
+  wrap.col_tag = col_tag;
   wrap.nb_col = nb_col;
-  wrap.y_max = y_max;
+  wrap.x_list = x_list;
   wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
+  wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = legend_value;
+  wrap.legend_value = y_sum;
 }
 
 //-- Tooltip
@@ -217,7 +216,7 @@ function CBA_MouseMove(wrap, d) {
     else
       tooltip_text = wrap.period + '月案例中有';
     
-    tooltip_text += d[wrap.col_tag_list[wrap.period]];
+    tooltip_text += d[wrap.col_tag];
     
     if (d['age'] == '70+')
       tooltip_text += '位<br>年齡在70歲以上';
@@ -226,23 +225,27 @@ function CBA_MouseMove(wrap, d) {
   }
   
   else if (GS_lang == 'fr') {
+    tooltip_text = d[wrap.col_tag];
+    
     if (wrap.period == 0)
-      tooltip_text = d[wrap.col_tag_list[wrap.period]] + " de l'ensemble des cas";
+      tooltip_text += " de l'ensemble des cas";
     else if (wrap.tag.includes('latest'))
-      tooltip_text = d[wrap.col_tag_list[wrap.period]] + " cas confirmés<br>de " + col_label + ' jours plus tôt';
+      tooltip_text += " cas confirmés<br>de " + col_label + ' jours plus tôt';
     else
-      tooltip_text = d[wrap.col_tag_list[wrap.period]] + " cas " + col_label;
+      tooltip_text += " cas " + col_label;
     
     tooltip_text += '<br>sont âgés de ' + d['age'] + ' ans';
   }
   
   else {
+    tooltip_text = d[wrap.col_tag];
+    
     if (wrap.period == 0)
-      tooltip_text = d[wrap.col_tag_list[wrap.period]] + ' of all confirmed cases';
+      tooltip_text += ' of all confirmed cases';
     else if (wrap.tag.includes('latest'))
-      tooltip_text = d[wrap.col_tag_list[wrap.period]] + ' confirmed cases<br>of ' + col_label + ' days ago';
+      tooltip_text += ' confirmed cases<br>of ' + col_label + ' days ago';
     else
-      tooltip_text = d[wrap.col_tag_list[wrap.period]] + ' cases from ' + col_label;
+      tooltip_text += ' cases from ' + col_label;
     
     tooltip_text += '<br>are ' + d['age'] + ' years old';
   }
@@ -255,84 +258,72 @@ function CBA_MouseMove(wrap, d) {
 }
 
 function CBA_Plot(wrap) {
-  //-- Define x-axis
-  var x = d3.scaleBand()
-    .domain(wrap.age_list)
+  //-- Define xscale
+  var xscale = d3.scaleBand()
+    .domain(wrap.x_list)
     .range([0, wrap.width])
     .padding(0.2);
     
-  //-- No xtick or xticklabel 
-  var x_axis = d3.axisBottom(x)
-    .tickSize(0)
-    .tickFormat("");
+  //-- Define xscale_2 for xtick & xticklabel
+  var eps = 0.1
+  var xscale_2 = d3.scaleLinear()
+    .domain([-eps, wrap.x_list.length+eps])
+    .range([0, wrap.width]);
   
-  //-- Add x-axis & adjust position
+  //-- Define xaxis for xtick & xticklabel
+  var xaxis = d3.axisBottom(xscale_2)
+    .tickSize(10)
+    .tickSizeOuter(0)
+    .tickValues(wrap.xtick)
+    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
+  
+  //-- Add xaxis & adjust position
   wrap.svg.append('g')
     .attr('class', 'xaxis')
     .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(x_axis)
-    
-  //-- Define a 2nd x-axis for xtick & xticklabel
-  var eps = 0.1
-  var x_2 = d3.scaleLinear()
-    .domain([-eps, wrap.age_list.length+eps])
-    .range([0, wrap.width])
-  
-  //-- Define xtick & xticklabel
-  var x_axis_2 = d3.axisBottom(x_2)
-    .tickValues(wrap.xtick)
-    .tickSize(10)
-    .tickSizeOuter(0)
-    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
-  
-  //-- Add 2nd x-axis & adjust position
-  wrap.svg.append("g")
-    .attr("class", "xaxis")
-    .attr("transform", "translate(0," + wrap.height + ")")
-    .call(x_axis_2)
+    .call(xaxis)
     .selectAll("text")
       .attr("transform", "translate(0,5)")
-      .style("text-anchor", "middle")
+      .style("text-anchor", "middle");
   
-  //-- Define y-axis
-  var y = d3.scaleLinear()
+  //-- Define yscale
+  var yscale = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
-  //-- Define ytick & yticklabel
-  var y_axis = d3.axisLeft(y)
+  //-- Define yaxis for ytick & yticklabel
+  var yaxis = d3.axisLeft(yscale)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
-    .tickFormat(d3.format("d"));
+    .tickFormat(d3.format('d'));
   
-  //-- Add y-axis
-  wrap.svg.append("g")
-    .attr("class", "yaxis")
-    .call(y_axis)
+  //-- Add yaxis
+  wrap.svg.append('g')
+    .attr('class', 'yaxis')
+    .call(yaxis);
 
-  //-- Define a 2nd y-axis for the frameline at right
-  var y_axis_2 = d3.axisRight(y)
+  //-- Define yaxis_2 for the frameline at right
+  var yaxis_2 = d3.axisRight(yscale)
     .ticks(0)
-    .tickSize(0)
+    .tickSize(0);
   
-  //-- Add 2nd y-axis
-  wrap.svg.append("g")
-    .attr("class", "yaxis")
-    .attr("transform", "translate(" + wrap.width + ",0)")
-    .call(y_axis_2)
+  //-- Add yaxis_2 & adjust position (no yaxis class)
+  wrap.svg.append('g')
+    .attr('transform', 'translate(' + wrap.width + ',0)')
+    .call(yaxis_2);
     
   //-- Add xlabel
-  wrap.svg.append("text")
-    .attr("class", "xlabel")
-    .attr("text-anchor", "middle")
-    .attr("dominant-baseline", "bottom")
-    .attr("transform", "translate(" + (wrap.width*0.5).toString() + ", " + (wrap.tot_height-0.2*wrap.margin.bottom).toString() + ")");
+  wrap.svg.append('text')
+    .attr('class', 'xlabel')
+    .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'bottom')
+    .attr('transform', 'translate(' + (wrap.width*0.5).toString() + ', ' + (wrap.tot_height-0.2*wrap.margin.bottom).toString() + ')');
   
   //-- Add ylabel
-  wrap.svg.append("text")
-    .attr("class", "ylabel")
-    .attr("text-anchor", "middle")
-    .attr("transform", "translate(" + (-wrap.margin.left*0.75).toString() + ", " + (wrap.height/2).toString() + ")rotate(-90)");
+  wrap.svg.append('text')
+    .attr('class', 'ylabel')
+    .attr('text-anchor', 'middle')
+    .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (wrap.height/2).toString() + ')rotate(-90)');
     
   //-- Add tooltip
   GS_MakeTooltip(wrap);
@@ -340,9 +331,8 @@ function CBA_Plot(wrap) {
   //-- Define color
   var color_list = GS_wrap.c_list.slice(7).concat(GS_wrap.c_list.slice(0, 7));
   color_list = color_list.concat(color_list.slice(1));
-  var col_tag_list = wrap.col_tag_list.slice();
   var color = d3.scaleOrdinal()
-    .domain(col_tag_list)
+    .domain(wrap.col_tag_list)
     .range(color_list);
   
   //-- Add bar
@@ -353,14 +343,14 @@ function CBA_Plot(wrap) {
   //-- Update bar with dummy details
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', color(col_tag_list[wrap.period]))
-    .attr('x', function (d) {return x(d['age']);})
-    .attr('y', y(0))
-    .attr('width', x.bandwidth())
+    .attr('fill', color(wrap.col_tag))
+    .attr('x', function (d) {return xscale(d.age);})
+    .attr('y', yscale(0))
+    .attr('width', xscale.bandwidth())
     .attr('height', 0)
-    .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
-    .on("mousemove", function (d) {CBA_MouseMove(wrap, d);})
-    .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
+      .on('mouseover', function (d) {GS_MouseOver(wrap, d);})
+      .on('mousemove', function (d) {CBA_MouseMove(wrap, d);})
+      .on('mouseleave', function (d) {GS_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
   wrap.color_list = color_list;
@@ -369,22 +359,29 @@ function CBA_Plot(wrap) {
 }
 
 function CBA_Replot(wrap) {
-  //-- Define y-axis
-  var y = d3.scaleLinear()
+  //-- Define new yscale
+  var yscale = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
   
-  //-- Define ytick
-  var y_axis = d3.axisLeft(y)
+  //-- Define yticklabel format
+  var yticklabel_format;
+  if (wrap.ytick[wrap.ytick.length-1] > 9999) 
+    yticklabel_format = '.2s';
+  else
+    yticklabel_format = 'd';
+  
+  //-- Define new yaxis for ytick
+  var yaxis = d3.axisLeft(yscale)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
-    .tickFormat(d3.format("d"));
+    .tickFormat(d3.format(yticklabel_format));
   
-  //-- Update y-axis
+  //-- Update yaxis
   wrap.svg.select('.yaxis')
     .transition()
     .duration(GS_wrap.trans_delay)
-    .call(y_axis);
+    .call(yaxis);
   
   //-- Define xlabel
   var xlabel;
@@ -395,6 +392,10 @@ function CBA_Replot(wrap) {
   else
     xlabel = "Age";
   
+  //-- Update xlabel
+  wrap.svg.select(".xlabel")
+    .text(xlabel);
+    
   //-- Define ylabel
   var ylabel;
   if (GS_lang == 'zh-tw')
@@ -404,23 +405,18 @@ function CBA_Replot(wrap) {
   else
     ylabel = 'Number of cases';
   
-  //-- Update xlabel
-  wrap.svg.select(".xlabel")
-    .text(xlabel);
-    
   //-- Update ylabel
   wrap.svg.select(".ylabel")
     .text(ylabel);
     
   //-- Update bar
-  var col_tag_list = wrap.col_tag_list.slice();
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
     .duration(GS_wrap.trans_delay)
-    .attr('fill', wrap.color(col_tag_list[wrap.period]))
-    .attr('y', function (d) {return y(d[col_tag_list[wrap.period]]);})
-    .attr('height', function (d) {return y(0)-y(d[col_tag_list[wrap.period]]);});
+    .attr('fill', wrap.color(wrap.col_tag))
+    .attr('y', function (d) {return yscale(d[wrap.col_tag]);})
+    .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);});
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -463,32 +459,32 @@ function CBA_Replot(wrap) {
   legend_value_2.push(wrap.legend_value[0]);
   
   //-- Update legend value
-  wrap.svg.selectAll(".legend.value")
+  wrap.svg.selectAll('.legend.value')
     .remove()
     .exit()
     .data(legend_value_2)
     .enter()
-    .append("text")
-      .attr("class", "legend value")
-      .attr("x", legend_pos.x)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style("fill", function (d, i) {return legend_color_list[i];})
+    .append('text')
+      .attr('class', 'legend value')
+      .attr('x', legend_pos.x)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color_list[i];})
       .text(function (d) {return d;})
-      .attr("text-anchor", "end")
+      .attr('text-anchor', 'end')
     
   //-- Update legend label
-  wrap.svg.selectAll(".legend.label")
+  wrap.svg.selectAll('.legend.label')
     .remove()
     .exit()
     .data(legend_label_2)
     .enter()
-    .append("text")
-      .attr("class", "legend label")
-      .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style("fill", function (d, i) {return legend_color_list[i];})
+    .append('text')
+      .attr('class', 'legend label')
+      .attr('x', legend_pos.x+legend_pos.dx)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color_list[i];})
       .text(function (d) {return d;})
-      .attr("text-anchor", "start")
+      .attr('text-anchor', 'start')
 }
 
 //-- Load

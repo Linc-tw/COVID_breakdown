@@ -565,7 +565,7 @@ class MainSheet(Template):
     ind = case_nb_list == case_nb_list
     self.data = data[ind]
     
-    self.getReportDate()
+    self.setCaseCounts()
     
     if verbose:
       print('Loaded \"%s\"' % name)
@@ -576,23 +576,12 @@ class MainSheet(Template):
       print('N_empty = %d' % self.n_empty)
     return 
     
-  def getReportDate(self):
-    report_date_list = []
-    
-    for report_date, trans in zip(self.getCol(self.coltag_report_date), self.getCol(self.coltag_transmission)):
+  def setCaseCounts(self):
+    for report_date, trans in zip(self.getReportDate(), self.getCol(self.coltag_transmission)):
       if trans != trans: ## NaN
-        report_date_list.append(np.nan)
         self.n_empty += 1
         continue
       
-      yyyymdday_zh = report_date.split('年')
-      y = int(yyyymdday_zh[0])
-      mdday_zh = yyyymdday_zh[1].split('月')
-      m = int(mdday_zh[0])
-      dday_zh = mdday_zh[1].split('日')
-      d = int(dday_zh[0])
-      report_date = '%04d-%02d-%02d' % (y, m, d)
-      report_date_list.append(report_date)
       self.n_total += 1
       
       ind_latest = indexForLatest(report_date)
@@ -609,6 +598,24 @@ class MainSheet(Template):
         self.n_2021 += 1
       if ind_2020 == ind_2020:
         self.n_2020 += 1
+    return
+  
+  def getReportDate(self):
+    report_date_list = []
+    
+    for report_date, trans in zip(self.getCol(self.coltag_report_date), self.getCol(self.coltag_transmission)):
+      if trans != trans: ## NaN
+        report_date_list.append(np.nan)
+        continue
+      
+      yyyymdday_zh = report_date.split('年')
+      y = int(yyyymdday_zh[0])
+      mdday_zh = yyyymdday_zh[1].split('月')
+      m = int(mdday_zh[0])
+      dday_zh = mdday_zh[1].split('日')
+      d = int(dday_zh[0])
+      report_date = '%04d-%02d-%02d' % (y, m, d)
+      report_date_list.append(report_date)
         
     return report_date_list
   
@@ -2639,6 +2646,53 @@ class CountySheet(Template):
       saveCsv(name, data)
     return
 
+  def makeStockDict_caseByAge(self):
+    report_date_list = self.getReportDate()
+    age_list = self.getAge()
+    nb_cases_list = self.getNbCases()
+    
+    ## Initialize stock dict
+    case_hist = {age: 0 for age in self.age_key_list}
+    stock = [case_hist.copy() for i in range(13)]
+    stock_dict = initializeStockDict_general(stock)
+    
+    ## Loop over series
+    for report_date, age, nb_cases in zip(report_date_list, age_list, nb_cases_list):
+      index_list = makeIndexList(report_date)
+      
+      for ind, page, stock in zip(index_list, stock_dict.keys(), stock_dict.values()):
+        if ind == ind:
+          stock[0][age] += nb_cases
+        
+          if page == PAGE_LATEST:
+            lookback_week = (ind - NB_LOOKBACK_DAYS) // 7 ## ind - NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
+            if lookback_week >= -12:
+              stock[-lookback_week][age] += nb_cases
+          else:
+            mm = int(report_date[5:7])
+            stock[mm][age] += nb_cases
+            
+    return stock_dict
+  
+  def saveCsv_caseByAge(self):
+    stock_dict = self.makeStockDict_caseByAge()
+    
+    ## Loop over page
+    for page, stock in stock_dict.items():
+      if 'latest' == page:
+        label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
+      else:
+        label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+      
+      data = {'age': self.age_key_list}
+      data.update({label: case_hist.values() for label, case_hist in zip(label_list, stock)})
+      data = pd.DataFrame(data)
+      
+      ## Save
+      name = '%sprocessed_data/%s/case_by_age.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
+    return
+
   def makeStockDict_incidenceMap(self):
     report_date_list = self.getReportDate()
     county_list = self.getCounty()
@@ -2702,53 +2756,6 @@ class CountySheet(Template):
       saveCsv(name, data_p)
     return
 
-  def makeStockDict_caseByAge(self):
-    report_date_list = self.getReportDate()
-    age_list = self.getAge()
-    nb_cases_list = self.getNbCases()
-    
-    ## Initialize stock dict
-    case_hist = {age: 0 for age in self.age_key_list}
-    stock = [case_hist.copy() for i in range(13)]
-    stock_dict = initializeStockDict_general(stock)
-    
-    ## Loop over series
-    for report_date, age, nb_cases in zip(report_date_list, age_list, nb_cases_list):
-      index_list = makeIndexList(report_date)
-      
-      for ind, page, stock in zip(index_list, stock_dict.keys(), stock_dict.values()):
-        if ind == ind:
-          stock[0][age] += nb_cases
-        
-          if page == PAGE_LATEST:
-            lookback_week = (ind - NB_LOOKBACK_DAYS) // 7 ## ind - NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
-            if lookback_week >= -12:
-              stock[-lookback_week][age] += nb_cases
-          else:
-            mm = int(report_date[5:7])
-            stock[mm][age] += nb_cases
-            
-    return stock_dict
-  
-  def saveCsv_caseByAge(self):
-    stock_dict = self.makeStockDict_caseByAge()
-    
-    ## Loop over page
-    for page, stock in stock_dict.items():
-      if 'latest' == page:
-        label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
-      else:
-        label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
-      
-      data = {'age': self.age_key_list}
-      data.update({label: case_hist.values() for label, case_hist in zip(label_list, stock)})
-      data = pd.DataFrame(data)
-      
-      ## Save
-      name = '%sprocessed_data/%s/case_by_age.csv' % (DATA_PATH, page)
-      saveCsv(name, data)
-    return
-
   def makeStock1_incidenceEvolutionByCounty(self):
     report_date_list = self.getReportDate()
     county_list = self.getCounty()
@@ -2791,9 +2798,22 @@ class CountySheet(Template):
   
   def saveCsv_incidenceEvolutionByCounty(self):
     stock = self.makeStock2_incidenceEvolutionByCounty()
-    data = pd.DataFrame(stock)
+    data_r = pd.DataFrame(stock)
+    
+    ## Data for population & label
+    county_dict = {dict_['tag']: dict_ for dict_ in COUNTY_DICT.values()}
+    label_list_en = [county_dict[county]['label'][0] for county in self.county_key_list]
+    label_list_fr = [county_dict[county]['label'][1] for county in self.county_key_list]
+    label_list_zh = [county_dict[county]['label'][2] for county in self.county_key_list]
+      
+    data_l = {'county': self.county_key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+    data_l = pd.DataFrame(data_l)
+    
     name = '%sprocessed_data/%s/incidence_evolution_by_county.csv' % (DATA_PATH, PAGE_LATEST)
-    saveCsv(name, data)
+    saveCsv(name, data_r)
+    
+    name = '%sprocessed_data/%s/incidence_evolution_by_county_label.csv' % (DATA_PATH, PAGE_LATEST)
+    saveCsv(name, data_l)
     return
   
   def saveCsv(self):
@@ -2905,7 +2925,7 @@ class VaccinationSheet(Template):
         for i, _ in enumerate(brand_list):
           stock['new_doses'][i] += itpFromCumul(prev[i], cum_doses[i], length)
           
-        stock['interpolated'].append(int(1 < length))
+        stock['interpolated'].append(-int(1 < length))
         prev = cum_doses
         ord_prev = ord_
         
@@ -3043,13 +3063,13 @@ def sandbox():
   #print(timeline_sheet.saveCriteria())
   #timeline_sheet.saveCsv_evtTimeline()
   
-  county_sheet = CountySheet()
+  #county_sheet = CountySheet()
   #print(county_sheet)
-  county_sheet.saveCsv_incidenceEvolutionByCounty()
+  #county_sheet.saveCsv_incidenceEvolutionByCounty()
   
-  #vacc_sheet = VaccinationSheet()
+  vacc_sheet = VaccinationSheet()
   #print(vacc_sheet.getDailyVacc())
-  #vacc_sheet.saveCsv_vaccinationByBrand()
+  vacc_sheet.saveCsv_vaccinationByBrand()
   return
 
 ################################################################################
