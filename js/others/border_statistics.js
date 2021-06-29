@@ -6,42 +6,32 @@
 //--   Chieh-An Lin
 
 function BS_InitFig(wrap) {
-  wrap.tot_width = 800;
-  wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 415;
-  wrap.tot_height_['fr'] = 400;
-  wrap.tot_height_['en'] = 400;
-  wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 90, right: 2, bottom: 105, top: 2};
-  wrap.margin_['fr'] = {left: 90, right: 2, bottom: 90, top: 2};
-  wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
-  
-  GS_InitFig(wrap);
+  GP_InitFig_Standard(wrap);
 }
 
 function BS_ResetText() {
-  if (GS_lang == 'zh-tw') {
-    TT_AddStr("border_statistics_title", "入出境人數統計");
-    TT_AddStr("border_statistics_text", "逐月更新");
-    TT_AddStr("border_statistics_button_1", "入境");
-    TT_AddStr("border_statistics_button_2", "出境");
-    TT_AddStr("border_statistics_button_3", "合計");
+  if (LS_lang == 'zh-tw') {
+    LS_AddStr('border_statistics_title', '入出境人數統計');
+    LS_AddStr('border_statistics_text', '逐月更新');
+    LS_AddStr('border_statistics_button_1', '入境');
+    LS_AddStr('border_statistics_button_2', '出境');
+    LS_AddStr('border_statistics_button_3', '合計');
   }
   
-  else if (GS_lang == 'fr') {
-    TT_AddStr("border_statistics_title", "Statistiques frontalières");
-    TT_AddStr("border_statistics_text", "Mise à jour mensuellement");
-    TT_AddStr("border_statistics_button_1", "Arrivée");
-    TT_AddStr("border_statistics_button_2", "Départ");
-    TT_AddStr("border_statistics_button_3", "Total");
+  else if (LS_lang == 'fr') {
+    LS_AddStr('border_statistics_title', 'Statistiques frontalières');
+    LS_AddStr('border_statistics_text', 'Mise à jour mensuellement');
+    LS_AddStr('border_statistics_button_1', 'Arrivée');
+    LS_AddStr('border_statistics_button_2', 'Départ');
+    LS_AddStr('border_statistics_button_3', 'Total');
   }
   
   else { //-- En
-    TT_AddStr("border_statistics_title", "Border Crossing");
-    TT_AddStr("border_statistics_text", "Updated monthly");
-    TT_AddStr("border_statistics_button_1", "Arrival");
-    TT_AddStr("border_statistics_button_2", "Departure");
-    TT_AddStr("border_statistics_button_3", "Both");
+    LS_AddStr('border_statistics_title', 'Border Crossing');
+    LS_AddStr('border_statistics_text', 'Updated monthly');
+    LS_AddStr('border_statistics_button_1', 'Arrival');
+    LS_AddStr('border_statistics_button_2', 'Departure');
+    LS_AddStr('border_statistics_button_3', 'Both');
   }
 }
 
@@ -112,26 +102,8 @@ function BS_FormatData(wrap, data) {
   //-- Calculate y_max
   y_max *= wrap.y_max_factor;
   
-  //-- Choose y_path
-  var y_path;
-  if (wrap.do_exit == 0)
-    y_path = wrap.y_path_0;
-  else if (wrap.do_exit == 1)
-    y_path = wrap.y_path_1;
-  else
-    y_path = wrap.y_path_2;
-  
   //-- Calculate y_path
-  //-- If string, use it as nb of ticks
-  var log_precision, precision;
-  if (typeof y_path === 'string') {
-    log_precision = Math.floor(Math.log10(y_max)) - 1;
-    precision = Math.pow(10, log_precision);
-    precision = Math.max(1, precision); //-- precision at least 1
-    y_path = y_max / (+y_path + 0.5);
-    y_path = Math.round(y_path / precision) * precision;
-  }
-  //-- Otherwise, do nothing
+  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks);
   
   //-- Generate yticks
   var ytick = [];
@@ -167,12 +139,12 @@ function BS_FormatData(wrap, data) {
 function BS_MouseMove(wrap, d) {
   //-- Get tooltip position
   var y_alpha = 0.5;
-  var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
+  var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     col_label_list = ['機場', '港口', '無細節']
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     col_label_list = ['Aéroports', 'Ports maritimes', 'Sans précisions']
   else
     col_label_list = ['Airports', 'Seaports', 'Not specified']
@@ -191,9 +163,9 @@ function BS_MouseMove(wrap, d) {
   }
   
   //-- Add text for sum
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     tooltip_text += "<br>合計 = ";
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     tooltip_text += "<br>Total = ";
   else
     tooltip_text += "<br>Total = ";
@@ -207,66 +179,14 @@ function BS_MouseMove(wrap, d) {
 }
 
 function BS_Plot(wrap) {
-  //-- Define xscale
-  var xscale = d3.scaleBand()
-    .domain(wrap.x_list)
-    .range([0, wrap.width])
-    .padding(0.2);
-    
-  //-- Define xscale_2 for xtick & xticklabel
-  var eps = 0.1
-  var xscale_2 = d3.scaleLinear()
-    .domain([-eps, wrap.x_list.length+eps])
-    .range([0, wrap.width]);
+  GP_PlotDateAsX(wrap);
+  GP_PlotLinearY(wrap);
   
-  //-- Define xaxis & update xtick or xticklabel later
-  var xaxis = d3.axisBottom(xscale_2)
-    .tickSize(0)
-    .tickFormat('');
-  
-  //-- Add xaxis & adjust position
-  wrap.svg.append('g')
-    .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(xaxis);
-    
-  //-- Define yscale
-  var yscale = d3.scaleLinear()
-    .domain([0, wrap.y_max])
-    .range([wrap.height, 0]);
-  
-  //-- Define yaxis for ytick & yticklabel
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(-wrap.width)
-    .tickValues(wrap.ytick)
-    .tickFormat(d3.format('d'));
-  
-  //-- Add yaxis
-  wrap.svg.append('g')
-    .attr('class', 'yaxis')
-    .call(yaxis);
-
-  //-- Define yaxis_2 for the frameline at right
-  var yaxis_2 = d3.axisRight(yscale)
-    .ticks(0)
-    .tickSize(0);
-  
-  //-- Add yaxis_2 & adjust position (no yaxis class)
-  wrap.svg.append('g')
-    .attr('transform', 'translate(' + wrap.width + ',0)')
-    .call(yaxis_2);
-    
-  //-- Add ylabel & update value later
-  wrap.svg.append('text')
-    .attr('class', 'ylabel')
-    .attr('text-anchor', 'middle')
-    .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (wrap.height/2).toString() + ')rotate(-90)');
-    
   //-- Add tooltip
-  GS_MakeTooltip(wrap);
+  GP_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GS_wrap.c_list.concat(GS_wrap.c_list).slice(10, 10+wrap.nb_col);
+  var color_list = GP_wrap.c_list.concat(GP_wrap.c_list).slice(10, 10+wrap.nb_col);
   var color = d3.scaleOrdinal()
     .domain(wrap.col_tag_list)
     .range(color_list);
@@ -280,66 +200,28 @@ function BS_Plot(wrap) {
   bar.append('rect')
     .attr('class', 'content bar')
     .attr('fill', function (d) {return color(d.col);})
-    .attr('x', function (d) {return xscale(d.x);})
-    .attr('y', yscale(0))
-    .attr('width', xscale.bandwidth())
+    .attr('x', function (d) {return wrap.xscale(d.x);})
+    .attr('y', wrap.yscale(0))
+    .attr('width', wrap.xscale.bandwidth())
     .attr('height', 0)
-      .on('mouseover', function (d) {GS_MouseOver(wrap, d);})
+      .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
       .on('mousemove', function (d) {BS_MouseMove(wrap, d);})
-      .on('mouseleave', function (d) {GS_MouseLeave(wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
-  wrap.xscale_2 = xscale_2;
   wrap.color_list = color_list;
   wrap.bar = bar;
 }
 
 function BS_Replot(wrap) {
-  //-- Define new xaxis for xticklabel
-  var xaxis = d3.axisBottom(wrap.xscale_2)
-    .tickSize(10)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
-  
-  //-- Update xaxis
-  wrap.svg.select('.xaxis')
-    .transition()
-    .duration(wrap.trans_delay)
-    .call(xaxis)
-    .selectAll('text')
-      .attr('transform', 'translate(-20,15) rotate(-90)')
-      .style('text-anchor', 'end');
-  
-  //-- Define new yscale
-  var yscale = d3.scaleLinear()
-    .domain([0, wrap.y_max])
-    .range([wrap.height, 0]);
-  
-  //-- Define yticklabel format
-  var yticklabel_format;
-  if (wrap.ytick[wrap.ytick.length-1] > 9999) 
-    yticklabel_format = '.2s';
-  else
-    yticklabel_format = 'd';
-  
-  //-- Define new yaxis for ytick
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(-wrap.width)
-    .tickValues(wrap.ytick)
-    .tickFormat(d3.format(yticklabel_format));
-  
-  //-- Update yaxis
-  wrap.svg.select('.yaxis')
-    .transition()
-    .duration(wrap.trans_delay)
-    .call(yaxis);
+  GP_ReplotDateAsX(wrap);
+  GP_ReplotCountAsY(wrap);
   
   //-- Define ylabel
   var ylabel;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     ylabel = '旅客人數';
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     ylabel = 'Nombre de voyageurs';
   else
     ylabel = 'Number of people';
@@ -353,8 +235,8 @@ function BS_Replot(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(wrap.trans_delay)
-    .attr('y', function (d) {return yscale(d.y1);})
-    .attr('height', function (d) {return yscale(d.y0)-yscale(d.y1);});
+    .attr('y', function (d) {return wrap.yscale(d.y1);})
+    .attr('height', function (d) {return wrap.yscale(d.y0)-wrap.yscale(d.y1);});
     
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -370,9 +252,9 @@ function BS_Replot(wrap) {
   
   //-- Define legend label
   var legend_label;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     legend_label = ['機場', '港口', '無細節', '合計'];
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     legend_label = ['Aéroports', 'Ports maritimes', 'Sans précisions', 'Total'];
   else
     legend_label = ['Airports', 'Seaports', 'Not specified', 'Total'];
@@ -418,9 +300,9 @@ function BS_Replot(wrap) {
   
   //-- Define legend title
   var legend_title;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     legend_title = ['於' + wrap.last_date];
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     legend_title = ['Au ' + wrap.last_date];
   else
     legend_title = ['On ' + wrap.last_date];
@@ -470,7 +352,7 @@ function BS_Reload(wrap) {
 function BS_ButtonListener(wrap) {
   //-- Entry or exit or both
   $(document).on("change", "input:radio[name='" + wrap.tag + "_exit']", function (event) {
-    GS_PressRadioButton(wrap, 'exit', wrap.do_exit, this.value);
+    GP_PressRadioButton(wrap, 'exit', wrap.do_exit, this.value);
     wrap.do_exit = this.value;
     BS_Reload(wrap);
   });
@@ -486,14 +368,14 @@ function BS_ButtonListener(wrap) {
     else
       tag1 = 'both';
 
-    name = wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
+    name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
   //-- Language
   $(document).on("change", "input:radio[name='language']", function (event) {
-    GS_lang = this.value;
-    Cookies.set("lang", GS_lang);
+    LS_lang = this.value;
+    Cookies.set("lang", LS_lang);
     
     //-- Replot
     BS_ResetText();
@@ -507,7 +389,7 @@ function BS_Main(wrap) {
   
   //-- Swap active to current value
   wrap.do_exit = document.querySelector("input[name='" + wrap.tag + "_exit']:checked").value;
-  GS_PressRadioButton(wrap, 'exit', 0, wrap.do_exit); //-- 0 from .html
+  GP_PressRadioButton(wrap, 'exit', 0, wrap.do_exit); //-- 0 from .html
 
   //-- Load
   BS_InitFig(wrap);

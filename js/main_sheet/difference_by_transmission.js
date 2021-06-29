@@ -16,32 +16,32 @@ function DBT_InitFig(wrap) {
   wrap.margin_['fr'] = {left: 70, right: 2, bottom: 80, top: 2};
   wrap.margin_['en'] = {left: 70, right: 2, bottom: 80, top: 2};
   
-  GS_InitFig(wrap);
+  GP_InitFig(wrap);
 }
 
 function DBT_ResetText() {
-  if (GS_lang == 'zh-tw') {
-    TT_AddStr('difference_by_transmission_title', '發現個案所需時間分布');
-    TT_AddStr('difference_by_transmission_button_1', '全部');
-    TT_AddStr('difference_by_transmission_button_2', '境外移入');
-    TT_AddStr('difference_by_transmission_button_3', '本土');
-    TT_AddStr('difference_by_transmission_button_4', '其他');
+  if (LS_lang == 'zh-tw') {
+    LS_AddStr('difference_by_transmission_title', '發現個案所需時間分布');
+    LS_AddStr('difference_by_transmission_button_1', '全部');
+    LS_AddStr('difference_by_transmission_button_2', '境外移入');
+    LS_AddStr('difference_by_transmission_button_3', '本土');
+    LS_AddStr('difference_by_transmission_button_4', '其他');
   }
   
-  else if (GS_lang == 'fr') {
-    TT_AddStr('difference_by_transmission_title', "Délai avant d'identifier une transmission");
-    TT_AddStr('difference_by_transmission_button_1', 'Tous');
-    TT_AddStr('difference_by_transmission_button_2', 'Importés');
-    TT_AddStr('difference_by_transmission_button_3', 'Locaux');
-    TT_AddStr('difference_by_transmission_button_4', 'Divers');
+  else if (LS_lang == 'fr') {
+    LS_AddStr('difference_by_transmission_title', "Délai avant d'identifier une transmission");
+    LS_AddStr('difference_by_transmission_button_1', 'Tous');
+    LS_AddStr('difference_by_transmission_button_2', 'Importés');
+    LS_AddStr('difference_by_transmission_button_3', 'Locaux');
+    LS_AddStr('difference_by_transmission_button_4', 'Divers');
   }
   
   else { //-- En
-    TT_AddStr('difference_by_transmission_title', 'Delay Before Identifying a Transmission');
-    TT_AddStr('difference_by_transmission_button_1', 'All');
-    TT_AddStr('difference_by_transmission_button_2', 'Imported');
-    TT_AddStr('difference_by_transmission_button_3', 'Local');
-    TT_AddStr('difference_by_transmission_button_4', 'Others');
+    LS_AddStr('difference_by_transmission_title', 'Delay Before Identifying a Transmission');
+    LS_AddStr('difference_by_transmission_button_1', 'All');
+    LS_AddStr('difference_by_transmission_button_2', 'Imported');
+    LS_AddStr('difference_by_transmission_button_3', 'Local');
+    LS_AddStr('difference_by_transmission_button_4', 'Others');
   }
 }
 
@@ -153,21 +153,21 @@ function DBT_FormatData2(wrap, data2) {
 function DBT_MouseMove(wrap, d) {
   //-- Get tooltip position
   var y_alpha = 0.35;
-  var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
+  var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     col_label_list = ['全部', '境外移入', '本土', '其他']
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     col_label_list = ["de l'ensemble des cas", 'des cas importés', 'des cas locaux', 'des autres cas']
   else
     col_label_list = ["all", 'imported', 'local', 'fleet']
   
   //-- Generate tooltip text
   var tooltip_text;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     tooltip_text = col_label_list[wrap.col_ind] + '案例中有' + d[wrap.col_tag] + '位<br>發病或入境後' + d['difference'] + '日確診';
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     tooltip_text = d[wrap.col_tag] + ' ' + col_label_list[wrap.col_ind] + ' attend(ent)<br>' + d['difference'] + " jour(s) avant d'être identifié(s)";
   else
     tooltip_text = d[wrap.col_tag] + ' of ' + col_label_list[wrap.col_ind] + ' cases required<br>' + d['difference'] + ' day(s) to be identified';
@@ -180,78 +180,17 @@ function DBT_MouseMove(wrap, d) {
 }
 
 function DBT_Plot(wrap) {
-  //-- Define xscale
-  var xscale = d3.scaleBand()
-    .domain(wrap.x_list)
-    .range([0, wrap.width])
-    .padding(0.2);
+  //-- Plot x
+  GP_PlotBandX(wrap);
+  
+  //-- Plot y
+  GP_PlotLinearY(wrap);
     
-  //-- Define xscale_2 for xtick & xticklabel
-  var eps = 0.1
-  var xscale_2 = d3.scaleLinear()
-    .domain([-eps, wrap.x_list.length+eps])
-    .range([0, wrap.width]);
-  
-  //-- Define xaxis for xtick & xticklabel
-  var xaxis = d3.axisBottom(xscale_2)
-    .tickSize(10)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
-  
-  //-- Add xaxis & adjust position
-  wrap.svg.append('g')
-    .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(xaxis)
-    .selectAll("text")
-      .attr("transform", "translate(0,5)")
-      .style("text-anchor", "middle");
-  
-  //-- Define yscale
-  var yscale = d3.scaleLinear()
-    .domain([0, wrap.y_max])
-    .range([wrap.height, 0]);
-  
-  //-- Define yaxis for ytick & yticklabel
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(-wrap.width)
-    .tickValues(wrap.ytick)
-    .tickFormat(d3.format('d'));
-  
-  //-- Add yaxis
-  wrap.svg.append('g')
-    .attr('class', 'yaxis')
-    .call(yaxis);
-
-  //-- Define yaxis_2 for the frameline at right
-  var yaxis_2 = d3.axisRight(yscale)
-    .ticks(0)
-    .tickSize(0);
-  
-  //-- Add yaxis_2 & adjust position (no yaxis class)
-  wrap.svg.append('g')
-    .attr('transform', 'translate(' + wrap.width + ',0)')
-    .call(yaxis_2);
-    
-  //-- Add xlabel & update value later
-  wrap.svg.append('text')
-    .attr('class', 'xlabel')
-    .attr('text-anchor', 'middle')
-    .attr('dominant-baseline', 'bottom')
-    .attr('transform', 'translate(' + (wrap.width*0.5).toString() + ', ' + (wrap.tot_height-0.2*wrap.margin.bottom).toString() + ')');
-  
-  //-- Add ylabel & update value later
-  wrap.svg.append('text')
-    .attr('class', 'ylabel')
-    .attr('text-anchor', 'middle')
-    .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (wrap.height/2).toString() + ')rotate(-90)');
-    
-  //-- Add tooltip
-  GS_MakeTooltip(wrap);
+  //-- Make tooltip
+  GP_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = [GS_wrap.c_list[8], GS_wrap.c_list[0], GS_wrap.c_list[1], GS_wrap.c_list[3], GS_wrap.gray, '#000000']; 
+  var color_list = [GP_wrap.c_list[8], GP_wrap.c_list[0], GP_wrap.c_list[1], GP_wrap.c_list[3], GP_wrap.gray, '#000000']; 
   var color = d3.scaleOrdinal()
     .domain(wrap.col_tag_list)
     .range(color_list);
@@ -265,13 +204,13 @@ function DBT_Plot(wrap) {
   bar.append('rect')
     .attr('class', 'content bar')
     .attr('fill', color(wrap.col_tag))
-    .attr('x', function (d) {return xscale(d.difference);})
-    .attr('y', yscale(0))
-    .attr('width', xscale.bandwidth())
+    .attr('x', function (d) {return wrap.xscale(d.difference);})
+    .attr('y', wrap.yscale(0))
+    .attr('width', wrap.xscale.bandwidth())
     .attr('height', 0)
-      .on('mouseover', function (d) {GS_MouseOver(wrap, d);})
+      .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
       .on('mousemove', function (d) {DBT_MouseMove(wrap, d);})
-      .on('mouseleave', function (d) {GS_MouseLeave(wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
   wrap.color_list = color_list;
@@ -280,35 +219,14 @@ function DBT_Plot(wrap) {
 }
 
 function DBT_Replot(wrap) {
-  //-- Define new yscale
-  var yscale = d3.scaleLinear()
-    .domain([0, wrap.y_max])
-    .range([wrap.height, 0]);
-  
-  //-- Define yticklabel format
-  var yticklabel_format;
-  if (wrap.ytick[wrap.ytick.length-1] > 9999) 
-    yticklabel_format = '.2s';
-  else
-    yticklabel_format = 'd';
-  
-  //-- Define new yaxis for ytick
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(-wrap.width)
-    .tickValues(wrap.ytick)
-    .tickFormat(d3.format(yticklabel_format));
-  
-  //-- Update yaxis
-  wrap.svg.select('.yaxis')
-    .transition()
-    .duration(GS_wrap.trans_delay)
-    .call(yaxis);
+  //-- Replot y
+  GP_ReplotCountAsY(wrap);
   
   //-- Define xlabel
   var xlabel;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     xlabel = '發病或入境後到確診所需天數';
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     xlabel = "Délai en nombre de jours avant d'identifier une transmission";
   else
     xlabel = 'Delay in number of days before identifying a transmission';
@@ -319,9 +237,9 @@ function DBT_Replot(wrap) {
   
   //-- Define ylabel
   var ylabel;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     ylabel = '案例數';
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     ylabel = 'Nombre de cas';
   else
     ylabel = 'Number of cases';
@@ -334,7 +252,7 @@ function DBT_Replot(wrap) {
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GS_wrap.trans_delay)
+    .duration(GP_wrap.trans_delay)
     .attr('fill', wrap.color(wrap.col_tag))
     .attr('y', function (d) {return yscale(d[wrap.col_tag]);})
     .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);});
@@ -349,12 +267,12 @@ function DBT_Replot(wrap) {
   
   //-- Define legend label
   var legend_label;
-  if (GS_lang == 'zh-tw')
-    legend_label = ['有資料案例數', '境外移入', '本土', '其他', '資料不全', '合計 '+TT_GetYearLabel(wrap)];
-  else if (GS_lang == 'fr')
-    legend_label = ['Données complètes', 'Importés', 'Locaux', 'Divers', 'Données incomplètes', 'Total '+TT_GetYearLabel(wrap)];
+  if (LS_lang == 'zh-tw')
+    legend_label = ['有資料案例數', '境外移入', '本土', '其他', '資料不全', '合計 '+LS_GetYearLabel(wrap)];
+  else if (LS_lang == 'fr')
+    legend_label = ['Données complètes', 'Importés', 'Locaux', 'Divers', 'Données incomplètes', 'Total '+LS_GetYearLabel(wrap)];
   else 
-    legend_label = ['Data complete', 'Imported', 'Local', 'Others', 'Data incomplete', 'Total '+TT_GetYearLabel(wrap)];
+    legend_label = ['Data complete', 'Imported', 'Local', 'Others', 'Data incomplete', 'Total '+LS_GetYearLabel(wrap)];
   
   //-- Update legend color, label, & value
   var legend_color_list, legend_label_2, legend_value_2;
@@ -432,7 +350,7 @@ function DBT_Reload(wrap) {
 function DBT_ButtonListener(wrap) {
   //-- Column index
   $(document).on("change", "input:radio[name='" + wrap.tag + "_ind']", function (event) {
-    GS_PressRadioButton(wrap, 'ind', wrap.col_ind, this.value);
+    GP_PressRadioButton(wrap, 'ind', wrap.col_ind, this.value);
     wrap.col_ind = this.value;
     DBT_Reload(wrap);
   });
@@ -450,14 +368,14 @@ function DBT_ButtonListener(wrap) {
     else
       tag1 = 'others';
     
-    name = wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
+    name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
   //-- Language
   $(document).on("change", "input:radio[name='language']", function (event) {
-    GS_lang = this.value;
-    Cookies.set("lang", GS_lang);
+    LS_lang = this.value;
+    Cookies.set("lang", LS_lang);
     
     //-- Replot
     DBT_ResetText();
@@ -471,7 +389,7 @@ function DBT_Main(wrap) {
   
   //-- Swap active to current value
   wrap.col_ind = document.querySelector("input[name='" + wrap.tag + "_ind']:checked").value;
-  GS_PressRadioButton(wrap, 'ind', 0, wrap.col_ind); //-- 0 from .html
+  GP_PressRadioButton(wrap, 'ind', 0, wrap.col_ind); //-- 0 from .html
   
   //-- Load
   DBT_InitFig(wrap);

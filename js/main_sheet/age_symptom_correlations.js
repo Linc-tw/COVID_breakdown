@@ -16,26 +16,26 @@ function ASC_InitFig(wrap) {
   wrap.margin_['fr'] = {left: 280, right: 2, bottom: 2, top: 220};
   wrap.margin_['en'] = {left: 250, right: 2, bottom: 2, top: 200};
   
-  GS_InitFig(wrap);
+  GP_InitFig(wrap);
 }
 
 function ASC_ResetText() {
-  if (GS_lang == 'zh-tw') {
-    TT_AddStr('age_symptom_correlations_title', '個案年齡與症狀相關程度');
-    TT_AddStr('age_symptom_correlations_button_1', '相關係數');
-    TT_AddStr('age_symptom_correlations_button_2', '案例數');
+  if (LS_lang == 'zh-tw') {
+    LS_AddStr('age_symptom_correlations_title', '個案年齡與症狀相關程度');
+    LS_AddStr('age_symptom_correlations_button_1', '相關係數');
+    LS_AddStr('age_symptom_correlations_button_2', '案例數');
   }
   
-  else if (GS_lang == 'fr') {
-    TT_AddStr('age_symptom_correlations_title', 'Corrélations entre âge & symptômes');
-    TT_AddStr('age_symptom_correlations_button_1', 'Coefficients');
-    TT_AddStr('age_symptom_correlations_button_2', 'Nombres');
+  else if (LS_lang == 'fr') {
+    LS_AddStr('age_symptom_correlations_title', 'Corrélations entre âge & symptômes');
+    LS_AddStr('age_symptom_correlations_button_1', 'Coefficients');
+    LS_AddStr('age_symptom_correlations_button_2', 'Nombres');
   }
   
   else { //-- En
-    TT_AddStr('age_symptom_correlations_title', 'Correlations between Age & Symptoms');
-    TT_AddStr('age_symptom_correlations_button_1', 'Coefficients');
-    TT_AddStr('age_symptom_correlations_button_2', 'Counts');
+    LS_AddStr('age_symptom_correlations_title', 'Correlations between Age & Symptoms');
+    LS_AddStr('age_symptom_correlations_button_1', 'Coefficients');
+    LS_AddStr('age_symptom_correlations_button_2', 'Counts');
   }
 }
 
@@ -100,9 +100,9 @@ function ASC_FormatData2(wrap, data2) {
       //-- If find match
       if (wrap.x_list[i] == data2[j]['label']) {
         //-- Switch between languages
-        if (GS_lang == 'zh-tw')
+        if (LS_lang == 'zh-tw')
           xticklabel.push(data2[j]['label_zh'] + ' (' + data2[j]['count'] + ')');
-        else if (GS_lang == 'fr')
+        else if (LS_lang == 'fr')
           xticklabel.push(data2[j]['label_fr'].charAt(0).toUpperCase() + data2[j]['label_fr'].slice(1) + ' (' + data2[j]['count'] + ')');
         else
           xticklabel.push(wrap.x_list[i].charAt(0).toUpperCase() + wrap.x_list[i].slice(1) + ' (' + data2[j]['count'] + ')');
@@ -118,9 +118,9 @@ function ASC_FormatData2(wrap, data2) {
       //-- If find match
       if (wrap.y_list[i] == data2[j]['label']) {
         //-- Switch between languages
-        if (GS_lang == 'zh-tw')
+        if (LS_lang == 'zh-tw')
           yticklabel.push(data2[j]['label_zh'] + ' (' + data2[j]['count'] + ')');
-        else if (GS_lang == 'fr')
+        else if (LS_lang == 'fr')
           yticklabel.push(data2[j]['label_fr'] + ' (' + data2[j]['count'] + ')');
         else
           yticklabel.push(wrap.y_list[i] + ' (' + data2[j]['count'] + ')');
@@ -202,7 +202,7 @@ function ASC_Plot(wrap) {
   var legend_pos = {x: wrap.legend_pos_x, y: -0.8*wrap.margin.top, dx: 12, dy: 30};
   
   //-- Define legend color
-  var legend_color = [GS_wrap.c_list[0], GS_wrap.gray, '#000000'];
+  var legend_color = [GP_wrap.c_list[0], GP_wrap.gray, '#000000'];
   
   //-- Define legend value
   var legend_value = [wrap.n_data, wrap.n_total-wrap.n_data, wrap.n_total];
@@ -240,8 +240,8 @@ function ASC_Plot(wrap) {
       .attr('width', xscale.bandwidth())
       .attr('height', yscale.bandwidth())
       .style('fill', function (d) {return color(d.value);})  
-        .on('mouseover', function (d) {GS_MouseOver2(wrap, d);})
-        .on('mouseleave', function (d) {GS_MouseLeave2(wrap, d);});
+        .on('mouseover', function (d) {GP_MouseOver2(wrap, d);})
+        .on('mouseleave', function (d) {GP_MouseLeave2(wrap, d);});
     
   //-- Add text
   wrap.svg.selectAll()
@@ -266,12 +266,12 @@ function ASC_Plot(wrap) {
 function ASC_Replot(wrap) {
   //-- Define legend label
   var legend_label;
-  if (GS_lang == 'zh-tw')
-    legend_label = ['有資料案例數', '資料不全', '合計 '+TT_GetYearLabel(wrap)];
-  else if (GS_lang == 'fr')
-    legend_label = ['Données complètes', 'Données incomplètes', 'Total '+TT_GetYearLabel(wrap)];
+  if (LS_lang == 'zh-tw')
+    legend_label = ['有資料案例數', '資料不全', '合計 '+LS_GetYearLabel(wrap)];
+  else if (LS_lang == 'fr')
+    legend_label = ['Données complètes', 'Données incomplètes', 'Total '+LS_GetYearLabel(wrap)];
   else
-    legend_label = ['Data complete', 'Data incomplete', 'Total '+TT_GetYearLabel(wrap)];
+    legend_label = ['Data complete', 'Data incomplete', 'Total '+LS_GetYearLabel(wrap)];
   
   //-- Update text
   wrap.svg.selectAll('.content.text')
@@ -335,7 +335,7 @@ function ASC_Reload(wrap) {
 function ASC_ButtonListener(wrap) {
   //-- Correlation or count
   $(document).on("change", "input:radio[name='" + wrap.tag + "_count']", function (event) {
-    GS_PressRadioButton(wrap, 'count', wrap.count, this.value);
+    GP_PressRadioButton(wrap, 'count', wrap.count, this.value);
     wrap.count = this.value;
     ASC_Reload(wrap);
   });
@@ -349,14 +349,14 @@ function ASC_ButtonListener(wrap) {
     else
       tag1 = 'coefficient';
     
-    name = wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
+    name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
   //-- Language
   $(document).on("change", "input:radio[name='language']", function (event) {
-    GS_lang = this.value;
-    Cookies.set("lang", GS_lang);
+    LS_lang = this.value;
+    Cookies.set("lang", LS_lang);
     
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove()
@@ -374,7 +374,7 @@ function ASC_Main(wrap) {
   
   //-- Swap active to current value
   wrap.count = document.querySelector("input[name='" + wrap.tag + "_count']:checked").value;
-  GS_PressRadioButton(wrap, 'count', 0, wrap.count); //-- 0 from .html
+  GP_PressRadioButton(wrap, 'count', 0, wrap.count); //-- 0 from .html
 
   //-- Load
   ASC_InitFig(wrap);

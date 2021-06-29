@@ -15,4 +15,4 @@ var PLH_plot_list = [
   [IEBC_Main, IEBC_latest_wrap, 1200],
 ];
 
-GS_Cascade(PLH_plot_list);
+GP_Cascade(PLH_plot_list);

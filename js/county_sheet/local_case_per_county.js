@@ -6,99 +6,89 @@
 //--   Chieh-An Lin
 
 function LCPC_InitFig(wrap) {
-  wrap.tot_width = 800;
-  wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 415;
-  wrap.tot_height_['fr'] = 400;
-  wrap.tot_height_['en'] = 400;
-  wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 90, right: 2, bottom: 105, top: 2};
-  wrap.margin_['fr'] = {left: 90, right: 2, bottom: 90, top: 2};
-  wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
-  
-  GS_InitFig(wrap);
+  GP_InitFig_Standard(wrap);
 }
 
 function LCPC_ResetText() {
-  if (GS_lang == 'zh-tw') {
-    TT_AddStr('local_case_per_county_title', '各縣市之每日確診人數');
-    TT_AddStr('local_case_per_county_button_total', '本土合計');
-    TT_AddStr('local_case_per_county_button_keelung', '基隆');
-    TT_AddStr('local_case_per_county_button_taipei', '台北');
-    TT_AddStr('local_case_per_county_button_new_taipei', '新北');
-    TT_AddStr('local_case_per_county_button_taoyuan', '桃園');
-    TT_AddStr('local_case_per_county_button_hsinchu', '竹縣');
-    TT_AddStr('local_case_per_county_button_hsinchu_city', '竹市');
-    TT_AddStr('local_case_per_county_button_miaoli', '苗栗');
-    TT_AddStr('local_case_per_county_button_taichung', '台中');
-    TT_AddStr('local_case_per_county_button_changhua', '彰化');
-    TT_AddStr('local_case_per_county_button_nantou', '南投');
-    TT_AddStr('local_case_per_county_button_yunlin', '雲林');
-    TT_AddStr('local_case_per_county_button_chiayi', '嘉縣');
-    TT_AddStr('local_case_per_county_button_chiayi_city', '嘉市');
-    TT_AddStr('local_case_per_county_button_tainan', '台南');
-    TT_AddStr('local_case_per_county_button_kaohsiung', '高雄');
-    TT_AddStr('local_case_per_county_button_pingtung', '屏東');
-    TT_AddStr('local_case_per_county_button_yilan', '宜蘭');
-    TT_AddStr('local_case_per_county_button_hualien', '花蓮');
-    TT_AddStr('local_case_per_county_button_taitung', '台東');
-    TT_AddStr('local_case_per_county_button_penghu', '澎湖');
-    TT_AddStr('local_case_per_county_button_kinmen', '金門');
-    TT_AddStr('local_case_per_county_button_matsu', '馬祖');
+  if (LS_lang == 'zh-tw') {
+    LS_AddStr('local_case_per_county_title', '各縣市之每日確診人數');
+    LS_AddStr('local_case_per_county_button_total', '本土合計');
+    LS_AddStr('local_case_per_county_button_keelung', '基隆');
+    LS_AddStr('local_case_per_county_button_taipei', '台北');
+    LS_AddStr('local_case_per_county_button_new_taipei', '新北');
+    LS_AddStr('local_case_per_county_button_taoyuan', '桃園');
+    LS_AddStr('local_case_per_county_button_hsinchu', '竹縣');
+    LS_AddStr('local_case_per_county_button_hsinchu_city', '竹市');
+    LS_AddStr('local_case_per_county_button_miaoli', '苗栗');
+    LS_AddStr('local_case_per_county_button_taichung', '台中');
+    LS_AddStr('local_case_per_county_button_changhua', '彰化');
+    LS_AddStr('local_case_per_county_button_nantou', '南投');
+    LS_AddStr('local_case_per_county_button_yunlin', '雲林');
+    LS_AddStr('local_case_per_county_button_chiayi', '嘉縣');
+    LS_AddStr('local_case_per_county_button_chiayi_city', '嘉市');
+    LS_AddStr('local_case_per_county_button_tainan', '台南');
+    LS_AddStr('local_case_per_county_button_kaohsiung', '高雄');
+    LS_AddStr('local_case_per_county_button_pingtung', '屏東');
+    LS_AddStr('local_case_per_county_button_yilan', '宜蘭');
+    LS_AddStr('local_case_per_county_button_hualien', '花蓮');
+    LS_AddStr('local_case_per_county_button_taitung', '台東');
+    LS_AddStr('local_case_per_county_button_penghu', '澎湖');
+    LS_AddStr('local_case_per_county_button_kinmen', '金門');
+    LS_AddStr('local_case_per_county_button_matsu', '馬祖');
   }
   
-  else if (GS_lang == 'fr') {
-    TT_AddStr('local_case_per_county_title', 'Cas confirmés locaux par ville et comté');
-    TT_AddStr('local_case_per_county_button_total', 'Locaux totaux');
-    TT_AddStr('local_case_per_county_button_keelung', 'Keelung');
-    TT_AddStr('local_case_per_county_button_taipei', 'Taipei');
-    TT_AddStr('local_case_per_county_button_new_taipei', 'Nouveau Taipei');
-    TT_AddStr('local_case_per_county_button_taoyuan', 'Taoyuan');
-    TT_AddStr('local_case_per_county_button_hsinchu', 'Comté de Hsinchu');
-    TT_AddStr('local_case_per_county_button_hsinchu_city', 'Ville de Hsinchu');
-    TT_AddStr('local_case_per_county_button_miaoli', 'Miaoli');
-    TT_AddStr('local_case_per_county_button_taichung', 'Taichung');
-    TT_AddStr('local_case_per_county_button_changhua', 'Changhua');
-    TT_AddStr('local_case_per_county_button_nantou', 'Nantou');
-    TT_AddStr('local_case_per_county_button_yunlin', 'Yunlin');
-    TT_AddStr('local_case_per_county_button_chiayi', 'Comté de Chiayi');
-    TT_AddStr('local_case_per_county_button_chiayi_city', 'Ville de Chiayi');
-    TT_AddStr('local_case_per_county_button_tainan', 'Tainan');
-    TT_AddStr('local_case_per_county_button_kaohsiung', 'Kaohsiung');
-    TT_AddStr('local_case_per_county_button_pingtung', 'Pingtung');
-    TT_AddStr('local_case_per_county_button_yilan', 'Yilan');
-    TT_AddStr('local_case_per_county_button_hualien', 'Hualien');
-    TT_AddStr('local_case_per_county_button_taitung', 'Taitung');
-    TT_AddStr('local_case_per_county_button_penghu', 'Penghu');
-    TT_AddStr('local_case_per_county_button_kinmen', 'Kinmen');
-    TT_AddStr('local_case_per_county_button_matsu', 'Matsu');
+  else if (LS_lang == 'fr') {
+    LS_AddStr('local_case_per_county_title', 'Cas confirmés locaux par ville et comté');
+    LS_AddStr('local_case_per_county_button_total', 'Locaux totaux');
+    LS_AddStr('local_case_per_county_button_keelung', 'Keelung');
+    LS_AddStr('local_case_per_county_button_taipei', 'Taipei');
+    LS_AddStr('local_case_per_county_button_new_taipei', 'Nouveau Taipei');
+    LS_AddStr('local_case_per_county_button_taoyuan', 'Taoyuan');
+    LS_AddStr('local_case_per_county_button_hsinchu', 'Comté de Hsinchu');
+    LS_AddStr('local_case_per_county_button_hsinchu_city', 'Ville de Hsinchu');
+    LS_AddStr('local_case_per_county_button_miaoli', 'Miaoli');
+    LS_AddStr('local_case_per_county_button_taichung', 'Taichung');
+    LS_AddStr('local_case_per_county_button_changhua', 'Changhua');
+    LS_AddStr('local_case_per_county_button_nantou', 'Nantou');
+    LS_AddStr('local_case_per_county_button_yunlin', 'Yunlin');
+    LS_AddStr('local_case_per_county_button_chiayi', 'Comté de Chiayi');
+    LS_AddStr('local_case_per_county_button_chiayi_city', 'Ville de Chiayi');
+    LS_AddStr('local_case_per_county_button_tainan', 'Tainan');
+    LS_AddStr('local_case_per_county_button_kaohsiung', 'Kaohsiung');
+    LS_AddStr('local_case_per_county_button_pingtung', 'Pingtung');
+    LS_AddStr('local_case_per_county_button_yilan', 'Yilan');
+    LS_AddStr('local_case_per_county_button_hualien', 'Hualien');
+    LS_AddStr('local_case_per_county_button_taitung', 'Taitung');
+    LS_AddStr('local_case_per_county_button_penghu', 'Penghu');
+    LS_AddStr('local_case_per_county_button_kinmen', 'Kinmen');
+    LS_AddStr('local_case_per_county_button_matsu', 'Matsu');
   }
   
   else { //-- En
-    TT_AddStr('local_case_per_county_title', 'Local Confirmed Cases per City & County');
-    TT_AddStr('local_case_per_county_button_total', 'Total local');
-    TT_AddStr('local_case_per_county_button_keelung', 'Keelung');
-    TT_AddStr('local_case_per_county_button_taipei', 'Taipei');
-    TT_AddStr('local_case_per_county_button_new_taipei', 'New Taipei');
-    TT_AddStr('local_case_per_county_button_taoyuan', 'Taoyuan');
-    TT_AddStr('local_case_per_county_button_hsinchu', 'Hsinchu County');
-    TT_AddStr('local_case_per_county_button_hsinchu_city', 'Hsinchu City');
-    TT_AddStr('local_case_per_county_button_miaoli', 'Miaoli');
-    TT_AddStr('local_case_per_county_button_taichung', 'Taichung');
-    TT_AddStr('local_case_per_county_button_changhua', 'Changhua');
-    TT_AddStr('local_case_per_county_button_nantou', 'Nantou');
-    TT_AddStr('local_case_per_county_button_yunlin', 'Yunlin');
-    TT_AddStr('local_case_per_county_button_chiayi', 'Chiayi County');
-    TT_AddStr('local_case_per_county_button_chiayi_city', 'Chiayi City');
-    TT_AddStr('local_case_per_county_button_tainan', 'Tainan');
-    TT_AddStr('local_case_per_county_button_kaohsiung', 'Kaohsiung');
-    TT_AddStr('local_case_per_county_button_pingtung', 'Pingtung');
-    TT_AddStr('local_case_per_county_button_yilan', 'Yilan');
-    TT_AddStr('local_case_per_county_button_hualien', 'Hualien');
-    TT_AddStr('local_case_per_county_button_taitung', 'Taitung');
-    TT_AddStr('local_case_per_county_button_penghu', 'Penghu');
-    TT_AddStr('local_case_per_county_button_kinmen', 'Kinmen');
-    TT_AddStr('local_case_per_county_button_matsu', 'Matsu');
+    LS_AddStr('local_case_per_county_title', 'Local Confirmed Cases per City & County');
+    LS_AddStr('local_case_per_county_button_total', 'Total local');
+    LS_AddStr('local_case_per_county_button_keelung', 'Keelung');
+    LS_AddStr('local_case_per_county_button_taipei', 'Taipei');
+    LS_AddStr('local_case_per_county_button_new_taipei', 'New Taipei');
+    LS_AddStr('local_case_per_county_button_taoyuan', 'Taoyuan');
+    LS_AddStr('local_case_per_county_button_hsinchu', 'Hsinchu County');
+    LS_AddStr('local_case_per_county_button_hsinchu_city', 'Hsinchu City');
+    LS_AddStr('local_case_per_county_button_miaoli', 'Miaoli');
+    LS_AddStr('local_case_per_county_button_taichung', 'Taichung');
+    LS_AddStr('local_case_per_county_button_changhua', 'Changhua');
+    LS_AddStr('local_case_per_county_button_nantou', 'Nantou');
+    LS_AddStr('local_case_per_county_button_yunlin', 'Yunlin');
+    LS_AddStr('local_case_per_county_button_chiayi', 'Chiayi County');
+    LS_AddStr('local_case_per_county_button_chiayi_city', 'Chiayi City');
+    LS_AddStr('local_case_per_county_button_tainan', 'Tainan');
+    LS_AddStr('local_case_per_county_button_kaohsiung', 'Kaohsiung');
+    LS_AddStr('local_case_per_county_button_pingtung', 'Pingtung');
+    LS_AddStr('local_case_per_county_button_yilan', 'Yilan');
+    LS_AddStr('local_case_per_county_button_hualien', 'Hualien');
+    LS_AddStr('local_case_per_county_button_taitung', 'Taitung');
+    LS_AddStr('local_case_per_county_button_penghu', 'Penghu');
+    LS_AddStr('local_case_per_county_button_kinmen', 'Kinmen');
+    LS_AddStr('local_case_per_county_button_matsu', 'Matsu');
   }
 }
 
@@ -145,20 +135,8 @@ function LCPC_FormatData(wrap, data) {
   //-- Calculate y_max
   y_max *= wrap.y_max_factor;
   
-  //-- Choose y_path
-  var y_path = wrap.y_path;
-  
   //-- Calculate y_path
-  //-- If string, use it as nb of ticks
-  var log_precision, precision;
-  if (typeof y_path === 'string') {
-    log_precision = Math.floor(Math.log10(y_max)) - 1;
-    precision = Math.pow(10, log_precision);
-    precision = Math.max(1, precision); //-- precision at least 1
-    y_path = y_max / (+y_path + 0.5);
-    y_path = Math.round(y_path / precision) * precision;
-  }
-  //-- Otherwise, do nothing
+  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks);
   
   //-- Generate yticks
   var ytick = [];
@@ -182,14 +160,14 @@ function LCPC_FormatData(wrap, data) {
 function LCPC_MouseMove(wrap, d) {
   //-- Get tooltip position
   var y_alpha = 0.35;
-  var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
+  var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Generate tooltip text
   var tooltip_text = d.date + '<br>';
   
   //-- Define legend label
   var legend_label;
-  if (GS_lang == 'zh-tw') {
+  if (LS_lang == 'zh-tw') {
     legend_label = [
       '本土合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
       '嘉縣', '嘉市', '台南', '高雄', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '馬祖'
@@ -197,7 +175,7 @@ function LCPC_MouseMove(wrap, d) {
     tooltip_text += legend_label[wrap.county] + d[wrap.col_tag] + '例';
   }
   
-  else if (GS_lang == 'fr') {
+  else if (LS_lang == 'fr') {
     legend_label = [
       'Locaux totaux', 'à Keelung', 'à Taipei', 'à Nouveau Taipei', 'à Taoyuan', 'au comté de Hsinchu', 'à la ville de Hsinchu', 'à Miaoli', 'à Taichung', 'à Changhua', 'à Nantou', 'à Yunlin', 
       'au comté de Chiayi', 'à la ville de Chiayi', 'à Tainan', 'à Kaohsiung', 'à Pingtung', 'à Yilan', 'à Hualien', 'à Taitung', 'à Penghu', 'à Kinmen', 'à Matsu'
@@ -227,66 +205,14 @@ function LCPC_MouseMove(wrap, d) {
 }
 
 function LCPC_Plot(wrap) {
-  //-- Define xscale
-  var xscale = d3.scaleBand()
-    .domain(wrap.x_list)
-    .range([0, wrap.width])
-    .padding(0.2);
-    
-  //-- Define xscale_2 for xtick & xticklabel
-  var eps = 0.1
-  var xscale_2 = d3.scaleLinear()
-    .domain([-eps, wrap.x_list.length+eps])
-    .range([0, wrap.width]);
+  GP_PlotDateAsX(wrap);
+  GP_PlotLinearY(wrap);
   
-  //-- Define xaxis & update xtick or xticklabel later
-  var xaxis = d3.axisBottom(xscale_2)
-    .tickSize(0)
-    .tickFormat('');
-  
-  //-- Add xaxis & adjust position
-  wrap.svg.append('g')
-    .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(xaxis);
-    
-  //-- Define yscale
-  var yscale = d3.scaleLinear()
-    .domain([0, wrap.y_max])
-    .range([wrap.height, 0]);
-  
-  //-- Define yaxis for ytick & yticklabel
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(-wrap.width)
-    .tickValues(wrap.ytick)
-    .tickFormat(d3.format('d'));
-  
-  //-- Add yaxis
-  wrap.svg.append('g')
-    .attr('class', 'yaxis')
-    .call(yaxis);
-
-  //-- Define yaxis_2 for the frameline at right
-  var yaxis_2 = d3.axisRight(yscale)
-    .ticks(0)
-    .tickSize(0);
-  
-  //-- Add yaxis_2 & adjust position (no yaxis class)
-  wrap.svg.append('g')
-    .attr('transform', 'translate(' + wrap.width + ',0)')
-    .call(yaxis_2);
-  
-  //-- Add ylabel & update value later
-  wrap.svg.append('text')
-    .attr('class', 'ylabel')
-    .attr('text-anchor', 'middle')
-    .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (wrap.height/2).toString() + ')rotate(-90)');
-    
   //-- Add tooltip
-  GS_MakeTooltip(wrap);
+  GP_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GS_wrap.c_list.slice(6).concat(GS_wrap.c_list.slice(0, 6));
+  var color_list = GP_wrap.c_list.slice(6).concat(GP_wrap.c_list.slice(0, 6));
   color_list = color_list.concat(color_list.slice(1));
   var color = d3.scaleOrdinal()
     .domain(wrap.col_tag_list)
@@ -301,67 +227,29 @@ function LCPC_Plot(wrap) {
   bar.append('rect')
     .attr('class', 'content bar')
     .attr('fill', color(wrap.col_tag))
-    .attr('x', function (d) {return xscale(d.date);})
-    .attr('y', yscale(0))
-    .attr('width', xscale.bandwidth())
+    .attr('x', function (d) {return wrap.xscale(d.date);})
+    .attr('y', wrap.yscale(0))
+    .attr('width', wrap.xscale.bandwidth())
     .attr('height', 0)
-      .on("mouseover", function (d) {GS_MouseOver(wrap, d);})
+      .on("mouseover", function (d) {GP_MouseOver(wrap, d);})
       .on("mousemove", function (d) {LCPC_MouseMove(wrap, d);})
-      .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
+      .on("mouseleave", function (d) {GP_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
-  wrap.xscale_2 = xscale_2;
   wrap.color_list = color_list;
   wrap.color = color;
   wrap.bar = bar;
 }
 
 function LCPC_Replot(wrap) {
-  //-- Define new xaxis for xticklabel
-  var xaxis = d3.axisBottom(wrap.xscale_2)
-    .tickSize(10)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
-  
-  //-- Update xaxis
-  wrap.svg.select('.xaxis')
-    .transition()
-    .duration(GS_wrap.trans_delay)
-    .call(xaxis)
-    .selectAll('text')
-      .attr('transform', 'translate(-20,15) rotate(-90)')
-      .style('text-anchor', 'end');
-  
-  //-- Define new yscale
-  var yscale = d3.scaleLinear()
-    .domain([0, wrap.y_max])
-    .range([wrap.height, 0]);
-  
-  //-- Define yticklabel format
-  var yticklabel_format;
-  if (wrap.ytick[wrap.ytick.length-1] > 9999) 
-    yticklabel_format = '.2s';
-  else
-    yticklabel_format = 'd';
-  
-  //-- Define new yaxis for ytick
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(-wrap.width)
-    .tickValues(wrap.ytick)
-    .tickFormat(d3.format(yticklabel_format));
-  
-  //-- Update yaxis
-  wrap.svg.select('.yaxis')
-    .transition()
-    .duration(GS_wrap.trans_delay)
-    .call(yaxis);
+  GP_ReplotDateAsX(wrap);
+  GP_ReplotCountAsY(wrap);
   
   //-- Define ylabel
   var ylabel;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     ylabel = '案例數';
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     ylabel = 'Nombre de cas';
   else
     ylabel = 'Number of cases';
@@ -374,29 +262,29 @@ function LCPC_Replot(wrap) {
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GS_wrap.trans_delay)
+    .duration(GP_wrap.trans_delay)
     .attr('fill', wrap.color(wrap.col_tag))
-    .attr('y', function (d) {return yscale(d[wrap.col_tag]);})
-    .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);});
+    .attr('y', function (d) {return wrap.yscale(d[wrap.col_tag]);})
+    .attr('height', function (d) {return wrap.yscale(0)-wrap.yscale(d[wrap.col_tag]);});
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   
   //-- Define legend label
   var legend_label;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     legend_label = [
-      '本土合計 '+TT_GetYearLabel(wrap), '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
+      '本土合計 '+LS_GetYearLabel(wrap), '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
       '嘉縣', '嘉市', '台南', '高雄', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '馬祖'
     ];
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     legend_label = [
-      'Locaux totaux '+TT_GetYearLabel(wrap), 'Keelung', 'Taipei', 'Nouveau Taipei', 'Taoyuan', 'Comté de Hsinchu', 'Ville de Hsinchu', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Locaux totaux '+LS_GetYearLabel(wrap), 'Keelung', 'Taipei', 'Nouveau Taipei', 'Taoyuan', 'Comté de Hsinchu', 'Ville de Hsinchu', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Comté de Chiayi', 'Ville de Chiayi', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
   else
     legend_label = [
-      'Total local '+TT_GetYearLabel(wrap), 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Total local '+LS_GetYearLabel(wrap), 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
   
@@ -483,14 +371,14 @@ function LCPC_ButtonListener(wrap) {
     ];
     var tag1 = col_label[wrap.county];
     
-    name = wrap.tag + '_' + tag1 + '_' + GS_lang + '.png';
+    name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
   //-- Language
   $(document).on("change", "input:radio[name='language']", function (event) {
-    GS_lang = this.value;
-    Cookies.set("lang", GS_lang);
+    LS_lang = this.value;
+    Cookies.set("lang", LS_lang);
     
     //-- Replot
     LCPC_ResetText();

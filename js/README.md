@@ -9,7 +9,7 @@ Structure by raw data
   - `case_by_age.js`
   - `local_case_per_county.js`
   - `incidence_evolution_by_age.js` TODO
-  - `incidence_evolution_by_county.js` TODO
+  - `incidence_evolution_by_county.js`
   - `incidence_map.js`
   
 `main_sheet/`
@@ -52,7 +52,7 @@ Structure by page
 `incidence.html`
   - `various_rates.js`
   - `incidence_map.js`
-  - `incidence_evolution_by_county.js` TODO
+  - `incidence_evolution_by_county.js`
   - `incidence_evolution_by_age.js` TODO
 
 `others.html`

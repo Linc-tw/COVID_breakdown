@@ -6,30 +6,20 @@
 //--   Chieh-An Lin
 
 function VR_InitFig(wrap) {
-  wrap.tot_width = 800;
-  wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 415;
-  wrap.tot_height_['fr'] = 400;
-  wrap.tot_height_['en'] = 400;
-  wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 70, right: 2, bottom: 105, top: 2};
-  wrap.margin_['fr'] = {left: 70, right: 2, bottom: 90, top: 2};
-  wrap.margin_['en'] = {left: 70, right: 2, bottom: 90, top: 2};
-  
-  GS_InitFig(wrap);
+  GP_InitFig_Standard(wrap);
 }
 
 function VR_ResetText() {
-  if (GS_lang == 'zh-tw') {
-    TT_AddStr("various_rates_title", "各種比率之七日平均");
+  if (LS_lang == 'zh-tw') {
+    LS_AddStr('various_rates_title', '各種比率之七日平均');
   }
   
-  else if (GS_lang == 'fr') {
-    TT_AddStr("various_rates_title", "Taux en moyenne glissante sur 7 jours");
+  else if (LS_lang == 'fr') {
+    LS_AddStr('various_rates_title', 'Taux en moyenne glissante sur 7 jours');
   }
   
   else { //-- En
-    TT_AddStr("various_rates_title", "7-day Average of Various Rates");
+    LS_AddStr('various_rates_title', '7-day Average of Various Rates');
   }
 }
 
@@ -133,12 +123,12 @@ function VR_FormatData(wrap, data) {
 function VR_MouseMove(wrap, d) {
   //-- Get tooltip position
   var y_alpha = 0.5;
-  var new_pos = GS_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
+  var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     col_label_list = ['陽性率', '入境盛行率', '本土盛行率']
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     col_label_list = ['Taux de positivité', "Taux d'inci. front.", "Taux d'inci. local"]
   else
     col_label_list = ['Positive rate', 'Arrival inci. rate', 'Local inci. rate']
@@ -159,80 +149,28 @@ function VR_MouseMove(wrap, d) {
 }
 
 function VR_Plot(wrap) {
-  //-- Define xscale
-  var xscale = d3.scaleBand()
-    .domain(wrap.x_list)
-    .range([0, wrap.width])
-    .padding(0.2);
-    
-  //-- Define xscale_2 for xtick & xticklabel
-  var eps = 0.1
-  var xscale_2 = d3.scaleLinear()
-    .domain([-eps, wrap.x_list.length+eps])
-    .range([0, wrap.width]);
+  GP_PlotDateAsX(wrap);
+  GP_PlotLinearY(wrap);
   
-  //-- Define xaxis & update xtick or xticklabel later
-  var xaxis = d3.axisBottom(xscale_2)
-    .tickSize(0)
-    .tickFormat('');
-  
-  //-- Add xaxis & adjust position
-  wrap.svg.append('g')
-    .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(xaxis);
-    
-  //-- Define yscale
-  var yscale = d3.scaleLinear()
-    .domain([0, wrap.y_max])
-    .range([wrap.height, 0]);
-  
-  //-- Define yaxis for ytick & yticklabel
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(-wrap.width)
-    .tickValues(wrap.ytick)
-    .tickFormat(d3.format(".0%"));
-  
-  //-- Add yaxis
-  wrap.svg.append('g')
-    .attr('class', 'yaxis')
-    .call(yaxis);
-
-  //-- Define yaxis_2 for the frameline at right
-  var yaxis_2 = d3.axisRight(yscale)
-    .ticks(0)
-    .tickSize(0);
-  
-  //-- Add yaxis_2 & adjust position (no yaxis class)
-  wrap.svg.append('g')
-    .attr('transform', 'translate(' + wrap.width + ',0)')
-    .call(yaxis_2);
-  
-  //-- Add ylabel & update value later
-  wrap.svg.append('text')
-    .attr('class', 'ylabel')
-    .attr('text-anchor', 'middle')
-    .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (wrap.height/2).toString() + ')rotate(-90)');
-    
   //-- Add tooltip
-  GS_MakeTooltip(wrap);
+  GP_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GS_wrap.c_list.slice(3, 3+wrap.nb_col);
+  var color_list = GP_wrap.c_list.slice(3, 3+wrap.nb_col);
   var color = d3.scaleOrdinal()
     .domain(wrap.col_tag_list)
     .range(color_list);
   
   //-- Define dummy line
   var draw_line_0 = d3.line()
-    .x(function (d) {return xscale(d.x);})
-    .y(yscale(0));
+    .x(function (d) {return wrap.xscale(d.x);})
+    .y(wrap.yscale(0));
     
   //-- Define real line
   var draw_line = d3.line()
     .defined(d => !isNaN(d.y))//-- Don't show line if NaN
-    .x(function (d) {return xscale(d.x);})
-    .y(function (d) {return yscale(d.y);});
+    .x(function (d) {return wrap.xscale(d.x);})
+    .y(function (d) {return wrap.yscale(d.y);});
   
   //-- Add line
   var line = wrap.svg.selectAll('.content.line')
@@ -260,15 +198,14 @@ function VR_Plot(wrap) {
     .enter()
     .append('circle')
       .attr('class', 'content dot')
-      .attr('cx', function (d) {return xscale(d.x);})
-      .attr('cy', function (d) {return yscale(d.y);})
+      .attr('cx', function (d) {return wrap.xscale(d.x);})
+      .attr('cy', function (d) {return wrap.yscale(d.y);})
       .attr('r', 0)
-        .on('mouseover', function (d) {GS_MouseOver(wrap, d);})
+        .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
         .on('mousemove', function (d) {VR_MouseMove(wrap, d);})
-        .on('mouseleave', function (d) {GS_MouseLeave(wrap, d);});
+        .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
       
   //-- Save to wrapper
-  wrap.xscale_2 = xscale_2;
   wrap.color_list = color_list;
   wrap.draw_line = draw_line;
   wrap.line = line;
@@ -276,21 +213,7 @@ function VR_Plot(wrap) {
 }
 
 function VR_Replot(wrap) {
-  //-- Define new xaxis for xticklabel
-  var xaxis = d3.axisBottom(wrap.xscale_2)
-    .tickSize(10)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
-  
-  //-- Update xaxis
-  wrap.svg.select('.xaxis')
-    .transition()
-    .duration(GS_wrap.trans_delay)
-    .call(xaxis)
-    .selectAll('text')
-      .attr('transform', 'translate(-20,15) rotate(-90)')
-      .style('text-anchor', 'end');
+  GP_ReplotDateAsX(wrap);
   
   //-- Define new yscale
   var yscale = d3.scaleLinear()
@@ -306,14 +229,14 @@ function VR_Replot(wrap) {
   //-- Update yaxis
   wrap.svg.select('.yaxis')
     .transition()
-    .duration(GS_wrap.trans_delay)
+    .duration(GP_wrap.trans_delay)
     .call(yaxis);
   
   //-- Define ylabel
   var ylabel;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     ylabel = '比率';
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     ylabel = 'Taux';
   else
     ylabel = 'Rate';
@@ -325,13 +248,13 @@ function VR_Replot(wrap) {
   //-- Update line
   wrap.line.selectAll('.content.line')
     .transition()
-    .duration(GS_wrap.trans_delay)
+    .duration(GP_wrap.trans_delay)
     .attr('d', function (d) {return wrap.draw_line(d.values);});
     
   //-- Update dot
   wrap.dot.selectAll('.content.dot')
     .transition()
-    .duration(GS_wrap.trans_delay)
+    .duration(GP_wrap.trans_delay)
     .attr("r", function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
 
   //-- Define legend position
@@ -339,9 +262,9 @@ function VR_Replot(wrap) {
   
   //-- Define legend label
   var legend_label;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     legend_label = ["陽性率", "入境盛行率（逐月更新）", "本土盛行率"];
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     legend_label = ["Taux de positivité", "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local"];
   else
     legend_label = ["Positive rate", "Arrival incidence rate (updated monthly)", "Local incidence rate"];
@@ -379,14 +302,14 @@ function VR_Load(wrap) {
 function VR_ButtonListener(wrap) {
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
-    name = wrap.tag + '_' + GS_lang + '.png'
+    name = wrap.tag + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
   //-- Language
   $(document).on("change", "input:radio[name='language']", function (event) {
-    GS_lang = this.value;
-    Cookies.set("lang", GS_lang);
+    LS_lang = this.value;
+    Cookies.set("lang", LS_lang);
     
     //-- Replot
     VR_ResetText();

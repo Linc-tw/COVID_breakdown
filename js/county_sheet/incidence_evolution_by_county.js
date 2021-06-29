@@ -16,20 +16,20 @@ function IEBC_InitFig(wrap) {
   wrap.margin_['fr'] = {left: 105, right: 2, bottom: 40, top: 25};
   wrap.margin_['en'] = {left: 90, right: 2, bottom: 50, top: 25};
   
-  GS_InitFig(wrap);
+  GP_InitFig(wrap);
 }
 
 function IEBC_ResetText() {
-  if (GS_lang == 'zh-tw') {
-    TT_AddStr('incidence_evolution_by_county_title', '各縣市確診率變化');
+  if (LS_lang == 'zh-tw') {
+    LS_AddStr('incidence_evolution_by_county_title', '各縣市確診率變化');
   }
   
-  else if (GS_lang == 'fr') {
-    TT_AddStr('incidence_evolution_by_county_title', "Évolution du taux d'incidence par ville et comté");
+  else if (LS_lang == 'fr') {
+    LS_AddStr('incidence_evolution_by_county_title', "Évolution du taux d'incidence par ville et comté");
   }
   
   else { //-- En
-    TT_AddStr('incidence_evolution_by_county_title', 'Evolution of Incidence Rate by City & County');
+    LS_AddStr('incidence_evolution_by_county_title', 'Evolution of Incidence Rate by City & County');
   }
 }
 
@@ -48,6 +48,7 @@ function IEBC_FormatData(wrap, data) {
   
   //-- Other variables
   var formatted_data = [];
+  var value_max = 0;
   var i, j, x, y, block;
   
   //-- Loop over row
@@ -73,6 +74,9 @@ function IEBC_FormatData(wrap, data) {
         'value': +row[col_tag]
       };
       
+      //-- Calculate value_max
+      value_max = Math.max(value_max, +row[col_tag]);
+      
       //-- Stock
       formatted_data.push(block);
     }
@@ -91,6 +95,7 @@ function IEBC_FormatData(wrap, data) {
   wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
   wrap.ytick = ytick;
+  wrap.value_max = value_max;
 }
 
 function IEBC_FormatData2(wrap, data2) {
@@ -110,54 +115,77 @@ function IEBC_FormatData2(wrap, data2) {
 }
 
 function IEBC_Plot(wrap) {
-  //-- Define xscale
+  //-- Define xscale for square
   var xscale = d3.scaleBand()
     .domain(wrap.x_list)
     .range([0, wrap.width])
     .padding(0.04);
     
-  //-- Define xaxis & update xtick or xticklabel later
-  var xaxis = d3.axisBottom(xscale)
+  //-- Define xscale_tick for xtick + xticklabel
+  var eps = 0
+  var xscale_tick = d3.scaleLinear()
+    .domain([-eps, wrap.x_list.length+eps])
+    .range([0, wrap.width]);
+  
+  //-- Define xaxis_frame for top frameline
+  var xaxis_frame = d3.axisBottom(xscale)
     .tickSize(0)
     .tickFormat('');
   
-  //-- Add xaxis & adjust position
+  //-- Add xaxis_frame (top frameline)
   wrap.svg.append('g')
-    .call(xaxis);
+    .call(xaxis_frame);
     
+  //-- Define xaxis for xtick + xticklabel
+  var xaxis = d3.axisBottom(xscale_tick)
+    .ticks(0)
+    .tickSize(0)
+    .tickValues(wrap.xtick)
+    .tickFormat(function (d, i) {return LS_ISODateToMDDate(wrap.xticklabel[i]);});
+  
+  //-- Add xaxis & adjust position (bottom frameline)
   wrap.svg.append('g')
     .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + wrap.height + ')');
-    
+    .attr('transform', 'translate(0,' + wrap.height + ')')
+    .call(xaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(-8,5) rotate(-90)')
+      .style('font-size', '12px')
+      .style('text-anchor', 'end');
+  
   //-- Define yscale
   var yscale = d3.scaleBand()
     .domain(wrap.col_tag_list)
     .range([0, wrap.height])
     .padding(0.04);
   
-  //-- Define yaxis & update yticklabel later
+  //-- Define yaxis for ytick + yticklabel
   var yaxis = d3.axisLeft(yscale)
     .tickSize(0)
-    .tickFormat('');
+    .tickFormat(function (d, i) {return wrap.y_list_dict[LS_lang][i]});
   
   //-- Add yaxis
   wrap.svg.append('g')
     .attr('class', 'yaxis')
     .call(yaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(-2,0)')
+      .style('font-size', '12px')
+      .style('text-anchor', 'end');
 
-  //-- Define yaxis_2 for the frameline at right
-  var yaxis_2 = d3.axisRight(yscale)
+  //-- Define yaxis_frame for right frameline
+  var yaxis_frame = d3.axisRight(yscale)
     .ticks(0)
     .tickSize(0);
   
-  //-- Add yaxis_2 & adjust position (no yaxis class)
+  //-- Add yaxis_frame & adjust position (right frameline)
   wrap.svg.append('g')
     .attr('transform', 'translate(' + wrap.width + ',0)')
-    .call(yaxis_2);
+    .call(yaxis_frame);
     
   //-- Define square color
   var color = d3.scaleSequential()
-    .domain([0, 61]) //WARNING use y_max
+    .domain([0, wrap.value_max+0.001])
     .interpolator(t => d3.interpolatePuRd(t));
   
   //-- Add square
@@ -173,8 +201,8 @@ function IEBC_Plot(wrap) {
       .attr('width', xscale.bandwidth())
       .attr('height', yscale.bandwidth())
       .style('fill', function (d) {return color(d.value);})
-        .on('mouseover', function (d) {GS_MouseOver2(wrap, d);})
-        .on('mouseleave', function (d) {GS_MouseLeave2(wrap, d);});
+        .on('mouseover', function (d) {GP_MouseOver2(wrap, d);})
+        .on('mouseleave', function (d) {GP_MouseLeave2(wrap, d);});
     
   //-- Add text
   wrap.svg.selectAll()
@@ -190,74 +218,30 @@ function IEBC_Plot(wrap) {
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central');
   
-  wrap.svg.append('text')
-    .attr('class', 'legend caption');
-  
-  //-- Save to wrapper
-  wrap.yscale = yscale;
-}
-
-function IEBC_Replot(wrap) {
-  //-- Define xscale_2 for xtick & xticklabel
-  var eps = 0
-  var xscale_2 = d3.scaleLinear()
-    .domain([-eps, wrap.x_list.length+eps])
-    .range([0, wrap.width]);
-  
-  //-- Define new xaxis for xticklabel
-  var x_axis = d3.axisBottom(xscale_2)
-    .ticks(0)
-    .tickSize(0)
-    .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return GS_ISODateToMDDate(wrap.xticklabel[i]);});
-  
-  //-- Update xaxis
-  wrap.svg.select('.xaxis')
-    .transition()
-    .duration(GS_wrap.trans_delay)
-    .call(x_axis)
-    .selectAll('text')
-      .attr('transform', 'translate(-8,7) rotate(-90)')
-      .style('font-size', '11px')
-      .style('text-anchor', 'end');
-  
-  //-- Define yaxis
-  var yaxis = d3.axisLeft(wrap.yscale)
-    .tickSize(0)
-    .tickFormat(function (d, i) {return wrap.y_list_dict[GS_lang][i]});
-  
-  //-- Update y-axis
-  wrap.svg.select('.yaxis')
-    .transition()
-    .duration(GS_wrap.trans_delay)
-    .call(yaxis)
-    .selectAll('text')
-      .attr('transform', 'translate(-2,0)')
-      .style('font-size', '11px')
-      .style('text-anchor', 'end');
-      
-  if (GS_lang == 'zh-tw')
-    caption = '各縣市每十萬人過去七日總確診數合';
-  else if (GS_lang == 'fr')
+  //-- Define caption
+  if (LS_lang == 'zh-tw')
+    caption = '各縣市每十萬人過去七日確診數總合';
+  else if (LS_lang == 'fr')
     caption = 'Nombre de cas confirmés sur 7 jours par 100k habitants, par ville & comté';
   else 
     caption = 'Number of confirmed cased over 7 days per 100k inhabitants, by city & county';
     
   var offset;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     offset = {x: -45, y: -8};
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     offset = {x: -115, y: -8};
   else 
     offset = {x: -100, y: -8};
   
-  //-- Update legend caption
-  wrap.svg.selectAll('.legend.caption')
+  //-- Add legend caption
+  wrap.svg.append('text')
+    .attr('class', 'legend caption')
     .attr('x', wrap.tot_width+offset.x)
     .attr('y', offset.y)
     .style('fill', '#000000')
     .text(caption)
-    .style('font-size', '12px')
+    .style('font-size', '16px')
     .attr('text-anchor', 'end');
 }
 
@@ -273,25 +257,28 @@ function IEBC_Load(wrap) {
       IEBC_FormatData(wrap, data);
       IEBC_FormatData2(wrap, data2);
       IEBC_Plot(wrap);
-      IEBC_Replot(wrap);
     });
 }
 
 function IEBC_ButtonListener(wrap) {
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
-    name = wrap.tag + '_' + GS_lang + '.png';
+    name = wrap.tag + '_' + LS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
   //-- Language
   $(document).on("change", "input:radio[name='language']", function (event) {
-    GS_lang = this.value;
-    Cookies.set("lang", GS_lang);
+    LS_lang = this.value;
+    Cookies.set("lang", LS_lang);
     
-    //-- Replot
+    //-- Remove
+    d3.selectAll(wrap.id+' .plot').remove()
+    
+    //-- Reload
+    IEBC_InitFig(wrap);
     IEBC_ResetText();
-    IEBC_Replot(wrap);
+    IEBC_Load(wrap);
   });
 }
 

@@ -16,101 +16,101 @@ function IM_InitFig(wrap) {
   wrap.margin_['fr'] = {left: 2, right: 2, bottom: 2, top: 2};
   wrap.margin_['en'] = {left: 2, right: 2, bottom: 2, top: 2};
   
-  GS_InitFig(wrap);
+  GP_InitFig(wrap);
 }
 
 function IM_ResetText() {
-  if (GS_lang == 'zh-tw') {
-    TT_AddStr('incidence_map_title', '縣市確診地圖');
-    TT_AddStr('incidence_map_button_1', '案例數');
-    TT_AddStr('incidence_map_button_2', '確診率');
-    TT_AddStr('incidence_map_button_total', '本土合計');
-    TT_AddStr('incidence_map_button_w-1', '0-6天前');
-    TT_AddStr('incidence_map_button_w-2', '7-13天前');
-    TT_AddStr('incidence_map_button_w-3', '14-20天前');
-    TT_AddStr('incidence_map_button_w-4', '21-27天前');
-    TT_AddStr('incidence_map_button_w-5', '28-34天前');
-    TT_AddStr('incidence_map_button_w-6', '35-41天前');
-    TT_AddStr('incidence_map_button_w-7', '42-48天前');
-    TT_AddStr('incidence_map_button_w-8', '49-55天前');
-    TT_AddStr('incidence_map_button_w-9', '56-62天前');
-    TT_AddStr('incidence_map_button_w-10', '63-69天前');
-    TT_AddStr('incidence_map_button_w-11', '70-76天前');
-    TT_AddStr('incidence_map_button_w-12', '77-83天前');
-    TT_AddStr('incidence_map_button_m1', '1月');
-    TT_AddStr('incidence_map_button_m2', '2月');
-    TT_AddStr('incidence_map_button_m3', '3月');
-    TT_AddStr('incidence_map_button_m4', '4月');
-    TT_AddStr('incidence_map_button_m5', '5月');
-    TT_AddStr('incidence_map_button_m6', '6月');
-    TT_AddStr('incidence_map_button_m7', '7月');
-    TT_AddStr('incidence_map_button_m8', '8月');
-    TT_AddStr('incidence_map_button_m9', '9月');
-    TT_AddStr('incidence_map_button_m10', '10月');
-    TT_AddStr('incidence_map_button_m11', '11月');
-    TT_AddStr('incidence_map_button_m12', '12月');
+  if (LS_lang == 'zh-tw') {
+    LS_AddStr('incidence_map_title', '縣市確診地圖');
+    LS_AddStr('incidence_map_button_1', '案例數');
+    LS_AddStr('incidence_map_button_2', '確診率');
+    LS_AddStr('incidence_map_button_total', '本土合計');
+    LS_AddStr('incidence_map_button_w-1', '0-6天前');
+    LS_AddStr('incidence_map_button_w-2', '7-13天前');
+    LS_AddStr('incidence_map_button_w-3', '14-20天前');
+    LS_AddStr('incidence_map_button_w-4', '21-27天前');
+    LS_AddStr('incidence_map_button_w-5', '28-34天前');
+    LS_AddStr('incidence_map_button_w-6', '35-41天前');
+    LS_AddStr('incidence_map_button_w-7', '42-48天前');
+    LS_AddStr('incidence_map_button_w-8', '49-55天前');
+    LS_AddStr('incidence_map_button_w-9', '56-62天前');
+    LS_AddStr('incidence_map_button_w-10', '63-69天前');
+    LS_AddStr('incidence_map_button_w-11', '70-76天前');
+    LS_AddStr('incidence_map_button_w-12', '77-83天前');
+    LS_AddStr('incidence_map_button_m1', '1月');
+    LS_AddStr('incidence_map_button_m2', '2月');
+    LS_AddStr('incidence_map_button_m3', '3月');
+    LS_AddStr('incidence_map_button_m4', '4月');
+    LS_AddStr('incidence_map_button_m5', '5月');
+    LS_AddStr('incidence_map_button_m6', '6月');
+    LS_AddStr('incidence_map_button_m7', '7月');
+    LS_AddStr('incidence_map_button_m8', '8月');
+    LS_AddStr('incidence_map_button_m9', '9月');
+    LS_AddStr('incidence_map_button_m10', '10月');
+    LS_AddStr('incidence_map_button_m11', '11月');
+    LS_AddStr('incidence_map_button_m12', '12月');
   }
   
-  else if (GS_lang == 'fr') {
-    TT_AddStr('incidence_map_title', "Carte d'incidence");
-    TT_AddStr('incidence_map_button_1', 'Nombre');
-    TT_AddStr('incidence_map_button_2', 'Taux');
-    TT_AddStr('incidence_map_button_total', 'Locaux totaux');
-    TT_AddStr('incidence_map_button_w-1', '0-6 jours plus tôt');
-    TT_AddStr('incidence_map_button_w-2', '7-13 jours plus tôt');
-    TT_AddStr('incidence_map_button_w-3', '14-20 jours plus tôt');
-    TT_AddStr('incidence_map_button_w-4', '21-27 jours plus tôt');
-    TT_AddStr('incidence_map_button_w-5', '28-34 jours plus tôt');
-    TT_AddStr('incidence_map_button_w-6', '35-41 jours plus tôt');
-    TT_AddStr('incidence_map_button_w-7', '42-48 jours plus tôt');
-    TT_AddStr('incidence_map_button_w-8', '49-55 jours plus tôt');
-    TT_AddStr('incidence_map_button_w-9', '56-62 jours plus tôt');
-    TT_AddStr('incidence_map_button_w-10', '63-69 jours plus tôt');
-    TT_AddStr('incidence_map_button_w-11', '70-76 jours plus tôt');
-    TT_AddStr('incidence_map_button_w-12', '77-83 jours plus tôt');
-    TT_AddStr('incidence_map_button_m1', 'Janvier');
-    TT_AddStr('incidence_map_button_m2', 'Février');
-    TT_AddStr('incidence_map_button_m3', 'Mars');
-    TT_AddStr('incidence_map_button_m4', 'Avril');
-    TT_AddStr('incidence_map_button_m5', 'Mai');
-    TT_AddStr('incidence_map_button_m6', 'Juin');
-    TT_AddStr('incidence_map_button_m7', 'Juillet');
-    TT_AddStr('incidence_map_button_m8', 'Août');
-    TT_AddStr('incidence_map_button_m9', 'Septembre');
-    TT_AddStr('incidence_map_button_m10', 'Octobre');
-    TT_AddStr('incidence_map_button_m11', 'Novembre');
-    TT_AddStr('incidence_map_button_m12', 'Décembre');
+  else if (LS_lang == 'fr') {
+    LS_AddStr('incidence_map_title', "Carte d'incidence");
+    LS_AddStr('incidence_map_button_1', 'Nombre');
+    LS_AddStr('incidence_map_button_2', 'Taux');
+    LS_AddStr('incidence_map_button_total', 'Locaux totaux');
+    LS_AddStr('incidence_map_button_w-1', '0-6 jours plus tôt');
+    LS_AddStr('incidence_map_button_w-2', '7-13 jours plus tôt');
+    LS_AddStr('incidence_map_button_w-3', '14-20 jours plus tôt');
+    LS_AddStr('incidence_map_button_w-4', '21-27 jours plus tôt');
+    LS_AddStr('incidence_map_button_w-5', '28-34 jours plus tôt');
+    LS_AddStr('incidence_map_button_w-6', '35-41 jours plus tôt');
+    LS_AddStr('incidence_map_button_w-7', '42-48 jours plus tôt');
+    LS_AddStr('incidence_map_button_w-8', '49-55 jours plus tôt');
+    LS_AddStr('incidence_map_button_w-9', '56-62 jours plus tôt');
+    LS_AddStr('incidence_map_button_w-10', '63-69 jours plus tôt');
+    LS_AddStr('incidence_map_button_w-11', '70-76 jours plus tôt');
+    LS_AddStr('incidence_map_button_w-12', '77-83 jours plus tôt');
+    LS_AddStr('incidence_map_button_m1', 'Janvier');
+    LS_AddStr('incidence_map_button_m2', 'Février');
+    LS_AddStr('incidence_map_button_m3', 'Mars');
+    LS_AddStr('incidence_map_button_m4', 'Avril');
+    LS_AddStr('incidence_map_button_m5', 'Mai');
+    LS_AddStr('incidence_map_button_m6', 'Juin');
+    LS_AddStr('incidence_map_button_m7', 'Juillet');
+    LS_AddStr('incidence_map_button_m8', 'Août');
+    LS_AddStr('incidence_map_button_m9', 'Septembre');
+    LS_AddStr('incidence_map_button_m10', 'Octobre');
+    LS_AddStr('incidence_map_button_m11', 'Novembre');
+    LS_AddStr('incidence_map_button_m12', 'Décembre');
   }
   
   else { //-- En
-    TT_AddStr('incidence_map_title', 'Incidence Map');
-    TT_AddStr('incidence_map_button_1', 'Counts');
-    TT_AddStr('incidence_map_button_2', 'Rate');
-    TT_AddStr('incidence_map_button_total', 'Total local');
-    TT_AddStr('incidence_map_button_w-1', '0-6 days ago');
-    TT_AddStr('incidence_map_button_w-2', '7-13 days ago');
-    TT_AddStr('incidence_map_button_w-3', '14-20 days ago');
-    TT_AddStr('incidence_map_button_w-4', '21-27 days ago');
-    TT_AddStr('incidence_map_button_w-5', '28-34 days ago');
-    TT_AddStr('incidence_map_button_w-6', '35-41 days ago');
-    TT_AddStr('incidence_map_button_w-7', '42-48 days ago');
-    TT_AddStr('incidence_map_button_w-8', '49-55 days ago');
-    TT_AddStr('incidence_map_button_w-9', '56-62 days ago');
-    TT_AddStr('incidence_map_button_w-10', '63-69 days ago');
-    TT_AddStr('incidence_map_button_w-11', '70-76 days ago');
-    TT_AddStr('incidence_map_button_w-12', '77-83 days ago');
-    TT_AddStr('incidence_map_button_m1', 'January');
-    TT_AddStr('incidence_map_button_m2', 'February');
-    TT_AddStr('incidence_map_button_m3', 'March');
-    TT_AddStr('incidence_map_button_m4', 'April');
-    TT_AddStr('incidence_map_button_m5', 'May');
-    TT_AddStr('incidence_map_button_m6', 'June');
-    TT_AddStr('incidence_map_button_m7', 'July');
-    TT_AddStr('incidence_map_button_m8', 'August');
-    TT_AddStr('incidence_map_button_m9', 'September');
-    TT_AddStr('incidence_map_button_m10', 'October');
-    TT_AddStr('incidence_map_button_m11', 'November');
-    TT_AddStr('incidence_map_button_m12', 'December');
+    LS_AddStr('incidence_map_title', 'Incidence Map');
+    LS_AddStr('incidence_map_button_1', 'Counts');
+    LS_AddStr('incidence_map_button_2', 'Rate');
+    LS_AddStr('incidence_map_button_total', 'Total local');
+    LS_AddStr('incidence_map_button_w-1', '0-6 days ago');
+    LS_AddStr('incidence_map_button_w-2', '7-13 days ago');
+    LS_AddStr('incidence_map_button_w-3', '14-20 days ago');
+    LS_AddStr('incidence_map_button_w-4', '21-27 days ago');
+    LS_AddStr('incidence_map_button_w-5', '28-34 days ago');
+    LS_AddStr('incidence_map_button_w-6', '35-41 days ago');
+    LS_AddStr('incidence_map_button_w-7', '42-48 days ago');
+    LS_AddStr('incidence_map_button_w-8', '49-55 days ago');
+    LS_AddStr('incidence_map_button_w-9', '56-62 days ago');
+    LS_AddStr('incidence_map_button_w-10', '63-69 days ago');
+    LS_AddStr('incidence_map_button_w-11', '70-76 days ago');
+    LS_AddStr('incidence_map_button_w-12', '77-83 days ago');
+    LS_AddStr('incidence_map_button_m1', 'January');
+    LS_AddStr('incidence_map_button_m2', 'February');
+    LS_AddStr('incidence_map_button_m3', 'March');
+    LS_AddStr('incidence_map_button_m4', 'April');
+    LS_AddStr('incidence_map_button_m5', 'May');
+    LS_AddStr('incidence_map_button_m6', 'June');
+    LS_AddStr('incidence_map_button_m7', 'July');
+    LS_AddStr('incidence_map_button_m8', 'August');
+    LS_AddStr('incidence_map_button_m9', 'September');
+    LS_AddStr('incidence_map_button_m10', 'October');
+    LS_AddStr('incidence_map_button_m11', 'November');
+    LS_AddStr('incidence_map_button_m12', 'December');
   }
 }
 
@@ -217,7 +217,7 @@ function IM_Plot(wrap) {
     .attr('class', 'content map')
     .attr('d', d3.geoPath().projection(projection))
     .attr('fill', function (d) {return '#FFFFFF';})
-    .style('stroke', GS_wrap.gray)
+    .style('stroke', GP_wrap.gray)
       .on('mouseover', function (d, i) {IM_MouseOver(wrap, d, i);})
       .on('mouseleave', function (d, i) {IM_MouseLeave(wrap, d, i);});
     
@@ -236,7 +236,7 @@ function IM_Replot(wrap) {
   wrap.map.selectAll('.content.map')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GS_wrap.trans_delay)
+    .duration(GP_wrap.trans_delay)
     .attr('fill', function (d) {return color(Math.log10(1+d.properties.value));})
     
   //-- Define legend position
@@ -282,7 +282,7 @@ function IM_Replot(wrap) {
   wrap.svg.selectAll('.legend.label')
     .remove()
     .exit()
-    .data(wrap.label_list_dict[GS_lang])
+    .data(wrap.label_list_dict[LS_lang])
     .enter()
     .append('text')
       .attr('class', 'legend label')
@@ -312,27 +312,27 @@ function IM_Replot(wrap) {
     line.append('polyline')
       .attr('points', points)
       .attr('opacity', 1)
-      .attr('stroke', GS_wrap.gray)
+      .attr('stroke', GP_wrap.gray)
       .attr('stroke-width', 1)
       .attr('id', wrap.tag+'_line_'+i)
       .attr('fill', 'none');
   }
   
   if (wrap.rate == 1) {
-    if (GS_lang == 'zh-tw')
-      caption = ['每十萬人確診率 '+TT_GetYearLabel(wrap)];
-    else if (GS_lang == 'fr')
-      caption = ["Taux d'incidence", 'par 100k habitants', TT_GetYearLabel(wrap)];
+    if (LS_lang == 'zh-tw')
+      caption = ['每十萬人確診率 '+LS_GetYearLabel(wrap)];
+    else if (LS_lang == 'fr')
+      caption = ["Taux d'incidence", 'par 100k habitants', LS_GetYearLabel(wrap)];
     else 
-      caption = ['Incidence rate', 'per 100k inhabitants', TT_GetYearLabel(wrap)];
+      caption = ['Incidence rate', 'per 100k inhabitants', LS_GetYearLabel(wrap)];
   }
   else 
-    if (GS_lang == 'zh-tw')
-      caption = ['確診案例數 '+TT_GetYearLabel(wrap)];
-    else if (GS_lang == 'fr')
-      caption = ['Nombre des cas confirmés', TT_GetYearLabel(wrap)];
+    if (LS_lang == 'zh-tw')
+      caption = ['確診案例數 '+LS_GetYearLabel(wrap)];
+    else if (LS_lang == 'fr')
+      caption = ['Nombre des cas confirmés', LS_GetYearLabel(wrap)];
     else 
-      caption = ['Confirmed case counts', TT_GetYearLabel(wrap)];
+      caption = ['Confirmed case counts', LS_GetYearLabel(wrap)];
     
   //-- Update legend caption
   wrap.svg.selectAll('.legend.caption')
@@ -343,7 +343,7 @@ function IM_Replot(wrap) {
     .append('text')
       .attr('class', 'legend caption')
       .attr('x', wrap.tot_width-20)
-      .attr('y', function (d, i) {return wrap.tot_height[GS_lang]-20-(caption.length-1-i)*25;})
+      .attr('y', function (d, i) {return wrap.tot_height-20-(caption.length-1-i)*25;})
       .style('fill', '#000000')
       .text(function (d) {return d;})
       .style('font-size', '20px')
@@ -383,7 +383,7 @@ function IM_Reload(wrap) {
 function IM_ButtonListener(wrap) {
   //-- Count or rate
   $(document).on("change", "input:radio[name='" + wrap.tag + "_rate']", function (event) {
-    GS_PressRadioButton(wrap, 'rate', wrap.rate, this.value);
+    GP_PressRadioButton(wrap, 'rate', wrap.rate, this.value);
     wrap.rate = this.value;
     IM_Reload(wrap);
   });
@@ -410,14 +410,14 @@ function IM_ButtonListener(wrap) {
     else
       tag2 = 'm' + wrap.period;
     
-    name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + GS_lang + '.png';
+    name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + LS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
   //-- Language
   $(document).on("change", "input:radio[name='language']", function (event) {
-    GS_lang = this.value;
-    Cookies.set('lang', GS_lang);
+    LS_lang = this.value;
+    Cookies.set('lang', LS_lang);
     
     //-- Replot
     IM_ResetText();
@@ -431,7 +431,7 @@ function IM_Main(wrap) {
   
   //-- Swap active to current value
   wrap.rate = document.querySelector("input[name='" + wrap.tag + "_rate']:checked").value;
-  GS_PressRadioButton(wrap, 'rate', 0, wrap.rate); //-- 0 from .html
+  GP_PressRadioButton(wrap, 'rate', 0, wrap.rate); //-- 0 from .html
   wrap.period = document.getElementById(wrap.tag + '_period').value;
   
   //-- Load

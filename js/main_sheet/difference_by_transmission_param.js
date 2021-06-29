@@ -18,6 +18,7 @@ var DBT_latest_wrap = {
   y_path_1: '4',
   y_path_2: '4',
   y_path_3: '4',
+  trans_delay: GP_wrap.trans_delay,
 };
 
 var DBT_2021_wrap = {
@@ -33,6 +34,7 @@ var DBT_2021_wrap = {
   y_path_1: '4',
   y_path_2: '4',
   y_path_3: '4',
+  trans_delay: GP_wrap.trans_delay,
 };
 
 var DBT_2020_wrap = {
@@ -48,4 +50,5 @@ var DBT_2020_wrap = {
   y_path_1: '4',
   y_path_2: '4',
   y_path_3: '4',
+  trans_delay: GP_wrap.trans_delay,
 };

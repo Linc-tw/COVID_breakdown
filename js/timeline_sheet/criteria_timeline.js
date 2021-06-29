@@ -16,32 +16,32 @@ function CT_InitFig(wrap) {
   wrap.margin_['fr'] = {left: 0, right: 0, bottom: 0, top: 0};
   wrap.margin_['en'] = {left: 0, right: 0, bottom: 0, top: 0};
   
-  GS_InitFig(wrap);
+  GP_InitFig(wrap);
 }
 
 function CT_ResetText() {
-  if (GS_lang == 'zh-tw') {
-    TT_AddStr("criteria_timeline_title", "檢驗通報標準演進圖");
-    TT_AddStr("criteria_timeline_button_1", "精選");
-    TT_AddStr("criteria_timeline_button_2", "完整");
-    TT_AddStr("criteria_timeline_button_3", "軸狀");
-    TT_AddStr("criteria_timeline_button_4", "碟狀");
+  if (LS_lang == 'zh-tw') {
+    LS_AddStr('criteria_timeline_title', '檢驗通報標準演進圖');
+    LS_AddStr('criteria_timeline_button_1', '精選');
+    LS_AddStr('criteria_timeline_button_2', '完整');
+    LS_AddStr('criteria_timeline_button_3', '軸狀');
+    LS_AddStr('criteria_timeline_button_4', '碟狀');
   }
   
-  else if (GS_lang == 'fr') {
-    TT_AddStr("criteria_timeline_title", "Chronologie des dépistages systématiques");
-    TT_AddStr("criteria_timeline_button_1", "Selectionnée");
-    TT_AddStr("criteria_timeline_button_2", "Complète");
-    TT_AddStr("criteria_timeline_button_3", "Frise");
-    TT_AddStr("criteria_timeline_button_4", "Disques");
+  else if (LS_lang == 'fr') {
+    LS_AddStr('criteria_timeline_title', 'Chronologie des dépistages systématiques');
+    LS_AddStr('criteria_timeline_button_1', 'Selectionnée');
+    LS_AddStr('criteria_timeline_button_2', 'Complète');
+    LS_AddStr('criteria_timeline_button_3', 'Frise');
+    LS_AddStr('criteria_timeline_button_4', 'Disques');
   }
   
   else { //-- En
-    TT_AddStr("criteria_timeline_title", "Chronology of Systematic Testing");
-    TT_AddStr("criteria_timeline_button_1", "Selected");
-    TT_AddStr("criteria_timeline_button_2", "Full");
-    TT_AddStr("criteria_timeline_button_3", "Timeline");
-    TT_AddStr("criteria_timeline_button_4", "Disks");
+    LS_AddStr('criteria_timeline_title', 'Chronology of Systematic Testing');
+    LS_AddStr('criteria_timeline_button_1', 'Selected');
+    LS_AddStr('criteria_timeline_button_2', 'Full');
+    LS_AddStr('criteria_timeline_button_3', 'Timeline');
+    LS_AddStr('criteria_timeline_button_4', 'Disks');
   }
 }
 
@@ -80,9 +80,9 @@ function CT_MouseMove(wrap, d) {
   
   //-- Define tooltip texts
   var tooltip_text;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     tooltip_text = '點我'
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     tooltip_text = 'Cliquez'
   else
     tooltip_text = 'Click me'
@@ -140,13 +140,13 @@ function CT_Click_Timeline(wrap, d, j) {
 
 function CT_Plot(wrap) {
   //-- Add tooltip
-  GS_MakeTooltip(wrap);
+  GP_MakeTooltip(wrap);
   
   //-- Define title
   var title;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     title = ['台灣針對嚴重特殊傳染性肺炎之', '採檢標準暨其生效日期變化圖'];
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     title = ['Antécédents de voyage, symptômes et autres', 'conditions avec lesquelles Taïwan dépiste', "systématiquement & leurs dates d'effet"];
   else
     title = ['Travel history, symptoms, & other conditions', 'with which Taiwan tests systematically &', 'their starting dates'];
@@ -173,7 +173,7 @@ function CT_Plot(wrap) {
   
   //-- Define timeline text x position
   var x_list_t;
-  if (GS_lang == 'zh-tw') {
+  if (LS_lang == 'zh-tw') {
     x_list_t = [
       0, 
           300, 120, 0, 180, 240, 
@@ -191,7 +191,7 @@ function CT_Plot(wrap) {
       0
     ];
   }
-  else if (GS_lang == 'fr') {
+  else if (LS_lang == 'fr') {
     x_list_t = [
       0, 
           380, 120, 0, 180, 240, 
@@ -245,12 +245,12 @@ function CT_Plot(wrap) {
     date = wrap.formatted_data[i]['date'];
     
     //-- Split text into multiple lines
-    split = wrap.formatted_data[i][GS_lang].split('\n');
+    split = wrap.formatted_data[i][LS_lang].split('\n');
     if (date == '2020-01-25' || date == '2020-03-17' || date == '2020-03-19')
       split = [split.join(' ')]
-    if (date == '2020-02-16' && GS_lang == 'fr')
+    if (date == '2020-02-16' && LS_lang == 'fr')
       split = [split[0]+' '+split[1], split[2]+' '+split[3]]
-    if (date == '2020-02-29' && GS_lang == 'fr')
+    if (date == '2020-02-29' && LS_lang == 'fr')
       split = [split[0], split[1], split[2]+' '+split[3]]
     
     //-- Add timeline date
@@ -288,7 +288,7 @@ function CT_Plot(wrap) {
         .attr("points", (x0_t+0.75*dx_t)+','+y1+' '+(x0_t+0.5*dx_t+x_list_t[i])+','+y2)
         .attr("opacity", line_alpha*wrap['timeline_text_'+i])
         .attr("id", function (d, j) {return wrap.tag+'_timeline_line_'+i;})
-        .attr("stroke", GS_wrap.gray)
+        .attr("stroke", GP_wrap.gray)
         .attr("stroke-width", 1)
         .attr('fill', 'none')
     }
@@ -320,9 +320,9 @@ function CT_Plot(wrap) {
       .attr("stroke", "black")
       .attr("stroke-width", 1)
         .on("click", function (d, j) {CT_Click_Timeline(wrap, d, j);})
-        .on("mouseover", function (d) {GS_MouseOver3(wrap, d);})
+        .on("mouseover", function (d) {GP_MouseOver3(wrap, d);})
         .on("mousemove", function (d) {CT_MouseMove(wrap, d);})
-        .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);});
+        .on("mouseleave", function (d) {GP_MouseLeave(wrap, d);});
   
   //-- Circle
   
@@ -348,13 +348,13 @@ function CT_Plot(wrap) {
       .attr("stroke", "black")
       .attr("stroke-width", 0.3)
         .on("click", function (d, i) {CT_Click_Circle(wrap, d, i);})
-        .on("mouseover", function (d) {GS_MouseOver3(wrap, d);})
+        .on("mouseover", function (d) {GP_MouseOver3(wrap, d);})
         .on("mousemove", function (d) {CT_MouseMove(wrap, d);})
-        .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);});
+        .on("mouseleave", function (d) {GP_MouseLeave(wrap, d);});
   
   //-- Define circle text position
   var x_list_c, y_list_c;
-  if (GS_lang == 'zh-tw') {
+  if (LS_lang == 'zh-tw') {
     x_list_c = [
       0, 
         1, 1, 0, 1, 1, 
@@ -390,7 +390,7 @@ function CT_Plot(wrap) {
       0
     ];
   }
-  else if (GS_lang == 'fr') {
+  else if (LS_lang == 'fr') {
     x_list_c = [
       0, 
         1, 1, 0, 1, 1, 
@@ -473,9 +473,9 @@ function CT_Plot(wrap) {
     
     //-- Split text into multiple lines
     if (i > 12)
-      split = (wrap.formatted_data[i]['date'] + ' ' + wrap.formatted_data[i][GS_lang]).split('\n');
+      split = (wrap.formatted_data[i]['date'] + ' ' + wrap.formatted_data[i][LS_lang]).split('\n');
     else
-      split = (wrap.formatted_data[i]['date'] + '\n' + wrap.formatted_data[i][GS_lang]).split('\n');
+      split = (wrap.formatted_data[i]['date'] + '\n' + wrap.formatted_data[i][LS_lang]).split('\n');
     
     //-- Fine-tuning
     x1 = x_list_c[i] ? wrap.width-10 : 2*x0_c+20;
@@ -504,7 +504,7 @@ function CT_Plot(wrap) {
         .attr("points", x0_c+','+y1+' '+(x1-60)+','+y2+' '+(x1-5)+','+y2)
         .attr("opacity", line_alpha*wrap['circle_text_'+i])
         .attr("id", function (d, j) {return wrap.tag+'_circle_line_'+i;})
-        .attr("stroke", GS_wrap.gray)
+        .attr("stroke", GP_wrap.gray)
         .attr("stroke-width", 1)
         .attr('fill', 'none')
     }
@@ -550,30 +550,30 @@ function CT_Replot(wrap) {
     wrap.svg.selectAll('.circle')
       .data(wrap.formatted_data)
       .transition()
-      .duration(GS_wrap.trans_delay)
+      .duration(GP_wrap.trans_delay)
       .attr("r", 0)
       
     //-- Update dot
     wrap.svg.selectAll('.dot')
       .data(wrap.formatted_data)
       .transition()
-      .duration(GS_wrap.trans_delay)
+      .duration(GP_wrap.trans_delay)
       .attr("r", 5)
     
     //-- Update baseline
     wrap.svg.selectAll(wrap.id+'_timeline_baseline')
       .transition()
-      .duration(GS_wrap.trans_delay)
+      .duration(GP_wrap.trans_delay)
       .attr('opacity', 1)
     
     //-- Define title parameters
     var title_x_t, title_y0_t, title_y1_t;
-    if (GS_lang == 'zh-tw') {
+    if (LS_lang == 'zh-tw') {
       title_x_t = wrap.width - 270;
       title_y0_t = wrap.height - 100;
       title_y1_t = 20;
     }
-    else if (GS_lang == 'fr') {
+    else if (LS_lang == 'fr') {
       title_x_t = wrap.width - 346;
       title_y0_t = wrap.height - 80;
       title_y1_t = 20;
@@ -587,7 +587,7 @@ function CT_Replot(wrap) {
     //-- Update title
     wrap.svg.selectAll('.title')
       .transition()
-      .duration(GS_wrap.trans_delay)
+      .duration(GP_wrap.trans_delay)
       .attr("x", title_x_t)
       .attr("y", function (d, i) {return title_y0_t + title_y1_t*i;})
       
@@ -599,13 +599,13 @@ function CT_Replot(wrap) {
       //-- Update circle text
       wrap.svg.selectAll(wrap.id+'_circle_text_'+i)
         .transition()
-        .duration(GS_wrap.trans_delay)
+        .duration(GP_wrap.trans_delay)
         .attr("opacity", 0)
         
       //-- Update circle line
       wrap.svg.selectAll(wrap.id+'_circle_line_'+i)
         .transition()
-        .duration(GS_wrap.trans_delay)
+        .duration(GP_wrap.trans_delay)
         .attr("opacity", wrap.line_alpha*0)
         
       //-- Update timeline state
@@ -614,13 +614,13 @@ function CT_Replot(wrap) {
       //-- Update timeline text
       wrap.svg.selectAll(wrap.id+'_timeline_text_'+i)
         .transition()
-        .duration(GS_wrap.trans_delay)
+        .duration(GP_wrap.trans_delay)
         .attr("opacity", active_list[i])
         
       //-- Update timeline line
       wrap.svg.selectAll(wrap.id+'_timeline_line_'+i)
         .transition()
-        .duration(GS_wrap.trans_delay)
+        .duration(GP_wrap.trans_delay)
         .attr("opacity", wrap.line_alpha*active_list[i])
     }
   }
@@ -632,26 +632,26 @@ function CT_Replot(wrap) {
     wrap.svg.selectAll('.circle')
       .data(wrap.formatted_data)
       .transition()
-      .duration(GS_wrap.trans_delay)
+      .duration(GP_wrap.trans_delay)
       .attr("r", function (d, i) {return wrap.r_c_max-(wrap.r_c_max-wrap.r_c_min)*i/(wrap.length-1);})
       
     //-- Update dot
     wrap.svg.selectAll('.dot')
       .data(wrap.formatted_data)
       .transition()
-      .duration(GS_wrap.trans_delay)
+      .duration(GP_wrap.trans_delay)
       .attr("r", 0)
     
     //-- Update baseline
     wrap.svg.selectAll(wrap.id+'_timeline_baseline')
       .transition()
-      .duration(GS_wrap.trans_delay)
+      .duration(GP_wrap.trans_delay)
       .attr('opacity', 0)
       
     //-- Update title
     wrap.svg.selectAll('.title')
       .transition()
-      .duration(GS_wrap.trans_delay)
+      .duration(GP_wrap.trans_delay)
       .attr("x", 10)
       .attr("y", function (d, i) {return 20 + i*20;})
       
@@ -663,13 +663,13 @@ function CT_Replot(wrap) {
       //-- Update circle text
       wrap.svg.selectAll(wrap.id+'_circle_text_'+i)
         .transition()
-        .duration(GS_wrap.trans_delay)
+        .duration(GP_wrap.trans_delay)
         .attr("opacity", active_list[i])
       
       //-- Update circle line
       wrap.svg.selectAll(wrap.id+'_circle_line_'+i)
         .transition()
-        .duration(GS_wrap.trans_delay)
+        .duration(GP_wrap.trans_delay)
         .attr("opacity", wrap.line_alpha*active_list[i])
         
       //-- Update timeline state
@@ -678,13 +678,13 @@ function CT_Replot(wrap) {
       //-- Update timeline text
       wrap.svg.selectAll(wrap.id+'_timeline_text_'+i)
         .transition()
-        .duration(GS_wrap.trans_delay)
+        .duration(GP_wrap.trans_delay)
         .attr("opacity", 0)
         
       //-- Update timeline line
       wrap.svg.selectAll(wrap.id+'_timeline_line_'+i)
         .transition()
-        .duration(GS_wrap.trans_delay)
+        .duration(GP_wrap.trans_delay)
         .attr("opacity", wrap.line_alpha*0)
     }
   }
@@ -707,14 +707,14 @@ function CT_Load(wrap) {
 function CT_ButtonListener(wrap) {
   //-- Selected or full
   $(document).on("change", "input:radio[name='" + wrap.tag + "_full']", function (event) {
-    GS_PressRadioButton(wrap, 'full', wrap.full, this.value);
+    GP_PressRadioButton(wrap, 'full', wrap.full, this.value);
     wrap.full = this.value;
     CT_Replot(wrap);
   });
 
   //-- Timeline or disks
   $(document).on("change", "input:radio[name='" + wrap.tag + "_timeline']", function (event) {
-    GS_PressRadioButton(wrap, 'timeline', wrap.timeline, this.value);
+    GP_PressRadioButton(wrap, 'timeline', wrap.timeline, this.value);
     wrap.timeline = this.value;
     CT_Replot(wrap);
   });
@@ -735,14 +735,14 @@ function CT_ButtonListener(wrap) {
     else
       tag2 = 'selected';
     
-    name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + GS_lang + '.png'
+    name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
   //-- Language button
   $(document).on("change", "input:radio[name='language']", function (event) {
-    GS_lang = this.value;
-    Cookies.set("lang", GS_lang);
+    LS_lang = this.value;
+    Cookies.set("lang", LS_lang);
     
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove();
@@ -761,8 +761,8 @@ function CT_Main(wrap) {
   //-- Swap active to current value
   wrap.full = document.querySelector("input[name='" + wrap.tag + "_full']:checked").value;
   wrap.timeline = document.querySelector("input[name='" + wrap.tag + "_timeline']:checked").value;
-  GS_PressRadioButton(wrap, 'full', 0, wrap.full); //-- 0 from .html
-  GS_PressRadioButton(wrap, 'timeline', 1, wrap.timeline); //-- 1 from .html
+  GP_PressRadioButton(wrap, 'full', 0, wrap.full); //-- 0 from .html
+  GP_PressRadioButton(wrap, 'timeline', 1, wrap.timeline); //-- 1 from .html
   
   //-- Load
   CT_InitFig(wrap);

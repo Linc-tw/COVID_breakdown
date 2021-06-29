@@ -17,26 +17,26 @@ function ET_InitFig(wrap) {
   wrap.margin_['en'] = {left: 0, right: 0, bottom: 0, top: 0};
   wrap.cell_size = 20; //-- Cell size
   
-  GS_InitFig(wrap);
+  GP_InitFig(wrap);
 }
 
 function ET_ResetText() {
-  if (GS_lang == 'zh-tw') {
-    TT_AddStr("event_timeline_title", "疫情時間軸");
-    TT_AddStr("event_timeline_button_1", "週日為首");
-    TT_AddStr("event_timeline_button_2", "週一為首");
+  if (LS_lang == 'zh-tw') {
+    LS_AddStr("event_timeline_title", "疫情時間軸");
+    LS_AddStr("event_timeline_button_1", "週日為首");
+    LS_AddStr("event_timeline_button_2", "週一為首");
   }
   
-  else if (GS_lang == 'fr') {
-    TT_AddStr("event_timeline_title", "Chronologie de la pandémie");
-    TT_AddStr("event_timeline_button_1", "1er jour dimanche");
-    TT_AddStr("event_timeline_button_2", "1er jour lundi");
+  else if (LS_lang == 'fr') {
+    LS_AddStr("event_timeline_title", "Chronologie de la pandémie");
+    LS_AddStr("event_timeline_button_1", "1er jour dimanche");
+    LS_AddStr("event_timeline_button_2", "1er jour lundi");
   }
   
   else { //-- En
-    TT_AddStr("event_timeline_title", "Pandemic Timeline");
-    TT_AddStr("event_timeline_button_1", "1st day Sunday");
-    TT_AddStr("event_timeline_button_2", "1st day Monday");
+    LS_AddStr("event_timeline_title", "Pandemic Timeline");
+    LS_AddStr("event_timeline_button_1", "1st day Sunday");
+    LS_AddStr("event_timeline_button_2", "1st day Monday");
   }
 }
 
@@ -567,9 +567,9 @@ function ET_MouseMove(wrap, d) {
   
   //-- Define tooltip texts
   var tooltip_text;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     tooltip_text = '點我'
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     tooltip_text = 'Cliquez'
   else
     tooltip_text = 'Click me'
@@ -601,15 +601,15 @@ function ET_Click(wrap, d, i) {
   
   //-- Update color
   for (j=0; j<split[1].length; j++)
-    color_list.push(GS_wrap.c_list[0]);
+    color_list.push(GP_wrap.c_list[0]);
   
   //-- Update color
   for (j=0; j<split[2].length; j++)
-    color_list.push(GS_wrap.c_list[1]);
+    color_list.push(GP_wrap.c_list[1]);
   
   //-- Update color
   for (j=0; j<split[3].length; j++)
-    color_list.push(GS_wrap.c_list[2]);
+    color_list.push(GP_wrap.c_list[2]);
   
   //-- Generate text
   var text = split[0].concat(split[1]).concat(split[2]).concat(split[3]);
@@ -624,7 +624,7 @@ function ET_Click(wrap, d, i) {
 
 function ET_Plot(wrap) {
   //-- Add tooltip
-  GS_MakeTooltip(wrap);
+  GP_MakeTooltip(wrap);
   
   //-- Parameters for half year block
   var x0 = 35;
@@ -657,9 +657,9 @@ function ET_Plot(wrap) {
   
   //-- Define title
   var title;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     title = '疫情爆發時間軸';
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     title = "Chronologie de la pandémie (texte en mandarin)";
   else
     title = 'Pandemic Timeline (text in Mandarin)';
@@ -752,9 +752,9 @@ function ET_Replot(wrap) {
       .style('fill', '#FFFFFF')
       .style('stroke', '#CCCCCC')
       .datum(d3.timeFormat("%Y-%m-%d"))
-      .on("mouseover", function (d) {GS_MouseOver3(wrap, d);})
+      .on("mouseover", function (d) {GP_MouseOver3(wrap, d);})
       .on("mousemove", function (d) {ET_MouseMove(wrap, d);})
-      .on("mouseleave", function (d) {GS_MouseLeave(wrap, d);})
+      .on("mouseleave", function (d) {GP_MouseLeave(wrap, d);})
       .on("click", function (d, i) {ET_Click(wrap, d, i);})
   
   //-- Define color
@@ -822,9 +822,9 @@ function ET_Replot(wrap) {
   
   //-- Define month tag
   var month_name_list;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     month_name_list = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     month_name_list = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'];
   else
     month_name_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -876,9 +876,9 @@ function ET_Replot(wrap) {
   
   //-- Define weekday tag
   var weekday_list;
-  if (GS_lang == 'zh-tw')
+  if (LS_lang == 'zh-tw')
     weekday_list = ['日', '一', '二', '三', '四', '五', '六'];
-  else if (GS_lang == 'fr')
+  else if (LS_lang == 'fr')
     weekday_list = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
   else
     weekday_list = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -921,7 +921,7 @@ function ET_Load(wrap) {
 function ET_ButtonListener(wrap) {
   //-- Start on Sunday or Monday
   $(document).on("change", "input:radio[name='" + wrap.tag + "_start']", function (event) {
-    GS_PressRadioButton(wrap, 'start', wrap.week_start, this.value);
+    GP_PressRadioButton(wrap, 'start', wrap.week_start, this.value);
     wrap.week_start = this.value;
     ET_Replot(wrap);
   });
@@ -935,14 +935,14 @@ function ET_ButtonListener(wrap) {
     else
       tag1 = 'start_on_Sunday';
     
-    name = wrap.tag + '_' + tag1 + '_' + GS_lang + '.png'
+    name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
   //-- Language
   $(document).on("change", "input:radio[name='language']", function (event) {
-    GS_lang = this.value;
-    Cookies.set("lang", GS_lang);
+    LS_lang = this.value;
+    Cookies.set("lang", LS_lang);
     
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove();
@@ -960,7 +960,7 @@ function ET_Main(wrap) {
 
   //-- Swap active to current value
   wrap.week_start = document.querySelector("input[name='" + wrap.tag + "_start']:checked").value;
-  GS_PressRadioButton(wrap, 'start', 0, wrap.week_start); //-- 0 from .html
+  GP_PressRadioButton(wrap, 'start', 0, wrap.week_start); //-- 0 from .html
   
   //-- Load
   ET_InitFig(wrap);

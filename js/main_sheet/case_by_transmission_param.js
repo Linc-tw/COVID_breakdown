@@ -14,21 +14,14 @@ var CBT_latest_wrap = {
   ],
   
   n_tot_key: 'n_latest',
-  xlabel_path: GS_wrap.xlabel_path_latest,
-  r_list: GS_wrap.r_list_latest,
+  xlabel_path: GP_wrap.xlabel_path_latest,
+  r_list: GP_wrap.r_list_latest,
   y_max_factor: 1.2,
-  y_max_fix_1_1: 0,
-  y_max_fix_1_0: 0,
-  y_max_fix_0_1: 0,
-  y_max_fix_0_0: 0,
-  y_path_1_1: '4', //-- 4 ticks
-  y_path_1_0: '4',
-  y_path_0_1: '4',
-  y_path_0_0: '4',
+  nb_yticks: 4,
   legend_pos_x_0_i_: {'zh-tw': 85, fr: 85, en: 85},
   legend_pos_x_1_i_: {'zh-tw': 85, fr: 85, en: 85},
   legend_pos_x1_: {'zh-tw': 230, fr: 290, en: 250},
-  trans_delay: GS_wrap.trans_delay,
+  trans_delay: GP_wrap.trans_delay,
 };
 
 var CBT_2021_wrap = {
@@ -40,21 +33,14 @@ var CBT_2021_wrap = {
   ],
 
   n_tot_key: 'n_2021',
-  xlabel_path: GS_wrap.xlabel_path_2021,
-  r_list: GS_wrap.r_list_2021,
+  xlabel_path: GP_wrap.xlabel_path_2021,
+  r_list: GP_wrap.r_list_2021,
   y_max_factor: 1.2,
-  y_max_fix_1_1: 0,
-  y_max_fix_1_0: 0,
-  y_max_fix_0_1: 0,
-  y_max_fix_0_0: 0,
-  y_path_1_1: '4', //-- 4 ticks
-  y_path_1_0: '4',
-  y_path_0_1: '4',
-  y_path_0_0: '4',
+  nb_yticks: 4,
   legend_pos_x_0_i_: {'zh-tw': 85, fr: 85, en: 85},
   legend_pos_x_1_i_: {'zh-tw': 85, fr: 85, en: 85},
   legend_pos_x1_: {'zh-tw': 240, fr: 310, en: 250},
-  trans_delay: GS_wrap.trans_delay_long,
+  trans_delay: GP_wrap.trans_delay_long,
 };
 
 var CBT_2020_wrap = {
@@ -66,19 +52,12 @@ var CBT_2020_wrap = {
   ],
 
   n_tot_key: 'n_2020',
-  xlabel_path: GS_wrap.xlabel_path_2020,
-  r_list: GS_wrap.r_list_2020,
+  xlabel_path: GP_wrap.xlabel_path_2020,
+  r_list: GP_wrap.r_list_2020,
   y_max_factor: 1.3,
-  y_max_fix_1_1: 0,
-  y_max_fix_1_0: 0,
-  y_max_fix_0_1: 0,
-  y_max_fix_0_0: 0,
-  y_path_1_1: '4', //-- 4 ticks
-  y_path_1_0: '4',
-  y_path_0_1: '4',
-  y_path_0_0: '4',
+  nb_yticks: 4,
   legend_pos_x_0_i_: {'zh-tw': 260, fr: 250, en: 290},
   legend_pos_x_1_i_: {'zh-tw': 0, fr: 55, en: 55},
   legend_pos_x1_: {'zh-tw': 0, fr: 270, en: 0},
-  trans_delay: GS_wrap.trans_delay_long,
+  trans_delay: GP_wrap.trans_delay_long,
 };

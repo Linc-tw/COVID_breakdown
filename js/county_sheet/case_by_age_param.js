@@ -14,6 +14,7 @@ var CBA_latest_wrap = {
   y_max_factor: 1.4,
   y_path: '4', //-- 4 ticks
   legend_pos_x: 90,
+  trans_delay: GP_wrap.trans_delay,
 };
 
 var CBA_2021_wrap = {
@@ -25,6 +26,7 @@ var CBA_2021_wrap = {
   y_max_factor: 1.4,
   y_path: '4', //-- 4 ticks
   legend_pos_x: 90,
+  trans_delay: GP_wrap.trans_delay,
 };
 
 var CBA_2020_wrap = {
@@ -36,4 +38,5 @@ var CBA_2020_wrap = {
   y_max_factor: 1.4,
   y_path: '4', //-- 4 ticks
   legend_pos_x: 90,
+  trans_delay: GP_wrap.trans_delay,
 };
