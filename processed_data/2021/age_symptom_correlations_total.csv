@@ -1,24 +1,24 @@
 label,count,label_zh,label_fr
-N_total,13895,合計,Total
-N_data,1325,有資料案例數,Données complètes
+N_total,13949,合計,Total
+N_data,1336,有資料案例數,Données complètes
 >100s,2,>100歲,>100aine
 90s,54,90-99歲,90aine
-80s,138,80-89歲,80aine
-70s,205,70-79歲,70aine
-60s,234,60-69歲,60aine
-50s,147,50-59歲,50aine
+80s,139,80-89歲,80aine
+70s,210,70-79歲,70aine
+60s,238,60-69歲,60aine
+50s,148,50-59歲,50aine
 40s,121,40-49歲,40aine
 30s,166,30-39歲,30aine
 20s,199,20-29歲,20aine
 10s,33,10-19歲,10aine
 0s,26,<10歲,<10 ans
-fever,522,發燒,fièvre
-cough,444,咳嗽,toux
-asymptomatic,336,無症狀,asymptomatique
-dyspnea,241,呼吸困難,dyspnée
-throatache,189,喉嚨症狀,mal de gorge
-fatigue,119,倦怠,fatigue
+fever,526,發燒,fièvre
+cough,449,咳嗽,toux
+asymptomatic,337,無症狀,asymptomatique
+dyspnea,243,呼吸困難,dyspnée
+throatache,190,喉嚨症狀,mal de gorge
+fatigue,120,倦怠,fatigue
 sneezing,112,鼻腔症狀,éternuement
 diarrhea,97,腹瀉,diarrhée
 soreness,70,痠痛,myalgie
-headache,66,頭痛,mal de tête
+headache,67,頭痛,mal de tête
