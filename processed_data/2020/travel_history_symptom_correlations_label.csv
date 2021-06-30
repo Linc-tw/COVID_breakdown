@@ -1,0 +1,24 @@
+key,count,label,label_fr,label_zh
+N_total,799,,,
+N_imported,704,,,
+N_data,670,,,
+USA,136,USA,États-Unis,美國
+Indonesia,135,Indonesia,Indonésie,印尼
+Philippines,104,Philippines,Philippines,菲律賓
+UK,95,UK,Royaume-Uni,英國
+France,34,France,France,法國
+Spain,21,Spain,Espagne,西班牙
+Turkey,16,Turkey,Turquie,土耳其
+Czechia,16,Czechia,Tchéquie,捷克
+Egypt,12,Egypt,Égypte,埃及
+Netherlands,12,Netherlands,Pays-Bas,荷蘭
+cough,225,Cough,Toux,咳嗽
+fever,207,Fever,Fièvre,發燒
+asymptomatic,190,Asymptomatic,Asymptomatique,無症狀
+sneezing,161,Sneezing,Éternuement,鼻腔症狀
+throatache,157,Throatache,Mal de gorge,喉嚨症狀
+dysnosmia,88,Dysnosmia,Dysosmie,嗅覺異常
+fatigue,83,Fatigue,Fatigue,倦怠
+soreness,74,Soreness,Myalgie,痠痛
+headache,60,Headache,Mal de tête,頭痛
+dysgeusia,53,Dysgeusia,Dysgueusie,味覺異常

@@ -8,8 +8,9 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
+//IEBC => col-8 x 45 days
+//IEBA
 //Vaccine progress with line
-//`incidence_evolution_by_age.js` TODO
 //7-day average for CBT, CBD, LCPC, TBC, VBB, BS, 
 //Cut continuous data with index
 //2020 & 2021 by week (data, plot, text)
@@ -209,6 +210,73 @@ function GP_PlotLinearY(wrap) {
   wrap.yscale = yscale;
 }
 
+//-- Require x_list, xticklabel
+function GP_PlotSquareX(wrap) {
+  //-- Define xscale
+  var xscale = d3.scaleBand()
+    .domain(wrap.x_list)
+    .range([0, wrap.width])
+    .padding(0.04);
+    
+  //-- Define xaxis for xticklabel
+  var xaxis = d3.axisTop(xscale)
+    .tickSize(0)
+    .tickFormat('');
+  
+  //-- Add xaxis (top frameline)
+  wrap.svg.append('g')
+    .attr('class', 'xaxis')
+    .call(xaxis);
+    
+  //-- Define xaxis_frame for bottom frameline
+  var xaxis_frame = d3.axisBottom(xscale)
+    .tickSize(0)
+    .tickFormat('');
+  
+  //-- Add xaxis_frame (bottom frameline)
+  wrap.svg.append('g')
+    .attr('transform', 'translate(0,' + wrap.height + ')')
+    .call(xaxis_frame);
+    
+  //-- Save to wrapper
+  wrap.xscale = xscale;
+}
+
+//-- Require y_list, yticklabel
+function GP_PlotSquareY(wrap) {
+  //-- Define yscale
+  var yscale = d3.scaleBand()
+    .domain(wrap.y_list)
+    .range([0, wrap.height])
+    .padding(0.04);
+  
+  //-- Define yaxis for yticklabel
+  var yaxis = d3.axisLeft(yscale)
+    .tickSize(0)
+    .tickFormat('');
+  
+  //-- Add yaxis (left frameline)
+  wrap.svg.append('g')
+    .attr('class', 'yaxis')
+    .call(yaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(-3,0)')
+      .style('font-size', '20px');
+
+  //-- Define yaxis_frame for right frameline
+  var yaxis_frame = d3.axisRight(yscale)
+    .ticks(0)
+    .tickSize(0);
+  
+  //-- Add yaxis_frame (right frameline)
+  wrap.svg.append('g')
+    .attr('transform', 'translate(' + wrap.width + ',0)')
+    .call(yaxis_frame);
+    
+  //-- Save to wrapper
+  wrap.yscale = yscale;
+}
+
 //-- Require xticklabel, y_max, ytick
 function GP_ReplotDateAsX(wrap) {
   //-- Define xaxis for xtick + xticklabel
@@ -259,6 +327,44 @@ function GP_ReplotCountAsY(wrap) {
     
   //-- Save to wrapper
   wrap.yscale = yscale;
+  wrap.yaxis = yaxis;
+}
+
+//-- Require xticklabel
+function GP_ReplotSquareX(wrap) {
+  //-- Define xaxis for xticklabel
+  var xaxis = d3.axisTop(wrap.xscale)
+    .tickSize(0)
+    .tickFormat(function (d, i) {return wrap.xticklabel_dict[LS_lang][i];});
+  
+  //-- Add xaxis
+  wrap.svg.select('.xaxis')
+    .transition()
+    .duration(wrap.trans_delay)
+    .call(xaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(8,-5) rotate(-90)')
+      .style('font-size', '20px')
+      .style('text-anchor', 'start');
+      
+  //-- Save to wrapper
+  wrap.xaxis = xaxis;
+}
+
+//-- Require yticklabel
+function GP_ReplotSquareY(wrap) {
+  //-- Define yaxis for yticklabel
+  var yaxis = d3.axisLeft(wrap.yscale)
+    .tickSize(0)
+    .tickFormat(function (d, i) {return wrap.yticklabel_dict[LS_lang][i];});
+  
+  //-- Add yaxis
+  wrap.svg.select('.yaxis')
+    .transition()
+    .duration(wrap.trans_delay)
+    .call(yaxis);
+      
+  //-- Save to wrapper
   wrap.yaxis = yaxis;
 }
 

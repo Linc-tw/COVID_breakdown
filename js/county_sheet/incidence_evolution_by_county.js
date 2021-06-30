@@ -99,19 +99,19 @@ function IEBC_FormatData(wrap, data) {
 }
 
 function IEBC_FormatData2(wrap, data2) {
-  var y_list_dict = {'tag': [], 'en': [], 'fr': [], 'zh-tw': []};
+  var yticklabel_dict = {'tag': [], 'en': [], 'fr': [], 'zh-tw': []};
   var i, tag; 
   
   //-- Loop over row
   for (i=0; i<data2.length; i++) {
-    y_list_dict['tag'].push(data2[i]['county']);
-    y_list_dict['en'].push(data2[i]['label']);
-    y_list_dict['fr'].push(data2[i]['label_fr']);
-    y_list_dict['zh-tw'].push(data2[i]['label_zh']);
+    yticklabel_dict['tag'].push(data2[i]['county']);
+    yticklabel_dict['en'].push(data2[i]['label']);
+    yticklabel_dict['fr'].push(data2[i]['label_fr']);
+    yticklabel_dict['zh-tw'].push(data2[i]['label_zh']);
   }
   
   //-- Save to wrapper
-  wrap.y_list_dict = y_list_dict;
+  wrap.yticklabel_dict = yticklabel_dict;
 }
 
 function IEBC_Plot(wrap) {
@@ -162,7 +162,7 @@ function IEBC_Plot(wrap) {
   //-- Define yaxis for ytick + yticklabel
   var yaxis = d3.axisLeft(yscale)
     .tickSize(0)
-    .tickFormat(function (d, i) {return wrap.y_list_dict[LS_lang][i]});
+    .tickFormat(function (d, i) {return wrap.yticklabel_dict[LS_lang][i]});
   
   //-- Add yaxis
   wrap.svg.append('g')
@@ -185,7 +185,7 @@ function IEBC_Plot(wrap) {
     
   //-- Define square color
   var color = d3.scaleSequential()
-    .domain([0, wrap.value_max+0.001])
+    .domain([0, Math.max(10, wrap.value_max+0.001)])
     .interpolator(t => d3.interpolatePuRd(t));
   
   //-- Add square

@@ -1,0 +1,24 @@
+key,count,label,label_fr,label_zh
+N_total,13768,,,
+N_data,1146,,,
+>100s,2,>100s,>100aine,>100歲
+90s,53,90s,90aine,90-99歲
+80s,138,80s,80aine,80-89歲
+70s,210,70s,70aine,70-79歲
+60s,230,60s,60aine,60-69歲
+50s,131,50s,50aine,50-59歲
+40s,100,40s,40aine,40-49歲
+30s,110,30s,30aine,30-39歲
+20s,121,20s,20aine,20-29歲
+10s,28,10s,10aine,10-19歲
+0s,23,0s,<10 ans,<10歲
+fever,506,Fever,Fièvre,發燒
+cough,419,Cough,Toux,咳嗽
+dyspnea,240,Dyspnea,Dyspnée,呼吸困難
+asymptomatic,225,Asymptomatic,Asymptomatique,無症狀
+throatache,164,Throatache,Mal de gorge,喉嚨症狀
+fatigue,111,Fatigue,Fatigue,倦怠
+sneezing,93,Sneezing,Éternuement,鼻腔症狀
+diarrhea,88,Diarrhea,Diarrhée,腹瀉
+soreness,67,Soreness,Myalgie,痠痛
+headache,56,Headache,Mal de tête,頭痛

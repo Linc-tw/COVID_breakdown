@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.06.27                  ##
+    ##  Version 2021.06.30                  ##
     ##########################################
 
 import os
@@ -927,8 +927,9 @@ class MainSheet(Template):
         '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/18-6/24', '5/19-6/10', 
         '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
         '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', '6/4-19', '6/4-23', '6/8-20', '6/10-22', '6/10-26', '6/11-25', '6/14-21', 
-        '6/16-28', '6/19-27', 
-        '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X']:
+        '6/16-28', '6/19-27', '6/20-29', 
+        '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X',
+      ]:
         onset_date_list.append(np.nan)
         
       elif onset_date in ['5/26 採檢\n5/26 確診']:
@@ -1097,6 +1098,7 @@ class MainSheet(Template):
       symp = ''.join(symp.split('(37.5度)'))
       symp = ''.join(symp.split('(37.4度)'))
       symp = ''.join(symp.split('首例本土'))
+      symp = ''.join(symp.split('平常就常'))
       symp = ''.join(symp.split('入境前有'))
       symp = ''.join(symp.split('心情不佳'))
       symp = ''.join(symp.split('診斷為'))
@@ -1399,36 +1401,32 @@ class MainSheet(Template):
       ## Data for coefficient
       symp_arr = grid[0].flatten()
       trav_hist_arr = grid[1].flatten()
-      value_arr_r = corr_mat.flatten()
-      label_arr_r = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_arr_r]
+      corr_arr = corr_mat.flatten()
+      corr_arr = np.around(corr_arr, decimals=4)
+      count_arr = count_mat.flatten()
       
-      ## Data for counts
-      label_arr_n = count_mat.flatten()
-      
-      ## Data for total
+      ## Data for label
       tot_dict = stock['nb_dict'].copy()
       tot_dict.update(y_dict)
       tot_dict.update(x_dict)
-      label_arr_en = list(tot_dict.keys())
-      value_arr_t = list(tot_dict.values())
-      label_arr_zh = ['合計', '境外移入總數', '有資料案例數'] + [TRAVEL_HISTORY_DICT[y]['zh-tw'] for y in y_list] + [SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
-      label_arr_fr = ['Total', 'Importés', 'Données complètes'] + [TRAVEL_HISTORY_DICT[y]['fr'] for y in y_list] + [SYMPTOM_DICT[x]['fr'] for x in x_list]
+      key_arr = list(tot_dict.keys())
+      x_list_fr = [SYMPTOM_DICT[x]['fr'] for x in x_list]
+      value_arr = list(tot_dict.values())
+      label_arr_en = ['', '', ''] + y_list + [x[0].upper() + x[1:] for x in x_list]
+      label_arr_fr = ['', '', ''] + [TRAVEL_HISTORY_DICT[y]['fr'] for y in y_list] + [x[0].upper() + x[1:] for x in x_list_fr]
+      label_arr_zh = ['', '', ''] + [TRAVEL_HISTORY_DICT[y]['zh-tw'] for y in y_list] + [SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
       
       ## Make data frame
-      data_r = {'symptom': symp_arr, 'trav_hist': trav_hist_arr, 'value': value_arr_r, 'label': label_arr_r}
-      data_r = pd.DataFrame(data_r)
-      data_n = {'symptom': symp_arr, 'trav_hist': trav_hist_arr, 'value': value_arr_r, 'label': label_arr_n}
-      data_n = pd.DataFrame(data_n)
-      data_t = {'label': label_arr_en, 'count': value_arr_t, 'label_zh': label_arr_zh, 'label_fr': label_arr_fr}
-      data_t = pd.DataFrame(data_t)
+      data_c = {'symptom': symp_arr, 'trav_hist': trav_hist_arr, 'corr': corr_arr, 'count': count_arr}
+      data_c = pd.DataFrame(data_c)
+      data_l = {'key': key_arr, 'count': value_arr, 'label': label_arr_en, 'label_fr': label_arr_fr, 'label_zh': label_arr_zh}
+      data_l = pd.DataFrame(data_l)
       
       ## Save
-      name = '%sprocessed_data/%s/travel_history_symptom_correlations_coefficient.csv' % (DATA_PATH, page)
-      saveCsv(name, data_r)
-      name = '%sprocessed_data/%s/travel_history_symptom_correlations_counts.csv' % (DATA_PATH, page)
-      saveCsv(name, data_n)
-      name = '%sprocessed_data/%s/travel_history_symptom_correlations_total.csv' % (DATA_PATH, page)
-      saveCsv(name, data_t)
+      name = '%sprocessed_data/%s/travel_history_symptom_correlations.csv' % (DATA_PATH, page)
+      saveCsv(name, data_c)
+      name = '%sprocessed_data/%s/travel_history_symptom_correlations_label.csv' % (DATA_PATH, page)
+      saveCsv(name, data_l)
     return
   
   def makeStockDict1_ageSymptomCorr(self):
@@ -1519,36 +1517,32 @@ class MainSheet(Template):
       ## Data for coefficient
       symp_arr = grid[0].flatten()
       age_arr = grid[1].flatten()
-      value_arr_r = corr_mat.flatten()
-      label_arr_r = ['%+.0f%%' % (100*v) if v == v else '0%' for v in value_arr_r]
-      
-      ## Data for counts
-      label_arr_n = count_mat.flatten()
+      corr_arr = corr_mat.flatten()
+      corr_arr = np.around(corr_arr, decimals=4)
+      count_arr = count_mat.flatten()
       
       ## Data for total
       tot_dict = stock['nb_dict'].copy()
       tot_dict.update(y_dict)
       tot_dict.update(x_dict)
-      label_arr_en = list(tot_dict.keys())
-      value_arr_t = list(tot_dict.values())
-      label_arr_zh = ['合計', '有資料案例數'] + [AGE_DICT[y]['zh-tw'] for y in y_list] + [SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
-      label_arr_fr = ['Total', 'Données complètes'] + [AGE_DICT[y]['fr'] for y in y_list] + [SYMPTOM_DICT[x]['fr'] for x in x_list]
+      key_arr = list(tot_dict.keys())
+      x_list_fr = [SYMPTOM_DICT[x]['fr'] for x in x_list]
+      value_arr = list(tot_dict.values())
+      label_arr_en = ['', ''] + y_list + [x[0].upper() + x[1:] for x in x_list]
+      label_arr_fr = ['', ''] + [AGE_DICT[y]['fr'] for y in y_list] + [x[0].upper() + x[1:] for x in x_list_fr]
+      label_arr_zh = ['', ''] + [AGE_DICT[y]['zh-tw'] for y in y_list] + [SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
       
       ## Make data frame
-      data_r = {'symptom': symp_arr, 'age': age_arr, 'value': value_arr_r, 'label': label_arr_r}
-      data_r = pd.DataFrame(data_r)
-      data_n = {'symptom': symp_arr, 'age': age_arr, 'value': value_arr_r, 'label': label_arr_n}
-      data_n = pd.DataFrame(data_n)
-      data_t = {'label': label_arr_en, 'count': value_arr_t, 'label_zh': label_arr_zh, 'label_fr': label_arr_fr}
-      data_t = pd.DataFrame(data_t)
+      data_c = {'symptom': symp_arr, 'age': age_arr, 'corr': corr_arr, 'count': count_arr}
+      data_c = pd.DataFrame(data_c)
+      data_l = {'key': key_arr, 'count': value_arr, 'label': label_arr_en, 'label_fr': label_arr_fr, 'label_zh': label_arr_zh}
+      data_l = pd.DataFrame(data_l)
       
       ## Save
-      name = '%sprocessed_data/%s/age_symptom_correlations_coefficient.csv' % (DATA_PATH, page)
-      saveCsv(name, data_r)
-      name = '%sprocessed_data/%s/age_symptom_correlations_counts.csv' % (DATA_PATH, page)
-      saveCsv(name, data_n)
-      name = '%sprocessed_data/%s/age_symptom_correlations_total.csv' % (DATA_PATH, page)
-      saveCsv(name, data_t)
+      name = '%sprocessed_data/%s/age_symptom_correlations.csv' % (DATA_PATH, page)
+      saveCsv(name, data_c)
+      name = '%sprocessed_data/%s/age_symptom_correlations_label.csv' % (DATA_PATH, page)
+      saveCsv(name, data_l)
     return
   
   def makeStockDict_diffByTransmission(self):
@@ -2752,7 +2746,7 @@ class CountySheet(Template):
       ## Save
       name = '%sprocessed_data/%s/incidence_map.csv' % (DATA_PATH, page)
       saveCsv(name, data_c)
-      name = '%sprocessed_data/%s/incidence_map_population.csv' % (DATA_PATH, page)
+      name = '%sprocessed_data/%s/incidence_map_label.csv' % (DATA_PATH, page)
       saveCsv(name, data_p)
     return
 
@@ -2943,7 +2937,7 @@ class VaccinationSheet(Template):
     new_doses_mat = np.array(new_doses_mat).T
     
     ### Initialize stock dict
-    stock = {'index': [], 'date': [], 'interpolated': []}
+    stock = {'date': [], 'interpolated': []}
     stock.update({brand: [] for brand in brand_list})
     stock_dict = initializeStockDict_general(stock)
     
@@ -2954,7 +2948,6 @@ class VaccinationSheet(Template):
       ## Loop over page
       for ind, stock in zip(index_list, stock_dict.values()):
         if ind == ind: ## If not NaN
-          stock['index'].append(ind)
           stock['date'].append(date)
           stock['interpolated'].append(itp)
           

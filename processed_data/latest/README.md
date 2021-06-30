@@ -23,29 +23,22 @@ Contents
 
 ### From `COVID-19_in_Taiwan_raw_data_case_breakdown.csv`
 
-`age_symptom_correlations_coefficient.csv`
+`age_symptom_correlations.csv`
 - Row = matrix element
 - Column
   - `symptom`
   - `age`
-  - `value` = correlation coefficient, used for color
-  - `label` = correlation coefficient, already formatted
+  - `corr` = correlation coefficient
+  - `count` = confirmed case counts
 
-`age_symptom_correlations_counts.csv`
-- Row = matrix element
+`age_symptom_correlations_label.csv`
+- Row = symptom or age range
 - Column
-  - `symptom`
-  - `age`
-  - `value` = correlation coefficient, used for color
-  - `label` = confirmed case counts
-
-`age_symptom_correlations_total.csv`
-- Row = matrix symptom & age
-- Column
-  - `label` = symptom & age in English
-  - `count` = confirmed case counts of the group
-  - `label_zh` = symptom & age in Mandarin (contains non-ASCII characters)
-  - `label_fr` = symptom & age in French (contains non-ASCII characters)
+  - `key`
+  - `count` = confirmed case counts of `key`
+  - `label` = label in English for `key`
+  - `label_fr` = label in French for `key` (contains non-ASCII characters)
+  - `label_zh` = label in Mandarin for `key` (contains non-ASCII characters)
 
 `case_by_detection_by_onset_day.csv`
 - Row = onset date
@@ -91,29 +84,22 @@ Contents
   - `other` = includes fleet, plane, & unknown
 - Value = confirmed case counts
 
-`travel_history_symptom_correlations_coefficient.csv`
+`travel_history_symptom_correlations.csv`
 - Row = matrix element
 - Column
   - `symptom`
   - `trav_hist`
-  - `value` = correlation coefficient, used for color
-  - `label` = correlation coefficient, already formatted
+  - `corr` = correlation coefficient
+  - `count` = confirmed case counts
 
-`travel_history_symptom_correlations_counts.csv`
-- Row = matrix element
+`travel_history_symptom_correlations_label.csv`
+- Row = symptom or travel history
 - Column
-  - `symptom`
-  - `trav_hist`
-  - `value` = correlation coefficient, used for color
-  - `label` = confirmed case counts
-
-`travel_history_symptom_correlations_total.csv`
-- Row = symptom & travel history
-- Column
-  - `label` = symptom & travel history in English
-  - `count` = confirmed case counts of the group
-  - `label_zh` = symptom & travel history in Mandarin (contains non-ASCII characters)
-  - `label_fr` = symptom & travel history in French (contains non-ASCII characters)
+  - `key`
+  - `count` = confirmed case counts of `key`
+  - `label` = label in English for `key`
+  - `label_fr` = label in French for `key` (contains non-ASCII characters)
+  - `label_zh` = label in Mandarin for `key` (contains non-ASCII characters)
 
 ### From `COVID-19_in_Taiwan_raw_data_county_age.csv`
 
@@ -135,7 +121,7 @@ Contents
   - etc.
 - Value = confirmed case counts
 
-`incidence_map_population.csv`
+`incidence_map_label.csv`
 - Row = city or county
 - Column
   - `code` = 5-digit code given by the Ministry of the Interior
@@ -170,6 +156,19 @@ Contents
   - `hospitalized`
   - `death`
 - Value = number counts
+
+### From `COVID-19_in_Taiwan_raw_data_vaccination.json`
+
+`vaccination_by_brand.csv`
+- Row = date
+- Column
+  - `interpolated`
+    - Original data are provided in cumulative counts but with missing values. Here, the processed data set provides daily counts where missing values are estimated from interpolation.
+    - 0 = true value, not interpolated
+    - 1 = interpolated value
+    - -1 = interpolated value, but the cumulative count on this day is a real value
+  - `AZ`
+  - `Moderna`
 
 ### From crossing multiple raw data files
 

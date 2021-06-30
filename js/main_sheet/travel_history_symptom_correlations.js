@@ -40,8 +40,8 @@ function THSC_ResetText() {
 }
 
 function THSC_FormatData(wrap, data) {
-  var x_list = [];
-  var y_list = [];
+  var x_list = []; //-- For symptom
+  var y_list = []; //-- For travel history
   var i, j, x, y, row;
   
   //-- Loop over row
@@ -50,7 +50,7 @@ function THSC_FormatData(wrap, data) {
     x = row['symptom'];
     y = row['trav_hist'];
     
-    //-- Search if `symptom` is already there
+    //-- Search if this x is already there
     for (j=0; j<x_list.length; j++) {
       if (x == x_list[j])
         break;
@@ -60,7 +60,7 @@ function THSC_FormatData(wrap, data) {
     if (j == x_list.length)
       x_list.push(x);
     
-    //-- Search if `trav_hist` is already there
+    //-- Search if this y is already there
     for (j=0; j<y_list.length; j++) {
       if (y == y_list[j])
         break;
@@ -78,131 +78,62 @@ function THSC_FormatData(wrap, data) {
 }
 
 function THSC_FormatData2(wrap, data2) {
-  var xticklabel = [];
-  var yticklabel = [];
-  var i, j, n_total, n_imported, n_data;
+  var i, row, n_total, n_imported, n_data;
   
+  //-- Get value of `n_total`, `n_imported`, & `n_data`
   //-- Loop over row
-  for (j=0; j<data2.length; j++) {
-    //-- Get value of `n_total`
-    if ('N_total' == data2[j]['label'])
-      n_total = data2[j]['count'];
+  for (i=0; i<data2.length; i++) {
+    row = data2[i];
     
-    //-- Get value of `n_imported`
-    else if ('N_imported' == data2[j]['label'])
-      n_imported = data2[j]['count'];
-    
-    //-- Get value of `n_data`
-    else if ('N_data' == data2[j]['label'])
-      n_data = data2[j]['count'];
-  }
-  
-  //-- Loop over symptom list
-  for (i=0; i<wrap.x_list.length; i++) {
-    //-- Lookup in list
-    for (j=0; j<data2.length; j++) {
-      //-- If find match
-      if (wrap.x_list[i] == data2[j]['label']) {
-        //-- Switch between languages
-        if (LS_lang == 'zh-tw')
-          xticklabel.push(data2[j]['label_zh'] + ' (' + data2[j]['count'] + ')');
-        else if (LS_lang == 'fr')
-          xticklabel.push(data2[j]['label_fr'].charAt(0).toUpperCase() + data2[j]['label_fr'].slice(1) + ' (' + data2[j]['count'] + ')'); //-- First capital
-        else
-          xticklabel.push(wrap.x_list[i].charAt(0).toUpperCase() + wrap.x_list[i].slice(1) + ' (' + data2[j]['count'] + ')'); //-- First capital
-        break; //-- If matched, stop
-      }
+    switch (row['key']) {
+      case 'N_total':
+        n_total = row['count'];
+        break;
+      case 'N_imported':
+        n_imported = row['count'];
+        break;
+      case 'N_data':
+        n_data = row['count'];
+        break;
+      default:
+        break;
     }
   }
   
-  //-- Loop over travel history list
-  for (i=0; i<wrap.y_list.length; i++) {
-    //-- Lookup in list
-    for (j=0; j<data2.length; j++) {
-      //-- If find match
-      if (wrap.y_list[i] == data2[j]['label']) {
-        //-- Switch between languages
-        if (LS_lang == 'zh-tw')
-          yticklabel.push(data2[j]['label_zh'] + ' (' + data2[j]['count'] + ')');
-        else if (LS_lang == 'fr')
-          yticklabel.push(data2[j]['label_fr'] + ' (' + data2[j]['count'] + ')');
-        else
-          yticklabel.push(wrap.y_list[i] + ' (' + data2[j]['count'] + ')');
-        break; //-- If matched, stop
-      }
-    }
+  var xticklabel_dict = {'en': [], 'fr': [], 'zh-tw': []};
+  var yticklabel_dict = {'en': [], 'fr': [], 'zh-tw': []};
+  var count;
+  
+  for (i=3+wrap.y_list.length; i<3+wrap.y_list.length+wrap.x_list.length; i++) {
+    row = data2[i];
+    count = row['count'];
+    
+    xticklabel_dict['en'].push(row['label'] + ' (' + count + ')');
+    xticklabel_dict['fr'].push(row['label_fr'] + ' (' + count + ')');
+    xticklabel_dict['zh-tw'].push(row['label_zh'] + ' (' + count + ')');
+  }
+  
+  for (i=3; i<3+wrap.y_list.length; i++) {
+    row = data2[i];
+    count = row['count'];
+    
+    yticklabel_dict['en'].push(row['label'] + ' (' + count + ')');
+    yticklabel_dict['fr'].push(row['label_fr'] + ' (' + count + ')');
+    yticklabel_dict['zh-tw'].push(row['label_zh'] + ' (' + count + ')');
   }
   
   //-- Save to wrapper
   wrap.n_total = n_total;
   wrap.n_imported = n_imported;
   wrap.n_data = n_data;
-  wrap.xticklabel = xticklabel;
-  wrap.yticklabel = yticklabel;
+  wrap.xticklabel_dict = xticklabel_dict;
+  wrap.yticklabel_dict = yticklabel_dict;
 }
 
 function THSC_Plot(wrap) {
-  //-- Define xscale
-  var xscale = d3.scaleBand()
-    .domain(wrap.x_list)
-    .range([0, wrap.width])
-    .padding(0.04);
-    
-  //-- Define xaxis for xticklabel
-  var xaxis = d3.axisTop(xscale)
-    .tickSize(0)
-    .tickFormat(function (d, i) {return wrap.xticklabel[i];});
+  GP_PlotSquareX(wrap);
+  GP_PlotSquareY(wrap);
   
-  //-- Add xaxis & adjust position
-  wrap.svg.append('g')
-    .attr('class', 'xaxis')
-    .call(xaxis)
-    .selectAll('text')
-      .attr('transform', 'translate(8,-5) rotate(-90)')
-      .style('font-size', '20px')
-      .style('text-anchor', 'start');
-    
-  //-- Define xaxis_2 for the frameline at bottom
-  var xaxis_2 = d3.axisBottom(xscale)
-    .tickSize(0)
-    .tickFormat('');
-  
-  //-- Add xaxis_2
-  wrap.svg.append('g')
-    .attr('transform', 'translate(0,' + wrap.height + ')')
-    .attr('class', 'xaxis')
-    .call(xaxis_2);
-  
-  //-- Define yscale
-  var yscale = d3.scaleBand()
-    .domain(wrap.y_list)
-    .range([0, wrap.height])
-    .padding(0.04);
-  
-  //-- Define yaxis for yticklabel
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(0)
-    .tickFormat(function (d, i) {return wrap.yticklabel[i];});
-  
-  //-- Add y-axis
-  wrap.svg.append('g')
-    .attr('class', 'yaxis')
-    .call(yaxis)
-    .selectAll('text')
-      .attr('transform', 'translate(-3,0)')
-      .style('font-size', '20px');
-
-  //-- Define yaxis_2 for the frameline at right
-  var yaxis_2 = d3.axisRight(yscale)
-    .ticks(0)
-    .tickSize(0);
-  
-  //-- Add 2nd y-axis
-  wrap.svg.append('g')
-    .attr('class', 'yaxis')
-    .attr('transform', 'translate(' + wrap.width + ',0)')
-    .call(yaxis_2);
-    
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: -0.8*wrap.margin.top, dx: 12, dy: 30};
   
@@ -238,13 +169,13 @@ function THSC_Plot(wrap) {
     .enter()
     .append('rect')
       .attr('class', 'content square')
-      .attr('x', function (d) {return xscale(d.symptom);})
-      .attr('y', function (d) {return yscale(d.trav_hist);})
+      .attr('x', function (d) {return wrap.xscale(d.symptom);})
+      .attr('y', function (d) {return wrap.yscale(d.trav_hist);})
       .attr('rx', 3)
       .attr('ry', 3)
-      .attr('width', xscale.bandwidth())
-      .attr('height', yscale.bandwidth())
-      .style('fill', function (d) {return color(d.value);})  
+      .attr('width', wrap.xscale.bandwidth())
+      .attr('height', wrap.yscale.bandwidth())
+      .style('fill', function (d) {return color(+d.corr);})  
         .on('mouseover', function (d) {GP_MouseOver2(wrap, d);})
         .on('mouseleave', function (d) {GP_MouseLeave2(wrap, d);});
     
@@ -254,21 +185,22 @@ function THSC_Plot(wrap) {
     .enter()
     .append('text')
       .attr('class', 'content text')
-      .attr('x', function (d) {return xscale(d.symptom) + 0.5*+xscale.bandwidth();})
-      .attr('y', function (d) {return yscale(d.trav_hist) + 0.5*+yscale.bandwidth();})
-      .style('fill', function (d) {if (Math.abs(d.value)<0.205) return '#000000'; return '#FFFFFF';})
-      .text(function (d) {return d.label;})
+      .attr('x', function (d) {return wrap.xscale(d.symptom) + 0.5*+wrap.xscale.bandwidth();})
+      .attr('y', function (d) {return wrap.yscale(d.trav_hist) + 0.5*+wrap.yscale.bandwidth();})
+      .style('fill', function (d) {if (Math.abs(+d.corr)<0.205) return '#000000'; return '#FFFFFF';})
+      .text(function (d) {return '';})
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central');
   
   //-- Save to wrapper
-  wrap.xscale = xscale;
-  wrap.yscale = yscale;
   wrap.legend_color = legend_color;
   wrap.legend_pos = legend_pos;
 }
 
 function THSC_Replot(wrap) {
+  GP_ReplotSquareX(wrap);
+  GP_ReplotSquareY(wrap);
+
   //-- Define legend label
   var legend_label;
   if (LS_lang == 'zh-tw')
@@ -288,8 +220,8 @@ function THSC_Replot(wrap) {
       .attr('class', 'content text')
       .attr('x', function (d) {return wrap.xscale(d.symptom) + 0.5*+wrap.xscale.bandwidth();})
       .attr('y', function (d) {return wrap.yscale(d.trav_hist) + 0.5*+wrap.yscale.bandwidth();})
-      .style('fill', function (d) {if (Math.abs(d.value)<0.205) return '#000000'; return '#FFFFFF';})
-      .text(function (d) {return d.label;})
+      .style('fill', function (d) {if (Math.abs(+d.corr)<0.205) return '#000000'; return '#FFFFFF';})
+      .text(function (d) {if (wrap.count > 0) return d.count; return (+d.corr*100).toFixed(0)+'%';})
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central');
   
@@ -312,8 +244,8 @@ function THSC_Replot(wrap) {
 //-- Load
 function THSC_Load(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[wrap.do_count])
-    .defer(d3.csv, wrap.data_path_list[2])
+    .defer(d3.csv, wrap.data_path_list[0])
+    .defer(d3.csv, wrap.data_path_list[1])
     .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
@@ -325,31 +257,19 @@ function THSC_Load(wrap) {
     });
 }
 
-function THSC_Reload(wrap) {
-  d3.queue()
-    .defer(d3.csv, wrap.data_path_list[wrap.do_count])
-    .await(function (error, data) {
-      if (error)
-        return console.warn(error);
-      
-      THSC_FormatData(wrap, data);
-      THSC_Replot(wrap);
-    });
-}
-
 function THSC_ButtonListener(wrap) {
   //-- Correlation or count
   $(document).on("change", "input:radio[name='" + wrap.tag + "_count']", function (event) {
-    GP_PressRadioButton(wrap, 'count', wrap.do_count, this.value);
-    wrap.do_count = this.value;
-    THSC_Reload(wrap);
+    GP_PressRadioButton(wrap, 'count', wrap.count, this.value);
+    wrap.count = this.value;
+    THSC_Replot(wrap);
   });
 
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
     var tag1;
     
-    if (wrap.do_count == 1)
+    if (wrap.count == 1)
       tag1 = 'count';
     else
       tag1 = 'coefficient';
@@ -363,7 +283,7 @@ function THSC_ButtonListener(wrap) {
     LS_lang = this.value;
     Cookies.set("lang", LS_lang);
     
-    //-- Remove
+    //-- Remove (because of figure size)
     d3.selectAll(wrap.id+' .plot').remove()
     
     //-- Reload
@@ -375,12 +295,11 @@ function THSC_ButtonListener(wrap) {
 
 //-- Main
 function THSC_Main(wrap) {
-  //-- Variables
   wrap.id = '#' + wrap.tag
   
   //-- Swap active to current value
-  wrap.do_count = document.querySelector("input[name='" + wrap.tag + "_count']:checked").value;
-  GP_PressRadioButton(wrap, 'count', 0, wrap.do_count); //-- 0 from .html
+  wrap.count = document.querySelector("input[name='" + wrap.tag + "_count']:checked").value;
+  GP_PressRadioButton(wrap, 'count', 0, wrap.count); //-- 0 from .html
 
   //-- Load
   THSC_InitFig(wrap);

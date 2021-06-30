@@ -7,10 +7,10 @@ Structure by raw data
 
 `county_sheet/`
   - `case_by_age.js`
-  - `local_case_per_county.js`
   - `incidence_evolution_by_age.js` TODO
   - `incidence_evolution_by_county.js`
   - `incidence_map.js`
+  - `local_case_per_county.js`
   
 `main_sheet/`
   - `age_symptom_correlations.js`
@@ -23,8 +23,12 @@ Structure by raw data
   - `border_statistics.js`
   - `status_evolution.js`
   - `test_by_criterion.js`
-  - `various_rates.js`
   - `vaccination_by_brand.js`
+  - `various_rates.js`
+
+`timeline/`
+  - `criteria_timeline.js`
+  - `event_timeline.js`
 
   
 Structure by page
@@ -60,3 +64,38 @@ Structure by page
   - `test_by_criterion.js`
   - `vaccination_by_brand.js`
   - `border_statistics.js`
+
+`timeline.html`
+  - `criteria_timeline.js`
+  - `event_timeline.js`
+
+  
+Structure by axis type
+----------------------
+
+Date-linear
+  - `local_case_per_county.js`
+  - `case_by_detection.js`
+  - `case_by_transmission.js`
+  - `border_statistics.js`
+  - `status_evolution.js`
+  - `test_by_criterion.js`
+  - `various_rates.js`
+  - `vaccination_by_brand.js`
+
+Band-linear
+  - `case_by_age.js`
+  - `difference_by_transmission.js`
+  
+Band-band
+  - `age_symptom_correlations.js`
+  - `travel_history_symptom_correlations.js`
+
+Band-band with linear ticks
+  - `incidence_evolution_by_age.js` TODO
+  - `incidence_evolution_by_county.js`
+
+No axis
+  - `incidence_map.js`
+  - `criteria_timeline.js`
+  - `event_timeline.js`

@@ -6,29 +6,39 @@
 //--   Chieh-An Lin
 
 function VBB_InitFig(wrap) {
-  GP_InitFig_Standard(wrap);
+  wrap.tot_width = 800;
+  wrap.tot_height_ = {};
+  wrap.tot_height_['zh-tw'] = 400;
+  wrap.tot_height_['fr'] = 400;
+  wrap.tot_height_['en'] = 400;
+  wrap.margin_ = {};
+  wrap.margin_['zh-tw'] = {left: 90, right: 2, bottom: 90, top: 2};
+  wrap.margin_['fr'] = {left: 90, right: 2, bottom: 90, top: 2};
+  wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
+  
+  GP_InitFig(wrap);
 }
 
 function VBB_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr("vaccination_by_brand_title", "疫苗接種");
-    LS_AddStr("vaccination_by_brand_text", "資料不全");
-    LS_AddStr("vaccination_by_brand_button_1", "逐日");
-    LS_AddStr("vaccination_by_brand_button_2", "累計");
+    LS_AddStr('vaccination_by_brand_title', '疫苗接種');
+    LS_AddStr('vaccination_by_brand_text', '資料不全');
+    LS_AddStr('vaccination_by_brand_button_1', '逐日');
+    LS_AddStr('vaccination_by_brand_button_2', '累計');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr("vaccination_by_brand_title", "Vaccins administrés par marque");
-    LS_AddStr("vaccination_by_brand_text", "Données incomplètes");
-    LS_AddStr("vaccination_by_brand_button_1", "Quotidiens");
-    LS_AddStr("vaccination_by_brand_button_2", "Cumulés");
+    LS_AddStr('vaccination_by_brand_title', 'Vaccins administrés par marque');
+    LS_AddStr('vaccination_by_brand_text', 'Données incomplètes');
+    LS_AddStr('vaccination_by_brand_button_1', 'Quotidiens');
+    LS_AddStr('vaccination_by_brand_button_2', 'Cumulés');
   }
   
   else { //-- En
-    LS_AddStr("vaccination_by_brand_title", "Administrated Vaccines by Brand");
-    LS_AddStr("vaccination_by_brand_text", "Incomplete data");
-    LS_AddStr("vaccination_by_brand_button_1", "Daily");
-    LS_AddStr("vaccination_by_brand_button_2", "Cumulative");
+    LS_AddStr('vaccination_by_brand_title', 'Administrated Vaccines by Brand');
+    LS_AddStr('vaccination_by_brand_text', 'Incomplete data');
+    LS_AddStr('vaccination_by_brand_button_1', 'Daily');
+    LS_AddStr('vaccination_by_brand_button_2', 'Cumulative');
   }
 }
 
@@ -40,9 +50,9 @@ function VBB_FormatData(wrap, data) {
   var xticklabel = [];
   
   //-- Variables for data
-  var col_tag_list = data.columns.slice(3); //-- 0 = index, 1 = date, 2 = interpolated
+  var col_tag_list = data.columns.slice(2); //-- 0 = date, 1 = interpolated
   var nb_col = col_tag_list.length;
-  var x_list = []; //-- index
+  var x_list = []; //-- For date
   var row;
   
   //-- Variables for bar
@@ -52,7 +62,7 @@ function VBB_FormatData(wrap, data) {
   
   //-- Other variables
   var formatted_data = [];
-  var i, j, x, y, date, block;
+  var i, j, x, y, block;
 
   //-- Convert data form
   if (wrap.cumul == 1)
@@ -66,15 +76,14 @@ function VBB_FormatData(wrap, data) {
   for (i=0; i<data.length; i++) {
     row = data[i];
     h_list = [];
-    date = row['date'];
-    x = row['index']; 
+    x = row['date'];
     y = 0;
     x_list.push(x);
     
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
-      xticklabel.push(date);
+      xticklabel.push(x);
     }
     
     //-- Loop over column
@@ -94,7 +103,6 @@ function VBB_FormatData(wrap, data) {
       //-- Make data block
       block = {
         'x': x,
-        'date': date,
         'y0': y,
         'y1': y+h,
         'h_list': h_list.slice(),
@@ -108,7 +116,7 @@ function VBB_FormatData(wrap, data) {
       if (wrap.cumul == 1)
         h_sum[j] = Math.max(h, h_sum[j]);
       else
-        h_sum[j] += h_list[j]; //-- Add value anyway
+        h_sum[j] += h_list[j]; //-- Add the real value anyway
       
       //-- Stock
       formatted_data.push(block);

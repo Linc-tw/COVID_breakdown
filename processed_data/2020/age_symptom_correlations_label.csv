@@ -1,0 +1,24 @@
+key,count,label,label_fr,label_zh
+N_total,799,,,
+N_data,688,,,
+>100s,0,>100s,>100aine,>100歲
+90s,1,90s,90aine,90-99歲
+80s,3,80s,80aine,80-89歲
+70s,18,70s,70aine,70-79歲
+60s,55,60s,60aine,60-69歲
+50s,72,50s,50aine,50-59歲
+40s,77,40s,40aine,40-49歲
+30s,177,30s,30aine,30-39歲
+20s,249,20s,20aine,20-29歲
+10s,31,10s,10aine,10-19歲
+0s,5,0s,<10 ans,<10歲
+cough,265,Cough,Toux,咳嗽
+fever,245,Fever,Fièvre,發燒
+sneezing,181,Sneezing,Éternuement,鼻腔症狀
+throatache,179,Throatache,Mal de gorge,喉嚨症狀
+asymptomatic,139,Asymptomatic,Asymptomatique,無症狀
+dysnosmia,103,Dysnosmia,Dysosmie,嗅覺異常
+fatigue,91,Fatigue,Fatigue,倦怠
+soreness,78,Soreness,Myalgie,痠痛
+headache,67,Headache,Mal de tête,頭痛
+dysgeusia,60,Dysgeusia,Dysgueusie,味覺異常

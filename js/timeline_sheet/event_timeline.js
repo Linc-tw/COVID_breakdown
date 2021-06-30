@@ -632,16 +632,16 @@ function ET_Plot(wrap) {
   var dy0 = 30;
   
   //-- Add half year block
-  var block = wrap.svg.selectAll(".year")
+  var block = wrap.svg.selectAll('.year')
     .data(wrap.half_year_list)
     .enter()
-    .append("svg")
+    .append('svg')
       .attr('class', 'year')
-      .attr("width", wrap.width)
-      .attr("height", wrap.height)
-      .append("g")
-        .attr("transform", function (d, i) {
-          return "translate(" + x0 + "," + (y0+i*(dy0+wrap.cell_size*7)) + ")";
+      .attr('width', wrap.width)
+      .attr('height', wrap.height)
+      .append('g')
+        .attr('transform', function (d, i) {
+          return 'translate(' + x0 + ',' + (y0+i*(dy0+wrap.cell_size*7)) + ')';
         });
   
   //-- Parameters for day square
@@ -649,10 +649,10 @@ function ET_Plot(wrap) {
   var dx1 = 25;
   
   //-- Add year text
-  block.append("text")
+  block.append('text')
     .attr('class', 'content text')
-    .attr("transform", "translate(" + (nb_squares*wrap.cell_size+dx1) + "," + (wrap.cell_size*3.5) + ")rotate(-90)")
-    .style("text-anchor", "middle")
+    .attr('transform', 'translate(' + (nb_squares*wrap.cell_size+dx1) + ',' + (wrap.cell_size*3.5) + ')rotate(-90)')
+    .style('text-anchor', 'middle')
     .text(function (d) {return ~~(d/2);});
   
   //-- Define title
@@ -660,19 +660,19 @@ function ET_Plot(wrap) {
   if (LS_lang == 'zh-tw')
     title = '疫情爆發時間軸';
   else if (LS_lang == 'fr')
-    title = "Chronologie de la pandémie (texte en mandarin)";
+    title = 'Chronologie de la pandémie (texte en mandarin)';
   else
     title = 'Pandemic Timeline (text in Mandarin)';
   
   //-- Add title
-  wrap.svg.append("text")
-      .attr("class", "title")
-      .attr("x", x0+nb_squares*wrap.cell_size*0.5)
-      .attr("y", 15)
-      .attr("fill", 'black')
-      .text(title)
-      .attr("text-anchor", "middle")
-      .attr("dominant-baseline", "bottom")
+  wrap.svg.append('text')
+    .attr('class', 'title')
+    .attr('x', x0+nb_squares*wrap.cell_size*0.5)
+    .attr('y', 15)
+    .attr('fill', 'black')
+    .text(title)
+    .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'bottom')
   
   //-- Parameters for text zone
   var dx2 = 20;
@@ -683,18 +683,18 @@ function ET_Plot(wrap) {
                '', '', '', '', '', '', '', '', '', ''];
   
   //-- Add text zone
-  wrap.svg.append("g").selectAll()
+  wrap.svg.append('g').selectAll()
     .data(split)
     .enter()
-    .append("text")
-      .attr("class", "content text")
-      .attr("x", x0+nb_squares*wrap.cell_size+dx1+dx2)
-      .attr("y", function (d, j) {return y0-28+j*dy2;})
-      .attr("fill", 'black')
-      .attr("id", function (d, j) {return wrap.tag+'_text';})
+    .append('text')
+      .attr('class', 'content text')
+      .attr('x', x0+nb_squares*wrap.cell_size+dx1+dx2)
+      .attr('y', function (d, j) {return y0-28+j*dy2;})
+      .attr('fill', 'black')
+      .attr('id', function (d, j) {return wrap.tag+'_text';})
       .text(function (d) {return d;})
-      .attr("text-anchor", 'start')
-      .attr("dominant-baseline", "middle")
+      .attr('text-anchor', 'start')
+      .attr('dominant-baseline', 'middle')
       
   //-- Save to wrapper
   wrap.block = block;
@@ -738,24 +738,24 @@ function ET_Replot(wrap) {
     .exit()
     .data(y_to_m_fct_1)
     .enter()
-    .append("rect")
+    .append('rect')
       .attr('id', wrap.tag+'_day')
-      .attr("width", wrap.cell_size)
-      .attr("height", wrap.cell_size)
-      .attr("x", function (d) {
+      .attr('width', wrap.cell_size)
+      .attr('height', wrap.cell_size)
+      .attr('x', function (d) {
         var week_nb = get_week(d, wrap.week_start);
-        if (+d3.timeFormat("%m")(d3.timeMonth(d)) > 6) 
+        if (+d3.timeFormat('%m')(d3.timeMonth(d)) > 6) 
           return (week_nb-26)*wrap.cell_size;
         return week_nb*wrap.cell_size;
       })
-      .attr("y", function (d) {return get_day(d, wrap.week_start) * wrap.cell_size;})
+      .attr('y', function (d) {return get_day(d, wrap.week_start) * wrap.cell_size;})
       .style('fill', '#FFFFFF')
       .style('stroke', '#CCCCCC')
-      .datum(d3.timeFormat("%Y-%m-%d"))
-      .on("mouseover", function (d) {GP_MouseOver3(wrap, d);})
-      .on("mousemove", function (d) {ET_MouseMove(wrap, d);})
-      .on("mouseleave", function (d) {GP_MouseLeave(wrap, d);})
-      .on("click", function (d, i) {ET_Click(wrap, d, i);})
+      .datum(d3.timeFormat('%Y-%m-%d'))
+      .on('mouseover', function (d) {GP_MouseOver3(wrap, d);})
+      .on('mousemove', function (d) {ET_MouseMove(wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
+      .on('click', function (d, i) {ET_Click(wrap, d, i);})
   
   //-- Define color
   var color2 = d3.scaleSequential()
@@ -764,7 +764,7 @@ function ET_Replot(wrap) {
   
   //-- Update square with color
   square.filter(function (d) {return d in wrap.formatted_data;})
-    .style("fill", function (d) {
+    .style('fill', function (d) {
       var split = wrap.formatted_data[d];
       return color2(d3.sum(split.map(function (d) {return d.length;})));
     })
@@ -793,16 +793,16 @@ function ET_Replot(wrap) {
     var d1 = get_day(t1, wrap.week_start);
     var w1 = get_week(t1, wrap.week_start);
     
-    if (+d3.timeFormat("%m")(d3.timeMonth(t0)) > 6) {
+    if (+d3.timeFormat('%m')(d3.timeMonth(t0)) > 6) {
       w0 -= 26;
       w1 -= 26;
     }
     
-    return "M" + (w0 + 1) * wrap.cell_size + "," + d0 * wrap.cell_size
-      + "H" + w0 * wrap.cell_size + "V" + 7 * wrap.cell_size
-      + "H" + w1 * wrap.cell_size + "V" + (d1 + 1) * wrap.cell_size
-      + "H" + (w1 + 1) * wrap.cell_size + "V" + 0
-      + "H" + (w0 + 1) * wrap.cell_size + "Z";
+    return 'M' + (w0 + 1) * wrap.cell_size + ',' + d0 * wrap.cell_size
+      + 'H' + w0 * wrap.cell_size + 'V' + 7 * wrap.cell_size
+      + 'H' + w1 * wrap.cell_size + 'V' + (d1 + 1) * wrap.cell_size
+      + 'H' + (w1 + 1) * wrap.cell_size + 'V' + 0
+      + 'H' + (w0 + 1) * wrap.cell_size + 'Z';
   }
 
   //-- Add month frame
@@ -862,15 +862,15 @@ function ET_Replot(wrap) {
     .exit()
     .data(function (d, i) {return month_list_list[i];})
     .enter()
-    .append("text")
+    .append('text')
       .attr('class', 'content text')
-      .attr("id", wrap.tag+"_month_tag")
-      .attr("x", function (d, i) {return (i+0.65)*dx1;})
-      .attr("y", -0.5*wrap.dy0+1)
-      .style("fill", 'black')
+      .attr('id', wrap.tag+'_month_tag')
+      .attr('x', function (d, i) {return (i+0.65)*dx1;})
+      .attr('y', -0.5*wrap.dy0+1)
+      .style('fill', 'black')
       .text(function (d) {return d;})
-      .attr("text-anchor", "middle")
-      .attr("dominant-baseline", "middle")
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'middle')
    
   //-- Weekday tag
   
@@ -893,15 +893,15 @@ function ET_Replot(wrap) {
     .exit()
     .data(weekday_list)
     .enter()
-    .append("text")
+    .append('text')
       .attr('class', 'content text')
-      .attr("id", wrap.tag+"_weekday_tag")
-      .attr("x", -20)
-      .attr("y", function (d, i) {return (i+0.5)*wrap.cell_size;})
-      .style("fill", 'black')
+      .attr('id', wrap.tag+'_weekday_tag')
+      .attr('x', -20)
+      .attr('y', function (d, i) {return (i+0.5)*wrap.cell_size;})
+      .style('fill', 'black')
       .text(function (d) {return d;})
-      .attr("text-anchor", "middle")
-      .attr("dominant-baseline", "middle")
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'middle')
 }
 
 //-- Load

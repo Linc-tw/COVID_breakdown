@@ -9,7 +9,7 @@ var IM_latest_wrap = {
   tag: 'incidence_map_latest',
   data_path_list: [
     'processed_data/adminMap_byCounties_offsetIslands_sphe.geojson',
-    'processed_data/latest/incidence_map_population.csv',
+    'processed_data/latest/incidence_map_label.csv',
     'processed_data/latest/incidence_map.csv',
   ],
 
@@ -24,7 +24,7 @@ var IM_2021_wrap = {
   tag: 'incidence_map_2021',
   data_path_list: [
     'processed_data/adminMap_byCounties_offsetIslands_sphe.geojson',
-    'processed_data/2021/incidence_map_population.csv',
+    'processed_data/2021/incidence_map_label.csv',
     'processed_data/2021/incidence_map.csv',
   ],
 
@@ -39,7 +39,7 @@ var IM_2020_wrap = {
   tag: 'incidence_map_2020',
   data_path_list: [
     'processed_data/adminMap_byCounties_offsetIslands_sphe.geojson',
-    'processed_data/2020/incidence_map_population.csv',
+    'processed_data/2020/incidence_map_label.csv',
     'processed_data/2020/incidence_map.csv',
   ],
 

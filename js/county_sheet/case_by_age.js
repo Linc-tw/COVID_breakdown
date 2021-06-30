@@ -333,8 +333,8 @@ function CBA_Replot(wrap) {
     .transition()
     .duration(GP_wrap.trans_delay)
     .attr('fill', wrap.color(wrap.col_tag))
-    .attr('y', function (d) {return yscale(d[wrap.col_tag]);})
-    .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);});
+    .attr('y', function (d) {return wrap.yscale(d[wrap.col_tag]);})
+    .attr('height', function (d) {return wrap.yscale(0)-wrap.yscale(d[wrap.col_tag]);});
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
