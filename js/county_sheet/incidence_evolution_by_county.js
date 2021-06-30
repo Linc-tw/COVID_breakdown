@@ -6,15 +6,15 @@
 //--   Chieh-An Lin
 
 function IEBC_InitFig(wrap) {
-  wrap.tot_width = 960;
+  wrap.tot_width = 900;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 400;
   wrap.tot_height_['fr'] = 400;
   wrap.tot_height_['en'] = 400;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 35, right: 2, bottom: 55, top: 25};
-  wrap.margin_['fr'] = {left: 105, right: 2, bottom: 40, top: 25};
-  wrap.margin_['en'] = {left: 90, right: 2, bottom: 50, top: 25};
+  wrap.margin_['zh-tw'] = {left: 40, right: 5, bottom: 55, top: 25};
+  wrap.margin_['fr'] = {left: 110, right: 5, bottom: 40, top: 25};
+  wrap.margin_['en'] = {left: 95, right: 5, bottom: 50, top: 25};
   
   GP_InitFig(wrap);
 }
@@ -121,12 +121,6 @@ function IEBC_Plot(wrap) {
     .range([0, wrap.width])
     .padding(0.04);
     
-  //-- Define xscale_tick for xtick + xticklabel
-  var eps = 0
-  var xscale_tick = d3.scaleLinear()
-    .domain([-eps, wrap.x_list.length+eps])
-    .range([0, wrap.width]);
-  
   //-- Define xaxis_frame for top frameline
   var xaxis_frame = d3.axisBottom(xscale)
     .tickSize(0)
@@ -136,22 +130,16 @@ function IEBC_Plot(wrap) {
   wrap.svg.append('g')
     .call(xaxis_frame);
     
-  //-- Define xaxis for xtick + xticklabel
-  var xaxis = d3.axisBottom(xscale_tick)
-    .ticks(0)
-    .tickSize(0)
-    .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return LS_ISODateToMDDate(wrap.xticklabel[i]);});
+  //-- Define xscale_tick for xticklabel
+  var eps = 0
+  var xscale_tick = d3.scaleLinear()
+    .domain([-eps, wrap.x_list.length+eps])
+    .range([0, wrap.width]);
   
-  //-- Add xaxis & adjust position (bottom frameline)
+  //-- Placeholder for xticklabel & adjust position (bottom frameline)
   wrap.svg.append('g')
     .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(xaxis)
-    .selectAll('text')
-      .attr('transform', 'translate(-8,5) rotate(-90)')
-      .style('font-size', '12px')
-      .style('text-anchor', 'end');
+    .attr('transform', 'translate(0,' + wrap.height + ')');
   
   //-- Define yscale
   var yscale = d3.scaleBand()
@@ -159,24 +147,19 @@ function IEBC_Plot(wrap) {
     .range([0, wrap.height])
     .padding(0.04);
   
-  //-- Define yaxis for ytick + yticklabel
+  //-- Define yaxis for yticklabel
   var yaxis = d3.axisLeft(yscale)
     .tickSize(0)
-    .tickFormat(function (d, i) {return wrap.yticklabel_dict[LS_lang][i]});
+    .tickFormat('');
   
-  //-- Add yaxis
+  //-- Placeholder for yticklabel (left frameline)
   wrap.svg.append('g')
-    .attr('class', 'yaxis')
-    .call(yaxis)
-    .selectAll('text')
-      .attr('transform', 'translate(-2,0)')
-      .style('font-size', '12px')
-      .style('text-anchor', 'end');
+    .attr('class', 'yaxis');
 
   //-- Define yaxis_frame for right frameline
   var yaxis_frame = d3.axisRight(yscale)
-    .ticks(0)
-    .tickSize(0);
+    .tickSize(0)
+    .tickFormat('');
   
   //-- Add yaxis_frame & adjust position (right frameline)
   wrap.svg.append('g')
@@ -243,6 +226,43 @@ function IEBC_Plot(wrap) {
     .text(caption)
     .style('font-size', '16px')
     .attr('text-anchor', 'end');
+    
+  //-- Save to wrapper
+  wrap.xscale_tick = xscale_tick;
+  wrap.yscale = yscale;
+}
+
+function IEBC_Replot(wrap) {
+  //-- Define xaxis for xtick + xticklabel
+  var xaxis = d3.axisBottom(wrap.xscale_tick)
+    .tickSize(0)
+    .tickValues(wrap.xtick)
+    .tickFormat(function (d, i) {return LS_ISODateToMDDate(wrap.xticklabel[i]);});
+  
+  //-- Add xaxis & adjust position (bottom frameline)
+  wrap.svg.selectAll('.xaxis')
+    .transition()
+    .duration(wrap.trans_delay)
+    .call(xaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(-8,5) rotate(-90)')
+      .style('font-size', '12px')
+      .style('text-anchor', 'end');
+  
+  //-- Define yaxis for ytick + yticklabel
+  var yaxis = d3.axisLeft(wrap.yscale)
+    .tickSize(0)
+    .tickFormat(function (d, i) {return wrap.yticklabel_dict[LS_lang][i]});
+  
+  //-- Add yaxis
+  wrap.svg.select('.yaxis')
+    .transition()
+    .duration(wrap.trans_delay)
+    .call(yaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(-2,0)')
+      .style('font-size', '12px')
+      .style('text-anchor', 'end');
 }
 
 //-- Load
@@ -257,6 +277,7 @@ function IEBC_Load(wrap) {
       IEBC_FormatData(wrap, data);
       IEBC_FormatData2(wrap, data2);
       IEBC_Plot(wrap);
+      IEBC_Replot(wrap);
     });
 }
 

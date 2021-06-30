@@ -12,9 +12,9 @@ function ASC_InitFig(wrap) {
   wrap.tot_height_['fr'] = 600;
   wrap.tot_height_['en'] = 600;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 230, right: 2, bottom: 2, top: 145};
-  wrap.margin_['fr'] = {left: 280, right: 2, bottom: 2, top: 220};
-  wrap.margin_['en'] = {left: 250, right: 2, bottom: 2, top: 200};
+  wrap.margin_['zh-tw'] = {left: 230, right: 5, bottom: 5, top: 145};
+  wrap.margin_['fr'] = {left: 280, right: 5, bottom: 5, top: 220};
+  wrap.margin_['en'] = {left: 250, right: 5, bottom: 5, top: 200};
   
   GP_InitFig(wrap);
 }
@@ -127,7 +127,10 @@ function ASC_FormatData2(wrap, data2) {
 }
 
 function ASC_Plot(wrap) {
+  //-- Plot x
   GP_PlotSquareX(wrap);
+  
+  //-- Plot y
   GP_PlotSquareY(wrap);
   
   //-- Define legend position
@@ -194,7 +197,10 @@ function ASC_Plot(wrap) {
 }
 
 function ASC_Replot(wrap) {
+  //-- Replot x
   GP_ReplotSquareX(wrap);
+  
+  //-- Replot y
   GP_ReplotSquareY(wrap);
 
   //-- Define legend label

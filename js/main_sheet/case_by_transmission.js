@@ -198,9 +198,12 @@ function CBT_MouseMove(wrap, d) {
 }
 
 function CBT_Plot(wrap) {
+  //-- Plot x
   GP_PlotDateAsX(wrap);
+  
+  //-- Plot y
   GP_PlotLinearY(wrap);
-    
+  
   //-- Add tooltip
   GP_MakeTooltip(wrap);
   
@@ -233,21 +236,18 @@ function CBT_Plot(wrap) {
 }
 
 function CBT_Replot(wrap) {
+  //-- Replot x
   GP_ReplotDateAsX(wrap);
+  
+  //-- Replot y
   GP_ReplotCountAsY(wrap);
   
   //-- Define ylabel
-  var ylabel;
-  if (LS_lang == 'zh-tw')
-    ylabel = '案例數';
-  else if (LS_lang == 'fr')
-    ylabel = 'Nombre de cas';
-  else
-    ylabel = 'Number of cases';
+  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
   
   //-- Update ylabel
   wrap.svg.select(".ylabel")
-    .text(ylabel);
+    .text(ylabel_dict[LS_lang]);
     
   //-- Update bar
   wrap.bar.selectAll('.content.bar')

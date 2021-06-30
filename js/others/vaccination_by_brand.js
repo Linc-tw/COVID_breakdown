@@ -6,17 +6,7 @@
 //--   Chieh-An Lin
 
 function VBB_InitFig(wrap) {
-  wrap.tot_width = 800;
-  wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 400;
-  wrap.tot_height_['fr'] = 400;
-  wrap.tot_height_['en'] = 400;
-  wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 90, right: 2, bottom: 90, top: 2};
-  wrap.margin_['fr'] = {left: 90, right: 2, bottom: 90, top: 2};
-  wrap.margin_['en'] = {left: 90, right: 2, bottom: 90, top: 2};
-  
-  GP_InitFig(wrap);
+  GP_InitFig_Standard(wrap);
 }
 
 function VBB_ResetText() {
@@ -188,7 +178,10 @@ function VBB_MouseMove(wrap, d) {
 }
 
 function VBB_Plot(wrap) {
+  //-- Plot x
   GP_PlotDateAsX(wrap);
+  
+  //-- Plot y
   GP_PlotLinearY(wrap);
   
   //-- Add tooltip
@@ -223,21 +216,18 @@ function VBB_Plot(wrap) {
 }
 
 function VBB_Replot(wrap) {
+  //-- Replot x
   GP_ReplotDateAsX(wrap);
+  
+  //-- Replot y
   GP_ReplotCountAsY(wrap);
   
   //-- Define ylabel
-  var ylabel;
-  if (LS_lang == 'zh-tw')
-    ylabel = '施打劑數';
-  else if (LS_lang == 'fr')
-    ylabel = 'Nombre de doses';
-  else
-    ylabel = 'Number of doses';
+  var ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '施打劑數'};
   
   //-- Update ylabel
   wrap.svg.select(".ylabel")
-    .text(ylabel);
+    .text(ylabel_dict[LS_lang]);
     
   //-- Update bar
   wrap.bar.selectAll('.content.bar')

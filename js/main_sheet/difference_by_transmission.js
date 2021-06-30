@@ -12,9 +12,9 @@ function DBT_InitFig(wrap) {
   wrap.tot_height_['fr'] = 400;
   wrap.tot_height_['en'] = 400;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 70, right: 2, bottom: 90, top: 2};
-  wrap.margin_['fr'] = {left: 70, right: 2, bottom: 80, top: 2};
-  wrap.margin_['en'] = {left: 70, right: 2, bottom: 80, top: 2};
+  wrap.margin_['zh-tw'] = {left: 90, right: 5, bottom: 75, top: 5};
+  wrap.margin_['fr'] = {left: 90, right: 5, bottom: 75, top: 5};
+  wrap.margin_['en'] = {left: 90, right: 5, bottom: 75, top: 5};
   
   GP_InitFig(wrap);
 }
@@ -219,34 +219,29 @@ function DBT_Plot(wrap) {
 }
 
 function DBT_Replot(wrap) {
+  //-- Replot x
+  GP_ReplotBandX(wrap);
+  
   //-- Replot y
   GP_ReplotCountAsY(wrap);
   
   //-- Define xlabel
-  var xlabel;
-  if (LS_lang == 'zh-tw')
-    xlabel = '發病或入境後到確診所需天數';
-  else if (LS_lang == 'fr')
-    xlabel = "Délai en nombre de jours avant d'identifier une transmission";
-  else
-    xlabel = 'Delay in number of days before identifying a transmission';
+  var xlabel_dict = {
+    en: 'Delay in number of days before identifying a transmission', 
+    fr: "Délai en nombre de jours avant d'identifier une transmission", 
+    'zh-tw': '發病或入境後到確診所需天數'
+  };
   
   //-- Update xlabel
-  wrap.svg.select('.xlabel')
-    .text(xlabel);
-  
+  wrap.svg.select(".xlabel")
+    .text(xlabel_dict[LS_lang]);
+    
   //-- Define ylabel
-  var ylabel;
-  if (LS_lang == 'zh-tw')
-    ylabel = '案例數';
-  else if (LS_lang == 'fr')
-    ylabel = 'Nombre de cas';
-  else
-    ylabel = 'Number of cases';
+  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
   
   //-- Update ylabel
-  wrap.svg.select('.ylabel')
-    .text(ylabel);
+  wrap.svg.select(".ylabel")
+    .text(ylabel_dict[LS_lang]);
     
   //-- Update bar
   wrap.bar.selectAll('.content.bar')

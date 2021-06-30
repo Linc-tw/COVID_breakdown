@@ -14,4 +14,5 @@ var IEBC_latest_wrap = {
 
   xlabel_path: 7,
   r_list: [0, 6, 5, 4, 3, 2, 1],
+  trans_delay: GP_wrap.trans_delay,
 };

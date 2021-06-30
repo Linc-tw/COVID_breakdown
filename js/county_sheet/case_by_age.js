@@ -8,13 +8,13 @@
 function CBA_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 415;
+  wrap.tot_height_['zh-tw'] = 400;
   wrap.tot_height_['fr'] = 400;
   wrap.tot_height_['en'] = 400;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 90, right: 2, bottom: 90, top: 2};
-  wrap.margin_['fr'] = {left: 90, right: 2, bottom: 80, top: 2};
-  wrap.margin_['en'] = {left: 90, right: 2, bottom: 80, top: 2};
+  wrap.margin_['zh-tw'] = {left: 90, right: 5, bottom: 75, top: 5};
+  wrap.margin_['fr'] = {left: 90, right: 5, bottom: 75, top: 5};
+  wrap.margin_['en'] = {left: 90, right: 5, bottom: 75, top: 5};
   
   GP_InitFig(wrap);
 }
@@ -298,34 +298,25 @@ function CBA_Plot(wrap) {
 }
 
 function CBA_Replot(wrap) {
+  //-- Replot x
+  GP_ReplotBandX(wrap);
+  
   //-- Replot y
   GP_ReplotCountAsY(wrap);
   
   //-- Define xlabel
-  var xlabel;
-  if (LS_lang == 'zh-tw')
-    xlabel = '年齡';
-  else if (LS_lang == 'fr')
-    xlabel = "Âge";
-  else
-    xlabel = "Age";
+  var xlabel_dict = {en: 'Age', fr: 'Âge', 'zh-tw': '年齡'};
   
   //-- Update xlabel
   wrap.svg.select(".xlabel")
-    .text(xlabel);
-    
+    .text(xlabel_dict[LS_lang]);
+  
   //-- Define ylabel
-  var ylabel;
-  if (LS_lang == 'zh-tw')
-    ylabel = '案例數';
-  else if (LS_lang == 'fr')
-    ylabel = 'Nombre de cas';
-  else
-    ylabel = 'Number of cases';
+  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
   
   //-- Update ylabel
   wrap.svg.select(".ylabel")
-    .text(ylabel);
+    .text(ylabel_dict[LS_lang]);
     
   //-- Update bar
   wrap.bar.selectAll('.content.bar')

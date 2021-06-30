@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//IEBC => col-8 x 45 days
 //IEBA
 //Vaccine progress with line
 //7-day average for CBT, CBD, LCPC, TBC, VBB, BS, 
@@ -102,15 +101,15 @@ function GP_InitFig_Standard(wrap) {
   wrap.tot_height_['fr'] = 400;
   wrap.tot_height_['en'] = 400;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 70, right: 2, bottom: 90, top: 2};
-  wrap.margin_['fr'] = {left: 70, right: 2, bottom: 90, top: 2};
-  wrap.margin_['en'] = {left: 70, right: 2, bottom: 90, top: 2};
+  wrap.margin_['zh-tw'] = {left: 90, right: 5, bottom: 90, top: 5};
+  wrap.margin_['fr'] = {left: 90, right: 5, bottom: 90, top: 5};
+  wrap.margin_['en'] = {left: 90, right: 5, bottom: 90, top: 5};
   
   GP_InitFig(wrap);
 }
 
 //------------------------------------------------------------------------------
-//-- Function declarations - plotting
+//-- Function declarations - plotting x
 
 //-- Require x_list
 function GP_PlotDateAsX(wrap) {
@@ -119,6 +118,8 @@ function GP_PlotDateAsX(wrap) {
     .domain(wrap.x_list)
     .range([0, wrap.width])
     .padding(0.2);
+    
+  //-- No top frameline thanks to GP_ReplotCountAsY
     
   //-- Define xscale_tick for xtick + xticklabel
   var eps = 0.1
@@ -136,148 +137,7 @@ function GP_PlotDateAsX(wrap) {
   wrap.xscale_tick = xscale_tick;
 }
 
-//-- Require x_list, xtick & xticklabel
-function GP_PlotBandX(wrap) {
-  //-- Define xscale for bar
-  var xscale = d3.scaleBand()
-    .domain(wrap.x_list)
-    .range([0, wrap.width])
-    .padding(0.2);
-    
-  //-- Define xscale_tick for xtick + xticklabel
-  var eps = 0.1
-  var xscale_tick = d3.scaleLinear()
-    .domain([-eps, wrap.x_list.length+eps])
-    .range([0, wrap.width]);
-  
-  //-- Define xaxis for xtick & xticklabel
-  var xaxis = d3.axisBottom(xscale_tick)
-    .tickSize(10)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
-  
-  //-- Add xaxis & adjust position
-  wrap.svg.append('g')
-    .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(xaxis)
-    .selectAll("text")
-      .attr("transform", "translate(0,5)")
-      .style("text-anchor", "middle");
-    
-  //-- Placeholder for xlabel
-  wrap.svg.append('text')
-    .attr('class', 'xlabel')
-    .attr('text-anchor', 'middle')
-    .attr('dominant-baseline', 'bottom')
-    .attr('transform', 'translate(' + (wrap.width*0.5).toString() + ', ' + (wrap.tot_height-0.2*wrap.margin.bottom).toString() + ')');
-  
-  //-- Save to wrapper
-  wrap.xscale = xscale;
-  wrap.xscale_tick = xscale_tick;
-  wrap.xaxis = xaxis;
-}
-
-//-- Require y_max, ytick
-function GP_PlotLinearY(wrap) {
-  //-- Define yscale for bar, ytick + yticklabel
-  var yscale = d3.scaleLinear()
-    .domain([0, wrap.y_max])
-    .range([wrap.height, 0]);
-  
-  //-- Placeholder for ytick + yticklabel
-  wrap.svg.append('g')
-    .attr('class', 'yaxis');
-
-  //-- Define yaxis_frame for right frameline
-  var yaxis_frame = d3.axisRight(yscale)
-    .ticks(0)
-    .tickSize(0);
-  
-  //-- Add yaxis_frame & adjust position (right frameline)
-  wrap.svg.append('g')
-    .attr('transform', 'translate(' + wrap.width + ',0)')
-    .call(yaxis_frame);
-  
-  //-- Placeholder for ylabel
-  wrap.svg.append('text')
-    .attr('class', 'ylabel')
-    .attr('text-anchor', 'middle')
-    .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (wrap.height/2).toString() + ')rotate(-90)');
-    
-  //-- Save to wrapper
-  wrap.yscale = yscale;
-}
-
-//-- Require x_list, xticklabel
-function GP_PlotSquareX(wrap) {
-  //-- Define xscale
-  var xscale = d3.scaleBand()
-    .domain(wrap.x_list)
-    .range([0, wrap.width])
-    .padding(0.04);
-    
-  //-- Define xaxis for xticklabel
-  var xaxis = d3.axisTop(xscale)
-    .tickSize(0)
-    .tickFormat('');
-  
-  //-- Add xaxis (top frameline)
-  wrap.svg.append('g')
-    .attr('class', 'xaxis')
-    .call(xaxis);
-    
-  //-- Define xaxis_frame for bottom frameline
-  var xaxis_frame = d3.axisBottom(xscale)
-    .tickSize(0)
-    .tickFormat('');
-  
-  //-- Add xaxis_frame (bottom frameline)
-  wrap.svg.append('g')
-    .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(xaxis_frame);
-    
-  //-- Save to wrapper
-  wrap.xscale = xscale;
-}
-
-//-- Require y_list, yticklabel
-function GP_PlotSquareY(wrap) {
-  //-- Define yscale
-  var yscale = d3.scaleBand()
-    .domain(wrap.y_list)
-    .range([0, wrap.height])
-    .padding(0.04);
-  
-  //-- Define yaxis for yticklabel
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(0)
-    .tickFormat('');
-  
-  //-- Add yaxis (left frameline)
-  wrap.svg.append('g')
-    .attr('class', 'yaxis')
-    .call(yaxis)
-    .selectAll('text')
-      .attr('transform', 'translate(-3,0)')
-      .style('font-size', '20px');
-
-  //-- Define yaxis_frame for right frameline
-  var yaxis_frame = d3.axisRight(yscale)
-    .ticks(0)
-    .tickSize(0);
-  
-  //-- Add yaxis_frame (right frameline)
-  wrap.svg.append('g')
-    .attr('transform', 'translate(' + wrap.width + ',0)')
-    .call(yaxis_frame);
-    
-  //-- Save to wrapper
-  wrap.yscale = yscale;
-}
-
-//-- Require xticklabel, y_max, ytick
+//-- Require xticklabel
 function GP_ReplotDateAsX(wrap) {
   //-- Define xaxis for xtick + xticklabel
   var xaxis = d3.axisBottom(wrap.xscale_tick)
@@ -299,38 +159,88 @@ function GP_ReplotDateAsX(wrap) {
   wrap.xaxis = xaxis;
 }
 
-//-- Require y_max, ytick
-function GP_ReplotCountAsY(wrap) {
-  //-- Define yscale for counts
-  var yscale = d3.scaleLinear()
-    .domain([0, wrap.y_max])
-    .range([wrap.height, 0]);
-  
-  //-- Define yticklabel format
-  var yticklabel_format;
-  if (wrap.ytick[wrap.ytick.length-1] > 9999) 
-    yticklabel_format = '.2s';
-  else
-    yticklabel_format = 'd';
-  
-  //-- Define yaxis for ytick + yticklabel
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(-wrap.width)
-    .tickValues(wrap.ytick)
-    .tickFormat(d3.format(yticklabel_format));
-  
-  //-- Add yaxis
-  wrap.svg.select('.yaxis')
-    .transition()
-    .duration(wrap.trans_delay)
-    .call(yaxis);
+//-- Require x_list
+function GP_PlotBandX(wrap) {
+  //-- Define xscale for bar
+  var xscale = d3.scaleBand()
+    .domain(wrap.x_list)
+    .range([0, wrap.width])
+    .padding(0.2);
     
+  //-- No top frameline thanks to GP_ReplotCountAsY
+    
+  //-- Define xscale_tick for xtick + xticklabel
+  var eps = 0.1
+  var xscale_tick = d3.scaleLinear()
+    .domain([-eps, wrap.x_list.length+eps])
+    .range([0, wrap.width]);
+  
+  //-- Placeholder for xtick + xticklabel & adjust position (bottom frameline)
+  wrap.svg.append('g')
+    .attr('class', 'xaxis')
+    .attr('transform', 'translate(0,' + wrap.height + ')')
+    
+  //-- Placeholder for xlabel
+  wrap.svg.append('text')
+    .attr('class', 'xlabel')
+    .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'bottom')
+    .attr('transform', 'translate(' + (wrap.width*0.5).toString() + ', ' + (wrap.tot_height-0.2*wrap.margin.bottom).toString() + ')');
+  
   //-- Save to wrapper
-  wrap.yscale = yscale;
-  wrap.yaxis = yaxis;
+  wrap.xscale = xscale;
+  wrap.xscale_tick = xscale_tick;
 }
 
-//-- Require xticklabel
+//-- Require xtick & xticklabel
+function GP_ReplotBandX(wrap) {
+  //-- Define xaxis for xtick & xticklabel
+  var xaxis = d3.axisBottom(wrap.xscale_tick)
+    .tickSize(10)
+    .tickSizeOuter(0)
+    .tickValues(wrap.xtick)
+    .tickFormat(function (d, i) {return wrap.xticklabel[i]});
+  
+  //-- Add xaxis
+  wrap.svg.select('.xaxis')
+    .transition()
+    .duration(wrap.trans_delay)
+    .call(xaxis)
+    .selectAll("text")
+      .attr("transform", "translate(0,5)")
+      .style("text-anchor", "middle");
+      
+  //-- Save to wrapper
+  wrap.xaxis = xaxis;
+}
+
+//-- Require x_list
+function GP_PlotSquareX(wrap) {
+  //-- Define xscale for square
+  var xscale = d3.scaleBand()
+    .domain(wrap.x_list)
+    .range([0, wrap.width])
+    .padding(0.04);
+    
+  //-- Placeholder for xticklabel (top frameline)
+  wrap.svg.append('g')
+    .attr('class', 'xaxis');
+    
+  //-- Define xaxis_frame for bottom frameline
+  var xaxis_frame = d3.axisBottom(xscale)
+    .tickSize(0)
+    .tickFormat('');
+  
+  //-- Add xaxis_frame (bottom frameline)
+  wrap.svg.append('g')
+    .attr('transform', 'translate(0,' + wrap.height + ')')
+    .call(xaxis_frame);
+    
+  //-- Save to wrapper
+  wrap.xscale = xscale;
+}
+
+//-- Require xticklabel_dict
 function GP_ReplotSquareX(wrap) {
   //-- Define xaxis for xticklabel
   var xaxis = d3.axisTop(wrap.xscale)
@@ -351,7 +261,98 @@ function GP_ReplotSquareX(wrap) {
   wrap.xaxis = xaxis;
 }
 
-//-- Require yticklabel
+//------------------------------------------------------------------------------
+//-- Function declarations - plotting y
+
+//-- Require y_max, ytick
+function GP_PlotLinearY(wrap) {
+  //-- Define yscale for bar, ytick + yticklabel
+  var yscale = d3.scaleLinear()
+    .domain([0, wrap.y_max])
+    .range([wrap.height, 0]);
+  
+  //-- Placeholder for ytick + yticklabel (left frameline)
+  wrap.svg.append('g')
+    .attr('class', 'yaxis');
+
+  //-- Define yaxis_frame for right frameline
+  var yaxis_frame = d3.axisRight(yscale)
+    .tickSize(0)
+    .tickFormat('');
+  
+  //-- Add yaxis_frame & adjust position (right frameline)
+  wrap.svg.append('g')
+    .attr('transform', 'translate(' + wrap.width + ',0)')
+    .call(yaxis_frame);
+  
+  //-- Placeholder for ylabel
+  wrap.svg.append('text')
+    .attr('class', 'ylabel')
+    .attr('text-anchor', 'middle')
+    .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (wrap.height/2).toString() + ')rotate(-90)');
+    
+  //-- Save to wrapper
+  wrap.yscale = yscale;
+}
+
+//-- Require y_max, ytick
+function GP_ReplotCountAsY(wrap) {
+  //-- Reefine yscale for counts, because y_max usually change
+  var yscale = d3.scaleLinear()
+    .domain([0, wrap.y_max])
+    .range([wrap.height, 0]);
+  
+  //-- Define yticklabel format
+  var yticklabel_format;
+  if (wrap.ytick[wrap.ytick.length-1] > 9999) 
+    yticklabel_format = '.2s';
+  else
+    yticklabel_format = 'd';
+  
+  //-- Define yaxis for ytick + yticklabel
+  var yaxis = d3.axisLeft(yscale)
+    .tickSize(-wrap.width) //-- Top & bottom frameline
+    .tickValues(wrap.ytick)
+    .tickFormat(d3.format(yticklabel_format));
+  
+  //-- Add yaxis
+  wrap.svg.select('.yaxis')
+    .transition()
+    .duration(wrap.trans_delay)
+    .call(yaxis);
+    
+  //-- Save to wrapper
+  wrap.yscale = yscale;
+  wrap.yaxis = yaxis;
+}
+
+//-- Require y_list
+function GP_PlotSquareY(wrap) {
+  //-- Define yscale for square
+  var yscale = d3.scaleBand()
+    .domain(wrap.y_list)
+    .range([0, wrap.height])
+    .padding(0.04);
+  
+  //-- Placeholder for yticklabel (left frameline)
+  wrap.svg.append('g')
+    .attr('class', 'yaxis');
+    
+  //-- Define yaxis_frame for right frameline
+  var yaxis_frame = d3.axisRight(yscale)
+    .tickSize(0)
+    .tickFormat('');
+  
+  //-- Add yaxis_frame (right frameline)
+  wrap.svg.append('g')
+    .attr('transform', 'translate(' + wrap.width + ',0)')
+    .call(yaxis_frame);
+    
+  //-- Save to wrapper
+  wrap.yscale = yscale;
+}
+
+//-- Require yticklabel_dict
 function GP_ReplotSquareY(wrap) {
   //-- Define yaxis for yticklabel
   var yaxis = d3.axisLeft(wrap.yscale)
@@ -362,7 +363,10 @@ function GP_ReplotSquareY(wrap) {
   wrap.svg.select('.yaxis')
     .transition()
     .duration(wrap.trans_delay)
-    .call(yaxis);
+    .call(yaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(-3,0)')
+      .style('font-size', '20px');
       
   //-- Save to wrapper
   wrap.yaxis = yaxis;

@@ -2775,7 +2775,7 @@ class CountySheet(Template):
   def makeStock2_incidenceEvolutionByCounty(self):
     stock = self.makeStock1_incidenceEvolutionByCounty()
     population_dict = {county['tag']: county['population'] * 0.00001 for code, county in COUNTY_DICT.items()}
-    nb_lookback_days = 60
+    nb_lookback_days = 45
     
     for county, nb_cases_arr in stock.items():
       if 'date' == county:
@@ -3056,13 +3056,13 @@ def sandbox():
   #print(timeline_sheet.saveCriteria())
   #timeline_sheet.saveCsv_evtTimeline()
   
-  #county_sheet = CountySheet()
+  county_sheet = CountySheet()
   #print(county_sheet)
-  #county_sheet.saveCsv_incidenceEvolutionByCounty()
+  county_sheet.saveCsv_incidenceEvolutionByCounty()
   
-  vacc_sheet = VaccinationSheet()
+  #vacc_sheet = VaccinationSheet()
   #print(vacc_sheet.getDailyVacc())
-  vacc_sheet.saveCsv_vaccinationByBrand()
+  #vacc_sheet.saveCsv_vaccinationByBrand()
   return
 
 ################################################################################

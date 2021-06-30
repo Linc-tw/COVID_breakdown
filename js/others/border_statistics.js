@@ -179,7 +179,10 @@ function BS_MouseMove(wrap, d) {
 }
 
 function BS_Plot(wrap) {
+  //-- Plot x
   GP_PlotDateAsX(wrap);
+  
+  //-- Plot y
   GP_PlotLinearY(wrap);
   
   //-- Add tooltip
@@ -214,21 +217,18 @@ function BS_Plot(wrap) {
 }
 
 function BS_Replot(wrap) {
+  //-- Replot x
   GP_ReplotDateAsX(wrap);
+  
+  //-- Replot y
   GP_ReplotCountAsY(wrap);
   
   //-- Define ylabel
-  var ylabel;
-  if (LS_lang == 'zh-tw')
-    ylabel = '旅客人數';
-  else if (LS_lang == 'fr')
-    ylabel = 'Nombre de voyageurs';
-  else
-    ylabel = 'Number of people';
+  var ylabel_dict = {en: 'Number of people', fr: 'Nombre de voyageurs', 'zh-tw': '旅客人數'};
   
   //-- Update ylabel
   wrap.svg.select(".ylabel")
-    .text(ylabel);
+    .text(ylabel_dict[LS_lang]);
     
   //-- Update bar
   wrap.bar.selectAll('.content.bar')

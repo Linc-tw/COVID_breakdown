@@ -6,7 +6,17 @@
 //--   Chieh-An Lin
 
 function VR_InitFig(wrap) {
-  GP_InitFig_Standard(wrap);
+  wrap.tot_width = 800;
+  wrap.tot_height_ = {};
+  wrap.tot_height_['zh-tw'] = 400;
+  wrap.tot_height_['fr'] = 400;
+  wrap.tot_height_['en'] = 400;
+  wrap.margin_ = {};
+  wrap.margin_['zh-tw'] = {left: 70, right: 5, bottom: 90, top: 5};
+  wrap.margin_['fr'] = {left: 70, right: 5, bottom: 90, top: 5};
+  wrap.margin_['en'] = {left: 70, right: 5, bottom: 90, top: 5};
+  
+  GP_InitFig(wrap);
 }
 
 function VR_ResetText() {
@@ -149,7 +159,10 @@ function VR_MouseMove(wrap, d) {
 }
 
 function VR_Plot(wrap) {
+  //-- Plot x
   GP_PlotDateAsX(wrap);
+  
+  //-- Plot y
   GP_PlotLinearY(wrap);
   
   //-- Add tooltip
@@ -213,15 +226,11 @@ function VR_Plot(wrap) {
 }
 
 function VR_Replot(wrap) {
+  //-- Replot x
   GP_ReplotDateAsX(wrap);
   
-  //-- Define new yscale
-  var yscale = d3.scaleLinear()
-    .domain([0, wrap.y_max])
-    .range([wrap.height, 0]);
-  
-  //-- Define new yaxis for ytick
-  var yaxis = d3.axisLeft(yscale)
+  //-- Define yaxis for ytick
+  var yaxis = d3.axisLeft(wrap.yscale)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
     .tickFormat(d3.format('.0%'));
@@ -233,17 +242,11 @@ function VR_Replot(wrap) {
     .call(yaxis);
   
   //-- Define ylabel
-  var ylabel;
-  if (LS_lang == 'zh-tw')
-    ylabel = '比率';
-  else if (LS_lang == 'fr')
-    ylabel = 'Taux';
-  else
-    ylabel = 'Rate';
+  var ylabel_dict = {en: 'Rate', fr: 'Taux', 'zh-tw': '比率'};
   
   //-- Update ylabel
-  wrap.svg.select('.ylabel')
-    .text(ylabel);
+  wrap.svg.select(".ylabel")
+    .text(ylabel_dict[LS_lang]);
     
   //-- Update line
   wrap.line.selectAll('.content.line')
@@ -255,7 +258,7 @@ function VR_Replot(wrap) {
   wrap.dot.selectAll('.content.dot')
     .transition()
     .duration(GP_wrap.trans_delay)
-    .attr("r", function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
+    .attr('r', function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
 
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -263,11 +266,11 @@ function VR_Replot(wrap) {
   //-- Define legend label
   var legend_label;
   if (LS_lang == 'zh-tw')
-    legend_label = ["陽性率", "入境盛行率（逐月更新）", "本土盛行率"];
+    legend_label = ['陽性率', '入境盛行率（逐月更新）', '本土盛行率'];
   else if (LS_lang == 'fr')
-    legend_label = ["Taux de positivité", "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local"];
+    legend_label = ['Taux de positivité', "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local"];
   else
-    legend_label = ["Positive rate", "Arrival incidence rate (updated monthly)", "Local incidence rate"];
+    legend_label = ['Positive rate', 'Arrival incidence rate (updated monthly)', 'Local incidence rate'];
   
   //-- Update legend label
   wrap.svg.selectAll(wrap.id+'_legend_label')

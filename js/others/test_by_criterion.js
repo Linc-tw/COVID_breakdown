@@ -175,7 +175,10 @@ function TBC_MouseMove(wrap, d) {
 }
 
 function TBC_Plot(wrap) {
+  //-- Plot x
   GP_PlotDateAsX(wrap);
+  
+  //-- Plot y
   GP_PlotLinearY(wrap);
   
   //-- Add tooltip
@@ -210,21 +213,18 @@ function TBC_Plot(wrap) {
 }
 
 function TBC_Replot(wrap) {
+  //-- Replot x
   GP_ReplotDateAsX(wrap);
+  
+  //-- Replot y
   GP_ReplotCountAsY(wrap);
   
   //-- Define ylabel
-  var ylabel;
-  if (LS_lang == 'zh-tw')
-    ylabel = '檢驗數';
-  else if (LS_lang == 'fr')
-    ylabel = 'Nombre de tests';
-  else
-    ylabel = 'Number of tests';
+  var ylabel_dict = {en: 'Number of tests', fr: 'Nombre de tests', 'zh-tw': '檢驗數'};
   
   //-- Update ylabel
-  wrap.svg.select('.ylabel')
-    .text(ylabel);
+  wrap.svg.select(".ylabel")
+    .text(ylabel_dict[LS_lang]);
     
   //-- Update bar
   wrap.bar.selectAll('.content.bar')
