@@ -301,11 +301,11 @@ function VR_Replot(wrap) {
   //-- Define legend label
   var legend_label;
   if (LS_lang == 'zh-tw')
-    legend_label = ['陽性率', '入境盛行率（逐月更新）', '本土盛行率（除以1000）', '最新數據'];
+    legend_label = ['陽性率', '入境盛行率（逐月更新）', '本土盛行率（乘以1000）', '最新數據'];
   else if (LS_lang == 'fr')
-    legend_label = ['Taux de positivité', "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local (divisé par 1000)", 'Dernier taux disponible'];
+    legend_label = ['Taux de positivité', "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local (multiplié par 1000)", 'Dernier taux disponible'];
   else
-    legend_label = ['Positive rate', 'Arrival incidence rate (updated monthly)', 'Local incidence rate (divided by 1000)', 'Last available value'];
+    legend_label = ['Positive rate', 'Arrival incidence rate (updated monthly)', 'Local incidence rate (multiplied by 1000)', 'Last available value'];
   
   //-- Update legend label
   wrap.svg.selectAll(wrap.id+'_legend_label')
