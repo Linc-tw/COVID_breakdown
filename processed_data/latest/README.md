@@ -32,7 +32,7 @@ Contents
   - `count` = confirmed case counts
 
 `age_symptom_correlations_label.csv`
-- Row = symptom or age range
+- Row = symptom or age group
 - Column
   - `key`
   - `count` = confirmed case counts of `key`
@@ -104,13 +104,41 @@ Contents
 ### From `COVID-19_in_Taiwan_raw_data_county_age.csv`
 
 `case_by_age.csv`
-- Row = age range of 5 up to 70
+- Row = age group of 5 up to 70
 - Column = time period
   - `total` = last 90 days
   - `week_-1` = between 0 to 6 days ago
   - `week_-2` = between 7 to 13 days ago
   - etc.
 - Value = confirmed case counts
+
+`incidence_evolution_by_age.csv`
+- Row = date
+- Column = age group
+- Value = 7-day moving sum of number of confirmed cases per 100k inhabitants
+
+`incidence_evolution_by_age_label.csv`
+- Row = age group
+- Column
+  - `key`
+  - `count` = confirmed case counts of `key`
+  - `label` = label in English for `key`
+  - `label_fr` = label in French for `key` (contains non-ASCII characters)
+  - `label_zh` = label in Mandarin for `key` (contains non-ASCII characters)
+
+`incidence_evolution_by_county.csv`
+- Row = date
+- Column = city or county
+- Value = 7-day moving sum of number of confirmed cases per 100k inhabitants
+
+`incidence_evolution_by_county_label.csv`
+- Row = city or county
+- Column
+  - `key`
+  - `count` = confirmed case counts of `key`
+  - `label` = label in English for `key`
+  - `label_fr` = label in French for `key` (contains non-ASCII characters)
+  - `label_zh` = label in Mandarin for `key` (contains non-ASCII characters)
 
 `incidence_map.csv`
 - Row = city or county
@@ -124,11 +152,12 @@ Contents
 `incidence_map_label.csv`
 - Row = city or county
 - Column
-  - `code` = 5-digit code given by the Ministry of the Interior
+  - `key`
+  - `code` = 5-digit code for `key` given by the Ministry of the Interior
   - `population`
-  - `label` = city or county name in English
-  - `label_fr` = city or county name in French (contains non-ASCII characters)
-  - `label_zh` = city or county name in Mandarin (contains non-ASCII characters)
+  - `label` = label in English for `key`
+  - `label_fr` = label in French for `key` (contains non-ASCII characters)
+  - `label_zh` = label in Mandarin for `key` (contains non-ASCII characters)
 
 `local_case_per_county.csv`
 - Row = report date

@@ -212,7 +212,7 @@
                             </div>
                             
                             <!-- incidence_evolution_by_county -->
-                            <div class="col-xl-9">
+                            <div class="col-xl-8">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-map me-1"></i> <span id="incidence_evolution_by_county_title"></span>
@@ -225,6 +225,23 @@
                                     </div>
                                     
                                     <div class="card-body" id="incidence_evolution_by_county_latest"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- incidence_evolution_by_age -->
+                            <div class="col-xl-8">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-map me-1"></i> <span id="incidence_evolution_by_age_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <button id='incidence_evolution_by_age_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="incidence_evolution_by_age_latest"></div>
                                 </div>
                             </div>
                             
@@ -264,6 +281,8 @@
         <script src="js/county_sheet/incidence_map_param.js"></script>
         <script src="js/county_sheet/incidence_evolution_by_county.js"></script>
         <script src="js/county_sheet/incidence_evolution_by_county_param.js"></script>
+        <script src="js/county_sheet/incidence_evolution_by_age.js"></script>
+        <script src="js/county_sheet/incidence_evolution_by_age_param.js"></script>
         
         <script src="js/plot/plot_latest_incidence.js"></script>
         

@@ -1,39 +1,39 @@
 
 //-- Filename:
-//--   incidence_evolution_by_county.js
+//--   incidence_evolution_by_age.js
 //--
 //-- Author:
 //--   Chieh-An Lin
 
-function IEBC_InitFig(wrap) {
+function IEBA_InitFig(wrap) {
   wrap.tot_width = 1200;
   wrap.tot_height_ = {};
   wrap.tot_height_['zh-tw'] = 600;
   wrap.tot_height_['fr'] = 600;
   wrap.tot_height_['en'] = 600;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 60, right: 5, bottom: 65, top: 35};
-  wrap.margin_['fr'] = {left: 160, right: 5, bottom: 65, top: 35};
-  wrap.margin_['en'] = {left: 140, right: 5, bottom: 75, top: 35};
+  wrap.margin_['zh-tw'] = {left: 70, right: 5, bottom: 65, top: 35};
+  wrap.margin_['fr'] = {left: 100, right: 5, bottom: 65, top: 35};
+  wrap.margin_['en'] = {left: 100, right: 5, bottom: 75, top: 35};
   
   GP_InitFig(wrap);
 }
 
-function IEBC_ResetText() {
+function IEBA_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('incidence_evolution_by_county_title', '各縣市確診率變化');
+    LS_AddStr('incidence_evolution_by_age_title', '各年齡層確診率變化');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('incidence_evolution_by_county_title', "Évolution du taux d'incidence par ville et comté");
+    LS_AddStr('incidence_evolution_by_age_title', "Évolution du taux d'incidence par tranche d'âge");
   }
   
   else { //-- En
-    LS_AddStr('incidence_evolution_by_county_title', 'Evolution of Incidence Rate by City & County');
+    LS_AddStr('incidence_evolution_by_age_title', 'Evolution of Incidence Rate by Age Group');
   }
 }
 
-function IEBC_FormatData(wrap, data) {
+function IEBA_FormatData(wrap, data) {
   //-- Variables for xtick
   var q = data.length % wrap.xlabel_path;
   var r = wrap.r_list[q];
@@ -98,7 +98,7 @@ function IEBC_FormatData(wrap, data) {
   wrap.value_max = value_max;
 }
 
-function IEBC_FormatData2(wrap, data2) {
+function IEBA_FormatData2(wrap, data2) {
   var yticklabel_dict = {'tag': [], 'en': [], 'fr': [], 'zh-tw': []};
   var i, tag; 
   
@@ -114,7 +114,7 @@ function IEBC_FormatData2(wrap, data2) {
   wrap.yticklabel_dict = yticklabel_dict;
 }
 
-function IEBC_Plot(wrap) {
+function IEBA_Plot(wrap) {
   //-- Define xscale for square
   var xscale = d3.scaleBand()
     .domain(wrap.x_list)
@@ -227,7 +227,7 @@ function IEBC_Plot(wrap) {
   wrap.color = color;
 }
 
-function IEBC_Replot(wrap) {
+function IEBA_Replot(wrap) {
   //-- Define xaxis for xtick + xticklabel
   var xaxis = d3.axisBottom(wrap.xscale_tick)
     .tickSize(0)
@@ -264,10 +264,11 @@ function IEBC_Replot(wrap) {
     .transition()
     .duration(wrap.trans_delay)
       .style('fill', function (d) {return wrap.color(d.value);});
+    
 }
 
 //-- Load
-function IEBC_Load(wrap) {
+function IEBA_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .defer(d3.csv, wrap.data_path_list[1])
@@ -275,14 +276,14 @@ function IEBC_Load(wrap) {
       if (error)
         return console.warn(error);
       
-      IEBC_FormatData(wrap, data);
-      IEBC_FormatData2(wrap, data2);
-      IEBC_Plot(wrap);
-      IEBC_Replot(wrap);
+      IEBA_FormatData(wrap, data);
+      IEBA_FormatData2(wrap, data2);
+      IEBA_Plot(wrap);
+      IEBA_Replot(wrap);
     });
 }
 
-function IEBC_ButtonListener(wrap) {
+function IEBA_ButtonListener(wrap) {
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
     name = wrap.tag + '_' + LS_lang + '.png';
@@ -298,21 +299,21 @@ function IEBC_ButtonListener(wrap) {
     d3.selectAll(wrap.id+' .plot').remove()
     
     //-- Reload
-    IEBC_InitFig(wrap);
-    IEBC_ResetText();
-    IEBC_Load(wrap);
+    IEBA_InitFig(wrap);
+    IEBA_ResetText();
+    IEBA_Load(wrap);
   });
 }
 
 //-- Main
-function IEBC_Main(wrap) {
+function IEBA_Main(wrap) {
   wrap.id = '#' + wrap.tag;
 
   //-- Load
-  IEBC_InitFig(wrap);
-  IEBC_ResetText();
-  IEBC_Load(wrap);
+  IEBA_InitFig(wrap);
+  IEBA_ResetText();
+  IEBA_Load(wrap);
   
   //-- Setup button listeners
-  IEBC_ButtonListener(wrap);
+  IEBA_ButtonListener(wrap);
 }

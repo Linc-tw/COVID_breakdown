@@ -17,7 +17,7 @@ Features
 --------
 
 The most recent statisitcs can be found in _Last 90 days_.
-In total, 13 charts are shown on 3 pages, 
+In total, 15 charts are shown on 3 pages, 
 [_Case breakdown_](https://linc-tw.github.io/COVID_breakdown/latest_breakdown.html),
 [_Incidence rates_](https://linc-tw.github.io/COVID_breakdown/latest_incidence.html), & 
 [_Other stats_](https://linc-tw.github.io/COVID_breakdown/latest_others.html).
@@ -34,6 +34,8 @@ In _Case breakdown_:
 In _Incidence rates_:
 - 7-day Average of Various Rates
 - Incidence Map
+- Evolution of Incidence Rate by City & County
+- Evolution of Incidence Rate by Age Group
 
 In _Other stats_:
 - Status Evolution
@@ -45,7 +47,9 @@ The above charts are all generated with data of last 90 days.
 A selection of these figures can be found in _Highlight_, constituting a dashboard.
 
 The same charts made from all-year statistics & can be found in _Stats 2020_ & _Stats 2021_,
-except for _Administrated Vaccines by Brand_ which only exists for _Stats 2021_.
+except that:
+- _Administrated Vaccines by Brand_ only exists for _Stats 2021_ and
+- no _Evolution of Incidence Rate by City & County_ or _Evolution of Incidence Rate by Age Group_for either of two.
 Loading can be slow for some pages of these categories due to large files.
 
 There are also 2 charts in _Timeline_:

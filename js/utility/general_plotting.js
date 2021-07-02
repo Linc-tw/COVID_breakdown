@@ -8,11 +8,15 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//IEBA
-//Vaccine progress with line
-//7-day average for CBT, CBD, LCPC, TBC, VBB, BS, 
-//Cut continuous data with index
-//2020 & 2021 by week (data, plot, text)
+//total fatality rate
+//Vaccination Progress VP
+//  => two lines, many legends
+//7-day average for CBT, CBD, LCPC, TBC, VBB, BS
+//  => col 0 = date, col 1 = 7-day moving average, col 2+ = data
+//Data by day: last 90, 2020 2021, overall
+//Data by week: overall
+//Overall by week (data, plot, README)
+//Note with "Collapse"
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
@@ -39,6 +43,14 @@ var GP_wrap = {
 
 //------------------------------------------------------------------------------
 //-- Function declarations - utility
+
+function GP_AbbreviateValue(value) {
+  if (value >= 1e+6)
+    return (1e-6*value).toPrecision(3) + 'M';
+  if (value >= 1e+4)
+    return (1e-3*value).toPrecision(3) + 'k';
+  return value;
+}
 
 function GP_CumSum(data, col_tag_list) {
   var i, j;

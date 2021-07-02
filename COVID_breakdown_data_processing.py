@@ -121,6 +121,7 @@ TRAVEL_HISTORY_DICT = {
   'Iceland': {'zh-tw': '冰島', 'fr': 'Islande'},
   'Ireland': {'zh-tw': '愛爾蘭', 'fr': 'Irlande'},
   'Italy': {'zh-tw': '義大利', 'fr': 'Italie'},
+  'Hungary': {'zh-tw': '匈牙利',  'fr': 'Hongrie'},
   'Luxemburg': {'zh-tw': '盧森堡', 'fr': 'Luxembourg'},
   'Netherlands': {'zh-tw': '荷蘭', 'fr': 'Pays-Bas'},
   'Poland': {'zh-tw': '波蘭', 'fr': 'Pologne'},
@@ -178,7 +179,7 @@ TRAVEL_HISTORY_DICT = {
 }
 
 AGE_DICT = {
-  '0s': {'zh-tw': '<10歲', 'fr': '<10 ans'},
+  '0s': {'zh-tw': '0-9歲', 'fr': '0-9 ans'},
   '10s': {'zh-tw': '10-19歲', 'fr': '10aine'},
   '20s': {'zh-tw': '20-29歲', 'fr': '20aine'},
   '30s': {'zh-tw': '30-39歲', 'fr': '30aine'},
@@ -188,7 +189,41 @@ AGE_DICT = {
   '70s': {'zh-tw': '70-79歲', 'fr': '70aine'},
   '80s': {'zh-tw': '80-89歲', 'fr': '80aine'},
   '90s': {'zh-tw': '90-99歲', 'fr': '90aine'},
-  '>100s': {'zh-tw': '>100歲', 'fr': '>100aine'}
+  '100+': {'zh-tw': '100+歲', 'fr': '100+'},
+}
+
+AGE_DICT_2 = {
+  'label': {
+    '0-4': {'zh-tw': '0-4歲', 'fr': '0-4 ans'}, 
+    '5-9': {'zh-tw': '5-9歲', 'fr': '5-9 ans'}, 
+    '10-14': {'zh-tw': '10-14歲', 'fr': '10-14 ans'}, 
+    '15-19': {'zh-tw': '15-19歲', 'fr': '15-19 ans'}, 
+    '20-24': {'zh-tw': '20-24歲', 'fr': '20-24 ans'}, 
+    '25-29': {'zh-tw': '25-29歲', 'fr': '25-29 ans'}, 
+    '30-34': {'zh-tw': '30-34歲', 'fr': '30-34 ans'}, 
+    '35-39': {'zh-tw': '35-39歲', 'fr': '35-39 ans'}, 
+    '40-44': {'zh-tw': '40-44歲', 'fr': '40-44 ans'}, 
+    '45-49': {'zh-tw': '45-49歲', 'fr': '45-49 ans'}, 
+    '50-54': {'zh-tw': '50-54歲', 'fr': '50-54 ans'}, 
+    '55-59': {'zh-tw': '55-59歲', 'fr': '55-59 ans'}, 
+    '60-64': {'zh-tw': '60-64歲', 'fr': '60-64 ans'}, 
+    '65-69': {'zh-tw': '65-69歲', 'fr': '65-69 ans'}, 
+    '70+': {'zh-tw': '70+歲', 'fr': '70+'},
+  },
+  
+  '2019': {
+    '0-4': 975801, '5-9': 1019322, '10-14': 1015228, '15-19': 1254141, '20-24': 1514105, '25-29': 1609454, 
+    '30-34': 1594132, '35-39': 1964945, '40-44': 1974288, '45-49': 1775328, '50-54': 1814146, '55-59': 1827585, 
+    '60-64': 1657519, '65-69': 1379517, '70-74': 800166, '75-79': 609634, '80-84': 426615, '85-89': 250664, 
+    '90-94': 111099, '95-99': 25626, '100+': 3806, 
+  },
+  
+  '2020': {
+    '0-4': 925302, '5-9': 1064186, '10-14': 973908, '15-19': 1154426, '20-24': 1494883, '25-29': 1597613, 
+    '30-34': 1583943, '35-39': 1894274, '40-44': 2016609, '45-49': 1760217, '50-54': 1806643, '55-59': 1824832,
+    '60-64': 1677085, '65-69': 1445839, '70-74': 902349, '75-79': 588493, '80-84': 445423, '85-89': 255428,
+    '90-94': 117104, '95-99': 28437, '100+': 4242,
+  },
 }
 
 COUNTY_DICT = {
@@ -465,18 +500,6 @@ def indexFor2021(iso):
     return np.nan
   return ind
 
-#def indexFor2020(iso):
-  #if iso[:4] != '2020':
-    #return np.nan
-  #week_nb = dtt.date.fromisoformat(iso).isocalendar()[1]
-  #return week_nb
-
-#def indexFor2021(iso):
-  #if iso[:4] != '2021':
-    #return np.nan
-  #week_nb = dtt.date.fromisoformat(iso).isocalendar()[1]
-  #return week_nb
-
 def makeIndexList(iso):
   ind_latest = indexForLatest(iso)
   ind_2021 = indexFor2021(iso)
@@ -503,12 +526,6 @@ def initializeStockDict_dailyCounts(col_tag_list):
   date_list = [ordDateToISO(ord_) for ord_ in range(ISODateToOrd('2020-01-01'), ISODateToOrd('2020-12-31')+1)]
   stock_2020 = {'date': date_list}
   stock_2020.update({col_tag: np.zeros(len(date_list), dtype=int) for col_tag in col_tag_list})
-  
-  #stock_2021 = {'week_nb': np.arange(1, nb_weeks_2021+1, dtype=int)}
-  #stock_2021.update({col_tag: np.zeros(nb_weeks_2021, dtype=int) for col_tag in col_tag_list})
-  
-  #stock_2020 = {'week_nb': np.arange(1, nb_weeks_2020+1, dtype=int)}
-  #stock_2020.update({col_tag: np.zeros(nb_weeks_2020, dtype=int) for col_tag in col_tag_list})
   
   stock_dict = {PAGE_LATEST: stock_latest, PAGE_2021: stock_2021, PAGE_2020: stock_2020}
   return stock_dict
@@ -628,7 +645,7 @@ class MainSheet(Template):
       ]:
         age_list.append(age[0]+'0s')
       elif age in ['1XX', '10X', '11X', '100s', '102']:
-        age_list.append('>100s')
+        age_list.append('100+')
         
       elif age in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '<10', '<1', '<5', '<6', '8月大']:
         age_list.append('0s')
@@ -744,6 +761,7 @@ class MainSheet(Template):
       'Iceland': ['冰島'], 
       'Ireland': ['愛爾蘭'], 
       'Italy': ['義大利'], 
+      'Hungary': ['匈牙利'],
       'Luxemburg': ['盧森堡'], 
       'Netherlands': ['荷蘭'], 
       'Poland': ['波蘭'], 
@@ -927,7 +945,7 @@ class MainSheet(Template):
         '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/18-6/24', '5/19-6/10', 
         '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
         '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', '6/4-19', '6/4-23', '6/8-20', '6/10-22', '6/10-26', '6/11-25', '6/14-21', 
-        '6/16-28', '6/19-27', '6/20-29', 
+        '6/16-28', '6/19-27', '6/20-29', '6/22-30', '6/22-7/1', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X',
       ]:
         onset_date_list.append(np.nan)
@@ -1329,16 +1347,24 @@ class MainSheet(Template):
       index_list = makeIndexList(report_date)
       
       for ind, stock in zip(index_list, stock_dict.values()):
-        if ind == ind: ## If not NaN
-          stock['nb_dict']['N_total'] += 1
-          
-          if trans == 'imported':
-            stock['nb_dict']['N_imported'] += 1
-            
-            if trav_hist == trav_hist and symp == symp: ## If not NaN
-              stock['nb_dict']['N_data'] += 1
-              stock['x_list_list'].append(symp)
-              stock['y_list_list'].append(trav_hist)
+        if ind != ind: ## If NaN
+          continue
+        
+        stock['nb_dict']['N_total'] += 1
+        
+        ## Keep only imported
+        if trans != 'imported':
+          continue
+        
+        stock['nb_dict']['N_imported'] += 1
+        
+        ## Remove NaN
+        if trav_hist != trav_hist or symp != symp:
+          continue
+        
+        stock['nb_dict']['N_data'] += 1
+        stock['x_list_list'].append(symp)
+        stock['y_list_list'].append(trav_hist)
               
     return stock_dict
   
@@ -1446,13 +1472,18 @@ class MainSheet(Template):
       index_list = makeIndexList(report_date)
       
       for ind, stock in zip(index_list, stock_dict.values()):
-        if ind == ind: ## If not NaN
-          stock['nb_dict']['N_total'] += 1
-          
-          if age == age and symp == symp: ## If not NaN
-            stock['nb_dict']['N_data'] += 1
-            stock['x_list_list'].append(symp)
-            stock['y_list_list'].append(age)
+        if ind != ind: ## If NaN
+          continue
+        
+        stock['nb_dict']['N_total'] += 1
+        
+        ## Remove NaN
+        if age != age or symp != symp:
+          continue
+        
+        stock['nb_dict']['N_data'] += 1
+        stock['x_list_list'].append(symp)
+        stock['y_list_list'].append(age)
             
     return stock_dict
   
@@ -1571,8 +1602,10 @@ class MainSheet(Template):
       index_list = makeIndexList(report_date)
       
       for ind, stock in zip(index_list, stock_dict.values()):
-        if ind == ind: ## If not NaN
-          stock[col_tag].append(diff)
+        if ind != ind: ## If NaN
+          continue
+        
+        stock[col_tag].append(diff)
           
     return stock_dict
   
@@ -2655,16 +2688,18 @@ class CountySheet(Template):
       index_list = makeIndexList(report_date)
       
       for ind, page, stock in zip(index_list, stock_dict.keys(), stock_dict.values()):
-        if ind == ind:
-          stock[0][age] += nb_cases
+        if ind != ind: ## If NaN
+          continue
         
-          if page == PAGE_LATEST:
-            lookback_week = (ind - NB_LOOKBACK_DAYS) // 7 ## ind - NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
-            if lookback_week >= -12:
-              stock[-lookback_week][age] += nb_cases
-          else:
-            mm = int(report_date[5:7])
-            stock[mm][age] += nb_cases
+        stock[0][age] += nb_cases
+      
+        if page == PAGE_LATEST:
+          lookback_week = (ind - NB_LOOKBACK_DAYS) // 7 ## ind - NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
+          if lookback_week >= -12:
+            stock[-lookback_week][age] += nb_cases
+        else:
+          mm = int(report_date[5:7])
+          stock[mm][age] += nb_cases
             
     return stock_dict
   
@@ -2705,16 +2740,18 @@ class CountySheet(Template):
       index_list = makeIndexList(report_date)
       
       for ind, page, stock in zip(index_list, stock_dict.keys(), stock_dict.values()):
-        if ind == ind:
-          stock[0][county] += nb_cases
+        if ind != ind:
+          continue
         
-          if page == PAGE_LATEST:
-            lookback_week = (ind - NB_LOOKBACK_DAYS) // 7 ## ind - NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
-            if lookback_week >= -12:
-              stock[-lookback_week][county] += nb_cases
-          else:
-            mm = int(report_date[5:7])
-            stock[mm][county] += nb_cases
+        stock[0][county] += nb_cases
+      
+        if page == PAGE_LATEST:
+          lookback_week = (ind - NB_LOOKBACK_DAYS) // 7 ## ind - NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
+          if lookback_week >= -12:
+            stock[-lookback_week][county] += nb_cases
+        else:
+          mm = int(report_date[5:7])
+          stock[mm][county] += nb_cases
     
     return stock_dict
   
@@ -2740,7 +2777,7 @@ class CountySheet(Template):
       data_c.update({label: case_hist.values() for label, case_hist in zip(label_list, stock)})
       data_c = pd.DataFrame(data_c)
       
-      data_p = {'county': self.county_key_list, 'code': code_list, 'population': population, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+      data_p = {'key': self.county_key_list, 'code': code_list, 'population': population, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
       data_p = pd.DataFrame(data_p)
       
       ## Save
@@ -2810,11 +2847,85 @@ class CountySheet(Template):
     saveCsv(name, data_l)
     return
   
+  def makeStock1_incidenceEvolutionByAge(self):
+    report_date_list = self.getReportDate()
+    age_list = self.getAge()
+    nb_cases_list = self.getNbCases()
+    
+    ## Reverse
+    age_key_list = self.age_key_list[::-1]
+    
+    ## Initialize stock dict
+    stock_dict = initializeStockDict_dailyCounts(age_key_list)
+    stock = stock_dict[PAGE_LATEST]
+    
+    ## Loop over series
+    for report_date, age, nb_cases in zip(report_date_list, age_list, nb_cases_list):
+      ind_latest = indexForLatest(report_date)
+      
+      try:
+        stock[age][ind_latest] += nb_cases
+      except IndexError:
+        pass
+      
+    return stock
+  
+  def makeStock2_incidenceEvolutionByAge(self):
+    stock = self.makeStock1_incidenceEvolutionByAge()
+    nb_lookback_days = 45
+    
+    ## Get year & adjust
+    year = dtt.datetime.today().isoformat()[:4]
+    year = str(int(year) - 1)
+    population_dict = AGE_DICT_2[year].copy()
+    population_dict = {age: population * 0.00001 for age, population in AGE_DICT_2[year].items()}
+    
+    ## Minor modif
+    value = 0
+    for age in ['70-74', '75-79', '80-84', '85-89', '90-94', '95-99', '100+']:
+      value += population_dict.pop(age)
+    population_dict['70+'] = value
+    
+    for age, nb_cases_arr in stock.items():
+      if 'date' == age:
+        stock[age] = nb_cases_arr[-nb_lookback_days:]
+        continue
+      
+      nb_cases_arr = nb_cases_arr.astype(float)
+      kernel = [1.0] * 7 + [0.0] * 6 ## Sum not mean
+      nb_cases_arr = signal.convolve(nb_cases_arr, kernel[::-1], mode='same')
+      nb_cases_arr = nb_cases_arr[-nb_lookback_days:] / population_dict[age]
+      stock[age] = np.around(nb_cases_arr, decimals=2)
+    return stock
+  
+  def saveCsv_incidenceEvolutionByAge(self):
+    stock = self.makeStock2_incidenceEvolutionByAge()
+    data_r = pd.DataFrame(stock)
+    
+    ## Reverse
+    age_key_list = self.age_key_list[::-1]
+    
+    ## Data for population & label
+    label_list_en = [age+' yo' for age in age_key_list]
+    label_list_fr = [AGE_DICT_2['label'][age]['fr'] for age in age_key_list]
+    label_list_zh = [AGE_DICT_2['label'][age]['zh-tw'] for age in age_key_list]
+      
+    data_l = {'age': age_key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+    data_l = pd.DataFrame(data_l)
+    
+    name = '%sprocessed_data/%s/incidence_evolution_by_age.csv' % (DATA_PATH, PAGE_LATEST)
+    saveCsv(name, data_r)
+    
+    name = '%sprocessed_data/%s/incidence_evolution_by_age_label.csv' % (DATA_PATH, PAGE_LATEST)
+    saveCsv(name, data_l)
+    return
+  
   def saveCsv(self):
     self.saveCsv_localCasePerCounty()
     self.saveCsv_caseByAge()
     self.saveCsv_incidenceMap()
     self.saveCsv_incidenceEvolutionByCounty()
+    #self.saveCsv_incidenceEvolutionByAge()
     return
   
 ################################################################################
@@ -2947,12 +3058,14 @@ class VaccinationSheet(Template):
       
       ## Loop over page
       for ind, stock in zip(index_list, stock_dict.values()):
-        if ind == ind: ## If not NaN
-          stock['date'].append(date)
-          stock['interpolated'].append(itp)
-          
-          for brand, nb_doses in zip(brand_list, nb_doses_arr):
-            stock[brand].append(nb_doses)
+        if ind != ind: ## If NaN
+          continue
+        
+        stock['date'].append(date)
+        stock['interpolated'].append(itp)
+        
+        for brand, nb_doses in zip(brand_list, nb_doses_arr):
+          stock[brand].append(nb_doses)
           
     return stock_dict
       
@@ -3010,7 +3123,7 @@ def makeVariousRates(main_sheet, test_sheet, border_sheet):
     imp_inci_rate = nb_imp_arr / nb_arrival_arr
     imp_inci_rate[ind_arrival] = np.nan
     
-    indi_inci_rate = nb_indi_arr / float(population_twn)
+    indi_inci_rate = nb_indi_arr / float(population_twn) * 1000
     
   return date_arr, pos_rate, imp_inci_rate, indi_inci_rate
   
@@ -3056,9 +3169,9 @@ def sandbox():
   #print(timeline_sheet.saveCriteria())
   #timeline_sheet.saveCsv_evtTimeline()
   
-  county_sheet = CountySheet()
+  #county_sheet = CountySheet()
   #print(county_sheet)
-  county_sheet.saveCsv_incidenceEvolutionByCounty()
+  #county_sheet.saveCsv_incidenceEvolutionByAge()
   
   #vacc_sheet = VaccinationSheet()
   #print(vacc_sheet.getDailyVacc())

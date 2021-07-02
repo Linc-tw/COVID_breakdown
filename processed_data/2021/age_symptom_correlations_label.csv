@@ -1,7 +1,7 @@
 key,count,label,label_fr,label_zh
 N_total,14112,,,
 N_data,1376,,,
->100s,2,>100s,>100aine,>100歲
+100+,2,100+,100+,100+歲
 90s,54,90s,90aine,90-99歲
 80s,144,80s,80aine,80-89歲
 70s,220,70s,70aine,70-79歲
@@ -11,7 +11,7 @@ N_data,1376,,,
 30s,170,30s,30aine,30-39歲
 20s,200,20s,20aine,20-29歲
 10s,33,10s,10aine,10-19歲
-0s,26,0s,<10 ans,<10歲
+0s,26,0s,0-9 ans,0-9歲
 fever,541,Fever,Fièvre,發燒
 cough,464,Cough,Toux,咳嗽
 asymptomatic,342,Asymptomatic,Asymptomatique,無症狀

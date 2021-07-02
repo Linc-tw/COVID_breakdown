@@ -128,7 +128,7 @@ function IM_FormatData2(wrap, data2) {
   
   //-- Loop over row
   for (i=0; i<data2.length; i++) {
-    tag = data2[i]['county'];
+    tag = data2[i]['key'];
     code = data2[i]['code'];
     population = +data2[i]['population'];
     code_dict[tag] = {'code': code, 'population': population/100000};

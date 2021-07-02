@@ -117,6 +117,21 @@ function VR_FormatData(wrap, data) {
   var ytick = [];
   for (i=0; i<y_max; i+=y_path) 
     ytick.push(i)
+    
+  //-- Calculate last row which is not NaN
+  var legend_value = [];
+  var last, value;
+  for (j=0; j<nb_col; j++) {
+    last = data.length - 1;
+    value = data[last][col_tag_list[j]];
+    while ('' == value) {
+      last -= 1;
+      value = data[last][col_tag_list[j]];
+    }
+    
+    //-- Get latest value as legend value
+    legend_value.push(value);
+  }
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
@@ -127,6 +142,7 @@ function VR_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
+  wrap.legend_value = legend_value;
 }
 
 //-- Tooltip
@@ -137,11 +153,11 @@ function VR_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw')
-    col_label_list = ['陽性率', '入境盛行率', '本土盛行率']
+    col_label_list = ['陽性率', '入境盛行率', '本土盛行率/1000']
   else if (LS_lang == 'fr')
-    col_label_list = ['Taux de positivité', "Taux d'inci. front.", "Taux d'inci. local"]
+    col_label_list = ['Taux de positivité', "Taux d'inci. front.", "Taux d'inci. local/1000"]
   else
-    col_label_list = ['Positive rate', 'Arrival inci. rate', 'Local inci. rate']
+    col_label_list = ['Positive rate', 'Arrival inci. rate', 'Local inci. rate/1000']
   
   //-- Define tooltip texts
   var fct_format = d3.format(".2%");
@@ -173,6 +189,23 @@ function VR_Plot(wrap) {
   var color = d3.scaleOrdinal()
     .domain(wrap.col_tag_list)
     .range(color_list);
+  
+  //-- Define legend position
+  var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
+  
+  //-- Add legend value
+  wrap.svg.selectAll('.legend.value')
+    .remove()
+    .exit()
+    .data(wrap.legend_value)
+    .enter()
+    .append('text')
+      .attr('class', 'legend value')
+      .attr('x', legend_pos.x)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return color_list[i];})
+      .text(function (d) {return (+d*100).toFixed(2)+'%';})
+      .attr('text-anchor', 'end');
   
   //-- Define dummy line
   var draw_line_0 = d3.line()
@@ -220,6 +253,7 @@ function VR_Plot(wrap) {
       
   //-- Save to wrapper
   wrap.color_list = color_list;
+  wrap.legend_pos = legend_pos;
   wrap.draw_line = draw_line;
   wrap.line = line;
   wrap.dot = dot;
@@ -260,17 +294,18 @@ function VR_Replot(wrap) {
     .duration(GP_wrap.trans_delay)
     .attr('r', function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
 
-  //-- Define legend position
-  var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
-  
+  //-- Define legend color
+  var legend_color = wrap.color_list.slice();
+  legend_color.push('#000000');
+    
   //-- Define legend label
   var legend_label;
   if (LS_lang == 'zh-tw')
-    legend_label = ['陽性率', '入境盛行率（逐月更新）', '本土盛行率'];
+    legend_label = ['陽性率', '入境盛行率（逐月更新）', '本土盛行率（除以1000）', '最新數據'];
   else if (LS_lang == 'fr')
-    legend_label = ['Taux de positivité', "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local"];
+    legend_label = ['Taux de positivité', "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local (divisé par 1000)", 'Dernier taux disponible'];
   else
-    legend_label = ['Positive rate', 'Arrival incidence rate (updated monthly)', 'Local incidence rate'];
+    legend_label = ['Positive rate', 'Arrival incidence rate (updated monthly)', 'Local incidence rate (divided by 1000)', 'Last available value'];
   
   //-- Update legend label
   wrap.svg.selectAll(wrap.id+'_legend_label')
@@ -281,9 +316,9 @@ function VR_Replot(wrap) {
     .append("text")
       .attr("id", wrap.tag+"_legend_label")
       .attr("class", "legend label")
-      .attr("x", legend_pos.x+legend_pos.dx)
-      .attr("y", function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style("fill", function (d, i) {return wrap.color_list[i];})
+      .attr("x", wrap.legend_pos.x+wrap.legend_pos.dx)
+      .attr("y", function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy;})
+      .style("fill", function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
       .attr("text-anchor", "start");
 }

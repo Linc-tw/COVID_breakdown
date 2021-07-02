@@ -1,7 +1,7 @@
 key,count,label,label_fr,label_zh
 N_total,13866,,,
 N_data,1174,,,
->100s,2,>100s,>100aine,>100歲
+100+,2,100+,100+,100+歲
 90s,53,90s,90aine,90-99歲
 80s,143,80s,80aine,80-89歲
 70s,217,70s,70aine,70-79歲
@@ -11,7 +11,7 @@ N_data,1174,,,
 30s,112,30s,30aine,30-39歲
 20s,121,20s,20aine,20-29歲
 10s,28,10s,10aine,10-19歲
-0s,23,0s,<10 ans,<10歲
+0s,23,0s,0-9 ans,0-9歲
 fever,516,Fever,Fièvre,發燒
 cough,429,Cough,Toux,咳嗽
 dyspnea,250,Dyspnea,Dyspnée,呼吸困難

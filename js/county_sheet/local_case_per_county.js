@@ -192,7 +192,7 @@ function LCPC_MouseMove(wrap, d) {
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
     if (wrap.county == 0)
-      tooltip_text += d[wrap.col_tag] + 'local cases in total';
+      tooltip_text += d[wrap.col_tag] + ' local cases in total';
     else
       tooltip_text += d[wrap.col_tag] + ' cases in ' + legend_label[wrap.county];
   }

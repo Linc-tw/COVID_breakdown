@@ -133,34 +133,10 @@ function ASC_Plot(wrap) {
   //-- Plot y
   GP_PlotSquareY(wrap);
   
-  //-- Define legend position
-  var legend_pos = {x: wrap.legend_pos_x, y: -0.8*wrap.margin.top, dx: 12, dy: 30};
-  
-  //-- Define legend color
-  var legend_color = [GP_wrap.c_list[0], GP_wrap.gray, '#000000'];
-  
-  //-- Define legend value
-  var legend_value = [wrap.n_data, wrap.n_total-wrap.n_data, wrap.n_total];
-  
   //-- Define square color
   var color = d3.scaleSequential()
     .domain([-0.3, 0.3])
     .interpolator(t => d3.interpolateRdBu(1-t));
-  
-  //-- Add legend value
-  wrap.svg.selectAll('.legend.value')
-    .remove()
-    .exit()
-    .data(legend_value)
-    .enter()
-    .append('text')
-      .attr('class', 'legend value')
-      .attr('x', -wrap.margin.left + legend_pos.x)
-      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
-      .style('font-size', '20px')
-      .attr('text-anchor', 'end');
   
   //-- Add square
   wrap.svg.selectAll()
@@ -174,7 +150,7 @@ function ASC_Plot(wrap) {
       .attr('ry', 3)
       .attr('width', wrap.xscale.bandwidth())
       .attr('height', wrap.yscale.bandwidth())
-      .style('fill', function (d) {return color(+d.corr);})  
+      .style('fill', '#FFFFFF')
         .on('mouseover', function (d) {GP_MouseOver2(wrap, d);})
         .on('mouseleave', function (d) {GP_MouseLeave2(wrap, d);});
     
@@ -191,7 +167,32 @@ function ASC_Plot(wrap) {
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central');
   
+  //-- Define legend position
+  var legend_pos = {x: wrap.legend_pos_x, y: -0.8*wrap.margin.top, dx: 12, dy: 30};
+  
+  //-- Define legend color
+  var legend_color = [GP_wrap.c_list[0], GP_wrap.gray, '#000000'];
+  
+  //-- Define legend value
+  var legend_value = [wrap.n_data, wrap.n_total-wrap.n_data, wrap.n_total];
+  
+  //-- Add legend value
+  wrap.svg.selectAll('.legend.value')
+    .remove()
+    .exit()
+    .data(legend_value)
+    .enter()
+    .append('text')
+      .attr('class', 'legend value')
+      .attr('x', -wrap.margin.left + legend_pos.x)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;})
+      .style('font-size', '20px')
+      .attr('text-anchor', 'end');
+  
   //-- Save to wrapper
+  wrap.color = color;
   wrap.legend_color = legend_color;
   wrap.legend_pos = legend_pos;
 }
@@ -203,15 +204,12 @@ function ASC_Replot(wrap) {
   //-- Replot y
   GP_ReplotSquareY(wrap);
 
-  //-- Define legend label
-  var legend_label;
-  if (LS_lang == 'zh-tw')
-    legend_label = ['有資料案例數', '資料不全', '合計 '+LS_GetYearLabel(wrap)];
-  else if (LS_lang == 'fr')
-    legend_label = ['Données complètes', 'Données incomplètes', 'Total '+LS_GetYearLabel(wrap)];
-  else
-    legend_label = ['Data complete', 'Data incomplete', 'Total '+LS_GetYearLabel(wrap)];
-  
+  //-- Update square
+  wrap.svg.selectAll('.content.square')
+    .transition()
+    .duration(wrap.trans_delay)
+      .style('fill', function (d) {return wrap.color(+d.corr);});
+    
   //-- Update text
   wrap.svg.selectAll('.content.text')
     .remove()
@@ -226,6 +224,15 @@ function ASC_Replot(wrap) {
       .text(function (d) {if (wrap.count > 0) return d.count; return (+d.corr*100).toFixed(0)+'%';})
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central');
+  
+  //-- Define legend label
+  var legend_label;
+  if (LS_lang == 'zh-tw')
+    legend_label = ['有資料案例數', '資料不全', '合計 '+LS_GetYearLabel(wrap)];
+  else if (LS_lang == 'fr')
+    legend_label = ['Données complètes', 'Données incomplètes', 'Total '+LS_GetYearLabel(wrap)];
+  else
+    legend_label = ['Data complete', 'Data incomplete', 'Total '+LS_GetYearLabel(wrap)];
   
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')

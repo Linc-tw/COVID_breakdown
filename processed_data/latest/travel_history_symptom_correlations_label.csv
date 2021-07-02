@@ -1,7 +1,7 @@
 key,count,label,label_fr,label_zh
 N_total,13866,,,
 N_imported,246,,,
-N_data,193,,,
+N_data,194,,,
 Philippines,72,Philippines,Philippines,菲律賓
 Indonesia,38,Indonesia,Indonésie,印尼
 India,31,India,Inde,印度
@@ -12,7 +12,7 @@ Egypt,3,Egypt,Égypte,埃及
 Canada,3,Canada,Canada,加拿大
 Netherlands,3,Netherlands,Pays-Bas,荷蘭
 Kazakhstan,2,Kazakhstan,Kazakhstan,哈薩克
-asymptomatic,136,Asymptomatic,Asymptomatique,無症狀
+asymptomatic,137,Asymptomatic,Asymptomatique,無症狀
 cough,28,Cough,Toux,咳嗽
 fever,27,Fever,Fièvre,發燒
 sneezing,18,Sneezing,Éternuement,鼻腔症狀

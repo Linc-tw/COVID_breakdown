@@ -167,20 +167,35 @@
                                 </div>
                             </div>
                             
-                            <!-- various_rates -->
+                            <!-- vaccination_by_brand -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-line me-1"></i> <span id="various_rates_title"></span>
+                                        <i class="fas fa-syringe me-1"></i> <span id="vaccination_by_brand_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos">
-                                            <button id='various_rates_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                            <div class="btn-group btn-group-sm me-3"> 
+                                              <span id="vaccination_by_brand_text"></span>
+                                            </div>
+                                            
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active" id="vaccination_by_brand_latest_cumul_0">
+                                                    <input type="radio" class="btn-check" name="vaccination_by_brand_latest_cumul" value=0>
+                                                    <span id="vaccination_by_brand_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="vaccination_by_brand_latest_cumul_1">
+                                                    <input type="radio" class="btn-check" name="vaccination_by_brand_latest_cumul" value=1 checked>
+                                                    <span id="vaccination_by_brand_button_2"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <button id='vaccination_by_brand_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
                                     
-                                    <div class="card-body" id="various_rates_latest"></div>
+                                    <div class="card-body" id="vaccination_by_brand_latest"></div>
                                 </div>
                             </div>
                             
@@ -223,47 +238,20 @@
                                 </div>
                             </div>
                             
-                            <!-- incidence_map -->
+                            <!-- various_rates -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-map me-1"></i> <span id="incidence_map_title"></span>
+                                        <i class="fas fa-chart-line me-1"></i> <span id="various_rates_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos">
-                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active" id="incidence_map_latest_rate_0">
-                                                    <input type="radio" class="btn-check" name="incidence_map_latest_rate" value=0 checked>
-                                                    <span id="incidence_map_button_1"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="incidence_map_latest_rate_1">
-                                                    <input type="radio" class="btn-check" name="incidence_map_latest_rate" value=1>
-                                                    <span id="incidence_map_button_2"></span>
-                                                </label>
-                                            </div>
-                                            
-                                            <select id="incidence_map_latest_period" class="form-select form-select-sm me-2" aria-label="incidence_map_latest_period">
-                                                <option value="0" id="incidence_map_button_total" selected></option>
-                                                <option value="1" id="incidence_map_button_w-1"></option>
-                                                <option value="2" id="incidence_map_button_w-2"></option>
-                                                <option value="3" id="incidence_map_button_w-3"></option>
-                                                <option value="4" id="incidence_map_button_w-4"></option>
-                                                <option value="5" id="incidence_map_button_w-5"></option>
-                                                <option value="6" id="incidence_map_button_w-6"></option>
-                                                <option value="7" id="incidence_map_button_w-7"></option>
-                                                <option value="8" id="incidence_map_button_w-8"></option>
-                                                <option value="9" id="incidence_map_button_w-9"></option>
-                                                <option value="10" id="incidence_map_button_w-10"></option>
-                                                <option value="11" id="incidence_map_button_w-11"></option>
-                                                <option value="12" id="incidence_map_button_w-12"></option>
-                                            </select>
-                                            
-                                            <button id='incidence_map_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                            <button id='various_rates_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
                                     
-                                    <div class="card-body" id="incidence_map_latest"></div>
+                                    <div class="card-body" id="various_rates_latest"></div>
                                 </div>
                             </div>
                             
@@ -295,35 +283,39 @@
                                 </div>
                             </div>
                             
-                            <!-- vaccination_by_brand -->
+                            <!-- border_statistics -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-syringe me-1"></i> <span id="vaccination_by_brand_title"></span>
+                                        <i class="fas fa-plane-slash me-1"></i> <span id="border_statistics_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos">
                                             <div class="btn-group btn-group-sm me-3"> 
-                                              <span id="vaccination_by_brand_text"></span>
+                                              <span id="border_statistics_text"></span>
                                             </div>
                                             
-                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active" id="vaccination_by_brand_latest_cumul_0">
-                                                    <input type="radio" class="btn-check" name="vaccination_by_brand_latest_cumul" value=0>
-                                                    <span id="vaccination_by_brand_button_1"></span>
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">
+                                                <label class="btn btn-covid active" id="border_statistics_latest_exit_0">
+                                                    <input type="radio" class="btn-check" name="border_statistics_latest_exit" value=0 checked>
+                                                    <span id="border_statistics_button_1"></span>
                                                 </label>
-                                                <label class="btn btn-covid" id="vaccination_by_brand_latest_cumul_1">
-                                                    <input type="radio" class="btn-check" name="vaccination_by_brand_latest_cumul" value=1 checked>
-                                                    <span id="vaccination_by_brand_button_2"></span>
+                                                <label class="btn btn-covid" id="border_statistics_latest_exit_1">
+                                                    <input type="radio" class="btn-check" name="border_statistics_latest_exit" value=1>
+                                                    <span id="border_statistics_button_2"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="border_statistics_latest_exit_2">
+                                                    <input type="radio" class="btn-check" name="border_statistics_latest_exit" value=2>
+                                                    <span id="border_statistics_button_3"></span>
                                                 </label>
                                             </div>
                                             
-                                            <button id='vaccination_by_brand_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                            <button id='border_statistics_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
                                     
-                                    <div class="card-body" id="vaccination_by_brand_latest"></div>
+                                    <div class="card-body" id="border_statistics_latest"></div>
                                 </div>
                             </div>
                             
@@ -376,16 +368,16 @@
         
         <script src="js/others/status_evolution.js"></script>
         <script src="js/others/status_evolution_param.js"></script>
-        <script src="js/others/various_rates.js"></script>
-        <script src="js/others/various_rates_param.js"></script>
-        <script src="js/main_sheet/case_by_transmission.js"></script>
-        <script src="js/main_sheet/case_by_transmission_param.js"></script>
-        <script src="js/county_sheet/incidence_map.js"></script>
-        <script src="js/county_sheet/incidence_map_param.js"></script>
-        <script src="js/others/test_by_criterion.js"></script>
-        <script src="js/others/test_by_criterion_param.js"></script>
         <script src="js/others/vaccination_by_brand.js"></script>
         <script src="js/others/vaccination_by_brand_param.js"></script>
+        <script src="js/main_sheet/case_by_transmission.js"></script>
+        <script src="js/main_sheet/case_by_transmission_param.js"></script>
+        <script src="js/others/various_rates.js"></script>
+        <script src="js/others/various_rates_param.js"></script>
+        <script src="js/others/test_by_criterion.js"></script>
+        <script src="js/others/test_by_criterion_param.js"></script>
+        <script src="js/others/border_statistics.js"></script>
+        <script src="js/others/border_statistics_param.js"></script>
         <script src="js/county_sheet/incidence_evolution_by_county.js"></script>
         <script src="js/county_sheet/incidence_evolution_by_county_param.js"></script>
         

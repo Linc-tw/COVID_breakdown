@@ -7,7 +7,7 @@
 
 var P1I_plot_list = [
   [VR_Main, VR_2021_wrap, 1000],
-  [IM_Main, IM_2021_wrap, 1200],
+  [IM_Main, IM_2021_wrap, 1500],
 ];
 
 GP_Cascade(P1I_plot_list);

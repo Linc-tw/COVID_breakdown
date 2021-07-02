@@ -149,15 +149,17 @@ function VBB_MouseMove(wrap, d) {
   col_label_list = ['AZ', 'Moderna']
   
   //-- Define tooltip texts
-  var tooltip_text = d.date;
+  var tooltip_text = d.x;
   var sum = 0;
   var i, h;
   
   for (i=0; i<wrap.nb_col; i++) {
-    h = d.h_list[i] * 0.001
+    h = d.h_list[i];
     if (h > 0) {
-      tooltip_text += '<br>' + col_label_list[i] + ' = ' + h.toFixed(0) + 'k';
       sum += h;
+      if (wrap.cumul > 0)
+        h = GP_AbbreviateValue(h);
+      tooltip_text += '<br>' + col_label_list[i] + ' = ' + h;
     }
   }
   
@@ -168,7 +170,9 @@ function VBB_MouseMove(wrap, d) {
     tooltip_text += '<br>Total = ';
   else
     tooltip_text += '<br>Total = ';
-  tooltip_text += sum.toFixed(0) + 'k';
+  if (wrap.cumul > 0)
+    sum = GP_AbbreviateValue(sum);
+  tooltip_text += sum;
   
   //-- Generate tooltip
   wrap.tooltip

@@ -7,7 +7,7 @@ Structure by raw data
 
 `county_sheet/`
   - `case_by_age.js`
-  - `incidence_evolution_by_age.js` TODO
+  - `incidence_evolution_by_age.js`
   - `incidence_evolution_by_county.js`
   - `incidence_map.js`
   - `local_case_per_county.js`
@@ -34,15 +34,14 @@ Structure by raw data
 Structure by page
 -----------------
 
-`index.html` (repeated)
+`index.html` (selection of plots)
   - `status_evolution.js`
-  - `various_rates.js`
+  - `vaccination_by_brand.js` (to be replaced with `vaccination_progress.js` TODO)
   - `case_by_transmission.js`
-  - `incidence_map.js`
+  - `various_rates.js`
   - `test_by_criterion.js`
-  - `vaccination_by_brand.js`
-  - `vaccination_progress.js` (replace `vaccination_by_brand.js`)
-  - `incidence_evolution_by_county.js` TODO (replace `incidence_map.js`)
+  - `border_statistics.js`
+  - `incidence_evolution_by_county.js`
 
 `breakdown.html`
   - `case_by_transmission.js`
@@ -57,7 +56,7 @@ Structure by page
   - `various_rates.js`
   - `incidence_map.js`
   - `incidence_evolution_by_county.js`
-  - `incidence_evolution_by_age.js` TODO
+  - `incidence_evolution_by_age.js`
 
 `others.html`
   - `status_evolution.js`
@@ -92,7 +91,7 @@ Band-band
   - `travel_history_symptom_correlations.js`
 
 Band-band with linear ticks
-  - `incidence_evolution_by_age.js` TODO
+  - `incidence_evolution_by_age.js`
   - `incidence_evolution_by_county.js`
 
 No axis

@@ -14,9 +14,9 @@ var VR_latest_wrap = {
   xlabel_path: GP_wrap.xlabel_path_latest,
   r_list: GP_wrap.r_list_latest,
   y_max_factor: 1.2,
-  y_max_fix: 0.043,
+  y_max_fix: 0.058,
   y_path: 0.01,
-  legend_pos_x: 40,
+  legend_pos_x: 90,
   r: 3.5, //-- Dot radius
   trans_delay: GP_wrap.trans_delay,
 };
@@ -30,9 +30,9 @@ var VR_2021_wrap = {
   xlabel_path: GP_wrap.xlabel_path_2021,
   r_list: GP_wrap.r_list_2021,
   y_max_factor: 1.2,
-  y_max_fix: 0.043,
+  y_max_fix: 0.058,
   y_path: 0.01,
-  legend_pos_x: 40,
+  legend_pos_x: 90,
   r: 3.5,
   trans_delay: GP_wrap.trans_delay,
 };
@@ -45,9 +45,9 @@ var VR_2020_wrap = {
   xlabel_path: GP_wrap.xlabel_path_2020,
   r_list: GP_wrap.r_list_2020,
   y_max_factor: 1.2,
-  y_max_fix: 0.033,
+  y_max_fix: 0.053,
   y_path: 0.01,
-  legend_pos_x: 240,
+  legend_pos_x: 90,
   r: 2.5,
   trans_delay: GP_wrap.trans_delay,
 };

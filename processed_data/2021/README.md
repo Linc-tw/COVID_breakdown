@@ -32,7 +32,7 @@ Contents
   - `count` = confirmed case counts
 
 `age_symptom_correlations_label.csv`
-- Row = symptom or age range
+- Row = symptom or age group
 - Column
   - `key`
   - `count` = confirmed case counts of `key`
@@ -104,7 +104,7 @@ Contents
 ### From `COVID-19_in_Taiwan_raw_data_county_age.csv`
 
 `case_by_age.csv`
-- Row = age range of 5 up to 70
+- Row = age group of 5 up to 70
 - Column = time period
   - `total` = 2021
   - `jan` = January 2021
