@@ -78,6 +78,7 @@ SYMPTOM_DICT = {
 TRAVEL_HISTORY_DICT = {
   ## Far-East Asia
   'Bangladesh': {'zh-tw': '孟加拉', 'fr': 'Bangladesh'},
+  'Cambodia': {'zh-tw': '柬埔寨', 'fr': 'Cambodge'},
   'China': {'zh-tw': '中國', 'fr': 'Chine'},
   'Hong Kong': {'zh-tw': '香港', 'fr': 'Hong Kong'},
   'Indonesia': {'zh-tw': '印尼', 'fr': 'Indonésie'},
@@ -669,7 +670,7 @@ class MainSheet(Template):
         age_list.append('90s')
         
       elif age in [
-        '<5-4X', '<5-8X', '<5-9X', '<5-1XX', '<10-4X', '<10-8X', '<10-9X', '3-77', 
+        '<5-4X', '<5-7X', '<5-8X', '<5-9X', '<5-1XX', '<10-4X', '<10-8X', '<10-9X', '3-77', 
         '1X-2X', '1X-4X', '2X-3X', '2X-4X', '2X-6X', '3X-4X', '3X-8X', '5X-7X', '5X-8X'
       ]:
         age_list.append(np.nan)
@@ -718,6 +719,7 @@ class MainSheet(Template):
     key_dict = {
       ## Far-East Asia
       'Bangladesh': ['孟加拉'],
+      'Cambodia': ['柬埔寨'],
       'China': ['中國', '武漢', '深圳', '廣州', '遼寧', '江蘇', '浙江'],
       'Hong Kong': ['香港'],
       'India': ['印度'], 
@@ -945,7 +947,7 @@ class MainSheet(Template):
         '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/18-6/24', '5/19-6/10', 
         '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
         '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', '6/4-19', '6/4-23', '6/8-20', '6/10-22', '6/10-26', '6/11-25', '6/14-21', 
-        '6/16-28', '6/19-27', '6/20-29', '6/22-30', '6/22-7/1', 
+        '6/16-28', '6/19-27', '6/20-29', '6/22-30', '6/22-7/1', '6/22-7/2', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X',
       ]:
         onset_date_list.append(np.nan)
@@ -1014,7 +1016,7 @@ class MainSheet(Template):
         channel_list.append('monitoring')
         
       elif channel in [
-        '入院', '快篩站', '自行就醫', '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', '定期篩檢', '定期監測', '定期監控', 
+        '入院', '專案', '快篩站', '自行就醫', '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', '定期篩檢', '定期監測', '定期監控', 
         '入院篩檢', '入院採檢', '院內採檢', '社區快篩', '社區專案', '社區篩檢', '專案篩檢', '常規篩檢', 
         '萬華專案', '擴大採檢', '擴大篩檢', '預防性快篩', '預防性採檢', '鄰家擴大採檢', '入院前預防性採檢', '解隔離後自行就醫'
       ]:
@@ -1618,37 +1620,41 @@ class MainSheet(Template):
     
     for page, stock in stock_dict.items():
       n_imp, ctr_bins = makeHist(stock['imported'], bins)
-      n_indi, ctr_bins = makeHist(stock['indigenous'], bins)
+      n_local, ctr_bins = makeHist(stock['indigenous'], bins)
       n_other, ctr_bins = makeHist(stock['other'], bins)
-      n_tot = n_imp + n_indi + n_other
+      n_tot = n_imp + n_local + n_other
       
       n_imp = n_imp.round(0).astype(int)
-      n_indi = n_indi.round(0).astype(int)
+      n_local = n_local.round(0).astype(int)
       n_other = n_other.round(0).astype(int)
       n_tot = n_tot.round(0).astype(int)
       ctr_bins = ctr_bins.round(0).astype(int)
       ctr_bins[-1] = 30
       
-      data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_indi, 'other': n_other}
+      data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_local, 'other': n_other}
       data = pd.DataFrame(data)
       
       name = '%sprocessed_data/%s/difference_by_transmission.csv' % (DATA_PATH, page)
       saveCsv(name, data)
     return
   
-  def makeDailyCaseCounts(self):
+  def updateDailyCaseCounts(self, stock):
     report_date_list = self.getReportDate()
     trans_list = self.getTransmission()
     
+    ## Date
     ord_ref = ISODateToOrd(ISO_DATE_REF)
     ord_today = getTodayOrdinal()
-    
     date_arr = [ordDateToISO(ord_) for ord_ in range(ord_ref, ord_today)]
     nb_days = ord_today - ord_ref
-    nb_imp_arr = np.zeros(nb_days, dtype=int)
-    nb_indi_arr = np.zeros(nb_days, dtype=int)
-    nb_cases_arr = np.zeros(nb_days, dtype=int)
     
+    ## Update stock
+    stock['date'] = date_arr
+    stock['new_imported'] = np.zeros(nb_days, dtype=int)
+    stock['new_local'] = np.zeros(nb_days, dtype=int)
+    stock['new_cases'] = np.zeros(nb_days, dtype=int)
+    
+    ## Fill data
     for report_date, trans in zip(report_date_list, trans_list):
       if trans != trans:
         continue
@@ -1658,15 +1664,14 @@ class MainSheet(Template):
         print('Bad ind_r = %d' % ind)
         continue
       
+      stock['new_cases'][ind] += 1
+      
       if trans == 'imported':
-        nb_imp_arr[ind] += 1
+        stock['new_imported'][ind] += 1
       elif trans == 'indigenous':
-        nb_indi_arr[ind] += 1
-      
-      nb_cases_arr[ind] += 1
-      
-    return date_arr, nb_imp_arr, nb_indi_arr, nb_cases_arr
-    
+        stock['new_local'][ind] += 1
+    return
+  
   def saveCsv(self):
     self.saveCsv_keyNb()
     self.saveCsv_caseByTransmission()
@@ -1680,7 +1685,6 @@ class MainSheet(Template):
 ## Classes - status sheet
 
 class StatusSheet(Template):
-
   def __init__(self, verbose=True):
     self.coltag_date = '日期'
     self.coltag_week_nb = '週次'
@@ -1785,6 +1789,19 @@ class StatusSheet(Template):
     saveCsv(name, data_2021)
     return
     
+  def updateCumCounts(self, stock):
+    date_list = self.getDate()
+    cum_deaths_list = self.getCumDeaths()
+    cum_cases_list = self.getCumCases()
+    
+    stock_tmp = {'date': date_list, 'cum_cases': cum_cases_list, 'cum_deaths': cum_deaths_list}
+    stock_tmp = pd.DataFrame(stock_tmp)
+    stock_tmp = adjustDateRange(stock_tmp)
+    
+    stock['cum_cases'] = stock_tmp['cum_cases'].values
+    stock['cum_deaths'] = stock_tmp['cum_deaths'].values
+    return
+  
   def saveCsv(self):
     self.saveCsv_statusEvolution()
     return
@@ -1793,7 +1810,6 @@ class StatusSheet(Template):
 ## Classes - test sheet
 
 class TestSheet(Template):
-  
   def __init__(self, verbose=True):
     self.coltag_date = '日期'
     self.coltag_from_extended = '擴大監測'
@@ -1897,27 +1913,6 @@ class TestSheet(Template):
     for crit in self.getCol(self.coltag_criteria):
       crit_list.append(crit)
     return crit_list
-  
-  def makeDailyTestCounts(self):
-    ord_ref = ISODateToOrd(ISO_DATE_REF)
-    ord_today = getTodayOrdinal()
-    
-    nb_days = ord_today - ord_ref
-    nb_tests_arr = np.zeros(nb_days, dtype=int)
-    
-    date_list = self.getDate()
-    from_ext_list = self.getFromExtended()
-    from_qt_list = self.getFromQT()
-    from_clin_def_list = self.getFromClinDef()
-    
-    for date, from_clin_def, from_qt, from_ext in zip(date_list, from_clin_def_list, from_qt_list, from_ext_list):
-      ind = ISODateToOrd(date) - ord_ref
-      if ind < 0 or ind >= nb_days:
-        print('Bad ind_r = %d' % ind)
-        continue
-      
-      nb_tests_arr[ind] = from_clin_def + from_qt + from_ext
-    return nb_tests_arr
   
   def saveCsv_testByCriterion(self):
     date_list = self.getDate()
@@ -2096,6 +2091,27 @@ class TestSheet(Template):
     
     name = '%sprocessed_data/criteria_timeline.csv' % DATA_PATH
     saveCsv(name, data)
+    return
+  
+  def updateDailyTestCounts(self, stock):
+    ord_ref = ISODateToOrd(ISO_DATE_REF)
+    ord_today = getTodayOrdinal()
+    nb_days = ord_today - ord_ref
+    
+    stock['new_tests'] = np.zeros(nb_days, dtype=int)
+    
+    date_list = self.getDate()
+    from_ext_list = self.getFromExtended()
+    from_qt_list = self.getFromQT()
+    from_clin_def_list = self.getFromClinDef()
+    
+    for date, from_clin_def, from_qt, from_ext in zip(date_list, from_clin_def_list, from_qt_list, from_ext_list):
+      ind = ISODateToOrd(date) - ord_ref
+      if ind < 0 or ind >= nb_days:
+        print('Bad ind_r = %d' % ind)
+        continue
+      
+      stock['new_tests'][ind] = from_clin_def + from_qt + from_ext
     return
   
   def saveCsv(self):
@@ -2352,25 +2368,6 @@ class BorderSheet(Template):
     not_spec_list = np.array(not_spec_list_break).sum(axis=0)
     return not_spec_list
   
-  def makeDailyArrivalCounts(self):
-    ord_ref = ISODateToOrd(ISO_DATE_REF)
-    ord_today = getTodayOrdinal()
-    
-    nb_days = ord_today - ord_ref
-    nb_arrival_arr = np.zeros(nb_days, dtype=int)
-    
-    date_list = self.getDate()
-    in_list = self.getEntry()
-    
-    for date, in_ in zip(date_list, in_list):
-      ind = ISODateToOrd(date) - ord_ref
-      if ind < 0 or ind >= nb_days:
-        print('Bad ind_r = %d' % ind)
-        continue
-      
-      nb_arrival_arr[ind] = in_
-    return nb_arrival_arr
-  
   def saveCsv_borderStats(self):
     date_list = self.getDate()
     
@@ -2395,6 +2392,25 @@ class BorderSheet(Template):
       saveCsv(name, data_2021)
     return
       
+  def updateDailyArrivalCounts(self, stock):
+    ord_ref = ISODateToOrd(ISO_DATE_REF)
+    ord_today = getTodayOrdinal()
+    nb_days = ord_today - ord_ref
+    
+    stock['new_entries'] = np.zeros(nb_days, dtype=int)
+    
+    date_list = self.getDate()
+    entry_list = self.getEntry()
+    
+    for date, entry in zip(date_list, entry_list):
+      ind = ISODateToOrd(date) - ord_ref
+      if ind < 0 or ind >= nb_days:
+        print('Bad ind_r = %d' % ind)
+        continue
+      
+      stock['new_entries'][ind] = entry
+    return
+  
   def saveCsv(self):
     self.saveCsv_borderStats()
     return
@@ -3089,49 +3105,56 @@ class VaccinationSheet(Template):
 ################################################################################
 ## Functions - cross-sheet operations
 
-def makeVariousRates(main_sheet, test_sheet, border_sheet):
-  date_arr, nb_imp_arr, nb_indi_arr, nb_cases_arr = main_sheet.makeDailyCaseCounts()
-  nb_tests_arr = test_sheet.makeDailyTestCounts()
-  nb_arrival_arr = border_sheet.makeDailyArrivalCounts()
+def makeVariousRates(main_sheet, status_sheet, test_sheet, border_sheet):
+  stock = {}
+  main_sheet.updateDailyCaseCounts(stock)
+  status_sheet.updateCumCounts(stock)
+  test_sheet.updateDailyTestCounts(stock)
+  border_sheet.updateDailyArrivalCounts(stock)
   
-  ## Convert to float
-  nb_imp_arr = nb_imp_arr.astype(float)
-  nb_indi_arr = nb_indi_arr.astype(float)
-  nb_cases_arr = nb_cases_arr.astype(float)
-  nb_tests_arr = nb_tests_arr.astype(float)
-  nb_arrival_arr = nb_arrival_arr.astype(float)
+  ## Index to avoid division by zero
+  ind_new_tests = stock['new_tests'] == 0
+  ind_entries = stock['new_entries'] == 0
+  ind_cum_cases = stock['cum_cases'] == 0
   
-  ind_test = nb_tests_arr == 0
-  ind_arrival = nb_arrival_arr == 0
+  kernel = [1/7] * 7 + [0.0] * 6
   
   ## Smooth
-  kernel = [1/7] * 7 + [0.0] * 6
-  nb_imp_arr = signal.convolve(nb_imp_arr, kernel[::-1], mode='same')
-  nb_indi_arr = signal.convolve(nb_indi_arr, kernel[::-1], mode='same')
-  nb_cases_arr = signal.convolve(nb_cases_arr, kernel[::-1], mode='same')
-  nb_tests_arr = signal.convolve(nb_tests_arr, kernel[::-1], mode='same')
-  nb_arrival_arr = signal.convolve(nb_arrival_arr, kernel[::-1], mode='same')
+  for key, arr in stock.items():
+    if 'date' == key:
+      continue
+    
+    ## Convert to float first
+    arr = arr.astype(float)
+    
+    ## scipy.signal's convention is reversed
+    if key not in ['cum_cases', 'cum_deaths']:
+      arr = signal.convolve(arr, kernel[::-1], mode='same')
+    
+    ## Push back
+    stock[key] = arr 
   
   population_twn = sum(value['population'] for value in COUNTY_DICT.values())
   
   with warnings.catch_warnings(): ## Avoid division by zero
-    warnings.simplefilter("ignore")
+    warnings.simplefilter('ignore')
     
-    pos_rate = nb_cases_arr / nb_tests_arr
-    pos_rate[ind_test] = np.nan
+    stock['positive_rate'] = stock.pop('new_cases') / stock.pop('new_tests')
+    stock['positive_rate'][ind_new_tests] = np.nan
     
-    imp_inci_rate = nb_imp_arr / nb_arrival_arr
-    imp_inci_rate[ind_arrival] = np.nan
+    stock['imp_inci_rate'] = stock.pop('new_imported') / stock.pop('new_entries')
+    stock['imp_inci_rate'][ind_entries] = np.nan
     
-    indi_inci_rate = nb_indi_arr / float(population_twn) * 1000
+    stock['indi_inci_rate'] = stock.pop('new_local') / float(population_twn) * 1000 ## Rate over thousand
     
-  return date_arr, pos_rate, imp_inci_rate, indi_inci_rate
+    stock['fatality'] = stock.pop('cum_deaths') / stock.pop('cum_cases')
+    stock['fatality'][ind_cum_cases] = np.nan
   
-def saveCsv_variousRate(main_sheet, test_sheet, border_sheet):
-  date_arr, pos_rate, imp_inci_rate, indi_inci_rate = makeVariousRates(main_sheet, test_sheet, border_sheet)
+  return stock
   
-  data = {'date': date_arr, 'positive_rate': pos_rate, 'imp_inci_rate': imp_inci_rate, 'indi_inci_rate': indi_inci_rate}
-  data = pd.DataFrame(data)
+def saveCsv_variousRate(main_sheet, status_sheet, test_sheet, border_sheet):
+  stock = makeVariousRates(main_sheet, status_sheet, test_sheet, border_sheet)
+  data = pd.DataFrame(stock)
   
   data_latest = data.iloc[-NB_LOOKBACK_DAYS:]
   data_2020 = data.iloc[RANGE_2020[0]:RANGE_2020[1]]
@@ -3176,6 +3199,12 @@ def sandbox():
   #vacc_sheet = VaccinationSheet()
   #print(vacc_sheet.getDailyVacc())
   #vacc_sheet.saveCsv_vaccinationByBrand()
+  
+  main_sheet = MainSheet()
+  status_sheet = StatusSheet()
+  test_sheet = TestSheet()
+  border_sheet = BorderSheet()
+  saveCsv_variousRate(main_sheet, status_sheet, test_sheet, border_sheet)
   return
 
 ################################################################################
@@ -3203,15 +3232,15 @@ def saveCsv_all():
   timeline_sheet.saveCsv()
   
   print()
-  saveCsv_variousRate(main_sheet, test_sheet, border_sheet)
-  
-  print()
   county_sheet = CountySheet()
   county_sheet.saveCsv()
   
   print()
   vacc_sheet = VaccinationSheet()
   vacc_sheet.saveCsv()
+  
+  print()
+  saveCsv_variousRate(main_sheet, status_sheet, test_sheet, border_sheet)
   print()
   return
 

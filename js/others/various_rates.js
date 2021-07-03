@@ -12,9 +12,9 @@ function VR_InitFig(wrap) {
   wrap.tot_height_['fr'] = 400;
   wrap.tot_height_['en'] = 400;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 70, right: 5, bottom: 90, top: 5};
-  wrap.margin_['fr'] = {left: 70, right: 5, bottom: 90, top: 5};
-  wrap.margin_['en'] = {left: 70, right: 5, bottom: 90, top: 5};
+  wrap.margin_['zh-tw'] = {left: 80, right: 5, bottom: 90, top: 5};
+  wrap.margin_['fr'] = {left: 80, right: 5, bottom: 90, top: 5};
+  wrap.margin_['en'] = {left: 80, right: 5, bottom: 90, top: 5};
   
   GP_InitFig(wrap);
 }
@@ -87,15 +87,18 @@ function VR_FormatData(wrap, data) {
     
     //-- Loop over row
     for (i=0; i<data.length; i++) {
+      y = y_list_list[i][j];
+      
       //-- Make data block; redundant information is for toolpix text
       block = {
         'x': data[i]['date'],
-        'y': y_list_list[i][j],
+        'y': y,
         'y_list': y_list_list[i]
       };
       
       //-- Update y_max
-      y_max = Math.max(y_max, y);
+      if (!isNaN(y))
+        y_max = Math.max(y_max, y);
       
       //-- Stock
       block2.push(block);
@@ -153,11 +156,11 @@ function VR_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw')
-    col_label_list = ['陽性率', '入境盛行率', '本土盛行率/1000']
+    col_label_list = ['陽性率', '入境盛行率', '本土盛行率/1000', '致死率']
   else if (LS_lang == 'fr')
-    col_label_list = ['Taux de positivité', "Taux d'inci. front.", "Taux d'inci. local/1000"]
+    col_label_list = ['Taux de positivité', "Taux d'inci. front.", "Taux d'inci. local/1000", 'Taux de létalité']
   else
-    col_label_list = ['Positive rate', 'Arrival inci. rate', 'Local inci. rate/1000']
+    col_label_list = ['Positive rate', 'Arrival incidence', 'Local incidence/1000', 'Fatality rate']
   
   //-- Define tooltip texts
   var fct_format = d3.format(".2%");
@@ -263,11 +266,18 @@ function VR_Replot(wrap) {
   //-- Replot x
   GP_ReplotDateAsX(wrap);
   
+  //-- Define yticklabel format
+  var yticklabel_format;
+  if (0 < wrap.y_path % 0.01) 
+    yticklabel_format = '.1%';
+  else
+    yticklabel_format = '.0%';
+  
   //-- Define yaxis for ytick
   var yaxis = d3.axisLeft(wrap.yscale)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
-    .tickFormat(d3.format('.0%'));
+    .tickFormat(d3.format(yticklabel_format));
   
   //-- Update yaxis
   wrap.svg.select('.yaxis')
@@ -301,11 +311,11 @@ function VR_Replot(wrap) {
   //-- Define legend label
   var legend_label;
   if (LS_lang == 'zh-tw')
-    legend_label = ['陽性率', '入境盛行率（逐月更新）', '本土盛行率（乘以1000）', '最新數據'];
+    legend_label = ['陽性率', '入境盛行率（逐月更新）', '本土盛行率（乘以1000）', '致死率', '最新數據'];
   else if (LS_lang == 'fr')
-    legend_label = ['Taux de positivité', "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local (multiplié par 1000)", 'Dernier taux disponible'];
+    legend_label = ['Taux de positivité', "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local (multiplié par 1000)", 'Taux de létalité', 'Dernier taux disponible'];
   else
-    legend_label = ['Positive rate', 'Arrival incidence rate (updated monthly)', 'Local incidence rate (multiplied by 1000)', 'Last available value'];
+    legend_label = ['Positive rate', 'Arrival incidence (updated monthly)', 'Local incidence (multiplied by 1000)', 'Fatality rate', 'Last available value'];
   
   //-- Update legend label
   wrap.svg.selectAll(wrap.id+'_legend_label')
