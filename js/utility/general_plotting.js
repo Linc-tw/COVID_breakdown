@@ -8,12 +8,8 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
+//Legend caption/title
 //VP: donation legend
-//7-day average for CBT, CBD, LCPC, TBC, VBB, BS
-//  => col 0 = date, col 1 = 7-day moving average, col 2+ = data
-//Data by day: last 90, 2020 2021, overall
-//Data by week: overall
-//Overall by week (data, plot, README)
 //Note with "Collapse"
 
 //------------------------------------------------------------------------------
@@ -382,6 +378,85 @@ function GP_ReplotSquareY(wrap) {
   wrap.yaxis = yaxis;
 }
 
+//------------------------------------------------------------------------------
+//-- Function declarations - plotting charts
+
+function GP_PlotBar(wrap) {
+  //-- Add bar
+  var bar = wrap.svg.selectAll('.content.bar')
+    .data(wrap.formatted_data)
+    .enter();
+  
+  //-- Update bar with dummy details
+  bar.append('rect')
+    .attr('class', 'content bar')
+    .attr('fill', function (d) {return wrap.color_list[d.col_ind];})
+    .attr('x', function (d) {return wrap.xscale(d.x);})
+    .attr('y', wrap.yscale(0))
+    .attr('width', wrap.xscale.bandwidth())
+    .attr('height', 0)
+      .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
+      .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
+      
+  //-- Save to wrapper
+  wrap.bar = bar;
+}
+
+function GP_ReplotBar(wrap) {
+  //-- Update bar
+  wrap.bar.selectAll('.content.bar')
+    .data(wrap.formatted_data)
+    .transition()
+    .duration(wrap.trans_delay)
+      .attr('y', function (d) {return wrap.yscale(d.y1);})
+      .attr('height', function (d) {return wrap.yscale(d.y0)-wrap.yscale(d.y1);});
+}
+
+function GP_PlotAvgLine(wrap) {
+  //-- Define dummy line
+  var draw_line_0 = d3.line()
+    .defined(d => !isNaN(d.y))//-- Don't show line if NaN
+    .x(function (d) {return wrap.xscale(d.x) + 0.5*wrap.xscale.bandwidth();})
+    .y(wrap.yscale(0));
+    
+  //-- Add line
+  var line = wrap.svg.selectAll('.content.line')
+    .data([wrap.moving_avg])
+    .enter();
+    
+  //-- Update line with dummy details
+  line.append('path')
+    .attr('class', 'content line')
+    .attr('d', function (d) {return draw_line_0(d);})
+    .style('stroke', GP_wrap.gray)
+    .style('stroke-width', '2.5px')
+    .style('fill', 'none');
+    
+  //-- Save to wrapper
+  wrap.draw_line_0 = draw_line_0;
+  wrap.line = line;
+}
+
+function GP_ReplotAvgLine(wrap) {
+  //-- Define line
+  var draw_line;
+  if (wrap.cumul > 0)
+    draw_line = wrap.draw_line_0; //-- No avg line if cumulative
+  else
+    draw_line = d3.line()
+      .defined(d => !isNaN(d.y))//-- Don't show line if NaN
+      .x(function (d) {return wrap.xscale(d.x) + 0.5*wrap.xscale.bandwidth();})
+      .y(function (d) {return wrap.yscale(d.y);});
+  
+  //-- Update line
+  wrap.line.selectAll('.content.line')
+    .data([wrap.moving_avg])
+    .transition()
+    .duration(wrap.trans_delay)
+      .attr('d', function (d) {return draw_line(d);});
+}
+  
 //------------------------------------------------------------------------------
 //-- Function declarations - tooltip
 

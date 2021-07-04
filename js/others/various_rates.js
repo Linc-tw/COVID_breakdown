@@ -12,9 +12,9 @@ function VR_InitFig(wrap) {
   wrap.tot_height_['fr'] = 400;
   wrap.tot_height_['en'] = 400;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 80, right: 5, bottom: 90, top: 5};
-  wrap.margin_['fr'] = {left: 80, right: 5, bottom: 90, top: 5};
-  wrap.margin_['en'] = {left: 80, right: 5, bottom: 90, top: 5};
+  wrap.margin_['zh-tw'] = {left: 85, right: 5, bottom: 90, top: 5};
+  wrap.margin_['fr'] = {left: 85, right: 5, bottom: 90, top: 5};
+  wrap.margin_['en'] = {left: 85, right: 5, bottom: 90, top: 5};
   
   GP_InitFig(wrap);
 }
@@ -110,17 +110,18 @@ function VR_FormatData(wrap, data) {
   
   //-- Calculate y_max
   y_max *= wrap.y_max_factor;
-  if (wrap.y_max_fix > 0)
-    y_max = wrap.y_max_fix;
   
   //-- Calculate y_path
-  var y_path = wrap.y_path;
+  var log_precision = Math.floor(Math.log10(y_max)) - 1;
+  var precision = Math.pow(10, log_precision);
+  var y_path = y_max / (wrap.nb_yticks + 0.5);
+  y_path = Math.round(y_path / precision) * precision;
   
   //-- Generate yticks
   var ytick = [];
-  for (i=0; i<y_max; i+=y_path) 
+  for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
-    
+  
   //-- Calculate last row which is not NaN
   var legend_value = [];
   var last, value;
@@ -192,6 +193,7 @@ function VR_Plot(wrap) {
   
   //-- Define dummy line
   var draw_line = d3.line()
+    .defined(d => !isNaN(d.y))//-- Don't show line if NaN
     .x(function (d) {return wrap.xscale(d.x);})
     .y(wrap.yscale(0));
     
@@ -202,11 +204,11 @@ function VR_Plot(wrap) {
     
   //-- Update line with dummy details
   line.append('path')
-      .attr('class', 'content line')
-      .attr('d', function (d) {return draw_line(d);})
-      .style('stroke', function (d, i) {return color_list[i];})
-      .style('stroke-width', '2.5px')
-      .style("fill", 'none');
+    .attr('class', 'content line')
+    .attr('d', function (d) {return draw_line(d);})
+    .style('stroke', function (d, i) {return color_list[i];})
+    .style('stroke-width', '2.5px')
+    .style('fill', 'none');
       
   //-- Add dot
   var dot_list = [];
@@ -241,18 +243,11 @@ function VR_Replot(wrap) {
   //-- Replot x
   GP_ReplotDateAsX(wrap);
   
-  //-- Define yticklabel format
-  var yticklabel_format;
-  if (0 < wrap.y_path % 0.01) 
-    yticklabel_format = '.1%';
-  else
-    yticklabel_format = '.0%';
-  
   //-- Define yaxis for ytick
   var yaxis = d3.axisLeft(wrap.yscale)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
-    .tickFormat(d3.format(yticklabel_format));
+    .tickFormat(d3.format('.1%'));
   
   //-- Update yaxis
   wrap.svg.select('.yaxis')

@@ -43,7 +43,7 @@ function BS_FormatData(wrap, data) {
   var xticklabel = [];
   
   //-- Variables for data
-  var col_tag_list = data.columns.slice(1); //-- 0 = date
+  var col_tag_list = data.columns.slice(2); //-- 0 = date, 1 = moving average
   var nb_col = col_tag_list.length;
   var x_list = []; //-- For date
   var row;
@@ -54,7 +54,8 @@ function BS_FormatData(wrap, data) {
   
   //-- Other variables
   var formatted_data = [];
-  var i, j, x, y, block;
+  var moving_avg = [];
+  var i, j, x, y, avg, block;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
@@ -62,8 +63,14 @@ function BS_FormatData(wrap, data) {
     h_list = [];
     x = row['date'];
     y = 0;
+    avg = row['moving_avg'];
     x_list.push(x);
     
+    if ('' == avg)
+      moving_avg.push({x: x, y: NaN});
+    else
+      moving_avg.push({x: x, y: +avg});
+      
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r) {
       xtick.push(i+0.5)
@@ -85,7 +92,7 @@ function BS_FormatData(wrap, data) {
         'y0': y,
         'y1': y+h,
         'h_list': h_list.slice(),
-        'col': col_tag_list[j]
+        'col_ind': j
       };
         
       //-- Update total height
@@ -124,7 +131,7 @@ function BS_FormatData(wrap, data) {
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
-  wrap.col_tag_list = col_tag_list;
+  wrap.moving_avg = moving_avg;
   wrap.nb_col = nb_col;
   wrap.x_list = x_list;
   wrap.xtick = xtick;
@@ -190,30 +197,16 @@ function BS_Plot(wrap) {
   
   //-- Define color
   var color_list = GP_wrap.c_list.concat(GP_wrap.c_list).slice(10, 10+wrap.nb_col);
-  var color = d3.scaleOrdinal()
-    .domain(wrap.col_tag_list)
-    .range(color_list);
   
-  //-- Add bar
-  var bar = wrap.svg.selectAll('.content.bar')
-    .data(wrap.formatted_data)
-    .enter();
-  
-  //-- Update bar with dummy details
-  bar.append('rect')
-    .attr('class', 'content bar')
-    .attr('fill', function (d) {return color(d.col);})
-    .attr('x', function (d) {return wrap.xscale(d.x);})
-    .attr('y', wrap.yscale(0))
-    .attr('width', wrap.xscale.bandwidth())
-    .attr('height', 0)
-      .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
-      .on('mousemove', function (d) {BS_MouseMove(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
-
   //-- Save to wrapper
+  wrap.mouse_move = BS_MouseMove;
   wrap.color_list = color_list;
-  wrap.bar = bar;
+  
+  //-- Plot bar
+  GP_PlotBar(wrap);
+
+  //-- Plot avg line
+  GP_PlotAvgLine(wrap);
 }
 
 function BS_Replot(wrap) {
@@ -230,14 +223,12 @@ function BS_Replot(wrap) {
   wrap.svg.select('.ylabel')
     .text(ylabel_dict[LS_lang]);
     
-  //-- Update bar
-  wrap.bar.selectAll('.content.bar')
-    .data(wrap.formatted_data)
-    .transition()
-    .duration(wrap.trans_delay)
-      .attr('y', function (d) {return wrap.yscale(d.y1);})
-      .attr('height', function (d) {return wrap.yscale(d.y0)-wrap.yscale(d.y1);});
-    
+  //-- Replot bar
+  GP_ReplotBar(wrap);
+  
+  //-- Replot avg line
+  GP_ReplotAvgLine(wrap);
+  
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   
