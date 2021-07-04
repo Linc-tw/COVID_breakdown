@@ -82,7 +82,7 @@ function VP_FormatData2(wrap, data) {
     row = data[i];
     
     //-- Before delivery
-    x = +row['index'];
+    x = +row['index'] - 0.5;
     block = {
       'x': x,
       'y': y
@@ -244,6 +244,8 @@ function VP_FormatData3(wrap, data) {
   //-- Other variables
   var block2 = [];
   var y_max = 0;
+  var i_delivery = 0;
+  var delivery = wrap.formatted_data[0][i_delivery+1];
   var i, j, x, y, block;
   
   //-- Loop over row
@@ -260,9 +262,16 @@ function VP_FormatData3(wrap, data) {
     else 
       y = +row[col_tag_list[wrap.brand-1]];
     
+    if (x >= delivery.x) {
+      i_delivery += 2;
+      delivery = wrap.formatted_data[0][i_delivery+1];
+    }
+    
     block = {
+      'date': row['date'],
       'x': x,
-      'y': y
+      'y': y,
+      'y_delivery': delivery.y,
     };
     
     //-- Update y_max
@@ -300,6 +309,32 @@ function VP_FormatData3(wrap, data) {
   wrap.formatted_data.push(block2);
   
   VP_MakeXTick(wrap);
+}
+
+//-- Tooltip
+function VP_MouseMove(wrap, d) {
+  //-- Get tooltip position
+  var y_alpha = 0.5;
+  var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
+  
+  //-- Get column tags
+  if (LS_lang == 'zh-tw')
+    col_label_list = ['到貨量', '施打量'];
+  else if (LS_lang == 'fr')
+    col_label_list = ['Livraisons', 'Injections'];
+  else
+    col_label_list = ['Deliveries', 'Injections'];
+  
+  //-- Define tooltip texts
+  var tooltip_text = d.date;
+  tooltip_text += '<br>' + col_label_list[0] + ' = ' + GP_AbbreviateValue(d.y_delivery);
+  tooltip_text += '<br>' + col_label_list[1] + ' = ' + GP_AbbreviateValue(d.y);
+  
+  //-- Generate tooltip
+  wrap.tooltip
+    .html(tooltip_text)
+    .style('left', new_pos[0] + 'px')
+    .style('top', new_pos[1] + 'px');
 }
 
 function VP_Plot(wrap) {
@@ -346,10 +381,10 @@ function VP_Plot(wrap) {
   GP_PlotLinearY(wrap);
   
   //-- Add tooltip
-//   GP_MakeTooltip(wrap);
+  GP_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GP_wrap.c_list.slice(6, 6+wrap.nb_col);
+  var color_list = GP_wrap.c_list.slice(7, 7+wrap.nb_col);
   color_list.push(GP_wrap.gray);
   
   //-- Define linestyle
@@ -388,9 +423,9 @@ function VP_Plot(wrap) {
       .attr('cx', function (d) {return xscale(d.x);})
       .attr('cy', wrap.yscale(0))
       .attr('r', 0)
-//         .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
-//         .on('mousemove', function (d) {VP_MouseMove(wrap, d);})
-//         .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
+        .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
+        .on('mousemove', function (d) {VP_MouseMove(wrap, d);})
+        .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
   
   //-- Save to wrapper
   wrap.xscale = xscale;

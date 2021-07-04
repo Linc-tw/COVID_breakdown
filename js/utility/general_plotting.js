@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
+//VP: donation legend
 //7-day average for CBT, CBD, LCPC, TBC, VBB, BS
 //  => col 0 = date, col 1 = 7-day moving average, col 2+ = data
 //Data by day: last 90, 2020 2021, overall

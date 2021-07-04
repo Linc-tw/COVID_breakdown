@@ -156,11 +156,11 @@ function VR_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw')
-    col_label_list = ['陽性率', '入境盛行率', '本土盛行率/1000', '致死率']
+    col_label_list = ['陽性率', '入境盛行率', '本土盛行率/1000', '致死率'];
   else if (LS_lang == 'fr')
-    col_label_list = ['Taux de positivité', "Taux d'inci. front.", "Taux d'inci. local/1000", 'Taux de létalité']
+    col_label_list = ['Taux de positivité', "Taux d'inci. front.", "Taux d'inci. local/1000", 'Taux de létalité'];
   else
-    col_label_list = ['Positive rate', 'Arrival incidence', 'Local incidence/1000', 'Fatality rate']
+    col_label_list = ['Positive rate', 'Arrival incidence', 'Local incidence/1000', 'Fatality rate'];
   
   //-- Define tooltip texts
   var fct_format = d3.format('.2%');
@@ -223,8 +223,11 @@ function VR_Plot(wrap) {
       .attr('class', 'content dot')
         .attr('cx', function (d) {return wrap.xscale(d.x);})
         .attr('cy', wrap.yscale(0))
-        .attr('r', 0);
-    
+        .attr('r', 0)
+          .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
+          .on('mousemove', function (d) {VR_MouseMove(wrap, d);})
+          .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
+  
     dot_list.push(dot);
   }
   

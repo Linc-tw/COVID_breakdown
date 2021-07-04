@@ -180,10 +180,10 @@ body,
   margin-bottom: -55px;
 }
 #various_rates_latest .tooltip, #various_rates_2021 .tooltip, #various_rates_2020 .tooltip {
-  margin-left: -75px;
-  margin-right: -75px;
-  margin-top: -45px;
-  margin-bottom: -45px;
+  margin-left: -85px;
+  margin-right: -85px;
+  margin-top: -50px;
+  margin-bottom: -50px;
 }
 #test_by_criterion_latest .tooltip, #test_by_criterion_2021 .tooltip, #test_by_criterion_2020 .tooltip {
   margin-left: -75px;
@@ -198,6 +198,12 @@ body,
   margin-bottom: -55px;
 }
 #vaccination_by_brand_latest .tooltip, #vaccination_by_brand_2021 .tooltip, #vaccination_by_brand_2020 .tooltip {
+  margin-left: -60px;
+  margin-right: -60px;
+  margin-top: -45px;
+  margin-bottom: -45px;
+}
+#vaccination_progress_latest .tooltip, #vaccination_progress_2021 .tooltip, #vaccination_progress_2020 .tooltip {
   margin-left: -60px;
   margin-right: -60px;
   margin-top: -45px;
