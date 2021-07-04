@@ -217,9 +217,6 @@ function LCPC_Plot(wrap) {
   //-- Define color
   var color_list = GP_wrap.c_list.slice(6).concat(GP_wrap.c_list.slice(0, 6));
   color_list = color_list.concat(color_list.slice(1));
-  var color = d3.scaleOrdinal()
-    .domain(wrap.col_tag_list)
-    .range(color_list);
   
   //-- Add bar
   var bar = wrap.svg.selectAll('.content.bar')
@@ -229,18 +226,17 @@ function LCPC_Plot(wrap) {
   //-- Update bar with dummy details
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', color(wrap.col_tag))
+    .attr('fill', color_list[wrap.county])
     .attr('x', function (d) {return wrap.xscale(d.date);})
     .attr('y', wrap.yscale(0))
     .attr('width', wrap.xscale.bandwidth())
     .attr('height', 0)
-      .on("mouseover", function (d) {GP_MouseOver(wrap, d);})
-      .on("mousemove", function (d) {LCPC_MouseMove(wrap, d);})
-      .on("mouseleave", function (d) {GP_MouseLeave(wrap, d);})
+      .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
+      .on('mousemove', function (d) {LCPC_MouseMove(wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
   wrap.color_list = color_list;
-  wrap.color = color;
   wrap.bar = bar;
 }
 
@@ -255,17 +251,17 @@ function LCPC_Replot(wrap) {
   var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
   
   //-- Update ylabel
-  wrap.svg.select(".ylabel")
+  wrap.svg.select('.ylabel')
     .text(ylabel_dict[LS_lang]);
     
   //-- Update bar
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GP_wrap.trans_delay)
-    .attr('fill', wrap.color(wrap.col_tag))
-    .attr('y', function (d) {return wrap.yscale(d[wrap.col_tag]);})
-    .attr('height', function (d) {return wrap.yscale(0)-wrap.yscale(d[wrap.col_tag]);});
+    .duration(wrap.trans_delay)
+      .attr('fill', wrap.color_list[wrap.county])
+      .attr('y', function (d) {return wrap.yscale(d[wrap.col_tag]);})
+      .attr('height', function (d) {return wrap.yscale(0)-wrap.yscale(d[wrap.col_tag]);});
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -288,18 +284,18 @@ function LCPC_Replot(wrap) {
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
   
-  //-- Update legend color, label, & value
-  var legend_color_list = [];
-  var legend_label_2 = [];
+  //-- Update legend color, value, & label
+  var legend_color = [];
   var legend_value_2 = [];
+  var legend_label_2 = [];
   if (wrap.county > 0) {
-    legend_color_list.push(wrap.color_list[wrap.county]);
-    legend_label_2.push(legend_label[wrap.county]);
+    legend_color.push(wrap.color_list[wrap.county]);
     legend_value_2.push(wrap.legend_value[1]);
+    legend_label_2.push(legend_label[wrap.county]);
   }
-  legend_color_list.push(wrap.color_list[0]);
-  legend_label_2.push(legend_label[0]);
+  legend_color.push(wrap.color_list[0]);
   legend_value_2.push(wrap.legend_value[0]);
+  legend_label_2.push(legend_label[0]);
   
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
@@ -311,7 +307,7 @@ function LCPC_Replot(wrap) {
       .attr('class', 'legend value')
       .attr('x', legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color_list[i];})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
       .attr('text-anchor', 'end')
     
@@ -325,7 +321,7 @@ function LCPC_Replot(wrap) {
       .attr('class', 'legend label')
       .attr('x', legend_pos.x+legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color_list[i];})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
       .attr('text-anchor', 'start')
 }

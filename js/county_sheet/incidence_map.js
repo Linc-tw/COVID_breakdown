@@ -200,6 +200,11 @@ function IM_MouseLeave(wrap, d, i) {
 }
 
 function IM_Plot(wrap) {
+  //-- Define color
+  var color = d3.scaleSequential()
+    .domain([0, Math.log10(1.000001+wrap.y_max)])
+    .interpolator(t => d3.interpolateMagma(1-0.75*t));
+  
   //-- Define projection
   var scale = 150;
   var ctr_ra = 120+48/60; //-- Center was 120 58' 55"
@@ -222,22 +227,17 @@ function IM_Plot(wrap) {
       .on('mouseleave', function (d, i) {IM_MouseLeave(wrap, d, i);});
     
   //-- Save to wrapper
-  wrap.projection = projection;
+  wrap.color = color;
   wrap.map = map;
 }
 
 function IM_Replot(wrap) {
-  //-- Define color
-  var color = d3.scaleSequential()
-    .domain([0, Math.log10(1.000001+wrap.y_max)])
-    .interpolator(t => d3.interpolateMagma(1-0.75*t));
-  
   //-- Update map
   wrap.map.selectAll('.content.map')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GP_wrap.trans_delay)
-    .attr('fill', function (d) {return color(Math.log10(1+d.properties.value));})
+    .duration(wrap.trans_delay)
+      .attr('fill', function (d) {return wrap.color(Math.log10(1+d.properties.value));})
     
   //-- Define legend position
   var legend_dy = 25;
@@ -278,46 +278,7 @@ function IM_Replot(wrap) {
     {lab_x: 215, lab_y: 90,  sign: 1, zone_x: 180, zone_y: 30}, //-- Matsu
   ];
   
-  //-- Update legend label
-  wrap.svg.selectAll('.legend.label')
-    .remove()
-    .exit()
-    .data(wrap.label_list_dict[LS_lang])
-    .enter()
-    .append('text')
-      .attr('class', 'legend label')
-      .attr('x', function (d, i) {return offset.x+legend_pos[i].lab_x;})
-      .attr('y', function (d, i) {return offset.y+legend_pos[i].lab_y;})
-      .style('fill', '#000000')
-      .text(function (d, i) {if (wrap.rate == 1) return d+' '+wrap.y_list[i].toFixed(1); return d+' '+wrap.y_list[i];})
-      .style('font-size', '16px')
-      .attr('id', function (d, i) {return wrap.tag+'_label_'+wrap.code_dict[wrap.label_list_dict.tag[i]]['code'];})
-      .attr('text-anchor', function (d, i) {if (legend_pos[i].sign > 0) return 'end'; return 'start';})
-      .attr('dominant-baseline', 'middle');
-      
-  var line = wrap.svg.append('g');
-  var eps = 5;
-  var dx = 15;
-  var i, row, points;
-  
-  for (i=0; i<wrap.list_length; i++) {
-    if ((i == 19) || (i == 20) || (i == 21))
-      continue;
-    
-    row = legend_pos[i];
-    points = (offset.x+row.lab_x+row.sign*eps) + ',' + (offset.y+row.lab_y) + ' ' +
-             (offset.x+row.lab_x+row.sign*(eps+dx)) + ',' + (offset.y+row.lab_y) + ' ' +
-             (offset.x+row.zone_x) + ',' + (offset.y+row.zone_y);
-    
-    line.append('polyline')
-      .attr('points', points)
-      .attr('opacity', 1)
-      .attr('stroke', GP_wrap.gray)
-      .attr('stroke-width', 1)
-      .attr('id', wrap.tag+'_line_'+i)
-      .attr('fill', 'none');
-  }
-  
+  //-- Define legend caption
   if (wrap.rate == 1) {
     if (LS_lang == 'zh-tw')
       caption = ['每十萬人確診率 '+LS_GetYearLabel(wrap)];
@@ -334,6 +295,50 @@ function IM_Replot(wrap) {
     else 
       caption = ['Confirmed case counts', LS_GetYearLabel(wrap)];
     
+  //-- Update legend value & label
+  wrap.svg.selectAll('.legend.label')
+    .remove()
+    .exit()
+    .data(wrap.label_list_dict[LS_lang])
+    .enter()
+    .append('text')
+      .attr('class', 'legend label')
+      .attr('x', function (d, i) {return offset.x+legend_pos[i].lab_x;})
+      .attr('y', function (d, i) {return offset.y+legend_pos[i].lab_y;})
+      .style('fill', '#000000')
+      .text(function (d, i) {if (wrap.rate == 1) return d+' '+wrap.y_list[i].toFixed(1); return d+' '+wrap.y_list[i];})
+      .style('font-size', '16px')
+      .attr('id', function (d, i) {return wrap.tag+'_label_'+wrap.code_dict[wrap.label_list_dict.tag[i]]['code'];})
+      .attr('text-anchor', function (d, i) {if (legend_pos[i].sign > 0) return 'end'; return 'start';})
+      .attr('dominant-baseline', 'middle');
+  
+  //-- Remove old lines
+  wrap.svg.selectAll('.legend.line')
+    .remove();
+    
+  //-- Update new lines
+  var eps = 5;
+  var dx = 15;
+  var i, row, points;
+  for (i=0; i<wrap.list_length; i++) {
+    if ((i == 19) || (i == 20) || (i == 21))
+      continue;
+    
+    row = legend_pos[i];
+    points = (offset.x+row.lab_x+row.sign*eps) + ',' + (offset.y+row.lab_y) + ' ' +
+             (offset.x+row.lab_x+row.sign*(eps+dx)) + ',' + (offset.y+row.lab_y) + ' ' +
+             (offset.x+row.zone_x) + ',' + (offset.y+row.zone_y);
+    
+    wrap.svg.append('polyline')
+      .attr('class', 'legend line')
+      .attr('points', points)
+      .attr('opacity', 1)
+      .attr('stroke', GP_wrap.gray)
+      .attr('stroke-width', 1)
+      .attr('id', wrap.tag+'_line_'+i)
+      .attr('fill', 'none');
+  }
+  
   //-- Update legend caption
   wrap.svg.selectAll('.legend.caption')
     .remove()

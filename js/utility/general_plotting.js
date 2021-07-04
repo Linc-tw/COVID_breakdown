@@ -8,9 +8,6 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//total fatality rate
-//Vaccination Progress VP
-//  => two lines, many legends
 //7-day average for CBT, CBD, LCPC, TBC, VBB, BS
 //  => col 0 = date, col 1 = 7-day moving average, col 2+ = data
 //Data by day: last 90, 2020 2021, overall
@@ -404,11 +401,13 @@ function GP_MouseOver(wrap, d) {
 
 function GP_MouseLeave(wrap, d) {
   //-- Change opacity when moving mouse away
-  wrap.tooltip.transition()
+  wrap.tooltip.html('')
+    .transition()
     .duration(10)
-    .style("opacity", 0)
+    .style('opacity', 0);
+  
   d3.select(d3.event.target)
-    .style("opacity", 1)
+    .style('opacity', 1);
 }
 
 function GP_GetTooltipPos(wrap, y_alpha, d) {
@@ -445,7 +444,7 @@ function GP_GetTooltipPos(wrap, y_alpha, d) {
   return [x_pos, y_pos];
 }
 
-//-- For THSC & ASC (no tooltip)
+//-- For THSC, ASC, IEBC, & IEBA (no tooltip)
 function GP_MouseOver2(wrap, d) {
   d3.select(d3.event.target)
     .style("opacity", 0.8)

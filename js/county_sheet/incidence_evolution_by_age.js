@@ -200,26 +200,6 @@ function IEBA_Plot(wrap) {
       .style('font-size', '13px')
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central');
-  
-  //-- Define caption
-  if (LS_lang == 'zh-tw')
-    caption = '每十萬人過去七日確診數總合';
-  else if (LS_lang == 'fr')
-    caption = 'Nombre de cas confirmés sur 7 jours par 100k habitants';
-  else 
-    caption = 'Number of confirmed cases over 7 days per 100k inhabitants';
-    
-  var offset = {x: -5, y: -8};
-  
-  //-- Add legend caption
-  wrap.svg.append('text')
-    .attr('class', 'legend caption')
-    .attr('x', wrap.width+offset.x)
-    .attr('y', offset.y)
-    .style('fill', '#000000')
-    .text(caption)
-    .style('font-size', '22px')
-    .attr('text-anchor', 'end');
     
   //-- Save to wrapper
   wrap.xscale_tick = xscale_tick;
@@ -234,7 +214,7 @@ function IEBA_Replot(wrap) {
     .tickValues(wrap.xtick)
     .tickFormat(function (d, i) {return LS_ISODateToMDDate(wrap.xticklabel[i]);});
   
-  //-- Add xaxis & adjust position (bottom frameline)
+  //-- Update xaxis & adjust position (bottom frameline)
   wrap.svg.selectAll('.xaxis')
     .transition()
     .duration(wrap.trans_delay)
@@ -249,7 +229,7 @@ function IEBA_Replot(wrap) {
     .tickSize(0)
     .tickFormat(function (d, i) {return wrap.yticklabel_dict[LS_lang][i]});
   
-  //-- Add yaxis
+  //-- Update yaxis
   wrap.svg.select('.yaxis')
     .transition()
     .duration(wrap.trans_delay)
@@ -265,6 +245,31 @@ function IEBA_Replot(wrap) {
     .duration(wrap.trans_delay)
       .style('fill', function (d) {return wrap.color(d.value);});
     
+  //-- Define legend position
+  var offset = {x: -5, y: -8};
+  
+  //-- Define legend caption
+  if (LS_lang == 'zh-tw')
+    caption = ['每十萬人過去七日確診數總合'];
+  else if (LS_lang == 'fr')
+    caption = ['Nombre de cas confirmés sur 7 jours par 100k habitants'];
+  else 
+    caption = ['Number of confirmed cases over 7 days per 100k inhabitants'];
+    
+  //-- Update legend caption
+  wrap.svg.selectAll('.legend.caption')
+    .remove()
+    .exit()
+    .data(caption)
+    .enter()
+    .append('text')
+      .attr('class', 'legend caption')
+      .attr('x', wrap.width+offset.x)
+      .attr('y', offset.y)
+      .style('fill', '#000000')
+      .text(function (d) {return d;})
+      .style('font-size', '22px')
+      .attr('text-anchor', 'end');
 }
 
 //-- Load

@@ -240,17 +240,17 @@ function DBT_Replot(wrap) {
   var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
   
   //-- Update ylabel
-  wrap.svg.select(".ylabel")
+  wrap.svg.select('.ylabel')
     .text(ylabel_dict[LS_lang]);
     
   //-- Update bar
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GP_wrap.trans_delay)
-    .attr('fill', wrap.color(wrap.col_tag))
-    .attr('y', function (d) {return wrap.yscale(d[wrap.col_tag]);})
-    .attr('height', function (d) {return wrap.yscale(0)-wrap.yscale(d[wrap.col_tag]);});
+    .duration(wrap.trans_delay)
+      .attr('fill', wrap.color(wrap.col_tag))
+      .attr('y', function (d) {return wrap.yscale(d[wrap.col_tag]);})
+      .attr('height', function (d) {return wrap.yscale(0)-wrap.yscale(d[wrap.col_tag]);});
   
   //-- Define legend position
   var legend_pos = {x: 470, y: 45, dx: 12, dy: 30};
@@ -270,18 +270,18 @@ function DBT_Replot(wrap) {
     legend_label = ['Data complete', 'Imported', 'Local', 'Others', 'Data incomplete', 'Total '+LS_GetYearLabel(wrap)];
   
   //-- Update legend color, label, & value
-  var legend_color_list, legend_label_2, legend_value_2;
+  var legend_color, legend_label_2, legend_value_2;
   if (wrap.col_ind == 0) {
-    legend_color_list = [wrap.color_list[0], wrap.color_list[4]]
+    legend_color = [wrap.color_list[0], wrap.color_list[4]]
     legend_label_2 = [legend_label[0], legend_label[4]]
     legend_value_2 = [legend_value[0], legend_value[2]]
   }
   else {
-    legend_color_list = [wrap.color_list[wrap.col_ind]]
+    legend_color = [wrap.color_list[wrap.col_ind]]
     legend_label_2 = [legend_label[wrap.col_ind]]
     legend_value_2 = [legend_value[1]]
   }
-  legend_color_list.push(wrap.color_list[5]);
+  legend_color.push(wrap.color_list[5]);
   legend_label_2.push(legend_label[5]);
   legend_value_2.push(wrap.legend_value[3]);
   
@@ -295,7 +295,7 @@ function DBT_Replot(wrap) {
       .attr('class', 'legend value')
       .attr('x', legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color_list[i];})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
       .attr('text-anchor', 'end')
     
@@ -309,7 +309,7 @@ function DBT_Replot(wrap) {
       .attr('class', 'legend label')
       .attr('x', legend_pos.x+legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color_list[i];})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
       .attr('text-anchor', 'start')
 }

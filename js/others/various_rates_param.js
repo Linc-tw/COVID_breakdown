@@ -17,7 +17,7 @@ var VR_latest_wrap = {
   y_max_fix: 0,
   y_path: 0.02,
   legend_pos_x: 90,
-  r: 3.5, //-- Dot radius
+  r: 3, //-- Dot radius
   trans_delay: GP_wrap.trans_delay,
 };
 

@@ -105,7 +105,7 @@ function VR_FormatData(wrap, data) {
     }
     
     //-- Stock
-    formatted_data.push({'col': col, 'values': block2});
+    formatted_data.push(block2);
   }
   
   //-- Calculate y_max
@@ -151,7 +151,7 @@ function VR_FormatData(wrap, data) {
 //-- Tooltip
 function VR_MouseMove(wrap, d) {
   //-- Get tooltip position
-  var y_alpha = 0.5;
+  var y_alpha = 0.7;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags
@@ -163,18 +163,18 @@ function VR_MouseMove(wrap, d) {
     col_label_list = ['Positive rate', 'Arrival incidence', 'Local incidence/1000', 'Fatality rate']
   
   //-- Define tooltip texts
-  var fct_format = d3.format(".2%");
+  var fct_format = d3.format('.2%');
   var tooltip_text = d.x;
   var i;
   
   for (i=0; i<wrap.nb_col; i++)
-    tooltip_text += "<br>" + col_label_list[i] + " = " + fct_format(d.y_list[i]);
+    tooltip_text += '<br>' + col_label_list[i] + ' = ' + fct_format(d.y_list[i]);
   
   //-- Generate tooltip
   wrap.tooltip
     .html(tooltip_text)
-    .style("left", new_pos[0] + "px")
-    .style("top", new_pos[1] + "px")
+    .style('left', new_pos[0] + 'px')
+    .style('top', new_pos[1] + 'px');
 }
 
 function VR_Plot(wrap) {
@@ -189,38 +189,12 @@ function VR_Plot(wrap) {
   
   //-- Define color
   var color_list = GP_wrap.c_list.slice(3, 3+wrap.nb_col);
-  var color = d3.scaleOrdinal()
-    .domain(wrap.col_tag_list)
-    .range(color_list);
-  
-  //-- Define legend position
-  var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
-  
-  //-- Add legend value
-  wrap.svg.selectAll('.legend.value')
-    .remove()
-    .exit()
-    .data(wrap.legend_value)
-    .enter()
-    .append('text')
-      .attr('class', 'legend value')
-      .attr('x', legend_pos.x)
-      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return color_list[i];})
-      .text(function (d) {return (+d*100).toFixed(2)+'%';})
-      .attr('text-anchor', 'end');
   
   //-- Define dummy line
-  var draw_line_0 = d3.line()
+  var draw_line = d3.line()
     .x(function (d) {return wrap.xscale(d.x);})
     .y(wrap.yscale(0));
     
-  //-- Define real line
-  var draw_line = d3.line()
-    .defined(d => !isNaN(d.y))//-- Don't show line if NaN
-    .x(function (d) {return wrap.xscale(d.x);})
-    .y(function (d) {return wrap.yscale(d.y);});
-  
   //-- Add line
   var line = wrap.svg.selectAll('.content.line')
     .data(wrap.formatted_data)
@@ -229,37 +203,35 @@ function VR_Plot(wrap) {
   //-- Update line with dummy details
   line.append('path')
       .attr('class', 'content line')
-      .attr('d', function (d) {return draw_line_0(d.values);})
-      .style('stroke', function (d) {return color(d.col);})
+      .attr('d', function (d) {return draw_line(d);})
+      .style('stroke', function (d, i) {return color_list[i];})
       .style('stroke-width', '2.5px')
       .style("fill", 'none');
       
   //-- Add dot
-  var dot = wrap.svg.selectAll()
-    .data(wrap.formatted_data)
-    .enter();
+  var dot_list = [];
+  var i, dot;
+  for (i=0; i<wrap.nb_col; i++) {
+    dot = wrap.svg.append('g')
+      .style('fill', color_list[i]);
     
-  //-- Update dot with dummy details
-  dot.append('g')
-    .style('fill', function (d) {return color(d.col);})
-    .selectAll('.content.dot')
-    .data(function (d) {return d.values;})
-    .enter()
-    .append('circle')
+    //-- Update dot with dummy details
+    dot.selectAll('.content.dot')
+      .data(wrap.formatted_data[i])
+      .enter()
+      .append('circle')
       .attr('class', 'content dot')
-      .attr('cx', function (d) {return wrap.xscale(d.x);})
-      .attr('cy', function (d) {return wrap.yscale(d.y);})
-      .attr('r', 0)
-        .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
-        .on('mousemove', function (d) {VR_MouseMove(wrap, d);})
-        .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
-      
+        .attr('cx', function (d) {return wrap.xscale(d.x);})
+        .attr('cy', wrap.yscale(0))
+        .attr('r', 0);
+    
+    dot_list.push(dot);
+  }
+  
   //-- Save to wrapper
   wrap.color_list = color_list;
-  wrap.legend_pos = legend_pos;
-  wrap.draw_line = draw_line;
   wrap.line = line;
-  wrap.dot = dot;
+  wrap.dot_list = dot_list;
 }
 
 function VR_Replot(wrap) {
@@ -282,32 +254,47 @@ function VR_Replot(wrap) {
   //-- Update yaxis
   wrap.svg.select('.yaxis')
     .transition()
-    .duration(GP_wrap.trans_delay)
+    .duration(wrap.trans_delay)
     .call(yaxis);
   
   //-- Define ylabel
   var ylabel_dict = {en: 'Rate', fr: 'Taux', 'zh-tw': '比率'};
   
   //-- Update ylabel
-  wrap.svg.select(".ylabel")
+  wrap.svg.select('.ylabel')
     .text(ylabel_dict[LS_lang]);
     
+  //-- Define line
+  var draw_line = d3.line()
+    .defined(d => !isNaN(d.y))//-- Don't show line if NaN
+    .x(function (d) {return wrap.xscale(d.x);})
+    .y(function (d) {return wrap.yscale(d.y);});
+  
   //-- Update line
   wrap.line.selectAll('.content.line')
     .transition()
-    .duration(GP_wrap.trans_delay)
-    .attr('d', function (d) {return wrap.draw_line(d.values);});
+    .duration(wrap.trans_delay)
+      .attr('d', function (d) {return draw_line(d);});
     
   //-- Update dot
-  wrap.dot.selectAll('.content.dot')
-    .transition()
-    .duration(GP_wrap.trans_delay)
-    .attr('r', function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
+  var i;
+  for (i=0; i<wrap.nb_col; i++) {
+    wrap.dot_list[i]
+      .selectAll('.content.dot')
+      .data(wrap.formatted_data[i])
+      .transition()
+      .duration(wrap.trans_delay)
+        .attr('cy', function (d) {return wrap.yscale(d.y);})
+        .attr('r', function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
+  }
 
+  //-- Define legend position
+  var legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 12, dy: 27};
+  
   //-- Define legend color
   var legend_color = wrap.color_list.slice();
   legend_color.push('#000000');
-    
+      
   //-- Define legend label
   var legend_label;
   if (LS_lang == 'zh-tw')
@@ -317,20 +304,35 @@ function VR_Replot(wrap) {
   else
     legend_label = ['Positive rate', 'Arrival incidence (updated monthly)', 'Local incidence (multiplied by 1000)', 'Fatality rate', 'Last available value'];
   
+  //-- Update legend value
+  wrap.svg.selectAll('.legend.value')
+    .remove()
+    .exit()
+    .data(wrap.legend_value)
+    .enter()
+    .append('text')
+      .attr('class', 'legend value')
+      .attr('x', legend_pos.x)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return (+d*100).toFixed(2)+'%';})
+      .style('font-size', '20px')
+      .attr('text-anchor', 'end');
+    
   //-- Update legend label
-  wrap.svg.selectAll(wrap.id+'_legend_label')
+  wrap.svg.selectAll('.legend.label')
     .remove()
     .exit()
     .data(legend_label)
     .enter()
-    .append("text")
-      .attr("id", wrap.tag+"_legend_label")
-      .attr("class", "legend label")
-      .attr("x", wrap.legend_pos.x+wrap.legend_pos.dx)
-      .attr("y", function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy;})
-      .style("fill", function (d, i) {return legend_color[i];})
+    .append('text')
+      .attr('class', 'legend label')
+      .attr('x', legend_pos.x+legend_pos.dx)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
-      .attr("text-anchor", "start");
+      .style('font-size', '20px')
+      .attr('text-anchor', 'start');
 }
 
 //-- Load

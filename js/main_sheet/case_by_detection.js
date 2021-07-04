@@ -247,7 +247,7 @@ function CBD_Replot(wrap) {
   var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
   
   //-- Update ylabel
-  wrap.svg.select(".ylabel")
+  wrap.svg.select('.ylabel')
     .text(ylabel_dict[LS_lang]);
     
   //-- Update bar
@@ -255,11 +255,11 @@ function CBD_Replot(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(wrap.trans_delay)
-    .attr('y', function (d) {return wrap.yscale(d.y1);})
-    .attr('height', function (d) {return wrap.yscale(d.y0)-wrap.yscale(d.y1);});
+      .attr('y', function (d) {return wrap.yscale(d.y1);})
+      .attr('height', function (d) {return wrap.yscale(d.y0)-wrap.yscale(d.y1);});
     
   //-- Define legend position
-  var legend_pos = {x: 70, y: 40, dx: 10, dy: 30, x1: 190};
+  var legend_pos = {x: 70, y: 40, dx: 10, dy: 27, x1: 190};
   if (wrap.cumul == 0) {
     if (wrap.legend_pos_x_0_i_[LS_lang] != 0)
       legend_pos.x = wrap.legend_pos_x_0_i_[LS_lang];
@@ -272,10 +272,10 @@ function CBD_Replot(wrap) {
     legend_pos.x1 = wrap.legend_pos_x1_[LS_lang];
   
   //-- Define legend color
-  var legend_color_list = wrap.color_list.slice();
+  var legend_color = wrap.color_list.slice();
   if (wrap.onset == 1)
-    legend_color_list.push(GP_wrap.gray);
-  legend_color_list.push('#000000');
+    legend_color.push(GP_wrap.gray);
+  legend_color.push('#000000');
   
   //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
@@ -292,10 +292,10 @@ function CBD_Replot(wrap) {
   }
   else if (LS_lang == 'fr') {
     legend_label = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', "À l'étranger", 'Pas annoncés', 'Total '+LS_GetYearLabel(wrap)];
-    legend_label_plus = "Sans date début sympt.";
+    legend_label_plus = 'Sans date début sympt.';
   }
   else {
-    legend_label = ["Airports", "Quarantine", "Isolation", "Monitoring", "Hospitals", 'Overseas', 'Not announced', 'Total '+LS_GetYearLabel(wrap)];
+    legend_label = ['Airports', 'Quarantine', 'Isolation', 'Monitoring', 'Hospitals', 'Overseas', 'Not announced', 'Total '+LS_GetYearLabel(wrap)];
     legend_label_plus = 'No onset date';
   }
   if (wrap.onset == 1)
@@ -305,41 +305,41 @@ function CBD_Replot(wrap) {
   var i;
   for (i=legend_value.length-1; i>=0; i--) {
     if (0 == legend_value[i]) {
-      legend_color_list.splice(i, 1);
+      legend_color.splice(i, 1);
       legend_value.splice(i, 1);
       legend_label.splice(i, 1);
     }
   }
   
   //-- Update legend value
-  wrap.svg.selectAll(".legend.value")
+  wrap.svg.selectAll('.legend.value')
     .remove()
     .exit()
     .data(legend_value)
     .enter()
-    .append("text")
-      .attr("class", "legend value")
-      .attr("x", function (d, i) {return legend_pos.x + Math.floor(i/5)*legend_pos.x1;})
-      .attr("y", function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
-      .style("fill", function (d, i) {return legend_color_list[i];})
+    .append('text')
+      .attr('class', 'legend value')
+      .attr('x', function (d, i) {return legend_pos.x + Math.floor(i/5)*legend_pos.x1;})
+      .attr('y', function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
-      .style("font-size", '20px')
-      .attr("text-anchor", "end")
+      .style('font-size', '20px')
+      .attr('text-anchor', 'end')
   
   //-- Update legend label
-  wrap.svg.selectAll(".legend.label")
+  wrap.svg.selectAll('.legend.label')
     .remove()
     .exit()
     .data(legend_label)
     .enter()
-    .append("text")
-      .attr("class", "legend label")
-      .attr("x", function (d, i) {return legend_pos.x + legend_pos.dx + Math.floor(i/5)*legend_pos.x1;})
-      .attr("y", function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
-      .style("fill", function (d, i) {return legend_color_list[i];})
+    .append('text')
+      .attr('class', 'legend label')
+      .attr('x', function (d, i) {return legend_pos.x + legend_pos.dx + Math.floor(i/5)*legend_pos.x1;})
+      .attr('y', function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
-      .style("font-size", '20px')
-      .attr("text-anchor", "start")
+      .style('font-size', '20px')
+      .attr('text-anchor', 'start')
 }
 
 //-- Load

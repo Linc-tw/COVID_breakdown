@@ -230,7 +230,7 @@ function VBB_Replot(wrap) {
   var ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '施打劑數'};
   
   //-- Update ylabel
-  wrap.svg.select(".ylabel")
+  wrap.svg.select('.ylabel')
     .text(ylabel_dict[LS_lang]);
     
   //-- Update bar
@@ -238,8 +238,8 @@ function VBB_Replot(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(wrap.trans_delay)
-    .attr('y', function (d) {return wrap.yscale(d.y1);})
-    .attr('height', function (d) {return wrap.yscale(d.y0)-wrap.yscale(d.y1);});
+      .attr('y', function (d) {return wrap.yscale(d.y1);})
+      .attr('height', function (d) {return wrap.yscale(d.y0)-wrap.yscale(d.y1);});
     
   //-- Define legend position
   var legend_pos = {x: 95, y: 40, dx: 12, dy: 30};
@@ -253,8 +253,8 @@ function VBB_Replot(wrap) {
   }
   
   //-- Define legend color
-  var legend_color_list = wrap.color_list.slice();
-  legend_color_list.push('#000000');
+  var legend_color = wrap.color_list.slice();
+  legend_color.push('#000000');
   
   //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
@@ -272,7 +272,7 @@ function VBB_Replot(wrap) {
   var i;
   for (i=legend_value.length-1; i>=0; i--) {
     if (0 == legend_value[i]) {
-      legend_color_list.splice(i, 1);
+      legend_color.splice(i, 1);
       legend_value.splice(i, 1);
       legend_label.splice(i, 1);
     }
@@ -288,7 +288,7 @@ function VBB_Replot(wrap) {
       .attr('class', 'legend value')
       .attr('x', legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color_list[i];})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
       .attr('text-anchor', 'end')
       
@@ -302,7 +302,7 @@ function VBB_Replot(wrap) {
       .attr('class', 'legend label')
       .attr('x', legend_pos.x+legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color_list[i];})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
       .attr('text-anchor', 'start')
 }
@@ -310,7 +310,7 @@ function VBB_Replot(wrap) {
 //-- Load
 function VBB_Load(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path[0])
+    .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
@@ -323,7 +323,7 @@ function VBB_Load(wrap) {
 
 function VBB_Reload(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path[0])
+    .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);

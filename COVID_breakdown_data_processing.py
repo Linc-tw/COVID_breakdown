@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.06.30                  ##
+    ##  Version 2021.07.03                  ##
     ##########################################
 
 import os
@@ -346,6 +346,18 @@ COUNTY_DICT = {
     population = 127723,
   ), 
 }
+
+DELIVERY_LIST = [
+  ## brand, source, quantity, delivery_date, available_date, delivery_news, available_news
+  ['AZ', 'AZ', 117000, '2021-03-03', '2021-03-22', 'https://www.cna.com.tw/news/firstnews/202103035003.aspx', 'https://www.cna.com.tw/news/firstnews/202103225002.aspx'],
+  ['AZ', 'COVAX', 199200, '2021-04-04', '2021-04-13', 'https://www.cna.com.tw/news/firstnews/202104040008.aspx', 'https://www.cna.com.tw/news/firstnews/202104120047.aspx'],
+  ['AZ', 'COVAX', 410400, '2021-05-19', '2021-05-27', 'https://www.cna.com.tw/news/firstnews/202105190224.aspx', 'https://www.cna.com.tw/news/ahel/202105260298.aspx'],
+  ['Moderna', 'Moderna', 150000, '2021-05-28', '2021-06-09', 'https://www.cna.com.tw/news/firstnews/202105285010.aspx', 'https://www.cna.com.tw/news/firstnews/202106080367.aspx'],
+  ['AZ', 'Japan', 1240000, '2021-06-04', '2021-06-12', 'https://www.cna.com.tw/news/firstnews/202106045008.aspx', 'https://www.cna.com.tw/news/firstnews/202106115014.aspx'],
+  ['Moderna', 'Moderna', 239400, '2021-06-18', '2021-06-26', 'https://www.cna.com.tw/news/firstnews/202106180294.aspx', 'https://www.cna.com.tw/news/firstnews/202106250255.aspx'],
+  ['Moderna', 'USA', 2500000, '2021-06-20', '2021-07-01', 'https://www.cna.com.tw/news/firstnews/202106205005.aspx', 'https://www.cna.com.tw/news/firstnews/202106250056.aspx'],
+  ['Moderna', 'Moderna', 410400, '2021-06-30', None, 'https://www.cna.com.tw/news/firstnews/202106305007.aspx', ''],
+]
 
 ################################################################################
 ## Functions - general utilities
@@ -1200,8 +1212,10 @@ class MainSheet(Template):
     timestamp = dtt.datetime.now().astimezone()
     timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
     
-    key = ['n_total', 'n_latest', 'n_2020', 'n_2021', 'n_empty', 'timestamp']
-    value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_empty, timestamp]
+    population_twn = sum(value['population'] for value in COUNTY_DICT.values())
+    
+    key = ['n_total', 'n_latest', 'n_2020', 'n_2021', 'n_empty', 'timestamp', 'population_twn']
+    value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_empty, timestamp, population_twn]
     
     ## Make data frame
     data = {'key': key, 'value': value}
@@ -2959,23 +2973,23 @@ class VaccinationSheet(Template):
     self.key_location = 'a01'
     self.key_iso_code = 'a02'
     self.key_date = 'a03'
-    self.key_tot_vacc = 'a04'
-    self.key_tot_vacc_per_100 = 'a05'
-    self.key_daily_vacc_raw = 'a06'
-    self.key_daily_vacc = 'a07'
-    self.key_daily_vacc_per_1m = 'a08'
+    self.key_cum_vacc = 'a04'
+    self.key_cum_vacc_per_100 = 'a05'
+    self.key_new_vacc_raw = 'a06'
+    self.key_new_vacc = 'a07'
+    self.key_new_vacc_per_1m = 'a08'
     self.key_ppl_vacc = 'a09'
     self.key_ppl_vacc_per_100 = 'a10'
     self.key_ppl_fully_vacc = 'a11'
     self.key_ppl_fully_vacc_per_100 = 'a12'
     self.key_manu = 'a13'
-    self.key_jj = 'a14'
-    self.key_moderna = 'a15'
-    self.key_az = 'a16'
-    self.key_pfizer = 'a17'
-    self.key_sinovac = 'a18'
-    self.key_sputnik = 'a19'
-    self.key_sinopharm = 'a20'
+    self.key_cum_jj = 'a14'
+    self.key_cum_moderna = 'a15'
+    self.key_cum_az = 'a16'
+    self.key_cum_pfizer = 'a17'
+    self.key_cum_sinovac = 'a18'
+    self.key_cum_sputnik = 'a19'
+    self.key_cum_sinopharm = 'a20'
     
     self.data = data
     self.n_total = len(self.data['data'])
@@ -2990,22 +3004,22 @@ class VaccinationSheet(Template):
   def getDate(self):
     return [row[self.key_date] for row in self.data['data']]
   
-  def getTotVacc(self):
-    return [int(row[self.key_tot_vacc]) for row in self.data['data']]
+  def getCumVacc(self):
+    return [int(row[self.key_cum_vacc]) for row in self.data['data']]
   
-  def getDailyVacc(self):
-    return [int(row[self.key_daily_vacc]) for row in self.data['data']]
+  def getNewVacc(self):
+    return [int(row[self.key_new_vacc]) for row in self.data['data']]
   
-  def getAZ(self):
-    return [int(row[self.key_az]) for row in self.data['data']]
+  def getCumAZ(self):
+    return [int(row[self.key_cum_az]) for row in self.data['data']]
   
-  def getModerna(self):
-    return [int(row[self.key_moderna]) for row in self.data['data']]
-   
+  def getCumModerna(self):
+    return [int(row[self.key_cum_moderna]) for row in self.data['data']]
+  
   def makeStock_vaccinationByBrand(self):
     date_list = self.getDate()
-    cum_az_list = self.getAZ()
-    cum_moderna_list = self.getModerna()
+    cum_az_list = self.getCumAZ()
+    cum_moderna_list = self.getCumModerna()
     
     ## Declare all brands
     brand_list = ['AZ', 'Moderna']
@@ -3097,7 +3111,70 @@ class VaccinationSheet(Template):
       name = '%sprocessed_data/%s/vaccination_by_brand.csv' % (DATA_PATH, page)
       saveCsv(name, data)
     return
+  
+  def makeDeliveryStock_vaccinationProgress(self):
+    stock = {}
     
+    ## brand, source, quantity, delivery_date, available_date, delivery_news, available_news
+    for row in DELIVERY_LIST:
+      brand = row[0]
+      quantity = row[2]
+      delivery_date = row[3]
+      available_date = row[4]
+      
+      #stock[delivery_date] = stock.get(delivery_date, {})
+      #stock[delivery_date][brand] = quantity
+      
+      if available_date is None or available_date == '':
+        continue
+      
+      stock[available_date] = stock.get(available_date, {})
+      stock[available_date][brand] = quantity
+      
+    date_list = list(stock.keys())
+    az_list = [delivery.get('AZ', 0) for delivery in stock.values()]
+    moderna_list = [delivery.get('Moderna', 0) for delivery in stock.values()]
+    
+    ord_ref = ISODateToOrd(ISO_DATE_REF)
+    index_list = [ISODateToOrd(iso)-ord_ref for iso in date_list]
+    
+    stock = {'index': index_list, 'date': date_list, 'AZ': az_list, 'Moderna': moderna_list}
+    return stock
+    
+  def makeAdministratedStock_vaccinationProgress(self):
+    date_list = self.getDate()
+    cum_az_list = self.getCumAZ()
+    cum_moderna_list = self.getCumModerna()
+    
+    stock = []
+    
+    for date, az, moderna in zip(date_list, cum_az_list, cum_moderna_list):
+      if 0 == az + moderna and date != '2021-03-21':
+        continue
+      stock.append([date, az, moderna])
+      
+    date_list = [row[0] for row in stock]
+    cum_az_list = [row[1] for row in stock]
+    cum_moderna_list = [row[2] for row in stock]
+    
+    ord_ref = ISODateToOrd(ISO_DATE_REF)
+    index_list = [ISODateToOrd(iso)-ord_ref for iso in date_list]
+    
+    stock = {'index': index_list, 'date': date_list, 'AZ': cum_az_list, 'Moderna': cum_moderna_list}
+    return stock
+    
+  def saveCsv_vaccinationProgress(self):
+    stock = self.makeDeliveryStock_vaccinationProgress()
+    data_d = pd.DataFrame(stock)
+    stock = self.makeAdministratedStock_vaccinationProgress()
+    data_p = pd.DataFrame(stock)
+    
+    name = '%sprocessed_data/%s/vaccination_progress_deliveries.csv' % (DATA_PATH, PAGE_LATEST)
+    saveCsv(name, data_d)
+    name = '%sprocessed_data/%s/vaccination_progress_administrated.csv' % (DATA_PATH, PAGE_LATEST)
+    saveCsv(name, data_p)
+    return
+  
   def saveCsv(self):
     self.saveCsv_vaccinationByBrand()
     return
@@ -3173,38 +3250,31 @@ def saveCsv_variousRate(main_sheet, status_sheet, test_sheet, border_sheet):
 
 def sandbox():
   #main_sheet = MainSheet()
-  #print(main_sheet.getReportDate())
   #main_sheet.saveCsv_ageSymptomCorr()
   
   #status_sheet = StatusSheet()
-  #print(status_sheet.getCumHosp())
   #status_sheet.saveCsv_statusEvolution()
   
   #test_sheet = TestSheet()
-  #print(test_sheet.getReportDate())
   #test_sheet.saveCsv_testByCriterion()
   
   #border_sheet = BorderSheet()
-  #print(border_sheet.makeDailyArrivalCounts())
   #border_sheet.saveCsv_borderStats()
   
   #timeline_sheet = TimelineSheet()
-  #print(timeline_sheet.saveCriteria())
   #timeline_sheet.saveCsv_evtTimeline()
   
   #county_sheet = CountySheet()
-  #print(county_sheet)
   #county_sheet.saveCsv_incidenceEvolutionByAge()
   
-  #vacc_sheet = VaccinationSheet()
-  #print(vacc_sheet.getDailyVacc())
-  #vacc_sheet.saveCsv_vaccinationByBrand()
+  vacc_sheet = VaccinationSheet()
+  vacc_sheet.saveCsv_vaccinationProgress()
   
-  main_sheet = MainSheet()
-  status_sheet = StatusSheet()
-  test_sheet = TestSheet()
-  border_sheet = BorderSheet()
-  saveCsv_variousRate(main_sheet, status_sheet, test_sheet, border_sheet)
+  #main_sheet = MainSheet()
+  #status_sheet = StatusSheet()
+  #test_sheet = TestSheet()
+  #border_sheet = BorderSheet()
+  #saveCsv_variousRate(main_sheet, status_sheet, test_sheet, border_sheet)
   return
 
 ################################################################################

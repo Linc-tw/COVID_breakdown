@@ -216,16 +216,16 @@ function SE_Replot(wrap) {
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GP_wrap.trans_delay)
-    .attr('y', function (d) {return wrap.yscale(d.y1);})
-    .attr('height', function (d) {return wrap.yscale(d.y0)-wrap.yscale(d.y1);});
+    .duration(wrap.trans_delay)
+      .attr('y', function (d) {return wrap.yscale(d.y1);})
+      .attr('height', function (d) {return wrap.yscale(d.y0)-wrap.yscale(d.y1);});
     
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   
   //-- Define legend color
-  var legend_color_list = wrap.color_list.slice();
-  legend_color_list.push('#000000');
+  var legend_color = wrap.color_list.slice();
+  legend_color.push('#000000');
   
   //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
@@ -251,7 +251,7 @@ function SE_Replot(wrap) {
       .attr('class', 'legend value')
       .attr('x', legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color_list[i];})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
       .attr('text-anchor', 'end')
   
@@ -265,7 +265,7 @@ function SE_Replot(wrap) {
       .attr('class', 'legend label')
       .attr('x', legend_pos.x+legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color_list[i];})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
       .attr('text-anchor', 'start')
 }

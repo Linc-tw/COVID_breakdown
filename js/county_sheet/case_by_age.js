@@ -270,9 +270,6 @@ function CBA_Plot(wrap) {
   //-- Define color
   var color_list = GP_wrap.c_list.slice(7).concat(GP_wrap.c_list.slice(0, 7));
   color_list = color_list.concat(color_list.slice(1));
-  var color = d3.scaleOrdinal()
-    .domain(wrap.col_tag_list)
-    .range(color_list);
   
   //-- Add bar
   var bar = wrap.svg.selectAll('.content.bar')
@@ -282,7 +279,7 @@ function CBA_Plot(wrap) {
   //-- Update bar with dummy details
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', color(wrap.col_tag))
+    .attr('fill', color_list[wrap.period])
     .attr('x', function (d) {return wrap.xscale(d.age);})
     .attr('y', wrap.yscale(0))
     .attr('width', wrap.xscale.bandwidth())
@@ -293,7 +290,6 @@ function CBA_Plot(wrap) {
 
   //-- Save to wrapper
   wrap.color_list = color_list;
-  wrap.color = color;
   wrap.bar = bar;
 }
 
@@ -322,10 +318,10 @@ function CBA_Replot(wrap) {
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
-    .duration(GP_wrap.trans_delay)
-    .attr('fill', wrap.color(wrap.col_tag))
-    .attr('y', function (d) {return wrap.yscale(d[wrap.col_tag]);})
-    .attr('height', function (d) {return wrap.yscale(0)-wrap.yscale(d[wrap.col_tag]);});
+    .duration(wrap.trans_delay)
+      .attr('fill', wrap.color_list[wrap.period])
+      .attr('y', function (d) {return wrap.yscale(d[wrap.col_tag]);})
+      .attr('height', function (d) {return wrap.yscale(0)-wrap.yscale(d[wrap.col_tag]);});
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -354,18 +350,18 @@ function CBA_Replot(wrap) {
       legend_label = ['Total '+LS_GetYearLabel(wrap), 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   }
   
-  //-- Update legend color, label, & value
-  var legend_color_list = [];
-  var legend_label_2 = [];
+  //-- Update legend color, value, & label
+  var legend_color = [];
   var legend_value_2 = [];
+  var legend_label_2 = [];
   if (wrap.period > 0) {
-    legend_color_list.push(wrap.color_list[wrap.period]);
-    legend_label_2.push(legend_label[wrap.period]);
+    legend_color.push(wrap.color_list[wrap.period]);
     legend_value_2.push(wrap.legend_value[1]);
+    legend_label_2.push(legend_label[wrap.period]);
   }
-  legend_color_list.push(wrap.color_list[0]);
-  legend_label_2.push(legend_label[0]);
+  legend_color.push(wrap.color_list[0]);
   legend_value_2.push(wrap.legend_value[0]);
+  legend_label_2.push(legend_label[0]);
   
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
@@ -377,7 +373,7 @@ function CBA_Replot(wrap) {
       .attr('class', 'legend value')
       .attr('x', legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color_list[i];})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
       .attr('text-anchor', 'end')
     
@@ -391,7 +387,7 @@ function CBA_Replot(wrap) {
       .attr('class', 'legend label')
       .attr('x', legend_pos.x+legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color_list[i];})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
       .attr('text-anchor', 'start')
 }

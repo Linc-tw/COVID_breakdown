@@ -167,34 +167,8 @@ function ASC_Plot(wrap) {
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central');
   
-  //-- Define legend position
-  var legend_pos = {x: wrap.legend_pos_x, y: -0.8*wrap.margin.top, dx: 12, dy: 30};
-  
-  //-- Define legend color
-  var legend_color = [GP_wrap.c_list[0], GP_wrap.gray, '#000000'];
-  
-  //-- Define legend value
-  var legend_value = [wrap.n_data, wrap.n_total-wrap.n_data, wrap.n_total];
-  
-  //-- Add legend value
-  wrap.svg.selectAll('.legend.value')
-    .remove()
-    .exit()
-    .data(legend_value)
-    .enter()
-    .append('text')
-      .attr('class', 'legend value')
-      .attr('x', -wrap.margin.left + legend_pos.x)
-      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
-      .style('font-size', '20px')
-      .attr('text-anchor', 'end');
-  
   //-- Save to wrapper
   wrap.color = color;
-  wrap.legend_color = legend_color;
-  wrap.legend_pos = legend_pos;
 }
 
 function ASC_Replot(wrap) {
@@ -225,6 +199,15 @@ function ASC_Replot(wrap) {
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central');
   
+  //-- Define legend position
+  var legend_pos = {x: wrap.legend_pos_x, y: -0.8*wrap.margin.top, dx: 12, dy: 27};
+  
+  //-- Define legend color
+  var legend_color = [GP_wrap.c_list[0], GP_wrap.gray, '#000000'];
+  
+  //-- Define legend value
+  var legend_value = [wrap.n_data, wrap.n_total-wrap.n_data, wrap.n_total];
+  
   //-- Define legend label
   var legend_label;
   if (LS_lang == 'zh-tw')
@@ -234,6 +217,21 @@ function ASC_Replot(wrap) {
   else
     legend_label = ['Data complete', 'Data incomplete', 'Total '+LS_GetYearLabel(wrap)];
   
+  //-- Update legend value
+  wrap.svg.selectAll('.legend.value')
+    .remove()
+    .exit()
+    .data(legend_value)
+    .enter()
+    .append('text')
+      .attr('class', 'legend value')
+      .attr('x', -wrap.margin.left + legend_pos.x)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;})
+      .style('font-size', '20px')
+      .attr('text-anchor', 'end');
+  
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')
     .remove()
@@ -242,9 +240,9 @@ function ASC_Replot(wrap) {
     .enter()
     .append('text')
       .attr('class', 'legend label')
-      .attr('x', -wrap.margin.left + wrap.legend_pos.x + wrap.legend_pos.dx)
-      .attr('y', function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy;})
-      .style('fill', function (d, i) {return wrap.legend_color[i];})
+      .attr('x', -wrap.margin.left + legend_pos.x + legend_pos.dx)
+      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
       .style('font-size', '20px')
       .attr('text-anchor', 'start');
