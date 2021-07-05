@@ -1,5 +1,4 @@
 date,moving_avg,airport,quarantine,isolation,monitoring,hospital,overseas,no_data
-2021-04-06,3.7143,2,0,0,0,0,0,0
 2021-04-07,2.8571,0,0,0,0,0,0,0
 2021-04-08,2.0,0,0,0,0,0,0,0
 2021-04-09,2.1429,0,1,0,0,3,0,0
@@ -89,3 +88,4 @@ date,moving_avg,airport,quarantine,isolation,monitoring,hospital,overseas,no_dat
 2021-07-02,63.7143,0,0,6,0,7,0,45
 2021-07-03,63.7143,0,3,1,0,1,0,75
 2021-07-04,56.5714,2,0,0,0,0,0,37
+2021-07-05,52.5714,1,2,0,0,0,0,28
