@@ -89,11 +89,11 @@ function IEBA_FormatData(wrap, data) {
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
-  wrap.col_tag_list = col_tag_list;
   wrap.nb_col = nb_col;
   wrap.x_list = x_list;
   wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
+  wrap.y_list = col_tag_list;
   wrap.ytick = ytick;
   wrap.value_max = value_max;
 }
@@ -141,34 +141,13 @@ function IEBA_Plot(wrap) {
     .attr('class', 'xaxis')
     .attr('transform', 'translate(0,' + wrap.height + ')');
   
-  //-- Define yscale
-  var yscale = d3.scaleBand()
-    .domain(wrap.col_tag_list)
-    .range([0, wrap.height])
-    .padding(0.04);
+  //-- Plot y
+  GP_PlotSquareY(wrap);
   
-  //-- Define yaxis for yticklabel
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(0)
-    .tickFormat('');
-  
-  //-- Placeholder for yticklabel (left frameline)
-  wrap.svg.append('g')
-    .attr('class', 'yaxis');
-
-  //-- Define yaxis_frame for right frameline
-  var yaxis_frame = d3.axisRight(yscale)
-    .tickSize(0)
-    .tickFormat('');
-  
-  //-- Add yaxis_frame & adjust position (right frameline)
-  wrap.svg.append('g')
-    .attr('transform', 'translate(' + wrap.width + ',0)')
-    .call(yaxis_frame);
-    
   //-- Define square color
+  var value_max = Math.max(3, wrap.value_max);
   var color = d3.scaleSequential()
-    .domain([0, Math.max(10, wrap.value_max+0.001)])
+    .domain([0, value_max])
     .interpolator(t => d3.interpolatePuRd(t));
   
   //-- Add square
@@ -178,11 +157,11 @@ function IEBA_Plot(wrap) {
     .append('rect')
       .attr('class', 'content square')
       .attr('x', function (d) {return xscale(d.x);})
-      .attr('y', function (d) {return yscale(d.y);})
+      .attr('y', function (d) {return wrap.yscale(d.y);})
       .attr('rx', 1.2)
       .attr('ry', 1.2)
       .attr('width', xscale.bandwidth())
-      .attr('height', yscale.bandwidth())
+      .attr('height', wrap.yscale.bandwidth())
       .style('fill', '#FFFFFF')
         .on('mouseover', function (d) {GP_MouseOver2(wrap, d);})
         .on('mouseleave', function (d) {GP_MouseLeave2(wrap, d);});
@@ -194,8 +173,8 @@ function IEBA_Plot(wrap) {
     .append('text')
       .attr('class', 'content text')
       .attr('x', function (d) {return xscale(d.x) + 0.5*+xscale.bandwidth();})
-      .attr('y', function (d) {return yscale(d.y) + 0.5*+yscale.bandwidth();})
-      .style('fill', function (d) {if (d.value<25) return '#000000'; return '#FFFFFF';})
+      .attr('y', function (d) {return wrap.yscale(d.y) + 0.5*+wrap.yscale.bandwidth();})
+      .style('fill', function (d) {if (d.value<0.5*value_max) return '#000000'; return '#FFFFFF';})
       .text(function (d) {if (d.value<0.5001) return ''; return d.value.toFixed(0);})
       .style('font-size', '13px')
       .attr('text-anchor', 'middle')
@@ -203,7 +182,6 @@ function IEBA_Plot(wrap) {
     
   //-- Save to wrapper
   wrap.xscale_tick = xscale_tick;
-  wrap.yscale = yscale;
   wrap.color = color;
 }
 

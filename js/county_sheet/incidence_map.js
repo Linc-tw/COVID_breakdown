@@ -200,11 +200,6 @@ function IM_MouseLeave(wrap, d, i) {
 }
 
 function IM_Plot(wrap) {
-  //-- Define color
-  var color = d3.scaleSequential()
-    .domain([0, Math.log10(1.000001+wrap.y_max)])
-    .interpolator(t => d3.interpolateMagma(1-0.75*t));
-  
   //-- Define projection
   var scale = 150;
   var ctr_ra = 120+48/60; //-- Center was 120 58' 55"
@@ -227,17 +222,21 @@ function IM_Plot(wrap) {
       .on('mouseleave', function (d, i) {IM_MouseLeave(wrap, d, i);});
     
   //-- Save to wrapper
-  wrap.color = color;
   wrap.map = map;
 }
 
 function IM_Replot(wrap) {
+  //-- Redefine color everytime, because y_max changes
+  var color = d3.scaleSequential()
+    .domain([0, Math.max(Math.log10(1+wrap.y_max), 0.3)])
+    .interpolator(t => d3.interpolatePuRd(Math.log10(1+t)));
+  
   //-- Update map
   wrap.map.selectAll('.content.map')
     .data(wrap.formatted_data)
     .transition()
     .duration(wrap.trans_delay)
-      .attr('fill', function (d) {return wrap.color(Math.log10(1+d.properties.value));})
+      .attr('fill', function (d) {return color(d.properties.value);})
     
   //-- Define legend position
   var legend_dy = 25;
