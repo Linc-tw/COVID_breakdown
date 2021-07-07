@@ -37,7 +37,6 @@ function IEBC_FormatData(wrap, data) {
   //-- Variables for xtick
   var q = data.length % wrap.xlabel_path;
   var r = wrap.r_list[q];
-  var xtick = [];
   var xticklabel = [];
   
   //-- Variables for data
@@ -58,10 +57,8 @@ function IEBC_FormatData(wrap, data) {
     x_list.push(x);
     
     //-- Determine whether to have xtick
-    if (i % wrap.xlabel_path == r) {
-      xtick.push(i+0.5)
+    if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
-    }
     
     //-- Loop over column
     for (j=0; j<nb_col; j++) {
@@ -91,7 +88,6 @@ function IEBC_FormatData(wrap, data) {
   wrap.formatted_data = formatted_data;
   wrap.nb_col = nb_col;
   wrap.x_list = x_list;
-  wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
   wrap.y_list = col_tag_list;
   wrap.ytick = ytick;
@@ -115,82 +111,32 @@ function IEBC_FormatData2(wrap, data2) {
 }
 
 function IEBC_Plot(wrap) {
-  //-- Define xscale for square
-  var xscale = d3.scaleBand()
-    .domain(wrap.x_list)
-    .range([0, wrap.width])
-    .padding(0.04);
-    
-  //-- Define xaxis_frame for top frameline
-  var xaxis_frame = d3.axisBottom(xscale)
-    .tickSize(0)
-    .tickFormat('');
+  //-- x = bottom, y = left
+  GP_PlotBottomLeft(wrap);
   
-  //-- Add xaxis_frame (top frameline)
-  wrap.svg.append('g')
-    .call(xaxis_frame);
-    
-  //-- Define xscale_tick for xticklabel
-  var eps = 0
-  var xscale_tick = d3.scaleLinear()
-    .domain([-eps, wrap.x_list.length+eps])
-    .range([0, wrap.width]);
-  
-  //-- Placeholder for xticklabel & adjust position (bottom frameline)
-  wrap.svg.append('g')
-    .attr('class', 'xaxis')
-    .attr('transform', 'translate(0,' + wrap.height + ')');
-  
-  //-- Plot y
-  GP_PlotSquareY(wrap);
-    
   //-- Define square color
   var value_max = Math.max(3, wrap.value_max);
   var color = d3.scaleSequential()
     .domain([0, value_max])
     .interpolator(t => d3.interpolatePuRd(t));
   
-  //-- Add square
-  wrap.svg.selectAll()
-    .data(wrap.formatted_data)
-    .enter()
-    .append('rect')
-      .attr('class', 'content square')
-      .attr('x', function (d) {return xscale(d.x);})
-      .attr('y', function (d) {return wrap.yscale(d.y);})
-      .attr('rx', 1.2)
-      .attr('ry', 1.2)
-      .attr('width', xscale.bandwidth())
-      .attr('height', wrap.yscale.bandwidth())
-      .style('fill', '#FFFFFF')
-        .on('mouseover', function (d) {GP_MouseOver2(wrap, d);})
-        .on('mouseleave', function (d) {GP_MouseLeave2(wrap, d);});
-    
-  //-- Add text
-  wrap.svg.selectAll()
-    .data(wrap.formatted_data)
-    .enter()
-    .append('text')
-      .attr('class', 'content text')
-      .attr('x', function (d) {return xscale(d.x) + 0.5*+xscale.bandwidth();})
-      .attr('y', function (d) {return wrap.yscale(d.y) + 0.5*+wrap.yscale.bandwidth();})
-      .style('fill', function (d) {if (d.value<0.5*value_max) return '#000000'; return '#FFFFFF';})
-      .text(function (d) {if (d.value<0.5001) return ''; return d.value.toFixed(0);})
-      .style('font-size', '13px')
-      .attr('text-anchor', 'middle')
-      .attr('dominant-baseline', 'central');
-    
   //-- Save to wrapper
-  wrap.xscale_tick = xscale_tick;
+  wrap.value_max = value_max;
   wrap.color = color;
+  
+  //-- Plot hot map
+  GP_PlotHotMap(wrap);
 }
 
 function IEBC_Replot(wrap) {
-  //-- Define xaxis for xtick + xticklabel
-  var xaxis = d3.axisBottom(wrap.xscale_tick)
+  //-- Define xscale
+  var xscale = GP_MakeBandXForTile(wrap);
+  
+  //-- Define xaxis
+  var xaxis = d3.axisBottom(xscale)
     .tickSize(0)
-    .tickValues(wrap.xtick)
-    .tickFormat(function (d, i) {return LS_ISODateToMDDate(wrap.xticklabel[i]);});
+    .tickValues(wrap.xticklabel)
+    .tickFormat(function (d) {return LS_ISODateToMDDate(d);});
   
   //-- Update xaxis & adjust position (bottom frameline)
   wrap.svg.selectAll('.xaxis')
@@ -202,8 +148,11 @@ function IEBC_Replot(wrap) {
       .style('font-size', '18px')
       .style('text-anchor', 'end');
   
-  //-- Define yaxis for ytick + yticklabel
-  var yaxis = d3.axisLeft(wrap.yscale)
+  //-- Define yscale
+  var yscale = GP_MakeBandYForTile(wrap);
+  
+  //-- Define yaxis
+  var yaxis = d3.axisLeft(yscale)
     .tickSize(0)
     .tickFormat(function (d, i) {return wrap.yticklabel_dict[LS_lang][i]});
   
@@ -217,11 +166,8 @@ function IEBC_Replot(wrap) {
       .style('font-size', '18px')
       .style('text-anchor', 'end');
       
-  //-- Update square
-  wrap.svg.selectAll('.content.square')
-    .transition()
-    .duration(wrap.trans_delay)
-      .style('fill', function (d) {return wrap.color(d.value);});
+  //-- Replot hot map
+  GP_ReplotHotMap(wrap);
   
   //-- Define legend position
   var offset = {x: -5, y: -8};

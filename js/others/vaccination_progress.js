@@ -338,48 +338,23 @@ function VP_MouseMove(wrap, d) {
 }
 
 function VP_Plot(wrap) {
-  //-- Plot x
-  var xscale = d3.scaleLinear()
-    .domain([wrap.x_min, wrap.x_max])
-    .range([0, wrap.width]);
+  //-- x = bottom, y = left
+  GP_PlotBottomLeft(wrap);
   
-  //-- Define xaxis for xtick_sep_month
-  var xaxis_month = d3.axisBottom(xscale)
-    .tickSize(10)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xtick_sep_month)
-    .tickFormat('');
-  
-  //-- Add xaxis & adjust position (bottom frameline)
+  //-- Placeholders
   wrap.svg.append('g')
-    .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(xaxis_month);
-  
-  //-- Define xaxis for xtick_sep_year
-  var xaxis_year = d3.axisBottom(xscale)
-    .tickSize(20)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xtick_sep_year)
-    .tickFormat('');
-  
-  //-- Add xaxis & adjust position (bottom frameline)
+    .attr('class', 'xaxis tick month')
+    .attr('transform', 'translate(0,' + wrap.height + ')');
   wrap.svg.append('g')
-    .attr('transform', 'translate(0,' + wrap.height + ')')
-    .call(xaxis_year);
-  
-  //-- Placeholder for xtick_label_month + xticklabel_month & adjust position (bottom frameline)
+    .attr('class', 'xaxis tick year')
+    .attr('transform', 'translate(0,' + wrap.height + ')');
   wrap.svg.append('g')
-    .attr('class', 'xaxis month')
+    .attr('class', 'xaxis label month')
+    .attr('transform', 'translate(0,' + wrap.height + ')');
+  wrap.svg.append('g')
+    .attr('class', 'xaxis label year')
     .attr('transform', 'translate(0,' + wrap.height + ')');
     
-  //-- Placeholder for xtick_label_year + xticklabel_year & adjust position (bottom frameline)
-  wrap.svg.append('g')
-    .attr('class', 'xaxis year')
-    .attr('transform', 'translate(0,' + wrap.height + ')');
-    
-  //-- Plot y
-  GP_PlotLinearY(wrap);
-  
   //-- Add tooltip
   GP_MakeTooltip(wrap);
   
@@ -387,6 +362,14 @@ function VP_Plot(wrap) {
   var color_list = GP_wrap.c_list.slice(7, 7+wrap.nb_col);
   color_list.push(GP_wrap.gray);
   
+  //-- Define xscale
+  var xscale = d3.scaleLinear()
+    .domain([wrap.x_min, wrap.x_max])
+    .range([0, wrap.width]);
+  
+  //-- Define yscale
+  var yscale = GP_MakeLinearY(wrap);
+    
   //-- Define linestyle
   var linewidth_list = ['2.5px', '2.5px', '1.5px'];
   var linestyle_list = ['5,0', '5,0', '5,5'];
@@ -394,7 +377,7 @@ function VP_Plot(wrap) {
   //-- Define dummy line
   var draw_line = d3.line()
     .x(function (d) {return xscale(d.x);})
-    .y(wrap.yscale(0));
+    .y(yscale(0));
     
   //-- Add line
   var line = wrap.svg.selectAll('.content.line')
@@ -421,62 +404,78 @@ function VP_Plot(wrap) {
     .append('circle')
     .attr('class', 'content dot')
       .attr('cx', function (d) {return xscale(d.x);})
-      .attr('cy', wrap.yscale(0))
+      .attr('cy', yscale(0))
       .attr('r', 0)
         .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
         .on('mousemove', function (d) {VP_MouseMove(wrap, d);})
         .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
   
   //-- Save to wrapper
-  wrap.xscale = xscale;
   wrap.color_list = color_list;
   wrap.line = line;
   wrap.dot = dot;
 }
 
 function VP_Replot(wrap) {
-  //-- Define xaxis_month for xtick_label_month + xticklabel_month
-  var xaxis_month = d3.axisBottom(wrap.xscale)
+  //-- Define xscale
+  var xscale = d3.scaleLinear()
+    .domain([wrap.x_min, wrap.x_max])
+    .range([0, wrap.width]);
+  
+  //-- Define & update xaxis_tick_month
+  var xaxis_tick_month = d3.axisBottom(xscale)
+    .tickSize(10)
+    .tickSizeOuter(0)
+    .tickValues(wrap.xtick_sep_month)
+    .tickFormat('');
+  wrap.svg.select('.xaxis.tick.month')
+    .call(xaxis_tick_month);
+  
+  //-- Define & update xaxis_tick_year
+  var xaxis_tick_year = d3.axisBottom(xscale)
+    .tickSize(20)
+    .tickSizeOuter(0)
+    .tickValues(wrap.xtick_sep_year)
+    .tickFormat('');
+  wrap.svg.select('.xaxis.tick.year')
+    .call(xaxis_tick_year);
+  
+  //-- Define & update xaxis_label_month
+  var xaxis_label_month = d3.axisBottom(xscale)
     .tickSize(0)
     .tickValues(wrap.xtick_label_month)
     .tickFormat(function (d, i) {return wrap.xticklabel_month[i];});
-  
-  //-- Add xaxis_month
-  wrap.svg.select('.xaxis.month')
+  wrap.svg.select('.xaxis.label.month')
     .transition()
     .duration(wrap.trans_delay)
-    .call(xaxis_month)
+    .call(xaxis_label_month)
     .selectAll('text')
       .attr('transform', 'translate(0,8)');
       
-  //-- Define xaxis_year for xtick_label_year + xticklabel_year
-  var xaxis_year = d3.axisBottom(wrap.xscale)
+  //-- Define & update xaxis_label_year
+  var xaxis_label_year = d3.axisBottom(xscale)
     .tickSize(0)
     .tickValues(wrap.xtick_label_year)
     .tickFormat(function (d, i) {return wrap.xticklabel_year[i];});
-  
-  //-- Add xaxis
-  wrap.svg.select('.xaxis.year')
+  wrap.svg.select('.xaxis.label.year')
     .transition()
     .duration(wrap.trans_delay)
-    .call(xaxis_year)
+    .call(xaxis_label_year)
     .selectAll('text')
       .attr('transform', 'translate(0,40)');
   
-  //-- Replot y
+  //-- Replot yaxis
   GP_ReplotCountAsY(wrap);
-  
-  //-- Define ylabel
-  var ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '疫苗劑數'};
-  
+  var yscale = wrap.yscale_tick;
+    
   //-- Update ylabel
-  wrap.svg.select('.ylabel')
-    .text(ylabel_dict[LS_lang]);
+  var ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '疫苗劑數'};
+  GP_ReplotYLabel(wrap, ylabel_dict);
     
   //-- Define line
   var draw_line = d3.line()
-    .x(function (d) {return wrap.xscale(d.x);})
-    .y(function (d) {return wrap.yscale(d.y);});
+    .x(function (d) {return xscale(d.x);})
+    .y(function (d) {return yscale(d.y);});
   
   //-- Update line
   wrap.line.selectAll('.content.line')
@@ -490,7 +489,7 @@ function VP_Replot(wrap) {
     .data(wrap.formatted_data[1])
     .transition()
     .duration(wrap.trans_delay)
-      .attr('cy', function (d) {return wrap.yscale(d.y);})
+      .attr('cy', function (d) {return yscale(d.y);})
       .attr('r', wrap.r);
 
   //-- Define legend position

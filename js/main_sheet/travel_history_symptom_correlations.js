@@ -40,6 +40,8 @@ function THSC_ResetText() {
 }
 
 function THSC_FormatData(wrap, data) {
+  var x_key = 'symptom';
+  var y_key = 'trav_hist';
   var x_list = []; //-- For symptom
   var y_list = []; //-- For travel history
   var i, j, x, y, row;
@@ -47,8 +49,8 @@ function THSC_FormatData(wrap, data) {
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
-    x = row['symptom'];
-    y = row['trav_hist'];
+    x = row[x_key];
+    y = row[y_key];
     
     //-- Search if this x is already there
     for (j=0; j<x_list.length; j++) {
@@ -73,7 +75,9 @@ function THSC_FormatData(wrap, data) {
   
   //-- Save to wrapper
   wrap.formatted_data = data;
+  wrap.x_key = x_key;
   wrap.x_list = x_list;
+  wrap.y_key = y_key;
   wrap.y_list = y_list;
 }
 
@@ -131,77 +135,30 @@ function THSC_FormatData2(wrap, data2) {
 }
 
 function THSC_Plot(wrap) {
-  //-- Plot x
-  GP_PlotSquareX(wrap);
-  
-  //-- Plot y
-  GP_PlotSquareY(wrap);
+  //-- x = top, y = left
+  GP_PlotTopLeft(wrap);
   
   //-- Define square color
   var color = d3.scaleSequential()
     .domain([-0.3, 0.3])
     .interpolator(t => d3.interpolateRdBu(1-t));
   
-  //-- Add square
-  wrap.svg.selectAll()
-    .data(wrap.formatted_data)
-    .enter()
-    .append('rect')
-      .attr('class', 'content square')
-      .attr('x', function (d) {return wrap.xscale(d.symptom);})
-      .attr('y', function (d) {return wrap.yscale(d.trav_hist);})
-      .attr('rx', 3)
-      .attr('ry', 3)
-      .attr('width', wrap.xscale.bandwidth())
-      .attr('height', wrap.yscale.bandwidth())
-      .style('fill', '#FFFFFF')
-        .on('mouseover', function (d) {GP_MouseOver2(wrap, d);})
-        .on('mouseleave', function (d) {GP_MouseLeave2(wrap, d);});
-    
-  //-- Add text
-  wrap.svg.selectAll()
-    .data(wrap.formatted_data)
-    .enter()
-    .append('text')
-      .attr('class', 'content text')
-      .attr('x', function (d) {return wrap.xscale(d.symptom) + 0.5*+wrap.xscale.bandwidth();})
-      .attr('y', function (d) {return wrap.yscale(d.trav_hist) + 0.5*+wrap.yscale.bandwidth();})
-      .style('fill', function (d) {if (Math.abs(+d.corr)<0.205) return '#000000'; return '#FFFFFF';})
-      .text(function (d) {return '';})
-      .attr('text-anchor', 'middle')
-      .attr('dominant-baseline', 'central');
-  
   //-- Save to wrapper
   wrap.color = color;
+  
+  //-- Plot corr
+  GP_PlotCorr(wrap);
 }
 
 function THSC_Replot(wrap) {
   //-- Replot x
-  GP_ReplotSquareX(wrap);
+  GP_ReplotTileX(wrap);
   
   //-- Replot y
-  GP_ReplotSquareY(wrap);
-
-  //-- Update square
-  wrap.svg.selectAll('.content.square')
-    .transition()
-    .duration(wrap.trans_delay)
-      .style('fill', function (d) {return wrap.color(+d.corr);});
+  GP_ReplotTileY(wrap);
   
-  //-- Update text
-  wrap.svg.selectAll('.content.text')
-    .remove()
-    .exit()
-    .data(wrap.formatted_data)
-    .enter()
-    .append('text')
-      .attr('class', 'content text')
-      .attr('x', function (d) {return wrap.xscale(d.symptom) + 0.5*+wrap.xscale.bandwidth();})
-      .attr('y', function (d) {return wrap.yscale(d.trav_hist) + 0.5*+wrap.yscale.bandwidth();})
-      .style('fill', function (d) {if (Math.abs(+d.corr)<0.205) return '#000000'; return '#FFFFFF';})
-      .text(function (d) {if (wrap.count > 0) return d.count; return (+d.corr*100).toFixed(0)+'%';})
-      .attr('text-anchor', 'middle')
-      .attr('dominant-baseline', 'central');
+  //-- Replot corr
+  GP_ReplotCorr(wrap);
     
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: -0.8*wrap.margin.top, dx: 12, dy: 27};

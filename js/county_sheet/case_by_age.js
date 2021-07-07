@@ -113,12 +113,13 @@ function CBA_ResetText() {
 
 function CBA_FormatData(wrap, data) {
   //-- Variables for xtick
+  var x_key = 'age';
   var xtick = [];
   var xticklabel = [];
   
   //-- Variables for data
   var col_tag_list = data.columns.slice(1);
-  var col_tag = col_tag_list[wrap.period];
+  var col_tag = col_tag_list[wrap.col_ind];
   var nb_col = col_tag_list.length;
   var x_list = []; //-- For age
   var row;
@@ -131,7 +132,7 @@ function CBA_FormatData(wrap, data) {
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
-    x = row['age'];
+    x = row[x_key];
     y = +row[col_tag];
     x_list.push(x);
     
@@ -179,6 +180,7 @@ function CBA_FormatData(wrap, data) {
   wrap.col_tag_list = col_tag_list;
   wrap.col_tag = col_tag;
   wrap.nb_col = nb_col;
+  wrap.x_key = x_key;
   wrap.x_list = x_list;
   wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
@@ -201,20 +203,20 @@ function CBA_MouseMove(wrap, d) {
   //-- Generate column label
   var col_label;
   if (wrap.tag.includes('latest'))
-    col_label = (7*(wrap.period-1)) + '-' + (7*wrap.period-1);
+    col_label = (7*(wrap.col_ind-1)) + '-' + (7*wrap.col_ind-1);
   else
-    col_label = month_label[wrap.period];
+    col_label = month_label[wrap.col_ind];
   
   //-- Generate tooltip text
   var tooltip_text;
   
   if (LS_lang == 'zh-tw') {
-    if (wrap.period == 0)
+    if (wrap.col_ind == 0)
       tooltip_text = '全部案例中有';
     else if (wrap.tag.includes('latest'))
       tooltip_text = col_label + '天前之案例中有';
     else
-      tooltip_text = wrap.period + '月案例中有';
+      tooltip_text = wrap.col_ind + '月案例中有';
     
     tooltip_text += d[wrap.col_tag];
     
@@ -227,7 +229,7 @@ function CBA_MouseMove(wrap, d) {
   else if (LS_lang == 'fr') {
     tooltip_text = d[wrap.col_tag];
     
-    if (wrap.period == 0)
+    if (wrap.col_ind == 0)
       tooltip_text += " de l'ensemble des cas";
     else if (wrap.tag.includes('latest'))
       tooltip_text += " cas confirmés<br>de " + col_label + ' jours plus tôt';
@@ -240,7 +242,7 @@ function CBA_MouseMove(wrap, d) {
   else {
     tooltip_text = d[wrap.col_tag];
     
-    if (wrap.period == 0)
+    if (wrap.col_ind == 0)
       tooltip_text += ' of all confirmed cases';
     else if (wrap.tag.includes('latest'))
       tooltip_text += ' confirmed cases<br>of ' + col_label + ' days ago';
@@ -258,70 +260,47 @@ function CBA_MouseMove(wrap, d) {
 }
 
 function CBA_Plot(wrap) {
-  //-- Plot x
-  GP_PlotBandX(wrap);
+  //-- x = bottom, y = left
+  GP_PlotBottomLeft(wrap);
   
-  //-- Plot y
-  GP_PlotLinearY(wrap);
-    
+  //-- Add xlabel
+  GP_PlotXLabel(wrap);
+  
+  //-- Add ylabel
+  GP_PlotYLabel(wrap);
+  
   //-- Make tooltip
   GP_MakeTooltip(wrap);
     
   //-- Define color
   var color_list = GP_wrap.c_list.slice(7).concat(GP_wrap.c_list.slice(0, 7));
   color_list = color_list.concat(color_list.slice(1));
-  
-  //-- Add bar
-  var bar = wrap.svg.selectAll('.content.bar')
-    .data(wrap.formatted_data)
-    .enter();
-  
-  //-- Update bar with dummy details
-  bar.append('rect')
-    .attr('class', 'content bar')
-    .attr('fill', color_list[wrap.period])
-    .attr('x', function (d) {return wrap.xscale(d.age);})
-    .attr('y', wrap.yscale(0))
-    .attr('width', wrap.xscale.bandwidth())
-    .attr('height', 0)
-      .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
-      .on('mousemove', function (d) {CBA_MouseMove(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
+  wrap.mouse_move = CBA_MouseMove;
   wrap.color_list = color_list;
-  wrap.bar = bar;
+  
+  //-- Plot bar
+  GP_PlotSingleBar(wrap);
 }
 
 function CBA_Replot(wrap) {
-  //-- Replot x
+  //-- Replot xaxis
   GP_ReplotBandX(wrap);
   
-  //-- Replot y
+  //-- Replot yaxis
   GP_ReplotCountAsY(wrap);
   
-  //-- Define xlabel
-  var xlabel_dict = {en: 'Age', fr: 'Âge', 'zh-tw': '年齡'};
-  
   //-- Update xlabel
-  wrap.svg.select(".xlabel")
-    .text(xlabel_dict[LS_lang]);
-  
-  //-- Define ylabel
-  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
+  var xlabel_dict = {en: 'Age', fr: 'Âge', 'zh-tw': '年齡'};
+  GP_ReplotXLabel(wrap, xlabel_dict);
   
   //-- Update ylabel
-  wrap.svg.select(".ylabel")
-    .text(ylabel_dict[LS_lang]);
-    
+  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
+  GP_ReplotYLabel(wrap, ylabel_dict);
+  
   //-- Update bar
-  wrap.bar.selectAll('.content.bar')
-    .data(wrap.formatted_data)
-    .transition()
-    .duration(wrap.trans_delay)
-      .attr('fill', wrap.color_list[wrap.period])
-      .attr('y', function (d) {return wrap.yscale(d[wrap.col_tag]);})
-      .attr('height', function (d) {return wrap.yscale(0)-wrap.yscale(d[wrap.col_tag]);});
+  GP_ReplotSingleBar(wrap);
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -354,10 +333,10 @@ function CBA_Replot(wrap) {
   var legend_color = [];
   var legend_value_2 = [];
   var legend_label_2 = [];
-  if (wrap.period > 0) {
-    legend_color.push(wrap.color_list[wrap.period]);
+  if (wrap.col_ind > 0) {
+    legend_color.push(wrap.color_list[wrap.col_ind]);
     legend_value_2.push(wrap.legend_value[1]);
-    legend_label_2.push(legend_label[wrap.period]);
+    legend_label_2.push(legend_label[wrap.col_ind]);
   }
   legend_color.push(wrap.color_list[0]);
   legend_value_2.push(wrap.legend_value[0]);
@@ -421,7 +400,7 @@ function CBA_Reload(wrap) {
 function CBA_ButtonListener(wrap) {
   //-- Period
   d3.select(wrap.id +'_period').on('change', function() {
-    wrap.period = this.value;
+    wrap.col_ind = this.value;
     CBA_Reload(wrap);
   });
 
@@ -429,12 +408,12 @@ function CBA_ButtonListener(wrap) {
   d3.select(wrap.id + '_save').on('click', function () {
     var tag1;
     
-    if (wrap.period == 0)
+    if (wrap.col_ind == 0)
       tag1 = 'total';
     else if (wrap.tag.includes('latest'))
-      tag1 = 'w' + (-wrap.period);
+      tag1 = 'w' + (-wrap.col_ind);
     else
-      tag1 = 'm' + wrap.period;
+      tag1 = 'm' + wrap.col_ind;
     
     name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
@@ -456,7 +435,7 @@ function CBA_Main(wrap) {
   wrap.id = '#' + wrap.tag;
 
   //-- Swap active to current value
-  wrap.period = document.getElementById(wrap.tag + "_period").value;
+  wrap.col_ind = document.getElementById(wrap.tag + "_period").value;
   
   //-- Load
   CBA_InitFig(wrap);

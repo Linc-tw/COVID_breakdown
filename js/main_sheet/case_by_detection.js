@@ -39,7 +39,6 @@ function CBD_FormatData(wrap, data) {
   //-- Variables for xtick
   var q = data.length % wrap.xlabel_path;
   var r = wrap.r_list[q];
-  var xtick = [];
   var xticklabel = [];
   
   //-- Variables for data
@@ -81,10 +80,8 @@ function CBD_FormatData(wrap, data) {
       moving_avg.push({x: x, y: +avg});
       
     //-- Determine whether to have xtick
-    if (i % wrap.xlabel_path == r) {
-      xtick.push(i+0.5)
+    if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
-    }
     
     //-- Loop over column
     for (j=0; j<nb_col; j++)
@@ -137,7 +134,6 @@ function CBD_FormatData(wrap, data) {
   wrap.moving_avg = moving_avg;
   wrap.nb_col = nb_col;
   wrap.x_list = x_list;
-  wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
@@ -205,12 +201,12 @@ function CBD_MouseMove(wrap, d) {
 }
 
 function CBD_Plot(wrap) {
-  //-- Plot x
-  GP_PlotDateAsX(wrap);
+  //-- x = bottom, y = left
+  GP_PlotBottomLeft(wrap);
   
-  //-- Plot y
-  GP_PlotLinearY(wrap);
-  
+  //-- Add ylabel
+  GP_PlotYLabel(wrap);
+    
   //-- Add tooltip
   GP_MakeTooltip(wrap);
   
@@ -223,28 +219,25 @@ function CBD_Plot(wrap) {
   wrap.color_list = color_list;
   
   //-- Plot bar
-  GP_PlotBar(wrap);
+  GP_PlotMultipleBar(wrap);
 
   //-- Plot avg line
   GP_PlotAvgLine(wrap);
 }
 
 function CBD_Replot(wrap) {
-  //-- Replot x
+  //-- Replot xaxis
   GP_ReplotDateAsX(wrap);
   
-  //-- Replot y
+  //-- Replot yaxis
   GP_ReplotCountAsY(wrap);
   
-  //-- Define ylabel
-  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
-  
   //-- Update ylabel
-  wrap.svg.select('.ylabel')
-    .text(ylabel_dict[LS_lang]);
-    
+  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
+  GP_ReplotYLabel(wrap, ylabel_dict);
+  
   //-- Replot bar
-  GP_ReplotBar(wrap);
+  GP_ReplotMultipleBar(wrap);
   
   //-- Replot avg line
   GP_ReplotAvgLine(wrap);

@@ -94,6 +94,7 @@ function LCPC_ResetText() {
 
 function LCPC_FormatData(wrap, data) {
   //-- Variables for xtick
+  var x_key = 'date';
   var q = data.length % wrap.xlabel_path;
   var r = wrap.r_list[q];
   var xtick = [];
@@ -101,7 +102,7 @@ function LCPC_FormatData(wrap, data) {
   
   //-- Variables for data
   var col_tag_list = data.columns.slice(1); //-- 0 = date
-  var col_tag = col_tag_list[wrap.county];
+  var col_tag = col_tag_list[wrap.col_ind];
   var nb_col = col_tag_list.length;
   var x_list = []; //-- For date
   var row;
@@ -114,7 +115,7 @@ function LCPC_FormatData(wrap, data) {
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
-    x = row['date'];
+    x = row[x_key];
     y = +row[col_tag];
     x_list.push(x);
     
@@ -148,6 +149,7 @@ function LCPC_FormatData(wrap, data) {
   wrap.col_tag_list = col_tag_list;
   wrap.col_tag = col_tag;
   wrap.nb_col = nb_col;
+  wrap.x_key = x_key;
   wrap.x_list = x_list;
   wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
@@ -172,7 +174,7 @@ function LCPC_MouseMove(wrap, d) {
       '本土合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
       '嘉縣', '嘉市', '台南', '高雄', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '馬祖'
     ];
-    tooltip_text += legend_label[wrap.county] + d[wrap.col_tag] + '例';
+    tooltip_text += legend_label[wrap.col_ind] + d[wrap.col_tag] + '例';
   }
   
   else if (LS_lang == 'fr') {
@@ -180,10 +182,10 @@ function LCPC_MouseMove(wrap, d) {
       'Locaux totaux', 'à Keelung', 'à Taipei', 'à Nouveau Taipei', 'à Taoyuan', 'au comté de Hsinchu', 'à la ville de Hsinchu', 'à Miaoli', 'à Taichung', 'à Changhua', 'à Nantou', 'à Yunlin', 
       'au comté de Chiayi', 'à la ville de Chiayi', 'à Tainan', 'à Kaohsiung', 'à Pingtung', 'à Yilan', 'à Hualien', 'à Taitung', 'à Penghu', 'à Kinmen', 'à Matsu'
     ];
-    if (wrap.county == 0)
+    if (wrap.col_ind == 0)
       tooltip_text += d[wrap.col_tag] + ' cas locaux au total';
     else
-      tooltip_text += d[wrap.col_tag] + ' cas ' + legend_label[wrap.county];
+      tooltip_text += d[wrap.col_tag] + ' cas ' + legend_label[wrap.col_ind];
   }
   
   else {
@@ -191,10 +193,10 @@ function LCPC_MouseMove(wrap, d) {
       'Total local', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
-    if (wrap.county == 0)
+    if (wrap.col_ind == 0)
       tooltip_text += d[wrap.col_tag] + ' local cases in total';
     else
-      tooltip_text += d[wrap.col_tag] + ' cases in ' + legend_label[wrap.county];
+      tooltip_text += d[wrap.col_tag] + ' cases in ' + legend_label[wrap.col_ind];
   }
   
   //-- Generate tooltip
@@ -205,12 +207,12 @@ function LCPC_MouseMove(wrap, d) {
 }
 
 function LCPC_Plot(wrap) {
-  //-- Plot x
-  GP_PlotDateAsX(wrap);
+  //-- x = bottom, y = left
+  GP_PlotBottomLeft(wrap);
   
-  //-- Plot y
-  GP_PlotLinearY(wrap);
-  
+  //-- Add ylabel
+  GP_PlotYLabel(wrap);
+    
   //-- Add tooltip
   GP_MakeTooltip(wrap);
   
@@ -218,50 +220,27 @@ function LCPC_Plot(wrap) {
   var color_list = GP_wrap.c_list.slice(6).concat(GP_wrap.c_list.slice(0, 6));
   color_list = color_list.concat(color_list.slice(1));
   
-  //-- Add bar
-  var bar = wrap.svg.selectAll('.content.bar')
-    .data(wrap.formatted_data)
-    .enter();
-  
-  //-- Update bar with dummy details
-  bar.append('rect')
-    .attr('class', 'content bar')
-    .attr('fill', color_list[wrap.county])
-    .attr('x', function (d) {return wrap.xscale(d.date);})
-    .attr('y', wrap.yscale(0))
-    .attr('width', wrap.xscale.bandwidth())
-    .attr('height', 0)
-      .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
-      .on('mousemove', function (d) {LCPC_MouseMove(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
-
   //-- Save to wrapper
+  wrap.mouse_move = LCPC_MouseMove;
   wrap.color_list = color_list;
-  wrap.bar = bar;
+  
+  //-- Plot bar
+  GP_PlotSingleBar(wrap);
 }
 
 function LCPC_Replot(wrap) {
-  //-- Replot x
+  //-- Replot xaxis
   GP_ReplotDateAsX(wrap);
   
-  //-- Replot y
+  //-- Replot yaxis
   GP_ReplotCountAsY(wrap);
   
-  //-- Define ylabel
-  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
-  
   //-- Update ylabel
-  wrap.svg.select('.ylabel')
-    .text(ylabel_dict[LS_lang]);
+  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
+  GP_ReplotYLabel(wrap, ylabel_dict);
     
   //-- Update bar
-  wrap.bar.selectAll('.content.bar')
-    .data(wrap.formatted_data)
-    .transition()
-    .duration(wrap.trans_delay)
-      .attr('fill', wrap.color_list[wrap.county])
-      .attr('y', function (d) {return wrap.yscale(d[wrap.col_tag]);})
-      .attr('height', function (d) {return wrap.yscale(0)-wrap.yscale(d[wrap.col_tag]);});
+  GP_ReplotSingleBar(wrap);
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -288,10 +267,10 @@ function LCPC_Replot(wrap) {
   var legend_color = [];
   var legend_value_2 = [];
   var legend_label_2 = [];
-  if (wrap.county > 0) {
-    legend_color.push(wrap.color_list[wrap.county]);
+  if (wrap.col_ind > 0) {
+    legend_color.push(wrap.color_list[wrap.col_ind]);
     legend_value_2.push(wrap.legend_value[1]);
-    legend_label_2.push(legend_label[wrap.county]);
+    legend_label_2.push(legend_label[wrap.col_ind]);
   }
   legend_color.push(wrap.color_list[0]);
   legend_value_2.push(wrap.legend_value[0]);
@@ -355,7 +334,7 @@ function LCPC_Reload(wrap) {
 function LCPC_ButtonListener(wrap) {
   //-- Period
   d3.select(wrap.id +'_county').on('change', function() {
-    wrap.county = this.value;
+    wrap.col_ind = this.value;
     LCPC_Reload(wrap);
   });
   
@@ -365,7 +344,7 @@ function LCPC_ButtonListener(wrap) {
       'Total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
-    var tag1 = col_label[wrap.county];
+    var tag1 = col_label[wrap.col_ind];
     
     name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
@@ -387,7 +366,7 @@ function LCPC_Main(wrap) {
   wrap.id = '#' + wrap.tag;
 
   //-- Swap active to current value
-  wrap.county = document.getElementById(wrap.tag + "_county").value;
+  wrap.col_ind = document.getElementById(wrap.tag + "_county").value;
   
   //-- Load
   LCPC_InitFig(wrap);

@@ -37,7 +37,6 @@ function VR_FormatData(wrap, data) {
   //-- Variables for xtick
   var q = data.length % wrap.xlabel_path;
   var r = wrap.r_list[q];
-  var xtick = [];
   var xticklabel = [];
   
   //-- Variables for data
@@ -60,10 +59,8 @@ function VR_FormatData(wrap, data) {
     x_list.push(x);
     
     //-- Determine whether to have xtick
-    if (i % wrap.xlabel_path == r) {
-      xtick.push(i+0.5)
+    if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
-    }
     
     //-- Loop over column
     for (j=0; j<nb_col; j++) {
@@ -142,7 +139,6 @@ function VR_FormatData(wrap, data) {
   wrap.col_tag_list = col_tag_list;
   wrap.nb_col = nb_col;
   wrap.x_list = x_list;
-  wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
@@ -179,11 +175,11 @@ function VR_MouseMove(wrap, d) {
 }
 
 function VR_Plot(wrap) {
-  //-- Plot x
-  GP_PlotDateAsX(wrap);
+  //-- x = bottom, y = left
+  GP_PlotBottomLeft(wrap);
   
-  //-- Plot y
-  GP_PlotLinearY(wrap);
+  //-- Add ylabel
+  GP_PlotYLabel(wrap);
   
   //-- Add tooltip
   GP_MakeTooltip(wrap);
@@ -191,11 +187,17 @@ function VR_Plot(wrap) {
   //-- Define color
   var color_list = GP_wrap.c_list.slice(3, 3+wrap.nb_col);
   
+  //-- Define xscale
+  var xscale = GP_MakeBandXForBar(wrap);
+  
+  //-- Define yscale
+  var yscale = GP_MakeLinearY(wrap);
+  
   //-- Define dummy line
   var draw_line = d3.line()
     .defined(d => !isNaN(d.y))//-- Don't show line if NaN
-    .x(function (d) {return wrap.xscale(d.x);})
-    .y(wrap.yscale(0));
+    .x(function (d) {return xscale(d.x);})
+    .y(yscale(0));
     
   //-- Add line
   var line = wrap.svg.selectAll('.content.line')
@@ -223,8 +225,8 @@ function VR_Plot(wrap) {
       .enter()
       .append('circle')
       .attr('class', 'content dot')
-        .attr('cx', function (d) {return wrap.xscale(d.x);})
-        .attr('cy', wrap.yscale(0))
+        .attr('cx', function (d) {return xscale(d.x);})
+        .attr('cy', yscale(0))
         .attr('r', 0)
           .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
           .on('mousemove', function (d) {VR_MouseMove(wrap, d);})
@@ -240,11 +242,17 @@ function VR_Plot(wrap) {
 }
 
 function VR_Replot(wrap) {
-  //-- Replot x
+  //-- Replot xaxis
   GP_ReplotDateAsX(wrap);
   
-  //-- Define yaxis for ytick
-  var yaxis = d3.axisLeft(wrap.yscale)
+  //-- Define xscale
+  var xscale = GP_MakeBandXForBar(wrap);
+  
+  //-- Define yscale
+  var yscale = GP_MakeLinearY(wrap);
+  
+  //-- Define yaxis
+  var yaxis = d3.axisLeft(yscale)
     .tickSize(-wrap.width)
     .tickValues(wrap.ytick)
     .tickFormat(d3.format('.1%'));
@@ -255,18 +263,15 @@ function VR_Replot(wrap) {
     .duration(wrap.trans_delay)
     .call(yaxis);
   
-  //-- Define ylabel
-  var ylabel_dict = {en: 'Rate', fr: 'Taux', 'zh-tw': '比率'};
-  
   //-- Update ylabel
-  wrap.svg.select('.ylabel')
-    .text(ylabel_dict[LS_lang]);
-    
+  var ylabel_dict = {en: 'Rate', fr: 'Taux', 'zh-tw': '比率'};
+  GP_ReplotYLabel(wrap, ylabel_dict);
+  
   //-- Define line
   var draw_line = d3.line()
     .defined(d => !isNaN(d.y))//-- Don't show line if NaN
-    .x(function (d) {return wrap.xscale(d.x);})
-    .y(function (d) {return wrap.yscale(d.y);});
+    .x(function (d) {return xscale(d.x);})
+    .y(function (d) {return yscale(d.y);});
   
   //-- Update line
   wrap.line.selectAll('.content.line')
@@ -282,7 +287,7 @@ function VR_Replot(wrap) {
       .data(wrap.formatted_data[i])
       .transition()
       .duration(wrap.trans_delay)
-        .attr('cy', function (d) {return wrap.yscale(d.y);})
+        .attr('cy', function (d) {return yscale(d.y);})
         .attr('r', function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
   }
 

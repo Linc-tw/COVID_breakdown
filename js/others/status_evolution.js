@@ -27,7 +27,6 @@ function SE_FormatData(wrap, data) {
   //-- Variables for xtick
   var q = data.length % wrap.xlabel_path;
   var r = wrap.r_list[q];
-  var xtick = [];
   var xticklabel = [];
   
   //-- Variables for data
@@ -53,10 +52,8 @@ function SE_FormatData(wrap, data) {
     x_list.push(x);
     
     //-- Determine whether to have xtick
-    if (i % wrap.xlabel_path == r) {
-      xtick.push(i+0.5)
+    if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
-    }
     
     //-- Loop over column
     for (j=0; j<nb_col; j++)
@@ -73,7 +70,7 @@ function SE_FormatData(wrap, data) {
         'y0': y,
         'y1': y+h,
         'h_list': h_list.slice(),
-        'col': col_tag_list[j]
+        'col_ind': j
       };
       
       //-- Update total height
@@ -113,7 +110,6 @@ function SE_FormatData(wrap, data) {
   wrap.col_tag_list = col_tag_list;
   wrap.nb_col = nb_col;
   wrap.x_list = x_list;
-  wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
@@ -161,65 +157,40 @@ function SE_MouseMove(wrap, d) {
 }
 
 function SE_Plot(wrap) {
-  //-- Plot x
-  GP_PlotDateAsX(wrap);
+  //-- x = bottom, y = left
+  GP_PlotBottomLeft(wrap);
   
-  //-- Plot y
-  GP_PlotLinearY(wrap);
+  //-- Add ylabel
+  GP_PlotYLabel(wrap);
   
   //-- Add tooltip
   GP_MakeTooltip(wrap);
   
   //-- Define color
   var color_list = GP_wrap.c_list.slice(0, wrap.nb_col);
-  var color = d3.scaleOrdinal()
-    .domain(wrap.col_tag_list)
-    .range(color_list);
   
-  //-- Add bar
-  var bar = wrap.svg.selectAll('.content.bar')
-    .data(wrap.formatted_data)
-    .enter();
-  
-  //-- Update bar with dummy details
-  bar.append('rect')
-    .attr('class', 'content bar')
-    .attr('fill', function (d) {return color(d.col);})
-    .attr('x', function (d) {return wrap.xscale(d.x);})
-    .attr('y', wrap.yscale(0))
-    .attr('width', wrap.xscale.bandwidth())
-    .attr('height', 0)
-      .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
-      .on('mousemove', function (d) {SE_MouseMove(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
-
   //-- Save to wrapper
+  wrap.mouse_move = SE_MouseMove;
   wrap.color_list = color_list;
-  wrap.bar = bar;
+  
+  //-- Plot bar
+  GP_PlotMultipleBar(wrap);
 }
 
 function SE_Replot(wrap) {
-  //-- Replot x
+  //-- Replot xaxis
   GP_ReplotDateAsX(wrap);
   
-  //-- Replot y
+  //-- Replot yaxis
   GP_ReplotCountAsY(wrap);
   
-  //-- Define ylabel
+  //-- Replot ylabel
   var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
+  GP_ReplotYLabel(wrap, ylabel_dict);
   
-  //-- Update ylabel
-  wrap.svg.select(".ylabel")
-    .text(ylabel_dict[LS_lang]);
-    
-  //-- Update bar
-  wrap.bar.selectAll('.content.bar')
-    .data(wrap.formatted_data)
-    .transition()
-    .duration(wrap.trans_delay)
-      .attr('y', function (d) {return wrap.yscale(d.y1);})
-      .attr('height', function (d) {return wrap.yscale(d.y0)-wrap.yscale(d.y1);});
-    
+  //-- Replot bar
+  GP_ReplotMultipleBar(wrap);
+  
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   

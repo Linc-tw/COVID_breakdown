@@ -47,6 +47,7 @@ function DBT_ResetText() {
 
 function DBT_FormatData(wrap, data) {
   //-- Variables for xtick
+  var x_key = 'difference';
   var xlabel_path = 3; //-- Hard-coded
   var r = 0;
   var xtick = [];
@@ -67,7 +68,7 @@ function DBT_FormatData(wrap, data) {
   //-- Loop over row
   for (i=0; i<31; i++) { //-- Was data.length; now hard-coded to 31 (days)
     row = data[i];
-    x = row['difference'];
+    x = row[x_key];
     y = +row[col_tag];
     x_list.push(x);
     
@@ -125,6 +126,7 @@ function DBT_FormatData(wrap, data) {
   wrap.col_tag_list = col_tag_list;
   wrap.col_tag = col_tag;
   wrap.nb_col = nb_col;
+  wrap.x_key = x_key;
   wrap.x_list = x_list;
   wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
@@ -180,77 +182,50 @@ function DBT_MouseMove(wrap, d) {
 }
 
 function DBT_Plot(wrap) {
-  //-- Plot x
-  GP_PlotBandX(wrap);
+  //-- x = bottom, y = left
+  GP_PlotBottomLeft(wrap);
   
-  //-- Plot y
-  GP_PlotLinearY(wrap);
+  //-- Add xlabel
+  GP_PlotXLabel(wrap);
+  
+  //-- Add ylabel
+  GP_PlotYLabel(wrap);
     
   //-- Make tooltip
   GP_MakeTooltip(wrap);
   
   //-- Define color
   var color_list = [GP_wrap.c_list[8], GP_wrap.c_list[0], GP_wrap.c_list[1], GP_wrap.c_list[3], GP_wrap.gray, '#000000']; 
-  var color = d3.scaleOrdinal()
-    .domain(wrap.col_tag_list)
-    .range(color_list);
-  
-  //-- Add bar
-  var bar = wrap.svg.selectAll('.content.bar')
-    .data(wrap.formatted_data)
-    .enter();
-  
-  //-- Update bar with dummy details
-  bar.append('rect')
-    .attr('class', 'content bar')
-    .attr('fill', color(wrap.col_tag))
-    .attr('x', function (d) {return wrap.xscale(d.difference);})
-    .attr('y', wrap.yscale(0))
-    .attr('width', wrap.xscale.bandwidth())
-    .attr('height', 0)
-      .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
-      .on('mousemove', function (d) {DBT_MouseMove(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
 
   //-- Save to wrapper
+  wrap.mouse_move = DBT_MouseMove;
   wrap.color_list = color_list;
-  wrap.color = color;
-  wrap.bar = bar;
+  
+  //-- Plot bar
+  GP_PlotSingleBar(wrap);
 }
 
 function DBT_Replot(wrap) {
-  //-- Replot x
+  //-- Update xaxis
   GP_ReplotBandX(wrap);
   
-  //-- Replot y
+  //-- Update yaxis
   GP_ReplotCountAsY(wrap);
   
-  //-- Define xlabel
+  //-- Update xlabel
   var xlabel_dict = {
     en: 'Delay in number of days before identifying a transmission', 
     fr: "Délai en nombre de jours avant d'identifier une transmission", 
     'zh-tw': '發病或入境後到確診所需天數'
   };
-  
-  //-- Update xlabel
-  wrap.svg.select(".xlabel")
-    .text(xlabel_dict[LS_lang]);
+  GP_ReplotXLabel(wrap, xlabel_dict);
     
-  //-- Define ylabel
-  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
-  
   //-- Update ylabel
-  wrap.svg.select('.ylabel')
-    .text(ylabel_dict[LS_lang]);
+  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
+  GP_ReplotYLabel(wrap, ylabel_dict);
     
   //-- Update bar
-  wrap.bar.selectAll('.content.bar')
-    .data(wrap.formatted_data)
-    .transition()
-    .duration(wrap.trans_delay)
-      .attr('fill', wrap.color(wrap.col_tag))
-      .attr('y', function (d) {return wrap.yscale(d[wrap.col_tag]);})
-      .attr('height', function (d) {return wrap.yscale(0)-wrap.yscale(d[wrap.col_tag]);});
+  GP_ReplotSingleBar(wrap);
   
   //-- Define legend position
   var legend_pos = {x: 470, y: 45, dx: 12, dy: 30};
