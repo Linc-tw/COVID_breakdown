@@ -248,9 +248,9 @@ function VBB_Replot(wrap) {
   //-- Define legend label
   var legend_label = ['AstraZeneca', 'Moderna'];
   if (LS_lang == 'zh-tw')
-    legend_label.push('合計 '+LS_GetYearLabel(wrap));
+    legend_label.push('合計');
   else
-    legend_label.push('Total '+LS_GetYearLabel(wrap));
+    legend_label.push('Total');
   
   //-- Remove from legend if value = 0
   var i;
@@ -262,6 +262,11 @@ function VBB_Replot(wrap) {
     }
   }
   
+  //-- Update legend title
+  legend_color.splice(0, 0, '#000000');
+  legend_value.splice(0, 0, '');
+  legend_label.splice(0, 0, LS_GetLegendTitle(wrap));
+  
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
     .remove()
@@ -272,9 +277,9 @@ function VBB_Replot(wrap) {
       .attr('class', 'legend value')
       .attr('x', legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
       .attr('text-anchor', 'end')
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;});
       
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')
@@ -286,9 +291,10 @@ function VBB_Replot(wrap) {
       .attr('class', 'legend label')
       .attr('x', legend_pos.x+legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
       .attr('text-anchor', 'start')
+      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;});
 }
 
 //-- Load

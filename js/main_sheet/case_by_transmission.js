@@ -165,7 +165,7 @@ function CBT_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw')
-    col_label_list = ['境外移入', '本土已知', '本土未知', '敦睦艦隊', '航空器', '未知']
+    col_label_list = ['境外移入', '本土已知', '本土未知', '船艦', '航空器', '未知']
   else if (LS_lang == 'fr')
     col_label_list = ['Importés', 'Locaux connus', 'Locaux inconnus', 'En bateau', 'En avion', 'Inconnus']
   else
@@ -242,17 +242,11 @@ function CBT_Replot(wrap) {
   GP_ReplotAvgLine(wrap);
   
   //-- Define legend position
-  var legend_pos = {x: 70, y: 45, dx: 12, dy: 30, x1: 240};
-  if (wrap.cumul == 0) {
-    if (wrap.legend_pos_x_0_i_[LS_lang] != 0)
-      legend_pos.x = wrap.legend_pos_x_0_i_[LS_lang];
-  }
-  else {
-    if (wrap.legend_pos_x_1_i_[LS_lang] != 0)
-      legend_pos.x = wrap.legend_pos_x_1_i_[LS_lang];
-  }
-  if (wrap.legend_pos_x1_[LS_lang] != 0)
-    legend_pos.x1 = wrap.legend_pos_x1_[LS_lang];
+  var legend_pos;
+  if (wrap.cumul == 0)
+    legend_pos = {x: wrap.legend_pos_x_0_i_[LS_lang], y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_0_i_[LS_lang]};
+  else
+    legend_pos = {x: wrap.legend_pos_x_1_i_[LS_lang], y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_1_i_[LS_lang]};
   
   //-- Define legend color
   var legend_color = wrap.color_list.slice();
@@ -262,23 +256,25 @@ function CBT_Replot(wrap) {
   
   //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
-  var sum = legend_value.reduce((a, b) => a + b, 0);
-  if (wrap.onset == 1)
+  var sum;
+  if (wrap.onset == 1) {
+    sum = wrap.legend_value.reduce((a, b) => a + b, 0);
     legend_value.push(wrap.n_tot-sum);
+  }
   legend_value.push(wrap.n_tot);
   
   //-- Define legend label
   var legend_label, legend_label_plus;
   if (LS_lang == 'zh-tw') {
-    legend_label = ['境外移入', '本土感染源已知', '本土感染源未知', '敦睦艦隊', '航空器', '未知', '合計 '+LS_GetYearLabel(wrap)];
+    legend_label = ['境外移入', '本土感染源已知', '本土感染源未知', '船艦', '航空器', '未知', '合計'];
     legend_label_plus = '無發病日資料';
   }
   else if (LS_lang == 'fr') {
-    legend_label = ['Importés', 'Locaux & lien connu', 'Locaux & lien inconnu', 'En bateau', 'En avion', 'Inconnus', 'Total '+LS_GetYearLabel(wrap)];
-    legend_label_plus = 'Sans date début sympt.';
+    legend_label = ['Importés', 'Locaux & lien connu', 'Locaux & lien inconnu', 'En bateau', 'En avion', 'Inconnus', 'Total'];
+    legend_label_plus = 'Sans date sympt.';
   }
   else {
-    legend_label = ['Imported', 'Local & linked', 'Local & unlinked', 'On boat', 'On plane', 'Unknown', 'Total '+LS_GetYearLabel(wrap)];
+    legend_label = ['Imported', 'Local & linked', 'Local & unlinked', 'On boat', 'On plane', 'Unknown', 'Total'];
     legend_label_plus = 'No onset date';
   }
   if (wrap.onset == 1)
@@ -294,6 +290,12 @@ function CBT_Replot(wrap) {
     }
   }
   
+  //-- Update legend title
+  legend_color.splice(0, 0, '#000000');
+  legend_value.splice(0, 0, '');
+  legend_label.splice(0, 0, LS_GetLegendTitle(wrap));
+  var legend_length = legend_color.length;
+  
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
     .remove()
@@ -302,11 +304,12 @@ function CBT_Replot(wrap) {
     .enter()
     .append('text')
       .attr('class', 'legend value')
-      .attr('x', function (d, i) {return legend_pos.x + Math.floor(i/5)*legend_pos.x1;})
-      .attr('y', function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
+      .attr('x', function (d, i) {return GP_GetLegendXPos(legend_pos, legend_length, i);})
+      .attr('y', function (d, i) {return GP_GetLegendYPos(legend_pos, legend_length, i);})
+      .attr('text-anchor', 'end')
       .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
-      .attr('text-anchor', 'end');
+      .style('font-size', '1.2rem')
+      .text(function (d) {return d;});
   
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')
@@ -316,11 +319,13 @@ function CBT_Replot(wrap) {
     .enter()
     .append('text')
       .attr('class', 'legend label')
-      .attr('x', function (d, i) {return legend_pos.x + legend_pos.dx + Math.floor(i/5)*legend_pos.x1;})
-      .attr('y', function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
+      .attr('x', function (d, i) {return GP_GetLegendXPos(legend_pos, legend_length, i) + legend_pos.dx;})
+      .attr('y', function (d, i) {return GP_GetLegendYPos(legend_pos, legend_length, i);})
+      .attr('text-anchor', 'start')
+      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
       .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
-      .attr('text-anchor', 'start');
+      .style('font-size', '1.2rem')
+      .text(function (d) {return d;});
 }
 
 //-- Load

@@ -353,12 +353,14 @@ DELIVERY_LIST = [
   ## brand, source, quantity, delivery_date, available_date, delivery_news, available_news
   ['AZ', 'AZ', 117000, '2021-03-03', '2021-03-22', 'https://www.cna.com.tw/news/firstnews/202103035003.aspx', 'https://www.cna.com.tw/news/firstnews/202103225002.aspx'],
   ['AZ', 'COVAX', 199200, '2021-04-04', '2021-04-13', 'https://www.cna.com.tw/news/firstnews/202104040008.aspx', 'https://www.cna.com.tw/news/firstnews/202104120047.aspx'],
-  ['AZ', 'COVAX', 410400, '2021-05-19', '2021-05-27', 'https://www.cna.com.tw/news/firstnews/202105190224.aspx', 'https://www.cna.com.tw/news/ahel/202105260298.aspx'],
-  ['Moderna', 'Moderna', 150000, '2021-05-28', '2021-06-09', 'https://www.cna.com.tw/news/firstnews/202105285010.aspx', 'https://www.cna.com.tw/news/firstnews/202106080367.aspx'],
-  ['AZ', 'Japan', 1240000, '2021-06-04', '2021-06-12', 'https://www.cna.com.tw/news/firstnews/202106045008.aspx', 'https://www.cna.com.tw/news/firstnews/202106115014.aspx'],
-  ['Moderna', 'Moderna', 239400, '2021-06-18', '2021-06-26', 'https://www.cna.com.tw/news/firstnews/202106180294.aspx', 'https://www.cna.com.tw/news/firstnews/202106250255.aspx'],
-  ['Moderna', 'USA', 2500000, '2021-06-20', '2021-07-01', 'https://www.cna.com.tw/news/firstnews/202106205005.aspx', 'https://www.cna.com.tw/news/firstnews/202106250056.aspx'],
-  ['Moderna', 'Moderna', 410400, '2021-06-30', None, 'https://www.cna.com.tw/news/firstnews/202106305007.aspx', ''],
+  ['AZ', 'COVAX', 409800, '2021-05-19', '2021-05-27', 'https://www.cna.com.tw/news/firstnews/202105190224.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600326'],
+  ['Moderna', 'Moderna', 148800, '2021-05-28', '2021-06-08', 'https://www.cna.com.tw/news/firstnews/202105285010.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600375'],
+  ['AZ', 'Japan', 1237860, '2021-06-04', '2021-06-12', 'https://www.cna.com.tw/news/firstnews/202106045008.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600389'],
+  ['Moderna', 'Moderna', 239400, '2021-06-18', '2021-06-26', 'https://www.cna.com.tw/news/firstnews/202106180294.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600409'],
+  ['Moderna', 'USA', 2498440, '2021-06-20', '2021-06-29', 'https://www.cna.com.tw/news/firstnews/202106205005.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600416'],
+  ['Moderna', 'Moderna', 409800, '2021-06-30', '2021-07-08', 'https://www.cna.com.tw/news/firstnews/202106305007.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600434'],
+  ['AZ', 'AZ', 625900, '2021-07-07', '', 'https://www.cna.com.tw/news/firstnews/202107070181.aspx', ''],
+  #['AZ', 'Japan', 1130000, '2021-07-08', '', '', ''],
 ]
 
 ################################################################################
@@ -1223,7 +1225,7 @@ class MainSheet(Template):
         '洗腎診所', '豐原家庭', '立揚鞋業', 
         'B醫療機構', '銀河百家樂', '維納斯會館', '羅東遊藝場', '串門子餐廳', '彰化麻將團', 
         '中國醫K歌團', '小姑娘小吃店', '快樂城小吃店', '桃園觀音工地', '台北農產公司', 
-        '東方紅時尚會館', '梧棲區藥局家族', '加強型防疫旅館', '鳳山早餐店家族', '國軍桃園總醫院', '台北家禽批發場', 
+        '東方紅時尚會館', '梧棲區藥局家族', '加強型防疫旅館', '鳳山早餐店家族', '國軍桃園總醫院', '桃園國軍總醫院', '台北家禽批發場', 
         '南澳雜貨店傳播鏈', '復興區公所員工家族案關係圖', 
       ]:
         link_list.append('linked')

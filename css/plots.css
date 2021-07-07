@@ -48,10 +48,10 @@ body,
 .legend,
 .xaxis text,
 .yaxis text {
-  font-size: 1.15rem;
+  font-size: 1.3rem;
 }
 .content.text {
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 @media (min-width: 20px) {
@@ -60,7 +60,7 @@ body,
   .legend,
   .xaxis text,
   .yaxis text {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
   .content.text {
     font-size: 1rem;
@@ -74,6 +74,9 @@ body,
   .yaxis text {
     font-size: 1.3rem;
   }
+  .content.text {
+    font-size: 1rem;
+  }
 }
 @media (min-width: 768px) {
   .xlabel,
@@ -81,7 +84,7 @@ body,
   .legend,
   .xaxis text,
   .yaxis text {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
   .content.text {
     font-size: 0.9rem;
@@ -95,6 +98,9 @@ body,
   .xaxis text,
   .yaxis text {
     font-size: 1.2rem;
+  }
+  .content.text {
+    font-size: 0.9rem;
   }
 }
 /* 1 col <=> 2 col */
@@ -119,7 +125,7 @@ body,
     font-size: 1.3rem;
   }
   .content.text {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 }
 

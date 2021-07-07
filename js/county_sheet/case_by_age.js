@@ -310,11 +310,11 @@ function CBA_Replot(wrap) {
   var i, label_list;
   if (wrap.tag.includes('latest')) {
     if (LS_lang == 'zh-tw')
-      label_list = ['合計 '+LS_GetYearLabel(wrap), '', '到', '天前之確診個案'];
+      label_list = ['合計', '', '到', '天前之確診個案'];
     else if (LS_lang == 'fr')
-      label_list = ['Total '+LS_GetYearLabel(wrap), '', ' & ', ' jours plus tôt'];
+      label_list = ['Total', '', ' & ', ' jours plus tôt'];
     else 
-      label_list = ['Total '+LS_GetYearLabel(wrap), 'Between ', ' & ', ' days ago'];
+      label_list = ['Total', 'Between ', ' & ', ' days ago'];
     
     legend_label = [label_list[0]];
     for (i=1; i<wrap.nb_col; i++)
@@ -322,11 +322,11 @@ function CBA_Replot(wrap) {
   }
   else {
     if (LS_lang == 'zh-tw')
-      legend_label = ['合計 '+LS_GetYearLabel(wrap), '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+      legend_label = ['合計', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
     else if (LS_lang == 'fr')
-      legend_label = ['Total '+LS_GetYearLabel(wrap), 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+      legend_label = ['Total', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
     else
-      legend_label = ['Total '+LS_GetYearLabel(wrap), 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      legend_label = ['Total', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   }
   
   //-- Update legend color, value, & label
@@ -342,6 +342,11 @@ function CBA_Replot(wrap) {
   legend_value_2.push(wrap.legend_value[0]);
   legend_label_2.push(legend_label[0]);
   
+  //-- Update legend title
+  legend_color.splice(0, 0, '#000000');
+  legend_value_2.splice(0, 0, '');
+  legend_label_2.splice(0, 0, LS_GetLegendTitle(wrap));
+  
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
     .remove()
@@ -352,9 +357,9 @@ function CBA_Replot(wrap) {
       .attr('class', 'legend value')
       .attr('x', legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
       .attr('text-anchor', 'end')
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;});
     
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')
@@ -366,9 +371,10 @@ function CBA_Replot(wrap) {
       .attr('class', 'legend label')
       .attr('x', legend_pos.x+legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
       .attr('text-anchor', 'start')
+      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;});
 }
 
 //-- Load

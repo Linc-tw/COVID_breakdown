@@ -243,17 +243,12 @@ function CBD_Replot(wrap) {
   GP_ReplotAvgLine(wrap);
   
   //-- Define legend position
-  var legend_pos = {x: 70, y: 40, dx: 10, dy: 27, x1: 190};
-  if (wrap.cumul == 0) {
-    if (wrap.legend_pos_x_0_i_[LS_lang] != 0)
-      legend_pos.x = wrap.legend_pos_x_0_i_[LS_lang];
-  }
-  else {
-    if (wrap.legend_pos_x_1_i_[LS_lang] != 0)
-      legend_pos.x = wrap.legend_pos_x_1_i_[LS_lang];
-  }
-  if (wrap.legend_pos_x1_[LS_lang] != 0)
-    legend_pos.x1 = wrap.legend_pos_x1_[LS_lang];
+  //-- Define legend position
+  var legend_pos;
+  if (wrap.cumul == 0)
+    legend_pos = {x: wrap.legend_pos_x_0_i_[LS_lang], y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_0_i_[LS_lang]};
+  else
+    legend_pos = {x: wrap.legend_pos_x_1_i_[LS_lang], y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_1_i_[LS_lang]};
   
   //-- Define legend color
   var legend_color = wrap.color_list.slice();
@@ -263,23 +258,25 @@ function CBD_Replot(wrap) {
   
   //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
-  var sum = legend_value.reduce((a, b) => a + b, 0);
-  if (wrap.onset == 1)
+  var sum;
+  if (wrap.onset == 1) {
+    sum = wrap.legend_value.reduce((a, b) => a + b, 0);
     legend_value.push(wrap.n_tot-sum);
+  }
   legend_value.push(wrap.n_tot);
   
   //-- Define legend label
   var legend_label, legend_label_plus;
   if (LS_lang == 'zh-tw') {
-    legend_label = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自費或自行就醫', '外國檢驗', '無檢驗管道資料', '合計 '+LS_GetYearLabel(wrap)];
+    legend_label = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自費或自行就醫', '外國檢驗', '無檢驗管道資料', '合計'];
     legend_label_plus = '無發病日資料';
   }
   else if (LS_lang == 'fr') {
-    legend_label = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', "À l'étranger", 'Pas annoncés', 'Total '+LS_GetYearLabel(wrap)];
-    legend_label_plus = 'Sans date début sympt.';
+    legend_label = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', "À l'étranger", 'Pas annoncés', 'Total'];
+    legend_label_plus = 'Sans date sympt.';
   }
   else {
-    legend_label = ['Airports', 'Quarantine', 'Isolation', 'Monitoring', 'Hospitals', 'Overseas', 'Not announced', 'Total '+LS_GetYearLabel(wrap)];
+    legend_label = ['Airports', 'Quarantine', 'Isolation', 'Monitoring', 'Hospitals', 'Overseas', 'Not announced', 'Total'];
     legend_label_plus = 'No onset date';
   }
   if (wrap.onset == 1)
@@ -288,12 +285,18 @@ function CBD_Replot(wrap) {
   //-- Remove from legend if value = 0
   var i;
   for (i=legend_value.length-1; i>=0; i--) {
-    if (0 == legend_value[i]) {
+    if (0 === legend_value[i]) {
       legend_color.splice(i, 1);
       legend_value.splice(i, 1);
       legend_label.splice(i, 1);
     }
   }
+  
+  //-- Update legend title
+  legend_color.splice(0, 0, '#000000');
+  legend_value.splice(0, 0, '');
+  legend_label.splice(0, 0, LS_GetLegendTitle(wrap));
+  var legend_length = legend_color.length;
   
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
@@ -303,12 +306,12 @@ function CBD_Replot(wrap) {
     .enter()
     .append('text')
       .attr('class', 'legend value')
-      .attr('x', function (d, i) {return legend_pos.x + Math.floor(i/5)*legend_pos.x1;})
-      .attr('y', function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
-      .style('font-size', '20px')
+      .attr('x', function (d, i) {return GP_GetLegendXPos(legend_pos, legend_length, i);})
+      .attr('y', function (d, i) {return GP_GetLegendYPos(legend_pos, legend_length, i);})
       .attr('text-anchor', 'end')
+      .style('fill', function (d, i) {return legend_color[i];})
+      .style('font-size', '1.2rem')
+      .text(function (d) {return d;});
   
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')
@@ -318,12 +321,13 @@ function CBD_Replot(wrap) {
     .enter()
     .append('text')
       .attr('class', 'legend label')
-      .attr('x', function (d, i) {return legend_pos.x + legend_pos.dx + Math.floor(i/5)*legend_pos.x1;})
-      .attr('y', function (d, i) {return legend_pos.y + (i%5)*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
-      .style('font-size', '20px')
+      .attr('x', function (d, i) {return GP_GetLegendXPos(legend_pos, legend_length, i) + legend_pos.dx;})
+      .attr('y', function (d, i) {return GP_GetLegendYPos(legend_pos, legend_length, i);})
       .attr('text-anchor', 'start')
+      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
+      .style('fill', function (d, i) {return legend_color[i];})
+      .style('font-size', '1.2rem')
+      .text(function (d) {return d;});
 }
 
 //-- Load

@@ -8,8 +8,10 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//Legend caption/title
+//Last available value => make fct
+//IEBC & IEBA week line
 //VP: donation legend
+//VP: projection
 //Note with "Collapse"
 
 //------------------------------------------------------------------------------
@@ -364,7 +366,6 @@ function GP_ReplotTileX(wrap) {
     .call(xaxis)
     .selectAll('text')
       .attr('transform', 'translate(8,-5) rotate(-90)')
-      .style('font-size', '20px')
       .style('text-anchor', 'start');
       
   //-- Save to wrapper
@@ -423,8 +424,7 @@ function GP_ReplotTileY(wrap) {
     .duration(wrap.trans_delay)
     .call(yaxis)
     .selectAll('text')
-      .attr('transform', 'translate(-3,0)')
-      .style('font-size', '20px');
+      .attr('transform', 'translate(-3,0)');
       
   //-- Save to wrapper
   wrap.yscale_tick = yscale;
@@ -437,7 +437,7 @@ function GP_ReplotYLabel(wrap, ylabel_dict) {
 }
 
 //------------------------------------------------------------------------------
-//-- Function declarations - plotting charts
+//-- Function declarations - charts
 
 function GP_PlotMultipleBar(wrap) {
   //-- Define xscale
@@ -454,11 +454,11 @@ function GP_PlotMultipleBar(wrap) {
   //-- Update bar with dummy details
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', function (d) {return wrap.color_list[d.col_ind];})
     .attr('x', function (d) {return xscale(d.x);})
     .attr('y', yscale(0))
     .attr('width', xscale.bandwidth())
     .attr('height', 0)
+    .attr('fill', function (d) {return wrap.color_list[d.col_ind];})
       .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
       .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
       .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
@@ -495,11 +495,11 @@ function GP_PlotSingleBar(wrap) {
   //-- Update bar with dummy details
   bar.append('rect')
     .attr('class', 'content bar')
-    .attr('fill', wrap.color_list[wrap.col_ind])
     .attr('x', function (d) {return xscale(d[wrap.x_key]);})
     .attr('y', yscale(0))
     .attr('width', xscale.bandwidth())
     .attr('height', 0)
+    .attr('fill', wrap.color_list[wrap.col_ind])
       .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
       .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
       .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
@@ -517,9 +517,9 @@ function GP_ReplotSingleBar(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(wrap.trans_delay)
-      .attr('fill', wrap.color_list[wrap.col_ind])
       .attr('y', function (d) {return yscale(d[wrap.col_tag]);})
-      .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);});
+      .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);})
+      .attr('fill', wrap.color_list[wrap.col_ind]);
 }
   
 function GP_PlotAvgLine(wrap) {
@@ -544,9 +544,9 @@ function GP_PlotAvgLine(wrap) {
   line.append('path')
     .attr('class', 'content line')
     .attr('d', function (d) {return draw_line_0(d);})
+    .style('fill', 'none')
     .style('stroke', GP_wrap.gray)
-    .style('stroke-width', '2.5px')
-    .style('fill', 'none');
+    .style('stroke-width', '2.5px');
     
   //-- Save to wrapper
   wrap.draw_line_0 = draw_line_0;
@@ -609,10 +609,10 @@ function GP_PlotCorr(wrap) {
       .attr('class', 'content text')
       .attr('x', function (d) {return xscale(d[wrap.x_key]) + 0.5*+xscale.bandwidth();})
       .attr('y', function (d) {return yscale(d[wrap.y_key]) + 0.5*+yscale.bandwidth();})
-      .style('fill', function (d) {if (Math.abs(+d.corr)<0.205) return '#000000'; return '#FFFFFF';})
-      .text(function (d) {return '';})
       .attr('text-anchor', 'middle')
-      .attr('dominant-baseline', 'central');
+      .attr('dominant-baseline', 'central')
+      .style('fill', function (d) {if (Math.abs(+d.corr)<0.205) return '#000000'; return '#FFFFFF';})
+      .text(function (d) {return '';});
 }
 
 function GP_ReplotCorr(wrap) {
@@ -638,10 +638,10 @@ function GP_ReplotCorr(wrap) {
       .attr('class', 'content text')
       .attr('x', function (d) {return xscale(d[wrap.x_key]) + 0.5*+xscale.bandwidth();})
       .attr('y', function (d) {return yscale(d[wrap.y_key]) + 0.5*+yscale.bandwidth();})
-      .style('fill', function (d) {if (Math.abs(+d.corr)<0.205) return '#000000'; return '#FFFFFF';})
-      .text(function (d) {if (wrap.count > 0) return d.count; return (+d.corr*100).toFixed(0)+'%';})
       .attr('text-anchor', 'middle')
-      .attr('dominant-baseline', 'central');
+      .attr('dominant-baseline', 'central')
+      .style('fill', function (d) {if (Math.abs(+d.corr)<0.205) return '#000000'; return '#FFFFFF';})
+      .text(function (d) {if (wrap.count > 0) return d.count; return (+d.corr*100).toFixed(0)+'%';});
 }
 
 function GP_PlotHotMap(wrap) {
@@ -675,11 +675,11 @@ function GP_PlotHotMap(wrap) {
       .attr('class', 'content text')
       .attr('x', function (d) {return xscale(d.x) + 0.5*+xscale.bandwidth();})
       .attr('y', function (d) {return yscale(d.y) + 0.5*+yscale.bandwidth();})
-      .style('fill', function (d) {if (d.value<0.5*wrap.value_max) return '#000000'; return '#FFFFFF';})
-      .text(function (d) {if (d.value<0.5001) return ''; return d.value.toFixed(0);})
-      .style('font-size', '13px')
       .attr('text-anchor', 'middle')
-      .attr('dominant-baseline', 'central');
+      .attr('dominant-baseline', 'central')
+      .style('fill', function (d) {if (d.value<0.5*wrap.value_max) return '#000000'; return '#FFFFFF';})
+      .style('font-size', '0.9rem')
+      .text(function (d) {if (d.value<0.5001) return ''; return d.value.toFixed(0);});
 }
 
 function GP_ReplotHotMap(wrap) {
@@ -688,6 +688,23 @@ function GP_ReplotHotMap(wrap) {
     .transition()
     .duration(wrap.trans_delay)
       .style('fill', function (d) {return wrap.color(d.value);});
+}
+
+//------------------------------------------------------------------------------
+//-- Function declarations - legend
+
+function GP_GetLegendXPos(legend_pos, legend_length, i) {
+  if (legend_length <= 4 || 2*i < legend_length)
+    return legend_pos.x;
+  
+  return legend_pos.x + legend_pos.x1;
+}
+
+function GP_GetLegendYPos(legend_pos, legend_length, i) {
+  if (legend_length <= 4 || 2*i < legend_length)
+    return legend_pos.y + i*legend_pos.dy;
+  
+  return legend_pos.y + (i-Math.floor(legend_length/2))*legend_pos.dy;
 }
 
 //------------------------------------------------------------------------------

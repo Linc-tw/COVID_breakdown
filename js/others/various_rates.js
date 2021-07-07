@@ -296,31 +296,44 @@ function VR_Replot(wrap) {
   
   //-- Define legend color
   var legend_color = wrap.color_list.slice();
-  legend_color.push('#000000');
+  
+  //-- Define legend value
+  var legend_value = wrap.legend_value.slice();
       
   //-- Define legend label
-  var legend_label;
-  if (LS_lang == 'zh-tw')
-    legend_label = ['陽性率', '入境盛行率（逐月更新）', '本土盛行率（乘以1000）', '致死率', '最新數據'];
-  else if (LS_lang == 'fr')
-    legend_label = ['Taux de positivité', "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local (multiplié par 1000)", 'Taux de létalité', 'Dernier taux disponible'];
-  else
-    legend_label = ['Positive rate', 'Arrival incidence (updated monthly)', 'Local incidence (multiplied by 1000)', 'Fatality rate', 'Last available value'];
+  var legend_label, legend_title;
+  if (LS_lang == 'zh-tw') {
+    legend_label = ['陽性率', '入境盛行率（逐月更新）', '本土盛行率（乘以1000）', '致死率'];
+    legend_title = '最新數據';
+  }
+  else if (LS_lang == 'fr') {
+    legend_label = ['Taux de positivité', "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local (multiplié par 1000)", 'Taux de létalité'];
+    legend_title = 'Dernières données disponibles';
+  }
+  else {
+    legend_label = ['Positive rate', 'Arrival incidence (updated monthly)', 'Local incidence (multiplied by 1000)', 'Fatality rate'];
+    legend_title = 'Last available value';
+  }
+  
+  //-- Update legend title
+  legend_color.splice(0, 0, '#000000');
+  legend_value.splice(0, 0, '');
+  legend_label.splice(0, 0, legend_title);
   
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
     .remove()
     .exit()
-    .data(wrap.legend_value)
+    .data(legend_value)
     .enter()
     .append('text')
       .attr('class', 'legend value')
       .attr('x', legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .attr('text-anchor', 'end')
       .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return (+d*100).toFixed(2)+'%';})
-      .style('font-size', '20px')
-      .attr('text-anchor', 'end');
+      .style('font-size', '1.2rem')
+      .text(function (d, i) {if (0 == i) return ''; return (+d*100).toFixed(2)+'%';});
     
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')
@@ -332,10 +345,11 @@ function VR_Replot(wrap) {
       .attr('class', 'legend label')
       .attr('x', legend_pos.x+legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .attr('text-anchor', 'start')
+      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
       .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
-      .style('font-size', '20px')
-      .attr('text-anchor', 'start');
+      .style('font-size', '1.2rem')
+      .text(function (d) {return d;});
 }
 
 //-- Load

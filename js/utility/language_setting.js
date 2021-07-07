@@ -24,16 +24,13 @@ LS_lang_btn.classList.add('active');
 //-- Function declarations - label
 
 function LS_ISODateToMDDate(iso_date) {
-  var md_date_format;
-  if (LS_lang == 'zh-tw')
-    md_date_format = d3.timeFormat('%m/%d');
-  else if (LS_lang == 'fr')
-    md_date_format = d3.timeFormat('%d/%m');
-  else
-    md_date_format = d3.timeFormat('%b %d');
-  
+  var mmdd_format_dict = {
+    'en': d3.timeFormat('%b %d'),
+    'fr': d3.timeFormat('%d/%m'),
+    'zh-tw': d3.timeFormat('%m/%d'),
+  };
   var date = d3.isoParse(iso_date);
-  return md_date_format(date);
+  return mmdd_format_dict[LS_lang](date);
 }
 
 function LS_GetYearLabel(wrap) {
@@ -52,6 +49,41 @@ function LS_GetYearLabel(wrap) {
     
     return '(last 90 days)';
   }
+  
+  return '';
+}
+
+function LS_GetLegendTitle(wrap) {
+  var str_latest;
+  var str_2021;
+  var str_2020;
+  
+  if (LS_lang == 'zh-tw') {
+    str_latest = '近90日統計';
+    str_2021 = '2021統計';
+    str_2020 = '2020統計';
+  }
+  
+  else if (LS_lang == 'fr') {
+    str_latest = '90 derniers jours';
+    str_2021 = 'Stat 2021';
+    str_2020 = 'Stat 2020';
+  }
+  
+  else { //-- En
+    str_latest = 'Last 90 days';
+    str_2021 = 'Stats 2021';
+    str_2020 = 'Stats 2020';
+  }
+  
+  if (wrap.tag.includes('latest'))
+    return str_latest;
+  
+  if (wrap.tag.includes('2021'))
+    return str_2021;
+  
+  if (wrap.tag.includes('2020'))
+    return str_2020;
   
   return '';
 }

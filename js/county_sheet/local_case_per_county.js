@@ -249,17 +249,17 @@ function LCPC_Replot(wrap) {
   var legend_label;
   if (LS_lang == 'zh-tw')
     legend_label = [
-      '本土合計 '+LS_GetYearLabel(wrap), '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
+      '本土合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
       '嘉縣', '嘉市', '台南', '高雄', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '馬祖'
     ];
   else if (LS_lang == 'fr')
     legend_label = [
-      'Locaux totaux '+LS_GetYearLabel(wrap), 'Keelung', 'Taipei', 'Nouveau Taipei', 'Taoyuan', 'Comté de Hsinchu', 'Ville de Hsinchu', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Cas locaux au total', 'Keelung', 'Taipei', 'Nouveau Taipei', 'Taoyuan', 'Comté de Hsinchu', 'Ville de Hsinchu', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Comté de Chiayi', 'Ville de Chiayi', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
   else
     legend_label = [
-      'Total local '+LS_GetYearLabel(wrap), 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Total local cases', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
   
@@ -276,6 +276,11 @@ function LCPC_Replot(wrap) {
   legend_value_2.push(wrap.legend_value[0]);
   legend_label_2.push(legend_label[0]);
   
+  //-- Update legend title
+  legend_color.splice(0, 0, '#000000');
+  legend_value_2.splice(0, 0, '');
+  legend_label_2.splice(0, 0, LS_GetLegendTitle(wrap));
+  
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
     .remove()
@@ -286,9 +291,9 @@ function LCPC_Replot(wrap) {
       .attr('class', 'legend value')
       .attr('x', legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
       .attr('text-anchor', 'end')
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;});
     
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')
@@ -300,9 +305,10 @@ function LCPC_Replot(wrap) {
       .attr('class', 'legend label')
       .attr('x', legend_pos.x+legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
       .attr('text-anchor', 'start')
+      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;});
 }
 
 //-- Load

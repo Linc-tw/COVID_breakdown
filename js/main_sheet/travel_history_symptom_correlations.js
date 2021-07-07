@@ -8,13 +8,13 @@
 function THSC_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 540;
+  wrap.tot_height_['zh-tw'] = 600;
   wrap.tot_height_['fr'] = 600;
   wrap.tot_height_['en'] = 600;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 230, right: 5, bottom: 5, top: 145};
-  wrap.margin_['fr'] = {left: 280, right: 5, bottom: 5, top: 220};
-  wrap.margin_['en'] = {left: 250, right: 5, bottom: 5, top: 200};
+  wrap.margin_['zh-tw'] = {left: 230, right: 5, bottom: 5, top: 180};
+  wrap.margin_['fr'] = {left: 280, right: 5, bottom: 5, top: 215};
+  wrap.margin_['en'] = {left: 250, right: 5, bottom: 5, top: 195};
   
   GP_InitFig(wrap);
 }
@@ -157,11 +157,19 @@ function THSC_Replot(wrap) {
   //-- Replot y
   GP_ReplotTileY(wrap);
   
+  //-- Adjust font size
+  wrap.svg.select('.xaxis')
+    .selectAll('text')
+      .style('font-size', '1.2rem');
+  wrap.svg.select('.yaxis')
+    .selectAll('text')
+      .style('font-size', '1.2rem');
+      
   //-- Replot corr
   GP_ReplotCorr(wrap);
     
   //-- Define legend position
-  var legend_pos = {x: wrap.legend_pos_x, y: -0.8*wrap.margin.top, dx: 12, dy: 27};
+  var legend_pos = {x: wrap.legend_pos_x, y: -0.75*wrap.margin.top, dx: 12, dy: 27};
   
   //-- Define legend color
   var legend_color = [GP_wrap.c_list[0], GP_wrap.gray, GP_wrap.gray, '#000000'];
@@ -172,11 +180,16 @@ function THSC_Replot(wrap) {
   //-- Define legend label
   var legend_label;
   if (LS_lang == 'zh-tw')
-    legend_label = ['有資料案例數', '資料不全', '無旅遊史', '合計 '+LS_GetYearLabel(wrap)];
+    legend_label = ['有資料案例數', '資料不全', '無旅遊史', '合計'];
   else if (LS_lang == 'fr')
-    legend_label = ['Données complètes', 'Données incomplètes', 'Sans anté. de voyage', 'Total '+LS_GetYearLabel(wrap)];
+    legend_label = ['Données complètes', 'Données incomplètes', 'Sans anté. de voyage', 'Total'];
   else
-    legend_label = ['Data complete', 'Data incomplete', 'No travel history', 'Total '+LS_GetYearLabel(wrap)];
+    legend_label = ['Data complete', 'Data incomplete', 'No travel history', 'Total'];
+  
+  //-- Update legend title
+  legend_color.splice(0, 0, '#000000');
+  legend_value.splice(0, 0, '');
+  legend_label.splice(0, 0, LS_GetLegendTitle(wrap));
   
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
@@ -188,10 +201,10 @@ function THSC_Replot(wrap) {
       .attr('class', 'legend value')
       .attr('x', -wrap.margin.left + legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .attr('text-anchor', 'end')
       .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
-      .style('font-size', '20px')
-      .attr('text-anchor', 'end');
+      .style('font-size', '1.2rem')
+      .text(function (d) {return d;});
   
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')
@@ -203,10 +216,11 @@ function THSC_Replot(wrap) {
       .attr('class', 'legend label')
       .attr('x', -wrap.margin.left + legend_pos.x + legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
+      .attr('text-anchor', 'start')
+      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
       .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
-      .style('font-size', '20px')
-      .attr('text-anchor', 'start');
+      .style('font-size', '1.2rem')
+      .text(function (d) {return d;});
 }
 
 //-- Load

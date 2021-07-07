@@ -223,15 +223,11 @@ function TBC_Replot(wrap) {
   GP_ReplotAvgLine(wrap);
   
   //-- Define legend position
-  var legend_pos = {x: 95, y: 40, dx: 12, dy: 30};
-  if (wrap.cumul == 0) {
-    if (wrap.legend_pos_x_0_[LS_lang] != 0)
-      legend_pos.x = wrap.legend_pos_x_0_[LS_lang];
-  }
-  else {
-    if (wrap.legend_pos_x_1_[LS_lang] != 0)
-      legend_pos.x = wrap.legend_pos_x_1_[LS_lang];
-  }
+  var legend_pos;
+  if (wrap.cumul == 0)
+    legend_pos = {x: wrap.legend_pos_x_0_[LS_lang], y: 40, dx: 10, dy: 27};
+  else
+    legend_pos = {x: wrap.legend_pos_x_1_[LS_lang], y: 40, dx: 10, dy: 27};
   
   //-- Define legend color
   var legend_color = wrap.color_list.slice();
@@ -245,11 +241,11 @@ function TBC_Replot(wrap) {
   //-- Define legend label
   var legend_label;
   if (LS_lang == 'zh-tw')
-    legend_label = ['法定定義通報', '居家檢疫', '擴大社區監測', '合計 '+LS_GetYearLabel(wrap)];
+    legend_label = ['法定定義通報', '居家檢疫', '擴大社區監測', '合計'];
   else if (LS_lang == 'fr')
-    legend_label = ['Critères cliniques', 'Quarantaine (fusionnée dans clinique)', 'Recherche dans la communauté', 'Total '+LS_GetYearLabel(wrap)];
+    legend_label = ['Critères cliniques', 'Quarantaine (fusionnée dans clinique)', 'Recherche dans la communauté', 'Total'];
   else
-    legend_label = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', 'Total '+LS_GetYearLabel(wrap)];
+    legend_label = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', 'Total'];
   
   //-- Remove from legend if value = 0
   var i;
@@ -261,6 +257,11 @@ function TBC_Replot(wrap) {
     }
   }
   
+  //-- Update legend title
+  legend_color.splice(0, 0, '#000000');
+  legend_value.splice(0, 0, '');
+  legend_label.splice(0, 0, LS_GetLegendTitle(wrap));
+  
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
     .remove()
@@ -271,9 +272,10 @@ function TBC_Replot(wrap) {
       .attr('class', 'legend value')
       .attr('x', legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
       .attr('text-anchor', 'end')
+      .style('fill', function (d, i) {return legend_color[i];})
+      .style('font-size', '1.2rem')
+      .text(function (d) {return d;});
       
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')
@@ -285,9 +287,11 @@ function TBC_Replot(wrap) {
       .attr('class', 'legend label')
       .attr('x', legend_pos.x+legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
       .attr('text-anchor', 'start')
+      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
+      .style('fill', function (d, i) {return legend_color[i];})
+      .style('font-size', '1.2rem')
+      .text(function (d) {return d;});
 }
 
 //-- Load

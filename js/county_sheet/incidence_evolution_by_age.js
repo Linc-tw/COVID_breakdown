@@ -8,13 +8,13 @@
 function IEBA_InitFig(wrap) {
   wrap.tot_width = 1200;
   wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 600;
-  wrap.tot_height_['fr'] = 600;
-  wrap.tot_height_['en'] = 600;
+  wrap.tot_height_['zh-tw'] = 500;
+  wrap.tot_height_['fr'] = 500;
+  wrap.tot_height_['en'] = 500;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 70, right: 5, bottom: 65, top: 35};
+  wrap.margin_['zh-tw'] = {left: 85, right: 5, bottom: 65, top: 35};
   wrap.margin_['fr'] = {left: 100, right: 5, bottom: 65, top: 35};
-  wrap.margin_['en'] = {left: 100, right: 5, bottom: 75, top: 35};
+  wrap.margin_['en'] = {left: 95, right: 5, bottom: 75, top: 35};
   
   GP_InitFig(wrap);
 }
@@ -145,27 +145,19 @@ function IEBA_Replot(wrap) {
     .call(xaxis)
     .selectAll('text')
       .attr('transform', 'translate(-8,5) rotate(-90)')
-      .style('font-size', '18px')
       .style('text-anchor', 'end');
   
-  //-- Define yscale
-  var yscale = GP_MakeBandYForTile(wrap);
-  
-  //-- Define yaxis
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(0)
-    .tickFormat(function (d, i) {return wrap.yticklabel_dict[LS_lang][i]});
-  
-  //-- Update yaxis
-  wrap.svg.select('.yaxis')
-    .transition()
-    .duration(wrap.trans_delay)
-    .call(yaxis)
+  //-- Replot yaxis
+  GP_ReplotTileY(wrap);
+      
+  //-- Adjust font size
+  wrap.svg.select('.xaxis')
     .selectAll('text')
-      .attr('transform', 'translate(-2,0)')
-      .style('font-size', '18px')
-      .style('text-anchor', 'end');
-  
+      .style('font-size', '1.15rem');
+  wrap.svg.select('.yaxis')
+    .selectAll('text')
+      .style('font-size', '1.15rem');
+      
   //-- Replot hot map
   GP_ReplotHotMap(wrap);
   
@@ -173,27 +165,30 @@ function IEBA_Replot(wrap) {
   var offset = {x: -5, y: -8};
   
   //-- Define legend caption
+  var legend_caption
   if (LS_lang == 'zh-tw')
-    caption = ['每十萬人過去七日確診數總合'];
+    legend_caption = ['近45日統計', '每十萬人過去七日確診數總合'];
   else if (LS_lang == 'fr')
-    caption = ['Nombre de cas confirmés sur 7 jours par 100k habitants'];
+    legend_caption = ['45 derniers jours', 'Nombre de cas confirmés sur 7 jours par 100k habitants'];
   else 
-    caption = ['Number of confirmed cases over 7 days per 100k inhabitants'];
-    
+    legend_caption = ['Last 45 days', 'Number of confirmed cases over 7 days per 100k inhabitants'];
+  
+  //-- Update legend caption
+  var legend_caption_2 = [legend_caption[0] + ' \u00A0 - \u00A0 ' + legend_caption[1]];
+  
   //-- Update legend caption
   wrap.svg.selectAll('.legend.caption')
     .remove()
     .exit()
-    .data(caption)
+    .data(legend_caption_2)
     .enter()
     .append('text')
       .attr('class', 'legend caption')
       .attr('x', wrap.width+offset.x)
       .attr('y', offset.y)
+      .attr('text-anchor', 'end')
       .style('fill', '#000000')
-      .text(function (d) {return d;})
-      .style('font-size', '22px')
-      .attr('text-anchor', 'end');
+      .text(function (d) {return d;});
 }
 
 //-- Load

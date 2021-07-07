@@ -235,13 +235,19 @@ function BS_Replot(wrap) {
   legend_value.push(sum);
   
   //-- Define legend label
-  var legend_label;
-  if (LS_lang == 'zh-tw')
-    legend_label = ['機場', '港口', '無細節', '合計 (於'+wrap.last_date+')'];
-  else if (LS_lang == 'fr')
-    legend_label = ['Aéroports', 'Ports maritimes', 'Sans précisions', 'Total (au '+wrap.last_date+')'];
-  else
-    legend_label = ['Airports', 'Seaports', 'Not specified', 'Total (on '+wrap.last_date+')'];
+  var legend_label, legend_title;
+  if (LS_lang == 'zh-tw') {
+    legend_label = ['機場', '港口', '無細節', '合計'];
+    legend_title = '於';
+  }
+  else if (LS_lang == 'fr') {
+    legend_label = ['Aéroports', 'Ports maritimes', 'Sans précisions', 'Total'];
+    legend_title = 'Au ';
+  }
+  else {
+    legend_label = ['Airports', 'Seaports', 'Not specified', 'Total'];
+    legend_title = 'On ';
+  }
   
   //-- Remove from legend if value = 0
   var i;
@@ -253,6 +259,11 @@ function BS_Replot(wrap) {
     }
   }
   
+  //-- Update legend title
+  legend_color.splice(0, 0, '#000000');
+  legend_value.splice(0, 0, '');
+  legend_label.splice(0, 0, legend_title+wrap.last_date);
+  
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
     .remove()
@@ -263,24 +274,24 @@ function BS_Replot(wrap) {
       .attr('class', 'legend value')
       .attr('x', legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
       .attr('text-anchor', 'end')
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;});
   
   //-- Update legend label
-  wrap.svg.selectAll(wrap.id+'_legend_label')
+  wrap.svg.selectAll('.legend.label')
     .remove()
     .exit()
     .data(legend_label)
     .enter()
     .append('text')
-      .attr('id', wrap.tag+'_legend_label')
       .attr('class', 'legend label')
       .attr('x', legend_pos.x+legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;})
       .attr('text-anchor', 'start')
+      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;});
 }
 
 //-- Load

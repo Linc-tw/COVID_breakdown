@@ -11,7 +11,7 @@ var CBA_latest_wrap = {
     'processed_data/latest/case_by_age.csv',
   ],
 
-  y_max_factor: 1.4,
+  y_max_factor: 1.6,
   y_path: '4', //-- 4 ticks
   legend_pos_x: 90,
   trans_delay: GP_wrap.trans_delay,

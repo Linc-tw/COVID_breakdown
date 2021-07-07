@@ -8,13 +8,13 @@
 function ASC_InitFig(wrap) {
   wrap.tot_width = 800;
   wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 540;
+  wrap.tot_height_['zh-tw'] = 600;
   wrap.tot_height_['fr'] = 600;
   wrap.tot_height_['en'] = 600;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 230, right: 5, bottom: 5, top: 145};
-  wrap.margin_['fr'] = {left: 280, right: 5, bottom: 5, top: 220};
-  wrap.margin_['en'] = {left: 250, right: 5, bottom: 5, top: 200};
+  wrap.margin_['zh-tw'] = {left: 230, right: 5, bottom: 5, top: 180};
+  wrap.margin_['fr'] = {left: 280, right: 5, bottom: 5, top: 215};
+  wrap.margin_['en'] = {left: 250, right: 5, bottom: 5, top: 195};
   
   GP_InitFig(wrap);
 }
@@ -153,11 +153,19 @@ function ASC_Replot(wrap) {
   //-- Replot y
   GP_ReplotTileY(wrap);
 
+  //-- Adjust font size
+  wrap.svg.select('.xaxis')
+    .selectAll('text')
+      .style('font-size', '1.2rem');
+  wrap.svg.select('.yaxis')
+    .selectAll('text')
+      .style('font-size', '1.2rem');
+      
   //-- Replot corr
   GP_ReplotCorr(wrap);
   
   //-- Define legend position
-  var legend_pos = {x: wrap.legend_pos_x, y: -0.8*wrap.margin.top, dx: 12, dy: 27};
+  var legend_pos = {x: wrap.legend_pos_x, y: -0.75*wrap.margin.top, dx: 12, dy: 27};
   
   //-- Define legend color
   var legend_color = [GP_wrap.c_list[0], GP_wrap.gray, '#000000'];
@@ -168,11 +176,16 @@ function ASC_Replot(wrap) {
   //-- Define legend label
   var legend_label;
   if (LS_lang == 'zh-tw')
-    legend_label = ['有資料案例數', '資料不全', '合計 '+LS_GetYearLabel(wrap)];
+    legend_label = ['有資料案例數', '資料不全', '合計'];
   else if (LS_lang == 'fr')
-    legend_label = ['Données complètes', 'Données incomplètes', 'Total '+LS_GetYearLabel(wrap)];
+    legend_label = ['Données complètes', 'Données incomplètes', 'Total'];
   else
-    legend_label = ['Data complete', 'Data incomplete', 'Total '+LS_GetYearLabel(wrap)];
+    legend_label = ['Data complete', 'Data incomplete', 'Total'];
+  
+  //-- Update legend title
+  legend_color.splice(0, 0, '#000000');
+  legend_value.splice(0, 0, '');
+  legend_label.splice(0, 0, LS_GetLegendTitle(wrap));
   
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
@@ -186,7 +199,7 @@ function ASC_Replot(wrap) {
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
       .style('fill', function (d, i) {return legend_color[i];})
       .text(function (d) {return d;})
-      .style('font-size', '20px')
+      .style('font-size', '1.2rem')
       .attr('text-anchor', 'end');
   
   //-- Update legend label
@@ -200,8 +213,9 @@ function ASC_Replot(wrap) {
       .attr('x', -wrap.margin.left + legend_pos.x + legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
       .style('fill', function (d, i) {return legend_color[i];})
+      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
       .text(function (d) {return d;})
-      .style('font-size', '20px')
+      .style('font-size', '1.2rem')
       .attr('text-anchor', 'start');
 }
 

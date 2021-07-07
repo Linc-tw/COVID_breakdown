@@ -495,28 +495,45 @@ function VP_Replot(wrap) {
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 12, dy: 30};
   
+  //-- Define legend color
+  var legend_color = wrap.color_list.slice();
+  
+  //-- Define legend value
+  var legend_value = wrap.legend_value.slice();
+      
   //-- Define legend label
-  var legend_label;
-  if (LS_lang == 'zh-tw')
+  var legend_label, legend_title;
+  if (LS_lang == 'zh-tw') {
     legend_label = ['到貨量', '施打量'];
-  else if (LS_lang == 'fr')
+    legend_title = '最新數據';
+  }
+  else if (LS_lang == 'fr') {
     legend_label = ['Livraisons', 'Injections'];
-  else
+    legend_title = 'Dernières données disponibles';
+  }
+  else {
     legend_label = ['Deliveries', 'Injections'];
+    legend_title = 'Last available value';
+  }
+  
+  //-- Update legend title
+  legend_color.splice(0, 0, '#000000');
+  legend_value.splice(0, 0, '');
+  legend_label.splice(0, 0, legend_title);
   
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
     .remove()
     .exit()
-    .data(wrap.legend_value)
+    .data(legend_value)
     .enter()
     .append('text')
       .attr('class', 'legend value')
       .attr('x', legend_pos.x)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return wrap.color_list[i];})
-      .text(function (d) {return d;})
-      .attr('text-anchor', 'end');
+      .attr('text-anchor', 'end')
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;});
     
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')
@@ -528,9 +545,10 @@ function VP_Replot(wrap) {
       .attr('class', 'legend label')
       .attr('x', legend_pos.x+legend_pos.dx)
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .style('fill', function (d, i) {return wrap.color_list[i];})
-      .text(function (d) {return d;})
-      .attr('text-anchor', 'start');
+      .attr('text-anchor', 'start')
+      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
+      .style('fill', function (d, i) {return legend_color[i];})
+      .text(function (d) {return d;});
 }
 
 //-- Load

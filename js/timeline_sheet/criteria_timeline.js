@@ -152,17 +152,17 @@ function CT_Plot(wrap) {
     title = ['Travel history, symptoms, & other conditions', 'with which Taiwan tests systematically &', 'their starting dates'];
   
   //-- Add title
-  wrap.svg.selectAll(".title")
+  wrap.svg.selectAll('.title')
     .data(title)
     .enter()
-    .append("text")
-      .attr("class", "title")
-      .attr("x", 0.5*wrap.width-150)
-      .attr("y", function (d, i) {return 0.5*wrap.height-20 + i*20;})
-      .attr("fill", 'black')
+    .append('text')
+      .attr('class', 'title')
+      .attr('x', 0.5*wrap.width-150)
+      .attr('y', function (d, i) {return 0.5*wrap.height-20 + i*20;})
+      .attr('fill', 'black')
       .text(function (d) {return d;})
-      .attr("text-anchor", "start")
-      .attr("dominant-baseline", "bottom")
+      .attr('text-anchor', 'start')
+      .attr('dominant-baseline', 'bottom')
   
   //-- Define color
   var color = d3.scaleLinear()
@@ -234,8 +234,8 @@ function CT_Plot(wrap) {
   //-- Define timeline parameters
   var x0_t = 130;
   var dx_t = 20;
-  var text = wrap.svg.append("g");
-  var line = wrap.svg.append("g");
+  var text = wrap.svg.append('g');
+  var line = wrap.svg.append('g');
   var line_alpha = 0.35;
   var i, date, split;
   
@@ -254,75 +254,75 @@ function CT_Plot(wrap) {
       split = [split[0], split[1], split[2]+' '+split[3]]
     
     //-- Add timeline date
-    text.append("text")
-      .attr("class", "content text")
-      .attr("x", x0_t-dx_t)
-      .attr("y", function (d, j) {return wrap.height*(i+0.5)/wrap.length+j*15;})
-      .attr("fill", function (d) {return color(i);})
-      .attr("opacity", wrap['timeline_text_'+i])
-      .attr("id", function (d, j) {return wrap.tag+'_timeline_text_'+i;})
+    text.append('text')
+      .attr('class', 'content text')
+      .attr('x', x0_t-dx_t)
+      .attr('y', function (d, j) {return wrap.height*(i+0.5)/wrap.length+j*15;})
+      .attr('fill', function (d) {return color(i);})
+      .attr('opacity', wrap['timeline_text_'+i])
+      .attr('id', function (d, j) {return wrap.tag+'_timeline_text_'+i;})
       .text(date)
-      .attr("text-anchor", 'end')
-      .attr("dominant-baseline", "middle")
+      .attr('text-anchor', 'end')
+      .attr('dominant-baseline', 'middle')
         
     //-- Add timeline text
     text.selectAll()
       .data(split)
       .enter()
-      .append("text")
-        .attr("class", "content text")
-        .attr("x", x0_t+dx_t+x_list_t[i])
-        .attr("y", function (d, j) {return wrap.height*(i+0.5)/wrap.length+j*15;})
-        .attr("fill", function (d) {return color(i);})
-        .attr("opacity", wrap['timeline_text_'+i])
-        .attr("id", function (d, j) {return wrap.tag+'_timeline_text_'+i;})
+      .append('text')
+        .attr('class', 'content text')
+        .attr('x', x0_t+dx_t+x_list_t[i])
+        .attr('y', function (d, j) {return wrap.height*(i+0.5)/wrap.length+j*15;})
+        .attr('fill', function (d) {return color(i);})
+        .attr('opacity', wrap['timeline_text_'+i])
+        .attr('id', function (d, j) {return wrap.tag+'_timeline_text_'+i;})
         .text(function (d) {return d;})
-        .attr("text-anchor", 'start')
-        .attr("dominant-baseline", "middle")
+        .attr('text-anchor', 'start')
+        .attr('dominant-baseline', 'middle')
         
     //-- Add timeline line
     if (x_list_t[i] > 0) {
       y1 = wrap.height*(i+0.5)/wrap.length;
       y2 = wrap.height*(i+0.5)/wrap.length+y_list_t[i];
-      line.append("polyline")
-        .attr("points", (x0_t+0.75*dx_t)+','+y1+' '+(x0_t+0.5*dx_t+x_list_t[i])+','+y2)
-        .attr("opacity", line_alpha*wrap['timeline_text_'+i])
-        .attr("id", function (d, j) {return wrap.tag+'_timeline_line_'+i;})
-        .attr("stroke", GP_wrap.gray)
-        .attr("stroke-width", 1)
+      line.append('polyline')
+        .attr('points', (x0_t+0.75*dx_t)+','+y1+' '+(x0_t+0.5*dx_t+x_list_t[i])+','+y2)
+        .attr('opacity', line_alpha*wrap['timeline_text_'+i])
+        .attr('id', function (d, j) {return wrap.tag+'_timeline_line_'+i;})
+        .attr('stroke', GP_wrap.gray)
+        .attr('stroke-width', 1)
         .attr('fill', 'none')
     }
   }
   
   //-- Add timeline baseline
-  var dot = wrap.svg.append("g");
-  dot.append("line")
-    .attr("x1", x0_t)
-    .attr("y1", wrap.height*0.5/wrap.length)
-    .attr("x2", x0_t)
-    .attr("y2", wrap.height*(wrap.length-0.5)/wrap.length)
-    .attr("opacity", 0)
+  var dot = wrap.svg.append('g');
+  dot.append('line')
+    .attr('x1', x0_t)
+    .attr('y1', wrap.height*0.5/wrap.length)
+    .attr('x2', x0_t)
+    .attr('y2', wrap.height*(wrap.length-0.5)/wrap.length)
+    .attr('opacity', 0)
     .attr('id', wrap.tag+'_timeline_baseline')
-    .attr("stroke", "black")
-    .attr("stroke-width", 1)
+    .attr('stroke', 'black')
+    .attr('stroke-width', 1)
   
   //-- Add timeline dot
-  dot.selectAll(".dot")
+  dot.selectAll('.dot')
     .data(wrap.formatted_data)
     .enter()
-    .append("circle")
-      .attr("class", "dot")
-      .attr("r", 0)
-      .attr("cx", x0_t)
-      .attr("cy", function (d, i) {return wrap.height*(i+0.5)/wrap.length;})
-      .attr("fill", function (d, i) {return color(i);})
-      .attr("fill-opacity", 1)
-      .attr("stroke", "black")
-      .attr("stroke-width", 1)
-        .on("click", function (d, j) {CT_Click_Timeline(wrap, d, j);})
-        .on("mouseover", function (d) {GP_MouseOver3(wrap, d);})
-        .on("mousemove", function (d) {CT_MouseMove(wrap, d);})
-        .on("mouseleave", function (d) {GP_MouseLeave(wrap, d);});
+    .append('circle')
+      .attr('class', 'dot')
+      .attr('r', 0)
+      .attr('cx', x0_t)
+      .attr('cy', function (d, i) {return wrap.height*(i+0.5)/wrap.length;})
+      .attr('fill', function (d, i) {return color(i);})
+      .attr('fill-opacity', 1)
+      .attr('stroke', 'black')
+      .attr('stroke-width', 1)
+        .on('click', function (d, j) {CT_Click_Timeline(wrap, d, j);})
+        .on('mouseover', function (d) {GP_MouseOver3(wrap, d);})
+        .on('mousemove', function (d) {CT_MouseMove(wrap, d);})
+        .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
   
   //-- Circle
   
@@ -334,23 +334,23 @@ function CT_Plot(wrap) {
   var dy_c = 0.5;
   
   //-- Add circle
-  wrap.svg.append("g")
-    .selectAll(".circle")
+  wrap.svg.append('g')
+    .selectAll('.circle')
     .data(wrap.formatted_data)
     .enter()
-    .append("circle")
-      .attr("class", "circle")
-      .attr("r", 0)
-      .attr("cx", x0_c)
-      .attr("cy", function (d, i) {return y0_c-(r_c_max-r_c_min)*i/(wrap.length-1)+dy_c*i;})
-      .attr("fill", function (d, i) {return color(wrap.length-1-i);})
-      .attr("fill-opacity", 1)
-      .attr("stroke", "black")
-      .attr("stroke-width", 0.3)
-        .on("click", function (d, i) {CT_Click_Circle(wrap, d, i);})
-        .on("mouseover", function (d) {GP_MouseOver3(wrap, d);})
-        .on("mousemove", function (d) {CT_MouseMove(wrap, d);})
-        .on("mouseleave", function (d) {GP_MouseLeave(wrap, d);});
+    .append('circle')
+      .attr('class', 'circle')
+      .attr('r', 0)
+      .attr('cx', x0_c)
+      .attr('cy', function (d, i) {return y0_c-(r_c_max-r_c_min)*i/(wrap.length-1)+dy_c*i;})
+      .attr('fill', function (d, i) {return color(wrap.length-1-i);})
+      .attr('fill-opacity', 1)
+      .attr('stroke', 'black')
+      .attr('stroke-width', 0.3)
+        .on('click', function (d, i) {CT_Click_Circle(wrap, d, i);})
+        .on('mouseover', function (d) {GP_MouseOver3(wrap, d);})
+        .on('mousemove', function (d) {CT_MouseMove(wrap, d);})
+        .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
   
   //-- Define circle text position
   var x_list_c, y_list_c;
@@ -464,7 +464,7 @@ function CT_Plot(wrap) {
   }
   
   //-- Define circle parameters
-  var line_2 = wrap.svg.append("g");
+  var line_2 = wrap.svg.append('g');
   var x1, y1, y2, anchor;
   
   //-- Loop over items
@@ -485,27 +485,27 @@ function CT_Plot(wrap) {
     text.selectAll()
       .data(split)
       .enter()
-      .append("text")
-        .attr("class", "content text")
-        .attr("x", x1)
-        .attr("y", function (d, j) {return wrap.height*(i+0.5)/wrap.length+j*15+y_list_c[i];})
-        .attr("fill", function (d) {return color(i);})
-        .attr("opacity", wrap['circle_text_'+i])
-        .attr("id", function (d, j) {return wrap.tag+'_circle_text_'+i;})
+      .append('text')
+        .attr('class', 'content text')
+        .attr('x', x1)
+        .attr('y', function (d, j) {return wrap.height*(i+0.5)/wrap.length+j*15+y_list_c[i];})
+        .attr('fill', function (d) {return color(i);})
+        .attr('opacity', wrap['circle_text_'+i])
+        .attr('id', function (d, j) {return wrap.tag+'_circle_text_'+i;})
         .text(function (d) {return d;})
-        .attr("text-anchor", anchor)
-        .attr("dominant-baseline", "middle")
+        .attr('text-anchor', anchor)
+        .attr('dominant-baseline', 'middle')
         
     //-- Add circle line
     if (x_list_c[i] == 0) {
       y1 = y0_c+r_c_max - 2*(r_c_max-r_c_min)*(wrap.length-1-(i-0.45))/(wrap.length-1) + dy_c*(wrap.length-1-(i-0.45));
       y2 = wrap.height*(i+0.5)/wrap.length+y_list_c[i];
-      line_2.append("polyline")
-        .attr("points", x0_c+','+y1+' '+(x1-60)+','+y2+' '+(x1-5)+','+y2)
-        .attr("opacity", line_alpha*wrap['circle_text_'+i])
-        .attr("id", function (d, j) {return wrap.tag+'_circle_line_'+i;})
-        .attr("stroke", GP_wrap.gray)
-        .attr("stroke-width", 1)
+      line_2.append('polyline')
+        .attr('points', x0_c+','+y1+' '+(x1-60)+','+y2+' '+(x1-5)+','+y2)
+        .attr('opacity', line_alpha*wrap['circle_text_'+i])
+        .attr('id', function (d, j) {return wrap.tag+'_circle_line_'+i;})
+        .attr('stroke', GP_wrap.gray)
+        .attr('stroke-width', 1)
         .attr('fill', 'none')
     }
   }
