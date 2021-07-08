@@ -502,24 +502,31 @@ function VP_Replot(wrap) {
   var legend_value = wrap.legend_value.slice();
       
   //-- Define legend label
-  var legend_label, legend_title;
+  var legend_label_2 = [];
+  var i, legend_label, col_tag_list;
   if (LS_lang == 'zh-tw') {
     legend_label = ['到貨量', '施打量'];
-    legend_title = '最新數據';
+    col_tag_list = ['所有廠牌'].concat(wrap.col_tag_list);
+    for (i=0; i<legend_label.length; i++)
+      legend_label_2.push(col_tag_list[wrap.brand]+legend_label[i]);
   }
   else if (LS_lang == 'fr') {
-    legend_label = ['Livraisons', 'Injections'];
-    legend_title = 'Dernières données disponibles';
+    legend_label = ['Livraisons ', ' Injections '];
+    col_tag_list = ['totales'].concat(wrap.col_tag_list);
+    for (i=0; i<legend_label.length; i++)
+      legend_label_2.push(legend_label[i]+col_tag_list[wrap.brand]);
   }
   else {
-    legend_label = ['Deliveries', 'Injections'];
-    legend_title = 'Last available value';
+    legend_label = [' deliveries', ' injections'];
+    col_tag_list = ['Total'].concat(wrap.col_tag_list);
+    for (i=0; i<legend_label.length; i++)
+      legend_label_2.push(col_tag_list[wrap.brand]+legend_label[i]);
   }
   
   //-- Update legend title
   legend_color.splice(0, 0, '#000000');
   legend_value.splice(0, 0, '');
-  legend_label.splice(0, 0, legend_title);
+  legend_label_2.splice(0, 0, LS_GetLegendTitle_Last(wrap));
   
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
@@ -539,7 +546,7 @@ function VP_Replot(wrap) {
   wrap.svg.selectAll('.legend.label')
     .remove()
     .exit()
-    .data(legend_label)
+    .data(legend_label_2)
     .enter()
     .append('text')
       .attr('class', 'legend label')

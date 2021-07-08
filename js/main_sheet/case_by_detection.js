@@ -295,7 +295,7 @@ function CBD_Replot(wrap) {
   //-- Update legend title
   legend_color.splice(0, 0, '#000000');
   legend_value.splice(0, 0, '');
-  legend_label.splice(0, 0, LS_GetLegendTitle(wrap));
+  legend_label.splice(0, 0, LS_GetLegendTitle_Page(wrap));
   var legend_length = legend_color.length;
   
   //-- Update legend value

@@ -33,27 +33,7 @@ function LS_ISODateToMDDate(iso_date) {
   return mmdd_format_dict[LS_lang](date);
 }
 
-function LS_GetYearLabel(wrap) {
-  if (wrap.tag.includes('2021'))
-    return '(2021)';
-  
-  if (wrap.tag.includes('2020'))
-    return '(2020)';
-  
-  if (wrap.tag.includes('latest')) {
-    if (LS_lang == 'zh-tw')
-      return '(近90日)';
-    
-    if (LS_lang == 'fr')
-      return '(90 jours)';
-    
-    return '(last 90 days)';
-  }
-  
-  return '';
-}
-
-function LS_GetLegendTitle(wrap) {
+function LS_GetLegendTitle_Page(wrap) {
   var str_latest;
   var str_2021;
   var str_2020;
@@ -86,6 +66,15 @@ function LS_GetLegendTitle(wrap) {
     return str_2020;
   
   return '';
+}
+
+function LS_GetLegendTitle_Last(wrap) {
+  var legend_title_dict = {
+    'en': 'Last available value',
+    'fr': 'Dernières données disponibles',
+    'zh-tw': '最新數據',
+  };
+  return legend_title_dict[LS_lang];
 }
 
 //------------------------------------------------------------------------------

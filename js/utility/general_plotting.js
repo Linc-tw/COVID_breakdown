@@ -8,8 +8,6 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//Last available value => make fct
-//IEBC & IEBA week line
 //VP: donation legend
 //VP: projection
 //Note with "Collapse"

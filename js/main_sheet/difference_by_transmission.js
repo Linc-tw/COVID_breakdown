@@ -263,7 +263,7 @@ function DBT_Replot(wrap) {
   //-- Update legend title
   legend_color.splice(0, 0, '#000000');
   legend_value_2.splice(0, 0, '');
-  legend_label_2.splice(0, 0, LS_GetLegendTitle(wrap));
+  legend_label_2.splice(0, 0, LS_GetLegendTitle_Page(wrap));
   
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')

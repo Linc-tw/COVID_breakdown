@@ -161,6 +161,27 @@ function IEBA_Replot(wrap) {
   //-- Replot hot map
   GP_ReplotHotMap(wrap);
   
+  //-- Remove old lines
+  wrap.svg.selectAll('.legend.line')
+    .remove();
+    
+  //-- Update lines
+  var x = wrap.width;
+  x -= wrap.width / 45 * 7;
+  var points
+  while (x >= 0) {
+    points = x + ',0 ' + x + ',' + wrap.height;
+    x -= wrap.width / 45 * 7;
+    
+    wrap.svg.append('polyline')
+      .attr('class', 'legend line')
+      .attr('points', points)
+      .attr('fill', 'none')
+      .attr('stroke', '#000000')
+      .attr('stroke-width', 1)
+      .attr('opacity', 1);
+  }
+  
   //-- Define legend position
   var offset = {x: -5, y: -8};
   

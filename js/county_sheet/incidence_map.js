@@ -187,7 +187,7 @@ function IM_MouseOver(wrap, d, i) {
   d3.select(d3.event.target)
     .style('opacity', 0.8);
     
-  wrap.svg.selectAll(wrap.id+'_label_'+d.properties.COUNTYCODE)
+  wrap.svg.select(wrap.id+'_label_'+d.properties.COUNTYCODE)
       .style('font-size', '1.2rem');
 }
 
@@ -195,7 +195,7 @@ function IM_MouseLeave(wrap, d, i) {
   d3.select(d3.event.target)
     .style('opacity', 1);
     
-  wrap.svg.selectAll(wrap.id+'_label_'+d.properties.COUNTYCODE)
+  wrap.svg.select(wrap.id+'_label_'+d.properties.COUNTYCODE)
     .style('font-size', 'inherit');
 }
 
@@ -273,7 +273,7 @@ function IM_Replot(wrap) {
       {lab_x: legend_e.x, lab_y: legend_e.y+2*legend_dy, sign: -1, zone_x: 510, zone_y: 400}, //-- Taitung
       
     {lab_x: 260, lab_y: 310, sign: 1, zone_x: 285, zone_y: 305}, //-- Penghu
-    {lab_x: 190, lab_y: 220, sign: 1, zone_x: 175, zone_y: 185}, //-- Kinmen
+    {lab_x: 180, lab_y: 220, sign: 1, zone_x: 175, zone_y: 185}, //-- Kinmen
     {lab_x: 215, lab_y: 90,  sign: 1, zone_x: 180, zone_y: 30}, //-- Matsu
   ];
   
@@ -296,7 +296,7 @@ function IM_Replot(wrap) {
       legend_caption = ['Confirmed case counts'];
     
   //-- Update legend caption
-  legend_caption.splice(0, 0, LS_GetLegendTitle(wrap));
+  legend_caption.splice(0, 0, LS_GetLegendTitle_Page(wrap));
   
   //-- Update legend value & label
   wrap.svg.selectAll('.content.text')
@@ -333,7 +333,6 @@ function IM_Replot(wrap) {
     
     wrap.svg.append('polyline')
       .attr('class', 'legend line')
-      .attr('id', wrap.tag+'_line_'+i)
       .attr('points', points)
       .attr('fill', 'none')
       .attr('stroke', GP_wrap.gray)

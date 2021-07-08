@@ -124,8 +124,6 @@ function BS_FormatData(wrap, data) {
   for (j=0; j<nb_col; j++)
     legend_value.push(+data[last][col_tag_list[j]]);
   
-  var last_date = data[last]['date'];
-  
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
   wrap.moving_avg = moving_avg;
@@ -134,7 +132,6 @@ function BS_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.last_date = last_date;
   wrap.legend_value = legend_value;
 }
 
@@ -235,19 +232,13 @@ function BS_Replot(wrap) {
   legend_value.push(sum);
   
   //-- Define legend label
-  var legend_label, legend_title;
-  if (LS_lang == 'zh-tw') {
+  var legend_label;
+  if (LS_lang == 'zh-tw')
     legend_label = ['機場', '港口', '無細節', '合計'];
-    legend_title = '於';
-  }
-  else if (LS_lang == 'fr') {
+  else if (LS_lang == 'fr')
     legend_label = ['Aéroports', 'Ports maritimes', 'Sans précisions', 'Total'];
-    legend_title = 'Au ';
-  }
-  else {
+  else
     legend_label = ['Airports', 'Seaports', 'Not specified', 'Total'];
-    legend_title = 'On ';
-  }
   
   //-- Remove from legend if value = 0
   var i;
@@ -262,7 +253,7 @@ function BS_Replot(wrap) {
   //-- Update legend title
   legend_color.splice(0, 0, '#000000');
   legend_value.splice(0, 0, '');
-  legend_label.splice(0, 0, legend_title+wrap.last_date);
+  legend_label.splice(0, 0, LS_GetLegendTitle_Last(wrap));
   
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')

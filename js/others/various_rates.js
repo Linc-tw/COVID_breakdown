@@ -301,24 +301,18 @@ function VR_Replot(wrap) {
   var legend_value = wrap.legend_value.slice();
       
   //-- Define legend label
-  var legend_label, legend_title;
-  if (LS_lang == 'zh-tw') {
-    legend_label = ['陽性率', '入境盛行率（逐月更新）', '本土盛行率（乘以1000）', '致死率'];
-    legend_title = '最新數據';
-  }
-  else if (LS_lang == 'fr') {
-    legend_label = ['Taux de positivité', "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local (multiplié par 1000)", 'Taux de létalité'];
-    legend_title = 'Dernières données disponibles';
-  }
-  else {
-    legend_label = ['Positive rate', 'Arrival incidence (updated monthly)', 'Local incidence (multiplied by 1000)', 'Fatality rate'];
-    legend_title = 'Last available value';
-  }
-  
+  var legend_label;
+  if (LS_lang == 'zh-tw')
+    legend_label = ['陽性率', '入境盛行率（逐月更新）', '本土盛行率（乘以1000）', '致死率（累計）'];
+  else if (LS_lang == 'fr')
+    legend_label = ['Taux de positivité', "Taux d'incidence frontalier (mise à jour mensuellement)", "Taux d'incidence local (multiplié par 1000)", 'Taux de létalité (cumulé)'];
+  else
+    legend_label = ['Positive rate', 'Arrival incidence (updated monthly)', 'Local incidence (multiplied by 1000)', 'Fatality rate (cumulative)'];
+    
   //-- Update legend title
   legend_color.splice(0, 0, '#000000');
   legend_value.splice(0, 0, '');
-  legend_label.splice(0, 0, legend_title);
+  legend_label.splice(0, 0, LS_GetLegendTitle_Last(wrap));
   
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
