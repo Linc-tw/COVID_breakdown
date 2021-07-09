@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.07.05                  ##
+    ##  Version 2021.07.09                  ##
     ##########################################
 
 import os
@@ -984,7 +984,7 @@ class MainSheet(Template):
         '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/18-6/24', '5/19-6/10', 
         '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
         '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', '6/4-19', '6/4-23', '6/8-20', '6/10-22', '6/10-26', '6/10-7/5', '6/11-25', '6/14-21', 
-        '6/16-28', '6/17-7/3', '6/19-27', '6/19-7/4', '6/20-29', '6/22-30', '6/22-7/1', '6/22-7/2', '6/26-7/6', '7/1-7', 
+        '6/16-28', '6/17-7/3', '6/19-27', '6/19-7/4', '6/20-29', '6/22-30', '6/22-7/1', '6/22-7/2', '6/26-7/6', '7/1-7', '7/1-8', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X',
       ]:
         onset_date_list.append(np.nan)
@@ -1095,7 +1095,7 @@ class MainSheet(Template):
       'vomiting': ['嘔吐感', '嘔吐'],
       'diarrhea': ['腹瀉'], 
       
-      'headache': ['頭暈目眩', '輕度頭痛', '頭骨痛', '偏頭痛', '頭痛', '頭暈', '頭脹', '暈眩', '頭重'],
+      'headache': ['頭暈目眩', '輕度頭痛', '頭骨痛', '偏頭痛', '頭痛', '頭暈', '頭脹', '頭昏', '暈眩', '頭重'],
       'eyes sore': ['結膜充血', '後眼窩痛', '眼睛癢', '眼睛痛', '眼壓高'], 
       'chest pain+backache': ['胸背痛'], 
       'chest pain': ['呼吸時胸痛', '心臟不舒服', '胸部不適', '胸痛', '胸悶'],
@@ -1226,7 +1226,7 @@ class MainSheet(Template):
         'B醫療機構', '銀河百家樂', '維納斯會館', '羅東遊藝場', '串門子餐廳', '彰化麻將團', 
         '中國醫K歌團', '小姑娘小吃店', '快樂城小吃店', '桃園觀音工地', '台北農產公司', 
         '東方紅時尚會館', '梧棲區藥局家族', '加強型防疫旅館', '鳳山早餐店家族', '國軍桃園總醫院', '桃園國軍總醫院', '台北家禽批發場', 
-        '南澳雜貨店傳播鏈', '復興區公所員工家族案關係圖', 
+        '南澳雜貨店傳播鏈', '社中街攤販集中場', '復興區公所員工家族案關係圖', 
       ]:
         link_list.append('linked')
 
@@ -3134,18 +3134,14 @@ class VaccinationSheet(Template):
       available_date = row[4]
       
       if available_date is None or available_date == '':
-        continue
+        ind = ''
+      else:
+        ind = ISODateToOrd(available_date) - ord_ref 
       
-      ind = ISODateToOrd(available_date) - ord_ref 
       stock['index'].append(ind)
       stock['date'].append(available_date)
       stock['source'].append(source)
       stock[brand][i] = quantity
-      
-    nb_rows = len(stock['date'])
-      
-    for brand in self.brand_list:
-      stock[brand] = stock[brand][:nb_rows]
     return stock
     
   def makeAdministrated_vaccinationProgress(self):
@@ -3268,7 +3264,7 @@ def sandbox():
   #county_sheet.saveCsv_incidenceEvolutionByCounty()
   
   vacc_sheet = VaccinationSheet()
-  vacc_sheet.saveCsv_vaccinationByBrand()
+  vacc_sheet.saveCsv_vaccinationProgress()
   
   #main_sheet = MainSheet()
   #status_sheet = StatusSheet()

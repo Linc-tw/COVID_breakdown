@@ -15,11 +15,11 @@ var VP_latest_wrap = {
 
   iso_ref: '2020-01-01',
   iso_begin: '2021-03-21',
-  extra_days: 14,
+  extra_factor: 1.2,
   xticklabel_width_min: 9,
   
-  y_max_factor: 1.2,
-  y_max_fixed: 9e+6,
+  y_max_factor: 1.3,
+  y_max_fixed: 0,
   nb_yticks: 4,
   legend_pos_x: 110,
   r: 3, //-- Dot radius

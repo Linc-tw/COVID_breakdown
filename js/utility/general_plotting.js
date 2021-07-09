@@ -8,10 +8,7 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//VP annotation font
 //VP annotation language
-//VP annotation 'extrapolation' right above xaxis
-//VP population line
 //Note with "Collapse"
 
 //------------------------------------------------------------------------------

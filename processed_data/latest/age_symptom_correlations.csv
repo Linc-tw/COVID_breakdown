@@ -8,7 +8,7 @@ fatigue,100+,0.0554,1
 sneezing,100+,-0.012,0
 diarrhea,100+,-0.0116,0
 soreness,100+,-0.01,0
-headache,100+,-0.0089,0
+headache,100+,-0.009,0
 fever,90s,0.0274,29
 cough,90s,0.0396,26
 dyspnea,90s,0.1181,25
@@ -18,7 +18,7 @@ fatigue,90s,-0.0462,2
 sneezing,90s,-0.0384,2
 diarrhea,90s,-0.0211,3
 soreness,90s,-0.0385,1
-headache,90s,-0.0489,0
+headache,90s,-0.0494,0
 fever,80s,0.0512,77
 cough,80s,-0.0365,48
 dyspnea,80s,0.1239,53
@@ -28,7 +28,7 @@ fatigue,80s,0.096,26
 sneezing,80s,-0.067,5
 diarrhea,80s,-0.0343,8
 soreness,80s,-0.0609,3
-headache,80s,-0.0121,6
+headache,80s,-0.0134,6
 fever,70s,0.0891,125
 cough,70s,0.0877,106
 dyspnea,70s,0.1241,75
@@ -38,7 +38,7 @@ fatigue,70s,0.059,31
 sneezing,70s,-0.0401,14
 diarrhea,70s,0.045,24
 soreness,70s,0.0125,15
-headache,70s,-0.0482,6
+headache,70s,-0.0399,7
 fever,60s,0.0902,130
 cough,60s,0.1301,120
 dyspnea,60s,0.0967,72
@@ -48,7 +48,7 @@ fatigue,60s,0.0307,28
 sneezing,60s,-0.0085,19
 diarrhea,60s,0.0232,22
 soreness,60s,0.0508,20
-headache,60s,-0.0036,11
+headache,60s,-0.0055,11
 fever,50s,-0.0044,61
 cough,50s,-0.0006,51
 dyspnea,50s,-0.0502,22
@@ -58,7 +58,7 @@ fatigue,50s,0.0044,14
 sneezing,50s,0.0135,13
 diarrhea,50s,0.0204,13
 soreness,50s,-0.0122,7
-headache,50s,-0.0184,5
+headache,50s,-0.0197,5
 fever,40s,-0.008,46
 cough,40s,-0.0487,31
 dyspnea,40s,-0.0913,10
@@ -68,7 +68,7 @@ fatigue,40s,-0.052,5
 sneezing,40s,0.0434,13
 diarrhea,40s,-0.0142,7
 soreness,40s,0.0219,8
-headache,40s,0.0684,10
+headache,40s,0.0667,10
 fever,30s,-0.1058,32
 cough,30s,-0.0581,32
 dyspnea,30s,-0.1407,4
@@ -78,7 +78,7 @@ fatigue,30s,-0.0482,6
 sneezing,30s,0.0354,13
 diarrhea,30s,0.0215,11
 soreness,30s,0.0277,9
-headache,30s,-0.018,4
+headache,30s,-0.0191,4
 fever,20s,-0.1359,28
 cough,20s,-0.1167,23
 dyspnea,20s,-0.1643,1
@@ -88,7 +88,7 @@ fatigue,20s,-0.0696,4
 sneezing,20s,0.0316,13
 diarrhea,20s,-0.0333,6
 soreness,20s,0.0011,7
-headache,20s,0.045,9
+headache,20s,0.0434,9
 fever,10s,-0.0654,7
 cough,10s,-0.0534,6
 dyspnea,10s,-0.0694,1
@@ -98,7 +98,7 @@ fatigue,10s,-0.0335,1
 sneezing,10s,0.068,6
 diarrhea,10s,-0.0456,0
 soreness,10s,-0.0164,1
-headache,10s,0.1156,6
+headache,10s,0.1141,6
 fever,0s,-0.0536,6
 cough,0s,-0.0696,3
 dyspnea,0s,-0.0734,0
@@ -108,4 +108,4 @@ fatigue,0s,-0.0458,0
 sneezing,0s,0.0221,3
 diarrhea,0s,-0.0187,1
 soreness,0s,-0.0348,0
-headache,0s,-0.031,0
+headache,0s,-0.0313,0

@@ -8,7 +8,7 @@ fatigue,100+,0.0542,1
 sneezing,100+,-0.0114,0
 diarrhea,100+,-0.0104,0
 soreness,100+,-0.0086,0
-headache,100+,-0.0084,0
+headache,100+,-0.0085,0
 fever,90s,0.0481,30
 cough,90s,0.0452,26
 asymptomatic,90s,-0.1096,1
@@ -18,7 +18,7 @@ fatigue,90s,-0.0393,2
 sneezing,90s,-0.0382,2
 diarrhea,90s,-0.0169,3
 soreness,90s,-0.0321,1
-headache,90s,-0.0466,0
+headache,90s,-0.0469,0
 fever,80s,0.0812,78
 cough,80s,-0.0122,49
 asymptomatic,80s,-0.1285,13
@@ -28,7 +28,7 @@ fatigue,80s,0.1077,27
 sneezing,80s,-0.0653,5
 diarrhea,80s,-0.0262,8
 soreness,80s,-0.0493,3
-headache,80s,-0.0148,6
+headache,80s,-0.0158,6
 fever,70s,0.1209,126
 cough,70s,0.1042,107
 asymptomatic,70s,-0.1718,19
@@ -38,7 +38,7 @@ fatigue,70s,0.0723,32
 sneezing,70s,-0.0433,14
 diarrhea,70s,0.049,24
 soreness,70s,0.0233,15
-headache,70s,-0.0484,6
+headache,70s,-0.0409,7
 fever,60s,0.1192,134
 cough,60s,0.1455,125
 asymptomatic,60s,-0.1653,24
@@ -48,7 +48,7 @@ fatigue,60s,0.0404,29
 sneezing,60s,-0.0074,21
 diarrhea,60s,0.031,23
 soreness,60s,0.0638,21
-headache,60s,-0.0126,11
+headache,60s,-0.014,11
 fever,50s,0.0022,64
 cough,50s,0.0081,56
 asymptomatic,50s,-0.0488,30
@@ -58,7 +58,7 @@ fatigue,50s,0.0144,16
 sneezing,50s,0.0093,15
 diarrhea,50s,0.012,13
 soreness,50s,-0.0024,8
-headache,50s,-0.0184,6
+headache,50s,-0.0194,6
 fever,40s,-0.0014,51
 cough,40s,-0.0195,40
 asymptomatic,40s,0.0284,37
@@ -68,7 +68,7 @@ fatigue,40s,-0.0207,9
 sneezing,40s,0.0418,16
 diarrhea,40s,0.0154,11
 soreness,40s,0.0257,9
-headache,40s,0.0417,10
+headache,40s,0.0404,10
 fever,30s,-0.126,40
 cough,30s,-0.0941,38
 asymptomatic,30s,0.1922,82
@@ -78,7 +78,7 @@ fatigue,30s,-0.0703,6
 sneezing,30s,0.0302,19
 diarrhea,30s,0.0033,13
 soreness,30s,0.0004,9
-headache,30s,0.0249,11
+headache,30s,0.0236,11
 fever,20s,-0.1902,34
 cough,20s,-0.143,35
 asymptomatic,20s,0.3208,120
@@ -88,7 +88,7 @@ fatigue,20s,-0.0982,4
 sneezing,20s,0.0241,21
 diarrhea,20s,-0.0518,8
 soreness,20s,-0.0315,7
-headache,20s,0.0099,11
+headache,20s,0.0085,11
 fever,10s,-0.0654,7
 cough,10s,-0.0482,7
 asymptomatic,10s,0.0429,13
@@ -98,7 +98,7 @@ fatigue,10s,-0.0339,1
 sneezing,10s,0.0778,8
 diarrhea,10s,-0.0445,0
 soreness,10s,-0.017,1
-headache,10s,0.1501,9
+headache,10s,0.1485,9
 fever,0s,-0.0486,6
 cough,0s,-0.0659,3
 asymptomatic,0s,0.1112,16
@@ -108,4 +108,4 @@ fatigue,0s,-0.0428,0
 sneezing,0s,0.0125,3
 diarrhea,0s,-0.0187,1
 soreness,0s,-0.0321,0
-headache,0s,-0.0311,0
+headache,0s,-0.0314,0
