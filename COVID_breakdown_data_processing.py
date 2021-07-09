@@ -3011,6 +3011,7 @@ class VaccinationSheet(Template):
     
     self.data = data
     self.n_total = len(self.data['data'])
+    self.brand_list = ['AZ', 'Moderna']
     
     if verbose:
       print('N_total = %d' % self.n_total)
@@ -3040,16 +3041,15 @@ class VaccinationSheet(Template):
     cum_moderna_list = self.getCumModerna()
     
     ## Declare all brands
-    brand_list = ['AZ', 'Moderna']
     cum_doses_dict = {}
     for date, cum_az, cum_moderna in zip(date_list, cum_az_list, cum_moderna_list):
       cum_doses_dict[date] = [cum_az, cum_moderna]
     
     ## Make stock dict
-    stock = {'date': [], 'interpolated': [], 'brand_list': brand_list, 'new_doses': [[] for brand in brand_list]}
+    stock = {'date': [], 'interpolated': [], 'brand_list': self.brand_list, 'new_doses': [[] for brand in self.brand_list]}
     
     ## For recording last non-missing data
-    prev = [0] * len(brand_list)
+    prev = [0] * len(self.brand_list)
     ord_prev = ISODateToOrd(date_list[0]) - 1
     
     ord_ref = ISODateToOrd(ISO_DATE_REF)
@@ -3063,7 +3063,7 @@ class VaccinationSheet(Template):
       ## Out of provided range
       if date not in cum_doses_dict:
         stock['interpolated'].append(1)
-        for i, _ in enumerate(brand_list):
+        for i, _ in enumerate(self.brand_list):
           stock['new_doses'][i].append(0)
         continue
       
@@ -3075,7 +3075,7 @@ class VaccinationSheet(Template):
         ord_ = ISODateToOrd(date)
         length = ord_ - ord_prev
         
-        for i, _ in enumerate(brand_list):
+        for i, _ in enumerate(self.brand_list):
           stock['new_doses'][i] += itpFromCumul(prev[i], cum_doses[i], length)
           
         stock['interpolated'].append(-int(1 < length))
@@ -3119,32 +3119,33 @@ class VaccinationSheet(Template):
     return
   
   def makeDeliveries_vaccinationProgress(self):
-    stock = {}
+    ord_ref = ISODateToOrd(ISO_DATE_REF)
+    nb_rows = len(DELIVERY_LIST)
+    
+    stock = {col: [] for col in ['index', 'date', 'source']}
+    stock.update({brand: np.zeros(nb_rows, dtype=int) for brand in self.brand_list})
     
     ## brand, source, quantity, delivery_date, available_date, delivery_news, available_news
-    for row in DELIVERY_LIST:
+    for i, row in enumerate(DELIVERY_LIST):
       brand = row[0]
+      source = row[1]
       quantity = row[2]
       delivery_date = row[3]
       available_date = row[4]
       
-      #stock[delivery_date] = stock.get(delivery_date, {})
-      #stock[delivery_date][brand] = quantity
-      
       if available_date is None or available_date == '':
         continue
       
-      stock[available_date] = stock.get(available_date, {})
-      stock[available_date][brand] = quantity
+      ind = ISODateToOrd(available_date) - ord_ref 
+      stock['index'].append(ind)
+      stock['date'].append(available_date)
+      stock['source'].append(source)
+      stock[brand][i] = quantity
       
-    date_list = list(stock.keys())
-    az_list = [delivery.get('AZ', 0) for delivery in stock.values()]
-    moderna_list = [delivery.get('Moderna', 0) for delivery in stock.values()]
-    
-    ord_ref = ISODateToOrd(ISO_DATE_REF)
-    index_list = [ISODateToOrd(iso)-ord_ref for iso in date_list]
-    
-    stock = {'index': index_list, 'date': date_list, 'AZ': az_list, 'Moderna': moderna_list}
+    nb_rows = len(stock['date'])
+      
+    for brand in self.brand_list:
+      stock[brand] = stock[brand][:nb_rows]
     return stock
     
   def makeAdministrated_vaccinationProgress(self):

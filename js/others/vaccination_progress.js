@@ -58,8 +58,9 @@ function VP_FormatData(wrap, data) {
 
 function VP_FormatData2(wrap, data) {
   //-- Variables for data
-  var col_tag_list = data.columns.slice(2); //-- 0 = index, 1 = date
+  var col_tag_list = data.columns.slice(3); //-- 0 = index, 1 = date, 2 = source
   var nb_col = col_tag_list.length;
+  var annotation = [];
   var row;
   
   //-- Variables for xtick
@@ -67,7 +68,7 @@ function VP_FormatData2(wrap, data) {
   x_min -= 0.5; //-- For edge
   
   //-- Other variables
-  var y_max = 0; //wrap.population;
+  var y_max = 0;
   var x = x_min;
   var y = 0;
   var block = {
@@ -75,7 +76,7 @@ function VP_FormatData2(wrap, data) {
     'y': y
   };
   var block2 = [block];
-  var i, j;
+  var i, j, dy;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
@@ -93,12 +94,14 @@ function VP_FormatData2(wrap, data) {
     
     //-- After delivery
     if (0 == wrap.brand) {
+      dy = 0;
       //-- Loop over column
       for (j=0; j<nb_col; j++)
-        y += +row[col_tag_list[j]];
+        dy += +row[col_tag_list[j]];
     }
     else 
-      y += +row[col_tag_list[wrap.brand-1]];
+      dy = +row[col_tag_list[wrap.brand-1]];
+    y += dy;
     
     block = {
       'x': x,
@@ -110,20 +113,26 @@ function VP_FormatData2(wrap, data) {
     
     //-- Update y_max
     y_max = Math.max(y_max, y);
+    
+    //-- Annotation
+    source = row['source'];
+    if (dy > 0 && source != 'COVAX' && !col_tag_list.includes(source))
+      annotation.push({x: x, y: y, source: source});
   }
   
   //-- Calculate last point
   var iso_today = wrap.timestamp.slice(0, 10);
-  var x_max = (new Date(iso_today) - new Date(wrap.iso_ref)) / 86400000;
-  x_max += 0.5; //-- For edge
+  var x_now = (new Date(iso_today) - new Date(wrap.iso_ref)) / 86400000;
+  x_now += 0.5; //-- For edge
+  var x_max = x_now + wrap.extra_days;
   
   //-- Half day correction
   var hour = wrap.timestamp.slice(11, 13);
   if (+hour < 12)
-    x_max -= 1;
+    x_now -= 1;
   
   //-- Stock last point
-  x = x_max;
+  x = x_now;
   block = {
     'x': x,
     'y': y
@@ -138,13 +147,89 @@ function VP_FormatData2(wrap, data) {
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
+  wrap.annotation = annotation;
   wrap.col_tag_list = col_tag_list;
   wrap.nb_col = nb_col;
   wrap.iso_today = iso_today;
   wrap.x_min = x_min;
+  wrap.x_now = x_now;
   wrap.x_max = x_max;
   wrap.y_max = y_max;
   wrap.legend_value = legend_value;
+}
+
+function VP_FormatData3(wrap, data) {
+  //-- Variables for data
+  var col_tag_list = data.columns.slice(2); //-- 0 = index, 1 = date
+  var nb_col = col_tag_list.length;
+  var row;
+  
+  //-- Other variables
+  var block2 = [];
+  var y_max = 0;
+  var i_delivery = 0;
+  var delivery = wrap.formatted_data[0][i_delivery+1];
+  var i, j, x, y, block;
+  
+  //-- Loop over row
+  for (i=0; i<data.length; i++) {
+    row = data[i];
+    x = +row['index'];
+    
+    if (0 == wrap.brand) {
+      y = 0;
+      //-- Loop over column
+      for (j=0; j<nb_col; j++)
+        y += +row[col_tag_list[j]];
+    }
+    else 
+      y = +row[col_tag_list[wrap.brand-1]];
+    
+    //-- Get delivery data to stock in block, for tooltip
+    if (x >= delivery.x) {
+      i_delivery += 2;
+      delivery = wrap.formatted_data[0][i_delivery+1];
+    }
+    
+    block = {
+      'date': row['date'],
+      'x': x,
+      'y': y,
+      'y_delivery': delivery.y,
+    };
+    
+    //-- Update y_max
+    y_max = Math.max(y_max, y);
+      
+    //-- Stock
+    block2.push(block);
+  }
+  
+  //-- Stock array
+  wrap.formatted_data.push(block2);
+  
+  //-- Calculate y_max
+  if (wrap.y_max_fixed > 0)
+    y_max = wrap.y_max_fixed
+  else {
+    y_max = Math.max(y_max, wrap.y_max);
+    y_max *= wrap.y_max_factor;
+  }
+  
+  //-- Calculate y_path
+  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks);
+  
+  //-- Generate yticks
+  var ytick = [];
+  for (i=0; i<y_max; i+=y_path) 
+    ytick.push(i)
+  
+  //-- Get latest value as legend value
+  wrap.legend_value.push(y);
+  
+  //-- Save to wrapper
+  wrap.y_max = y_max;
+  wrap.ytick = ytick;
 }
 
 function VP_MakeXTick(wrap) {
@@ -210,9 +295,9 @@ function VP_MakeXTick(wrap) {
     x /= 86400000; //-- Convert from ms to day
     x += 0.5; //-- For edge
     
-    //-- If last year, do not draw xtick_sep_year & use x_max to compare
+    //-- If last year, do not draw xtick_sep_year & use x_now to compare
     if (i == yyyy_today)
-      x = wrap.x_max;
+      x = wrap.x_now;
     else
       xtick_sep_year.push(x);
       
@@ -235,80 +320,26 @@ function VP_MakeXTick(wrap) {
   wrap.xticklabel_year = xticklabel_year;
 }
 
-function VP_FormatData3(wrap, data) {
-  //-- Variables for data
-  var col_tag_list = data.columns.slice(2); //-- 0 = index, 1 = date
-  var nb_col = col_tag_list.length;
-  var row;
-  
-  //-- Other variables
-  var block2 = [];
-  var y_max = 0;
-  var i_delivery = 0;
-  var delivery = wrap.formatted_data[0][i_delivery+1];
-  var i, j, x, y, block;
-  
-  //-- Loop over row
-  for (i=0; i<data.length; i++) {
-    row = data[i];
-    x = +row['index'];
-    
-    if (0 == wrap.brand) {
-      y = 0;
-      //-- Loop over column
-      for (j=0; j<nb_col; j++)
-        y += +row[col_tag_list[j]];
-    }
-    else 
-      y = +row[col_tag_list[wrap.brand-1]];
-    
-    if (x >= delivery.x) {
-      i_delivery += 2;
-      delivery = wrap.formatted_data[0][i_delivery+1];
-    }
-    
-    block = {
-      'date': row['date'],
-      'x': x,
-      'y': y,
-      'y_delivery': delivery.y,
-    };
-    
-    //-- Update y_max
-    y_max = Math.max(y_max, y);
-      
-    //-- Stock
-    block2.push(block);
-  }
-  
-  //-- Stock array
-  wrap.formatted_data.push(block2);
-  
-  //-- Calculate y_max
-  y_max = Math.max(y_max, wrap.y_max);
-  y_max *= wrap.y_max_factor;
-  
-  //-- Calculate y_path
-  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks);
-  
-  //-- Generate yticks
-  var ytick = [];
-  for (i=0; i<y_max; i+=y_path) 
-    ytick.push(i)
-  
-  //-- Get latest value as legend value
-  wrap.legend_value.push(y);
-  
-  //-- Save to wrapper
-  wrap.y_max = y_max;
-  wrap.ytick = ytick;
-  
-  //-- Post processing
-  var threshold = 0.6;
-  block2 = [{x: wrap.x_min, y: wrap.population}, {x: wrap.x_max, y: wrap.population}];
-  wrap.formatted_data.push(block2);
-  
+function VP_FormatData4(wrap) {
   VP_MakeXTick(wrap);
+  
+  //-- Now
+  var block = [{x: wrap.x_now, y: 0}, {x: wrap.x_now, y: wrap.y_max}];
+  wrap.formatted_data.push(block);
+  
+  //-- Population line
+  var threshold = 0.6;
+  var block = [{x: wrap.x_min, y: wrap.population*threshold}, {x: wrap.x_max, y: wrap.population*threshold}];
+  wrap.formatted_data.push(block);
+  
+  //-- Extrapolation
+  var administrated = wrap.formatted_data[1];
+  var length = administrated.length;
+  var last = administrated[length-1];
+  var gradient = (last.y - administrated[length-8].y) / 7;
+  var block = [last, {x: last.x + wrap.extra_days, y: last.y + wrap.extra_days*gradient}];
+  wrap.formatted_data.push(block);
+//   wrap.annotation.push(block[1]);
 }
 
 //-- Tooltip
@@ -355,12 +386,25 @@ function VP_Plot(wrap) {
     .attr('class', 'xaxis label year')
     .attr('transform', 'translate(0,' + wrap.height + ')');
     
+  //-- Add ylabel
+  GP_PlotYLabel(wrap);
+  
   //-- Add tooltip
   GP_MakeTooltip(wrap);
   
-  //-- Define color
+  //-- Define color & linestyle
+  //-- AZ, Moderna, 
   var color_list = GP_wrap.c_list.slice(7, 7+wrap.nb_col);
-  color_list.push(GP_wrap.gray);
+  var linewidth_list = ['2.5px', '2.5px'];
+  var linestyle_list = ['5,0', '5,0'];
+  
+  //-- Now, 60% population, extrapolation
+  var i;
+  for (i=0; i<3; i++) {
+    color_list.push(GP_wrap.gray);
+    linewidth_list.push('1.5px');
+    linestyle_list.push('5,5');
+  }
   
   //-- Define xscale
   var xscale = d3.scaleLinear()
@@ -370,10 +414,6 @@ function VP_Plot(wrap) {
   //-- Define yscale
   var yscale = GP_MakeLinearY(wrap);
     
-  //-- Define linestyle
-  var linewidth_list = ['2.5px', '2.5px', '1.5px'];
-  var linestyle_list = ['5,0', '5,0', '5,5'];
-  
   //-- Define dummy line
   var draw_line = d3.line()
     .x(function (d) {return xscale(d.x);})
@@ -424,13 +464,17 @@ function VP_Replot(wrap) {
   
   //-- Define & update xaxis_tick_month
   var xaxis_tick_month = d3.axisBottom(xscale)
-    .tickSize(10)
+    .tickSize(12)
     .tickSizeOuter(0)
     .tickValues(wrap.xtick_sep_month)
     .tickFormat('');
   wrap.svg.select('.xaxis.tick.month')
     .call(xaxis_tick_month);
-  
+    
+  //-- Adjust xtick style
+  wrap.svg.selectAll('.xaxis.tick.month line')
+    .style('stroke-opacity', '0.8');
+    
   //-- Define & update xaxis_tick_year
   var xaxis_tick_year = d3.axisBottom(xscale)
     .tickSize(20)
@@ -472,6 +516,43 @@ function VP_Replot(wrap) {
   var ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '疫苗劑數'};
   GP_ReplotYLabel(wrap, ylabel_dict);
     
+  //-- Remove old annotations
+  wrap.svg.selectAll('.annotation')
+    .remove();
+    
+  //-- Update annotation lines
+  var dy = 20;
+  var i, x_deliv, y_deliv, x_anno, y_anno, points, text;
+  
+  for (i=0; i<wrap.annotation.length; i++) {
+    x_deliv = wrap.annotation[i].x;
+    y_deliv = wrap.annotation[i].y;
+    x_anno = (x_deliv - wrap.x_min) / (wrap.x_max - wrap.x_min) * wrap.width;
+    y_anno = (1 - y_deliv / wrap.y_max) * wrap.height;
+    points = x_anno + ',' + y_anno + ' ' + x_anno + ',' + (y_anno-dy);
+//     if (i == wrap.annotation.length-1) 
+//       text = 'Extrapolation'; 
+//     else
+      text = 'Donated by '+wrap.annotation[i].source;
+  
+    wrap.svg.append('polyline')
+      .attr('class', 'annotation line')
+      .attr('points', points)
+      .attr('fill', 'none')
+      .attr('stroke', '#000000')
+      .attr('stroke-width', 1)
+      .attr('opacity', 0.25);
+      
+    //-- Update annotation text
+    wrap.svg.append('text')
+      .attr('class', 'annotation text')
+      .attr('x', x_anno)
+      .attr('y', y_anno-1.5*dy)
+      .attr('text-anchor', 'end')
+      .style('fill', '#000000')
+      .text(text);
+  }
+  
   //-- Define line
   var draw_line = d3.line()
     .x(function (d) {return xscale(d.x);})
@@ -571,6 +652,7 @@ function VP_Load(wrap) {
       VP_FormatData(wrap, data);
       VP_FormatData2(wrap, data2);
       VP_FormatData3(wrap, data3);
+      VP_FormatData4(wrap);
       VP_Plot(wrap);
       VP_Replot(wrap);
     });
@@ -586,6 +668,7 @@ function VP_Reload(wrap) {
       
       VP_FormatData2(wrap, data2);
       VP_FormatData3(wrap, data3);
+      VP_FormatData4(wrap);
       VP_Replot(wrap);
     });
 }

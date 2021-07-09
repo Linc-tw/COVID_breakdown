@@ -8,8 +8,10 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//VP: donation legend
-//VP: projection
+//VP annotation font
+//VP annotation language
+//VP annotation 'extrapolation' right above xaxis
+//VP population line
 //Note with "Collapse"
 
 //------------------------------------------------------------------------------
@@ -319,6 +321,10 @@ function GP_ReplotDateAsX(wrap) {
       .attr('transform', 'translate(-20,15) rotate(-90)')
       .style('text-anchor', 'end');
       
+  //-- Tick style
+  wrap.svg.selectAll('.xaxis line')
+    .style('stroke-opacity', '0.4');
+      
   //-- Save to wrapper
   wrap.xscale_tick = xscale;
 }
@@ -342,6 +348,10 @@ function GP_ReplotBandX(wrap) {
     .selectAll('text')
       .attr('transform', 'translate(0,5)')
       .style('text-anchor', 'middle');
+      
+  //-- Adjust xtick style
+  wrap.svg.selectAll('.xaxis line')
+    .style('stroke-opacity', '0.4');
       
   //-- Save to wrapper
   wrap.xscale_tick = xscale;
