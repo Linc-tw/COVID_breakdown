@@ -652,21 +652,21 @@ function VP_Replot(wrap) {
   var legend_label_2 = [];
   var i, legend_label, col_tag_list;
   if (LS_lang == 'zh-tw') {
-    legend_label = ['到貨量', '接種量'];
+    legend_label = ['供應量', '接種量'];
     legend_title = '整體統計';
     col_tag_list = ['總'].concat(wrap.col_tag_list);
     for (i=0; i<legend_label.length; i++)
       legend_label_2.push(col_tag_list[wrap.brand]+legend_label[i]);
   }
   else if (LS_lang == 'fr') {
-    legend_label = ['Livraisons ', ' Injections '];
+    legend_label = ['Approvisionnements ', ' Injections '];
     legend_title = 'Stat complète';
-    col_tag_list = ['totales'].concat(wrap.col_tag_list);
+    col_tag_list = [['totaux'].concat(wrap.col_tag_list), ['totales'].concat(wrap.col_tag_list)];
     for (i=0; i<legend_label.length; i++)
-      legend_label_2.push(legend_label[i]+col_tag_list[wrap.brand]);
+      legend_label_2.push(legend_label[i]+col_tag_list[i][wrap.brand]);
   }
   else {
-    legend_label = [' deliveries', ' injections'];
+    legend_label = [' supplies', ' injections'];
     legend_title = 'Overall stats';
     col_tag_list = ['Total'].concat(wrap.col_tag_list);
     for (i=0; i<legend_label.length; i++)
