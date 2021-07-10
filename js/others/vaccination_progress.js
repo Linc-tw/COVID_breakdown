@@ -122,7 +122,8 @@ function VP_FormatData2(wrap, data) {
   block.push({x: x, y: y});
   
   //-- Calculate x_max
-  var x_max = Math.ceil(x_min + (x_today - x_min) * wrap.extra_factor);
+  var x_max = Math.ceil(x_min+0.5 + (x_today - x_min) * wrap.x_max_factor)
+  x_max -= 0.5;
   
   //-- Stock array
   var formatted_data = [block];
@@ -386,7 +387,7 @@ function VP_FormatData4(wrap) {
   var length = administrated.length;
   var last = administrated[length-1];
   var gradient = (last.y - administrated[length-8].y) / 7;
-  var extra_days = Math.ceil(0.75 * (wrap.extra_factor-1) * (wrap.x_today-wrap.x_min));
+  var extra_days = 14; //Math.ceil(0.75 * (wrap.x_max_factor-1) * (wrap.x_today-wrap.x_min));
   block_line = [last, {x: last.x+extra_days, y: last.y+extra_days*gradient}];
   wrap.formatted_data.push(block_line);
   

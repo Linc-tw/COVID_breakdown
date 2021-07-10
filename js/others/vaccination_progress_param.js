@@ -15,7 +15,7 @@ var VP_latest_wrap = {
 
   iso_ref: '2020-01-01',
   iso_begin: '2021-03-21',
-  extra_factor: 1.2,
+  x_max_factor: 1.19,
   xticklabel_width_min: 9,
   
   y_max_factor: 1.3,
