@@ -428,11 +428,11 @@ function VP_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw')
-    col_label_list = ['到貨量', '施打量'];
+    col_label_list = ['供應量', '施打量'];
   else if (LS_lang == 'fr')
-    col_label_list = ['Livraisons', 'Injections'];
+    col_label_list = ['Approvisionnements', 'Injections'];
   else
-    col_label_list = ['Deliveries', 'Injections'];
+    col_label_list = ['Supplies', 'Injections'];
   
   //-- Define tooltip texts
   var tooltip_text = d.date;
