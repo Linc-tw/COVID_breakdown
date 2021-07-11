@@ -8,8 +8,10 @@
 var VBB_latest_wrap = {
   tag: 'vaccination_by_brand_latest', 
   data_path_list: [
-    '../processed_data/latest/vaccination_by_brand.csv', 
-    '../processed_data/key_numbers.csv',
+//     '../processed_data/latest/vaccination_by_brand.csv', 
+//     '../processed_data/key_numbers.csv',
+    'processed_data/latest/vaccination_by_brand.csv', 
+    'processed_data/key_numbers.csv',
   ],
 
   xlabel_path: GP_wrap.xlabel_path_latest, 
@@ -40,8 +42,10 @@ var VBB_overall_wrap = {
 var VBB_2021_wrap = {
   tag: 'vaccination_by_brand_2021',
   data_path_list: [
-    '../processed_data/2021/vaccination_by_brand.csv',
-    '../processed_data/key_numbers.csv',
+//     '../processed_data/2021/vaccination_by_brand.csv',
+//     '../processed_data/key_numbers.csv',
+    'processed_data/2021/vaccination_by_brand.csv',
+    'processed_data/key_numbers.csv',
   ],
 
   xlabel_path: GP_wrap.xlabel_path_2021,

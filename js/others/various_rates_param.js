@@ -8,8 +8,10 @@
 var VR_latest_wrap = {
   tag: 'various_rates_latest',
   data_path_list: [
-    '../processed_data/latest/various_rates.csv',
-    '../processed_data/key_numbers.csv',
+//     '../processed_data/latest/various_rates.csv',
+//     '../processed_data/key_numbers.csv',
+    'processed_data/latest/various_rates.csv',
+    'processed_data/key_numbers.csv',
   ],
 
   xlabel_path: GP_wrap.xlabel_path_latest,
@@ -40,8 +42,10 @@ var VR_overall_wrap = {
 var VR_2021_wrap = {
   tag: 'various_rates_2021',
   data_path_list: [
-    '../processed_data/2021/various_rates.csv',
-    '../processed_data/key_numbers.csv',
+//     '../processed_data/2021/various_rates.csv',
+//     '../processed_data/key_numbers.csv',
+    'processed_data/2021/various_rates.csv',
+    'processed_data/key_numbers.csv',
   ],
 
   xlabel_path: GP_wrap.xlabel_path_2021,
@@ -56,8 +60,10 @@ var VR_2021_wrap = {
 var VR_2020_wrap = {
   tag: 'various_rates_2020',
   data_path_list: [
-    '../processed_data/2020/various_rates.csv',
-    '../processed_data/key_numbers.csv',
+//     '../processed_data/2020/various_rates.csv',
+//     '../processed_data/key_numbers.csv',
+    'processed_data/2020/various_rates.csv',
+    'processed_data/key_numbers.csv',
   ],
   xlabel_path: GP_wrap.xlabel_path_2020,
   r_list: GP_wrap.r_list_2020,

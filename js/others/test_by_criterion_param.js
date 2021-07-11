@@ -8,8 +8,10 @@
 var TBC_latest_wrap = {
   tag: 'test_by_criterion_latest', 
   data_path_list: [
-    '../processed_data/latest/test_by_criterion.csv', 
-    '../processed_data/key_numbers.csv',
+//     '../processed_data/latest/test_by_criterion.csv', 
+//     '../processed_data/key_numbers.csv',
+    'processed_data/latest/test_by_criterion.csv', 
+    'processed_data/key_numbers.csv',
   ],
 
   xlabel_path: GP_wrap.xlabel_path_latest, 
@@ -38,8 +40,10 @@ var TBC_overall_wrap = {
 var TBC_2021_wrap = {
   tag: 'test_by_criterion_2021',
   data_path_list: [
-    '../processed_data/2021/test_by_criterion.csv',
-    '../processed_data/key_numbers.csv',
+//     '../processed_data/2021/test_by_criterion.csv',
+//     '../processed_data/key_numbers.csv',
+    'processed_data/2021/test_by_criterion.csv',
+    'processed_data/key_numbers.csv',
   ],
 
   xlabel_path: GP_wrap.xlabel_path_2021,
@@ -53,8 +57,10 @@ var TBC_2021_wrap = {
 var TBC_2020_wrap = {
   tag: 'test_by_criterion_2020',
   data_path_list: [
-    '../processed_data/2020/test_by_criterion.csv',
-    '../processed_data/key_numbers.csv',
+//     '../processed_data/2020/test_by_criterion.csv',
+//     '../processed_data/key_numbers.csv',
+    'processed_data/2020/test_by_criterion.csv',
+    'processed_data/key_numbers.csv',
   ],
 
   xlabel_path: GP_wrap.xlabel_path_2020,

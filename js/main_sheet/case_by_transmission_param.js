@@ -8,8 +8,10 @@
 var CBT_latest_wrap = {
   tag: 'case_by_transmission_latest',
   data_path_list: [
-    '../processed_data/latest/case_by_transmission_by_report_day.csv',
-    '../processed_data/key_numbers.csv',
+//     '../processed_data/latest/case_by_transmission_by_report_day.csv',
+//     '../processed_data/key_numbers.csv',
+    'processed_data/latest/case_by_transmission_by_report_day.csv',
+    'processed_data/key_numbers.csv',
   ],
   
   xlabel_path: GP_wrap.xlabel_path_latest,
@@ -40,8 +42,10 @@ var CBT_overall_wrap = {
 var CBT_2021_wrap = {
   tag: 'case_by_transmission_2021',
   data_path_list: [
-    '../processed_data/2021/case_by_transmission_by_report_day.csv',
-    '../processed_data/key_numbers.csv',
+//     '../processed_data/2021/case_by_transmission_by_report_day.csv',
+//     '../processed_data/key_numbers.csv',
+    'processed_data/2021/case_by_transmission_by_report_day.csv',
+    'processed_data/key_numbers.csv',
   ],
 
   n_tot_key: 'n_2021',
@@ -57,8 +61,10 @@ var CBT_2021_wrap = {
 var CBT_2020_wrap = {
   tag: 'case_by_transmission_2020',
   data_path_list: [
-    '../processed_data/2020/case_by_transmission_by_report_day.csv',
-    '../processed_data/key_numbers.csv',
+//     '../processed_data/2020/case_by_transmission_by_report_day.csv',
+//     '../processed_data/key_numbers.csv',
+    'processed_data/2020/case_by_transmission_by_report_day.csv',
+    'processed_data/key_numbers.csv',
   ],
 
   n_tot_key: 'n_2020',

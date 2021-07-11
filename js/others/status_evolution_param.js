@@ -23,6 +23,7 @@ var SE_latest_wrap = {
 var SE_2021_wrap = {
   tag: 'status_evolution_2021',
   data_path_list: [
+//     '../processed_data/2021/status_evolution.csv',
     'processed_data/2021/status_evolution.csv',
   ],
 
@@ -38,6 +39,7 @@ var SE_2021_wrap = {
 var SE_2020_wrap = {
   tag: 'status_evolution_2020',
   data_path_list: [
+//     '../processed_data/2020/status_evolution.csv',
     'processed_data/2020/status_evolution.csv',
   ],
 
