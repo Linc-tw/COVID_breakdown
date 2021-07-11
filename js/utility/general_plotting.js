@@ -1075,7 +1075,8 @@ async function GP_Cascade(plot_list) {
 //-- Function declarations - initialization
 
 //-- Execution
-d3.csv('../processed_data/key_numbers.csv', function (error, data) {
+// d3.csv('../processed_data/key_numbers.csv', function (error, data) {
+d3.csv('processed_data/key_numbers.csv', function (error, data) {
   if (error)
     return console.warn(error);
   
