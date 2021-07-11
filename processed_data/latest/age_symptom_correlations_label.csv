@@ -1,21 +1,21 @@
 key,count,label,label_fr,label_zh
-N_total,14161,,,
-N_data,1239,,,
+N_total,14191,,,
+N_data,1245,,,
 100+,2,100+,100+,100+歲
 90s,58,90s,90aine,90-99歲
 80s,153,80s,80aine,80-89歲
-70s,238,70s,70aine,70-79歲
+70s,239,70s,70aine,70-79歲
 60s,246,60s,60aine,60-69歲
-50s,142,50s,50aine,50-59歲
-40s,108,40s,40aine,40-49歲
-30s,118,30s,30aine,30-39歲
-20s,120,20s,20aine,20-29歲
+50s,144,50s,50aine,50-59歲
+40s,110,40s,40aine,40-49歲
+30s,120,30s,30aine,30-39歲
+20s,119,20s,20aine,20-29歲
 10s,30,10s,10aine,10-19歲
 0s,24,0s,0-9 ans,0-9歲
-fever,544,Fever,Fièvre,發燒
-cough,448,Cough,Toux,咳嗽
-dyspnea,265,Dyspnea,Dyspnée,呼吸困難
-asymptomatic,238,Asymptomatic,Asymptomatique,無症狀
+fever,548,Fever,Fièvre,發燒
+cough,450,Cough,Toux,咳嗽
+dyspnea,267,Dyspnea,Dyspnée,呼吸困難
+asymptomatic,240,Asymptomatic,Asymptomatique,無症狀
 throatache,174,Throatache,Mal de gorge,喉嚨症狀
 fatigue,119,Fatigue,Fatigue,倦怠
 sneezing,101,Sneezing,Éternuement,鼻腔症狀
