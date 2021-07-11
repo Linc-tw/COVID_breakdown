@@ -8,7 +8,8 @@
 var SE_latest_wrap = {
   tag: 'status_evolution_latest',
   data_path_list: [
-    '../processed_data/latest/status_evolution.csv',
+//     '../processed_data/latest/status_evolution.csv',
+    'processed_data/latest/status_evolution.csv',
   ],
   
   xlabel_path: GP_wrap.xlabel_path_latest,
