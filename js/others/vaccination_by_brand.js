@@ -13,111 +13,105 @@ function VBB_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('vaccination_by_brand_title', '疫苗接種');
     LS_AddStr('vaccination_by_brand_text', '資料不全');
-    LS_AddStr('vaccination_by_brand_button_1', '逐日');
-    LS_AddStr('vaccination_by_brand_button_2', '累計');
+    LS_AddStr('vaccination_by_brand_button_daily', '逐日');
+    LS_AddStr('vaccination_by_brand_button_cumul', '累計');
+    LS_AddStr('vaccination_by_brand_button_total', '合計');
+    LS_AddStr('vaccination_by_brand_button_AZ', 'AZ');
+    LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('vaccination_by_brand_title', 'Vaccins administrés par marque');
     LS_AddStr('vaccination_by_brand_text', 'Données incomplètes');
-    LS_AddStr('vaccination_by_brand_button_1', 'Quotidiens');
-    LS_AddStr('vaccination_by_brand_button_2', 'Cumulés');
+    LS_AddStr('vaccination_by_brand_button_daily', 'Quotidiens');
+    LS_AddStr('vaccination_by_brand_button_cumul', 'Cumulés');
+    LS_AddStr('vaccination_by_brand_button_total', 'Totaux');
+    LS_AddStr('vaccination_by_brand_button_AZ', 'AZ');
+    LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
   }
   
   else { //-- En
     LS_AddStr('vaccination_by_brand_title', 'Administrated Vaccines by Brand');
     LS_AddStr('vaccination_by_brand_text', 'Incomplete data');
-    LS_AddStr('vaccination_by_brand_button_1', 'Daily');
-    LS_AddStr('vaccination_by_brand_button_2', 'Cumulative');
+    LS_AddStr('vaccination_by_brand_button_daily', 'Daily');
+    LS_AddStr('vaccination_by_brand_button_cumul', 'Cumulative');
+    LS_AddStr('vaccination_by_brand_button_total', 'Total');
+    LS_AddStr('vaccination_by_brand_button_AZ', 'AZ');
+    LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
   }
 }
 
 function VBB_FormatData(wrap, data) {
   //-- Variables for xtick
-  var q = data.length % wrap.xlabel_path;
-  var r = wrap.r_list[q];
+  var x_key = 'date';
+  var q, r;
+  if (wrap.tag.includes('overall'))
+    r = 999;
+  else {
+    q = data.length % wrap.xlabel_path;
+    r = wrap.r_list[q];
+  }
   var xticklabel = [];
   
   //-- Variables for data
-  var col_tag_list = data.columns.slice(3); //-- 0 = date, 1 = interpolated, 2 = moving average
+  var col_tag_list = data.columns.slice(2, 5); //-- 0 = date, 1 = interpolated
+  var col_tag = col_tag_list[wrap.col_ind];
+  var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
   var x_list = []; //-- For date
   var row;
   
   //-- Variables for bar
-  var h_sum = []; //-- For legend
-  var y_max = 0;
-  var h, h_list;
+  var y_sum = []; //-- For legend
+  var y_max = 4.5;
   
   //-- Other variables
-  var formatted_data = [];
-  var moving_avg = [];
-  var i, j, x, y, avg, block;
+  var i, j, x, y, avg;
 
   //-- Convert data form
   if (wrap.cumul == 1)
     GP_CumSum(data, col_tag_list);
   
-  //-- Initialize h_sum
+  //-- Initialize y_sum
   for (j=0; j<nb_col; j++)
-    h_sum.push(0);
+    y_sum.push(0);
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
-    h_list = [];
     x = row['date'];
-    y = 0;
-    avg = row['moving_avg'];
+    avg = row[col_tag_avg];
     x_list.push(x);
     
     if ('' == avg)
-      moving_avg.push({x: x, y: NaN});
+      row[col_tag_avg] = NaN;
     else
-      moving_avg.push({x: x, y: +avg});
+      row[col_tag_avg] = +avg;
     
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
     
-    //-- Loop over column
-    for (j=0; j<nb_col; j++)
-      h_list.push(+row[col_tag_list[j]]);
-    
-    //-- Loop over column again (reversed order)
-    for (j=nb_col-1; j>=0; j--) {
-      //-- Current value
-      if (0 < wrap.cumul && 0 < +row['interpolated'])
-        h = 0;
-      else if (0 == wrap.cumul && 0 != +row['interpolated'])
-        h = 0;
-      else
-        h = h_list[j];
-        
-      //-- Make data block
-      block = {
-        'x': x,
-        'y0': y,
-        'y1': y+h,
-        'h_list': h_list.slice(),
-        'col_ind': j
-      };
-        
-      //-- Update total height
-      y += h;
-      
-      //-- Update sum
-      if (wrap.cumul == 1)
-        h_sum[j] = Math.max(h, h_sum[j]);
-      else
-        h_sum[j] += h_list[j]; //-- Add the real value anyway
-      
-      //-- Stock
-      formatted_data.push(block);
+    //-- Update y_sum
+    for (j=0; j<nb_col; j++) {
+      if (wrap.cumul == 0)
+        y_sum[j] += +row[col_tag_list[j]];
+      else 
+        y_sum[j] = Math.max(y_sum[j], +row[col_tag_list[j]]);
     }
     
+    y = +row[col_tag];
+    
+    //-- Modify data
+    if (wrap.cumul == 1)
+      row[col_tag_avg] = y;
+    if (0 < wrap.cumul && 0 < +row['interpolated'])
+      row[col_tag] = 0;
+    else if (0 == wrap.cumul && 0 != +row['interpolated'])
+      row[col_tag] = 0;
+      
     //-- Update y_max
-    y_max = Math.max(y_max, y);
+    y_max = Math.max(y_max, +row[col_tag]);
   }
   
   //-- Calculate y_max
@@ -131,15 +125,35 @@ function VBB_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
+  //-- Make legend value
+  var legend_value = y_sum.slice(1, nb_col);
+  legend_value.push(y_sum[0]);
+    
   //-- Save to wrapper
-  wrap.formatted_data = formatted_data;
-  wrap.moving_avg = moving_avg;
+  wrap.formatted_data = data;
+  wrap.col_tag = col_tag;
+  wrap.col_tag_avg = col_tag_avg;
   wrap.nb_col = nb_col;
+  wrap.x_key = x_key;
   wrap.x_list = x_list;
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = h_sum;
+  wrap.legend_value = legend_value;
+}
+
+function VBB_FormatData2(wrap, data2) {
+  var i, timestamp;
+  
+  //-- Loop over row
+  for (i=0; i<data2.length; i++) {
+    //-- Get value of `n_tot`
+    if ('timestamp' == data2[i]['key'])
+      timestamp = data2[i]['value'];
+  }
+  
+  //-- Save to wrapper
+  wrap.timestamp = timestamp;
 }
 
 //-- Tooltip
@@ -149,33 +163,23 @@ function VBB_MouseMove(wrap, d) {
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags
-  col_label_list = ['AZ', 'Moderna']
-  
-  //-- Define tooltip texts
-  var tooltip_text = d.x;
-  var sum = 0;
-  var i, h;
-  
-  for (i=0; i<wrap.nb_col; i++) {
-    h = d.h_list[i];
-    if (h > 0) {
-      sum += h;
-      if (wrap.cumul > 0)
-        h = GP_AbbreviateValue(h);
-      tooltip_text += '<br>' + col_label_list[i] + ' = ' + h;
-    }
+  if (LS_lang == 'zh-tw') {
+    col_label_list = ['合計', 'AZ', 'Moderna'];
+    avg_text = '過去七日平均';
+  }
+  else if (LS_lang == 'fr') {
+    col_label_list = ['Totaux', 'AZ', 'Moderna'];
+    avg_text = 'Moyenne sur 7 jours';
+  }
+  else {
+    col_label_list = ['Total', 'AZ', 'Moderna'];
+    avg_text = '7-day average';
   }
   
-  //-- Add text for sum
-  if (LS_lang == 'zh-tw')
-    tooltip_text += '<br>合計 = ';
-  else if (LS_lang == 'fr')
-    tooltip_text += '<br>Total = ';
-  else
-    tooltip_text += '<br>Total = ';
-  if (wrap.cumul > 0)
-    sum = GP_AbbreviateValue(sum);
-  tooltip_text += sum;
+  //-- Define tooltip texts
+  var tooltip_text = d.date;
+  tooltip_text += '<br>' + col_label_list[wrap.col_ind] + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag]);
+  tooltip_text += '<br>' + avg_text + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag_avg]);
   
   //-- Generate tooltip
   wrap.tooltip
@@ -188,6 +192,10 @@ function VBB_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
+  //-- Replot xaxis
+  if (wrap.tag.includes('overall'))
+    GP_PlotBottomOverallEmptyAxis(wrap);
+  
   //-- Add ylabel
   GP_PlotYLabel(wrap);
   
@@ -195,14 +203,13 @@ function VBB_Plot(wrap) {
   GP_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GP_wrap.c_list.slice(3, 3+wrap.nb_col);
+  wrap.color = GP_wrap.c_list[3];
   
-  //-- Save to wrapper
+  //-- Define mouse-move
   wrap.mouse_move = VBB_MouseMove;
-  wrap.color_list = color_list;
   
   //-- Plot bar
-  GP_PlotMultipleBar(wrap);
+  GP_PlotFaintSingleBar(wrap);
 
   //-- Plot avg line
   GP_PlotAvgLine(wrap);
@@ -210,7 +217,10 @@ function VBB_Plot(wrap) {
 
 function VBB_Replot(wrap) {
   //-- Replot xaxis
-  GP_ReplotDateAsX(wrap);
+  if (wrap.tag.includes('overall'))
+    GP_ReplotOverallXTick(wrap);
+  else
+    GP_ReplotDateAsX(wrap);
   
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap);
@@ -220,13 +230,13 @@ function VBB_Replot(wrap) {
   GP_ReplotYLabel(wrap, ylabel_dict);
   
   //-- Replot bar
-  GP_ReplotMultipleBar(wrap);
+  GP_ReplotFaintSingleBar(wrap);
   
   //-- Replot avg line
   GP_ReplotAvgLine(wrap);
   
   //-- Define legend position
-  var legend_pos = {x: 95, y: 40, dx: 12, dy: 30};
+  var legend_pos = {x: 95, y: 45, dx: 12, dy: 30};
   if (wrap.cumul == 0) {
     if (wrap.legend_pos_x_0_[LS_lang] != 0)
       legend_pos.x = wrap.legend_pos_x_0_[LS_lang];
@@ -237,23 +247,26 @@ function VBB_Replot(wrap) {
   }
   
   //-- Define legend color
-  var legend_color = wrap.color_list.slice();
-  legend_color.push('#000000');
+  var legend_color = [];
+  var i;
+  for (i=0; i<wrap.nb_col; i++)
+    legend_color.push(GP_wrap.gray);
+  i = (wrap.nb_col + wrap.col_ind - 1) % wrap.nb_col;
+  legend_color[i] = wrap.color;
   
   //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
-  var sum = legend_value.reduce((a, b) => a + b, 0);
-  legend_value.push(sum);
   
   //-- Define legend label
-  var legend_label = ['AstraZeneca', 'Moderna'];
+  var legend_label;
   if (LS_lang == 'zh-tw')
-    legend_label.push('合計');
+    legend_label = ['AstraZeneca', 'Moderna', '合計'];
+  else if (LS_lang == 'fr')
+    legend_label = ['AstraZeneca', 'Moderna', 'Totaux'];
   else
-    legend_label.push('Total');
+    legend_label = ['AstraZeneca', 'Moderna', 'Total'];
   
   //-- Remove from legend if value = 0
-  var i;
   for (i=legend_value.length-1; i>=0; i--) {
     if (0 == legend_value[i]) {
       legend_color.splice(i, 1);
@@ -301,11 +314,13 @@ function VBB_Replot(wrap) {
 function VBB_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       VBB_FormatData(wrap, data);
+      VBB_FormatData2(wrap, data2);
       VBB_Plot(wrap);
       VBB_Replot(wrap);
     });
@@ -331,16 +346,29 @@ function VBB_ButtonListener(wrap) {
     VBB_Reload(wrap);
   });
 
+  //-- Transmission type
+  d3.select(wrap.id +'_brand').on('change', function() {
+    wrap.col_ind = this.value;
+    VBB_Reload(wrap);
+  });
+  
   //-- Save
   d3.select(wrap.id + '_save').on('click', function(){
-    var tag1;
+    var tag1, tag2;
+    
+    if (wrap.col_ind == 0)
+      tag1 = 'total';
+    else if (wrap.col_ind == 1)
+      tag1 = 'AZ';
+    else
+      tag1 = 'Moderna';
     
     if (wrap.cumul == 1)
-      tag1 = 'cumulative';
+      tag2 = 'cumulative';
     else
-      tag1 = 'daily';
+      tag2 = 'daily';
     
-    name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png'
+    name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
@@ -362,6 +390,7 @@ function VBB_Main(wrap) {
   //-- Swap active to current value
   wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
   GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
+  wrap.col_ind = document.getElementById(wrap.tag + "_brand").value;
   
   //-- Load
   VBB_InitFig(wrap);

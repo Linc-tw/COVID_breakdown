@@ -21,9 +21,9 @@ function BS_ResetText() {
   else if (LS_lang == 'fr') {
     LS_AddStr('border_statistics_title', 'Statistiques frontalières');
     LS_AddStr('border_statistics_text', 'Mise à jour mensuellement');
-    LS_AddStr('border_statistics_button_1', 'Arrivée');
-    LS_AddStr('border_statistics_button_2', 'Départ');
-    LS_AddStr('border_statistics_button_3', 'Total');
+    LS_AddStr('border_statistics_button_1', 'Arrivées');
+    LS_AddStr('border_statistics_button_2', 'Départs');
+    LS_AddStr('border_statistics_button_3', 'Totaux');
   }
   
   else { //-- En
@@ -31,74 +31,69 @@ function BS_ResetText() {
     LS_AddStr('border_statistics_text', 'Updated monthly');
     LS_AddStr('border_statistics_button_1', 'Arrival');
     LS_AddStr('border_statistics_button_2', 'Departure');
-    LS_AddStr('border_statistics_button_3', 'Both');
+    LS_AddStr('border_statistics_button_3', 'Total');
   }
 }
 
 function BS_FormatData(wrap, data) {
   //-- Variables for xtick
-  var q = data.length % wrap.xlabel_path;
-  var r = wrap.r_list[q];
+  var x_key = 'date';
+  var q, r;
+  if (wrap.tag.includes('overall'))
+    r = 999;
+  else {
+    q = data.length % wrap.xlabel_path;
+    r = wrap.r_list[q];
+  }
   var xticklabel = [];
   
   //-- Variables for data
-  var col_tag_list = data.columns.slice(2); //-- 0 = date, 1 = moving average
+  var col_tag_list = data.columns.slice(1, 4); //-- 0 = date
+  var col_tag = col_tag_list[wrap.col_ind];
+  var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
   var x_list = []; //-- For date
   var row;
   
   //-- Variables for bar
-  var y_max = 0;
-  var h, h_list;
+  var y_last = []; //-- For legend
+  var y_max = 4.5;
   
   //-- Other variables
-  var formatted_data = [];
-  var moving_avg = [];
-  var i, j, x, y, avg, block;
+  var i, j, x, y, avg;
+
+  //-- Initialize y_last
+  for (j=0; j<nb_col; j++)
+    y_last.push(0);
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
-    h_list = [];
     x = row['date'];
-    y = 0;
-    avg = row['moving_avg'];
+    avg = row[col_tag_avg];
     x_list.push(x);
     
     if ('' == avg)
-      moving_avg.push({x: x, y: NaN});
+      row[col_tag_avg] = NaN;
     else
-      moving_avg.push({x: x, y: +avg});
-      
+      row[col_tag_avg] = +avg;
+    
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
     
-    //-- Loop over column
-    for (j=0; j<nb_col; j++)
-      h_list.push(+row[col_tag_list[j]]);
-    
-    //-- Loop over column again (reversed order)
-    for (j=nb_col-1; j>=0; j--) {
-      //-- Current value
-      h = h_list[j];
-      
-      //-- Make data block
-      block = {
-        'x': x,
-        'y0': y,
-        'y1': y+h,
-        'h_list': h_list.slice(),
-        'col_ind': j
-      };
-        
-      //-- Update total height
-      y += h;
-      
-      //-- Stock
-      formatted_data.push(block);
+    //-- Update y_last
+    if (+row[col_tag_list[2]] > 0) { //-- If both > 0
+      for (j=0; j<nb_col; j++)
+        y_last[j] = +row[col_tag_list[j]];
     }
     
+    y = +row[col_tag];
+    
+    //-- Modify data
+    if (wrap.cumul == 1)
+      row[col_tag_avg] = y;
+      
     //-- Update y_max
     y_max = Math.max(y_max, y);
   }
@@ -114,25 +109,31 @@ function BS_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
-  //-- Calculate last row which is not zero
-  var last = data.length - 1;
-  while (+data[last][col_tag_list[0]] == 0)
-    last -= 1;
-  
-  //-- Get latest value as legend value
-  var legend_value = [];
-  for (j=0; j<nb_col; j++)
-    legend_value.push(+data[last][col_tag_list[j]]);
-  
   //-- Save to wrapper
-  wrap.formatted_data = formatted_data;
-  wrap.moving_avg = moving_avg;
+  wrap.formatted_data = data;
+  wrap.col_tag = col_tag;
+  wrap.col_tag_avg = col_tag_avg;
   wrap.nb_col = nb_col;
+  wrap.x_key = x_key;
   wrap.x_list = x_list;
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = legend_value;
+  wrap.legend_value = y_last;
+}
+
+function BS_FormatData2(wrap, data2) {
+  var i, timestamp;
+  
+  //-- Loop over row
+  for (i=0; i<data2.length; i++) {
+    //-- Get value of `n_tot`
+    if ('timestamp' == data2[i]['key'])
+      timestamp = data2[i]['value'];
+  }
+  
+  //-- Save to wrapper
+  wrap.timestamp = timestamp;
 }
 
 //-- Tooltip
@@ -142,34 +143,23 @@ function BS_MouseMove(wrap, d) {
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags
-  if (LS_lang == 'zh-tw')
-    col_label_list = ['機場', '港口', '無細節']
-  else if (LS_lang == 'fr')
-    col_label_list = ['Aéroports', 'Ports maritimes', 'Sans précisions']
-  else
-    col_label_list = ['Airports', 'Seaports', 'Not specified']
-  
-  //-- Define tooltip texts
-  var tooltip_text = d.x;
-  var sum = 0;
-  var i, h;
-  
-  for (i=0; i<wrap.nb_col; i++) {
-    h = d.h_list[i];
-    if (h > 0) {
-      tooltip_text += "<br>" + col_label_list[i] + " = " + h;
-      sum += h;
-    }
+  if (LS_lang == 'zh-tw') {
+    col_label_list = ['入境', '出境', '合計'];
+    avg_text = '過去七日平均';
+  }
+  else if (LS_lang == 'fr') {
+    col_label_list = ['Arrivées', 'Départs', 'Totaux'];
+    avg_text = 'Moyenne sur 7 jours';
+  }
+  else {
+    col_label_list = ['Arrival', 'Departure', 'Total'];
+    avg_text = '7-day average';
   }
   
-  //-- Add text for sum
-  if (LS_lang == 'zh-tw')
-    tooltip_text += "<br>合計 = ";
-  else if (LS_lang == 'fr')
-    tooltip_text += "<br>Total = ";
-  else
-    tooltip_text += "<br>Total = ";
-  tooltip_text += sum;
+  //-- Define tooltip texts
+  var tooltip_text = d.date;
+  tooltip_text += '<br>' + col_label_list[wrap.col_ind] + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag]);
+  tooltip_text += '<br>' + avg_text + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag_avg]);
   
   //-- Generate tooltip
   wrap.tooltip
@@ -182,6 +172,10 @@ function BS_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
+  //-- Replot xaxis
+  if (wrap.tag.includes('overall'))
+    GP_PlotBottomOverallEmptyAxis(wrap);
+  
   //-- Add ylabel
   GP_PlotYLabel(wrap);
   
@@ -189,14 +183,13 @@ function BS_Plot(wrap) {
   GP_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GP_wrap.c_list.concat(GP_wrap.c_list).slice(10, 10+wrap.nb_col);
+  wrap.color = GP_wrap.c_list[10];
   
-  //-- Save to wrapper
+  //-- Define mouse-move
   wrap.mouse_move = BS_MouseMove;
-  wrap.color_list = color_list;
   
   //-- Plot bar
-  GP_PlotMultipleBar(wrap);
+  GP_PlotFaintSingleBar(wrap);
 
   //-- Plot avg line
   GP_PlotAvgLine(wrap);
@@ -204,7 +197,10 @@ function BS_Plot(wrap) {
 
 function BS_Replot(wrap) {
   //-- Replot xaxis
-  GP_ReplotDateAsX(wrap);
+  if (wrap.tag.includes('overall'))
+    GP_ReplotOverallXTick(wrap);
+  else
+    GP_ReplotDateAsX(wrap);
   
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap);
@@ -214,7 +210,7 @@ function BS_Replot(wrap) {
   GP_ReplotYLabel(wrap, ylabel_dict);
   
   //-- Replot bar
-  GP_ReplotMultipleBar(wrap);
+  GP_ReplotFaintSingleBar(wrap);
   
   //-- Replot avg line
   GP_ReplotAvgLine(wrap);
@@ -223,25 +219,25 @@ function BS_Replot(wrap) {
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   
   //-- Define legend color
-  var legend_color = wrap.color_list.slice();
-  legend_color.push('#000000');
+  var legend_color = [];
+  var i;
+  for (i=0; i<wrap.nb_col; i++)
+    legend_color.push(GP_wrap.gray);
+  legend_color[wrap.col_ind] = wrap.color;
   
   //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
-  var sum = legend_value.reduce((a, b) => a + b, 0);
-  legend_value.push(sum);
   
   //-- Define legend label
   var legend_label;
   if (LS_lang == 'zh-tw')
-    legend_label = ['機場', '港口', '無細節', '合計'];
+    legend_label = ['入境', '出境', '合計'];
   else if (LS_lang == 'fr')
-    legend_label = ['Aéroports', 'Ports maritimes', 'Sans précisions', 'Total'];
+    legend_label = ['Arrivées', 'Départs', 'Totaux'];
   else
-    legend_label = ['Airports', 'Seaports', 'Not specified', 'Total'];
+    legend_label = ['Arrival', 'Departure', 'Total'];
   
   //-- Remove from legend if value = 0
-  var i;
   for (i=legend_value.length-1; i>=0; i--) {
     if (0 == legend_value[i]) {
       legend_color.splice(i, 1);
@@ -288,12 +284,14 @@ function BS_Replot(wrap) {
 //-- Load
 function BS_Load(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[wrap.do_exit])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[0])
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       BS_FormatData(wrap, data);
+      BS_FormatData2(wrap, data2);
       BS_Plot(wrap);
       BS_Replot(wrap);
     });
@@ -301,7 +299,7 @@ function BS_Load(wrap) {
 
 function BS_Reload(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[wrap.do_exit])
+    .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
@@ -314,8 +312,8 @@ function BS_Reload(wrap) {
 function BS_ButtonListener(wrap) {
   //-- Entry or exit or both
   $(document).on("change", "input:radio[name='" + wrap.tag + "_exit']", function (event) {
-    GP_PressRadioButton(wrap, 'exit', wrap.do_exit, this.value);
-    wrap.do_exit = this.value;
+    GP_PressRadioButton(wrap, 'exit', wrap.col_ind, this.value);
+    wrap.col_ind = this.value;
     BS_Reload(wrap);
   });
 
@@ -323,9 +321,9 @@ function BS_ButtonListener(wrap) {
   d3.select(wrap.id + '_save').on('click', function () {
     var tag1;
     
-    if (wrap.do_exit == 0)
+    if (wrap.col_ind == 0)
       tag1 = 'arrival';
-    else if (wrap.do_exit == 1)
+    else if (wrap.col_ind == 1)
       tag1 = 'departure';
     else
       tag1 = 'both';
@@ -350,8 +348,8 @@ function BS_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
   //-- Swap active to current value
-  wrap.do_exit = document.querySelector("input[name='" + wrap.tag + "_exit']:checked").value;
-  GP_PressRadioButton(wrap, 'exit', 0, wrap.do_exit); //-- 0 from .html
+  wrap.col_ind = document.querySelector("input[name='" + wrap.tag + "_exit']:checked").value;
+  GP_PressRadioButton(wrap, 'exit', 0, wrap.col_ind); //-- 0 from .html
 
   //-- Load
   BS_InitFig(wrap);

@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.07.09                  ##
+    ##  Version 2021.07.11                  ##
     ##########################################
 
 import os
@@ -25,13 +25,12 @@ import pandas as pd
 DATA_PATH = '/home/linc/21_Codes/COVID_breakdown/'
 ISO_DATE_REF = '2020-01-01'
 NB_LOOKBACK_DAYS = 90
-RANGE_2020 = [0, 366]
-RANGE_2021 = [366, 731]
 PAGE_LATEST = 'latest'
+PAGE_OVERALL = 'overall'
 PAGE_2022 = '2022'
 PAGE_2021 = '2021'
 PAGE_2020 = '2020'
-PAGE_LIST = [PAGE_LATEST, PAGE_2021, PAGE_2020]
+PAGE_LIST = [PAGE_LATEST, PAGE_OVERALL, PAGE_2021, PAGE_2020]
 
 SYMPTOM_DICT = {
   'sneezing': {'zh-tw': '鼻腔症狀', 'fr': 'éternuement'},
@@ -178,7 +177,7 @@ TRAVEL_HISTORY_DICT = {
   'Coral Princess': {'zh-tw': '珊瑚公主號', 'fr': 'Coral Princess'},
   'Diamond Princess': {'zh-tw': '鑽石公主號', 'fr': 'Diamond Princess'}, 
   'Pan-Shi': {'zh-tw': '磐石艦', 'fr': 'Pan-Shi'},
-  'indigenous': {'zh-tw': '無', 'fr': 'local'}
+  'local': {'zh-tw': '無', 'fr': 'local'}
 }
 
 AGE_DICT = {
@@ -479,17 +478,17 @@ def initializeStock_dailyCounts(col_tag_list):
 def initializeStockDict_general(stock):
   return {page: copy.deepcopy(stock) for page in PAGE_LIST}
 
-def indexForOverall(iso):
-  ord_begin_overall = ISODateToOrd(ISO_DATE_REF)
-  ind = ISODateToOrd(iso) - ord_begin_overall
-  if ind < 0:
-    return np.nan
-  return ind
-
 def indexForLatest(iso):
   ord_today = getTodayOrdinal()
   ind = ISODateToOrd(iso) - ord_today + NB_LOOKBACK_DAYS
   if ind < 0 or ind >= NB_LOOKBACK_DAYS:
+    return np.nan
+  return ind
+
+def indexForOverall(iso):
+  ord_begin_overall = ISODateToOrd(ISO_DATE_REF)
+  ind = ISODateToOrd(iso) - ord_begin_overall
+  if ind < 0:
     return np.nan
   return ind
 
@@ -509,9 +508,10 @@ def indexFor2020(iso):
 
 def makeIndexList(iso):
   ind_latest = indexForLatest(iso)
+  ind_overall = indexForOverall(iso)
   ind_2021 = indexFor2021(iso)
   ind_2020 = indexFor2020(iso)
-  return [ind_latest, ind_2021, ind_2020]
+  return [ind_latest, ind_overall, ind_2021, ind_2020]
 
 def addMovingAverageToStock(stock):
   date = stock.pop('date')
@@ -524,6 +524,11 @@ def addMovingAverageToStock(stock):
   stock_new = {'date': date, 'moving_avg': avg_arr}
   stock_new.update(stock)
   return stock_new
+    
+def makeMovingAverage(value_arr):
+  avg_arr = sevenDayMovingAverage(value_arr)
+  avg_arr = np.around(avg_arr, decimals=4)
+  return avg_arr
     
 def adjustDateRange(data):
   ord_ref = ISODateToOrd(ISO_DATE_REF)
@@ -565,6 +570,7 @@ def truncateStock(stock, page):
   if PAGE_2020 == page:
     return stock.iloc[0:366]
     
+  ## If overall
   return stock
 
 ################################################################################
@@ -734,7 +740,7 @@ class MainSheet(Template):
         trans_list.append('fleet')
       
       elif trans == '本土':
-        trans_list.append('indigenous')
+        trans_list.append('local')
       
       elif trans == '不明':
         trans_list.append('unknown')
@@ -854,7 +860,7 @@ class MainSheet(Template):
       'Coral Princess': ['珊瑚公主號'], 
       'Diamond Princess': ['鑽石公主號'], 
       'Pan-Shi': ['海軍敦睦支隊磐石艦', '整隊登艦', '台灣啟航', '左營靠泊檢疫'],
-      'indigenous': ['無', 'x', 'X']
+      'local': ['無', 'x', 'X']
     }
     nat_list = self.getNationality()
     trav_hist_list = []
@@ -984,7 +990,8 @@ class MainSheet(Template):
         '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/18-6/24', '5/19-6/10', 
         '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
         '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', '6/4-19', '6/4-23', '6/8-20', '6/10-22', '6/10-26', '6/10-7/5', '6/11-25', '6/14-21', 
-        '6/16-28', '6/17-7/3', '6/19-27', '6/19-7/4', '6/20-29', '6/22-30', '6/22-7/1', '6/22-7/2', '6/22-7/9', '6/26-7/6', '7/1-7', '7/1-8', 
+        '6/16-28', '6/17-7/3', '6/19-27', '6/19-7/4', '6/20-29', '6/22-30', '6/22-7/1', '6/22-7/2', '6/22-7/9', '6/26-7/6', '6/26-7/10', 
+        '7/1-7', '7/1-8', 
         '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X',
       ]:
         onset_date_list.append(np.nan)
@@ -1242,7 +1249,7 @@ class MainSheet(Template):
     
     population_twn = sum(value['population'] for value in COUNTY_DICT.values())
     
-    key = ['n_total', 'n_latest', 'n_2020', 'n_2021', 'n_empty', 'timestamp', 'population_twn']
+    key = ['n_overall', 'n_latest', 'n_2020', 'n_2021', 'n_empty', 'timestamp', 'population_twn']
     value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_empty, timestamp, population_twn]
     
     ## Make data frame
@@ -1255,67 +1262,48 @@ class MainSheet(Template):
     
   def increment_caseByTransmission(self):
     report_date_list = self.getReportDate()
-    onset_date_list = self.getOnsetDate()
     trans_list = self.getTransmission()
-    link_list = self.getLink()
     
     ## Initialize stocks
-    col_tag_list = ['imported', 'linked', 'unlinked', 'fleet', 'plane', 'unknown']
-    stock_r = initializeStock_dailyCounts(col_tag_list)
-    stock_o = initializeStock_dailyCounts(col_tag_list)
+    col_tag_list = ['total', 'imported', 'local', 'others']
+    stock = initializeStock_dailyCounts(col_tag_list)
     
     ## Loop over cases
-    for report_date, onset_date, trans, link in zip(report_date_list, onset_date_list, trans_list, link_list):
+    for report_date, trans in zip(report_date_list, trans_list):
       if trans != trans:
         continue
       
       ## Determine column tag
-      if trans == 'indigenous':
-        if link == 'unlinked':
-          col_tag = link
-        else:
-          col_tag = 'linked'
-      else:
+      if trans in ['imported', 'local']:
         col_tag = trans
+      else:
+        col_tag = 'others'
         
       try:
         ind = indexForOverall(report_date)
-        stock_r[col_tag][ind] += 1
+        stock[col_tag][ind] += 1
+        stock['total'][ind] += 1
       except IndexError: ## If NaN
         pass
         
-      ## Check if NaN
-      if onset_date != onset_date:
-        continue
-      
-      try:
-        ind = indexForOverall(onset_date)
-        stock_o[col_tag][ind] += 1
-      except IndexError: ## If NaN
-        pass
-      
-    return stock_r, stock_o
+    ## Loop over column
+    for col_tag in col_tag_list:
+      key = col_tag + '_avg'
+      stock[key] = makeMovingAverage(stock[col_tag])
+    return stock
     
   def saveCsv_caseByTransmission(self):
-    stock_r, stock_o = self.increment_caseByTransmission()
+    stock = self.increment_caseByTransmission()
     
-    stock_r = addMovingAverageToStock(stock_r)
-    stock_r = pd.DataFrame(stock_r)
-    stock_r = adjustDateRange(stock_r)
-    
-    stock_o = addMovingAverageToStock(stock_o)
-    stock_o = pd.DataFrame(stock_o)
-    stock_o = adjustDateRange(stock_o)
+    stock = pd.DataFrame(stock)
+    stock = adjustDateRange(stock)
     
     for page in PAGE_LIST:
-      data_r = truncateStock(stock_r, page)
-      data_o = truncateStock(stock_o, page)
+      data = truncateStock(stock, page)
       
       ## Save
       name = '%sprocessed_data/%s/case_by_transmission_by_report_day.csv' % (DATA_PATH, page)
-      saveCsv(name, data_r)
-      name = '%sprocessed_data/%s/case_by_transmission_by_onset_day.csv' % (DATA_PATH, page)
-      saveCsv(name, data_o)
+      saveCsv(name, data)
     return
   
   def increment_caseByDetection(self):
@@ -1632,17 +1620,17 @@ class MainSheet(Template):
     onset_date_list = self.getOnsetDate()
     trans_list = self.getTransmission()
     
-    stock = {'imported': [], 'indigenous': [], 'other': []}
+    stock = {'imported': [], 'local': [], 'others': []}
     stock_dict = initializeStockDict_general(stock)
 
     for report_date, entry_date, onset_date, trans in zip(report_date_list, entry_date_list, onset_date_list, trans_list):
       if trans != trans:
         continue
       
-      if trans in ['imported', 'indigenous']:
+      if trans in ['imported', 'local']:
         col_tag = trans
       else:
-        col_tag = 'other'
+        col_tag = 'others'
         
       ord_rep = ISODateToOrd(report_date)
       ord_entry = ISODateToOrd(entry_date) if entry_date == entry_date else 0
@@ -1668,7 +1656,7 @@ class MainSheet(Template):
     
     for page, stock in stock_dict.items():
       n_imp, ctr_bins = makeHist(stock['imported'], bins)
-      n_local, ctr_bins = makeHist(stock['indigenous'], bins)
+      n_local, ctr_bins = makeHist(stock['local'], bins)
       n_other, ctr_bins = makeHist(stock['other'], bins)
       n_tot = n_imp + n_local + n_other
       
@@ -1679,7 +1667,7 @@ class MainSheet(Template):
       ctr_bins = ctr_bins.round(0).astype(int)
       ctr_bins[-1] = 30
       
-      data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'indigenous': n_local, 'other': n_other}
+      data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'local': n_local, 'other': n_other}
       data = pd.DataFrame(data)
       
       name = '%sprocessed_data/%s/difference_by_transmission.csv' % (DATA_PATH, page)
@@ -1716,17 +1704,17 @@ class MainSheet(Template):
       
       if trans == 'imported':
         stock['new_imported'][ind] += 1
-      elif trans == 'indigenous':
+      elif trans == 'local':
         stock['new_local'][ind] += 1
     return
   
   def saveCsv(self):
     self.saveCsv_keyNb()
     self.saveCsv_caseByTransmission()
-    self.saveCsv_caseByDetection()
-    self.saveCsv_travHistSymptomCorr()
-    self.saveCsv_ageSymptomCorr()
-    self.saveCsv_diffByTransmission()
+    #self.saveCsv_caseByDetection()
+    #self.saveCsv_travHistSymptomCorr()
+    #self.saveCsv_ageSymptomCorr()
+    #self.saveCsv_diffByTransmission()
     return
 
 ################################################################################
@@ -1871,6 +1859,7 @@ class TestSheet(Template):
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv' % DATA_PATH
     data = pd.read_csv(name, dtype=object, skipinitialspace=True)
+    #https://covid19dashboard.cdc.gov.tw/dash4
     
     from_extended_list = data[self.coltag_from_extended].values
     self.ind_2021 = (from_extended_list == '2021分隔線').argmax()
@@ -1962,8 +1951,10 @@ class TestSheet(Template):
     from_qt_list = self.getFromQT()
     from_clin_def_list = self.getFromClinDef()
     
-    stock = {'date': date_list, 'clinical': from_clin_def_list, 'quarantine': from_qt_list, 'extended': from_ext_list}
-    stock = addMovingAverageToStock(stock)
+    value_arr = np.array(from_clin_def_list, dtype=int) + np.array(from_qt_list, dtype=int) + np.array(from_ext_list, dtype=int)
+    avg_arr = makeMovingAverage(value_arr)
+    stock = {'date': date_list, 'total': value_arr, 'total_avg': avg_arr}
+    
     stock = pd.DataFrame(stock)
     stock = adjustDateRange(stock)
     
@@ -2284,6 +2275,7 @@ class BorderSheet(Template):
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_border_statistics.csv' % DATA_PATH
     data = pd.read_csv(name, dtype=object, skipinitialspace=True, header=[0, 1])
+    #https://data.gov.tw/dataset/12369
     
     ## Change header
     hdr = []
@@ -2409,23 +2401,34 @@ class BorderSheet(Template):
   
   def saveCsv_borderStats(self):
     date_list = self.getDate()
+    stock = {'date': date_list}
+    col_tag_list = ['entry', 'exit', 'total']
     
-    for save_tag in ['entry', 'exit', 'both']:
-      air_list = self.getAirport(tag=save_tag)
-      sea_list = self.getSeaport(tag=save_tag)
-      not_spec_list = self.getNotSpecified(tag=save_tag)
-      
-      stock = {'date': date_list, 'airport': air_list, 'seaport': sea_list, 'not_specified': not_spec_list}
-      stock = addMovingAverageToStock(stock)
-      stock = pd.DataFrame(stock)
-      stock = adjustDateRange(stock)
-      
-      for page in PAGE_LIST:
-        data = truncateStock(stock, page)
+    for col_tag in col_tag_list:
+      if col_tag == 'total':
+        tag = 'both'
+      else:
+        tag = col_tag
         
-        ## Save
-        name = '%sprocessed_data/%s/border_statistics_%s.csv' % (DATA_PATH, page, save_tag)
-        saveCsv(name, data)
+      air_list = self.getAirport(tag=tag)
+      sea_list = self.getSeaport(tag=tag)
+      not_spec_list = self.getNotSpecified(tag=tag)
+      stock[col_tag] = np.array(air_list, dtype=int) + np.array(sea_list, dtype=int) + np.array(not_spec_list, dtype=int)
+      
+    ## Loop over column
+    for col_tag in col_tag_list:
+      key = col_tag + '_avg'
+      stock[key] = makeMovingAverage(stock[col_tag])
+      
+    stock = pd.DataFrame(stock)
+    stock = adjustDateRange(stock)
+    
+    for page in PAGE_LIST:
+      data = truncateStock(stock, page)
+      
+      ## Save
+      name = '%sprocessed_data/%s/border_statistics.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
     return
       
   def updateNewEntryCounts(self, stock):
@@ -2981,6 +2984,7 @@ class CountySheet(Template):
 ## Classes - Vaccination
 
 class VaccinationSheet(Template):
+  
   def __init__(self, verbose=True):
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_vaccination.json' % DATA_PATH
     data = loadJson(name, verbose=verbose)
@@ -3037,19 +3041,22 @@ class VaccinationSheet(Template):
   
   def incrementWithInterpolation_vaccinationByBrand(self):
     date_list = self.getDate()
+    cum_vacc_list = self.getCumVacc()
     cum_az_list = self.getCumAZ()
     cum_moderna_list = self.getCumModerna()
     
     ## Declare all brands
     cum_doses_dict = {}
-    for date, cum_az, cum_moderna in zip(date_list, cum_az_list, cum_moderna_list):
-      cum_doses_dict[date] = [cum_az, cum_moderna]
+    for date, cum_vacc, cum_az, cum_moderna in zip(date_list, cum_vacc_list, cum_az_list, cum_moderna_list):
+      cum_doses_dict[date] = [cum_vacc, cum_az, cum_moderna]
+    
+    brand_list = ['total'] + self.brand_list
     
     ## Make stock dict
-    stock = {'date': [], 'interpolated': [], 'brand_list': self.brand_list, 'new_doses': [[] for brand in self.brand_list]}
+    stock = {'date': [], 'interpolated': [], 'brand_list': brand_list, 'new_doses': [[] for brand in brand_list]}
     
     ## For recording last non-missing data
-    prev = [0] * len(self.brand_list)
+    prev = [0] * len(brand_list)
     ord_prev = ISODateToOrd(date_list[0]) - 1
     
     ord_ref = ISODateToOrd(ISO_DATE_REF)
@@ -3063,8 +3070,8 @@ class VaccinationSheet(Template):
       ## Out of provided range
       if date not in cum_doses_dict:
         stock['interpolated'].append(1)
-        for i, _ in enumerate(self.brand_list):
-          stock['new_doses'][i].append(0)
+        for list_ in stock['new_doses']:
+          list_.append(0)
         continue
       
       ## In range
@@ -3075,7 +3082,7 @@ class VaccinationSheet(Template):
         ord_ = ISODateToOrd(date)
         length = ord_ - ord_prev
         
-        for i, _ in enumerate(self.brand_list):
+        for i, _ in enumerate(brand_list):
           stock['new_doses'][i] += itpFromCumul(prev[i], cum_doses[i], length)
           
         stock['interpolated'].append(-int(1 < length))
@@ -3097,15 +3104,18 @@ class VaccinationSheet(Template):
   def saveCsv_vaccinationByBrand(self):
     stock_prev = self.incrementWithInterpolation_vaccinationByBrand()
     stock_tmp = {brand: new_doses_arr for brand, new_doses_arr in zip(stock_prev['brand_list'], stock_prev['new_doses'])}
-    count_mat = list(stock_tmp.values())
     
-    avg_arr = np.sum(count_mat, axis=0)
-    avg_arr = sevenDayMovingAverage(avg_arr)
-    avg_arr = np.around(avg_arr, decimals=4)
-    
-    stock = {'date': stock_prev['date'], 'interpolated': stock_prev['interpolated'], 'moving_avg': avg_arr}
+    ## For order
+    stock = {'date': stock_prev['date'], 'interpolated': stock_prev['interpolated']}
     stock.update(stock_tmp)
+    
+    ## Loop over column
+    for col_tag in stock_prev['brand_list']:
+      key = col_tag + '_avg'
+      stock[key] = makeMovingAverage(stock[col_tag])
+      
     stock = pd.DataFrame(stock)
+    stock = adjustDateRange(stock)
     
     for page in PAGE_LIST:
       if page == PAGE_2020:
@@ -3246,7 +3256,7 @@ def saveCsv_variousRate(main_sheet, status_sheet, test_sheet, border_sheet):
 
 def sandbox():
   #main_sheet = MainSheet()
-  #main_sheet.saveCsv_caseByDetection()
+  #main_sheet.saveCsv_keyNb()
   
   #status_sheet = StatusSheet()
   #status_sheet.saveCsv_statusEvolution()
@@ -3260,11 +3270,11 @@ def sandbox():
   #timeline_sheet = TimelineSheet()
   #timeline_sheet.saveCsv_evtTimeline()
   
-  #county_sheet = CountySheet()
-  #county_sheet.saveCsv_incidenceEvolutionByCounty()
+  county_sheet = CountySheet()
+  county_sheet.saveCsv_caseByAge()
   
-  vacc_sheet = VaccinationSheet()
-  vacc_sheet.saveCsv_vaccinationProgress()
+  #vacc_sheet = VaccinationSheet()
+  #vacc_sheet.saveCsv_vaccinationByBrand()
   
   #main_sheet = MainSheet()
   #status_sheet = StatusSheet()

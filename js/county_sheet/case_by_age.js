@@ -271,14 +271,12 @@ function CBA_Plot(wrap) {
   
   //-- Make tooltip
   GP_MakeTooltip(wrap);
-    
+  
   //-- Define color
-  var color_list = GP_wrap.c_list.slice(7).concat(GP_wrap.c_list.slice(0, 7));
-  color_list = color_list.concat(color_list.slice(1));
-
-  //-- Save to wrapper
+  wrap.color = GP_wrap.c_list[2];
+  
+  //-- Define mouse-move
   wrap.mouse_move = CBA_MouseMove;
-  wrap.color_list = color_list;
   
   //-- Plot bar
   GP_PlotSingleBar(wrap);
@@ -330,17 +328,14 @@ function CBA_Replot(wrap) {
   }
   
   //-- Update legend color, value, & label
-  var legend_color = [];
-  var legend_value_2 = [];
-  var legend_label_2 = [];
-  if (wrap.col_ind > 0) {
-    legend_color.push(wrap.color_list[wrap.col_ind]);
-    legend_value_2.push(wrap.legend_value[1]);
-    legend_label_2.push(legend_label[wrap.col_ind]);
+  var legend_color = [wrap.color, GP_wrap.gray];
+  var legend_value_2 = [wrap.legend_value[1], wrap.legend_value[0]];
+  var legend_label_2 = [legend_label[wrap.col_ind], legend_label[0]];
+  if (wrap.col_ind == 0) {
+    legend_color = legend_color.slice(0, 1);
+    legend_value_2 = legend_value_2.slice(0, 1);
+    legend_label_2 = legend_label_2.slice(0, 1);
   }
-  legend_color.push(wrap.color_list[0]);
-  legend_value_2.push(wrap.legend_value[0]);
-  legend_label_2.push(legend_label[0]);
   
   //-- Update legend title
   legend_color.splice(0, 0, '#000000');

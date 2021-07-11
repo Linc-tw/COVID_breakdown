@@ -266,8 +266,8 @@ function VP_MakeXTick(wrap) {
   
   for (i=yyyymm_begin; i<yyyymm_today+1; i++) {
     //-- Get tick date
-    yyyy = Math.floor(i/12);
-    mm = (i % 12 + 1 + 1).toLocaleString(undefined, {minimumIntegerDigits: 2}); //-- Get next month
+    yyyy = Math.floor((i+1)/12);
+    mm = ((i+1) % 12 + 1).toLocaleString(undefined, {minimumIntegerDigits: 2}); //-- Get next month
     iso = yyyy + '-' + mm +'-01';
     
     //-- Get index
@@ -451,18 +451,7 @@ function VP_Plot(wrap) {
   GP_PlotBottomLeft(wrap);
   
   //-- Placeholders
-  wrap.svg.append('g')
-    .attr('class', 'xaxis tick month')
-    .attr('transform', 'translate(0,' + wrap.height + ')');
-  wrap.svg.append('g')
-    .attr('class', 'xaxis tick year')
-    .attr('transform', 'translate(0,' + wrap.height + ')');
-  wrap.svg.append('g')
-    .attr('class', 'xaxis label month')
-    .attr('transform', 'translate(0,' + wrap.height + ')');
-  wrap.svg.append('g')
-    .attr('class', 'xaxis label year')
-    .attr('transform', 'translate(0,' + wrap.height + ')');
+  GP_PlotBottomOverallEmptyAxis(wrap);
     
   //-- Add ylabel
   GP_PlotYLabel(wrap);

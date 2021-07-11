@@ -35,8 +35,13 @@ function VR_ResetText() {
 
 function VR_FormatData(wrap, data) {
   //-- Variables for xtick
-  var q = data.length % wrap.xlabel_path;
-  var r = wrap.r_list[q];
+  var q, r;
+  if (wrap.tag.includes('overall'))
+    r = 999;
+  else {
+    q = data.length % wrap.xlabel_path;
+    r = wrap.r_list[q];
+  }
   var xticklabel = [];
   
   //-- Variables for data
@@ -48,8 +53,9 @@ function VR_FormatData(wrap, data) {
   //-- Other variables
   var formatted_data = [];
   var y_list_list = [];
+  var y_last_list = [];
   var y_max = 0;
-  var i, j, x, y, y_list, block;
+  var i, j, x, y, y_list, y_last, block;
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
@@ -77,6 +83,7 @@ function VR_FormatData(wrap, data) {
     y_list_list.push(y_list)
   }
   
+  
   //-- Loop over column
   for (j=0; j<nb_col; j++) {
     col = col_tag_list[j];
@@ -93,9 +100,11 @@ function VR_FormatData(wrap, data) {
         'y_list': y_list_list[i]
       };
       
-      //-- Update y_max
-      if (!isNaN(y))
+      //-- Update y_last & y_max
+      if (!isNaN(y)) {
+        y_last = y;
         y_max = Math.max(y_max, y);
+      }
       
       //-- Stock
       block2.push(block);
@@ -103,6 +112,7 @@ function VR_FormatData(wrap, data) {
     
     //-- Stock
     formatted_data.push(block2);
+    y_last_list.push(y_last);
   }
   
   //-- Calculate y_max
@@ -119,21 +129,6 @@ function VR_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
-  //-- Calculate last row which is not NaN
-  var legend_value = [];
-  var last, value;
-  for (j=0; j<nb_col; j++) {
-    last = data.length - 1;
-    value = data[last][col_tag_list[j]];
-    while ('' == value) {
-      last -= 1;
-      value = data[last][col_tag_list[j]];
-    }
-    
-    //-- Get latest value as legend value
-    legend_value.push(value);
-  }
-  
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
   wrap.col_tag_list = col_tag_list;
@@ -142,7 +137,21 @@ function VR_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = legend_value;
+  wrap.legend_value = y_last_list;
+}
+
+function VR_FormatData2(wrap, data2) {
+  var i, timestamp;
+  
+  //-- Loop over row
+  for (i=0; i<data2.length; i++) {
+    //-- Get value of `n_tot`
+    if ('timestamp' == data2[i]['key'])
+      timestamp = data2[i]['value'];
+  }
+  
+  //-- Save to wrapper
+  wrap.timestamp = timestamp;
 }
 
 //-- Tooltip
@@ -177,6 +186,10 @@ function VR_MouseMove(wrap, d) {
 function VR_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
+  
+  //-- Replot xaxis
+  if (wrap.tag.includes('overall'))
+    GP_PlotBottomOverallEmptyAxis(wrap);
   
   //-- Add ylabel
   GP_PlotYLabel(wrap);
@@ -243,7 +256,10 @@ function VR_Plot(wrap) {
 
 function VR_Replot(wrap) {
   //-- Replot xaxis
-  GP_ReplotDateAsX(wrap);
+  if (wrap.tag.includes('overall'))
+    GP_ReplotOverallXTick(wrap);
+  else
+    GP_ReplotDateAsX(wrap);
   
   //-- Define xscale
   var xscale = GP_MakeBandXForBar(wrap);
@@ -350,11 +366,13 @@ function VR_Replot(wrap) {
 function VR_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       VR_FormatData(wrap, data);
+      VR_FormatData2(wrap, data2);
       VR_Plot(wrap);
       VR_Replot(wrap);
     });

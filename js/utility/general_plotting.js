@@ -8,9 +8,6 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//VP annotation language
-//Note with "Collapse"
-
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
 
@@ -25,9 +22,15 @@ var GP_wrap = {
   xlabel_path_2021: 15,
   r_list_2021: [7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6],
   
+  iso_ref: '2020-01-01',
+  xticklabel_overall_width_min: 15,
+  
   //-- Color
   c_list: ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022', '#117733', '#DD6622', '#7733AA', '#BB8811'],
   gray: '#999999',
+  
+  //-- Transparence
+  opacity: 0.3,
   
   //-- Transition delay
   trans_delay: 800,
@@ -42,7 +45,7 @@ function GP_AbbreviateValue(value) {
     return (1e-6*value).toPrecision(3) + 'M';
   if (value >= 1e+4)
     return (1e-3*value).toPrecision(3) + 'k';
-  return value;
+  return value.toFixed(0);
 }
 
 function GP_CumSum(data, col_tag_list) {
@@ -258,6 +261,22 @@ function GP_PlotRightEmptyAxis(wrap) {
     .attr('transform', 'translate(' + wrap.width + ',0)');
 }
 
+//-- Placeholders
+function GP_PlotBottomOverallEmptyAxis(wrap) {
+  wrap.svg.append('g')
+    .attr('class', 'xaxis tick month')
+    .attr('transform', 'translate(0,' + wrap.height + ')');
+  wrap.svg.append('g')
+    .attr('class', 'xaxis tick year')
+    .attr('transform', 'translate(0,' + wrap.height + ')');
+  wrap.svg.append('g')
+    .attr('class', 'xaxis label month')
+    .attr('transform', 'translate(0,' + wrap.height + ')');
+  wrap.svg.append('g')
+    .attr('class', 'xaxis label year')
+    .attr('transform', 'translate(0,' + wrap.height + ')');
+}
+
 //------------------------------------------------------------------------------
 //-- Function declarations - frame
 
@@ -377,6 +396,170 @@ function GP_ReplotTileX(wrap) {
   wrap.xscale_tick = xscale;
 }
 
+function GP_MakeOverallXTick(wrap) {
+  var xticklabel_month_list;
+//   if (LS_lang == 'zh-tw')
+//     xticklabel_month_list = ['', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+//   else if (LS_lang == 'fr')
+//     xticklabel_month_list = ['', 'Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'];
+//   else
+//     xticklabel_month_list = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  if (LS_lang == 'zh-tw')
+    xticklabel_month_list = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+  else if (LS_lang == 'fr')
+    xticklabel_month_list = ['', 'J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+  else
+    xticklabel_month_list = ['', 'J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+  
+  //-- Today  
+  var iso_today = wrap.timestamp.slice(0, 10);
+  var x_today = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_today += 1; //-- For edge
+  
+  //-- Generate xtick for month
+  var iso_begin = GP_wrap.iso_ref;
+  var x_min = 0;
+  var x_max = x_today;
+  
+  var yyyymm_begin = +iso_begin.slice(5, 7) - 1 + 12 * +iso_begin.slice(0, 4);
+  var yyyymm_today = +iso_today.slice(5, 7) - 1 + 12 * +iso_today.slice(0, 4);
+  var xtick_sep_month = [];
+  var xtick_label_month = [];
+  var xticklabel_month = [];
+  var x_prev = x_min;
+  var i, x, mm, yyyy, iso;
+  
+  for (i=yyyymm_begin; i<yyyymm_today+1; i++) {
+    //-- Get tick date
+    yyyy = Math.floor((i+1)/12);
+    mm = ((i+1) % 12 + 1).toLocaleString(undefined, {minimumIntegerDigits: 2}); //-- Get next month
+    iso = yyyy + '-' + mm +'-01';
+    
+    //-- Get index
+    x = (new Date(iso) - new Date(GP_wrap.iso_ref)); //-- Calculate difference
+    x /= 86400000; //-- Convert from ms to day
+    x -= 0.1; //-- For edge
+    
+    //-- If last month, do not draw xtick_sep_month & use x_max to compare
+    if (i == yyyymm_today)
+      x = x_max;
+    else
+      xtick_sep_month.push(x);
+      
+    //-- Compare with previous x, draw xtick_label_month & xticklabel_month only if wide enough
+    if (x-x_prev >= GP_wrap.xticklabel_overall_width_min) {
+      xtick_label_month.push(0.5*(x_prev+x));
+      mm = i % 12 + 1; //-- Get current month
+      xticklabel_month.push(xticklabel_month_list[mm]);
+    }
+    
+    //-- Update x_prev
+    x_prev = x;
+  }
+  
+  //-- Generate xtick for year
+  var yyyy_begin = +iso_begin.slice(0, 4);
+  var yyyy_today = +iso_today.slice(0, 4);
+  var xtick_sep_year = [];
+  var xtick_label_year = [];
+  var xticklabel_year = [];
+  x_prev = x_min;
+  
+  for (i=yyyy_begin; i<yyyy_today+1; i++) {
+    //-- Get tick date
+    iso = i + '-12-31';
+    
+    //-- Get index
+    x = (new Date(iso) - new Date(GP_wrap.iso_ref)); //-- Calculate difference
+    x /= 86400000; //-- Convert from ms to day
+    x += 0.9; //-- For edge
+    
+    //-- If last year, do not draw xtick_sep_year & use x_max to compare
+    if (i == yyyy_today)
+      x = x_max;
+    else
+      xtick_sep_year.push(x);
+      
+    //-- Compare with previous x, draw xtick_label_year & xticklabel_year only if wide enough
+    if (x-x_prev >= GP_wrap.xticklabel_overall_width_min) {
+      xtick_label_year.push(0.5*(x_prev+x));
+      xticklabel_year.push(i);
+    }
+    
+    //-- Update x_prev
+    x_prev = x;
+  }
+  
+  //-- Save to wrapper
+  wrap.x_min = x_min;
+  wrap.x_max = x_max;
+  wrap.xtick_sep_month = xtick_sep_month;
+  wrap.xtick_label_month = xtick_label_month;
+  wrap.xticklabel_month = xticklabel_month;
+  wrap.xtick_sep_year = xtick_sep_year;
+  wrap.xtick_label_year = xtick_label_year;
+  wrap.xticklabel_year = xticklabel_year;
+}
+
+function GP_ReplotOverallXTick(wrap) {
+  GP_MakeOverallXTick(wrap);
+  
+  //-- Define xscale
+  var xscale = d3.scaleLinear()
+    .domain([wrap.x_min, wrap.x_max])
+    .range([0, wrap.width]);
+  
+  //-- Define & update xaxis_tick_month
+  var xaxis_tick_month = d3.axisBottom(xscale)
+    .tickSize(12)
+    .tickSizeOuter(0)
+    .tickValues(wrap.xtick_sep_month)
+    .tickFormat('');
+  wrap.svg.select('.xaxis.tick.month')
+    .call(xaxis_tick_month);
+    
+  //-- Adjust xtick style
+  wrap.svg.selectAll('.xaxis.tick.month line')
+    .style('stroke-opacity', 0.8);
+    
+  //-- Define & update xaxis_tick_year
+  var xaxis_tick_year = d3.axisBottom(xscale)
+    .tickSize(30)
+    .tickSizeOuter(0)
+    .tickValues(wrap.xtick_sep_year)
+    .tickFormat('');
+  wrap.svg.select('.xaxis.tick.year')
+    .call(xaxis_tick_year);
+  
+  //-- Adjust xtick style
+  wrap.svg.selectAll('.xaxis.tick.year line')
+    .style('stroke-opacity', 0.8);
+    
+  //-- Define & update xaxis_label_month
+  var xaxis_label_month = d3.axisBottom(xscale)
+    .tickSize(0)
+    .tickValues(wrap.xtick_label_month)
+    .tickFormat(function (d, i) {return wrap.xticklabel_month[i];});
+  wrap.svg.select('.xaxis.label.month')
+    .transition()
+    .duration(wrap.trans_delay)
+    .call(xaxis_label_month)
+    .selectAll('text')
+      .attr('transform', 'translate(0,8)');
+      
+  //-- Define & update xaxis_label_year
+  var xaxis_label_year = d3.axisBottom(xscale)
+    .tickSize(0)
+    .tickValues(wrap.xtick_label_year)
+    .tickFormat(function (d, i) {return wrap.xticklabel_year[i];});
+  wrap.svg.select('.xaxis.label.year')
+    .transition()
+    .duration(wrap.trans_delay)
+    .call(xaxis_label_year)
+    .selectAll('text')
+      .attr('transform', 'translate(0,40)');
+}
+  
 function GP_ReplotXLabel(wrap, xlabel_dict) {
   //-- Update xlabel
   wrap.svg.select(".xlabel")
@@ -504,7 +687,7 @@ function GP_PlotSingleBar(wrap) {
     .attr('y', yscale(0))
     .attr('width', xscale.bandwidth())
     .attr('height', 0)
-    .attr('fill', wrap.color_list[wrap.col_ind])
+    .attr('fill', wrap.color)
       .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
       .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
       .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
@@ -523,10 +706,51 @@ function GP_ReplotSingleBar(wrap) {
     .transition()
     .duration(wrap.trans_delay)
       .attr('y', function (d) {return yscale(d[wrap.col_tag]);})
-      .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);})
-      .attr('fill', wrap.color_list[wrap.col_ind]);
+      .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);});
 }
+
+function GP_PlotFaintSingleBar(wrap) {
+  //-- Define xscale for bar
+  var xscale = GP_MakeBandXForBar(wrap);
   
+  //-- Define yscale for counts
+  var yscale = GP_MakeLinearY(wrap);
+  
+  //-- Add bar
+  var bar = wrap.svg.selectAll('.content.bar')
+    .data(wrap.formatted_data)
+    .enter();
+  
+  //-- Update bar with dummy details
+  bar.append('rect')
+    .attr('class', 'content bar')
+    .attr('x', function (d) {return xscale(d[wrap.x_key]);})
+    .attr('y', yscale(0))
+    .attr('width', xscale.bandwidth())
+    .attr('height', 0)
+    .attr('fill', wrap.color)
+    .attr('opacity', GP_wrap.opacity)
+      .on('mouseover', function (d) {GP_MouseOver4(wrap, d);})
+      .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave4(wrap, d);})
+      
+  //-- Save to wrapper
+  wrap.bar = bar;
+}
+
+function GP_ReplotFaintSingleBar(wrap) {
+  //-- Define yscale
+  var yscale = GP_MakeLinearY(wrap);
+  
+  //-- Update bar
+  wrap.bar.selectAll('.content.bar')
+    .data(wrap.formatted_data)
+    .transition()
+    .duration(wrap.trans_delay)
+      .attr('y', function (d) {return yscale(d[wrap.col_tag]);})
+      .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);});
+}
+
 function GP_PlotAvgLine(wrap) {
   //-- Define xscale
   var xscale = GP_MakeBandXForBar(wrap);
@@ -536,13 +760,13 @@ function GP_PlotAvgLine(wrap) {
   
   //-- Define dummy line
   var draw_line_0 = d3.line()
-    .defined(d => !isNaN(d.y))//-- Don't show line if NaN
-    .x(function (d) {return xscale(d.x) + 0.5*xscale.bandwidth();})
+    .defined(d => !isNaN(d[wrap.col_tag_avg]))//-- Don't show line if NaN
+    .x(function (d) {return xscale(d.date) + 0.5*xscale.bandwidth();})
     .y(yscale(0));
     
   //-- Add line
   var line = wrap.svg.selectAll('.content.line')
-    .data([wrap.moving_avg])
+    .data([wrap.formatted_data])
     .enter();
     
   //-- Update line with dummy details
@@ -550,7 +774,7 @@ function GP_PlotAvgLine(wrap) {
     .attr('class', 'content line')
     .attr('d', function (d) {return draw_line_0(d);})
     .style('fill', 'none')
-    .style('stroke', GP_wrap.gray)
+    .style('stroke', wrap.color)
     .style('stroke-width', '2.5px');
     
   //-- Save to wrapper
@@ -566,18 +790,14 @@ function GP_ReplotAvgLine(wrap) {
   var yscale = GP_MakeLinearY(wrap);
   
   //-- Define line
-  var draw_line;
-  if (wrap.cumul > 0)
-    draw_line = wrap.draw_line_0; //-- No avg line if cumulative
-  else
-    draw_line = d3.line()
-      .defined(d => !isNaN(d.y))//-- Don't show line if NaN
-      .x(function (d) {return xscale(d.x) + 0.5*xscale.bandwidth();})
-      .y(function (d) {return yscale(d.y);});
+  var draw_line = d3.line()
+    .defined(d => !isNaN(d[wrap.col_tag_avg]))//-- Don't show line if NaN
+    .x(function (d) {return xscale(d.date) + 0.5*xscale.bandwidth();})
+    .y(function (d) {return yscale(d[wrap.col_tag_avg]);});
   
   //-- Update line
   wrap.line.selectAll('.content.line')
-    .data([wrap.moving_avg])
+    .data([wrap.formatted_data])
     .transition()
     .duration(wrap.trans_delay)
       .attr('d', function (d) {return draw_line(d);});
@@ -741,6 +961,26 @@ function GP_MouseLeave(wrap, d) {
     .style('opacity', 1);
 }
 
+function GP_MouseOver4(wrap, d) {
+  //-- Change opacity when moving mouse over
+  wrap.tooltip.transition()
+    .duration(200)
+    .style("opacity", 0.9)
+  d3.select(d3.event.target)
+    .style("opacity", 1)
+}
+
+function GP_MouseLeave4(wrap, d) {
+  //-- Change opacity when moving mouse away
+  wrap.tooltip.html('')
+    .transition()
+    .duration(10)
+    .style('opacity', 0);
+  
+  d3.select(d3.event.target)
+    .style('opacity', GP_wrap.opacity);
+}
+
 function GP_GetTooltipPos(wrap, y_alpha, d) {
   var l_max = 0;
   var i_max = -1;
@@ -835,7 +1075,7 @@ async function GP_Cascade(plot_list) {
 //-- Function declarations - initialization
 
 //-- Execution
-d3.csv('processed_data/key_numbers.csv', function (error, data) {
+d3.csv('../processed_data/key_numbers.csv', function (error, data) {
   if (error)
     return console.warn(error);
   

@@ -14,24 +14,24 @@ function CBD_ResetText() {
     LS_AddStr('case_by_detection_title', '各檢驗管道之每日確診人數');
     LS_AddStr('case_by_detection_button_1', '逐日');
     LS_AddStr('case_by_detection_button_2', '累計');
-    LS_AddStr('case_by_detection_button_3', '確診日');
-    LS_AddStr('case_by_detection_button_4', '發病日');
+//     LS_AddStr('case_by_detection_button_3', '確診日');
+//     LS_AddStr('case_by_detection_button_4', '發病日');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('case_by_detection_title', 'Cas confirmés par canal de détection');
     LS_AddStr('case_by_detection_button_1', 'Quotidiens');
     LS_AddStr('case_by_detection_button_2', 'Cumulés');
-    LS_AddStr('case_by_detection_button_3', 'Date du diagnostic');
-    LS_AddStr('case_by_detection_button_4', 'Date du début des sympt.');
+//     LS_AddStr('case_by_detection_button_3', 'Date du diagnostic');
+//     LS_AddStr('case_by_detection_button_4', 'Date du début des sympt.');
   }
   
   else { //-- En
     LS_AddStr('case_by_detection_title', 'Confirmed Cases by Detection Channel');
     LS_AddStr('case_by_detection_button_1', 'Daily');
     LS_AddStr('case_by_detection_button_2', 'Cumulative');
-    LS_AddStr('case_by_detection_button_3', 'Report date');
-    LS_AddStr('case_by_detection_button_4', 'Onset date');
+//     LS_AddStr('case_by_detection_button_3', 'Report date');
+//     LS_AddStr('case_by_detection_button_4', 'Onset date');
   }
 }
 
@@ -252,35 +252,35 @@ function CBD_Replot(wrap) {
   
   //-- Define legend color
   var legend_color = wrap.color_list.slice();
-  if (wrap.onset == 1)
-    legend_color.push(GP_wrap.gray);
+//   if (wrap.onset == 1)
+//     legend_color.push(GP_wrap.gray);
   legend_color.push('#000000');
   
   //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
-  var sum;
-  if (wrap.onset == 1) {
-    sum = wrap.legend_value.reduce((a, b) => a + b, 0);
-    legend_value.push(wrap.n_tot-sum);
-  }
+//   var sum;
+//   if (wrap.onset == 1) {
+//     sum = wrap.legend_value.reduce((a, b) => a + b, 0);
+//     legend_value.push(wrap.n_tot-sum);
+//   }
   legend_value.push(wrap.n_tot);
   
   //-- Define legend label
   var legend_label, legend_label_plus;
   if (LS_lang == 'zh-tw') {
     legend_label = ['機場', '居家或集中檢疫', '居家隔離', '自主健康管理', '自費或自行就醫', '外國檢驗', '無檢驗管道資料', '合計'];
-    legend_label_plus = '無發病日資料';
+//     legend_label_plus = '無發病日資料';
   }
   else if (LS_lang == 'fr') {
     legend_label = ['Aéroports', 'Quarantaine', 'Isolation', 'Auto-contrôle', 'Hôpitaux', "À l'étranger", 'Pas annoncés', 'Total'];
-    legend_label_plus = 'Sans date sympt.';
+//     legend_label_plus = 'Sans date sympt.';
   }
   else {
     legend_label = ['Airports', 'Quarantine', 'Isolation', 'Monitoring', 'Hospitals', 'Overseas', 'Not announced', 'Total'];
-    legend_label_plus = 'No onset date';
+//     legend_label_plus = 'No onset date';
   }
-  if (wrap.onset == 1)
-    legend_label.splice(wrap.nb_col, 0, legend_label_plus);
+//   if (wrap.onset == 1)
+//     legend_label.splice(wrap.nb_col, 0, legend_label_plus);
   
   //-- Remove from legend if value = 0
   var i;
@@ -333,7 +333,7 @@ function CBD_Replot(wrap) {
 //-- Load
 function CBD_Load(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[wrap.onset])
+    .defer(d3.csv, wrap.data_path_list[0])
     .defer(d3.csv, wrap.data_path_list[2])
     .await(function (error, data, data2) {
       if (error)
@@ -348,7 +348,7 @@ function CBD_Load(wrap) {
 
 function CBD_Reload(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[wrap.onset])
+    .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
@@ -366,28 +366,28 @@ function CBD_ButtonListener(wrap) {
     CBD_Reload(wrap);
   });
 
-  //-- Report date or onset date
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_onset']", function (event) {
-    GP_PressRadioButton(wrap, 'onset', wrap.onset, this.value);
-    wrap.onset = this.value
-    CBD_Reload(wrap);
-  });
+//   //-- Report date or onset date
+//   $(document).on("change", "input:radio[name='" + wrap.tag + "_onset']", function (event) {
+//     GP_PressRadioButton(wrap, 'onset', wrap.onset, this.value);
+//     wrap.onset = this.value
+//     CBD_Reload(wrap);
+//   });
 
   //-- Save
   d3.select(wrap.id + '_save').on('click', function() {
-    var tag1, tag2;
+    var tag1;
     
     if (wrap.cumul == 1)
       tag1 = 'cumulative';
     else
       tag1 = 'daily';
     
-    if (wrap.onset == 1)
-      tag2 = 'onset';
-    else
-      tag2 = 'report';
+//     if (wrap.onset == 1)
+//       tag2 = 'onset';
+//     else
+//       tag2 = 'report';
     
-    name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + LS_lang + '.png'
+    name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
@@ -408,9 +408,9 @@ function CBD_Main(wrap) {
   
   //-- Swap active to current value
   wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
-  wrap.onset = document.querySelector("input[name='" + wrap.tag + "_onset']:checked").value;
+//   wrap.onset = document.querySelector("input[name='" + wrap.tag + "_onset']:checked").value;
   GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
-  GP_PressRadioButton(wrap, 'onset', 0, wrap.onset); //-- 0 from .html
+//   GP_PressRadioButton(wrap, 'onset', 0, wrap.onset); //-- 0 from .html
   
   //-- Load
   CBD_InitFig(wrap);

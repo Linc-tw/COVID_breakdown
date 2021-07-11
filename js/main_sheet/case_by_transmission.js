@@ -14,106 +14,98 @@ function CBT_ResetText() {
     LS_AddStr("case_by_transmission_title", "各感染源之每日確診人數");
     LS_AddStr("case_by_transmission_button_1", "逐日");
     LS_AddStr("case_by_transmission_button_2", "累計");
-    LS_AddStr("case_by_transmission_button_3", "確診日");
-    LS_AddStr("case_by_transmission_button_4", "發病日");
+    LS_AddStr("case_by_transmission_button_total", "合計");
+    LS_AddStr("case_by_transmission_button_imported", "境外移入");
+    LS_AddStr("case_by_transmission_button_local", "本土");
+    LS_AddStr("case_by_transmission_button_others", "其他");
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr("case_by_transmission_title", "Cas confirmés par moyen de transmission");
     LS_AddStr("case_by_transmission_button_1", "Quotidiens");
     LS_AddStr("case_by_transmission_button_2", "Cumulés");
-    LS_AddStr("case_by_transmission_button_3", "Date du diagnostic");
-    LS_AddStr("case_by_transmission_button_4", "Date du début des sympt.");
+    LS_AddStr("case_by_transmission_button_total", "Totaux");
+    LS_AddStr("case_by_transmission_button_imported", "Importés");
+    LS_AddStr("case_by_transmission_button_local", "Locaux");
+    LS_AddStr("case_by_transmission_button_others", "Divers");
   }
   
   else { //-- En
     LS_AddStr("case_by_transmission_title", "Confirmed Cases by Transmission Type");
     LS_AddStr("case_by_transmission_button_1", "Daily");
     LS_AddStr("case_by_transmission_button_2", "Cumulative");
-    LS_AddStr("case_by_transmission_button_3", "Report date");
-    LS_AddStr("case_by_transmission_button_4", "Onset date");
+    LS_AddStr("case_by_transmission_button_total", "Total");
+    LS_AddStr("case_by_transmission_button_imported", "Imported");
+    LS_AddStr("case_by_transmission_button_local", "Local");
+    LS_AddStr("case_by_transmission_button_others", "Others");
   }
 }
 
 function CBT_FormatData(wrap, data) {
   //-- Variables for xtick
-  var q = data.length % wrap.xlabel_path;
-  var r = wrap.r_list[q];
+  var x_key = 'date';
+  var q, r;
+  if (wrap.tag.includes('overall'))
+    r = 999;
+  else {
+    q = data.length % wrap.xlabel_path;
+    r = wrap.r_list[q];
+  }
   var xticklabel = [];
   
   //-- Variables for data
-  var col_tag_list = data.columns.slice(2); //-- 0 = date, 1 = moving average
+  var col_tag_list = data.columns.slice(1, 5); //-- 0 = date
+  var col_tag = col_tag_list[wrap.col_ind];
+  var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
   var x_list = []; //-- For date
   var row;
   
   //-- Variables for bar
-  var h_sum = []; //-- For legend
-  var y_max = 0;
-  var h, h_list;
+  var y_sum = []; //-- For legend
+  var y_max = 4.5;
   
   //-- Other variables
-  var formatted_data = [];
-  var moving_avg = [];
-  var i, j, x, y, avg, block;
+  var i, j, x, y, avg;
 
   //-- Convert data form
   if (wrap.cumul == 1)
     GP_CumSum(data, col_tag_list);
   
-  //-- Initialize h_sum
+  //-- Initialize y_sum
   for (j=0; j<nb_col; j++)
-    h_sum.push(0);
+    y_sum.push(0);
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
-    h_list = [];
     x = row['date'];
-    y = 0;
-    avg = row['moving_avg'];
+    avg = row[col_tag_avg];
     x_list.push(x);
     
     if ('' == avg)
-      moving_avg.push({x: x, y: NaN});
+      row[col_tag_avg] = NaN;
     else
-      moving_avg.push({x: x, y: +avg});
+      row[col_tag_avg] = +avg;
     
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
     
-    //-- Loop over column
-    for (j=0; j<nb_col; j++)
-      h_list.push(+row[col_tag_list[j]]);
-    
-    //-- Loop over column again (reversed order)
-    for (j=nb_col-1; j>=0; j--) {
-      //-- Current value
-      h = h_list[j];
-      
-      //-- Make data block
-      block = {
-        'x': x,
-        'y0': y,
-        'y1': y+h,
-        'h_list': h_list.slice(),
-        'col_ind': j
-      };
-        
-      //-- Update total height
-      y += h;
-    
-      //-- Update sum
-      if (wrap.cumul == 1)
-        h_sum[j] = Math.max(h, h_sum[j]);
-      else
-        h_sum[j] += h;
-      
-      //-- Stock
-      formatted_data.push(block);
+    //-- Update y_sum
+    for (j=0; j<nb_col; j++) {
+      if (wrap.cumul == 0)
+        y_sum[j] += +row[col_tag_list[j]];
+      else 
+        y_sum[j] = Math.max(y_sum[j], +row[col_tag_list[j]]);
     }
     
+    y = +row[col_tag];
+    
+    //-- Modify data
+    if (wrap.cumul == 1)
+      row[col_tag_avg] = y;
+      
     //-- Update y_max
     y_max = Math.max(y_max, y);
   }
@@ -129,32 +121,35 @@ function CBT_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
+  //-- Make legend value
+  var legend_value = y_sum.slice(1, nb_col);
+  legend_value.push(y_sum[0]);
+    
   //-- Save to wrapper
-  wrap.formatted_data = formatted_data;
-  wrap.moving_avg = moving_avg;
+  wrap.formatted_data = data;
+  wrap.col_tag = col_tag;
+  wrap.col_tag_avg = col_tag_avg;
   wrap.nb_col = nb_col;
+  wrap.x_key = x_key;
   wrap.x_list = x_list;
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = h_sum;
+  wrap.legend_value = legend_value;
 }
 
 function CBT_FormatData2(wrap, data2) {
-  var n_tot = 0;
-  var i;
+  var i, timestamp;
   
   //-- Loop over row
   for (i=0; i<data2.length; i++) {
     //-- Get value of `n_tot`
-    if (wrap.n_tot_key == data2[i]['key']) {
-      n_tot = +data2[i]['value'];
-      break;
-    }
+    if ('timestamp' == data2[i]['key'])
+      timestamp = data2[i]['value'];
   }
   
   //-- Save to wrapper
-  wrap.n_tot = n_tot;
+  wrap.timestamp = timestamp;
 }
 
 //-- Tooltip
@@ -164,34 +159,23 @@ function CBT_MouseMove(wrap, d) {
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags
-  if (LS_lang == 'zh-tw')
-    col_label_list = ['境外移入', '本土已知', '本土未知', '船艦', '航空器', '未知']
-  else if (LS_lang == 'fr')
-    col_label_list = ['Importés', 'Locaux connus', 'Locaux inconnus', 'En bateau', 'En avion', 'Inconnus']
-  else
-    col_label_list = ['Imported', 'Local linked', 'Local unlinked', 'On boat', 'On plane', 'Unknown']
-  
-  //-- Define tooltip texts
-  var tooltip_text = d.x;
-  var sum = 0;
-  var i, h;
-  
-  for (i=0; i<wrap.nb_col; i++) {
-    h = d.h_list[i];
-    if (h > 0) {
-      tooltip_text += '<br>' + col_label_list[i] + ' = ' + h;
-      sum += h;
-    }
+  if (LS_lang == 'zh-tw') {
+    col_label_list = ['合計', '境外移入', '本土', '其他'];
+    avg_text = '過去七日平均';
+  }
+  else if (LS_lang == 'fr') {
+    col_label_list = ['Totaux', 'Importés', 'Locaux', 'Divers'];
+    avg_text = 'Moyenne sur 7 jours';
+  }
+  else {
+    col_label_list = ['Total', 'Imported', 'Local', 'Others'];
+    avg_text = '7-day average';
   }
   
-  //-- Add text for sum
-  if (LS_lang == 'zh-tw')
-    tooltip_text += '<br>合計 = ';
-  else if (LS_lang == 'fr')
-    tooltip_text += '<br>Total = ';
-  else
-    tooltip_text += '<br>Total = ';
-  tooltip_text += sum;
+  //-- Define tooltip texts
+  var tooltip_text = d.date;
+  tooltip_text += '<br>' + col_label_list[wrap.col_ind] + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag]);
+  tooltip_text += '<br>' + avg_text + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag_avg]);
   
   //-- Generate tooltip
   wrap.tooltip
@@ -204,6 +188,10 @@ function CBT_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
+  //-- Replot xaxis
+  if (wrap.tag.includes('overall'))
+    GP_PlotBottomOverallEmptyAxis(wrap);
+  
   //-- Add ylabel
   GP_PlotYLabel(wrap);
     
@@ -211,22 +199,24 @@ function CBT_Plot(wrap) {
   GP_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GP_wrap.c_list.slice(0, wrap.nb_col);
+  wrap.color = GP_wrap.c_list[0];
   
-  //-- Save to wrapper
+  //-- Define mouse-move
   wrap.mouse_move = CBT_MouseMove;
-  wrap.color_list = color_list;
   
   //-- Plot bar
-  GP_PlotMultipleBar(wrap);
-
+  GP_PlotFaintSingleBar(wrap);
+  
   //-- Plot avg line
   GP_PlotAvgLine(wrap);
 }
 
 function CBT_Replot(wrap) {
   //-- Replot xaxis
-  GP_ReplotDateAsX(wrap);
+  if (wrap.tag.includes('overall'))
+    GP_ReplotOverallXTick(wrap);
+  else
+    GP_ReplotDateAsX(wrap);
   
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap);
@@ -236,52 +226,35 @@ function CBT_Replot(wrap) {
   GP_ReplotYLabel(wrap, ylabel_dict);
   
   //-- Replot bar
-  GP_ReplotMultipleBar(wrap);
+  GP_ReplotFaintSingleBar(wrap);
   
   //-- Replot avg line
   GP_ReplotAvgLine(wrap);
   
   //-- Define legend position
-  var legend_pos;
-  if (wrap.cumul == 0)
-    legend_pos = {x: wrap.legend_pos_x_0_i_[LS_lang], y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_0_i_[LS_lang]};
-  else
-    legend_pos = {x: wrap.legend_pos_x_1_i_[LS_lang], y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_1_i_[LS_lang]};
+  var legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_[LS_lang]};
   
   //-- Define legend color
-  var legend_color = wrap.color_list.slice();
-  if (wrap.onset == 1)
+  var legend_color = [];
+  var i;
+  for (i=0; i<wrap.nb_col; i++)
     legend_color.push(GP_wrap.gray);
-  legend_color.push('#000000');
+  i = (wrap.nb_col + wrap.col_ind - 1) % wrap.nb_col;
+  legend_color[i] = wrap.color;
   
   //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
-  var sum;
-  if (wrap.onset == 1) {
-    sum = wrap.legend_value.reduce((a, b) => a + b, 0);
-    legend_value.push(wrap.n_tot-sum);
-  }
-  legend_value.push(wrap.n_tot);
   
   //-- Define legend label
-  var legend_label, legend_label_plus;
-  if (LS_lang == 'zh-tw') {
-    legend_label = ['境外移入', '本土感染源已知', '本土感染源未知', '船艦', '航空器', '未知', '合計'];
-    legend_label_plus = '無發病日資料';
-  }
-  else if (LS_lang == 'fr') {
-    legend_label = ['Importés', 'Locaux & lien connu', 'Locaux & lien inconnu', 'En bateau', 'En avion', 'Inconnus', 'Total'];
-    legend_label_plus = 'Sans date sympt.';
-  }
-  else {
-    legend_label = ['Imported', 'Local & linked', 'Local & unlinked', 'On boat', 'On plane', 'Unknown', 'Total'];
-    legend_label_plus = 'No onset date';
-  }
-  if (wrap.onset == 1)
-    legend_label.splice(wrap.nb_col, 0, legend_label_plus);
+  var legend_label;
+  if (LS_lang == 'zh-tw')
+    legend_label = ['境外移入', '本土', '其他', '合計'];
+  else if (LS_lang == 'fr')
+    legend_label = ['Importés', 'Locaux', 'Divers', 'Total'];
+  else
+    legend_label = ['Imported', 'Local', 'Others', 'Total'];
   
   //-- Remove from legend if value = 0
-  var i;
   for (i=legend_value.length-1; i>=0; i--) {
     if (0 == legend_value[i]) {
       legend_color.splice(i, 1);
@@ -331,8 +304,8 @@ function CBT_Replot(wrap) {
 //-- Load
 function CBT_Load(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[wrap.onset])
-    .defer(d3.csv, wrap.data_path_list[2])
+    .defer(d3.csv, wrap.data_path_list[0])
+    .defer(d3.csv, wrap.data_path_list[1])
     .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
@@ -346,7 +319,7 @@ function CBT_Load(wrap) {
 
 function CBT_Reload(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[wrap.onset])
+    .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
@@ -363,27 +336,30 @@ function CBT_ButtonListener(wrap) {
     wrap.cumul = this.value;
     CBT_Reload(wrap);
   });
-
-  //-- Report date or onset date
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_onset']", function (event) {
-    GP_PressRadioButton(wrap, 'onset', wrap.onset, this.value);
-    wrap.onset = this.value
+  
+  //-- Transmission type
+  d3.select(wrap.id +'_trans').on('change', function() {
+    wrap.col_ind = this.value;
     CBT_Reload(wrap);
   });
-
+  
   //-- Save
   d3.select(wrap.id + '_save').on('click', function() {
     var tag1, tag2;
     
-    if (wrap.cumul == 1)
-      tag1 = 'cumulative';
+    if (wrap.col_ind == 0)
+      tag1 = 'total';
+    else if (wrap.col_ind == 1)
+      tag1 = 'imported';
+    else if (wrap.col_ind == 2)
+      tag1 = 'local';
     else
-      tag1 = 'daily';
+      tag1 = 'others';
     
-    if (wrap.onset == 1)
-      tag2 = 'onset';
+    if (wrap.cumul == 1)
+      tag2 = 'cumulative';
     else
-      tag2 = 'report';
+      tag2 = 'daily';
     
     name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
@@ -406,9 +382,8 @@ function CBT_Main(wrap) {
   
   //-- Swap active to current value
   wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
-  wrap.onset = document.querySelector("input[name='" + wrap.tag + "_onset']:checked").value;
   GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
-  GP_PressRadioButton(wrap, 'onset', 0, wrap.onset); //-- 0 from .html
+  wrap.col_ind = document.getElementById(wrap.tag + "_trans").value;
   
   //-- Load
   CBT_InitFig(wrap);

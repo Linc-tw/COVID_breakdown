@@ -1,3 +1,12 @@
+
+<!--
+  Filename:
+    index.html (real)
+
+  Author:
+    Chieh-An Lin
+-->
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -219,16 +228,12 @@
                                                 </label>
                                             </div>
                                             
-                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active" id="case_by_transmission_latest_onset_0">
-                                                    <input type="radio" class="btn-check" name="case_by_transmission_latest_onset" value=0 checked>
-                                                    <span id="case_by_transmission_button_3"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="case_by_transmission_latest_onset_1">
-                                                    <input type="radio" class="btn-check" name="case_by_transmission_latest_onset" value=1>
-                                                    <span id="case_by_transmission_button_4"></span>
-                                                </label>
-                                            </div>
+                                            <select id="case_by_transmission_latest_trans" class="form-select form-select-sm me-2" aria-label="case_by_transmission_latest_trans">
+                                                <option value="0" id="case_by_transmission_button_total" selected></option>
+                                                <option value="1" id="case_by_transmission_button_imported"></option>
+                                                <option value="2" id="case_by_transmission_button_local"></option>
+                                                <option value="3" id="case_by_transmission_button_others"></option>
+                                            </select>
                                             
                                             <button id='case_by_transmission_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>

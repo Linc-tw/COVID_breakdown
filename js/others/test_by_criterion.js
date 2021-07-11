@@ -31,83 +31,65 @@ function TBC_ResetText() {
 
 function TBC_FormatData(wrap, data) {
   //-- Variables for xtick
-  var q = data.length % wrap.xlabel_path;
-  var r = wrap.r_list[q];
+  var x_key = 'date';
+  var q, r;
+  if (wrap.tag.includes('overall'))
+    r = 999;
+  else {
+    q = data.length % wrap.xlabel_path;
+    r = wrap.r_list[q];
+  }
   var xticklabel = [];
   
   //-- Variables for data
-  var col_tag_list = data.columns.slice(2); //-- 0 = date, 1 = moving average
+  var col_tag_list = data.columns.slice(1, 2); //-- 0 = date
+  var col_tag = col_tag_list[0];
+  var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
   var x_list = []; //-- For date
   var row;
   
   //-- Variables for bar
-  var h_sum = []; //-- For legend
-  var y_max = 0;
-  var h, h_list;
+  var y_sum = 0; //-- For legend
+  var y_max = 4.5;
   
   //-- Other variables
-  var formatted_data = [];
-  var moving_avg = [];
-  var i, j, x, y, avg, block;
+  var i, j, x, y, avg;
 
   //-- Convert data form
   if (wrap.cumul == 1)
     GP_CumSum(data, col_tag_list);
   
-  //-- Initialize h_sum
-  for (j=0; j<nb_col; j++)
-    h_sum.push(0);
-  
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
-    h_list = [];
     x = row['date'];
-    y = 0;
-    avg = row['moving_avg'];
+    avg = row[col_tag_avg];
     x_list.push(x);
     
     if ('' == avg)
-      moving_avg.push({x: x, y: NaN});
+      row[col_tag_avg] = NaN;
     else
-      moving_avg.push({x: x, y: +avg});
-      
+      row[col_tag_avg] = +avg;
+    
     //-- Determine whether to have xtick
     if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
     
-    //-- Loop over column
-    for (j=0; j<nb_col; j++)
-      h_list.push(+row[col_tag_list[j]]);
-    
-    //-- Loop over column again (no reverse, so displayed upside down)
+    //-- Update y_sum
     for (j=0; j<nb_col; j++) {
-      //-- Current value
-      h = h_list[j];
-      
-      //-- Make data block
-      block = {
-        'x': x,
-        'y0': y,
-        'y1': y+h,
-        'h_list': h_list.slice(),
-        'col_ind': j
-      };
-        
-      //-- Update total height
-      y += h;
-      
-      //-- Update sum
-      if (wrap.cumul == 1)
-        h_sum[j] = Math.max(h, h_sum[j]);
-      else
-        h_sum[j] += h;
-      
-      //-- Stock
-      formatted_data.push(block);
+      if (wrap.cumul == 0)
+        y_sum += +row[col_tag_list[j]];
+      else 
+        y_sum = Math.max(y_sum, +row[col_tag_list[j]]);
     }
     
+    y = +row[col_tag];
+    
+    //-- Modify data
+    if (wrap.cumul == 1)
+      row[col_tag_avg] = y;
+      
     //-- Update y_max
     y_max = Math.max(y_max, y);
   }
@@ -124,14 +106,30 @@ function TBC_FormatData(wrap, data) {
     ytick.push(i)
   
   //-- Save to wrapper
-  wrap.formatted_data = formatted_data;
-  wrap.moving_avg = moving_avg;
+  wrap.formatted_data = data;
+  wrap.col_tag = col_tag;
+  wrap.col_tag_avg = col_tag_avg;
   wrap.nb_col = nb_col;
+  wrap.x_key = x_key;
   wrap.x_list = x_list;
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = h_sum;
+  wrap.legend_value = [y_sum];
+}
+
+function TBC_FormatData2(wrap, data2) {
+  var i, timestamp;
+  
+  //-- Loop over row
+  for (i=0; i<data2.length; i++) {
+    //-- Get value of `n_tot`
+    if ('timestamp' == data2[i]['key'])
+      timestamp = data2[i]['value'];
+  }
+  
+  //-- Save to wrapper
+  wrap.timestamp = timestamp;
 }
 
 //-- Tooltip
@@ -141,38 +139,23 @@ function TBC_MouseMove(wrap, d) {
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags
-  if (LS_lang == 'zh-tw')
-    col_label_list = ['法定通報', '居家檢疫', '擴大監測']
-  else if (LS_lang == 'fr')
-    col_label_list = ['Clinique', 'Quarantaine', 'Communauté']
-  else
-    col_label_list = ['Clinical', 'Quarantine', 'Community']
-  
-  //-- Define tooltip texts
-  var tooltip_text = d.x;
-  var sum = 0;
-  var i, h;
-  
-  for (i=0; i<wrap.nb_col; i++) {
-    h = d.h_list[i];
-    if (h > 0) {
-      sum += h;
-      if (wrap.cumul > 0)
-        h = GP_AbbreviateValue(h);
-      tooltip_text += '<br>' + col_label_list[i] + ' = ' + h;
-    }
+  if (LS_lang == 'zh-tw') {
+    col_label = '檢驗量';
+    avg_text = '過去七日平均';
+  }
+  else if (LS_lang == 'fr') {
+    col_label = 'Nombre de tests';
+    avg_text = 'Moyenne sur 7 jours';
+  }
+  else {
+    col_label = 'Number of tests';
+    avg_text = '7-day average';
   }
   
-  //-- Add text for sum
-  if (LS_lang == 'zh-tw')
-    tooltip_text += '<br>合計 = ';
-  else if (LS_lang == 'fr')
-    tooltip_text += '<br>Total = ';
-  else
-    tooltip_text += '<br>Total = ';
-  if (wrap.cumul > 0)
-    sum = GP_AbbreviateValue(sum);
-  tooltip_text += sum;
+  //-- Define tooltip texts
+  var tooltip_text = d.date;
+  tooltip_text += '<br>' + col_label + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag]);
+  tooltip_text += '<br>' + avg_text + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag_avg]);
   
   //-- Generate tooltip
   wrap.tooltip
@@ -185,6 +168,10 @@ function TBC_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
+  //-- Replot xaxis
+  if (wrap.tag.includes('overall'))
+    GP_PlotBottomOverallEmptyAxis(wrap);
+  
   //-- Add ylabel
   GP_PlotYLabel(wrap);
   
@@ -192,14 +179,13 @@ function TBC_Plot(wrap) {
   GP_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GP_wrap.c_list.slice(0, wrap.nb_col);
+  wrap.color = GP_wrap.c_list[2];
   
-  //-- Save to wrapper
+  //-- Define mouse-move
   wrap.mouse_move = TBC_MouseMove;
-  wrap.color_list = color_list;
   
   //-- Plot bar
-  GP_PlotMultipleBar(wrap);
+  GP_PlotFaintSingleBar(wrap);
 
   //-- Plot avg line
   GP_PlotAvgLine(wrap);
@@ -207,45 +193,35 @@ function TBC_Plot(wrap) {
 
 function TBC_Replot(wrap) {
   //-- Replot xaxis
-  GP_ReplotDateAsX(wrap);
+  if (wrap.tag.includes('overall'))
+    GP_ReplotOverallXTick(wrap);
+  else
+    GP_ReplotDateAsX(wrap);
   
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap);
   
-  //-- Update ylabel
-  var ylabel_dict = {en: 'Number of tests', fr: 'Nombre de tests', 'zh-tw': '檢驗數'};
+  //-- Replot ylabel
+  var ylabel_dict = {en: 'Number of tests', fr: 'Nombre de tests', 'zh-tw': '檢驗量'};
   GP_ReplotYLabel(wrap, ylabel_dict);
   
   //-- Replot bar
-  GP_ReplotMultipleBar(wrap);
+  GP_ReplotFaintSingleBar(wrap);
   
   //-- Replot avg line
   GP_ReplotAvgLine(wrap);
   
   //-- Define legend position
-  var legend_pos;
-  if (wrap.cumul == 0)
-    legend_pos = {x: wrap.legend_pos_x_0_[LS_lang], y: 40, dx: 10, dy: 27};
-  else
-    legend_pos = {x: wrap.legend_pos_x_1_[LS_lang], y: 40, dx: 10, dy: 27};
+  var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   
   //-- Define legend color
-  var legend_color = wrap.color_list.slice();
-  legend_color.push('#000000');
+  var legend_color = [wrap.color];
   
   //-- Calculate legend value
   var legend_value = wrap.legend_value.slice();
-  var sum = legend_value.reduce((a, b) => a + b, 0);
-  legend_value.push(sum);
   
   //-- Define legend label
-  var legend_label;
-  if (LS_lang == 'zh-tw')
-    legend_label = ['法定定義通報', '居家檢疫', '擴大社區監測', '合計'];
-  else if (LS_lang == 'fr')
-    legend_label = ['Critères cliniques', 'Quarantaine (fusionnée dans clinique)', 'Recherche dans la communauté', 'Total'];
-  else
-    legend_label = ['Suspicious clinical cases', 'Quarantine (merged into clinical)', 'Community monitoring', 'Total'];
+  var legend_label = [ylabel_dict[LS_lang]];
   
   //-- Remove from legend if value = 0
   var i;
@@ -274,7 +250,6 @@ function TBC_Replot(wrap) {
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
       .attr('text-anchor', 'end')
       .style('fill', function (d, i) {return legend_color[i];})
-      .style('font-size', '1.2rem')
       .text(function (d) {return d;});
       
   //-- Update legend label
@@ -290,7 +265,6 @@ function TBC_Replot(wrap) {
       .attr('text-anchor', 'start')
       .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
       .style('fill', function (d, i) {return legend_color[i];})
-      .style('font-size', '1.2rem')
       .text(function (d) {return d;});
 }
 
@@ -298,11 +272,13 @@ function TBC_Replot(wrap) {
 function TBC_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       TBC_FormatData(wrap, data);
+      TBC_FormatData2(wrap, data2);
       TBC_Plot(wrap);
       TBC_Replot(wrap);
     });

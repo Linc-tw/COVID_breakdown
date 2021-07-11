@@ -95,8 +95,13 @@ function LCPC_ResetText() {
 function LCPC_FormatData(wrap, data) {
   //-- Variables for xtick
   var x_key = 'date';
-  var q = data.length % wrap.xlabel_path;
-  var r = wrap.r_list[q];
+  var q, r;
+  if (wrap.tag.includes('overall'))
+    r = 999;
+  else {
+    q = data.length % wrap.xlabel_path;
+    r = wrap.r_list[q];
+  }
   var xtick = [];
   var xticklabel = [];
   
@@ -158,6 +163,20 @@ function LCPC_FormatData(wrap, data) {
   wrap.legend_value = y_sum;
 }
 
+function LCPC_FormatData2(wrap, data2) {
+  var i, timestamp;
+  
+  //-- Loop over row
+  for (i=0; i<data2.length; i++) {
+    //-- Get value of `n_tot`
+    if ('timestamp' == data2[i]['key'])
+      timestamp = data2[i]['value'];
+  }
+  
+  //-- Save to wrapper
+  wrap.timestamp = timestamp;
+}
+
 //-- Tooltip
 function LCPC_MouseMove(wrap, d) {
   //-- Get tooltip position
@@ -210,6 +229,10 @@ function LCPC_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
+  //-- Replot xaxis
+  if (wrap.tag.includes('overall'))
+    GP_PlotBottomOverallEmptyAxis(wrap);
+  
   //-- Add ylabel
   GP_PlotYLabel(wrap);
     
@@ -217,12 +240,10 @@ function LCPC_Plot(wrap) {
   GP_MakeTooltip(wrap);
   
   //-- Define color
-  var color_list = GP_wrap.c_list.slice(6).concat(GP_wrap.c_list.slice(0, 6));
-  color_list = color_list.concat(color_list.slice(1));
+  wrap.color = GP_wrap.c_list[1];
   
-  //-- Save to wrapper
+  //-- Define mouse-move
   wrap.mouse_move = LCPC_MouseMove;
-  wrap.color_list = color_list;
   
   //-- Plot bar
   GP_PlotSingleBar(wrap);
@@ -230,7 +251,10 @@ function LCPC_Plot(wrap) {
 
 function LCPC_Replot(wrap) {
   //-- Replot xaxis
-  GP_ReplotDateAsX(wrap);
+  if (wrap.tag.includes('overall'))
+    GP_ReplotOverallXTick(wrap);
+  else
+    GP_ReplotDateAsX(wrap);
   
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap);
@@ -264,17 +288,14 @@ function LCPC_Replot(wrap) {
     ];
   
   //-- Update legend color, value, & label
-  var legend_color = [];
-  var legend_value_2 = [];
-  var legend_label_2 = [];
-  if (wrap.col_ind > 0) {
-    legend_color.push(wrap.color_list[wrap.col_ind]);
-    legend_value_2.push(wrap.legend_value[1]);
-    legend_label_2.push(legend_label[wrap.col_ind]);
+  var legend_color = [wrap.color, GP_wrap.gray];
+  var legend_value_2 = [wrap.legend_value[1], wrap.legend_value[0]];
+  var legend_label_2 = [legend_label[wrap.col_ind], legend_label[0]];
+  if (wrap.col_ind == 0) {
+    legend_color = legend_color.slice(0, 1);
+    legend_value_2 = legend_value_2.slice(0, 1);
+    legend_label_2 = legend_label_2.slice(0, 1);
   }
-  legend_color.push(wrap.color_list[0]);
-  legend_value_2.push(wrap.legend_value[0]);
-  legend_label_2.push(legend_label[0]);
   
   //-- Update legend title
   legend_color.splice(0, 0, '#000000');
@@ -315,11 +336,13 @@ function LCPC_Replot(wrap) {
 function LCPC_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       LCPC_FormatData(wrap, data);
+      LCPC_FormatData2(wrap, data2);
       LCPC_Plot(wrap);
       LCPC_Replot(wrap);
     });

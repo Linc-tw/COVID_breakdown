@@ -35,29 +35,36 @@ function LS_ISODateToMDDate(iso_date) {
 
 function LS_GetLegendTitle_Page(wrap) {
   var str_latest;
+  var str_overall;
   var str_2021;
   var str_2020;
   
   if (LS_lang == 'zh-tw') {
     str_latest = '近90日統計';
+    str_overall = '整體統計';
     str_2021 = '2021統計';
     str_2020 = '2020統計';
   }
   
   else if (LS_lang == 'fr') {
     str_latest = '90 derniers jours';
+    str_overall = 'Stat complète';
     str_2021 = 'Stat 2021';
     str_2020 = 'Stat 2020';
   }
   
   else { //-- En
     str_latest = 'Last 90 days';
+    str_overall = 'Overall stats';
     str_2021 = 'Stats 2021';
     str_2020 = 'Stats 2020';
   }
   
   if (wrap.tag.includes('latest'))
     return str_latest;
+  
+  if (wrap.tag.includes('overall'))
+    return str_overall;
   
   if (wrap.tag.includes('2021'))
     return str_2021;
@@ -70,8 +77,8 @@ function LS_GetLegendTitle_Page(wrap) {
 
 function LS_GetLegendTitle_Last(wrap) {
   var legend_title_dict = {
-    'en': 'Last available value',
-    'fr': 'Dernières données disponibles',
+    'en': 'Latest value',
+    'fr': 'Dernières données',
     'zh-tw': '最新數據',
   };
   return legend_title_dict[LS_lang];
@@ -103,100 +110,133 @@ function LS_AddHtml(id, string) {
 
 function LS_FillText_Menu() {
   var str_title;
+  var str_index;
   var str_latest;
-  var str_2021;
-  var str_2020;
-  var str_highlight;
-  var str_breakdown;
+  var str_overall;
+  var str_cases;
   var str_incidence;
+  var str_vaccination;
   var str_others;
   var str_timeline;
   var str_source;
   var str_copyleft;
   var str_slow;
   
+  var str_2021;
+  var str_2020;
+  var str_highlight;
+  
   if (LS_lang == 'zh-tw') {
     str_title = '嚴重特殊傳染性肺炎 台灣疫情';
+    str_index = '首頁';
     str_latest = '近90日統計';
-    str_2021 = '2021統計';
-    str_2020 = '2020統計';
-    str_highlight = '儀表板';
-    str_breakdown = '個案分析';
+    str_overall = '整體統計';
+    str_cases = '個案分析';
     str_incidence = '感染率比較';
+    str_vaccination = '疫苗進度';
     str_others = '其他統計';
     str_timeline = '時間軸';
     str_source = '資料來源';
     str_copyleft = '版權沒有';
     str_slow = '載入費時';
     str_update = '最後更新：' + LS_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3';
+    
+    str_2021 = '2021統計';
+    str_2020 = '2020統計';
+    str_highlight = '儀表板';
   }
   
   else if (LS_lang == 'fr') {
     str_title = 'Statistiques de COVID-19 à Taïwan';
+    str_index = 'Accueil';
     str_latest = '90 derniers jours';
-    str_2021 = 'Stat 2021';
-    str_2020 = 'Stat 2020';
-    str_highlight = 'Mise au point';
-    str_breakdown = 'Analyse des cas';
+    str_overall = 'Stat complète';
+    str_cases = 'Analyse des cas';
     str_incidence = "Taux d'incidence";
+    str_vaccination = 'Vaccination';
     str_others = 'Stats diverses';
     str_timeline = 'Chronologie';
     str_source = 'Sources des données';
     str_copyleft = "Sans droit d'auteur";
     str_slow = 'chargement lent';
     str_update = 'Dernière mise à jour : ' + LS_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3';
+    
+    str_2021 = 'Stat 2021';
+    str_2020 = 'Stat 2020';
+    str_highlight = 'Mise au point';
   }
   
   else { //-- En
     str_title = 'COVID-19 Statistics in Taiwan';
+    str_index = 'Home';
     str_latest = 'Last 90 days';
-    str_2021 = 'Stats 2021';
-    str_2020 = 'Stats 2020';
-    str_highlight = 'Highlight';
-    str_breakdown = 'Case breakdown';
+    str_overall = 'Overall stats';
+    str_cases = 'Case breakdown';
     str_incidence = 'Incidence rates';
+    str_vaccination = 'Vaccination';
     str_others = 'Other stats';
     str_timeline = 'Timeline';
     str_source = 'Data Sources';
     str_copyleft = 'No right reserved';
     str_slow = 'slow loading';
     str_update = 'Last update: ' + LS_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3';
+    
+    str_2021 = 'Stats 2021';
+    str_2020 = 'Stats 2020';
+    str_highlight = 'Highlight';
   }
   
   //-- Menu
+  LS_AddStr('menu_index', str_index);
   LS_AddStr('menu_latest', str_latest);
-  LS_AddStr('menu_latest_highlight', str_highlight);
-  LS_AddStr('menu_latest_breakdown', str_breakdown);
+  LS_AddStr('menu_latest_cases', str_cases);
   LS_AddStr('menu_latest_incidence', str_incidence);
+  LS_AddStr('menu_latest_vaccination', str_vaccination);
   LS_AddStr('menu_latest_others', str_others);
-  LS_AddStr('menu_2021', str_2021);
-  LS_AddStr('menu_2021_breakdown', str_breakdown);
-  LS_AddStr('menu_2021_incidence', str_incidence);
-  LS_AddStr('menu_2021_others', str_others);
-  LS_AddStr('menu_2020', str_2020);
-  LS_AddStr('menu_2020_breakdown', str_breakdown);
-  LS_AddStr('menu_2020_incidence', str_incidence);
-  LS_AddStr('menu_2020_others', str_others);
+  LS_AddStr('menu_overall', str_overall);
+  LS_AddStr('menu_overall_cases', str_cases);
+  LS_AddStr('menu_overall_incidence', str_incidence);
+  LS_AddStr('menu_overall_vaccination', str_vaccination);
+  LS_AddStr('menu_overall_others', str_others);
   LS_AddStr('menu_timeline', str_timeline);
   LS_AddStr('menu_source', str_source);
   LS_AddStr('menu_copyleft', str_copyleft);
   
+  LS_AddStr('menu_latest_highlight', str_highlight);
+  LS_AddStr('menu_latest_breakdown', str_cases);
+  LS_AddStr('menu_2021', str_2021);
+  LS_AddStr('menu_2021_breakdown', str_cases);
+  LS_AddStr('menu_2021_incidence', str_incidence);
+  LS_AddStr('menu_2021_others', str_others);
+  LS_AddStr('menu_2020', str_2020);
+  LS_AddStr('menu_2020_breakdown', str_cases);
+  LS_AddStr('menu_2020_incidence', str_incidence);
+  LS_AddStr('menu_2020_others', str_others);
+  
   //-- Header + footer
   LS_AddStr('title', str_title);
-  LS_AddStr('title_latest_highlight', str_latest + ' - ' + str_highlight);
-  LS_AddStr('title_latest_breakdown', str_latest + ' - ' + str_breakdown);
+  LS_AddStr('title_index', str_index);
+  LS_AddStr('title_latest_cases', str_latest + ' - ' + str_cases);
   LS_AddStr('title_latest_incidence', str_latest + ' - ' + str_incidence);
+  LS_AddStr('title_latest_vaccination', str_latest + ' - ' + str_vaccination);
   LS_AddStr('title_latest_others', str_latest + ' - ' + str_others);
-  LS_AddStr('title_2021_breakdown', str_2021 + ' - ' + str_breakdown);
-  LS_AddStr('title_2021_incidence', str_2021 + ' - ' + str_incidence);
-  LS_AddStr('title_2021_others', str_2021 + ' - ' + str_others);
-  LS_AddStr('title_2020_breakdown', str_2020 + ' - ' + str_breakdown);
-  LS_AddStr('title_2020_incidence', str_2020 + ' - ' + str_incidence);
-  LS_AddStr('title_2020_others', str_2020 + ' - ' + str_others);
+  LS_AddStr('title_overall_cases', str_overall + ' - ' + str_cases);
+  LS_AddStr('title_overall_incidence', str_overall + ' - ' + str_incidence);
+  LS_AddStr('title_overall_vaccination', str_overall + ' - ' + str_vaccination);
+  LS_AddStr('title_overall_others', str_overall + ' - ' + str_others);
   LS_AddStr('title_timeline', str_timeline);
   LS_AddStr('title_source', str_source);
   LS_AddStr('title_copyleft', str_copyleft);
   LS_AddStr('footer_last_update', str_update);
+  
+  LS_AddStr('title_latest_highlight', str_latest + ' - ' + str_highlight);
+  LS_AddStr('title_latest_breakdown', str_latest + ' - ' + str_cases);
+  LS_AddStr('title_2021_breakdown', str_2021 + ' - ' + str_cases);
+  LS_AddStr('title_2021_incidence', str_2021 + ' - ' + str_incidence);
+  LS_AddStr('title_2021_others', str_2021 + ' - ' + str_others);
+  LS_AddStr('title_2020_breakdown', str_2020 + ' - ' + str_cases);
+  LS_AddStr('title_2020_incidence', str_2020 + ' - ' + str_incidence);
+  LS_AddStr('title_2020_others', str_2020 + ' - ' + str_others);
 }
 
 function LS_FillText_Source() {
