@@ -2555,6 +2555,7 @@ class TimelineSheet(Template):
 ## Classes - County breakdown
 
 class CountySheet(Template):
+  
   def __init__(self, verbose=True):
     self.coltag_disease = '確定病名'
     self.coltag_report_date = '個案研判日'
@@ -2714,6 +2715,10 @@ class CountySheet(Template):
       except IndexError: ## If NaN
         pass
       
+    ## Moving average
+    for col_tag in col_tag_list:
+      key = col_tag + '_avg'
+      stock[key] = makeMovingAverage(stock[col_tag])
     return stock
   
   def saveCsv_localCasePerCounty(self):
@@ -3271,7 +3276,7 @@ def sandbox():
   #timeline_sheet.saveCsv_evtTimeline()
   
   county_sheet = CountySheet()
-  county_sheet.saveCsv_caseByAge()
+  county_sheet.saveCsv_localCasePerCounty()
   
   #vacc_sheet = VaccinationSheet()
   #vacc_sheet.saveCsv_vaccinationByBrand()

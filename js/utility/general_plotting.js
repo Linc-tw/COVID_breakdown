@@ -8,6 +8,13 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
+//IM legend: add total case & national incidence
+//html to page/ folder
+//New page: overall stats
+//Note with "Collapse"
+//Automize README generation
+
+
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
 
@@ -112,6 +119,20 @@ function GP_InitFig_Standard(wrap) {
   wrap.margin_['zh-tw'] = {left: 90, right: 5, bottom: 90, top: 5};
   wrap.margin_['fr'] = {left: 90, right: 5, bottom: 90, top: 5};
   wrap.margin_['en'] = {left: 90, right: 5, bottom: 90, top: 5};
+  
+  GP_InitFig(wrap);
+}
+
+function GP_InitFig_Mini(wrap) {
+  wrap.tot_width = 400;
+  wrap.tot_height_ = {};
+  wrap.tot_height_['zh-tw'] = 200;
+  wrap.tot_height_['fr'] = 200;
+  wrap.tot_height_['en'] = 200;
+  wrap.margin_ = {};
+  wrap.margin_['zh-tw'] = {left: 5, right: 5, bottom: 5, top: 5};
+  wrap.margin_['fr'] = {left: 5, right: 5, bottom: 5, top: 5};
+  wrap.margin_['en'] = {left: 5, right: 5, bottom: 5, top: 5};
   
   GP_InitFig(wrap);
 }
@@ -292,6 +313,13 @@ function GP_PlotTopLeft(wrap) {
   GP_PlotBottomFrameline(wrap);
   GP_PlotLeftEmptyAxis(wrap);
   GP_PlotRightFrameline(wrap);
+}
+
+function GP_PlotTopRight(wrap) {
+  GP_PlotTopEmptyAxis(wrap);
+  GP_PlotBottomFrameline(wrap);
+  GP_PlotLeftFrameline(wrap);
+  GP_PlotRightEmptyAxis(wrap);
 }
 
 //------------------------------------------------------------------------------
@@ -943,19 +971,22 @@ function GP_MakeTooltip(wrap) {
 
 function GP_MouseOver(wrap, d) {
   //-- Change opacity when moving mouse over
-  wrap.tooltip.transition()
-    .duration(200)
-    .style("opacity", 0.9)
+  if (!wrap.tag.includes('mini'))
+    wrap.tooltip.transition()
+      .duration(200)
+      .style("opacity", 0.9);
+      
   d3.select(d3.event.target)
-    .style("opacity", 0.8)
+    .style("opacity", 0.8);
 }
 
 function GP_MouseLeave(wrap, d) {
   //-- Change opacity when moving mouse away
-  wrap.tooltip.html('')
-    .transition()
-    .duration(10)
-    .style('opacity', 0);
+  if (!wrap.tag.includes('mini'))
+    wrap.tooltip.html('')
+      .transition()
+      .duration(10)
+      .style('opacity', 0);
   
   d3.select(d3.event.target)
     .style('opacity', 1);
@@ -963,19 +994,22 @@ function GP_MouseLeave(wrap, d) {
 
 function GP_MouseOver4(wrap, d) {
   //-- Change opacity when moving mouse over
-  wrap.tooltip.transition()
-    .duration(200)
-    .style("opacity", 0.9)
+  if (!wrap.tag.includes('mini'))
+    wrap.tooltip.transition()
+      .duration(200)
+      .style("opacity", 0.9);
+  
   d3.select(d3.event.target)
-    .style("opacity", 1)
+    .style("opacity", 1);
 }
 
 function GP_MouseLeave4(wrap, d) {
   //-- Change opacity when moving mouse away
-  wrap.tooltip.html('')
-    .transition()
-    .duration(10)
-    .style('opacity', 0);
+  if (!wrap.tag.includes('mini'))
+    wrap.tooltip.html('')
+      .transition()
+      .duration(10)
+      .style('opacity', 0);
   
   d3.select(d3.event.target)
     .style('opacity', GP_wrap.opacity);
@@ -1018,22 +1052,24 @@ function GP_GetTooltipPos(wrap, y_alpha, d) {
 //-- For THSC, ASC, IEBC, & IEBA (no tooltip)
 function GP_MouseOver2(wrap, d) {
   d3.select(d3.event.target)
-    .style("opacity", 0.8)
+    .style("opacity", 0.8);
 }
 
 //-- For THSC & ASC (no tooltip)
 function GP_MouseLeave2(wrap, d) {
   d3.select(d3.event.target)
-    .style("opacity", 1)
+    .style("opacity", 1);
 }
 
 //-- For CT & ET
 function GP_MouseOver3(wrap, d) {
-  wrap.tooltip.transition()
-    .duration(200)
-    .style("opacity", 0.9)
+  if (!wrap.tag.includes('mini'))
+    wrap.tooltip.transition()
+      .duration(200)
+      .style("opacity", 0.9);
+      
   d3.select(d3.event.target)
-    .style("opacity", 0.6)
+    .style("opacity", 0.6);
 }
 
 //------------------------------------------------------------------------------
@@ -1075,8 +1111,8 @@ async function GP_Cascade(plot_list) {
 //-- Function declarations - initialization
 
 //-- Execution
-// d3.csv('../processed_data/key_numbers.csv', function (error, data) {
-d3.csv('processed_data/key_numbers.csv', function (error, data) {
+d3.csv('../processed_data/key_numbers.csv', function (error, data) {
+// d3.csv('processed_data/key_numbers.csv', function (error, data) {
   if (error)
     return console.warn(error);
   

@@ -5,13 +5,27 @@
 //-- Author:
 //--   Chieh-An Lin
 
+var VR_mini_wrap = {
+  tag: 'various_rates_mini',
+  data_path_list: [
+    '../processed_data/latest/various_rates.csv',
+    '../processed_data/key_numbers.csv',
+  ],
+
+  xlabel_path: GP_wrap.xlabel_path_latest,
+  r_list: GP_wrap.r_list_latest,
+  y_max_factor: 1.1,
+  nb_yticks: 4,
+  legend_pos_x: 85,
+  r: 2, //-- Dot radius
+  trans_delay: GP_wrap.trans_delay,
+};
+
 var VR_latest_wrap = {
   tag: 'various_rates_latest',
   data_path_list: [
-//     '../processed_data/latest/various_rates.csv',
-//     '../processed_data/key_numbers.csv',
-    'processed_data/latest/various_rates.csv',
-    'processed_data/key_numbers.csv',
+    '../processed_data/latest/various_rates.csv',
+    '../processed_data/key_numbers.csv',
   ],
 
   xlabel_path: GP_wrap.xlabel_path_latest,

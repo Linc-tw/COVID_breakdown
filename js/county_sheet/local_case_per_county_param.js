@@ -8,10 +8,8 @@
 var LCPC_latest_wrap = {
   tag: 'local_case_per_county_latest',
   data_path_list: [
-//     '../processed_data/latest/local_case_per_county.csv',
-//     '../processed_data/key_numbers.csv',
-    'processed_data/latest/local_case_per_county.csv',
-    'processed_data/key_numbers.csv',
+    '../processed_data/latest/local_case_per_county.csv',
+    '../processed_data/key_numbers.csv',
   ],
 
   xlabel_path: GP_wrap.xlabel_path_latest,

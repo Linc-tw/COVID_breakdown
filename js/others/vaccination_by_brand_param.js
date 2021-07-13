@@ -5,13 +5,27 @@
 //-- Author:
 //--   Chieh-An Lin
 
+var VBB_mini_wrap = {
+  tag: 'vaccination_by_brand_mini', 
+  data_path_list: [
+    '../processed_data/latest/vaccination_by_brand.csv', 
+    '../processed_data/key_numbers.csv',
+  ],
+
+  xlabel_path: GP_wrap.xlabel_path_latest, 
+  r_list: GP_wrap.r_list_latest, 
+  y_max_factor: 1.1, 
+  nb_yticks: 4,
+  legend_pos_x_0_: {'zh-tw': 110, fr: 110, en: 110},
+  legend_pos_x_1_: {'zh-tw': 110, fr: 110, en: 110}, 
+  trans_delay: GP_wrap.trans_delay,
+};
+
 var VBB_latest_wrap = {
   tag: 'vaccination_by_brand_latest', 
   data_path_list: [
-//     '../processed_data/latest/vaccination_by_brand.csv', 
-//     '../processed_data/key_numbers.csv',
-    'processed_data/latest/vaccination_by_brand.csv', 
-    'processed_data/key_numbers.csv',
+    '../processed_data/latest/vaccination_by_brand.csv', 
+    '../processed_data/key_numbers.csv',
   ],
 
   xlabel_path: GP_wrap.xlabel_path_latest, 

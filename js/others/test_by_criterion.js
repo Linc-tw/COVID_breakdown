@@ -6,26 +6,29 @@
 //--   Chieh-An Lin
 
 function TBC_InitFig(wrap) {
-  GP_InitFig_Standard(wrap);
+  if (wrap.tag.includes('mini'))
+    GP_InitFig_Mini(wrap);
+  else
+    GP_InitFig_Standard(wrap);
 }
 
 function TBC_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr("test_by_criterion_title", "檢驗數量");
-    LS_AddStr("test_by_criterion_button_1", "逐日");
-    LS_AddStr("test_by_criterion_button_2", "累計");
+    LS_AddStr("test_by_criterion_button_daily", "逐日");
+    LS_AddStr("test_by_criterion_button_cumul", "累計");
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr("test_by_criterion_title", "Nombre de tests par critère");
-    LS_AddStr("test_by_criterion_button_1", "Quotidiens");
-    LS_AddStr("test_by_criterion_button_2", "Cumulés");
+    LS_AddStr("test_by_criterion_button_daily", "Quotidiens");
+    LS_AddStr("test_by_criterion_button_cumul", "Cumulés");
   }
   
   else { //-- En
     LS_AddStr("test_by_criterion_title", "Number of Tests by Reporting Criterion");
-    LS_AddStr("test_by_criterion_button_1", "Daily");
-    LS_AddStr("test_by_criterion_button_2", "Cumulative");
+    LS_AddStr("test_by_criterion_button_daily", "Daily");
+    LS_AddStr("test_by_criterion_button_cumul", "Cumulative");
   }
 }
 
@@ -134,6 +137,9 @@ function TBC_FormatData2(wrap, data2) {
 
 //-- Tooltip
 function TBC_MouseMove(wrap, d) {
+  if (wrap.tag.includes('mini'))
+    return;
+    
   //-- Get tooltip position
   var y_alpha = 0.5;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
@@ -176,7 +182,8 @@ function TBC_Plot(wrap) {
   GP_PlotYLabel(wrap);
   
   //-- Add tooltip
-  GP_MakeTooltip(wrap);
+  if (!wrap.tag.includes('mini'))
+    GP_MakeTooltip(wrap);
   
   //-- Define color
   wrap.color = GP_wrap.c_list[2];
@@ -192,6 +199,17 @@ function TBC_Plot(wrap) {
 }
 
 function TBC_Replot(wrap) {
+  //-- Replot bar
+  GP_ReplotFaintSingleBar(wrap);
+  
+  //-- Replot avg line
+  GP_ReplotAvgLine(wrap);
+  
+  if (wrap.tag.includes('mini')) {
+    GP_PlotTopRight(wrap);
+    return;
+  }
+  
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
     GP_ReplotOverallXTick(wrap);
@@ -204,12 +222,6 @@ function TBC_Replot(wrap) {
   //-- Replot ylabel
   var ylabel_dict = {en: 'Number of tests', fr: 'Nombre de tests', 'zh-tw': '檢驗量'};
   GP_ReplotYLabel(wrap, ylabel_dict);
-  
-  //-- Replot bar
-  GP_ReplotFaintSingleBar(wrap);
-  
-  //-- Replot avg line
-  GP_ReplotAvgLine(wrap);
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -333,8 +345,12 @@ function TBC_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
   //-- Swap active to current value
-  wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
-  GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
+  if (wrap.tag.includes('mini'))
+    wrap.cumul = 0;
+  else {
+    wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
+    GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
+  }
   
   //-- Load
   TBC_InitFig(wrap);

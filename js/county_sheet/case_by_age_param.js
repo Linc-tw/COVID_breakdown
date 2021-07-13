@@ -8,8 +8,19 @@
 var CBA_latest_wrap = {
   tag: 'case_by_age_latest',
   data_path_list: [
-//     '../processed_data/latest/case_by_age.csv',
-    'processed_data/latest/case_by_age.csv',
+    '../processed_data/latest/case_by_age.csv',
+  ],
+
+  y_max_factor: 1.6,
+  y_path: '4', //-- 4 ticks
+  legend_pos_x: 90,
+  trans_delay: GP_wrap.trans_delay,
+};
+
+var CBA_overall_wrap = {
+  tag: 'case_by_age_overall',
+  data_path_list: [
+    '../processed_data/overall/case_by_age.csv',
   ],
 
   y_max_factor: 1.6,

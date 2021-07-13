@@ -8,6 +8,7 @@
 var CT_wrap = {
   tag: 'criteria_timeline',
   data_path_list: [
-    'processed_data/criteria_timeline.csv',
+    '../processed_data/criteria_timeline.csv',
   ],
+  size: '0.85rem',
 };

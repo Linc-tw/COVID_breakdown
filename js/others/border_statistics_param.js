@@ -8,10 +8,8 @@
 var BS_latest_wrap = {
   tag: 'border_statistics_latest', 
   data_path_list: [
-//     '../processed_data/latest/border_statistics.csv',
-//     '../processed_data/key_numbers.csv',
-    'processed_data/latest/border_statistics.csv',
-    'processed_data/key_numbers.csv',
+    '../processed_data/latest/border_statistics.csv',
+    '../processed_data/key_numbers.csv',
   ], 
 
   xlabel_path: GP_wrap.xlabel_path_latest, 

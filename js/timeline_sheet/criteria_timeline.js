@@ -256,14 +256,14 @@ function CT_Plot(wrap) {
     //-- Add timeline date
     text.append('text')
       .attr('class', 'content text')
+      .attr('id', function (d, j) {return wrap.tag+'_timeline_text_'+i;})
       .attr('x', x0_t-dx_t)
       .attr('y', function (d, j) {return wrap.height*(i+0.5)/wrap.length+j*15;})
       .attr('fill', function (d) {return color(i);})
       .attr('opacity', wrap['timeline_text_'+i])
-      .attr('id', function (d, j) {return wrap.tag+'_timeline_text_'+i;})
-      .text(date)
       .attr('text-anchor', 'end')
       .attr('dominant-baseline', 'middle')
+      .text(date)
         
     //-- Add timeline text
     text.selectAll()
@@ -271,14 +271,15 @@ function CT_Plot(wrap) {
       .enter()
       .append('text')
         .attr('class', 'content text')
+        .attr('id', function (d, j) {return wrap.tag+'_timeline_text_'+i;})
         .attr('x', x0_t+dx_t+x_list_t[i])
         .attr('y', function (d, j) {return wrap.height*(i+0.5)/wrap.length+j*15;})
         .attr('fill', function (d) {return color(i);})
         .attr('opacity', wrap['timeline_text_'+i])
-        .attr('id', function (d, j) {return wrap.tag+'_timeline_text_'+i;})
-        .text(function (d) {return d;})
         .attr('text-anchor', 'start')
         .attr('dominant-baseline', 'middle')
+        .style('font-size', wrap.size)
+        .text(function (d) {return d;});
         
     //-- Add timeline line
     if (x_list_t[i] > 0) {
@@ -495,6 +496,7 @@ function CT_Plot(wrap) {
         .text(function (d) {return d;})
         .attr('text-anchor', anchor)
         .attr('dominant-baseline', 'middle')
+        .style('font-size', wrap.size);
         
     //-- Add circle line
     if (x_list_c[i] == 0) {

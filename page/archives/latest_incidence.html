@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="This site informs general public about COVID-19 with data visualization. It shows cases, testing, & vaccination statistics in Taiwan." />
+        <meta property="og:title" content="Latest incidence rates | COVID-19 Statistics in Taiwan" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://linc-tw.github.io/COVID_breakdown/index.html" />
+        <meta property="og:image" content="https://linc-tw.github.io/COVID_breakdown/figures/screenshot.png" />
+        <meta property="og:description" content="This site informs general public about COVID-19 with data visualization. It shows cases, testing, & vaccination statistics in Taiwan." />
+        
+        <title>Latest incidence rates | COVID-19 Statistics in Taiwan</title>
+        
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&family=Roboto&display=swap" rel="stylesheet"> 
+        <link href="css/template.css" rel="stylesheet" />
+        <link href="css/plots.css" rel="stylesheet" />
+        <link href="figures/favicon.png" rel="shortcut icon" />
+    </head>
+    
+    <body class="sb-nav-fixed">
+        <!-- Navigation bar -->
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-gray-dark">
+            <a class="navbar-brand ps-3" href="index.html">COVID-19 in TWN</a>
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+        </nav>
+        
+        <div id="layoutSidenav">
+            <!-- Side bar -->
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                        
+                            <!-- Language buttons -->
+                            <div class="sb-sidenav-menu-heading-nouppercase">
+                                <div class="btn-group-vertical btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                    <label id="menu_lang_en" class="btn btn-covid-white">
+                                        <input type="radio" class="btn-check" name="language" value='en'>English<br>
+                                    </label>
+                                    <label id="menu_lang_fr" class="btn btn-covid-white">
+                                        <input type="radio" class="btn-check" name="language" value='fr'>Français<br>
+                                    </label>
+                                    <label id="menu_lang_zh-tw" class="btn btn-covid-white">
+                                        <input type="radio" class="btn-check" name="language" value='zh-tw'>正體中文<br>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Menu -->
+                            <div class="sb-sidenav-menu-heading"></div>
+                            
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_latest" aria-expanded="false" aria-controls="collapse_latest">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-times"></i></div>
+                                <span id="menu_latest"></span>
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapse_latest" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="index.html">
+                                        <span id="menu_latest_highlight"></span>
+                                    </a>
+                                    <a class="nav-link" href="latest_breakdown.html">
+                                        <span id="menu_latest_breakdown"></span>
+                                    </a>
+                                    <a class="nav-link" href="latest_incidence.html">
+                                        <span id="menu_latest_incidence"></span>
+                                    </a>
+                                    <a class="nav-link" href="latest_others.html">
+                                        <span id="menu_latest_others"></span>
+                                    </a>
+                                </nav>
+                            </div>
+                            
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_2021" aria-expanded="false" aria-controls="collapse_2021">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-times"></i></div>
+                                <span id="menu_2021"></span>
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapse_2021" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="2021_breakdown.html">
+                                        <span id="menu_2021_breakdown"></span>
+                                    </a>
+                                    <a class="nav-link" href="2021_incidence.html">
+                                        <span id="menu_2021_incidence"></span>
+                                    </a>
+                                    <a class="nav-link" href="2021_others.html">
+                                        <span id="menu_2021_others"></span>
+                                    </a>
+                                </nav>
+                            </div>
+                            
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_2020" aria-expanded="false" aria-controls="collapse_2020">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-times"></i></div>
+                                <span id="menu_2020"></span>
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapse_2020" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="2020_breakdown.html">
+                                        <span id="menu_2020_breakdown"></span>
+                                    </a>
+                                    <a class="nav-link" href="2020_incidence.html">
+                                        <span id="menu_2020_incidence"></span>
+                                    </a>
+                                    <a class="nav-link" href="2020_others.html">
+                                        <span id="menu_2020_others"></span>
+                                    </a>
+                                </nav>
+                            </div>
+                            
+                            <a class="nav-link" href="timeline.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-hourglass-half"></i></div>
+                                <span id="menu_timeline"></span>
+                            </a>
+                            
+                            <a class="nav-link" href="data_source.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-database"></i></div>
+                                <span id="menu_source"></span>
+                            </a>
+                            
+                            <a class="nav-link" href="no_right_reserved.html">
+                                <div class="sb-nav-link-icon"><i class="fab fa-creative-commons-zero"></i></div>
+                                <span id="menu_copyleft"></span>
+                            </a>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- Social media -->
+                    <div class="sb-sidenav-footer-covid icon">
+                        <a href="https://github.com/Linc-tw/COVID_breakdown" target="_blank">
+                            <img src="figures/GitHub-Mark-Light-64px.png" alt="GitHub"></img>
+                        </a>
+                        <span style="display:inline-block; width: 24px;"></span>
+                        <a href="https://twitter.com/Linc_tw" target="_blank">
+                            <img src="figures/Twitter_Social_Icon_Circle_Color.png" alt="Twitter"></img>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+            
+            <div id="layoutSidenav_content">
+                <!-- Main body -->
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 id="title" class="mt-4"></h1>
+                        <h4 id="title_latest_incidence" class="mb-4"></h4>
+                        <div class="row">
+                        
+                            <!-- various_rates -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-line me-1"></i> <span id="various_rates_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <button id='various_rates_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="various_rates_latest"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- incidence_map -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-map me-1"></i> <span id="incidence_map_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active" id="incidence_map_latest_rate_0">
+                                                    <input type="radio" class="btn-check" name="incidence_map_latest_rate" value=0 checked>
+                                                    <span id="incidence_map_button_1"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="incidence_map_latest_rate_1">
+                                                    <input type="radio" class="btn-check" name="incidence_map_latest_rate" value=1>
+                                                    <span id="incidence_map_button_2"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <select id="incidence_map_latest_period" class="form-select form-select-sm me-2" aria-label="incidence_map_latest_period">
+                                                <option value="0" id="incidence_map_button_total" selected></option>
+                                                <option value="1" id="incidence_map_button_w-1"></option>
+                                                <option value="2" id="incidence_map_button_w-2"></option>
+                                                <option value="3" id="incidence_map_button_w-3"></option>
+                                                <option value="4" id="incidence_map_button_w-4"></option>
+                                                <option value="5" id="incidence_map_button_w-5"></option>
+                                                <option value="6" id="incidence_map_button_w-6"></option>
+                                                <option value="7" id="incidence_map_button_w-7"></option>
+                                                <option value="8" id="incidence_map_button_w-8"></option>
+                                                <option value="9" id="incidence_map_button_w-9"></option>
+                                                <option value="10" id="incidence_map_button_w-10"></option>
+                                                <option value="11" id="incidence_map_button_w-11"></option>
+                                                <option value="12" id="incidence_map_button_w-12"></option>
+                                            </select>
+                                            
+                                            <button id='incidence_map_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="incidence_map_latest"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- incidence_evolution_by_county -->
+                            <div class="col-xl-8">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-map me-1"></i> <span id="incidence_evolution_by_county_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <button id='incidence_evolution_by_county_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="incidence_evolution_by_county_latest"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- incidence_evolution_by_age -->
+                            <div class="col-xl-8">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-map me-1"></i> <span id="incidence_evolution_by_age_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <button id='incidence_evolution_by_age_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="incidence_evolution_by_age_latest"></div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </main>
+                
+                <!-- Footer -->
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <span id="footer_last_update"></span>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        
+        <!-- Scripts -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+        <script src="https://d3js.org/d3.v4.js"></script>
+        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.19.0/js/canvas-to-blob.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+        
+        <script src="js/utility/saveSvgAsPng.js"></script>
+        <script src="js/utility/toggle_sidebar.js"></script>
+        <script src="js/utility/language_setting.js"></script>
+        <script src="js/utility/general_plotting.js"></script>
+        
+        <script src="js/others/various_rates.js"></script>
+        <script src="js/others/various_rates_param.js"></script>
+        <script src="js/county_sheet/incidence_map.js"></script>
+        <script src="js/county_sheet/incidence_map_param.js"></script>
+        <script src="js/county_sheet/incidence_evolution_by_county.js"></script>
+        <script src="js/county_sheet/incidence_evolution_by_county_param.js"></script>
+        <script src="js/county_sheet/incidence_evolution_by_age.js"></script>
+        <script src="js/county_sheet/incidence_evolution_by_age_param.js"></script>
+        
+        <script src="js/plot/plot_latest_incidence.js"></script>
+        
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58898441-4"></script>
+        <script>
+          var host = window.location.hostname;
+          if (!host in ["localhost", "127.0.0.1"]) {	
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-58898441-4');
+          }
+        </script>
+    </body>
+</html>

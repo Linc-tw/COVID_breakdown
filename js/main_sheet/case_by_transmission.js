@@ -6,14 +6,17 @@
 //--   Chieh-An Lin
 
 function CBT_InitFig(wrap) {
-  GP_InitFig_Standard(wrap);
+  if (wrap.tag.includes('mini'))
+    GP_InitFig_Mini(wrap);
+  else
+    GP_InitFig_Standard(wrap);
 }
 
 function CBT_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr("case_by_transmission_title", "各感染源之每日確診人數");
-    LS_AddStr("case_by_transmission_button_1", "逐日");
-    LS_AddStr("case_by_transmission_button_2", "累計");
+    LS_AddStr("case_by_transmission_button_daily", "逐日");
+    LS_AddStr("case_by_transmission_button_cumul", "累計");
     LS_AddStr("case_by_transmission_button_total", "合計");
     LS_AddStr("case_by_transmission_button_imported", "境外移入");
     LS_AddStr("case_by_transmission_button_local", "本土");
@@ -22,8 +25,8 @@ function CBT_ResetText() {
   
   else if (LS_lang == 'fr') {
     LS_AddStr("case_by_transmission_title", "Cas confirmés par moyen de transmission");
-    LS_AddStr("case_by_transmission_button_1", "Quotidiens");
-    LS_AddStr("case_by_transmission_button_2", "Cumulés");
+    LS_AddStr("case_by_transmission_button_daily", "Quotidiens");
+    LS_AddStr("case_by_transmission_button_cumul", "Cumulés");
     LS_AddStr("case_by_transmission_button_total", "Totaux");
     LS_AddStr("case_by_transmission_button_imported", "Importés");
     LS_AddStr("case_by_transmission_button_local", "Locaux");
@@ -32,8 +35,8 @@ function CBT_ResetText() {
   
   else { //-- En
     LS_AddStr("case_by_transmission_title", "Confirmed Cases by Transmission Type");
-    LS_AddStr("case_by_transmission_button_1", "Daily");
-    LS_AddStr("case_by_transmission_button_2", "Cumulative");
+    LS_AddStr("case_by_transmission_button_daily", "Daily");
+    LS_AddStr("case_by_transmission_button_cumul", "Cumulative");
     LS_AddStr("case_by_transmission_button_total", "Total");
     LS_AddStr("case_by_transmission_button_imported", "Imported");
     LS_AddStr("case_by_transmission_button_local", "Local");
@@ -80,15 +83,11 @@ function CBT_FormatData(wrap, data) {
   for (i=0; i<data.length; i++) {
     row = data[i];
     x = row['date'];
+    y = +row[col_tag];
     avg = row[col_tag_avg];
     x_list.push(x);
     
-    if ('' == avg)
-      row[col_tag_avg] = NaN;
-    else
-      row[col_tag_avg] = +avg;
-    
-    //-- Determine whether to have xtick
+    //-- Determine where to have xtick
     if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
     
@@ -100,12 +99,14 @@ function CBT_FormatData(wrap, data) {
         y_sum[j] = Math.max(y_sum[j], +row[col_tag_list[j]]);
     }
     
-    y = +row[col_tag];
-    
-    //-- Modify data
-    if (wrap.cumul == 1)
+    //-- Update moving avg
+    if ('' == avg)
+      row[col_tag_avg] = NaN;
+    else if (wrap.cumul == 1)
       row[col_tag_avg] = y;
-      
+    else
+      row[col_tag_avg] = +avg;
+    
     //-- Update y_max
     y_max = Math.max(y_max, y);
   }
@@ -154,6 +155,9 @@ function CBT_FormatData2(wrap, data2) {
 
 //-- Tooltip
 function CBT_MouseMove(wrap, d) {
+  if (wrap.tag.includes('mini'))
+    return;
+    
   //-- Get tooltip position
   var y_alpha = 0.5;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
@@ -196,7 +200,8 @@ function CBT_Plot(wrap) {
   GP_PlotYLabel(wrap);
     
   //-- Add tooltip
-  GP_MakeTooltip(wrap);
+  if (!wrap.tag.includes('mini'))
+    GP_MakeTooltip(wrap);
   
   //-- Define color
   wrap.color = GP_wrap.c_list[0];
@@ -212,6 +217,17 @@ function CBT_Plot(wrap) {
 }
 
 function CBT_Replot(wrap) {
+  //-- Replot bar
+  GP_ReplotFaintSingleBar(wrap);
+  
+  //-- Replot avg line
+  GP_ReplotAvgLine(wrap);
+  
+  if (wrap.tag.includes('mini')) {
+    GP_PlotTopRight(wrap);
+    return;
+  }
+  
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
     GP_ReplotOverallXTick(wrap);
@@ -224,12 +240,6 @@ function CBT_Replot(wrap) {
   //-- Replot ylabel
   var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
   GP_ReplotYLabel(wrap, ylabel_dict);
-  
-  //-- Replot bar
-  GP_ReplotFaintSingleBar(wrap);
-  
-  //-- Replot avg line
-  GP_ReplotAvgLine(wrap);
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_[LS_lang]};
@@ -381,9 +391,15 @@ function CBT_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
   //-- Swap active to current value
-  wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
-  GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
-  wrap.col_ind = document.getElementById(wrap.tag + "_trans").value;
+  if (wrap.tag.includes('mini')) {
+    wrap.cumul = 0;
+    wrap.col_ind = 0;
+  }
+  else {
+    wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
+    GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
+    wrap.col_ind = document.getElementById(wrap.tag + "_trans").value;
+  }
   
   //-- Load
   CBT_InitFig(wrap);

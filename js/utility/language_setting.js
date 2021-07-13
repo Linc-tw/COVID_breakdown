@@ -118,8 +118,8 @@ function LS_FillText_Menu() {
   var str_vaccination;
   var str_others;
   var str_timeline;
-  var str_source;
-  var str_copyleft;
+  var str_data_source;
+  var str_no_right_reserved;
   var str_slow;
   
   var str_2021;
@@ -136,8 +136,8 @@ function LS_FillText_Menu() {
     str_vaccination = '疫苗進度';
     str_others = '其他統計';
     str_timeline = '時間軸';
-    str_source = '資料來源';
-    str_copyleft = '版權沒有';
+    str_data_source = '資料來源';
+    str_no_right_reserved = '版權沒有';
     str_slow = '載入費時';
     str_update = '最後更新：' + LS_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3';
     
@@ -156,8 +156,8 @@ function LS_FillText_Menu() {
     str_vaccination = 'Vaccination';
     str_others = 'Stats diverses';
     str_timeline = 'Chronologie';
-    str_source = 'Sources des données';
-    str_copyleft = "Sans droit d'auteur";
+    str_data_source = 'Sources des données';
+    str_no_right_reserved = "Sans droit d'auteur";
     str_slow = 'chargement lent';
     str_update = 'Dernière mise à jour : ' + LS_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3';
     
@@ -176,8 +176,8 @@ function LS_FillText_Menu() {
     str_vaccination = 'Vaccination';
     str_others = 'Other stats';
     str_timeline = 'Timeline';
-    str_source = 'Data Sources';
-    str_copyleft = 'No right reserved';
+    str_data_source = 'Data Sources';
+    str_no_right_reserved = 'No right reserved';
     str_slow = 'slow loading';
     str_update = 'Last update: ' + LS_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3';
     
@@ -199,8 +199,8 @@ function LS_FillText_Menu() {
   LS_AddStr('menu_overall_vaccination', str_vaccination);
   LS_AddStr('menu_overall_others', str_others);
   LS_AddStr('menu_timeline', str_timeline);
-  LS_AddStr('menu_source', str_source);
-  LS_AddStr('menu_copyleft', str_copyleft);
+  LS_AddStr('menu_source', str_data_source);
+  LS_AddStr('menu_copyleft', str_no_right_reserved);
   
   LS_AddStr('menu_latest_highlight', str_highlight);
   LS_AddStr('menu_latest_breakdown', str_cases);
@@ -225,8 +225,8 @@ function LS_FillText_Menu() {
   LS_AddStr('title_overall_vaccination', str_overall + ' - ' + str_vaccination);
   LS_AddStr('title_overall_others', str_overall + ' - ' + str_others);
   LS_AddStr('title_timeline', str_timeline);
-  LS_AddStr('title_source', str_source);
-  LS_AddStr('title_copyleft', str_copyleft);
+  LS_AddStr('title_data_source', str_data_source);
+  LS_AddStr('title_no_right_reserved', str_no_right_reserved);
   LS_AddStr('footer_last_update', str_update);
   
   LS_AddStr('title_latest_highlight', str_latest + ' - ' + str_highlight);
@@ -237,6 +237,20 @@ function LS_FillText_Menu() {
   LS_AddStr('title_2020_breakdown', str_2020 + ' - ' + str_cases);
   LS_AddStr('title_2020_incidence', str_2020 + ' - ' + str_incidence);
   LS_AddStr('title_2020_others', str_2020 + ' - ' + str_others);
+  
+  //-- Index
+  LS_AddStr('vignette_title_cases', str_cases);
+  LS_AddStr('vignette_title_incidence', str_incidence);
+  LS_AddStr('vignette_title_vaccination', str_vaccination);
+  LS_AddStr('vignette_title_others', str_others);
+  LS_AddStr('vignette_latest_cases', str_latest);
+  LS_AddStr('vignette_latest_incidence', str_latest);
+  LS_AddStr('vignette_latest_vaccination', str_latest);
+  LS_AddStr('vignette_latest_others', str_latest);
+  LS_AddStr('vignette_overall_cases', str_overall);
+  LS_AddStr('vignette_overall_incidence', str_overall);
+  LS_AddStr('vignette_overall_vaccination', str_overall);
+  LS_AddStr('vignette_overall_others', str_overall);
 }
 
 function LS_FillText_Source() {

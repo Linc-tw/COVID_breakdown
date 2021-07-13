@@ -22,8 +22,8 @@ function IM_InitFig(wrap) {
 function IM_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('incidence_map_title', '縣市確診地圖');
-    LS_AddStr('incidence_map_button_1', '案例數');
-    LS_AddStr('incidence_map_button_2', '確診率');
+    LS_AddStr('incidence_map_button_count', '案例數');
+    LS_AddStr('incidence_map_button_rate', '確診率');
     LS_AddStr('incidence_map_button_total', '本土合計');
     LS_AddStr('incidence_map_button_w-1', '0-6天前');
     LS_AddStr('incidence_map_button_w-2', '7-13天前');
@@ -53,8 +53,8 @@ function IM_ResetText() {
   
   else if (LS_lang == 'fr') {
     LS_AddStr('incidence_map_title', "Carte d'incidence");
-    LS_AddStr('incidence_map_button_1', 'Nombre');
-    LS_AddStr('incidence_map_button_2', 'Taux');
+    LS_AddStr('incidence_map_button_count', 'Nombre');
+    LS_AddStr('incidence_map_button_rate', 'Taux');
     LS_AddStr('incidence_map_button_total', 'Locaux totaux');
     LS_AddStr('incidence_map_button_w-1', '0-6 jours plus tôt');
     LS_AddStr('incidence_map_button_w-2', '7-13 jours plus tôt');
@@ -84,8 +84,8 @@ function IM_ResetText() {
   
   else { //-- En
     LS_AddStr('incidence_map_title', 'Incidence Map');
-    LS_AddStr('incidence_map_button_1', 'Counts');
-    LS_AddStr('incidence_map_button_2', 'Rate');
+    LS_AddStr('incidence_map_button_count', 'Counts');
+    LS_AddStr('incidence_map_button_rate', 'Rate');
     LS_AddStr('incidence_map_button_total', 'Total local');
     LS_AddStr('incidence_map_button_w-1', '0-6 days ago');
     LS_AddStr('incidence_map_button_w-2', '7-13 days ago');

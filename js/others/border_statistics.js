@@ -13,25 +13,25 @@ function BS_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('border_statistics_title', '入出境人數統計');
     LS_AddStr('border_statistics_text', '逐月更新');
-    LS_AddStr('border_statistics_button_1', '入境');
-    LS_AddStr('border_statistics_button_2', '出境');
-    LS_AddStr('border_statistics_button_3', '合計');
+    LS_AddStr('border_statistics_button_entry', '入境');
+    LS_AddStr('border_statistics_button_exit', '出境');
+    LS_AddStr('border_statistics_button_total', '合計');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('border_statistics_title', 'Statistiques frontalières');
     LS_AddStr('border_statistics_text', 'Mise à jour mensuellement');
-    LS_AddStr('border_statistics_button_1', 'Arrivées');
-    LS_AddStr('border_statistics_button_2', 'Départs');
-    LS_AddStr('border_statistics_button_3', 'Totaux');
+    LS_AddStr('border_statistics_button_entry', 'Arrivées');
+    LS_AddStr('border_statistics_button_exit', 'Départs');
+    LS_AddStr('border_statistics_button_total', 'Totaux');
   }
   
   else { //-- En
     LS_AddStr('border_statistics_title', 'Border Crossing');
     LS_AddStr('border_statistics_text', 'Updated monthly');
-    LS_AddStr('border_statistics_button_1', 'Arrival');
-    LS_AddStr('border_statistics_button_2', 'Departure');
-    LS_AddStr('border_statistics_button_3', 'Total');
+    LS_AddStr('border_statistics_button_entry', 'Arrival');
+    LS_AddStr('border_statistics_button_exit', 'Departure');
+    LS_AddStr('border_statistics_button_total', 'Total');
   }
 }
 

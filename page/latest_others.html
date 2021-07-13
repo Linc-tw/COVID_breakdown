@@ -1,0 +1,261 @@
+
+<!--
+  Filename:
+    latest_others.html
+
+  Author:
+    Chieh-An Lin
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Metadata - common part -->
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="This site informs general public about COVID-19 with data visualization. It shows cases, testing, & vaccination statistics in Taiwan." />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://linc-tw.github.io/COVID_breakdown/figures/screenshot.png" />
+        <meta property="og:description" content="This site informs general public about COVID-19 with data visualization. It shows cases, testing, & vaccination statistics in Taiwan." />
+
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&family=Roboto&display=swap" rel="stylesheet"> 
+        <link href="../css/template.css" rel="stylesheet" />
+        <link href="../css/plots.css" rel="stylesheet" />
+        <link href="../figures/favicon.png" rel="shortcut icon" />
+        
+        <!-- Metadata - variable part -->
+        <meta property="og:title" content="Latest others | COVID-19 Statistics in Taiwan" />
+        <meta property="og:url" content="https://linc-tw.github.io/COVID_breakdown/page/latest_others.html" />
+        <title>Latest others | COVID-19 Statistics in Taiwan</title>
+    </head>
+    
+    <body class="sb-nav-fixed">
+        <!-- Navigation bar -->
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-gray-dark">
+            <a class="navbar-brand ps-3" href="index.html">COVID-19 in TWN</a>
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+        </nav>
+        
+        <div id="layoutSidenav">
+            <!-- Side bar -->
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                        
+                            <!-- Language buttons -->
+                            <div class="sb-sidenav-menu-heading-nouppercase">
+                                <div class="btn-group-vertical btn-group-sm btn-group-toggle" data-toggle="buttons"> 
+                                    <label id="menu_lang_en" class="btn btn-covid-white">
+                                        <input type="radio" class="btn-check" name="language" value='en'>English<br>
+                                    </label>
+                                    <label id="menu_lang_fr" class="btn btn-covid-white">
+                                        <input type="radio" class="btn-check" name="language" value='fr'>Français<br>
+                                    </label>
+                                    <label id="menu_lang_zh-tw" class="btn btn-covid-white">
+                                        <input type="radio" class="btn-check" name="language" value='zh-tw'>正體中文<br>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Menu -->
+                            <div class="sb-sidenav-menu-heading"></div>
+                            
+                            <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
+                                <span id="menu_index"></span>
+                            </a>
+                            
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_latest" aria-expanded="false" aria-controls="collapse_latest">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-times"></i></div>
+                                <span id="menu_latest"></span>
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapse_latest" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="latest_cases.html">
+                                        <span id="menu_latest_cases"></span>
+                                    </a>
+                                    <a class="nav-link" href="latest_incidence.html">
+                                        <span id="menu_latest_incidence"></span>
+                                    </a>
+                                    <a class="nav-link" href="latest_vaccination.html">
+                                        <span id="menu_latest_vaccination"></span>
+                                    </a>
+                                    <a class="nav-link" href="latest_others.html">
+                                        <span id="menu_latest_others"></span>
+                                    </a>
+                                </nav>
+                            </div>
+                            
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_overall" aria-expanded="false" aria-controls="collapse_overall">
+                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-times"></i></div>
+                                <span id="menu_overall"></span>
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapse_overall" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="overall_cases.html">
+                                        <span id="menu_overall_cases"></span>
+                                    </a>
+                                    <a class="nav-link" href="overall_incidence.html">
+                                        <span id="menu_overall_incidence"></span>
+                                    </a>
+                                    <a class="nav-link" href="overall_vaccination.html">
+                                        <span id="menu_overall_vaccination"></span>
+                                    </a>
+                                    <a class="nav-link" href="overall_others.html">
+                                        <span id="menu_overall_others"></span>
+                                    </a>
+                                </nav>
+                            </div>
+                            
+                            <a class="nav-link" href="timeline.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-hourglass-half"></i></div>
+                                <span id="menu_timeline"></span>
+                            </a>
+                            
+                            <a class="nav-link" href="data_source.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-database"></i></div>
+                                <span id="menu_source"></span>
+                            </a>
+                            
+                            <a class="nav-link" href="no_right_reserved.html">
+                                <div class="sb-nav-link-icon"><i class="fab fa-creative-commons-zero"></i></div>
+                                <span id="menu_copyleft"></span>
+                            </a>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- Social media -->
+                    <div class="sb-sidenav-footer-covid icon">
+                        <a href="https://github.com/Linc-tw/COVID_breakdown" target="_blank">
+                            <img src="../figures/GitHub-Mark-Light-64px.png" alt="GitHub"></img>
+                        </a>
+                        <span style="display:inline-block; width: 24px;"></span>
+                        <a href="https://twitter.com/Linc_tw" target="_blank">
+                            <img src="../figures/Twitter_Social_Icon_Circle_Color.png" alt="Twitter"></img>
+                        </a>
+                    </div>
+                </nav>
+            </div>       
+
+            <div id="layoutSidenav_content">
+                <!-- Main body -->
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 id="title" class="mt-4"></h1>
+                        <h4 id="title_latest_others" class="mb-4"></h4>
+                        <div class="row">
+                        
+                            <!-- test_by_criterion -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-vial me-1"></i> <span id="test_by_criterion_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos"> 
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active" id="test_by_criterion_latest_cumul_0">
+                                                    <input type="radio" class="btn-check" name="test_by_criterion_latest_cumul" value=0 checked>
+                                                    <span id="test_by_criterion_button_daily"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="test_by_criterion_latest_cumul_1">
+                                                    <input type="radio" class="btn-check" name="test_by_criterion_latest_cumul" value=1>
+                                                    <span id="test_by_criterion_button_cumul"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <button id='test_by_criterion_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="test_by_criterion_latest"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- border_statistics -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-plane-slash me-1"></i> <span id="border_statistics_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <div class="btn-group btn-group-sm me-3"> 
+                                              <span id="border_statistics_text"></span>
+                                            </div>
+                                            
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">
+                                                <label class="btn btn-covid active" id="border_statistics_latest_exit_0">
+                                                    <input type="radio" class="btn-check" name="border_statistics_latest_exit" value=0 checked>
+                                                    <span id="border_statistics_button_entry"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="border_statistics_latest_exit_1">
+                                                    <input type="radio" class="btn-check" name="border_statistics_latest_exit" value=1>
+                                                    <span id="border_statistics_button_exit"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="border_statistics_latest_exit_2">
+                                                    <input type="radio" class="btn-check" name="border_statistics_latest_exit" value=2>
+                                                    <span id="border_statistics_button_total"></span>
+                                                </label>
+                                            </div>
+                                            
+                                            <button id='border_statistics_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="border_statistics_latest"></div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </main>
+                
+                <!-- Footer -->
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <span id="footer_last_update"></span>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        
+        <!-- External -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+        <script src="https://d3js.org/d3.v4.js"></script>
+        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.19.0/js/canvas-to-blob.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+        
+        <!-- Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58898441-4"></script>
+        <script src="../js/utility/analytics.js"></script>
+        
+        <!-- Utilities -->
+        <script src="../js/utility/saveSvgAsPng.js"></script>
+        <script src="../js/utility/toggle_sidebar.js"></script>
+        <script src="../js/utility/language_setting.js"></script>
+        <script src="../js/utility/general_plotting.js"></script>
+
+        <!-- Plots -->
+        <script src="../js/others/test_by_criterion.js"></script>        
+        <script src="../js/others/test_by_criterion_param.js"></script>
+        <script src="../js/others/border_statistics.js"></script>
+        <script src="../js/others/border_statistics_param.js"></script>
+        
+        <!-- Main -->
+        <script src="../js/plot/plot_latest_others.js"></script>
+    </body>
+</html>

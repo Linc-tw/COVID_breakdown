@@ -102,12 +102,12 @@ function LCPC_FormatData(wrap, data) {
     q = data.length % wrap.xlabel_path;
     r = wrap.r_list[q];
   }
-  var xtick = [];
   var xticklabel = [];
   
   //-- Variables for data
   var col_tag_list = data.columns.slice(1); //-- 0 = date
   var col_tag = col_tag_list[wrap.col_ind];
+  var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
   var x_list = []; //-- For date
   var row;
@@ -122,17 +122,22 @@ function LCPC_FormatData(wrap, data) {
     row = data[i];
     x = row[x_key];
     y = +row[col_tag];
+    avg = row[col_tag_avg];
     x_list.push(x);
     
-    //-- Determine whether to have xtick
-    if (i % wrap.xlabel_path == r) {
-      xtick.push(i+0.5)
+    //-- Determine where to have xtick
+    if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
-    }
     
     //-- Update y_sum
     y_sum[0] += +row[col_tag_list[0]];
     y_sum[1] += y;
+    
+    //-- Update moving avg
+    if ('' == avg)
+      row[col_tag_avg] = NaN;
+    else
+      row[col_tag_avg] = +avg;
     
     //-- Update y_max
     y_max = Math.max(y_max, y);
@@ -151,12 +156,11 @@ function LCPC_FormatData(wrap, data) {
   
   //-- Save to wrapper
   wrap.formatted_data = data;
-  wrap.col_tag_list = col_tag_list;
   wrap.col_tag = col_tag;
+  wrap.col_tag_avg = col_tag_avg;
   wrap.nb_col = nb_col;
   wrap.x_key = x_key;
   wrap.x_list = x_list;
-  wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
@@ -246,7 +250,10 @@ function LCPC_Plot(wrap) {
   wrap.mouse_move = LCPC_MouseMove;
   
   //-- Plot bar
-  GP_PlotSingleBar(wrap);
+  GP_PlotFaintSingleBar(wrap);
+  
+  //-- Plot avg line
+  GP_PlotAvgLine(wrap);
 }
 
 function LCPC_Replot(wrap) {
@@ -264,7 +271,10 @@ function LCPC_Replot(wrap) {
   GP_ReplotYLabel(wrap, ylabel_dict);
     
   //-- Update bar
-  GP_ReplotSingleBar(wrap);
+  GP_ReplotFaintSingleBar(wrap);
+  
+  //-- Replot avg line
+  GP_ReplotAvgLine(wrap);
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};

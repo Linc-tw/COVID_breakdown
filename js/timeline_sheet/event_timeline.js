@@ -670,9 +670,9 @@ function ET_Plot(wrap) {
     .attr('x', x0+nb_squares*wrap.cell_size*0.5)
     .attr('y', 15)
     .attr('fill', 'black')
-    .text(title)
     .attr('text-anchor', 'middle')
     .attr('dominant-baseline', 'bottom')
+    .text(title);
   
   //-- Parameters for text zone
   var dx2 = 20;
@@ -688,13 +688,13 @@ function ET_Plot(wrap) {
     .enter()
     .append('text')
       .attr('class', 'content text')
+      .attr('id', function (d, j) {return wrap.tag+'_text';})
       .attr('x', x0+nb_squares*wrap.cell_size+dx1+dx2)
       .attr('y', function (d, j) {return y0-28+j*dy2;})
       .attr('fill', 'black')
-      .attr('id', function (d, j) {return wrap.tag+'_text';})
-      .text(function (d) {return d;})
       .attr('text-anchor', 'start')
       .attr('dominant-baseline', 'middle')
+      .text(function (d) {return d;});
       
   //-- Save to wrapper
   wrap.block = block;
@@ -752,10 +752,10 @@ function ET_Replot(wrap) {
       .style('fill', '#FFFFFF')
       .style('stroke', '#CCCCCC')
       .datum(d3.timeFormat('%Y-%m-%d'))
-      .on('mouseover', function (d) {GP_MouseOver3(wrap, d);})
-      .on('mousemove', function (d) {ET_MouseMove(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
-      .on('click', function (d, i) {ET_Click(wrap, d, i);})
+        .on('mouseover', function (d) {GP_MouseOver3(wrap, d);})
+        .on('mousemove', function (d) {ET_MouseMove(wrap, d);})
+        .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
+        .on('click', function (d, i) {ET_Click(wrap, d, i);});
   
   //-- Define color
   var color2 = d3.scaleSequential()
@@ -867,10 +867,11 @@ function ET_Replot(wrap) {
       .attr('id', wrap.tag+'_month_tag')
       .attr('x', function (d, i) {return (i+0.65)*dx1;})
       .attr('y', -0.5*wrap.dy0+1)
-      .style('fill', 'black')
-      .text(function (d) {return d;})
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
+      .style('fill', 'black')
+      .style('font-size', wrap.size)
+      .text(function (d) {return d;});
    
   //-- Weekday tag
   
@@ -898,10 +899,11 @@ function ET_Replot(wrap) {
       .attr('id', wrap.tag+'_weekday_tag')
       .attr('x', -20)
       .attr('y', function (d, i) {return (i+0.5)*wrap.cell_size;})
-      .style('fill', 'black')
-      .text(function (d) {return d;})
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
+      .style('fill', 'black')
+      .style('font-size', wrap.size)
+      .text(function (d) {return d;});
 }
 
 //-- Load

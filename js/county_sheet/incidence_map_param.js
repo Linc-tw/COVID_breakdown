@@ -8,9 +8,9 @@
 var IM_latest_wrap = {
   tag: 'incidence_map_latest',
   data_path_list: [
-    'processed_data/adminMap_byCounties_offsetIslands_sphe.geojson',
-    'processed_data/latest/incidence_map_label.csv',
-    'processed_data/latest/incidence_map.csv',
+    '../processed_data/adminMap_byCounties_offsetIslands_sphe.geojson',
+    '../processed_data/latest/incidence_map_label.csv',
+    '../processed_data/latest/incidence_map.csv',
   ],
 
   xlabel_path: GP_wrap.xlabel_path_latest,

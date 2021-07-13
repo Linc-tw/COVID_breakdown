@@ -236,6 +236,10 @@ body,
   margin-right: 20px;
 }
 
+.btn-vignette {
+  margin-bottom: 20px;
+}
+
 .btn-covid {
   color: #000;
   background-color: rgba(0, 0, 0, 0.03);

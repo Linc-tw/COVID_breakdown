@@ -22,23 +22,23 @@ function VP_InitFig(wrap) {
 function VP_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('vaccination_progress_title', '疫苗到貨與接種進度');
-    LS_AddStr('vaccination_progress_button_1', '全部');
-    LS_AddStr('vaccination_progress_button_2', 'AZ');
-    LS_AddStr('vaccination_progress_button_3', 'Moderna');
+    LS_AddStr('vaccination_progress_button_total', '全部');
+    LS_AddStr('vaccination_progress_button_AZ', 'AZ');
+    LS_AddStr('vaccination_progress_button_Moderna', 'Moderna');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('vaccination_progress_title', 'Livraisons et avancement de vaccination');
-    LS_AddStr('vaccination_progress_button_1', 'Tous');
-    LS_AddStr('vaccination_progress_button_2', 'AZ');
-    LS_AddStr('vaccination_progress_button_3', 'Moderna');
+    LS_AddStr('vaccination_progress_button_total', 'Tous');
+    LS_AddStr('vaccination_progress_button_AZ', 'AZ');
+    LS_AddStr('vaccination_progress_button_Moderna', 'Moderna');
   }
   
   else { //-- En
     LS_AddStr('vaccination_progress_title', 'Vaccination Progress & Deliveries');
-    LS_AddStr('vaccination_progress_button_1', 'All');
-    LS_AddStr('vaccination_progress_button_2', 'AZ');
-    LS_AddStr('vaccination_progress_button_3', 'Moderna');
+    LS_AddStr('vaccination_progress_button_total', 'All');
+    LS_AddStr('vaccination_progress_button_AZ', 'AZ');
+    LS_AddStr('vaccination_progress_button_Moderna', 'Moderna');
   }
 }
 

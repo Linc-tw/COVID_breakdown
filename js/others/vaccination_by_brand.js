@@ -6,7 +6,10 @@
 //--   Chieh-An Lin
 
 function VBB_InitFig(wrap) {
-  GP_InitFig_Standard(wrap);
+  if (wrap.tag.includes('mini'))
+    GP_InitFig_Mini(wrap);
+  else
+    GP_InitFig_Standard(wrap);
 }
 
 function VBB_ResetText() {
@@ -80,15 +83,11 @@ function VBB_FormatData(wrap, data) {
   for (i=0; i<data.length; i++) {
     row = data[i];
     x = row['date'];
+    y = +row[col_tag];
     avg = row[col_tag_avg];
     x_list.push(x);
     
-    if ('' == avg)
-      row[col_tag_avg] = NaN;
-    else
-      row[col_tag_avg] = +avg;
-    
-    //-- Determine whether to have xtick
+    //-- Determine where to have xtick
     if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
     
@@ -100,11 +99,15 @@ function VBB_FormatData(wrap, data) {
         y_sum[j] = Math.max(y_sum[j], +row[col_tag_list[j]]);
     }
     
-    y = +row[col_tag];
-    
-    //-- Modify data
-    if (wrap.cumul == 1)
+    //-- Update moving avg
+    if ('' == avg)
+      row[col_tag_avg] = NaN;
+    else if (wrap.cumul == 1)
       row[col_tag_avg] = y;
+    else
+      row[col_tag_avg] = +avg;
+    
+    //-- Update to exclude interpolation
     if (0 < wrap.cumul && 0 < +row['interpolated'])
       row[col_tag] = 0;
     else if (0 == wrap.cumul && 0 != +row['interpolated'])
@@ -158,6 +161,9 @@ function VBB_FormatData2(wrap, data2) {
 
 //-- Tooltip
 function VBB_MouseMove(wrap, d) {
+  if (wrap.tag.includes('mini'))
+    return;
+    
   //-- Get tooltip position
   var y_alpha = 0.5;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
@@ -200,10 +206,11 @@ function VBB_Plot(wrap) {
   GP_PlotYLabel(wrap);
   
   //-- Add tooltip
-  GP_MakeTooltip(wrap);
+  if (!wrap.tag.includes('mini'))
+    GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color = GP_wrap.c_list[3];
+  wrap.color = GP_wrap.c_list[1];
   
   //-- Define mouse-move
   wrap.mouse_move = VBB_MouseMove;
@@ -216,6 +223,17 @@ function VBB_Plot(wrap) {
 }
 
 function VBB_Replot(wrap) {
+  //-- Replot bar
+  GP_ReplotFaintSingleBar(wrap);
+  
+  //-- Replot avg line
+  GP_ReplotAvgLine(wrap);
+  
+  if (wrap.tag.includes('mini')) {
+    GP_PlotTopRight(wrap);
+    return;
+  }
+  
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
     GP_ReplotOverallXTick(wrap);
@@ -228,12 +246,6 @@ function VBB_Replot(wrap) {
   //-- Update ylabel
   var ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '施打劑數'};
   GP_ReplotYLabel(wrap, ylabel_dict);
-  
-  //-- Replot bar
-  GP_ReplotFaintSingleBar(wrap);
-  
-  //-- Replot avg line
-  GP_ReplotAvgLine(wrap);
   
   //-- Define legend position
   var legend_pos = {x: 95, y: 45, dx: 12, dy: 30};
@@ -388,9 +400,15 @@ function VBB_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
   //-- Swap active to current value
-  wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
-  GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
-  wrap.col_ind = document.getElementById(wrap.tag + "_brand").value;
+  if (wrap.tag.includes('mini')) {
+    wrap.cumul = 0;
+    wrap.col_ind = 0;
+  }
+  else {
+    wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
+    GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
+    wrap.col_ind = document.getElementById(wrap.tag + "_brand").value;
+  }
   
   //-- Load
   VBB_InitFig(wrap);

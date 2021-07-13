@@ -5,12 +5,12 @@
 //-- Author:
 //--   Chieh-An Lin
 
-var VP_latest_wrap = {
-  tag: 'vaccination_progress_latest',
+var VP_overall_wrap = {
+  tag: 'vaccination_progress_overall',
   data_path_list: [
-    'processed_data/key_numbers.csv',
-    'processed_data/latest/vaccination_progress_deliveries.csv',
-    'processed_data/latest/vaccination_progress_administrated.csv',
+    '../processed_data/key_numbers.csv',
+    '../processed_data/latest/vaccination_progress_deliveries.csv',
+    '../processed_data/latest/vaccination_progress_administrated.csv',
   ],
 
   iso_ref: '2020-01-01',

@@ -6,17 +6,21 @@
 //--   Chieh-An Lin
 
 function VR_InitFig(wrap) {
-  wrap.tot_width = 800;
-  wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 400;
-  wrap.tot_height_['fr'] = 400;
-  wrap.tot_height_['en'] = 400;
-  wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 85, right: 5, bottom: 90, top: 5};
-  wrap.margin_['fr'] = {left: 85, right: 5, bottom: 90, top: 5};
-  wrap.margin_['en'] = {left: 85, right: 5, bottom: 90, top: 5};
-  
-  GP_InitFig(wrap);
+  if (wrap.tag.includes('mini'))
+    GP_InitFig_Mini(wrap);
+  else {
+    wrap.tot_width = 800;
+    wrap.tot_height_ = {};
+    wrap.tot_height_['zh-tw'] = 400;
+    wrap.tot_height_['fr'] = 400;
+    wrap.tot_height_['en'] = 400;
+    wrap.margin_ = {};
+    wrap.margin_['zh-tw'] = {left: 85, right: 5, bottom: 90, top: 5};
+    wrap.margin_['fr'] = {left: 85, right: 5, bottom: 90, top: 5};
+    wrap.margin_['en'] = {left: 85, right: 5, bottom: 90, top: 5};
+    
+    GP_InitFig(wrap);
+  }
 }
 
 function VR_ResetText() {
@@ -156,6 +160,9 @@ function VR_FormatData2(wrap, data2) {
 
 //-- Tooltip
 function VR_MouseMove(wrap, d) {
+  if (wrap.tag.includes('mini'))
+    return;
+    
   //-- Get tooltip position
   var y_alpha = 0.7;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
@@ -195,7 +202,8 @@ function VR_Plot(wrap) {
   GP_PlotYLabel(wrap);
   
   //-- Add tooltip
-  GP_MakeTooltip(wrap);
+  if (!wrap.tag.includes('mini'))
+    GP_MakeTooltip(wrap);
   
   //-- Define color
   var color_list = GP_wrap.c_list.slice(3, 3+wrap.nb_col);
@@ -255,33 +263,11 @@ function VR_Plot(wrap) {
 }
 
 function VR_Replot(wrap) {
-  //-- Replot xaxis
-  if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap);
-  else
-    GP_ReplotDateAsX(wrap);
-  
   //-- Define xscale
   var xscale = GP_MakeBandXForBar(wrap);
   
   //-- Define yscale
   var yscale = GP_MakeLinearY(wrap);
-  
-  //-- Define yaxis
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(-wrap.width)
-    .tickValues(wrap.ytick)
-    .tickFormat(d3.format('.1%'));
-  
-  //-- Update yaxis
-  wrap.svg.select('.yaxis')
-    .transition()
-    .duration(wrap.trans_delay)
-    .call(yaxis);
-  
-  //-- Update ylabel
-  var ylabel_dict = {en: 'Rate', fr: 'Taux', 'zh-tw': '比率'};
-  GP_ReplotYLabel(wrap, ylabel_dict);
   
   //-- Define line
   var draw_line = d3.line()
@@ -307,6 +293,33 @@ function VR_Replot(wrap) {
         .attr('r', function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
   }
 
+  if (wrap.tag.includes('mini')) {
+    GP_PlotTopRight(wrap);
+    return;
+  }
+  
+  //-- Replot xaxis
+  if (wrap.tag.includes('overall'))
+    GP_ReplotOverallXTick(wrap);
+  else
+    GP_ReplotDateAsX(wrap);
+  
+  //-- Define yaxis
+  var yaxis = d3.axisLeft(yscale)
+    .tickSize(-wrap.width)
+    .tickValues(wrap.ytick)
+    .tickFormat(d3.format('.1%'));
+  
+  //-- Update yaxis
+  wrap.svg.select('.yaxis')
+    .transition()
+    .duration(wrap.trans_delay)
+    .call(yaxis);
+  
+  //-- Update ylabel
+  var ylabel_dict = {en: 'Rate', fr: 'Taux', 'zh-tw': '比率'};
+  GP_ReplotYLabel(wrap, ylabel_dict);
+  
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 12, dy: 27};
   

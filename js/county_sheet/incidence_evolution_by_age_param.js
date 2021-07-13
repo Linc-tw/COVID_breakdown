@@ -8,8 +8,8 @@
 var IEBA_latest_wrap = {
   tag: 'incidence_evolution_by_age_latest',
   data_path_list: [
-    'processed_data/latest/incidence_evolution_by_age.csv',
-    'processed_data/latest/incidence_evolution_by_age_label.csv',
+    '../processed_data/latest/incidence_evolution_by_age.csv',
+    '../processed_data/latest/incidence_evolution_by_age_label.csv',
   ],
 
   xlabel_path: 3,
