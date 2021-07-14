@@ -7,6 +7,7 @@
 
 var PLO_plot_list = [
   [TBC_Main, TBC_latest_wrap, 1000],
+  [PAF_Main, PAF_latest_wrap, 1000],
   [BS_Main, BS_latest_wrap, 1000],
 ];
 

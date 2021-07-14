@@ -14,21 +14,21 @@ function TBC_InitFig(wrap) {
 
 function TBC_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr("test_by_criterion_title", "檢驗數量");
-    LS_AddStr("test_by_criterion_button_daily", "逐日");
-    LS_AddStr("test_by_criterion_button_cumul", "累計");
+    LS_AddStr('test_by_criterion_title', '檢驗數量');
+    LS_AddStr('test_by_criterion_button_daily', '逐日');
+    LS_AddStr('test_by_criterion_button_cumul', '累計');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr("test_by_criterion_title", "Nombre de tests par critère");
-    LS_AddStr("test_by_criterion_button_daily", "Quotidiens");
-    LS_AddStr("test_by_criterion_button_cumul", "Cumulés");
+    LS_AddStr('test_by_criterion_title', 'Nombre de tests');
+    LS_AddStr('test_by_criterion_button_daily', 'Quotidiens');
+    LS_AddStr('test_by_criterion_button_cumul', 'Cumulés');
   }
   
   else { //-- En
-    LS_AddStr("test_by_criterion_title", "Number of Tests by Reporting Criterion");
-    LS_AddStr("test_by_criterion_button_daily", "Daily");
-    LS_AddStr("test_by_criterion_button_cumul", "Cumulative");
+    LS_AddStr('test_by_criterion_title', 'Number of Tests');
+    LS_AddStr('test_by_criterion_button_daily', 'Daily');
+    LS_AddStr('test_by_criterion_button_cumul', 'Cumulative');
   }
 }
 

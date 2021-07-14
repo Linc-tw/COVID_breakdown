@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.07.11                  ##
+    ##  Version 2021.07.14                  ##
     ##########################################
 
 import os
@@ -358,7 +358,7 @@ DELIVERY_LIST = [
   ['Moderna', 'Moderna', 239400, '2021-06-18', '2021-06-26', 'https://www.cna.com.tw/news/firstnews/202106180294.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600409'],
   ['Moderna', 'USA', 2498440, '2021-06-20', '2021-06-29', 'https://www.cna.com.tw/news/firstnews/202106205005.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600416'],
   ['Moderna', 'Moderna', 409800, '2021-06-30', '2021-07-08', 'https://www.cna.com.tw/news/firstnews/202106305007.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600434'],
-  ['AZ', 'AZ', 625900, '2021-07-07', '', 'https://www.cna.com.tw/news/firstnews/202107070181.aspx', ''],
+  ['AZ', 'AZ', 625900, '2021-07-07', '2021-07-15', 'https://www.cna.com.tw/news/firstnews/202107070181.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600446'],
   ['AZ', 'Japan', 1131780, '2021-07-08', '', 'https://www.cna.com.tw/news/firstnews/202107085007.aspx', ''],
 ]
 
@@ -3001,14 +3001,15 @@ class VaccinationSheet(Template):
     self.key_iso_code = 'a02'
     self.key_date = 'a03'
     self.key_cum_vacc = 'a04'
-    self.key_cum_vacc_per_100 = 'a05'
-    self.key_new_vacc_raw = 'a06'
-    self.key_new_vacc = 'a07'
-    self.key_new_vacc_per_1m = 'a08'
-    self.key_ppl_vacc = 'a09'
+    self.key_ppl_vacc = 'a05'
+    self.key_ppl_fully_vacc = 'a06'
+    self.key_new_vacc_raw = 'a07' ## Unsure
+    self.key_new_vacc = 'a08'
+    self.key_cum_vacc_per_100 = 'a09'
     self.key_ppl_vacc_per_100 = 'a10'
-    self.key_ppl_fully_vacc = 'a11'
-    self.key_ppl_fully_vacc_per_100 = 'a12'
+    self.key_ppl_fully_vacc_per_100 = 'a11'
+    self.key_new_vacc_per_1m = 'a12'
+    
     self.key_manu = 'a13'
     self.key_cum_jj = 'a14'
     self.key_cum_moderna = 'a15'
@@ -3035,6 +3036,12 @@ class VaccinationSheet(Template):
   def getCumVacc(self):
     return [int(row[self.key_cum_vacc]) for row in self.data['data']]
   
+  def getPplVaccRate(self):
+    return [float(row[self.key_ppl_vacc_per_100]) for row in self.data['data']]
+    
+  def getPplFullyVaccRate(self):
+    return [float(row[self.key_ppl_fully_vacc_per_100]) for row in self.data['data']]
+    
   def getNewVacc(self):
     return [int(row[self.key_new_vacc]) for row in self.data['data']]
   
@@ -3161,24 +3168,26 @@ class VaccinationSheet(Template):
     
   def makeAdministrated_vaccinationProgress(self):
     date_list = self.getDate()
+    cum_vacc_list = self.getCumVacc()
     cum_az_list = self.getCumAZ()
     cum_moderna_list = self.getCumModerna()
     
     stock = []
     
-    for date, az, moderna in zip(date_list, cum_az_list, cum_moderna_list):
-      if 0 == az + moderna and date != '2021-03-21':
+    for date, cum_vacc, cum_az, cum_moderna in zip(date_list, cum_vacc_list, cum_az_list, cum_moderna_list):
+      if 0 == cum_vacc and date != '2021-03-21':
         continue
-      stock.append([date, az, moderna])
+      stock.append([date, cum_vacc, cum_az, cum_moderna])
       
     date_list = [row[0] for row in stock]
-    cum_az_list = [row[1] for row in stock]
-    cum_moderna_list = [row[2] for row in stock]
+    cum_vacc_list = [row[1] for row in stock]
+    cum_az_list = [row[2] for row in stock]
+    cum_moderna_list = [row[3] for row in stock]
     
     ord_ref = ISODateToOrd(ISO_DATE_REF)
     index_list = [ISODateToOrd(iso)-ord_ref for iso in date_list]
     
-    stock = {'index': index_list, 'date': date_list, 'AZ': cum_az_list, 'Moderna': cum_moderna_list}
+    stock = {'index': index_list, 'date': date_list, 'total': cum_vacc_list, 'AZ': cum_az_list, 'Moderna': cum_moderna_list}
     return stock
     
   def saveCsv_vaccinationProgress(self):
@@ -3187,30 +3196,104 @@ class VaccinationSheet(Template):
     stock_a = self.makeAdministrated_vaccinationProgress()
     stock_a = pd.DataFrame(stock_a)
     
-    name = '%sprocessed_data/%s/vaccination_progress_deliveries.csv' % (DATA_PATH, PAGE_LATEST)
+    name = '%sprocessed_data/%s/vaccination_progress_deliveries.csv' % (DATA_PATH, PAGE_OVERALL)
     saveCsv(name, stock_d)
-    name = '%sprocessed_data/%s/vaccination_progress_administrated.csv' % (DATA_PATH, PAGE_LATEST)
+    name = '%sprocessed_data/%s/vaccination_progress_administrated.csv' % (DATA_PATH, PAGE_OVERALL)
     saveCsv(name, stock_a)
+    return
+  
+  def makeStock_vaccinationByDose(self):
+    date_list = self.getDate()
+    ppl_vacc_rate_list = self.getPplVaccRate()
+    ppl_fully_vacc_rate_list = self.getPplFullyVaccRate()
+    
+    stock = []
+    
+    ## Not using cum_vacc_list because it contains more zeros
+    for date, ppl_vacc_rate, ppl_fully_vacc_rate in zip(date_list, ppl_vacc_rate_list, ppl_fully_vacc_rate_list):
+      if 0 == ppl_vacc_rate + ppl_fully_vacc_rate and date != '2021-03-21':
+        continue
+      stock.append([date, 0.01*ppl_vacc_rate, 0.01*ppl_fully_vacc_rate])
+    
+    date_list = [row[0] for row in stock]
+    ppl_vacc_rate_list = [row[1] for row in stock]
+    ppl_fully_vacc_rate_list = [row[2] for row in stock]
+    
+    ord_ref = ISODateToOrd(ISO_DATE_REF)
+    index_list = [ISODateToOrd(iso)-ord_ref for iso in date_list]
+    ppl_vacc_rate_list = np.around(ppl_vacc_rate_list, decimals=4)
+    ppl_fully_vacc_rate_list = np.around(ppl_fully_vacc_rate_list, decimals=4)
+    
+    stock = {'index': index_list, 'date': date_list, 'ppl_vacc_rate': ppl_vacc_rate_list, 'ppl_fully_vacc_rate': ppl_fully_vacc_rate_list}
+    return stock
+    
+  def saveCsv_vaccinationByDose(self):
+    stock = self.makeStock_vaccinationByDose()
+    stock = pd.DataFrame(stock)
+    
+    name = '%sprocessed_data/%s/vaccination_by_dose.csv' % (DATA_PATH, PAGE_OVERALL)
+    saveCsv(name, stock)
     return
   
   def saveCsv(self):
     self.saveCsv_vaccinationByBrand()
     self.saveCsv_vaccinationProgress()
+    self.saveCsv_vaccinationByDose()
     return
   
 ################################################################################
 ## Functions - cross-sheet operations
 
-def makeVariousRates(main_sheet, status_sheet, test_sheet, border_sheet):
+def makeIncidenceRates(main_sheet, border_sheet):
+  stock = {}
+  main_sheet.updateNewCaseCounts(stock)
+  border_sheet.updateNewEntryCounts(stock)
+  
+  ## Index to avoid division by zero
+  ind_entries = stock['new_entries'] == 0
+  
+  ## Smooth
+  for key, value_arr in stock.items():
+    if 'date' == key:
+      continue
+    
+    ## Modify
+    stock[key] = sevenDayMovingAverage(value_arr) 
+  
+  population_twn = sum(value['population'] for value in COUNTY_DICT.values())
+  stock_new = {}
+  stock_new['date'] = stock['date']
+  
+  with warnings.catch_warnings(): ## Avoid division by zero
+    warnings.simplefilter('ignore')
+    
+    stock_new['arr_incidence'] = stock.pop('new_imported') / stock.pop('new_entries')
+    stock_new['arr_incidence'][ind_entries] = np.nan
+    
+    stock_new['local_incidence'] = stock.pop('new_local') / float(population_twn) * 1000 ## Rate over thousand
+  
+  return stock_new
+  
+def saveCsv_incidenceRates(main_sheet, border_sheet):
+  stock = makeIncidenceRates(main_sheet, border_sheet)
+  stock = pd.DataFrame(stock)
+  
+  for page in PAGE_LIST:
+    data = truncateStock(stock, page)
+    
+    ## Save
+    name = '%sprocessed_data/%s/incidence_rates.csv' % (DATA_PATH, page)
+    saveCsv(name, data)
+  return
+  
+def makePositivityAndFatality(main_sheet, status_sheet, test_sheet):
   stock = {}
   main_sheet.updateNewCaseCounts(stock)
   status_sheet.updateCumCounts(stock)
   test_sheet.updateNewTestCounts(stock)
-  border_sheet.updateNewEntryCounts(stock)
   
   ## Index to avoid division by zero
   ind_new_tests = stock['new_tests'] == 0
-  ind_entries = stock['new_entries'] == 0
   ind_cum_cases = stock['cum_cases'] == 0
   
   ## Smooth
@@ -3218,41 +3301,37 @@ def makeVariousRates(main_sheet, status_sheet, test_sheet, border_sheet):
     if 'date' == key:
       continue
     
+    ## No smoothing if cumulative
     if key in ['cum_cases', 'cum_deaths']:
       value_arr = value_arr.astype(float)
     else:
       value_arr = sevenDayMovingAverage(value_arr)
     
     ## Push back
-    stock[key] = value_arr 
-  
-  population_twn = sum(value['population'] for value in COUNTY_DICT.values())
+    stock[key] = sevenDayMovingAverage(value_arr) 
   
   with warnings.catch_warnings(): ## Avoid division by zero
     warnings.simplefilter('ignore')
     
-    stock['positive_rate'] = stock.pop('new_cases') / stock.pop('new_tests')
-    stock['positive_rate'][ind_new_tests] = np.nan
-    
-    stock['imp_inci_rate'] = stock.pop('new_imported') / stock.pop('new_entries')
-    stock['imp_inci_rate'][ind_entries] = np.nan
-    
-    stock['indi_inci_rate'] = stock.pop('new_local') / float(population_twn) * 1000 ## Rate over thousand
+    stock['positivity'] = stock.pop('new_cases') / stock.pop('new_tests')
+    stock['positivity'][ind_new_tests] = np.nan
     
     stock['fatality'] = stock.pop('cum_deaths') / stock.pop('cum_cases')
     stock['fatality'][ind_cum_cases] = np.nan
   
+    stock.pop('new_imported')
+    stock.pop('new_local')
   return stock
   
-def saveCsv_variousRate(main_sheet, status_sheet, test_sheet, border_sheet):
-  stock = makeVariousRates(main_sheet, status_sheet, test_sheet, border_sheet)
+def saveCsv_positivityAndFatality(main_sheet, status_sheet, test_sheet):
+  stock = makePositivityAndFatality(main_sheet, status_sheet, test_sheet)
   stock = pd.DataFrame(stock)
   
   for page in PAGE_LIST:
     data = truncateStock(stock, page)
     
     ## Save
-    name = '%sprocessed_data/%s/various_rates.csv' % (DATA_PATH, page)
+    name = '%sprocessed_data/%s/positivity_and_fatality.csv' % (DATA_PATH, page)
     saveCsv(name, data)
   return
   
@@ -3275,17 +3354,18 @@ def sandbox():
   #timeline_sheet = TimelineSheet()
   #timeline_sheet.saveCsv_evtTimeline()
   
-  county_sheet = CountySheet()
-  county_sheet.saveCsv_localCasePerCounty()
+  #county_sheet = CountySheet()
+  #county_sheet.saveCsv_localCasePerCounty()
   
-  #vacc_sheet = VaccinationSheet()
-  #vacc_sheet.saveCsv_vaccinationByBrand()
+  vacc_sheet = VaccinationSheet()
+  vacc_sheet.saveCsv()
   
   #main_sheet = MainSheet()
   #status_sheet = StatusSheet()
   #test_sheet = TestSheet()
   #border_sheet = BorderSheet()
-  #saveCsv_variousRate(main_sheet, status_sheet, test_sheet, border_sheet)
+  #saveCsv_incidenceRates(main_sheet, border_sheet)
+  #saveCsv_positivityAndFatality(main_sheet, status_sheet, test_sheet)
   return
 
 ################################################################################
@@ -3321,7 +3401,8 @@ def saveCsv_all():
   vacc_sheet.saveCsv()
   
   print()
-  saveCsv_variousRate(main_sheet, status_sheet, test_sheet, border_sheet)
+  saveCsv_incidenceRates(main_sheet, border_sheet)
+  saveCsv_positivityAndFatality(main_sheet, status_sheet, test_sheet)
   print()
   return
 

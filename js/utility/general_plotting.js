@@ -8,12 +8,17 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
+//VBD: dot & tooltip 
+//Hospitalization & Death data
+//Hospitalization plot
+//Death plot
+//VBB: shorter x axis
+//Vaccination: unify axis fct, unify tick fct
+//IR & PAF: unify dot functions
 //IM legend: add total case & national incidence
-//html to page/ folder
-//New page: overall stats
+//VBD: latest
 //Note with "Collapse"
 //Automize README generation
-
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
