@@ -29,7 +29,7 @@ var TBC_latest_wrap = {
 
   xlabel_path: GP_wrap.xlabel_path_latest, 
   r_list: GP_wrap.r_list_latest, 
-  y_max_factor: 1.2, 
+  y_max_factor: 1.5, 
   nb_yticks: 4,
   legend_pos_x: 110,
   trans_delay: GP_wrap.trans_delay,

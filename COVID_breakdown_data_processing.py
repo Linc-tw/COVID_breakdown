@@ -359,7 +359,10 @@ DELIVERY_LIST = [
   ['Moderna', 'USA', 2498440, '2021-06-20', '2021-06-29', 'https://www.cna.com.tw/news/firstnews/202106205005.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600416'],
   ['Moderna', 'Moderna', 409800, '2021-06-30', '2021-07-08', 'https://www.cna.com.tw/news/firstnews/202106305007.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600434'],
   ['AZ', 'AZ', 625900, '2021-07-07', '2021-07-15', 'https://www.cna.com.tw/news/firstnews/202107070181.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600446'],
-  ['AZ', 'Japan', 1131780, '2021-07-08', '', 'https://www.cna.com.tw/news/firstnews/202107085007.aspx', ''],
+  ['AZ', 'Japan', 1131780, '2021-07-08', '2021-07-16', 'https://www.cna.com.tw/news/firstnews/202107085007.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600448'],
+  ['AZ', 'Japan', 973480, '2021-07-15', '', 'https://www.cna.com.tw/news/firstnews/202107155011.aspx', ''],
+  ['AZ', 'AZ', 560100, '2021-07-15', '', 'https://www.cna.com.tw/news/firstnews/202107150245.aspx', ''],
+  ['Moderna', 'Moderna', 349200, '2021-07-15', '', 'https://www.cna.com.tw/news/firstnews/202107150215.aspx',''],
 ]
 
 ################################################################################
@@ -1819,6 +1822,41 @@ class StatusSheet(Template):
       saveCsv(name, data)
     return
     
+  def saveCsv_deathCounts(self):
+    date_list = self.getDate()
+    cum_deaths_list = self.getCumDeaths()
+    cum_deaths_list_offset = np.insert(cum_deaths_list[:-1], 0, 0)
+    new_deaths_list = cum_deaths_list - cum_deaths_list_offset
+    avg_arr = makeMovingAverage(new_deaths_list)
+    
+    stock = {'date': date_list, 'death': new_deaths_list, 'death_avg': avg_arr}
+    stock = pd.DataFrame(stock)
+    stock = adjustDateRange(stock)
+    
+    for page in PAGE_LIST:
+      data = truncateStock(stock, page)
+      
+      ## Save
+      name = '%sprocessed_data/%s/death_counts.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
+    return
+    
+  def saveCsv_hospitalizationOrIsolation(self):
+    date_list = self.getDate()
+    cum_hosp_list = self.getCumHospitalized()
+    
+    stock = {'date': date_list, 'hospitalized': cum_hosp_list}
+    stock = pd.DataFrame(stock)
+    stock = adjustDateRange(stock)
+    
+    for page in PAGE_LIST:
+      data = truncateStock(stock, page)
+      
+      ## Save
+      name = '%sprocessed_data/%s/hospitalization_or_isolation.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
+    return
+    
   def updateCumCounts(self, stock):
     date_list = self.getDate()
     cum_deaths_list = self.getCumDeaths()
@@ -1834,6 +1872,8 @@ class StatusSheet(Template):
   
   def saveCsv(self):
     self.saveCsv_statusEvolution()
+    self.saveCsv_deathCounts()
+    self.saveCsv_hospitalizationOrIsolation()
     return
 
 ################################################################################
@@ -3342,8 +3382,8 @@ def sandbox():
   #main_sheet = MainSheet()
   #main_sheet.saveCsv_keyNb()
   
-  #status_sheet = StatusSheet()
-  #status_sheet.saveCsv_statusEvolution()
+  status_sheet = StatusSheet()
+  status_sheet.saveCsv_deathCounts()
   
   #test_sheet = TestSheet()
   #test_sheet.saveCsv_testByCriterion()
@@ -3357,8 +3397,8 @@ def sandbox():
   #county_sheet = CountySheet()
   #county_sheet.saveCsv_localCasePerCounty()
   
-  vacc_sheet = VaccinationSheet()
-  vacc_sheet.saveCsv()
+  #vacc_sheet = VaccinationSheet()
+  #vacc_sheet.saveCsv()
   
   #main_sheet = MainSheet()
   #status_sheet = StatusSheet()

@@ -65,7 +65,7 @@ Structure by page
 `others.html`
   - `test_by_criterion.js`
   - `positivity_and_fatality.js`
-  - TODO death
+  - `death_counts.js`
   - TODO hospitalization
   - `border_statistics.js`
 

@@ -26,7 +26,7 @@ function TBC_ResetText() {
   }
   
   else { //-- En
-    LS_AddStr('test_by_criterion_title', 'Number of Tests');
+    LS_AddStr('test_by_criterion_title', 'Test Counts');
     LS_AddStr('test_by_criterion_button_daily', 'Daily');
     LS_AddStr('test_by_criterion_button_cumul', 'Cumulative');
   }
