@@ -24,6 +24,7 @@ import pandas as pd
 
 DATA_PATH = '/home/linc/21_Codes/COVID_breakdown/'
 ISO_DATE_REF = '2020-01-01'
+ISO_DATE_REF_VACC = '2021-03-01'
 NB_LOOKBACK_DAYS = 90
 PAGE_LATEST = 'latest'
 PAGE_OVERALL = 'overall'
@@ -3034,7 +3035,8 @@ class VaccinationSheet(Template):
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_vaccination.json' % DATA_PATH
     data = loadJson(name, verbose=verbose)
     #https://covid-19.nchc.org.tw/dt_002-csse_covid_19_daily_reports_vaccine.php?countryCode=TW/taiwan
-    
+    #https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine&limitColumn=a01&limitValue=taiwan%&equalValue= like &encodeKey=MTYyNjQyODMwOQ==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=varchar&d[]=NO&c[]=a02&t[]=varchar&d[]=NO&c[]=a03&t[]=date&d[]=NO&c[]=a04&t[]=int&d[]=NO&c[]=a05&t[]=int&d[]=YES&c[]=a06&t[]=int&d[]=YES&c[]=a07&t[]=int&d[]=YES&c[]=a08&t[]=decimal&d[]=YES&c[]=a09&t[]=decimal&d[]=YES&c[]=a10&t[]=decimal&d[]=YES&c[]=a11&t[]=decimal&d[]=YES&c[]=a12&t[]=decimal&d[]=YES&c[]=a13&t[]=text&d[]=NO&c[]=a14&t[]=int&d[]=NO&c[]=a15&t[]=int&d[]=NO&c[]=a16&t[]=int&d[]=NO&c[]=a17&t[]=int&d[]=NO&c[]=a18&t[]=int&d[]=NO&c[]=a19&t[]=int&d[]=NO&c[]=a20&t[]=int&d[]=NO&c[]=a21&t[]=int&d[]=NO",
+                                  
     self.key_row_id = 'DT_RowId'
     self.key_id = 'id'
     self.key_location = 'a01'
@@ -3062,6 +3064,10 @@ class VaccinationSheet(Template):
     self.data = data
     self.n_total = len(self.data['data'])
     self.brand_list = ['AZ', 'Moderna']
+    
+    if (self.n_total > 1.5 * (getTodayOrdinal() - ISODateToOrd('2021-03-21'))):
+      self.n_total //= 2
+      self.data['data'] = self.data['data'][:self.n_total]
     
     if verbose:
       print('N_total = %d' % self.n_total)
@@ -3175,6 +3181,11 @@ class VaccinationSheet(Template):
       
       data = truncateStock(stock, page)
       
+      ## Vaccination trunk
+      if page == PAGE_OVERALL:
+        ind = ISODateToOrd(ISO_DATE_REF_VACC) - ISODateToOrd(ISO_DATE_REF)
+        data = data[ind:]
+        
       ## Save
       name = '%sprocessed_data/%s/vaccination_by_brand.csv' % (DATA_PATH, page)
       saveCsv(name, data)
@@ -3247,6 +3258,7 @@ class VaccinationSheet(Template):
     ppl_vacc_rate_list = self.getPplVaccRate()
     ppl_fully_vacc_rate_list = self.getPplFullyVaccRate()
     
+    print(date_list)
     stock = []
     
     ## Not using cum_vacc_list because it contains more zeros
@@ -3382,8 +3394,8 @@ def sandbox():
   #main_sheet = MainSheet()
   #main_sheet.saveCsv_keyNb()
   
-  status_sheet = StatusSheet()
-  status_sheet.saveCsv_deathCounts()
+  #status_sheet = StatusSheet()
+  #status_sheet.saveCsv_deathCounts()
   
   #test_sheet = TestSheet()
   #test_sheet.saveCsv_testByCriterion()
@@ -3397,8 +3409,8 @@ def sandbox():
   #county_sheet = CountySheet()
   #county_sheet.saveCsv_localCasePerCounty()
   
-  #vacc_sheet = VaccinationSheet()
-  #vacc_sheet.saveCsv()
+  vacc_sheet = VaccinationSheet()
+  vacc_sheet.saveCsv()
   
   #main_sheet = MainSheet()
   #status_sheet = StatusSheet()

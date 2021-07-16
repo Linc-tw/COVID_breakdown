@@ -8,15 +8,15 @@
 var VBD_overall_wrap = {
   tag: 'vaccination_by_dose_overall',
   data_path_list: [
-    '../processed_data/key_numbers.csv',
     '../processed_data/overall/vaccination_by_dose.csv',
+    '../processed_data/key_numbers.csv',
   ],
 
-  iso_ref: '2020-01-01',
-  iso_begin: '2021-03-21',
-  xticklabel_width_min: 9,
+  iso_begin: GP_wrap.iso_ref_vacc,
+  xticklabel_min_space: GP_wrap.xticklabel_min_space_vacc,
+  overall_type: 'dot',
   
-  y_max_factor: 1.45,
+  y_max_factor: 1.3,
   y_max_fixed: 0,
   nb_yticks: 4,
   legend_pos_x: 110,

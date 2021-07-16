@@ -8,6 +8,8 @@
 function VBB_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
     GP_InitFig_Mini(wrap);
+  else if (wrap.tag.includes('overall'))
+    GP_InitFig_Overall(wrap);
   else
     GP_InitFig_Standard(wrap);
 }
@@ -48,9 +50,7 @@ function VBB_FormatData(wrap, data) {
   //-- Variables for xtick
   var x_key = 'date';
   var q, r;
-  if (wrap.tag.includes('overall'))
-    r = 999;
-  else {
+  if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
     q = data.length % wrap.xlabel_path;
     r = wrap.r_list[q];
   }
@@ -88,8 +88,10 @@ function VBB_FormatData(wrap, data) {
     x_list.push(x);
     
     //-- Determine where to have xtick
-    if (i % wrap.xlabel_path == r)
-      xticklabel.push(x);
+    if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
+      if (i % wrap.xlabel_path == r)
+        xticklabel.push(x);
+    }
     
     //-- Update y_sum
     for (j=0; j<nb_col; j++) {
@@ -146,6 +148,9 @@ function VBB_FormatData(wrap, data) {
 }
 
 function VBB_FormatData2(wrap, data2) {
+  if (!wrap.tag.includes('overall'))
+    return;
+  
   var i, timestamp;
   
   //-- Loop over row
@@ -155,8 +160,24 @@ function VBB_FormatData2(wrap, data2) {
       timestamp = data2[i]['value'];
   }
   
+  //-- Calculate x_min
+  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_min -= 0.2; //-- For edge
+  
+  //-- Calculate x_max
+  var iso_today = timestamp.slice(0, 10);
+  var x_max = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_max += 1; //-- For edge
+  
+  //-- Half day correction
+  var hour = timestamp.slice(11, 13);
+  if (+hour < 12)
+    x_max -= 1;
+  
   //-- Save to wrapper
-  wrap.timestamp = timestamp;
+  wrap.iso_end = iso_today;
+  wrap.x_min = x_min;
+  wrap.x_max = x_max;
 }
 
 //-- Tooltip
@@ -248,15 +269,7 @@ function VBB_Replot(wrap) {
   GP_ReplotYLabel(wrap, ylabel_dict);
   
   //-- Define legend position
-  var legend_pos = {x: 95, y: 45, dx: 12, dy: 30};
-  if (wrap.cumul == 0) {
-    if (wrap.legend_pos_x_0_[LS_lang] != 0)
-      legend_pos.x = wrap.legend_pos_x_0_[LS_lang];
-  }
-  else {
-    if (wrap.legend_pos_x_1_[LS_lang] != 0)
-      legend_pos.x = wrap.legend_pos_x_1_[LS_lang];
-  }
+  var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   
   //-- Define legend color
   var legend_color = [];

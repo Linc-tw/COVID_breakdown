@@ -6,17 +6,10 @@
 //--   Chieh-An Lin
 
 function HOI_InitFig(wrap) {
-  wrap.tot_width = 800;
-  wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 400;
-  wrap.tot_height_['fr'] = 400;
-  wrap.tot_height_['en'] = 400;
-  wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 90, right: 5, bottom: 75, top: 5};
-  wrap.margin_['fr'] = {left: 90, right: 5, bottom: 75, top: 5};
-  wrap.margin_['en'] = {left: 90, right: 5, bottom: 75, top: 5};
-  
-  GP_InitFig(wrap);
+  if (wrap.tag.includes('mini'))
+    GP_InitFig_Mini(wrap);
+  else
+    GP_InitFig_Standard(wrap);
 }
 
 function HOI_ResetText() {
@@ -36,8 +29,11 @@ function HOI_ResetText() {
 function HOI_FormatData(wrap, data) {
   //-- Variables for xtick
   var x_key = 'date';
-  var q = data.length % wrap.xlabel_path;
-  var r = wrap.r_list[q];
+  var q, r;
+  if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
+    q = data.length % wrap.xlabel_path;
+    r = wrap.r_list[q];
+  }
   var xtick = [];
   var xticklabel = [];
   
@@ -61,9 +57,11 @@ function HOI_FormatData(wrap, data) {
     x_list.push(x);
     
     //-- Determine whether to have xtick
-    if (i % wrap.xlabel_path == r) {
-      xtick.push(i)
-      xticklabel.push(x);
+    if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
+      if (i % wrap.xlabel_path == r) {
+        xtick.push(i)
+        xticklabel.push(x);
+      }
     }
     
     //-- Update y_last
@@ -100,6 +98,9 @@ function HOI_FormatData(wrap, data) {
 }
 
 function HOI_FormatData2(wrap, data2) {
+  if (!wrap.tag.includes('overall'))
+    return;
+  
   var i, timestamp;
   
   //-- Loop over row
@@ -109,12 +110,31 @@ function HOI_FormatData2(wrap, data2) {
       timestamp = data2[i]['value'];
   }
   
+  //-- Calculate x_min
+  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_min -= 0.2; //-- For edge
+  
+  //-- Calculate x_max
+  var iso_today = timestamp.slice(0, 10);
+  var x_max = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_max += 1; //-- For edge
+  
+  //-- Half day correction
+  var hour = timestamp.slice(11, 13);
+  if (+hour < 12)
+    x_max -= 1;
+  
   //-- Save to wrapper
-  wrap.timestamp = timestamp;
+  wrap.iso_end = iso_today;
+  wrap.x_min = x_min;
+  wrap.x_max = x_max;
 }
 
 //-- Tooltip
 function HOI_MouseMove(wrap, d) {
+  if (wrap.tag.includes('mini'))
+    return;
+    
   //-- Get tooltip position
   var y_alpha = 0.35;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
@@ -142,11 +162,16 @@ function HOI_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
+  //-- Replot xaxis
+  if (wrap.tag.includes('overall'))
+    GP_PlotBottomOverallEmptyAxis(wrap);
+  
   //-- Add ylabel
   GP_PlotYLabel(wrap);
   
   //-- Make tooltip
-  GP_MakeTooltip(wrap);
+  if (!wrap.tag.includes('mini'))
+    GP_MakeTooltip(wrap);
   
   //-- Define color
   wrap.color = GP_wrap.c_list[3];
@@ -159,8 +184,20 @@ function HOI_Plot(wrap) {
 }
 
 function HOI_Replot(wrap) {
+  //-- Update bar
+  GP_ReplotSingleBar(wrap);
+  
+  //-- Frameline for mini
+  if (wrap.tag.includes('mini')) {
+    GP_PlotTopRight(wrap);
+    return;
+  }
+  
   //-- Replot xaxis
-  GP_ReplotDateAsX(wrap);
+  if (wrap.tag.includes('overall'))
+    GP_ReplotOverallXTick(wrap);
+  else
+    GP_ReplotDateAsX(wrap);
   
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap);
@@ -168,9 +205,6 @@ function HOI_Replot(wrap) {
   //-- Update ylabel
   var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
   GP_ReplotYLabel(wrap, ylabel_dict);
-  
-  //-- Update bar
-  GP_ReplotSingleBar(wrap);
   
   //-- Define legend color
   var legend_color = [wrap.color];

@@ -36,9 +36,7 @@ function TBC_FormatData(wrap, data) {
   //-- Variables for xtick
   var x_key = 'date';
   var q, r;
-  if (wrap.tag.includes('overall'))
-    r = 999;
-  else {
+  if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
     q = data.length % wrap.xlabel_path;
     r = wrap.r_list[q];
   }
@@ -67,17 +65,15 @@ function TBC_FormatData(wrap, data) {
   for (i=0; i<data.length; i++) {
     row = data[i];
     x = row['date'];
+    y = +row[col_tag];
     avg = row[col_tag_avg];
     x_list.push(x);
     
-    if ('' == avg)
-      row[col_tag_avg] = NaN;
-    else
-      row[col_tag_avg] = +avg;
-    
-    //-- Determine whether to have xtick
-    if (i % wrap.xlabel_path == r)
-      xticklabel.push(x);
+    //-- Determine where to have xtick
+    if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
+      if (i % wrap.xlabel_path == r)
+        xticklabel.push(x);
+    }
     
     //-- Update y_sum
     for (j=0; j<nb_col; j++) {
@@ -87,12 +83,14 @@ function TBC_FormatData(wrap, data) {
         y_sum = Math.max(y_sum, +row[col_tag_list[j]]);
     }
     
-    y = +row[col_tag];
-    
-    //-- Modify data
-    if (wrap.cumul == 1)
+    //-- Update moving avg
+    if ('' == avg)
+      row[col_tag_avg] = NaN;
+    else if (wrap.cumul == 1)
       row[col_tag_avg] = y;
-      
+    else
+      row[col_tag_avg] = +avg;
+    
     //-- Update y_max
     y_max = Math.max(y_max, y);
   }
@@ -122,6 +120,9 @@ function TBC_FormatData(wrap, data) {
 }
 
 function TBC_FormatData2(wrap, data2) {
+  if (!wrap.tag.includes('overall'))
+    return;
+  
   var i, timestamp;
   
   //-- Loop over row
@@ -131,8 +132,24 @@ function TBC_FormatData2(wrap, data2) {
       timestamp = data2[i]['value'];
   }
   
+  //-- Calculate x_min
+  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_min -= 0.2; //-- For edge
+  
+  //-- Calculate x_max
+  var iso_today = timestamp.slice(0, 10);
+  var x_max = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_max += 1; //-- For edge
+  
+  //-- Half day correction
+  var hour = timestamp.slice(11, 13);
+  if (+hour < 12)
+    x_max -= 1;
+  
   //-- Save to wrapper
-  wrap.timestamp = timestamp;
+  wrap.iso_end = iso_today;
+  wrap.x_min = x_min;
+  wrap.x_max = x_max;
 }
 
 //-- Tooltip
@@ -205,6 +222,7 @@ function TBC_Replot(wrap) {
   //-- Replot avg line
   GP_ReplotAvgLine(wrap);
   
+  //-- Frameline for mini
   if (wrap.tag.includes('mini')) {
     GP_PlotTopRight(wrap);
     return;

@@ -6,7 +6,10 @@
 //--   Chieh-An Lin
 
 function BS_InitFig(wrap) {
-  GP_InitFig_Standard(wrap);
+  if (wrap.tag.includes('mini'))
+    GP_InitFig_Mini(wrap);
+  else
+    GP_InitFig_Standard(wrap);
 }
 
 function BS_ResetText() {
@@ -39,9 +42,7 @@ function BS_FormatData(wrap, data) {
   //-- Variables for xtick
   var x_key = 'date';
   var q, r;
-  if (wrap.tag.includes('overall'))
-    r = 999;
-  else {
+  if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
     q = data.length % wrap.xlabel_path;
     r = wrap.r_list[q];
   }
@@ -70,30 +71,31 @@ function BS_FormatData(wrap, data) {
   for (i=0; i<data.length; i++) {
     row = data[i];
     x = row['date'];
+    y = +row[col_tag];
     avg = row[col_tag_avg];
     x_list.push(x);
     
-    if ('' == avg)
-      row[col_tag_avg] = NaN;
-    else
-      row[col_tag_avg] = +avg;
-    
-    //-- Determine whether to have xtick
-    if (i % wrap.xlabel_path == r)
-      xticklabel.push(x);
+    //-- Determine where to have xtick
+    if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
+      if (i % wrap.xlabel_path == r)
+        xticklabel.push(x);
+    }
     
     //-- Update y_last
-    if (+row[col_tag_list[2]] > 0) { //-- If both > 0
+    if (y != '') {
+//     if (+row[col_tag_list[2]] > 0) { //-- If both > 0
       for (j=0; j<nb_col; j++)
         y_last[j] = +row[col_tag_list[j]];
     }
     
-    y = +row[col_tag];
-    
-    //-- Modify data
-    if (wrap.cumul == 1)
+    //-- Update moving avg
+    if ('' == avg)
+      row[col_tag_avg] = NaN;
+    else if (wrap.cumul == 1)
       row[col_tag_avg] = y;
-      
+    else
+      row[col_tag_avg] = +avg;
+    
     //-- Update y_max
     y_max = Math.max(y_max, y);
   }
@@ -123,6 +125,9 @@ function BS_FormatData(wrap, data) {
 }
 
 function BS_FormatData2(wrap, data2) {
+  if (!wrap.tag.includes('overall'))
+    return;
+  
   var i, timestamp;
   
   //-- Loop over row
@@ -132,12 +137,31 @@ function BS_FormatData2(wrap, data2) {
       timestamp = data2[i]['value'];
   }
   
+  //-- Calculate x_min
+  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_min -= 0.2; //-- For edge
+  
+  //-- Calculate x_max
+  var iso_today = timestamp.slice(0, 10);
+  var x_max = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_max += 1; //-- For edge
+  
+  //-- Half day correction
+  var hour = timestamp.slice(11, 13);
+  if (+hour < 12)
+    x_max -= 1;
+  
   //-- Save to wrapper
-  wrap.timestamp = timestamp;
+  wrap.iso_end = iso_today;
+  wrap.x_min = x_min;
+  wrap.x_max = x_max;
 }
 
 //-- Tooltip
 function BS_MouseMove(wrap, d) {
+  if (wrap.tag.includes('mini'))
+    return;
+    
   //-- Get tooltip position
   var y_alpha = 0.5;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
@@ -180,7 +204,8 @@ function BS_Plot(wrap) {
   GP_PlotYLabel(wrap);
   
   //-- Add tooltip
-  GP_MakeTooltip(wrap);
+  if (!wrap.tag.includes('mini'))
+    GP_MakeTooltip(wrap);
   
   //-- Define color
   wrap.color = GP_wrap.c_list[10];
@@ -196,6 +221,18 @@ function BS_Plot(wrap) {
 }
 
 function BS_Replot(wrap) {
+  //-- Replot bar
+  GP_ReplotFaintSingleBar(wrap);
+  
+  //-- Replot avg line
+  GP_ReplotAvgLine(wrap);
+  
+  //-- Frameline for mini
+  if (wrap.tag.includes('mini')) {
+    GP_PlotTopRight(wrap);
+    return;
+  }
+  
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
     GP_ReplotOverallXTick(wrap);
@@ -208,12 +245,6 @@ function BS_Replot(wrap) {
   //-- Update ylabel
   var ylabel_dict = {en: 'Number of people', fr: 'Nombre de voyageurs', 'zh-tw': '旅客人數'};
   GP_ReplotYLabel(wrap, ylabel_dict);
-  
-  //-- Replot bar
-  GP_ReplotFaintSingleBar(wrap);
-  
-  //-- Replot avg line
-  GP_ReplotAvgLine(wrap);
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -348,8 +379,12 @@ function BS_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
   //-- Swap active to current value
-  wrap.col_ind = document.querySelector("input[name='" + wrap.tag + "_exit']:checked").value;
-  GP_PressRadioButton(wrap, 'exit', 0, wrap.col_ind); //-- 0 from .html
+  if (wrap.tag.includes('mini'))
+    wrap.col_ind = 0;
+  else {
+    wrap.col_ind = document.querySelector("input[name='" + wrap.tag + "_exit']:checked").value;
+    GP_PressRadioButton(wrap, 'exit', 0, wrap.col_ind); //-- 0 from .html
+  }
 
   //-- Load
   BS_InitFig(wrap);

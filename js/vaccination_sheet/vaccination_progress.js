@@ -6,17 +6,12 @@
 //--   Chieh-An Lin
 
 function VP_InitFig(wrap) {
-  wrap.tot_width = 800;
-  wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 400;
-  wrap.tot_height_['fr'] = 400;
-  wrap.tot_height_['en'] = 400;
-  wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 90, right: 5, bottom: 70, top: 5};
-  wrap.margin_['fr'] = {left: 90, right: 5, bottom: 70, top: 5};
-  wrap.margin_['en'] = {left: 90, right: 5, bottom: 70, top: 5};
-  
-  GP_InitFig(wrap);
+  if (wrap.tag.includes('mini'))
+    GP_InitFig_Mini(wrap);
+  else if (wrap.tag.includes('overall'))
+    GP_InitFig_Overall(wrap);
+  else
+    GP_InitFig_Standard(wrap);
 }
 
 function VP_ResetText() {
@@ -52,12 +47,12 @@ function VP_FormatData(wrap, data) {
   }
   
   //-- Calculate x_min
-  var x_min = (new Date(wrap.iso_begin) - new Date(wrap.iso_ref)) / 86400000;
+  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
   x_min -= 0.5; //-- For edge
   
-  //-- Calculate today
+  //-- Calculate x_max
   var iso_today = timestamp.slice(0, 10);
-  var x_today = (new Date(iso_today) - new Date(wrap.iso_ref)) / 86400000;
+  var x_today = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
   x_today += 0.5; //-- For edge
   
   //-- Half day correction
@@ -66,9 +61,8 @@ function VP_FormatData(wrap, data) {
     x_today -= 1;
   
   //-- Calculate x_max
-  var nb_extended_days = (x_today - x_min) * (wrap.x_max_factor - 1)
-  var x_max = Math.ceil(x_today+0.5 + nb_extended_days)
-  x_max -= 0.5;
+  var nb_extended_days = (x_today - x_min) * (wrap.x_max_factor - 1);
+  var x_max = x_today + Math.ceil(nb_extended_days);
   
   //-- Add real end
   var iso_end = new Date(iso_today);
@@ -85,11 +79,21 @@ function VP_FormatData(wrap, data) {
 }
 
 function VP_FormatData2(wrap, data) {
+  //-- Variables for xtick
+  var x_key = 'date';
+  var q, r;
+  if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
+    q = data.length % wrap.xlabel_path;
+    r = wrap.r_list[q];
+  }
+  var xticklabel = [];
+  
   //-- Variables for data
   var col_tag_list = data.columns.slice(3); //-- 0 = index, 1 = date, 2 = source
   var nb_col = col_tag_list.length;
+  var x_list = []; //-- For date
   var annotation = [];
-  var row;
+  var date, row;
   
   //-- Other variables
   var x = wrap.x_min;
@@ -100,10 +104,18 @@ function VP_FormatData2(wrap, data) {
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
+    date = row['date'];
     
     //-- If no date, vaccines are delivered but under quality check
-    if ('' == row['date'])
+    if ('' == date)
       break;
+    
+    //-- Determine where to have xtick
+    x_list.push(date);
+    if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
+      if (i % wrap.xlabel_path == r)
+        xticklabel.push(date);
+    }
     
     //-- Before delivery
     x = +row['index'] - 0.5;
@@ -174,6 +186,8 @@ function VP_FormatData2(wrap, data) {
   wrap.annotation = annotation;
   wrap.col_tag_list = col_tag_list;
   wrap.nb_col = nb_col;
+  wrap.x_list = x_list;
+  wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.legend_value = legend_value;
 }
@@ -245,99 +259,8 @@ function VP_FormatData3(wrap, data) {
   wrap.ytick = ytick;
 }
 
-function VP_MakeXTick(wrap) {
-  var xticklabel_month_list;
-  if (LS_lang == 'zh-tw')
-    xticklabel_month_list = ['', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-  else if (LS_lang == 'fr')
-    xticklabel_month_list = ['', 'Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'];
-  else
-    xticklabel_month_list = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
-  //-- Generate xtick for month
-  var yyyymm_begin = +wrap.iso_begin.slice(5, 7) - 1 + 12 * +wrap.iso_begin.slice(0, 4);
-  var yyyymm_end = +wrap.iso_end.slice(5, 7) - 1 + 12 * +wrap.iso_end.slice(0, 4);
-  var xtick_sep_month = [];
-  var xtick_label_month = [];
-  var xticklabel_month = [];
-  var x_prev = wrap.x_min;
-  var i, x, mm, yyyy, iso;
-  
-  for (i=yyyymm_begin; i<yyyymm_end+1; i++) {
-    //-- Get tick date
-    yyyy = Math.floor((i+1)/12);
-    mm = ((i+1) % 12 + 1).toLocaleString(undefined, {minimumIntegerDigits: 2}); //-- Get next month
-    iso = yyyy + '-' + mm +'-01';
-    
-    //-- Get index
-    x = (new Date(iso) - new Date(wrap.iso_ref)); //-- Calculate difference
-    x /= 86400000; //-- Convert from ms to day
-    x -= 0.5; //-- For edge
-    
-    //-- If last month, do not draw xtick_sep_month & use x_max to compare
-    if (i == yyyymm_end)
-      x = wrap.x_max;
-    else
-      xtick_sep_month.push(x);
-      
-    //-- Compare with previous x, draw xtick_label_month & xticklabel_month only if wide enough
-    if (x-x_prev >= wrap.xticklabel_width_min) {
-      xtick_label_month.push(0.5*(x_prev+x));
-      mm = i % 12 + 1; //-- Get current month
-      xticklabel_month.push(xticklabel_month_list[mm]);
-    }
-    
-    //-- Update x_prev
-    x_prev = x;
-  }
-  
-  //-- Generate xtick for year
-  var yyyy_begin = +wrap.iso_begin.slice(0, 4);
-  var yyyy_end = +wrap.iso_end.slice(0, 4);
-  var xtick_sep_year = [];
-  var xtick_label_year = [];
-  var xticklabel_year = [];
-  x_prev = wrap.x_min;
-  
-  for (i=yyyy_begin; i<yyyy_end+1; i++) {
-    //-- Get tick date
-    iso = i + '-12-31';
-    
-    //-- Get index
-    x = (new Date(iso) - new Date(wrap.iso_ref)); //-- Calculate difference
-    x /= 86400000; //-- Convert from ms to day
-    x += 0.5; //-- For edge
-    
-    //-- If last year, do not draw xtick_sep_year & use x_max to compare
-    if (i == yyyy_end)
-      x = wrap.x_max;
-    else
-      xtick_sep_year.push(x);
-      
-    //-- Compare with previous x, draw xtick_label_year & xticklabel_year only if wide enough
-    if (x-x_prev >= wrap.xticklabel_width_min) {
-      xtick_label_year.push(0.5*(x_prev+x));
-      xticklabel_year.push(i);
-    }
-    
-    //-- Update x_prev
-    x_prev = x;
-  }
-  
-  //-- Save to wrapper
-  wrap.xtick_sep_month = xtick_sep_month;
-  wrap.xtick_label_month = xtick_label_month;
-  wrap.xticklabel_month = xticklabel_month;
-  wrap.xtick_sep_year = xtick_sep_year;
-  wrap.xtick_label_year = xtick_label_year;
-  wrap.xticklabel_year = xticklabel_year;
-}
-
 //-- Post processing
 function VP_FormatData4(wrap) {
-  //-- Make ticks
-  VP_MakeXTick(wrap);
-  
   var eps = 10;
   var i, x, y, x_anno, y_anno;
   var block_line, block_anno;
@@ -414,7 +337,7 @@ function VP_FormatData4(wrap) {
   y_anno = (1 - y / wrap.y_max) * wrap.height;
   if (y_anno > 10) {
     text_dict = {en: '20% of population', fr: '20% de la population', 'zh-tw': '20%人口'};
-    block_anno = {tag: '', points: '', text: text_dict[LS_lang], x_text: 3*eps, y_text: y_anno-eps, 'text-anchor': 'start'};
+    block_anno = {tag: '', points: '', text: text_dict[LS_lang], x_text: 25*eps, y_text: y_anno-eps, 'text-anchor': 'start'};
     wrap.annotation.push(block_anno);
   }
 }
@@ -449,14 +372,16 @@ function VP_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
-  //-- Placeholders
-  GP_PlotBottomOverallEmptyAxis(wrap);
-    
+  //-- Replot xaxis
+  if (wrap.tag.includes('overall'))
+    GP_PlotBottomOverallEmptyAxis(wrap);
+  
   //-- Add ylabel
   GP_PlotYLabel(wrap);
   
   //-- Add tooltip
-  GP_MakeTooltip(wrap);
+  if (!wrap.tag.includes('mini'))
+    GP_MakeTooltip(wrap);
   
   //-- Define color & linestyle
   //-- AZ, Moderna
@@ -525,60 +450,9 @@ function VP_Replot(wrap) {
     .domain([wrap.x_min, wrap.x_max])
     .range([0, wrap.width]);
   
-  //-- Define & update xaxis_tick_month
-  var xaxis_tick_month = d3.axisBottom(xscale)
-    .tickSize(12)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xtick_sep_month)
-    .tickFormat('');
-  wrap.svg.select('.xaxis.tick.month')
-    .call(xaxis_tick_month);
-    
-  //-- Adjust xtick style
-  wrap.svg.selectAll('.xaxis.tick.month line')
-    .style('stroke-opacity', '0.8');
-    
-  //-- Define & update xaxis_tick_year
-  var xaxis_tick_year = d3.axisBottom(xscale)
-    .tickSize(20)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xtick_sep_year)
-    .tickFormat('');
-  wrap.svg.select('.xaxis.tick.year')
-    .call(xaxis_tick_year);
+  //-- Define yscale
+  var yscale = GP_MakeLinearY(wrap);
   
-  //-- Define & update xaxis_label_month
-  var xaxis_label_month = d3.axisBottom(xscale)
-    .tickSize(0)
-    .tickValues(wrap.xtick_label_month)
-    .tickFormat(function (d, i) {return wrap.xticklabel_month[i];});
-  wrap.svg.select('.xaxis.label.month')
-    .transition()
-    .duration(wrap.trans_delay)
-    .call(xaxis_label_month)
-    .selectAll('text')
-      .attr('transform', 'translate(0,8)');
-      
-  //-- Define & update xaxis_label_year
-  var xaxis_label_year = d3.axisBottom(xscale)
-    .tickSize(0)
-    .tickValues(wrap.xtick_label_year)
-    .tickFormat(function (d, i) {return wrap.xticklabel_year[i];});
-  wrap.svg.select('.xaxis.label.year')
-    .transition()
-    .duration(wrap.trans_delay)
-    .call(xaxis_label_year)
-    .selectAll('text')
-      .attr('transform', 'translate(0,40)');
-  
-  //-- Replot yaxis
-  GP_ReplotCountAsY(wrap);
-  var yscale = wrap.yscale_tick;
-    
-  //-- Update ylabel
-  var ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '疫苗劑數'};
-  GP_ReplotYLabel(wrap, ylabel_dict);
-    
   //-- Define line
   var draw_line = d3.line()
     .x(function (d) {return xscale(d.x);})
@@ -627,8 +501,28 @@ function VP_Replot(wrap) {
       .style('fill', function (d) {if (d.tag == 'delivery') return wrap.color_list[0]; if (d.tag == 'administrated') return wrap.color_list[1]; return GP_wrap.gray;})
       .text(function (d) {return d.text;});
       
+  //-- Frameline for mini
+  if (wrap.tag.includes('mini')) {
+    GP_PlotTopRight(wrap);
+    return;
+  }
+  
+  //-- Replot xaxis
+  if (wrap.tag.includes('overall'))
+    GP_ReplotOverallXTick(wrap);
+  else
+    GP_ReplotDateAsX(wrap);
+  
+  //-- Replot yaxis
+  GP_ReplotCountAsY(wrap);
+  var yscale = wrap.yscale_tick;
+    
+  //-- Update ylabel
+  var ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '疫苗劑數'};
+  GP_ReplotYLabel(wrap, ylabel_dict);
+  
   //-- Define legend position
-  var legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27};
+  var legend_pos = {x: wrap.legend_pos_x, y: 80, dx: 10, dy: 27};
   
   //-- Define legend color
   var legend_color = wrap.color_list.slice();
@@ -768,8 +662,12 @@ function VP_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
   //-- Swap active to current value
-  wrap.brand = document.querySelector("input[name='" + wrap.tag + "_brand']:checked").value;
-  GP_PressRadioButton(wrap, 'brand', 0, wrap.brand); //-- 0 from .html
+  if (wrap.tag.includes('mini'))
+    wrap.brand = 0;
+  else {
+    wrap.brand = document.querySelector("input[name='" + wrap.tag + "_brand']:checked").value;
+    GP_PressRadioButton(wrap, 'brand', 0, wrap.brand); //-- 0 from .html
+  }
   
   //-- Load
   VP_InitFig(wrap);

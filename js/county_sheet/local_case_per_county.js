@@ -6,7 +6,10 @@
 //--   Chieh-An Lin
 
 function LCPC_InitFig(wrap) {
-  GP_InitFig_Standard(wrap);
+  if (wrap.tag.includes('mini'))
+    GP_InitFig_Mini(wrap);
+  else
+    GP_InitFig_Standard(wrap);
 }
 
 function LCPC_ResetText() {
@@ -96,9 +99,7 @@ function LCPC_FormatData(wrap, data) {
   //-- Variables for xtick
   var x_key = 'date';
   var q, r;
-  if (wrap.tag.includes('overall'))
-    r = 999;
-  else {
+  if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
     q = data.length % wrap.xlabel_path;
     r = wrap.r_list[q];
   }
@@ -126,8 +127,10 @@ function LCPC_FormatData(wrap, data) {
     x_list.push(x);
     
     //-- Determine where to have xtick
-    if (i % wrap.xlabel_path == r)
-      xticklabel.push(x);
+    if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
+      if (i % wrap.xlabel_path == r)
+        xticklabel.push(x);
+    }
     
     //-- Update y_sum
     y_sum[0] += +row[col_tag_list[0]];
@@ -168,6 +171,9 @@ function LCPC_FormatData(wrap, data) {
 }
 
 function LCPC_FormatData2(wrap, data2) {
+  if (!wrap.tag.includes('overall'))
+    return;
+  
   var i, timestamp;
   
   //-- Loop over row
@@ -177,12 +183,31 @@ function LCPC_FormatData2(wrap, data2) {
       timestamp = data2[i]['value'];
   }
   
+  //-- Calculate x_min
+  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_min -= 0.2; //-- For edge
+  
+  //-- Calculate x_max
+  var iso_today = timestamp.slice(0, 10);
+  var x_max = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_max += 1; //-- For edge
+  
+  //-- Half day correction
+  var hour = timestamp.slice(11, 13);
+  if (+hour < 12)
+    x_max -= 1;
+  
   //-- Save to wrapper
-  wrap.timestamp = timestamp;
+  wrap.iso_end = iso_today;
+  wrap.x_min = x_min;
+  wrap.x_max = x_max;
 }
 
 //-- Tooltip
 function LCPC_MouseMove(wrap, d) {
+  if (wrap.tag.includes('mini'))
+    return;
+  
   //-- Get tooltip position
   var y_alpha = 0.35;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
@@ -257,6 +282,18 @@ function LCPC_Plot(wrap) {
 }
 
 function LCPC_Replot(wrap) {
+  //-- Update bar
+  GP_ReplotFaintSingleBar(wrap);
+  
+  //-- Replot avg line
+  GP_ReplotAvgLine(wrap);
+  
+  //-- Frameline for mini
+  if (wrap.tag.includes('mini')) {
+    GP_PlotTopRight(wrap);
+    return;
+  }
+  
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
     GP_ReplotOverallXTick(wrap);
@@ -270,12 +307,6 @@ function LCPC_Replot(wrap) {
   var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
   GP_ReplotYLabel(wrap, ylabel_dict);
     
-  //-- Update bar
-  GP_ReplotFaintSingleBar(wrap);
-  
-  //-- Replot avg line
-  GP_ReplotAvgLine(wrap);
-  
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   
@@ -405,7 +436,10 @@ function LCPC_Main(wrap) {
   wrap.id = '#' + wrap.tag;
 
   //-- Swap active to current value
-  wrap.col_ind = document.getElementById(wrap.tag + "_county").value;
+  if (wrap.tag.includes('mini'))
+    wrap.col_ind = 0;
+  else
+    wrap.col_ind = document.getElementById(wrap.tag + "_county").value;
   
   //-- Load
   LCPC_InitFig(wrap);

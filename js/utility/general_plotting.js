@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//VBD: dot & tooltip 
-//Hospitalization & Death data
-//Hospitalization plot
-//Death plot
-//VBB: shorter x axis
-//Vaccination: unify axis fct, unify tick fct
+//Init fig overall
+//Put mini mechanism everywhere
+//plot legend fct
+//percentage yticklabel fct
+//Overall: unify tick fct
+//Vaccination: unify axis fct
 //IR & PAF: unify dot functions
 //IM legend: add total case & national incidence
 //VBD: latest
@@ -35,7 +35,12 @@ var GP_wrap = {
   r_list_2021: [7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6],
   
   iso_ref: '2020-01-01',
-  xticklabel_overall_width_min: 15,
+  iso_ref_vacc: '2021-03-01',
+  xticklabel_min_space: 15,
+  xticklabel_min_space_vacc: 9,
+  
+  bar_padding: 0.2,
+  tile_padding: 0.04,
   
   //-- Color
   c_list: ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022', '#117733', '#DD6622', '#7733AA', '#BB8811'],
@@ -128,6 +133,20 @@ function GP_InitFig_Standard(wrap) {
   GP_InitFig(wrap);
 }
 
+function GP_InitFig_Overall(wrap) {
+  wrap.tot_width = 800;
+  wrap.tot_height_ = {};
+  wrap.tot_height_['zh-tw'] = 400;
+  wrap.tot_height_['fr'] = 400;
+  wrap.tot_height_['en'] = 400;
+  wrap.margin_ = {};
+  wrap.margin_['zh-tw'] = {left: 90, right: 5, bottom: 70, top: 5};
+  wrap.margin_['fr'] = {left: 90, right: 5, bottom: 70, top: 5};
+  wrap.margin_['en'] = {left: 90, right: 5, bottom: 70, top: 5};
+  
+  GP_InitFig(wrap);
+}
+
 function GP_InitFig_Mini(wrap) {
   wrap.tot_width = 400;
   wrap.tot_height_ = {};
@@ -150,7 +169,7 @@ function GP_MakeBandXForBar(wrap) {
   var xscale = d3.scaleBand()
     .domain(wrap.x_list)
     .range([0, wrap.width])
-    .padding(0.2);
+    .padding(GP_wrap.bar_padding);
   return xscale;
 }
 
@@ -168,7 +187,7 @@ function GP_MakeBandXForTile(wrap) {
   var xscale = d3.scaleBand()
     .domain(wrap.x_list)
     .range([0, wrap.width])
-    .padding(0.04);
+    .padding(GP_wrap.tile_padding);
   return xscale;
 }
 
@@ -185,7 +204,7 @@ function GP_MakeBandYForTile(wrap) {
   var yscale = d3.scaleBand()
     .domain(wrap.y_list)
     .range([0, wrap.height])
-    .padding(0.04);
+    .padding(GP_wrap.tile_padding);
   return yscale;
 }
 
@@ -431,38 +450,37 @@ function GP_ReplotTileX(wrap) {
 
 function GP_MakeOverallXTick(wrap) {
   var xticklabel_month_list;
-//   if (LS_lang == 'zh-tw')
-//     xticklabel_month_list = ['', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-//   else if (LS_lang == 'fr')
-//     xticklabel_month_list = ['', 'Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'];
-//   else
-//     xticklabel_month_list = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  if (LS_lang == 'zh-tw')
-    xticklabel_month_list = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
-  else if (LS_lang == 'fr')
-    xticklabel_month_list = ['', 'J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
-  else
-    xticklabel_month_list = ['', 'J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
-  
-  //-- Today  
-  var iso_today = wrap.timestamp.slice(0, 10);
-  var x_today = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
-  x_today += 1; //-- For edge
+  if (wrap.tag.includes('vaccination')) {
+    if (LS_lang == 'zh-tw')
+      xticklabel_month_list = ['', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+    else if (LS_lang == 'fr')
+      xticklabel_month_list = ['', 'Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'];
+    else
+      xticklabel_month_list = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  }
+  else {
+    if (LS_lang == 'zh-tw')
+      xticklabel_month_list = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+    else if (LS_lang == 'fr')
+      xticklabel_month_list = ['', 'J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+    else
+      xticklabel_month_list = ['', 'J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+  }
   
   //-- Generate xtick for month
-  var iso_begin = GP_wrap.iso_ref;
-  var x_min = 0;
-  var x_max = x_today;
-  
-  var yyyymm_begin = +iso_begin.slice(5, 7) - 1 + 12 * +iso_begin.slice(0, 4);
-  var yyyymm_today = +iso_today.slice(5, 7) - 1 + 12 * +iso_today.slice(0, 4);
+  var yyyymm_begin = +wrap.iso_begin.slice(5, 7) - 1 + 12 * +wrap.iso_begin.slice(0, 4);
+  var yyyymm_end = +wrap.iso_end.slice(5, 7) - 1 + 12 * +wrap.iso_end.slice(0, 4);
   var xtick_sep_month = [];
   var xtick_label_month = [];
   var xticklabel_month = [];
-  var x_prev = x_min;
   var i, x, mm, yyyy, iso;
   
-  for (i=yyyymm_begin; i<yyyymm_today+1; i++) {
+  //-- Get x_prev
+  var x_prev = wrap.x_min;
+  if (wrap.overall_type == 'band') //-- For edge
+    x_prev += 0.1;
+  
+  for (i=yyyymm_begin; i<yyyymm_end+1; i++) {
     //-- Get tick date
     yyyy = Math.floor((i+1)/12);
     mm = ((i+1) % 12 + 1).toLocaleString(undefined, {minimumIntegerDigits: 2}); //-- Get next month
@@ -471,16 +489,22 @@ function GP_MakeOverallXTick(wrap) {
     //-- Get index
     x = (new Date(iso) - new Date(GP_wrap.iso_ref)); //-- Calculate difference
     x /= 86400000; //-- Convert from ms to day
-    x -= 0.1; //-- For edge
+    if (wrap.overall_type == 'band') //-- For edge
+      x -= 0.1;
+    else
+      x -= 0.5;
     
     //-- If last month, do not draw xtick_sep_month & use x_max to compare
-    if (i == yyyymm_today)
-      x = x_max;
+    if (i == yyyymm_end) {
+      x = wrap.x_max;
+      if (wrap.overall_type == 'band') //-- For edge
+        x -= 0.1; 
+    }
     else
       xtick_sep_month.push(x);
       
     //-- Compare with previous x, draw xtick_label_month & xticklabel_month only if wide enough
-    if (x-x_prev >= GP_wrap.xticklabel_overall_width_min) {
+    if (x-x_prev >= wrap.xticklabel_min_space) {
       xtick_label_month.push(0.5*(x_prev+x));
       mm = i % 12 + 1; //-- Get current month
       xticklabel_month.push(xticklabel_month_list[mm]);
@@ -491,30 +515,40 @@ function GP_MakeOverallXTick(wrap) {
   }
   
   //-- Generate xtick for year
-  var yyyy_begin = +iso_begin.slice(0, 4);
-  var yyyy_today = +iso_today.slice(0, 4);
+  var yyyy_begin = +wrap.iso_begin.slice(0, 4);
+  var yyyy_end = +wrap.iso_end.slice(0, 4);
   var xtick_sep_year = [];
   var xtick_label_year = [];
   var xticklabel_year = [];
-  x_prev = x_min;
   
-  for (i=yyyy_begin; i<yyyy_today+1; i++) {
+  //-- Get x_prev
+  x_prev = wrap.x_min;
+  if (wrap.overall_type == 'band') //-- For edge
+    x_prev += 0.1;
+  
+  for (i=yyyy_begin; i<yyyy_end+1; i++) {
     //-- Get tick date
     iso = i + '-12-31';
     
     //-- Get index
     x = (new Date(iso) - new Date(GP_wrap.iso_ref)); //-- Calculate difference
     x /= 86400000; //-- Convert from ms to day
-    x += 0.9; //-- For edge
+    if (wrap.overall_type == 'band') //-- For edge
+      x += 0.9;
+    else
+      x += 0.5;
     
     //-- If last year, do not draw xtick_sep_year & use x_max to compare
-    if (i == yyyy_today)
-      x = x_max;
+    if (i == yyyy_end) {
+      x = wrap.x_max;
+      if (wrap.overall_type == 'band') //-- For edge
+        x -= 0.1; 
+    }
     else
       xtick_sep_year.push(x);
       
     //-- Compare with previous x, draw xtick_label_year & xticklabel_year only if wide enough
-    if (x-x_prev >= GP_wrap.xticklabel_overall_width_min) {
+    if (x-x_prev >= wrap.xticklabel_min_space) {
       xtick_label_year.push(0.5*(x_prev+x));
       xticklabel_year.push(i);
     }
@@ -524,8 +558,6 @@ function GP_MakeOverallXTick(wrap) {
   }
   
   //-- Save to wrapper
-  wrap.x_min = x_min;
-  wrap.x_max = x_max;
   wrap.xtick_sep_month = xtick_sep_month;
   wrap.xtick_label_month = xtick_label_month;
   wrap.xticklabel_month = xticklabel_month;

@@ -13,12 +13,12 @@ var VP_overall_wrap = {
     '../processed_data/overall/vaccination_progress_administrated.csv',
   ],
 
-  iso_ref: '2020-01-01',
-  iso_begin: '2021-03-21',
+  iso_begin: GP_wrap.iso_ref_vacc,
+  xticklabel_min_space: GP_wrap.xticklabel_min_space_vacc,
+  overall_type: 'dot',
   x_max_factor: 1.19,
-  xticklabel_width_min: 9,
   
-  y_max_factor: 1.3,
+  y_max_factor: 1.4,
   y_max_fixed: 0,
   nb_yticks: 4,
   legend_pos_x: 110,

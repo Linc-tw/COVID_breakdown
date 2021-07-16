@@ -40,9 +40,7 @@ function IR_ResetText() {
 function IR_FormatData(wrap, data) {
   //-- Variables for xtick
   var q, r;
-  if (wrap.tag.includes('overall'))
-    r = 999;
-  else {
+  if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
     q = data.length % wrap.xlabel_path;
     r = wrap.r_list[q];
   }
@@ -69,8 +67,10 @@ function IR_FormatData(wrap, data) {
     x_list.push(x);
     
     //-- Determine whether to have xtick
-    if (i % wrap.xlabel_path == r)
-      xticklabel.push(x);
+    if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
+      if (i % wrap.xlabel_path == r)
+        xticklabel.push(x);
+    }
     
     //-- Loop over column
     for (j=0; j<nb_col; j++) {
@@ -145,6 +145,9 @@ function IR_FormatData(wrap, data) {
 }
 
 function IR_FormatData2(wrap, data2) {
+  if (!wrap.tag.includes('overall'))
+    return;
+  
   var i, timestamp;
   
   //-- Loop over row
@@ -154,8 +157,24 @@ function IR_FormatData2(wrap, data2) {
       timestamp = data2[i]['value'];
   }
   
+  //-- Calculate x_min
+  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_min -= 0.5; //-- For edge
+  
+  //-- Calculate x_max
+  var iso_today = timestamp.slice(0, 10);
+  var x_max = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
+  x_max += 0.5; //-- For edge
+  
+  //-- Half day correction
+  var hour = timestamp.slice(11, 13);
+  if (+hour < 12)
+    x_max -= 1;
+  
   //-- Save to wrapper
-  wrap.timestamp = timestamp;
+  wrap.iso_end = iso_today;
+  wrap.x_min = x_min;
+  wrap.x_max = x_max;
 }
 
 //-- Tooltip
@@ -292,7 +311,8 @@ function IR_Replot(wrap) {
         .attr('cy', function (d) {return yscale(d.y);})
         .attr('r', function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
   }
-
+  
+  //-- Frameline for mini
   if (wrap.tag.includes('mini')) {
     GP_PlotTopRight(wrap);
     return;
@@ -322,7 +342,6 @@ function IR_Replot(wrap) {
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
-//   var legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27};
   
   //-- Define legend color
   var legend_color = wrap.color_list.slice();
@@ -356,7 +375,6 @@ function IR_Replot(wrap) {
       .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
       .attr('text-anchor', 'end')
       .style('fill', function (d, i) {return legend_color[i];})
-//       .style('font-size', '1.2rem')
       .text(function (d, i) {if (0 == i) return ''; return (+d*100).toFixed(2)+'%';});
     
   //-- Update legend label
