@@ -12,7 +12,7 @@ var CBA_latest_wrap = {
   ],
 
   y_max_factor: 1.6,
-  y_path: '4', //-- 4 ticks
+  nb_yticks: 4,
   legend_pos_x: 95,
   trans_delay: GP_wrap.trans_delay,
 };
@@ -24,7 +24,7 @@ var CBA_overall_wrap = {
   ],
 
   y_max_factor: 1.6,
-  y_path: '4', //-- 4 ticks
+  nb_yticks: 4,
   legend_pos_x: 95,
   trans_delay: GP_wrap.trans_delay,
 };
@@ -32,12 +32,11 @@ var CBA_overall_wrap = {
 var CBA_2021_wrap = {
   tag: 'case_by_age_2021',
   data_path_list: [
-//     '../processed_data/2021/case_by_age.csv',
-    'processed_data/2021/case_by_age.csv',
+    '../processed_data/2021/case_by_age.csv',
   ],
 
   y_max_factor: 1.4,
-  y_path: '4', //-- 4 ticks
+  nb_yticks: 4,
   legend_pos_x: 95,
   trans_delay: GP_wrap.trans_delay,
 };
@@ -45,12 +44,11 @@ var CBA_2021_wrap = {
 var CBA_2020_wrap = {
   tag: 'case_by_age_2020',
   data_path_list: [
-//     '../processed_data/2020/case_by_age.csv',
-    'processed_data/2020/case_by_age.csv',
+    '../processed_data/2020/case_by_age.csv',
   ],
 
   y_max_factor: 1.4,
-  y_path: '4', //-- 4 ticks
+  nb_yticks: 4,
   legend_pos_x: 90,
   trans_delay: GP_wrap.trans_delay,
 };

@@ -37,71 +37,66 @@ function VP_ResetText() {
   }
 }
 
+//-- Key values
 function VP_FormatData(wrap, data) {
-  var i, timestamp, population;
+  var i, population;
   for (i=0; i<data.length; i++) {
     if ('timestamp' == data[i]['key'])
-      timestamp = data[i]['value'];
+      wrap.timestamp = data[i]['value'];
     else if ('population_twn' == data[i]['key'])
       population = +data[i]['value'];
   }
   
-  //-- Calculate x_min
-  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
-  x_min -= 0.5; //-- For edge
+  //-- Set iso_begin
+  wrap.iso_begin = GP_wrap.iso_ref_vacc;
+  
+  //-- Calculate xlim
+  GP_MakeXLim(wrap, 'dot');
   
   //-- Calculate x_max
-  var iso_today = timestamp.slice(0, 10);
-  var x_today = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
-  x_today += 0.5; //-- For edge
-  
-  //-- Half day correction
-  var hour = timestamp.slice(11, 13);
-  if (+hour < 12)
-    x_today -= 1;
-  
-  //-- Calculate x_max
-  var nb_extended_days = (x_today - x_min) * (wrap.x_max_factor - 1);
+  var iso_today = wrap.iso_end;
+  var x_today = wrap.x_max;
+  var nb_extended_days = (x_today - wrap.x_min) * (wrap.x_max_factor - 1);
   var x_max = x_today + Math.ceil(nb_extended_days);
   
   //-- Add real end
-  var iso_end = new Date(iso_today);
-  iso_end.setDate(iso_end.getDate() + nb_extended_days);
-  iso_end = iso_end.getFullYear() + '-' + (iso_end.getMonth()+1).toLocaleString(undefined, {minimumIntegerDigits: 2}) + '-' + iso_end.getDate().toLocaleString(undefined, {minimumIntegerDigits: 2});
+  var iso_end = GP_ISODateAddition(iso_today, nb_extended_days);
   
   //-- Save to wrapper
   wrap.population = population;
   wrap.iso_today = iso_today;
   wrap.iso_end = iso_end;
-  wrap.x_min = x_min;
   wrap.x_today = x_today;
   wrap.x_max = x_max;
 }
 
+//-- Supply
 function VP_FormatData2(wrap, data) {
-  //-- Variables for xtick
+  //-- Variables for data
+  var col_tag_list = data.columns.slice(3); //-- 0 = index, 1 = date, 2 = source
+  var col_tag = col_tag_list[0];
+  var col_tag_avg = col_tag + '_avg';
+  var nb_col = col_tag_list.length;
+  var i, j, row;
+  
+  //-- Variables for plot
   var x_key = 'date';
+  var x = wrap.x_min;
+  var y = 0;
+  var block = [{x: x, y: y}];
+  var x_list = [];
+  var annotation = [];
+  var dy, date;
+  
+  //-- Variables for xaxis
+  var xticklabel = [];
   var q, r;
   if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
     q = data.length % wrap.xlabel_path;
     r = wrap.r_list[q];
   }
-  var xticklabel = [];
   
-  //-- Variables for data
-  var col_tag_list = data.columns.slice(3); //-- 0 = index, 1 = date, 2 = source
-  var nb_col = col_tag_list.length;
-  var x_list = []; //-- For date
-  var annotation = [];
-  var date, row;
-  
-  //-- Other variables
-  var x = wrap.x_min;
-  var y = 0;
-  var block = [{x: x, y: y}];
-  var i, j, dy;
-  
-  //-- Loop over row
+  //-- Main loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
     date = row['date'];
@@ -192,21 +187,24 @@ function VP_FormatData2(wrap, data) {
   wrap.legend_value = legend_value;
 }
 
+//-- Injection
 function VP_FormatData3(wrap, data) {
   //-- Variables for data
   var col_tag_list = data.columns.slice(2); //-- 0 = index, 1 = date
   var col_tag = col_tag_list[wrap.brand];
   var nb_col = col_tag_list.length;
-  var row;
+  var i, j, x, y, row;
   
-  //-- Other variables
-  var block2 = [];
-  var y_max = 0;
+  //-- Variables for plot
   var i_delivery = 0;
   var delivery = wrap.formatted_data[0][i_delivery+1];
-  var i, j, x, y, block;
+  var block2 = [];
+  var block;
   
-  //-- Loop over row
+  //-- Variables for yaxis
+  var y_max = 0;
+  
+  //-- Main loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
     x = +row['index'];
@@ -244,7 +242,9 @@ function VP_FormatData3(wrap, data) {
   }
   
   //-- Calculate y_path
-  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks);
+  if (wrap.tag.includes('mini'))
+    wrap.nb_yticks = 1;
+  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks, 'count');
   
   //-- Generate yticks
   var ytick = [];
@@ -328,16 +328,16 @@ function VP_FormatData4(wrap) {
   //-- No today annotation
   
   //-- Population line
-  var threshold = 0.2;
-  y = wrap.population * threshold;
+  y = wrap.population * wrap.threshold;
   block_line = [{x: wrap.x_min, y: y}, {x: wrap.x_max, y: y}];
   wrap.formatted_data.push(block_line);
   
   //-- Population annotation
   y_anno = (1 - y / wrap.y_max) * wrap.height;
   if (y_anno > 10) {
-    text_dict = {en: '20% of population', fr: '20% de la population', 'zh-tw': '20%人口'};
-    block_anno = {tag: '', points: '', text: text_dict[LS_lang], x_text: 25*eps, y_text: y_anno-eps, 'text-anchor': 'start'};
+    threshold = d3.format('.0f')(wrap.threshold*100);
+    text_dict = {en: '% of population', fr: '% de la population', 'zh-tw': '%人口'};
+    block_anno = {tag: '', points: '', text: threshold+text_dict[LS_lang], x_text: wrap.threshold_pos_x, y_text: y_anno-eps, 'text-anchor': 'start'};
     wrap.annotation.push(block_anno);
   }
 }
@@ -395,9 +395,7 @@ function VP_Plot(wrap) {
   linestyle_list = linestyle_list.concat(['8,5', '8,5', '8,5', '8,5']);
   
   //-- Define xscale
-  var xscale = d3.scaleLinear()
-    .domain([wrap.x_min, wrap.x_max])
-    .range([0, wrap.width]);
+  var xscale = GP_MakeLinearX(wrap);
   
   //-- Define yscale
   var yscale = GP_MakeLinearY(wrap);
@@ -446,9 +444,7 @@ function VP_Plot(wrap) {
 
 function VP_Replot(wrap) {
   //-- Define xscale
-  var xscale = d3.scaleLinear()
-    .domain([wrap.x_min, wrap.x_max])
-    .range([0, wrap.width]);
+  var xscale = GP_MakeLinearX(wrap);
   
   //-- Define yscale
   var yscale = GP_MakeLinearY(wrap);
@@ -473,6 +469,12 @@ function VP_Replot(wrap) {
       .attr('cy', function (d) {return yscale(d.y);})
       .attr('r', wrap.r);
 
+  //-- Frameline for mini
+  if (wrap.tag.includes('mini')) {
+    GP_PlotTopRight(wrap);
+    return;
+  }
+  
   //-- Update annotation line
   wrap.svg.selectAll('.annotation.line')
     .remove()
@@ -501,92 +503,52 @@ function VP_Replot(wrap) {
       .style('fill', function (d) {if (d.tag == 'delivery') return wrap.color_list[0]; if (d.tag == 'administrated') return wrap.color_list[1]; return GP_wrap.gray;})
       .text(function (d) {return d.text;});
       
-  //-- Frameline for mini
-  if (wrap.tag.includes('mini')) {
-    GP_PlotTopRight(wrap);
-    return;
-  }
-  
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap);
+    GP_ReplotOverallXTick(wrap, 'dot');
   else
     GP_ReplotDateAsX(wrap);
   
   //-- Replot yaxis
-  GP_ReplotCountAsY(wrap);
-  var yscale = wrap.yscale_tick;
+  GP_ReplotCountAsY(wrap, 'count');
     
   //-- Update ylabel
   var ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '疫苗劑數'};
   GP_ReplotYLabel(wrap, ylabel_dict);
   
   //-- Define legend position
-  var legend_pos = {x: wrap.legend_pos_x, y: 80, dx: 10, dy: 27};
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: wrap.legend_pos_y, dx: 10, dy: 27};
   
   //-- Define legend color
-  var legend_color = wrap.color_list.slice();
+  wrap.legend_color = wrap.color_list.slice();
   
-  //-- Define legend value
-  var legend_value = wrap.legend_value.slice();
-      
   //-- Define legend label
-  var legend_label_2 = [];
+  wrap.legend_label = [];
   var i, legend_label, col_tag_list;
   if (LS_lang == 'zh-tw') {
     legend_label = ['供應量', '接種量'];
     col_tag_list = ['總'].concat(wrap.col_tag_list);
     for (i=0; i<legend_label.length; i++)
-      legend_label_2.push(col_tag_list[wrap.brand]+legend_label[i]);
+      wrap.legend_label.push(col_tag_list[wrap.brand]+legend_label[i]);
   }
   else if (LS_lang == 'fr') {
     legend_label = ['Approvisionnements ', ' Injections '];
     col_tag_list = [['totaux'].concat(wrap.col_tag_list), ['totales'].concat(wrap.col_tag_list)];
     for (i=0; i<legend_label.length; i++)
-      legend_label_2.push(legend_label[i]+col_tag_list[i][wrap.brand]);
+      wrap.legend_label.push(legend_label[i]+col_tag_list[i][wrap.brand]);
   }
   else {
     legend_label = [' supplies', ' injections'];
     col_tag_list = ['Total'].concat(wrap.col_tag_list);
     for (i=0; i<legend_label.length; i++)
-      legend_label_2.push(col_tag_list[wrap.brand]+legend_label[i]);
+      wrap.legend_label.push(col_tag_list[wrap.brand]+legend_label[i]);
   }
   
   //-- Update legend title
-  legend_color.splice(0, 0, '#000000');
-  legend_value.splice(0, 0, '');
-  legend_label_2.splice(0, 0, LS_GetLegendTitle_Page(wrap));
+  GP_UpdateLegendTitle(wrap);
   
-  //-- Update legend value
-  wrap.svg.selectAll('.legend.value')
-    .remove()
-    .exit()
-    .data(legend_value)
-    .enter()
-    .append('text')
-      .attr('class', 'legend value')
-      .attr('x', legend_pos.x)
-      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .attr('text-anchor', 'end')
-      .style('fill', function (d, i) {return legend_color[i];})
-      .style('font-size', '1.2rem')
-      .text(function (d) {return d;});
-    
-  //-- Update legend label
-  wrap.svg.selectAll('.legend.label')
-    .remove()
-    .exit()
-    .data(legend_label_2)
-    .enter()
-    .append('text')
-      .attr('class', 'legend label')
-      .attr('x', legend_pos.x+legend_pos.dx)
-      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .attr('text-anchor', 'start')
-      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .style('font-size', '1.2rem')
-      .text(function (d) {return d;});
+  //-- Replot legend
+  GP_ReplotLegend(wrap, 'count', '1.2rem');
 }
 
 //-- Load

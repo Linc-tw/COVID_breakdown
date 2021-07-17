@@ -8,15 +8,6 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//Init fig overall
-//Put mini mechanism everywhere
-//plot legend fct
-//percentage yticklabel fct
-//Overall: unify tick fct
-//Vaccination: unify axis fct
-//IR & PAF: unify dot functions
-//IM legend: add total case & national incidence
-//VBD: latest
 //Note with "Collapse"
 //Automize README generation
 
@@ -34,11 +25,13 @@ var GP_wrap = {
   xlabel_path_2021: 15,
   r_list_2021: [7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6],
   
+  //-- xlabel overall
   iso_ref: '2020-01-01',
   iso_ref_vacc: '2021-03-01',
   xticklabel_min_space: 15,
   xticklabel_min_space_vacc: 9,
   
+  //-- padding
   bar_padding: 0.2,
   tile_padding: 0.04,
   
@@ -46,7 +39,7 @@ var GP_wrap = {
   c_list: ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022', '#117733', '#DD6622', '#7733AA', '#BB8811'],
   gray: '#999999',
   
-  //-- Transparence
+  //-- Transparency
   opacity: 0.3,
   
   //-- Transition delay
@@ -73,14 +66,23 @@ function GP_CumSum(data, col_tag_list) {
   }
 }
 
-function GP_CalculateTickInterval(y_max, nb_yticks) {
+function GP_CalculateTickInterval(y_max, nb_yticks, format) {
   var log_precision = Math.floor(Math.log10(y_max)) - 1;
   var precision = Math.pow(10, log_precision);
-  precision = Math.max(1, precision); //-- precision at least 1
+  
+  if (format != 'percentage')
+    precision = Math.max(1, precision); //-- precision at least 1
   
   var y_path = y_max / (nb_yticks + 0.5);
   y_path = Math.round(y_path / precision) * precision;
   return y_path;
+}
+
+function GP_ISODateAddition(iso, nb_days) {
+  var new_iso = new Date(iso);
+  new_iso.setDate(new_iso.getDate() + nb_days);
+  new_iso = new_iso.getFullYear() + '-' + (new_iso.getMonth()+1).toLocaleString(undefined, {minimumIntegerDigits: 2}) + '-' + new_iso.getDate().toLocaleString(undefined, {minimumIntegerDigits: 2});
+  return new_iso;
 }
 
 //------------------------------------------------------------------------------
@@ -96,19 +98,19 @@ function GP_InitFig(wrap) {
   
   //-- Add svg
   var svg = d3.select(wrap.id)
-    .append("svg")
+    .append('svg')
       .attr('class', 'plot')
-      .attr("viewBox", "0 0 " + wrap.tot_width + " " + tot_height)
-      .attr("preserveAspectRatio", "xMinYMin meet")
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .attr('viewBox', '0 0 ' + wrap.tot_width + ' ' + tot_height)
+      .attr('preserveAspectRatio', 'xMinYMin meet')
+    .append('g')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
   
   //-- Add background
-  svg.append("rect")
-      .attr("width", "100%")
-      .attr("height", "100%")
-      .attr("fill", "white")
-      .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")")
+  svg.append('rect')
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('fill', 'white')
+      .attr('transform', 'translate(' + -margin.left + ',' + -margin.top + ')')
   
   //-- Save to wrapper
   wrap.tot_height = tot_height;
@@ -129,6 +131,20 @@ function GP_InitFig_Standard(wrap) {
   wrap.margin_['zh-tw'] = {left: 90, right: 5, bottom: 90, top: 5};
   wrap.margin_['fr'] = {left: 90, right: 5, bottom: 90, top: 5};
   wrap.margin_['en'] = {left: 90, right: 5, bottom: 90, top: 5};
+  
+  GP_InitFig(wrap);
+}
+
+function GP_InitFig_SimpleBar(wrap) {
+  wrap.tot_width = 800;
+  wrap.tot_height_ = {};
+  wrap.tot_height_['zh-tw'] = 400;
+  wrap.tot_height_['fr'] = 400;
+  wrap.tot_height_['en'] = 400;
+  wrap.margin_ = {};
+  wrap.margin_['zh-tw'] = {left: 90, right: 5, bottom: 75, top: 5};
+  wrap.margin_['fr'] = {left: 90, right: 5, bottom: 75, top: 5};
+  wrap.margin_['en'] = {left: 90, right: 5, bottom: 75, top: 5};
   
   GP_InitFig(wrap);
 }
@@ -163,6 +179,14 @@ function GP_InitFig_Mini(wrap) {
 
 //------------------------------------------------------------------------------
 //-- Function declarations - xscale & yscale
+
+//-- Require x_min & x_max
+function GP_MakeLinearX(wrap) {
+  var xscale = d3.scaleLinear()
+    .domain([wrap.x_min, wrap.x_max])
+    .range([0, wrap.width]);
+  return xscale;
+}
 
 //-- Require x_list
 function GP_MakeBandXForBar(wrap) {
@@ -278,7 +302,7 @@ function GP_PlotRightFrameline(wrap) {
 }
 
 //------------------------------------------------------------------------------
-//-- Function declarations - xaxis & yaxis
+//-- Function declarations - empty axis
 
 //-- Placeholder for top xaxis
 function GP_PlotTopEmptyAxis(wrap) {
@@ -369,6 +393,28 @@ function GP_PlotYLabel(wrap) {
 //------------------------------------------------------------------------------
 //-- Function declarations - xaxis
 
+function GP_GetRForTickPos(wrap, data_length) {
+  if (wrap.tag.includes('overall') || wrap.tag.includes('mini'))
+    return -1;
+  
+  if (wrap.tag.includes('latest')) {
+    wrap.xlabel_path = GP_wrap.xlabel_path_latest;
+    r_list = GP_wrap.r_list_latest;
+  }
+  else if (wrap.tag.includes('2021')) {
+    wrap.xlabel_path = GP_wrap.xlabel_path_2021;
+    r_list = GP_wrap.r_list_2021;
+  } 
+  else {
+    wrap.xlabel_path = GP_wrap.xlabel_path_2020;
+    r_list = GP_wrap.r_list_2020;
+  }
+  
+  var q = data_length % wrap.xlabel_path;
+  var r = r_list[q];
+  return r;
+}
+
 function GP_ReplotDateAsX(wrap) {
   //-- Define xscale
   var xscale = GP_MakeBandXForBar(wrap);
@@ -448,9 +494,59 @@ function GP_ReplotTileX(wrap) {
   wrap.xscale_tick = xscale;
 }
 
-function GP_MakeOverallXTick(wrap) {
-  var xticklabel_month_list;
+//-- Require xticklabel
+function GP_ReplotDateAsTileX(wrap) {
+  //-- Define xscale
+  var xscale = GP_MakeBandXForTile(wrap);
+  
+  //-- Define xaxis
+  var xaxis = d3.axisBottom(xscale)
+    .tickSize(0)
+    .tickValues(wrap.xticklabel)
+    .tickFormat(function (d) {return LS_ISODateToMDDate(d);});
+  
+  //-- Update xaxis & adjust position (bottom frameline)
+  wrap.svg.selectAll('.xaxis')
+    .transition()
+    .duration(wrap.trans_delay)
+    .call(xaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(-8,5) rotate(-90)')
+      .style('text-anchor', 'end');
+}
+
+function GP_MakeXLim(wrap, format) {
+  //-- Calculate x_min
+  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
+  if (format == 'band') //-- Edge correction
+    x_min -= 0.2;
+  else if (format == 'dot')
+    x_min -= 0.5;
+  
+  //-- Calculate x_max
+  var iso_today = wrap.timestamp.slice(0, 10);
+  var x_max = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
+  if (format == 'band') //-- Edge correction
+    x_max += 1;
+  else if (format == 'dot')
+    x_max += 0.5;
+  
+  //-- Half day correction
+  var hour = wrap.timestamp.slice(11, 13);
+  if (+hour < 12)
+    x_max -= 1;
+  
+  //-- Save to wrapper
+  wrap.iso_end = iso_today;
+  wrap.x_min = x_min;
+  wrap.x_max = x_max;
+}
+
+function GP_MakeOverallXTick(wrap, format) {
+  var xticklabel_min_space, xticklabel_month_list;
   if (wrap.tag.includes('vaccination')) {
+    xticklabel_min_space = GP_wrap.xticklabel_min_space_vacc;
+    
     if (LS_lang == 'zh-tw')
       xticklabel_month_list = ['', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
     else if (LS_lang == 'fr')
@@ -459,6 +555,8 @@ function GP_MakeOverallXTick(wrap) {
       xticklabel_month_list = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   }
   else {
+    xticklabel_min_space = GP_wrap.xticklabel_min_space;
+    
     if (LS_lang == 'zh-tw')
       xticklabel_month_list = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
     else if (LS_lang == 'fr')
@@ -477,7 +575,7 @@ function GP_MakeOverallXTick(wrap) {
   
   //-- Get x_prev
   var x_prev = wrap.x_min;
-  if (wrap.overall_type == 'band') //-- For edge
+  if (format == 'band') //-- For edge
     x_prev += 0.1;
   
   for (i=yyyymm_begin; i<yyyymm_end+1; i++) {
@@ -489,7 +587,7 @@ function GP_MakeOverallXTick(wrap) {
     //-- Get index
     x = (new Date(iso) - new Date(GP_wrap.iso_ref)); //-- Calculate difference
     x /= 86400000; //-- Convert from ms to day
-    if (wrap.overall_type == 'band') //-- For edge
+    if (format == 'band') //-- For edge
       x -= 0.1;
     else
       x -= 0.5;
@@ -497,14 +595,14 @@ function GP_MakeOverallXTick(wrap) {
     //-- If last month, do not draw xtick_sep_month & use x_max to compare
     if (i == yyyymm_end) {
       x = wrap.x_max;
-      if (wrap.overall_type == 'band') //-- For edge
+      if (format == 'band') //-- For edge
         x -= 0.1; 
     }
     else
       xtick_sep_month.push(x);
       
     //-- Compare with previous x, draw xtick_label_month & xticklabel_month only if wide enough
-    if (x-x_prev >= wrap.xticklabel_min_space) {
+    if (x-x_prev >= xticklabel_min_space) {
       xtick_label_month.push(0.5*(x_prev+x));
       mm = i % 12 + 1; //-- Get current month
       xticklabel_month.push(xticklabel_month_list[mm]);
@@ -523,7 +621,7 @@ function GP_MakeOverallXTick(wrap) {
   
   //-- Get x_prev
   x_prev = wrap.x_min;
-  if (wrap.overall_type == 'band') //-- For edge
+  if (format == 'band') //-- For edge
     x_prev += 0.1;
   
   for (i=yyyy_begin; i<yyyy_end+1; i++) {
@@ -533,7 +631,7 @@ function GP_MakeOverallXTick(wrap) {
     //-- Get index
     x = (new Date(iso) - new Date(GP_wrap.iso_ref)); //-- Calculate difference
     x /= 86400000; //-- Convert from ms to day
-    if (wrap.overall_type == 'band') //-- For edge
+    if (format == 'band') //-- For edge
       x += 0.9;
     else
       x += 0.5;
@@ -541,14 +639,14 @@ function GP_MakeOverallXTick(wrap) {
     //-- If last year, do not draw xtick_sep_year & use x_max to compare
     if (i == yyyy_end) {
       x = wrap.x_max;
-      if (wrap.overall_type == 'band') //-- For edge
+      if (format == 'band') //-- For edge
         x -= 0.1; 
     }
     else
       xtick_sep_year.push(x);
       
     //-- Compare with previous x, draw xtick_label_year & xticklabel_year only if wide enough
-    if (x-x_prev >= wrap.xticklabel_min_space) {
+    if (x-x_prev >= xticklabel_min_space) {
       xtick_label_year.push(0.5*(x_prev+x));
       xticklabel_year.push(i);
     }
@@ -566,8 +664,8 @@ function GP_MakeOverallXTick(wrap) {
   wrap.xticklabel_year = xticklabel_year;
 }
 
-function GP_ReplotOverallXTick(wrap) {
-  GP_MakeOverallXTick(wrap);
+function GP_ReplotOverallXTick(wrap, format) {
+  GP_MakeOverallXTick(wrap, format);
   
   //-- Define xscale
   var xscale = d3.scaleLinear()
@@ -634,22 +732,34 @@ function GP_ReplotXLabel(wrap, xlabel_dict) {
 //------------------------------------------------------------------------------
 //-- Function declarations - yaxis
 
-function GP_ReplotCountAsY(wrap) {
+function GP_ReplotCountAsY(wrap, format) {
   //-- Define yscale
   var yscale = GP_MakeLinearY(wrap);
   
-  //-- Define yticklabel format
-  var yticklabel_format;
-  if (wrap.ytick[wrap.ytick.length-1] > 9999) 
-    yticklabel_format = '.2s';
-  else
-    yticklabel_format = 'd';
-  
   //-- Define yaxis
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(-wrap.width) //-- Top & bottom frameline
-    .tickValues(wrap.ytick)
-    .tickFormat(d3.format(yticklabel_format));
+  var yaxis, yticklabel_format;
+  if (format == 'percentage') {
+    if (wrap.ytick[wrap.ytick.length-1] >= 0.1) 
+      yticklabel_format = '.0%';
+    else
+      yticklabel_format = '.1%';
+  
+    yaxis = d3.axisLeft(yscale)
+      .tickSize(-wrap.width) //-- Top & bottom frameline
+      .tickValues(wrap.ytick)
+      .tickFormat(d3.format(yticklabel_format));
+  }
+  else {
+    if (wrap.ytick[wrap.ytick.length-1] > 9999) 
+      yticklabel_format = '.2s';
+    else
+      yticklabel_format = 'd';
+  
+    yaxis = d3.axisLeft(yscale)
+      .tickSize(-wrap.width) //-- Top & bottom frameline
+      .tickValues(wrap.ytick)
+      .tickFormat(d3.format(yticklabel_format));
+  }
   
   //-- Add yaxis
   wrap.svg.select('.yaxis')
@@ -814,6 +924,110 @@ function GP_ReplotFaintSingleBar(wrap) {
     .duration(wrap.trans_delay)
       .attr('y', function (d) {return yscale(d[wrap.col_tag]);})
       .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);});
+}
+
+function GP_PlotLine(wrap) {
+  //-- Define xscale
+  var xscale = GP_MakeBandXForBar(wrap);
+  
+  //-- Define yscale
+  var yscale = GP_MakeLinearY(wrap);
+  
+  //-- Define dummy line
+  var draw_line = d3.line()
+    .defined(d => !isNaN(d.y))//-- Don't show line if NaN
+    .x(function (d) {return xscale(d.x);})
+    .y(yscale(0));
+    
+  //-- Add line
+  var line = wrap.svg.selectAll('.content.line')
+    .data(wrap.formatted_data)
+    .enter();
+    
+  //-- Update line with dummy details
+  line.append('path')
+    .attr('class', 'content line')
+    .attr('d', function (d) {return draw_line(d);})
+    .style('stroke', function (d, i) {return wrap.color_list[i];})
+    .style('stroke-width', '2.5px')
+    .style('fill', 'none');
+    
+  //-- Save to wrapper
+  wrap.line = line;
+}
+
+function GP_ReplotLine(wrap) {
+  //-- Define xscale
+  var xscale = GP_MakeBandXForBar(wrap);
+  
+  //-- Define yscale
+  var yscale = GP_MakeLinearY(wrap);
+  
+  //-- Define line
+  var draw_line = d3.line()
+    .defined(d => !isNaN(d.y))//-- Don't show line if NaN
+    .x(function (d) {return xscale(d.x);})
+    .y(function (d) {return yscale(d.y);});
+  
+  //-- Update line
+  wrap.line.selectAll('.content.line')
+    .transition()
+    .duration(wrap.trans_delay)
+      .attr('d', function (d) {return draw_line(d);});
+}
+
+function GP_PlotDot(wrap) {
+  //-- Define xscale
+  var xscale = GP_MakeBandXForBar(wrap);
+  
+  //-- Define yscale
+  var yscale = GP_MakeLinearY(wrap);
+  
+  //-- Add dot
+  var dot_list = [];
+  var i, dot;
+  for (i=0; i<wrap.nb_col; i++) {
+    dot = wrap.svg.append('g')
+      .style('fill', wrap.color_list[i]);
+    
+    //-- Update dot with dummy details
+    dot.selectAll('.content.dot')
+      .data(wrap.formatted_data[i])
+      .enter()
+      .append('circle')
+      .attr('class', 'content dot')
+        .attr('cx', function (d) {return xscale(d.x);})
+        .attr('cy', yscale(0))
+        .attr('r', 0)
+          .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
+          .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
+          .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
+  
+    dot_list.push(dot);
+  }
+  
+  //-- Save to wrapper
+  wrap.dot_list = dot_list;
+}
+
+function GP_ReplotDot(wrap) {
+  //-- Define xscale
+  var xscale = GP_MakeBandXForBar(wrap);
+  
+  //-- Define yscale
+  var yscale = GP_MakeLinearY(wrap);
+  
+  //-- Update dot
+  var i;
+  for (i=0; i<wrap.nb_col; i++) {
+    wrap.dot_list[i]
+      .selectAll('.content.dot')
+      .data(wrap.formatted_data[i])
+      .transition()
+      .duration(wrap.trans_delay)
+        .attr('cy', function (d) {return yscale(d.y);})
+        .attr('r', function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
+  }
 }
 
 function GP_PlotAvgLine(wrap) {
@@ -995,6 +1209,52 @@ function GP_GetLegendYPos(legend_pos, legend_length, i) {
     return legend_pos.y + i*legend_pos.dy;
   
   return legend_pos.y + (i-Math.floor(legend_length/2))*legend_pos.dy;
+}
+
+function GP_UpdateLegendTitle(wrap) {
+  //-- Update legend title
+  wrap.legend_color.splice(0, 0, '#000000');
+  wrap.legend_value.splice(0, 0, '');
+  wrap.legend_label.splice(0, 0, LS_GetLegendTitle_Page(wrap));
+}
+
+function GP_ReplotLegend(wrap, format, legend_size) {
+  //-- Update legend value
+  wrap.svg.selectAll('.legend.value')
+    .remove()
+    .exit()
+    .data(wrap.legend_value)
+    .enter()
+    .append('text')
+      .attr('class', 'legend value')
+      .attr('x', wrap.legend_pos.x)
+      .attr('y', function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy;})
+      .attr('text-anchor', 'end')
+      .style('fill', function (d, i) {return wrap.legend_color[i];})
+      .text(function (d, i) {if (0 == i) return ''; if (format == 'count') return d; return d3.format('.2%')(d);});
+      
+  //-- Update legend label
+  wrap.svg.selectAll('.legend.label')
+    .remove()
+    .exit()
+    .data(wrap.legend_label)
+    .enter()
+    .append('text')
+      .attr('class', 'legend label')
+      .attr('x', wrap.legend_pos.x+wrap.legend_pos.dx)
+      .attr('y', function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy;})
+      .attr('text-anchor', 'start')
+      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
+      .style('fill', function (d, i) {return wrap.legend_color[i];})
+      .text(function (d) {return d;});
+      
+  if (legend_size != 'normal') {
+    wrap.svg.selectAll('.legend.value')
+        .style('font-size', legend_size);
+    
+    wrap.svg.selectAll('.legend.label')
+        .style('font-size', legend_size);
+  } 
 }
 
 //------------------------------------------------------------------------------

@@ -34,21 +34,21 @@ function IEBC_ResetText() {
 }
 
 function IEBC_FormatData(wrap, data) {
-  //-- Variables for xtick
-  var q = data.length % wrap.xlabel_path;
-  var r = wrap.r_list[q];
-  var xticklabel = [];
-  
   //-- Variables for data
   var col_tag_list = data.columns.slice(1); //-- 0 = date
   var nb_col = col_tag_list.length;
-  var x_list = []; //-- For date
-  var row, col_tag;
+  var i, j, x, y, row;
   
-  //-- Other variables
+  //-- Variables for plot
   var formatted_data = [];
+  var x_list = []; //-- For date
   var value_max = 0;
-  var i, j, x, y, block;
+  var block, col_tag;
+  
+  //-- Variables for xaxis
+  var q = data.length % wrap.xlabel_path;
+  var r = wrap.r_list[q];
+  var xticklabel = [];
   
   //-- Loop over row
   for (i=0; i<data.length; i++) {
@@ -115,37 +115,21 @@ function IEBC_Plot(wrap) {
   GP_PlotBottomLeft(wrap);
   
   //-- Define square color
-  var value_max = Math.max(3, wrap.value_max);
-  var color = d3.scaleSequential()
-    .domain([0, value_max])
+  wrap.value_max = Math.max(3, wrap.value_max);
+  wrap.color = d3.scaleSequential()
+    .domain([0, wrap.value_max])
     .interpolator(t => d3.interpolatePuRd(t));
-  
-  //-- Save to wrapper
-  wrap.value_max = value_max;
-  wrap.color = color;
   
   //-- Plot hot map
   GP_PlotHotMap(wrap);
 }
 
 function IEBC_Replot(wrap) {
-  //-- Define xscale
-  var xscale = GP_MakeBandXForTile(wrap);
+  //-- Replot hot map
+  GP_ReplotHotMap(wrap);
   
-  //-- Define xaxis
-  var xaxis = d3.axisBottom(xscale)
-    .tickSize(0)
-    .tickValues(wrap.xticklabel)
-    .tickFormat(function (d) {return LS_ISODateToMDDate(d);});
-  
-  //-- Update xaxis & adjust position (bottom frameline)
-  wrap.svg.selectAll('.xaxis')
-    .transition()
-    .duration(wrap.trans_delay)
-    .call(xaxis)
-    .selectAll('text')
-      .attr('transform', 'translate(-8,5) rotate(-90)')
-      .style('text-anchor', 'end');
+  //-- Replot xaxis
+  GP_ReplotDateAsTileX(wrap);
   
   //-- Replot yaxis
   GP_ReplotTileY(wrap);
@@ -158,9 +142,6 @@ function IEBC_Replot(wrap) {
     .selectAll('text')
       .style('font-size', '1.15rem');
       
-  //-- Replot hot map
-  GP_ReplotHotMap(wrap);
-  
   //-- Remove old lines
   wrap.svg.selectAll('.legend.line')
     .remove();

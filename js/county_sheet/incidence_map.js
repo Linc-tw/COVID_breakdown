@@ -132,6 +132,10 @@ function IM_FormatData2(wrap, data2) {
     code = data2[i]['code'];
     population = +data2[i]['population'];
     code_dict[tag] = {'code': code, 'population': population/100000};
+    
+    if (tag == 'total')
+      continue;
+    
     label_list_dict['tag'].push(tag);
     label_list_dict['en'].push(data2[i]['label']);
     label_list_dict['fr'].push(data2[i]['label_fr']);
@@ -148,11 +152,12 @@ function IM_FormatData3(wrap, data3) {
   //-- Variables for data
   var col_tag_list = data3.columns.slice(1);
   var col_tag = col_tag_list[wrap.period];
-  var y_list = [];
+  var i, j, x, y;
   
-  //-- Other variables
-  var y_max = 0.0;
-  var i, j, x, y, count, county, code, population, properties;
+  //-- Variables for plot
+  var value_list = [];
+  var value_max = 0.0;
+  var count, county, code, population, properties, legend_value;
   
   //-- Loop over row
   for (i=0; i<data3.length; i++) {
@@ -162,11 +167,21 @@ function IM_FormatData3(wrap, data3) {
     population = wrap.code_dict[x]['population'];
     
     y = count / population;
-    y_max = Math.max(y, y_max);
-    if (wrap.rate == 1)
-      y_list.push(y);
-    else
-      y_list.push(count);
+    
+    if (x == 'total') {
+      if (wrap.rate == 1)
+        legend_value = y;
+      else
+        legend_value = count;
+      continue;
+    }
+    else {
+      value_max = Math.max(y, value_max);
+      if (wrap.rate == 1)
+        value_list.push(y);
+      else
+        value_list.push(count);
+    }
     
     for (j=0; j<wrap.list_length; j++) {
       properties = wrap.formatted_data[j].properties;
@@ -178,8 +193,9 @@ function IM_FormatData3(wrap, data3) {
   
   //-- Save to wrapper
   wrap.col_tag_list = col_tag_list;
-  wrap.y_max = y_max;
-  wrap.y_list = y_list;
+  wrap.value_list = value_list;
+  wrap.value_max = value_max;
+  wrap.legend_value = legend_value;
 }
 
 //-- Tooltip
@@ -226,9 +242,9 @@ function IM_Plot(wrap) {
 }
 
 function IM_Replot(wrap) {
-  //-- Redefine color everytime, because y_max changes
+  //-- Redefine color everytime, because value_max changes
   var color = d3.scaleSequential()
-    .domain([0, Math.max(Math.log10(1+wrap.y_max), 0.3)])
+    .domain([0, Math.max(Math.log10(1+wrap.value_max), 0.3)])
     .interpolator(t => d3.interpolatePuRd(t));
   
   //-- Update map
@@ -238,67 +254,46 @@ function IM_Replot(wrap) {
     .duration(wrap.trans_delay)
       .attr('fill', function (d) {return color(Math.log10(1+d.properties.value));})
     
-  //-- Define legend position
-  var legend_dy = 27;
-  var legend_n = {x: 645, y: 110};
-  var legend_nw = {x: 420, y: 40};
-  var legend_c = {x: 350, y: 170};
-  var legend_s = {x: 290, y: 420};
-  var legend_e = {x: 615, y: 300};
-  var offset = {x: -63, y: 20};
+  //-- Define annotation position
+  var anno_dy = 27;
+  var anno_n = {x: 645, y: 110};
+  var anno_nw = {x: 420, y: 40};
+  var anno_c = {x: 350, y: 170};
+  var anno_s = {x: 290, y: 420};
+  var anno_e = {x: 615, y: 300};
+  var anno_offset = {x: -63, y: 20};
   
-  var legend_pos = [
-      {lab_x: legend_n.x, lab_y: legend_n.y,             sign: -1, zone_x: 585, zone_y: 80}, //-- Keelung
-      {lab_x: legend_n.x, lab_y: legend_n.y+legend_dy,   sign: -1, zone_x: 565, zone_y: 90}, //-- Taipei
-      {lab_x: legend_n.x, lab_y: legend_n.y+2*legend_dy, sign: -1, zone_x: 560, zone_y: 115}, //-- New_Taipei
+  var anno_pos = [
+      {lab_x: anno_n.x, lab_y: anno_n.y,           sign: -1, zone_x: 585, zone_y: 80}, //-- Keelung
+      {lab_x: anno_n.x, lab_y: anno_n.y+anno_dy,   sign: -1, zone_x: 565, zone_y: 90}, //-- Taipei
+      {lab_x: anno_n.x, lab_y: anno_n.y+2*anno_dy, sign: -1, zone_x: 560, zone_y: 115}, //-- New_Taipei
       
-    {lab_x: legend_nw.x, lab_y: legend_nw.y,             sign: 1, zone_x: 510, zone_y: 100}, //-- Taoyuan
-    {lab_x: legend_nw.x, lab_y: legend_nw.y+legend_dy,   sign: 1, zone_x: 490, zone_y: 117}, //-- Hsinchu
-    {lab_x: legend_nw.x, lab_y: legend_nw.y+2*legend_dy, sign: 1, zone_x: 480, zone_y: 130}, //-- Hsinchu_C
-    {lab_x: legend_nw.x, lab_y: legend_nw.y+3*legend_dy, sign: 1, zone_x: 472, zone_y: 155}, //-- Miaoli
+    {lab_x: anno_nw.x, lab_y: anno_nw.y,           sign: 1, zone_x: 510, zone_y: 100}, //-- Taoyuan
+    {lab_x: anno_nw.x, lab_y: anno_nw.y+anno_dy,   sign: 1, zone_x: 490, zone_y: 117}, //-- Hsinchu
+    {lab_x: anno_nw.x, lab_y: anno_nw.y+2*anno_dy, sign: 1, zone_x: 480, zone_y: 130}, //-- Hsinchu_C
+    {lab_x: anno_nw.x, lab_y: anno_nw.y+3*anno_dy, sign: 1, zone_x: 472, zone_y: 155}, //-- Miaoli
     
-    {lab_x: legend_c.x, lab_y: legend_c.y,             sign: 1, zone_x: 440, zone_y: 220}, //-- Taichung
-    {lab_x: legend_c.x, lab_y: legend_c.y+legend_dy,   sign: 1, zone_x: 420, zone_y: 240}, //-- Changhua
-    {lab_x: legend_c.x, lab_y: legend_c.y+2*legend_dy, sign: 1, zone_x: 455, zone_y: 290}, //-- Nantou
-    {lab_x: legend_c.x, lab_y: legend_c.y+3*legend_dy, sign: 1, zone_x: 410, zone_y: 285}, //-- Yunlin
+    {lab_x: anno_c.x, lab_y: anno_c.y,           sign: 1, zone_x: 440, zone_y: 220}, //-- Taichung
+    {lab_x: anno_c.x, lab_y: anno_c.y+anno_dy,   sign: 1, zone_x: 420, zone_y: 240}, //-- Changhua
+    {lab_x: anno_c.x, lab_y: anno_c.y+2*anno_dy, sign: 1, zone_x: 455, zone_y: 290}, //-- Nantou
+    {lab_x: anno_c.x, lab_y: anno_c.y+3*anno_dy, sign: 1, zone_x: 410, zone_y: 285}, //-- Yunlin
     
-    {lab_x: legend_s.x, lab_y: legend_s.y,             sign: 1, zone_x: 387, zone_y: 330}, //-- Chiayi
-    {lab_x: legend_s.x, lab_y: legend_s.y+legend_dy,   sign: 1, zone_x: 413, zone_y: 326}, //-- Chiayi_C
-    {lab_x: legend_s.x, lab_y: legend_s.y+2*legend_dy, sign: 1, zone_x: 385, zone_y: 380}, //-- Tainan
-    {lab_x: legend_s.x, lab_y: legend_s.y+3*legend_dy, sign: 1, zone_x: 395, zone_y: 430}, //-- Kaohsiung
-    {lab_x: legend_s.x, lab_y: legend_s.y+4*legend_dy, sign: 1, zone_x: 430, zone_y: 455}, //-- Pingtung
+    {lab_x: anno_s.x, lab_y: anno_s.y,           sign: 1, zone_x: 387, zone_y: 330}, //-- Chiayi
+    {lab_x: anno_s.x, lab_y: anno_s.y+anno_dy,   sign: 1, zone_x: 413, zone_y: 326}, //-- Chiayi_C
+    {lab_x: anno_s.x, lab_y: anno_s.y+2*anno_dy, sign: 1, zone_x: 385, zone_y: 380}, //-- Tainan
+    {lab_x: anno_s.x, lab_y: anno_s.y+3*anno_dy, sign: 1, zone_x: 395, zone_y: 430}, //-- Kaohsiung
+    {lab_x: anno_s.x, lab_y: anno_s.y+4*anno_dy, sign: 1, zone_x: 430, zone_y: 455}, //-- Pingtung
     
-      {lab_x: legend_e.x, lab_y: legend_e.y,             sign: -1, zone_x: 575, zone_y: 170}, //-- Yilan
-      {lab_x: legend_e.x, lab_y: legend_e.y+legend_dy,   sign: -1, zone_x: 545, zone_y: 270}, //-- Hualien
-      {lab_x: legend_e.x, lab_y: legend_e.y+2*legend_dy, sign: -1, zone_x: 510, zone_y: 400}, //-- Taitung
+      {lab_x: anno_e.x, lab_y: anno_e.y,           sign: -1, zone_x: 575, zone_y: 170}, //-- Yilan
+      {lab_x: anno_e.x, lab_y: anno_e.y+anno_dy,   sign: -1, zone_x: 545, zone_y: 270}, //-- Hualien
+      {lab_x: anno_e.x, lab_y: anno_e.y+2*anno_dy, sign: -1, zone_x: 510, zone_y: 400}, //-- Taitung
       
     {lab_x: 260, lab_y: 310, sign: 1, zone_x: 285, zone_y: 305}, //-- Penghu
     {lab_x: 180, lab_y: 220, sign: 1, zone_x: 175, zone_y: 185}, //-- Kinmen
     {lab_x: 215, lab_y: 90,  sign: 1, zone_x: 180, zone_y: 30}, //-- Matsu
   ];
   
-  //-- Define legend caption
-  var legend_caption;
-  if (wrap.rate == 1) {
-    if (LS_lang == 'zh-tw')
-      legend_caption = ['每十萬人確診率'];
-    else if (LS_lang == 'fr')
-      legend_caption = ["Taux d'incidence", 'par 100k habitants'];
-    else 
-      legend_caption = ['Incidence rate', 'per 100k inhabitants'];
-  }
-  else 
-    if (LS_lang == 'zh-tw')
-      legend_caption = ['確診案例數'];
-    else if (LS_lang == 'fr')
-      legend_caption = ['Nombre des cas confirmés'];
-    else 
-      legend_caption = ['Confirmed case counts'];
-    
-  //-- Update legend caption
-  legend_caption.splice(0, 0, LS_GetLegendTitle_Page(wrap));
-  
-  //-- Update legend value & label
+  //-- Update annotation text
   wrap.svg.selectAll('.content.text')
     .remove()
     .exit()
@@ -307,18 +302,18 @@ function IM_Replot(wrap) {
     .append('text')
       .attr('class', 'content text')
       .attr('id', function (d, i) {return wrap.tag+'_label_'+wrap.code_dict[wrap.label_list_dict.tag[i]]['code'];})
-      .attr('x', function (d, i) {return offset.x+legend_pos[i].lab_x;})
-      .attr('y', function (d, i) {return offset.y+legend_pos[i].lab_y;})
-      .attr('text-anchor', function (d, i) {if (legend_pos[i].sign > 0) return 'end'; return 'start';})
+      .attr('x', function (d, i) {return anno_offset.x+anno_pos[i].lab_x;})
+      .attr('y', function (d, i) {return anno_offset.y+anno_pos[i].lab_y;})
+      .attr('text-anchor', function (d, i) {if (anno_pos[i].sign > 0) return 'end'; return 'start';})
       .attr('dominant-baseline', 'middle')
       .style('fill', '#000000')
-      .text(function (d, i) {if (wrap.rate == 1) return d+' '+wrap.y_list[i].toFixed(1); return d+' '+wrap.y_list[i];});
+      .text(function (d, i) {if (wrap.rate == 1) return d+' '+wrap.value_list[i].toFixed(1); return d+' '+wrap.value_list[i];});
   
-  //-- Remove old lines
-  wrap.svg.selectAll('.legend.line')
+  //-- Remove annotation lines
+  wrap.svg.selectAll('.annotation.line')
     .remove();
     
-  //-- Update new lines
+  //-- Update annotation lines
   var eps = 5;
   var dx = 15;
   var i, row, points;
@@ -326,30 +321,104 @@ function IM_Replot(wrap) {
     if ((i == 19) || (i == 20) || (i == 21))
       continue;
     
-    row = legend_pos[i];
-    points = (offset.x+row.lab_x+row.sign*eps) + ',' + (offset.y+row.lab_y) + ' ' +
-             (offset.x+row.lab_x+row.sign*(eps+dx)) + ',' + (offset.y+row.lab_y) + ' ' +
-             (offset.x+row.zone_x) + ',' + (offset.y+row.zone_y);
+    row = anno_pos[i];
+    points = (anno_offset.x+row.lab_x+row.sign*eps) + ',' + (anno_offset.y+row.lab_y) + ' ' +
+             (anno_offset.x+row.lab_x+row.sign*(eps+dx)) + ',' + (anno_offset.y+row.lab_y) + ' ' +
+             (anno_offset.x+row.zone_x) + ',' + (anno_offset.y+row.zone_y);
     
     wrap.svg.append('polyline')
-      .attr('class', 'legend line')
+      .attr('class', 'annotation line')
       .attr('points', points)
       .attr('fill', 'none')
       .attr('stroke', GP_wrap.gray)
       .attr('stroke-width', 1)
       .attr('opacity', 1);
   }
+      
+  //-- Define top legend caption
+  var legend_caption_top;
+  if (wrap.rate == 1) {
+    if (LS_lang == 'zh-tw')
+      legend_caption_top = ['每十萬人確診率'];
+    else if (LS_lang == 'fr')
+      legend_caption_top = ["Taux d'incidence par 100k habitants"];
+    else 
+      legend_caption_top = ['Incidence rate per 100k inhabitants'];
+  }
+  else 
+    if (LS_lang == 'zh-tw')
+      legend_caption_top = ['確診案例數'];
+    else if (LS_lang == 'fr')
+      legend_caption_top = ['Nombre de cas confirmés'];
+    else 
+      legend_caption_top = ['Confirmed case counts'];
+    
+  //-- Update top legend caption
+  wrap.svg.selectAll('.legend.caption_top')
+    .remove()
+    .exit()
+    .data(legend_caption_top)
+    .enter()
+    .append('text')
+      .attr('class', 'legend caption_top')
+      .attr('x', wrap.tot_width-20)
+      .attr('y', 20)
+      .attr('text-anchor', 'end')
+      .style('fill', '#000000')
+      .style('font-size', '1.2rem')
+      .text(function (d) {return d;});
+  
+  //-- Define legend title
+  var legend_title_list;
+  if (LS_lang == 'zh-tw')
+    legend_title_list = [
+      '0-6天前', '7-13天前', '14-20天前', '21-27天前', '28-34天前', '35-41天前', 
+      '42-48天前', '49-55天前', '56-62天前', '63-69天前', '70-76天前', '77-83天前'
+    ];
+  else if (LS_lang == 'fr')
+    legend_title_list = [
+      '0-6 jours plus tôt', '7-13 jours plus tôt', '14-20 jours plus tôt', '21-27 jours plus tôt', '28-34 jours plus tôt', '35-41 jours plus tôt', 
+      '42-48 jours plus tôt', '49-55 jours plus tôt', '56-62 jours plus tôt', '63-69 jours plus tôt', '70-76 jours plus tôt', '77-83 jours plus tôt'
+    ];
+  else
+    legend_title_list = [
+      '0-6 days ago', '7-13 days ago', '14-20 days ago', '21-27 days ago', '28-34 days ago', '35-41 days ago', 
+      '42-48 days ago', '49-55 days ago', '56-62 days ago', '63-69 days ago', '70-76 days ago', '77-83 days ago'
+    ]; 
+  legend_title_list = [LS_GetLegendTitle_Page(wrap)].concat(legend_title_list);
+  
+  //-- Define bottom legend caption
+  var legend_label;
+  if (wrap.rate == 1) {
+    if (LS_lang == 'zh-tw')
+      legend_label = '全國平均 ';
+    else if (LS_lang == 'fr')
+      legend_label = 'Niveau national ';
+    else 
+      legend_label = 'National level ';
+    legend_label += +wrap.legend_value.toFixed(1);
+  }
+  else {
+    if (LS_lang == 'zh-tw')
+      legend_label = '全國合計 ';
+    else if (LS_lang == 'fr')
+      legend_label = 'Totaux nationaux ';
+    else 
+      legend_label = 'National total ';
+    legend_label += wrap.legend_value;
+  }
+  legend_caption_bottom = [legend_title_list[wrap.period], legend_label];
   
   //-- Update legend caption
   wrap.svg.selectAll('.legend.caption')
     .remove()
     .exit()
-    .data(legend_caption)
+    .data(legend_caption_bottom)
     .enter()
     .append('text')
       .attr('class', 'legend caption')
       .attr('x', wrap.tot_width-20)
-      .attr('y', function (d, i) {return wrap.tot_height-20-(legend_caption.length-1-i)*27;})
+      .attr('y', function (d, i) {return wrap.tot_height-20-(legend_caption_bottom.length-1-i)*27;})
       .attr('text-anchor', 'end')
       .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
       .style('fill', '#000000')

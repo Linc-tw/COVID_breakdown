@@ -6,17 +6,8 @@
 //--   Chieh-An Lin
 
 function CBA_InitFig(wrap) {
-  wrap.tot_width = 800;
-  wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 400;
-  wrap.tot_height_['fr'] = 400;
-  wrap.tot_height_['en'] = 400;
-  wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 90, right: 5, bottom: 75, top: 5};
-  wrap.margin_['fr'] = {left: 90, right: 5, bottom: 75, top: 5};
-  wrap.margin_['en'] = {left: 90, right: 5, bottom: 75, top: 5};
-  
-  GP_InitFig(wrap);
+  //-- No GP_InitFig_Overall because it doesn't change axis
+  GP_InitFig_SimpleBar(wrap);
 }
 
 function CBA_ResetText() {
@@ -112,24 +103,27 @@ function CBA_ResetText() {
 }
 
 function CBA_FormatData(wrap, data) {
-  //-- Variables for xtick
-  var x_key = 'age';
-  var xtick = [];
-  var xticklabel = [];
-  
   //-- Variables for data
   var col_tag_list = data.columns.slice(1);
   var col_tag = col_tag_list[wrap.col_ind];
   var nb_col = col_tag_list.length;
+  var i, j, x, y, row;
+  
+  //-- Variables for plot
+  var x_key = 'age';
   var x_list = []; //-- For age
-  var row;
   
-  //-- Other variables
-  var y_sum = [0, 0]; //-- For legend, 0 (total) & period
+  //-- Variables for xaxis
+  var xtick = [];
+  var xticklabel = [];
+  
+  //-- Variables for yaxis
   var y_max = 4.5;
-  var i, j, x, y;
   
-  //-- Loop over row
+  //-- Variables for legend
+  var y_sum = [0, 0]; //-- 0 (total) & period
+  
+  //-- Main loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
     x = row[x_key];
@@ -137,8 +131,10 @@ function CBA_FormatData(wrap, data) {
     x_list.push(x);
     
     //-- Determine whether to have xtick
-    xtick.push(i);
-    xticklabel.push(i*5);
+    if (!wrap.tag.includes('mini')) {
+      xtick.push(i);
+      xticklabel.push(i*5);
+    }
     
     //-- Update y_sum
     y_sum[0] += +row[col_tag_list[0]];
@@ -155,20 +151,10 @@ function CBA_FormatData(wrap, data) {
   //-- Calculate y_max
   y_max *= wrap.y_max_factor;
   
-  //-- Choose y_path
-  var y_path = wrap.y_path;
-  
   //-- Calculate y_path
-  //-- If string, use it as nb of ticks
-  var log_precision, precision;
-  if (typeof y_path === 'string') {
-    log_precision = Math.floor(Math.log10(y_max)) - 1;
-    precision = Math.pow(10, log_precision);
-    precision = Math.max(1, precision); //-- precision at least 1
-    y_path = y_max / (+y_path + 0.5);
-    y_path = Math.round(y_path / precision) * precision;
-  }
-  //-- Otherwise, do nothing
+  if (wrap.tag.includes('mini'))
+    wrap.nb_yticks = 1;
+  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks, 'count');
   
   //-- Generate yticks
   var ytick = [];
@@ -186,7 +172,7 @@ function CBA_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = y_sum;
+  wrap.legend_value_raw = y_sum;
 }
 
 //-- Tooltip
@@ -269,8 +255,9 @@ function CBA_Plot(wrap) {
   //-- Add ylabel
   GP_PlotYLabel(wrap);
   
-  //-- Make tooltip
-  GP_MakeTooltip(wrap);
+  //-- Add tooltip
+  if (!wrap.tag.includes('mini'))
+    GP_MakeTooltip(wrap);
   
   //-- Define color
   wrap.color = GP_wrap.c_list[2];
@@ -283,11 +270,20 @@ function CBA_Plot(wrap) {
 }
 
 function CBA_Replot(wrap) {
+  //-- Update bar
+  GP_ReplotSingleBar(wrap);
+  
+  //-- Frameline for mini
+  if (wrap.tag.includes('mini')) {
+    GP_PlotTopRight(wrap);
+    return;
+  }
+  
   //-- Replot xaxis
   GP_ReplotBandX(wrap);
   
   //-- Replot yaxis
-  GP_ReplotCountAsY(wrap);
+  GP_ReplotCountAsY(wrap, 'count');
   
   //-- Update xlabel
   var xlabel_dict = {en: 'Age', fr: 'Âge', 'zh-tw': '年齡'};
@@ -297,11 +293,14 @@ function CBA_Replot(wrap) {
   var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
   GP_ReplotYLabel(wrap, ylabel_dict);
   
-  //-- Update bar
-  GP_ReplotSingleBar(wrap);
-  
   //-- Define legend position
-  var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
+  
+  //-- Define legend color
+  wrap.legend_color = [wrap.color, GP_wrap.gray];
+  
+  //-- Define legend value
+  wrap.legend_value = [wrap.legend_value_raw[1], wrap.legend_value_raw[0]];
   
   //-- Define legend label
   var legend_label;
@@ -326,50 +325,20 @@ function CBA_Replot(wrap) {
     else
       legend_label = ['Total', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   }
+  wrap.legend_label = [legend_label[wrap.col_ind], legend_label[0]];
   
-  //-- Update legend color, value, & label
-  var legend_color = [wrap.color, GP_wrap.gray];
-  var legend_value_2 = [wrap.legend_value[1], wrap.legend_value[0]];
-  var legend_label_2 = [legend_label[wrap.col_ind], legend_label[0]];
+  //-- Remove redundancy from legend if col_ind = 0
   if (wrap.col_ind == 0) {
-    legend_color = legend_color.slice(0, 1);
-    legend_value_2 = legend_value_2.slice(0, 1);
-    legend_label_2 = legend_label_2.slice(0, 1);
+    wrap.legend_color = wrap.legend_color.slice(0, 1);
+    wrap.legend_value = wrap.legend_value.slice(0, 1);
+    wrap.legend_label = wrap.legend_label.slice(0, 1);
   }
   
   //-- Update legend title
-  legend_color.splice(0, 0, '#000000');
-  legend_value_2.splice(0, 0, '');
-  legend_label_2.splice(0, 0, LS_GetLegendTitle_Page(wrap));
+  GP_UpdateLegendTitle(wrap);
   
-  //-- Update legend value
-  wrap.svg.selectAll('.legend.value')
-    .remove()
-    .exit()
-    .data(legend_value_2)
-    .enter()
-    .append('text')
-      .attr('class', 'legend value')
-      .attr('x', legend_pos.x)
-      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .attr('text-anchor', 'end')
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;});
-    
-  //-- Update legend label
-  wrap.svg.selectAll('.legend.label')
-    .remove()
-    .exit()
-    .data(legend_label_2)
-    .enter()
-    .append('text')
-      .attr('class', 'legend label')
-      .attr('x', legend_pos.x+legend_pos.dx)
-      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .attr('text-anchor', 'start')
-      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;});
+  //-- Replot legend
+  GP_ReplotLegend(wrap, 'count', 'normal');
 }
 
 //-- Load
@@ -436,7 +405,10 @@ function CBA_Main(wrap) {
   wrap.id = '#' + wrap.tag;
 
   //-- Swap active to current value
-  wrap.col_ind = document.getElementById(wrap.tag + "_period").value;
+  if (wrap.tag.includes('mini'))
+    wrap.col_ind = 0;
+  else
+    wrap.col_ind = document.getElementById(wrap.tag + "_period").value;
   
   //-- Load
   CBA_InitFig(wrap);

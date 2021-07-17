@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.07.14                  ##
+    ##  Version 2021.07.17                  ##
     ##########################################
 
 import os
@@ -197,21 +197,22 @@ AGE_DICT = {
 
 AGE_DICT_2 = {
   'label': {
-    '0-4': {'zh-tw': '0-4歲', 'fr': '0-4 ans'}, 
-    '5-9': {'zh-tw': '5-9歲', 'fr': '5-9 ans'}, 
-    '10-14': {'zh-tw': '10-14歲', 'fr': '10-14 ans'}, 
-    '15-19': {'zh-tw': '15-19歲', 'fr': '15-19 ans'}, 
-    '20-24': {'zh-tw': '20-24歲', 'fr': '20-24 ans'}, 
-    '25-29': {'zh-tw': '25-29歲', 'fr': '25-29 ans'}, 
-    '30-34': {'zh-tw': '30-34歲', 'fr': '30-34 ans'}, 
-    '35-39': {'zh-tw': '35-39歲', 'fr': '35-39 ans'}, 
-    '40-44': {'zh-tw': '40-44歲', 'fr': '40-44 ans'}, 
-    '45-49': {'zh-tw': '45-49歲', 'fr': '45-49 ans'}, 
-    '50-54': {'zh-tw': '50-54歲', 'fr': '50-54 ans'}, 
-    '55-59': {'zh-tw': '55-59歲', 'fr': '55-59 ans'}, 
-    '60-64': {'zh-tw': '60-64歲', 'fr': '60-64 ans'}, 
-    '65-69': {'zh-tw': '65-69歲', 'fr': '65-69 ans'}, 
-    '70+': {'zh-tw': '70+歲', 'fr': '70+'},
+    '0-4': {'zh-tw': '0-4歲', 'fr': '0-4 ans', 'en': '0-4 yo'}, 
+    '5-9': {'zh-tw': '5-9歲', 'fr': '5-9 ans', 'en': '5-9 yo'}, 
+    '10-14': {'zh-tw': '10-14歲', 'fr': '10-14 ans', 'en': '10-14 yo'}, 
+    '15-19': {'zh-tw': '15-19歲', 'fr': '15-19 ans', 'en': '15-19 yo'}, 
+    '20-24': {'zh-tw': '20-24歲', 'fr': '20-24 ans', 'en': '20-24 yo'}, 
+    '25-29': {'zh-tw': '25-29歲', 'fr': '25-29 ans', 'en': '25-29 yo'}, 
+    '30-34': {'zh-tw': '30-34歲', 'fr': '30-34 ans', 'en': '30-34 yo'}, 
+    '35-39': {'zh-tw': '35-39歲', 'fr': '35-39 ans', 'en': '35-39 yo'}, 
+    '40-44': {'zh-tw': '40-44歲', 'fr': '40-44 ans', 'en': '40-44 yo'}, 
+    '45-49': {'zh-tw': '45-49歲', 'fr': '45-49 ans', 'en': '45-49 yo'}, 
+    '50-54': {'zh-tw': '50-54歲', 'fr': '50-54 ans', 'en': '50-54 yo'}, 
+    '55-59': {'zh-tw': '55-59歲', 'fr': '55-59 ans', 'en': '55-59 yo'}, 
+    '60-64': {'zh-tw': '60-64歲', 'fr': '60-64 ans', 'en': '60-64 yo'}, 
+    '65-69': {'zh-tw': '65-69歲', 'fr': '65-69 ans', 'en': '65-69 yo'}, 
+    '70+': {'zh-tw': '70+歲', 'fr': '70+ ans', 'en': '70+ yo'},
+    'total': {'zh-tw': '全國', 'fr': 'National', 'en': 'National'},
   },
   
   '2019': {
@@ -230,6 +231,12 @@ AGE_DICT_2 = {
 }
 
 COUNTY_DICT = {
+  '00000': dict( ## Total
+    tag = 'total', 
+    label = ['National', 'National', '全國'], 
+    population = 23588597,
+  ),
+  
   ## Metropole
   '63000': dict( ## Taipei
     tag = 'Taipei', 
@@ -1251,7 +1258,7 @@ class MainSheet(Template):
     timestamp = dtt.datetime.now().astimezone()
     timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
     
-    population_twn = sum(value['population'] for value in COUNTY_DICT.values())
+    population_twn = COUNTY_DICT['00000']['population']
     
     key = ['n_overall', 'n_latest', 'n_2020', 'n_2021', 'n_empty', 'timestamp', 'population_twn']
     value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_empty, timestamp, population_twn]
@@ -2829,7 +2836,8 @@ class CountySheet(Template):
     nb_cases_list = self.getNbCases()
     
     ## Initialize stock dict
-    case_hist = {county: 0 for county in self.county_key_list}
+    county_key_list = ['total'] + self.county_key_list
+    case_hist = {county: 0 for county in county_key_list}
     stock = [case_hist.copy() for i in range(13)]
     stock_dict = initializeStockDict_general(stock)
     
@@ -2844,23 +2852,30 @@ class CountySheet(Template):
         if ind != ind:
           continue
         
+        stock[0]['total'] += nb_cases
         stock[0][county] += nb_cases
       
         if page == PAGE_LATEST:
           lookback_week = (ind - NB_LOOKBACK_DAYS) // 7 ## ind - NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
           if lookback_week >= -12:
+            stock[-lookback_week]['total'] += nb_cases
             stock[-lookback_week][county] += nb_cases
         else:
           mm = int(report_date[5:7])
+          stock[mm]['total'] += nb_cases
           stock[mm][county] += nb_cases
     
     return stock_dict
   
   def saveCsv_incidenceMap(self):
     stock_dict = self.increment_incidenceMap()
+    county_key_list = ['total'] + self.county_key_list
     
     ## Loop over page
     for page, stock in stock_dict.items():
+      if page == PAGE_LATEST:
+        continue
+      
       if 'latest' == page:
         label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
       else:
@@ -2868,17 +2883,17 @@ class CountySheet(Template):
     
       ## Data for population & label
       inv_dict = {dict_['tag']: code for code, dict_ in COUNTY_DICT.items()}
-      code_list = [inv_dict[county] for county in self.county_key_list]
+      code_list = [inv_dict[county] for county in county_key_list]
       population = [COUNTY_DICT[code]['population'] for code in code_list]
       label_list_en = [COUNTY_DICT[code]['label'][0] for code in code_list]
       label_list_fr = [COUNTY_DICT[code]['label'][1] for code in code_list]
       label_list_zh = [COUNTY_DICT[code]['label'][2] for code in code_list]
       
-      data_c = {'county': self.county_key_list}
+      data_c = {'county': county_key_list}
       data_c.update({label: case_hist.values() for label, case_hist in zip(label_list, stock)})
       data_c = pd.DataFrame(data_c)
       
-      data_p = {'key': self.county_key_list, 'code': code_list, 'population': population, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+      data_p = {'key': county_key_list, 'code': code_list, 'population': population, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
       data_p = pd.DataFrame(data_p)
       
       ## Save
@@ -2894,7 +2909,8 @@ class CountySheet(Template):
     nb_cases_list = self.getNbCases()
     
     ## Initialize stock
-    stock = initializeStock_dailyCounts(self.county_key_list)
+    county_key_list = ['total'] + self.county_key_list
+    stock = initializeStock_dailyCounts(county_key_list)
     
     ## Loop over series
     for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):
@@ -2905,6 +2921,7 @@ class CountySheet(Template):
       
       try:
         stock[county][ind] += nb_cases
+        stock['total'][ind] += nb_cases
       except IndexError:
         pass
     return stock
@@ -2931,12 +2948,13 @@ class CountySheet(Template):
     data_r = pd.DataFrame(stock)
     
     ## Data for population & label
+    county_key_list = ['total'] + self.county_key_list
     county_dict = {dict_['tag']: dict_ for dict_ in COUNTY_DICT.values()}
-    label_list_en = [county_dict[county]['label'][0] for county in self.county_key_list]
-    label_list_fr = [county_dict[county]['label'][1] for county in self.county_key_list]
-    label_list_zh = [county_dict[county]['label'][2] for county in self.county_key_list]
+    label_list_en = [county_dict[county]['label'][0] for county in county_key_list]
+    label_list_fr = [county_dict[county]['label'][1] for county in county_key_list]
+    label_list_zh = [county_dict[county]['label'][2] for county in county_key_list]
       
-    data_l = {'county': self.county_key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+    data_l = {'county': county_key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data_l = pd.DataFrame(data_l)
     
     name = '%sprocessed_data/%s/incidence_evolution_by_county.csv' % (DATA_PATH, PAGE_LATEST)
@@ -2952,7 +2970,7 @@ class CountySheet(Template):
     nb_cases_list = self.getNbCases()
     
     ## Reverse
-    age_key_list = self.age_key_list[::-1]
+    age_key_list = ['total'] + self.age_key_list[::-1]
     
     ## Initialize stock
     stock = initializeStock_dailyCounts(age_key_list)
@@ -2963,6 +2981,7 @@ class CountySheet(Template):
       
       try:
         stock[age][ind] += nb_cases
+        stock['total'][ind] += nb_cases
       except IndexError:
         pass
       
@@ -2975,8 +2994,8 @@ class CountySheet(Template):
     ## Get year & adjust
     year = dtt.datetime.today().isoformat()[:4]
     year = str(int(year) - 1)
-    population_dict = AGE_DICT_2[year].copy()
     population_dict = {age: population * 0.00001 for age, population in AGE_DICT_2[year].items()}
+    population_dict['total'] = COUNTY_DICT['00000']['population'] * 0.00001
     
     ## Minor modif
     value = 0
@@ -3001,13 +3020,13 @@ class CountySheet(Template):
     data_r = pd.DataFrame(stock)
     
     ## Reverse
-    age_key_list = self.age_key_list[::-1]
+    age_key_list = ['total'] + self.age_key_list[::-1]
     
     ## Data for population & label
-    label_list_en = [age+' yo' for age in age_key_list]
+    label_list_en = [AGE_DICT_2['label'][age]['en'] for age in age_key_list]
     label_list_fr = [AGE_DICT_2['label'][age]['fr'] for age in age_key_list]
     label_list_zh = [AGE_DICT_2['label'][age]['zh-tw'] for age in age_key_list]
-      
+    
     data_l = {'age': age_key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data_l = pd.DataFrame(data_l)
     
@@ -3258,7 +3277,6 @@ class VaccinationSheet(Template):
     ppl_vacc_rate_list = self.getPplVaccRate()
     ppl_fully_vacc_rate_list = self.getPplFullyVaccRate()
     
-    print(date_list)
     stock = []
     
     ## Not using cum_vacc_list because it contains more zeros
@@ -3283,8 +3301,23 @@ class VaccinationSheet(Template):
     stock = self.makeStock_vaccinationByDose()
     stock = pd.DataFrame(stock)
     
-    name = '%sprocessed_data/%s/vaccination_by_dose.csv' % (DATA_PATH, PAGE_OVERALL)
-    saveCsv(name, stock)
+    for page in PAGE_LIST:
+      if page == PAGE_2020:
+        continue
+      
+      ## Vaccination trunk
+      if page == PAGE_LATEST:
+        ind = getTodayOrdinal() - ISODateToOrd(ISO_DATE_REF) - 90
+      elif page == PAGE_2021:
+        ind = ISODateToOrd('2021-01-01') - ISODateToOrd(ISO_DATE_REF)
+      elif page == PAGE_OVERALL:
+        ind = ISODateToOrd(ISO_DATE_REF_VACC) - ISODateToOrd(ISO_DATE_REF)
+        
+      ind_arr = stock['index'] >= ind
+      data = stock[ind_arr]
+        
+      name = '%sprocessed_data/%s/vaccination_by_dose.csv' % (DATA_PATH, page)
+      saveCsv(name, data)
     return
   
   def saveCsv(self):
@@ -3312,17 +3345,21 @@ def makeIncidenceRates(main_sheet, border_sheet):
     ## Modify
     stock[key] = sevenDayMovingAverage(value_arr) 
   
-  population_twn = sum(value['population'] for value in COUNTY_DICT.values())
+  population_twn = COUNTY_DICT['00000']['population']
   stock_new = {}
   stock_new['date'] = stock['date']
   
   with warnings.catch_warnings(): ## Avoid division by zero
     warnings.simplefilter('ignore')
     
-    stock_new['arr_incidence'] = stock.pop('new_imported') / stock.pop('new_entries')
-    stock_new['arr_incidence'][ind_entries] = np.nan
+    value_arr = stock['new_imported'] / stock['new_entries']
+    value_arr = np.around(value_arr, decimals=4)
+    value_arr[ind_entries] = np.nan
+    stock_new['arr_incidence'] = value_arr
     
-    stock_new['local_incidence'] = stock.pop('new_local') / float(population_twn) * 1000 ## Rate over thousand
+    value_arr = stock['new_local'] / float(population_twn) * 1000 ## Rate over thousand
+    value_arr = np.around(value_arr, decimals=4)
+    stock_new['local_incidence'] = value_arr
   
   return stock_new
   
@@ -3362,18 +3399,22 @@ def makePositivityAndFatality(main_sheet, status_sheet, test_sheet):
     ## Push back
     stock[key] = sevenDayMovingAverage(value_arr) 
   
+  stock_new = {}
+  stock_new['date'] = stock['date']
+  
   with warnings.catch_warnings(): ## Avoid division by zero
     warnings.simplefilter('ignore')
     
-    stock['positivity'] = stock.pop('new_cases') / stock.pop('new_tests')
-    stock['positivity'][ind_new_tests] = np.nan
+    value_arr = stock['new_cases'] / stock['new_tests']
+    value_arr = np.around(value_arr, decimals=4)
+    value_arr[ind_new_tests] = np.nan
+    stock_new['positivity'] = value_arr
     
-    stock['fatality'] = stock.pop('cum_deaths') / stock.pop('cum_cases')
-    stock['fatality'][ind_cum_cases] = np.nan
-  
-    stock.pop('new_imported')
-    stock.pop('new_local')
-  return stock
+    value_arr = stock['cum_deaths'] / stock['cum_cases']
+    value_arr = np.around(value_arr, decimals=4)
+    value_arr[ind_cum_cases] = np.nan
+    stock_new['fatality'] = value_arr
+  return stock_new
   
 def saveCsv_positivityAndFatality(main_sheet, status_sheet, test_sheet):
   stock = makePositivityAndFatality(main_sheet, status_sheet, test_sheet)
@@ -3386,7 +3427,7 @@ def saveCsv_positivityAndFatality(main_sheet, status_sheet, test_sheet):
     name = '%sprocessed_data/%s/positivity_and_fatality.csv' % (DATA_PATH, page)
     saveCsv(name, data)
   return
-  
+
 ################################################################################
 ## Functions - sandbox
 
@@ -3407,10 +3448,10 @@ def sandbox():
   #timeline_sheet.saveCsv_evtTimeline()
   
   #county_sheet = CountySheet()
-  #county_sheet.saveCsv_localCasePerCounty()
+  #county_sheet.saveCsv_incidenceEvolutionByAge()
   
   vacc_sheet = VaccinationSheet()
-  vacc_sheet.saveCsv()
+  vacc_sheet.saveCsv_vaccinationByDose()
   
   #main_sheet = MainSheet()
   #status_sheet = StatusSheet()

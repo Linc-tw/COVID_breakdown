@@ -28,6 +28,9 @@ Contents
 `latest/`
 - Contains statistics of last 90 days
 
+`overall/`
+- Contains statistics of the entire pandemic
+
 `adminMap_byCounties_offsetIslands_sphe.geojson`
 - Map of Taiwan with its islands rearranged
 - Contain non-ASCII characters
@@ -43,8 +46,6 @@ Contents
 - Column
   - `key`
   - `value`
-
-### From `COVID-19_in_Taiwan_raw_data_timeline.csv`
 
 `criteria_timeline.csv`
 - Row = date

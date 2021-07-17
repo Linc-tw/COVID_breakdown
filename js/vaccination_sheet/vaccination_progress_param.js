@@ -13,15 +13,14 @@ var VP_overall_wrap = {
     '../processed_data/overall/vaccination_progress_administrated.csv',
   ],
 
-  iso_begin: GP_wrap.iso_ref_vacc,
-  xticklabel_min_space: GP_wrap.xticklabel_min_space_vacc,
-  overall_type: 'dot',
+  threshold: 0.2,
   x_max_factor: 1.19,
-  
-  y_max_factor: 1.4,
+  y_max_factor: 1.38,
   y_max_fixed: 0,
   nb_yticks: 4,
-  legend_pos_x: 110,
+  legend_pos_x: 100,
+  legend_pos_y: 46,
+  threshold_pos_x: 250,
   r: 3, //-- Dot radius
   trans_delay: GP_wrap.trans_delay,
 };

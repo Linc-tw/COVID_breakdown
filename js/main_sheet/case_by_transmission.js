@@ -8,6 +8,8 @@
 function CBT_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
     GP_InitFig_Mini(wrap);
+  else if (wrap.tag.includes('overall'))
+    GP_InitFig_Overall(wrap);
   else
     GP_InitFig_Standard(wrap);
 }
@@ -45,39 +47,35 @@ function CBT_ResetText() {
 }
 
 function CBT_FormatData(wrap, data) {
-  //-- Variables for xtick
-  var x_key = 'date';
-  var q, r;
-  if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
-    q = data.length % wrap.xlabel_path;
-    r = wrap.r_list[q];
-  }
-  var xticklabel = [];
-  
   //-- Variables for data
   var col_tag_list = data.columns.slice(1, 5); //-- 0 = date
   var col_tag = col_tag_list[wrap.col_ind];
   var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
-  var x_list = []; //-- For date
-  var row;
+  var i, j, x, y, row;
   
-  //-- Variables for bar
-  var y_sum = []; //-- For legend
+  //-- Variables for plot
+  var x_key = 'date';
+  var x_list = [];
+  var avg;
+  
+  //-- Variables for xaxis
+  var r = GP_GetRForTickPos(wrap, data.length);
+  var xticklabel = [];
+  
+  //-- Variables for yaxis
   var y_max = 4.5;
   
-  //-- Other variables
-  var i, j, x, y, avg;
-
+  //-- Variables for legend
+  var y_sum = []; 
+  for (j=0; j<nb_col; j++) //-- Initialize with 0
+    y_sum.push(0);
+  
   //-- Convert data form
   if (wrap.cumul == 1)
     GP_CumSum(data, col_tag_list);
   
-  //-- Initialize y_sum
-  for (j=0; j<nb_col; j++)
-    y_sum.push(0);
-  
-  //-- Loop over row
+  //-- Main loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
     x = row['date'];
@@ -86,10 +84,8 @@ function CBT_FormatData(wrap, data) {
     x_list.push(x);
     
     //-- Determine where to have xtick
-    if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
-      if (i % wrap.xlabel_path == r)
-        xticklabel.push(x);
-    }
+    if (i % wrap.xlabel_path == r)
+      xticklabel.push(x);
     
     //-- Update y_sum
     for (j=0; j<nb_col; j++) {
@@ -115,17 +111,15 @@ function CBT_FormatData(wrap, data) {
   y_max *= wrap.y_max_factor;
   
   //-- Calculate y_path
-  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks);
+  if (wrap.tag.includes('mini'))
+    wrap.nb_yticks = 1;
+  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks, 'count');
   
   //-- Generate yticks
   var ytick = [];
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
-  //-- Make legend value
-  var legend_value = y_sum.slice(1, nb_col);
-  legend_value.push(y_sum[0]);
-    
   //-- Save to wrapper
   wrap.formatted_data = data;
   wrap.col_tag = col_tag;
@@ -136,40 +130,26 @@ function CBT_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = legend_value;
+  wrap.legend_value_raw = y_sum;
 }
 
 function CBT_FormatData2(wrap, data2) {
   if (!wrap.tag.includes('overall'))
     return;
   
-  var i, timestamp;
-  
   //-- Loop over row
+  var i;
   for (i=0; i<data2.length; i++) {
     //-- Get value of `n_tot`
     if ('timestamp' == data2[i]['key'])
-      timestamp = data2[i]['value'];
+      wrap.timestamp = data2[i]['value'];
   }
   
-  //-- Calculate x_min
-  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
-  x_min -= 0.2; //-- For edge
+  //-- Set iso_begin
+  wrap.iso_begin = GP_wrap.iso_ref;
   
-  //-- Calculate x_max
-  var iso_today = timestamp.slice(0, 10);
-  var x_max = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
-  x_max += 1; //-- For edge
-  
-  //-- Half day correction
-  var hour = timestamp.slice(11, 13);
-  if (+hour < 12)
-    x_max -= 1;
-  
-  //-- Save to wrapper
-  wrap.iso_end = iso_today;
-  wrap.x_min = x_min;
-  wrap.x_max = x_max;
+  //-- Calculate xlim
+  GP_MakeXLim(wrap, 'band');
 }
 
 //-- Tooltip
@@ -250,12 +230,12 @@ function CBT_Replot(wrap) {
   
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap);
+    GP_ReplotOverallXTick(wrap, 'band');
   else
     GP_ReplotDateAsX(wrap);
   
   //-- Replot yaxis
-  GP_ReplotCountAsY(wrap);
+  GP_ReplotCountAsY(wrap, 'count');
   
   //-- Replot ylabel
   var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
@@ -265,52 +245,50 @@ function CBT_Replot(wrap) {
   var legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_[LS_lang]};
   
   //-- Define legend color
-  var legend_color = [];
   var i;
+  wrap.legend_color = [];
   for (i=0; i<wrap.nb_col; i++)
-    legend_color.push(GP_wrap.gray);
+    wrap.legend_color.push(GP_wrap.gray);
   i = (wrap.nb_col + wrap.col_ind - 1) % wrap.nb_col;
-  legend_color[i] = wrap.color;
+  wrap.legend_color[i] = wrap.color;
   
-  //-- Calculate legend value
-  var legend_value = wrap.legend_value.slice();
+  //-- Define legend value
+  wrap.legend_value = wrap.legend_value_raw.slice(1, wrap.nb_col);
+  wrap.legend_value.push(wrap.legend_value_raw[0]); //-- Move last to first
   
   //-- Define legend label
-  var legend_label;
   if (LS_lang == 'zh-tw')
-    legend_label = ['境外移入', '本土', '其他', '合計'];
+    wrap.legend_label = ['境外移入', '本土', '其他', '合計'];
   else if (LS_lang == 'fr')
-    legend_label = ['Importés', 'Locaux', 'Divers', 'Total'];
+    wrap.legend_label = ['Importés', 'Locaux', 'Divers', 'Total'];
   else
-    legend_label = ['Imported', 'Local', 'Others', 'Total'];
+    wrap.legend_label = ['Imported', 'Local', 'Others', 'Total'];
   
   //-- Remove from legend if value = 0
-  for (i=legend_value.length-1; i>=0; i--) {
-    if (0 == legend_value[i]) {
-      legend_color.splice(i, 1);
-      legend_value.splice(i, 1);
-      legend_label.splice(i, 1);
+  for (i=wrap.legend_value.length-1; i>=0; i--) {
+    if (0 == wrap.legend_value[i]) {
+      wrap.legend_color.splice(i, 1);
+      wrap.legend_value.splice(i, 1);
+      wrap.legend_label.splice(i, 1);
     }
   }
   
   //-- Update legend title
-  legend_color.splice(0, 0, '#000000');
-  legend_value.splice(0, 0, '');
-  legend_label.splice(0, 0, LS_GetLegendTitle_Page(wrap));
-  var legend_length = legend_color.length;
+  GP_UpdateLegendTitle(wrap);
+  var legend_length = wrap.legend_color.length;
   
   //-- Update legend value
   wrap.svg.selectAll('.legend.value')
     .remove()
     .exit()
-    .data(legend_value)
+    .data(wrap.legend_value)
     .enter()
     .append('text')
       .attr('class', 'legend value')
       .attr('x', function (d, i) {return GP_GetLegendXPos(legend_pos, legend_length, i);})
       .attr('y', function (d, i) {return GP_GetLegendYPos(legend_pos, legend_length, i);})
       .attr('text-anchor', 'end')
-      .style('fill', function (d, i) {return legend_color[i];})
+      .style('fill', function (d, i) {return wrap.legend_color[i];})
       .style('font-size', '1.2rem')
       .text(function (d) {return d;});
   
@@ -318,7 +296,7 @@ function CBT_Replot(wrap) {
   wrap.svg.selectAll('.legend.label')
     .remove()
     .exit()
-    .data(legend_label)
+    .data(wrap.legend_label)
     .enter()
     .append('text')
       .attr('class', 'legend label')
@@ -326,7 +304,7 @@ function CBT_Replot(wrap) {
       .attr('y', function (d, i) {return GP_GetLegendYPos(legend_pos, legend_length, i);})
       .attr('text-anchor', 'start')
       .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
-      .style('fill', function (d, i) {return legend_color[i];})
+      .style('fill', function (d, i) {return wrap.legend_color[i];})
       .style('font-size', '1.2rem')
       .text(function (d) {return d;});
 }

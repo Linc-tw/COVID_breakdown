@@ -59,7 +59,7 @@ Structure by page
 `vaccination.html`
   - `vaccination_by_brand.js`
   - `vaccination_progress.js` (only overall)
-  - `vaccination_by_dose.js` (TODO latest)
+  - `vaccination_by_dose.js`
   - TODO vaccination by county
 
 `others.html`

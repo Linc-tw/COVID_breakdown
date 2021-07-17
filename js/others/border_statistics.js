@@ -8,6 +8,8 @@
 function BS_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
     GP_InitFig_Mini(wrap);
+  else if (wrap.tag.includes('overall'))
+    GP_InitFig_Overall(wrap);
   else
     GP_InitFig_Standard(wrap);
 }
@@ -39,35 +41,31 @@ function BS_ResetText() {
 }
 
 function BS_FormatData(wrap, data) {
-  //-- Variables for xtick
-  var x_key = 'date';
-  var q, r;
-  if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
-    q = data.length % wrap.xlabel_path;
-    r = wrap.r_list[q];
-  }
-  var xticklabel = [];
-  
   //-- Variables for data
   var col_tag_list = data.columns.slice(1, 4); //-- 0 = date
   var col_tag = col_tag_list[wrap.col_ind];
   var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
-  var x_list = []; //-- For date
-  var row;
+  var i, j, x, y, row;
   
-  //-- Variables for bar
-  var y_last = []; //-- For legend
+  //-- Variables for plot
+  var x_key = 'date';
+  var x_list = [];
+  var avg;
+  
+  //-- Variables for xaxis
+  var r = GP_GetRForTickPos(wrap, data.length);
+  var xticklabel = [];
+  
+  //-- Variables for yaxis
   var y_max = 4.5;
   
-  //-- Other variables
-  var i, j, x, y, avg;
-
-  //-- Initialize y_last
-  for (j=0; j<nb_col; j++)
+  //-- Variables for legend
+  var y_last = [];
+  for (j=0; j<nb_col; j++) //-- Initialize with 0
     y_last.push(0);
   
-  //-- Loop over row
+  //-- Main loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
     x = row['date'];
@@ -76,14 +74,11 @@ function BS_FormatData(wrap, data) {
     x_list.push(x);
     
     //-- Determine where to have xtick
-    if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
-      if (i % wrap.xlabel_path == r)
-        xticklabel.push(x);
-    }
+    if (i % wrap.xlabel_path == r)
+      xticklabel.push(x);
     
     //-- Update y_last
     if (y != '') {
-//     if (+row[col_tag_list[2]] > 0) { //-- If both > 0
       for (j=0; j<nb_col; j++)
         y_last[j] = +row[col_tag_list[j]];
     }
@@ -104,7 +99,9 @@ function BS_FormatData(wrap, data) {
   y_max *= wrap.y_max_factor;
   
   //-- Calculate y_path
-  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks);
+  if (wrap.tag.includes('mini'))
+    wrap.nb_yticks = 1;
+  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks, 'count');
   
   //-- Generate yticks
   var ytick = [];
@@ -128,33 +125,19 @@ function BS_FormatData2(wrap, data2) {
   if (!wrap.tag.includes('overall'))
     return;
   
-  var i, timestamp;
-  
   //-- Loop over row
+  var i;
   for (i=0; i<data2.length; i++) {
     //-- Get value of `n_tot`
     if ('timestamp' == data2[i]['key'])
-      timestamp = data2[i]['value'];
+      wrap.timestamp = data2[i]['value'];
   }
   
-  //-- Calculate x_min
-  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
-  x_min -= 0.2; //-- For edge
+  //-- Set iso_begin
+  wrap.iso_begin = GP_wrap.iso_ref;
   
-  //-- Calculate x_max
-  var iso_today = timestamp.slice(0, 10);
-  var x_max = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
-  x_max += 1; //-- For edge
-  
-  //-- Half day correction
-  var hour = timestamp.slice(11, 13);
-  if (+hour < 12)
-    x_max -= 1;
-  
-  //-- Save to wrapper
-  wrap.iso_end = iso_today;
-  wrap.x_min = x_min;
-  wrap.x_max = x_max;
+  //-- Calculate xlim
+  GP_MakeXLim(wrap, 'band');
 }
 
 //-- Tooltip
@@ -235,81 +218,42 @@ function BS_Replot(wrap) {
   
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap);
+    GP_ReplotOverallXTick(wrap, 'band');
   else
     GP_ReplotDateAsX(wrap);
   
   //-- Replot yaxis
-  GP_ReplotCountAsY(wrap);
+  GP_ReplotCountAsY(wrap, 'count');
   
   //-- Update ylabel
   var ylabel_dict = {en: 'Number of people', fr: 'Nombre de voyageurs', 'zh-tw': '旅客人數'};
   GP_ReplotYLabel(wrap, ylabel_dict);
   
   //-- Define legend position
-  var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   
   //-- Define legend color
-  var legend_color = [];
   var i;
+  wrap.legend_color = [];
   for (i=0; i<wrap.nb_col; i++)
-    legend_color.push(GP_wrap.gray);
-  legend_color[wrap.col_ind] = wrap.color;
+    wrap.legend_color.push(GP_wrap.gray);
+  wrap.legend_color[wrap.col_ind] = wrap.color;
   
-  //-- Calculate legend value
-  var legend_value = wrap.legend_value.slice();
+  //-- No need to update legend value
   
   //-- Define legend label
-  var legend_label;
   if (LS_lang == 'zh-tw')
-    legend_label = ['入境', '出境', '合計'];
+    wrap.legend_label = ['入境', '出境', '合計'];
   else if (LS_lang == 'fr')
-    legend_label = ['Arrivées', 'Départs', 'Totaux'];
+    wrap.legend_label = ['Arrivées', 'Départs', 'Totaux'];
   else
-    legend_label = ['Arrival', 'Departure', 'Total'];
-  
-  //-- Remove from legend if value = 0
-  for (i=legend_value.length-1; i>=0; i--) {
-    if (0 == legend_value[i]) {
-      legend_color.splice(i, 1);
-      legend_value.splice(i, 1);
-      legend_label.splice(i, 1);
-    }
-  }
+    wrap.legend_label = ['Arrival', 'Departure', 'Total'];
   
   //-- Update legend title
-  legend_color.splice(0, 0, '#000000');
-  legend_value.splice(0, 0, '');
-  legend_label.splice(0, 0, LS_GetLegendTitle_Last(wrap));
+  GP_UpdateLegendTitle(wrap);
   
-  //-- Update legend value
-  wrap.svg.selectAll('.legend.value')
-    .remove()
-    .exit()
-    .data(legend_value)
-    .enter()
-    .append('text')
-      .attr('class', 'legend value')
-      .attr('x', legend_pos.x)
-      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .attr('text-anchor', 'end')
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;});
-  
-  //-- Update legend label
-  wrap.svg.selectAll('.legend.label')
-    .remove()
-    .exit()
-    .data(legend_label)
-    .enter()
-    .append('text')
-      .attr('class', 'legend label')
-      .attr('x', legend_pos.x+legend_pos.dx)
-      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .attr('text-anchor', 'start')
-      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
-      .style('fill', function (d, i) {return legend_color[i];})
-      .text(function (d) {return d;});
+  //-- Replot legend
+  GP_ReplotLegend(wrap, 'count', 'normal');
 }
 
 //-- Load

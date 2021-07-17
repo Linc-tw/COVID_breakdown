@@ -29,40 +29,28 @@ function VBD_ResetText() {
 }
 
 function VBD_FormatData(wrap, data) {
-  //-- Variables for xtick
-  var x_key = 'date';
-  var q, r;
-  if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
-    q = data.length % wrap.xlabel_path;
-    r = wrap.r_list[q];
-  }
-  var xticklabel = [];
-  
   //-- Variables for data
   var col_tag_list = data.columns.slice(2); //-- 0 = index, 1 = date
   var nb_col = col_tag_list.length;
-  var x_list = []; //-- For date
-  var row;
+  var i, j, x, y, row;
   
-  //-- Other variables
+  //-- Variables for plot
+  var x_key = 'date';
   var formatted_data = [];
   var y_list_list = [];
-  var y_last_list = [];
-  var y_max = 0;
-  var i, j, x, y, y_list, y_last, block, block2;
+  var y_list, block, block2;
   
-  //-- Loop over row
+  //-- Variables for yaxis
+  var y_max = 0;
+  
+  //-- Variables for legend
+  var y_last_list = [];
+  var y_last;
+  
+  //-- Main loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
-    x = row['date'];
     y_list = [];
-    x_list.push(x);
-    
-    //-- Determine where to have xtick
-    if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
-      if (i % wrap.xlabel_path == r)
-        xticklabel.push(x);
-    }
     
     //-- Loop over column
     for (j=0; j<nb_col; j++) {
@@ -80,7 +68,7 @@ function VBD_FormatData(wrap, data) {
     y_list_list.push(y_list)
   }
   
-  //-- Loop over column
+  //-- Main loop over column
   for (j=0; j<nb_col; j++) {
     col = col_tag_list[j];
     block2 = [];
@@ -117,10 +105,9 @@ function VBD_FormatData(wrap, data) {
   y_max *= wrap.y_max_factor;
   
   //-- Calculate y_path
-  var log_precision = Math.floor(Math.log10(y_max)) - 1;
-  var precision = Math.pow(10, log_precision);
-  var y_path = y_max / (wrap.nb_yticks + 0.5);
-  y_path = Math.round(y_path / precision) * precision;
+  if (wrap.tag.includes('mini'))
+    wrap.nb_yticks = 1;
+  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks, 'percentage');
   
   //-- Generate yticks
   var ytick = [];
@@ -131,39 +118,50 @@ function VBD_FormatData(wrap, data) {
   wrap.formatted_data = formatted_data;
   wrap.col_tag_list = col_tag_list;
   wrap.nb_col = nb_col;
-  wrap.x_list = x_list;
-  wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
   wrap.legend_value = y_last_list;
 }
 
-//-- Not optional
 function VBD_FormatData2(wrap, data2) {
-  var i, timestamp;
+  //-- Not optional
+  
+  var i;
   for (i=0; i<data2.length; i++) {
     if ('timestamp' == data2[i]['key'])
-      timestamp = data2[i]['value'];
+      wrap.timestamp = data2[i]['value'];
   }
   
-  //-- Calculate x_min
-  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
-  x_min -= 0.5; //-- For edge
+  //-- Set iso_begin
+  if (wrap.tag.includes('latest'))
+    wrap.iso_begin = GP_ISODateAddition(wrap.timestamp.slice(0, 10), -90+1);
+  else if (wrap.tag.includes('overall'))
+    wrap.iso_begin = GP_wrap.iso_ref_vacc;
   
-  //-- Calculate x_max
-  var iso_today = timestamp.slice(0, 10);
-  var x_max = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
-  x_max += 0.5; //-- For edge
+  //-- Calculate xlim
+  GP_MakeXLim(wrap, 'area');
   
-  //-- Half day correction
-  var hour = timestamp.slice(11, 13);
-  if (+hour < 12)
-    x_max -= 1;
+  //-- Variables for xaxis
+  var r = GP_GetRForTickPos(wrap, 90);
+  var xticklabel = [];
+  var x_list = [];
+  var x;
+  
+  if (wrap.tag.includes('latest')) {
+    //-- For xtick
+    for (i=0; i<90; i++) {
+      //-- Determine where to have xtick
+      if (i % wrap.xlabel_path == r) {
+        x = GP_ISODateAddition(wrap.iso_begin, i);
+        x_list.push(i+wrap.x_min);
+        xticklabel.push(x);
+      }
+    }
+  }
   
   //-- Save to wrapper
-  wrap.iso_end = iso_today;
-  wrap.x_min = x_min;
-  wrap.x_max = x_max;
+  wrap.x_list = x_list;
+  wrap.xticklabel = xticklabel;
 }
 
 function VBD_Plot(wrap) {
@@ -181,30 +179,11 @@ function VBD_Plot(wrap) {
   var color_list = GP_wrap.c_list.slice(2, 2+wrap.nb_col).reverse();
   
   //-- Define xscale
-  var xscale = d3.scaleLinear()
-    .domain([wrap.x_min, wrap.x_max])
-    .range([0, wrap.width]);
+  var xscale = GP_MakeLinearX(wrap);
   
   //-- Define yscale
   var yscale = GP_MakeLinearY(wrap);
     
-  //-- Define dummy line
-  var draw_line = d3.line()
-    .x(function (d) {return xscale(d.x);})
-    .y(yscale(0));
-    
-  //-- Add line
-  var line = wrap.svg.selectAll('.content.line')
-    .data(wrap.formatted_data)
-    .enter();
-    
-  //-- Update line with dummy details
-  line.append('path')
-    .attr('class', 'content line')
-    .attr('d', function (d) {return draw_line(d);})
-    .style('stroke', function (d, i) {return color_list[i];})
-    .style('fill', 'none');
-      
   //-- Define dummy area
   var draw_area = d3.area()
     .x(function (d) {return xscale(d.x);})
@@ -231,9 +210,7 @@ function VBD_Plot(wrap) {
 
 function VBD_Replot(wrap) {
   //-- Define xscale
-  var xscale = d3.scaleLinear()
-    .domain([wrap.x_min, wrap.x_max])
-    .range([0, wrap.width]);
+  var xscale = GP_MakeLinearX(wrap);
   
   //-- Define yscale
   var yscale = GP_MakeLinearY(wrap);
@@ -259,82 +236,57 @@ function VBD_Replot(wrap) {
   
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap);
-  else
-    GP_ReplotDateAsX(wrap);
+    GP_ReplotOverallXTick(wrap, 'area');
+  else {
+    //-- Define xaxis
+    var xaxis = d3.axisBottom(xscale)
+      .tickSize(10)
+      .tickSizeOuter(0)
+      .tickValues(wrap.x_list)
+      .tickFormat(function (d, i) {return LS_ISODateToMDDate(wrap.xticklabel[i]);});
+    
+    //-- Add xaxis
+    wrap.svg.select('.xaxis')
+      .transition()
+      .duration(wrap.trans_delay)
+      .call(xaxis)
+      .selectAll('text')
+        .attr('transform', 'translate(-20,15) rotate(-90)')
+        .style('text-anchor', 'end');
+        
+    //-- Tick style
+    wrap.svg.selectAll('.xaxis line')
+      .style('stroke-opacity', '0.4');
+  }
   
-  //-- Define yaxis
-  var yaxis = d3.axisLeft(yscale)
-    .tickSize(-wrap.width)
-    .tickValues(wrap.ytick)
-    .tickFormat(d3.format('.0%'));
-  
-  //-- Update yaxis
-  wrap.svg.select('.yaxis')
-    .transition()
-    .duration(wrap.trans_delay)
-    .call(yaxis);
+  //-- Replot yaxis
+  GP_ReplotCountAsY(wrap, 'percentage');
   
   //-- Update ylabel
   var ylabel_dict = {en: 'Proportion of the population', fr: 'Part de la population', 'zh-tw': '佔人口比例'};
   GP_ReplotYLabel(wrap, ylabel_dict);
     
   //-- Define legend position
-  var legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   
   //-- Define legend color
-  var legend_color = wrap.color_list.slice();
+  wrap.legend_color = wrap.color_list.slice();
   
-  //-- Define legend value
-  var legend_value = []
-  var i;
-  for (i=0; i<wrap.legend_value.length; i++) 
-    legend_value.push(d3.format('.2%')(wrap.legend_value[i]));
-      
+  //-- No need to update legend value
+  
   //-- Define legend label
-  var legend_label;
   if (LS_lang == 'zh-tw')
-    legend_label = ['已施打一劑', '已施打兩劑'];
+    wrap.legend_label = ['已施打一劑', '已施打兩劑'];
   else if (LS_lang == 'fr')
-    legend_label = ['1er dose ', '2nd dose'];
+    wrap.legend_label = ['1er dose ', '2nd dose'];
   else
-    legend_label = ['1st dose', '2nd dose'];
+    wrap.legend_label = ['1st dose', '2nd dose'];
   
   //-- Update legend title
-  legend_color.splice(0, 0, '#000000');
-  legend_value.splice(0, 0, '');
-  legend_label.splice(0, 0, LS_GetLegendTitle_Page(wrap));
+  GP_UpdateLegendTitle(wrap);
   
-  //-- Update legend value
-  wrap.svg.selectAll('.legend.value')
-    .remove()
-    .exit()
-    .data(legend_value)
-    .enter()
-    .append('text')
-      .attr('class', 'legend value')
-      .attr('x', legend_pos.x)
-      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .attr('text-anchor', 'end')
-      .style('fill', function (d, i) {return legend_color[i];})
-//       .style('font-size', '1.2rem')
-      .text(function (d) {return d;});
-    
-  //-- Update legend label
-  wrap.svg.selectAll('.legend.label')
-    .remove()
-    .exit()
-    .data(legend_label)
-    .enter()
-    .append('text')
-      .attr('class', 'legend label')
-      .attr('x', legend_pos.x+legend_pos.dx)
-      .attr('y', function (d, i) {return legend_pos.y + i*legend_pos.dy;})
-      .attr('text-anchor', 'start')
-      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
-      .style('fill', function (d, i) {return legend_color[i];})
-//       .style('font-size', '1.2rem')
-      .text(function (d) {return d;});
+  //-- Replot legend
+  GP_ReplotLegend(wrap, 'percentage', 'normal');
 }
 
 //-- Load

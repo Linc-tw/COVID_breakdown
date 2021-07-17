@@ -24,9 +24,6 @@ var TBC_latest_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  xlabel_path: GP_wrap.xlabel_path_latest, 
-  r_list: GP_wrap.r_list_latest, 
-  
   y_max_factor: 1.5, 
   nb_yticks: 4,
   legend_pos_x: 115,
@@ -39,10 +36,6 @@ var TBC_overall_wrap = {
     '../processed_data/overall/test_by_criterion.csv', 
     '../processed_data/key_numbers.csv',
   ],
-
-  iso_begin: GP_wrap.iso_ref,
-  xticklabel_min_space: GP_wrap.xticklabel_min_space,
-  overall_type: 'band',
   
   y_max_factor: 1.1, 
   nb_yticks: 4,
@@ -57,9 +50,6 @@ var TBC_2021_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  xlabel_path: GP_wrap.xlabel_path_2021,
-  r_list: GP_wrap.r_list_2021,
-  
   y_max_factor: 1.2,
   nb_yticks: 4,
   legend_pos_x: 110,
@@ -73,9 +63,6 @@ var TBC_2020_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  xlabel_path: GP_wrap.xlabel_path_2020,
-  r_list: GP_wrap.r_list_2020,
-  
   y_max_factor: 1.2,
   nb_yticks: 4,
   legend_pos_x: 90,
