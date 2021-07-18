@@ -178,7 +178,7 @@ function CBA_FormatData(wrap, data) {
 //-- Tooltip
 function CBA_MouseMove(wrap, d) {
   //-- Get tooltip position
-  var y_alpha = 0.35;
+  var y_alpha = 0.5;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   if (LS_lang == 'fr')

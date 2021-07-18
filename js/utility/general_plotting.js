@@ -8,7 +8,12 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
+//vaccination map => like IM
+//Overall IM
+//Overall CBA
 //Note with "Collapse"
+//Clean processed_data
+//Change plot name
 //Automize README generation
 
 //------------------------------------------------------------------------------

@@ -51,7 +51,7 @@ function PAF_FormatData(wrap, data) {
   var y_last_list = [];
   var y_last;
   
-  //-- Main loop over row
+  //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
     y_list = [];
@@ -84,13 +84,14 @@ function PAF_FormatData(wrap, data) {
     
     //-- Loop over row
     for (i=0; i<data.length; i++) {
-      y = y_list_list[i][j];
+      y_list = y_list_list[i];
+      y = y_list[j];
       
       //-- Make data block; redundant information is for toolpix text
       block = {
         'x': data[i]['date'],
         'y': y,
-        'y_list': y_list_list[i]
+        'y_list': y_list
       };
       
       //-- Update y_last & y_max
@@ -157,7 +158,7 @@ function PAF_MouseMove(wrap, d) {
     return;
     
   //-- Get tooltip position
-  var y_alpha = 0.7;
+  var y_alpha = 0.5;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags

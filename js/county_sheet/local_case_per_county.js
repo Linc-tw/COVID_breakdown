@@ -197,7 +197,7 @@ function LCPC_MouseMove(wrap, d) {
     return;
   
   //-- Get tooltip position
-  var y_alpha = 0.35;
+  var y_alpha = 0.5;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Generate tooltip text
@@ -375,8 +375,8 @@ function LCPC_ButtonListener(wrap) {
   
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
-    col_label = [
-      'Total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+    var col_label = [
+      'total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
     var tag1 = col_label[wrap.col_ind];

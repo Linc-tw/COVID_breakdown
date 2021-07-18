@@ -47,7 +47,7 @@ function VBD_FormatData(wrap, data) {
   var y_last_list = [];
   var y_last;
   
-  //-- Main loop over row
+  //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
     y_list = [];
@@ -176,7 +176,7 @@ function VBD_Plot(wrap) {
   GP_PlotYLabel(wrap);
   
   //-- Define color
-  var color_list = GP_wrap.c_list.slice(2, 2+wrap.nb_col).reverse();
+  wrap.color_list = GP_wrap.c_list.slice(2, 2+wrap.nb_col).reverse();
   
   //-- Define xscale
   var xscale = GP_MakeLinearX(wrap);
@@ -199,12 +199,11 @@ function VBD_Plot(wrap) {
   area.append('path')
     .attr('class', 'content area')
     .attr('d', function (d) {return draw_area(d);})
-    .style('fill', function (d, i) {return color_list[i];})
+    .style('fill', function (d, i) {return wrap.color_list[i];})
       .on('mouseover', function (d) {GP_MouseOver2(wrap, d);})
       .on('mouseleave', function (d) {GP_MouseLeave2(wrap, d);});
     
   //-- Save to wrapper
-  wrap.color_list = color_list;
   wrap.area = area;
 }
 

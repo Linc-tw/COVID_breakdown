@@ -314,7 +314,7 @@ function VBB_ButtonListener(wrap) {
     VBB_Reload(wrap);
   });
 
-  //-- Transmission type
+  //-- Brand
   d3.select(wrap.id +'_brand').on('change', function() {
     wrap.col_ind = this.value;
     VBB_Reload(wrap);
@@ -363,7 +363,7 @@ function VBB_Main(wrap) {
   else {
     wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
     GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
-    wrap.col_ind = document.getElementById(wrap.tag + "_brand").value;
+    wrap.col_ind = document.getElementById(wrap.tag + '_brand').value;
   }
   
   //-- Load

@@ -23,6 +23,8 @@ Structure by raw data
   
 `others/`
   - `border_statistics.js`
+  - `death_counts.js`
+  - `hospitalization_or_isolation.js`
   - `incidence_rates.js`
   - `positivity_and_fatality.js`
   - `status_evolution.js`
@@ -82,17 +84,23 @@ Multiple bar
   
 Single bar
   - `case_by_age.js`
+  - `hospitalization_or_isolation.js`
 
 Faint single bar & avg line
   - `border_statistics.js`
   - `case_by_transmission.js`
+  - `death_counts.js`
   - `local_case_per_county.js`
   - `test_by_criterion.js`
   - `vaccination_by_brand.js`
 
 Line
+  - `incidence_rates.js`
+  - `positivity_and_fatality.js`
   - `vaccination_progress.js`
-  - `various_rates.js`
+
+Area
+  - `vaccination_by_dose.js`
 
 Hot map
   - `incidence_evolution_by_age.js`

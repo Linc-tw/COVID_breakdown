@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.07.17                  ##
+    ##  Version 2021.07.18                  ##
     ##########################################
 
 import os
@@ -212,7 +212,7 @@ AGE_DICT_2 = {
     '60-64': {'zh-tw': '60-64歲', 'fr': '60-64 ans', 'en': '60-64 yo'}, 
     '65-69': {'zh-tw': '65-69歲', 'fr': '65-69 ans', 'en': '65-69 yo'}, 
     '70+': {'zh-tw': '70+歲', 'fr': '70+ ans', 'en': '70+ yo'},
-    'total': {'zh-tw': '全國', 'fr': 'National', 'en': 'National'},
+    'total': {'zh-tw': '全國', 'fr': 'National', 'en': 'Nationalwide'},
   },
   
   '2019': {
@@ -233,7 +233,7 @@ AGE_DICT_2 = {
 COUNTY_DICT = {
   '00000': dict( ## Total
     tag = 'total', 
-    label = ['National', 'National', '全國'], 
+    label = ['Nationalwide', 'National', '全國'], 
     population = 23588597,
   ),
   
@@ -354,6 +354,36 @@ COUNTY_DICT = {
     label = ['Kinmen', 'Kinmen', '金門'],
     population = 127723,
   ), 
+}
+
+COUNTY_DICT_2 = {
+  '基隆市': 'Keelung',
+  '台北市': 'Taipei',
+  '臺北市': 'Taipei',
+  '新北市': 'New_Taipei',
+  '桃園市': 'Taoyuan',
+  '新竹縣': 'Hsinchu',
+  '新竹市': 'Hsinchu_C',
+  '苗栗縣': 'Miaoli',
+  '台中市': 'Taichung',
+  '臺中市': 'Taichung',
+  '彰化縣': 'Changhua',
+  '南投縣': 'Nantou',
+  '雲林縣': 'Yunlin',
+  '嘉義縣': 'Chiayi',
+  '嘉義市': 'Chiayi_C',
+  '台南市': 'Tainan',
+  '臺南市': 'Tainan',
+  '高雄市': 'Kaohsiung',
+  '屏東縣': 'Pingtung',
+  '宜蘭縣': 'Yilan',
+  '花蓮縣': 'Hualien',
+  '台東縣': 'Taitung',
+  '臺東縣': 'Taitung',
+  '澎湖縣': 'Penghu',
+  '金門縣': 'Kinmen',
+  '連江縣': 'Matsu',
+  '空值': 'unknown',
 }
 
 DELIVERY_LIST = [
@@ -598,7 +628,6 @@ class Template:
 ## Classes - main sheet
 
 class MainSheet(Template):
-  
   def __init__(self, verbose=True):
     self.coltag_case = '案例'
     self.coltag_report_date = '新聞稿發布日期'
@@ -2626,13 +2655,6 @@ class CountySheet(Template):
       'Yilan', 'Hualien', 'Taitung', 
       'Penghu', 'Kinmen', 'Matsu', 
     ]
-    self.county_code_list = [
-      '10017', '63000', '65000', '68000', '10004', '10018', '10005', 
-      '66000', '10007', '10008', '10009', 
-      '10010' ,'10020', '67000', '64000', '10013', 
-      '10002', '10015', '10014', 
-      '10016', '09020', '09007', 
-    ]
     self.age_key_list = [
       '0-4', '5-9', '10-14', '15-19', '20-24', '25-29', '30-34', '35-39', 
       '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70+',
@@ -2659,58 +2681,9 @@ class CountySheet(Template):
     county_list = []
     
     for county in self.getCol(self.coltag_county):
-      if county == '基隆市':
-        county_list.append('Keelung')
-      elif county == '台北市':
-        county_list.append('Taipei')
-      elif county == '新北市':
-        county_list.append('New_Taipei')
-      elif county == '桃園市':
-        county_list.append('Taoyuan')
-      elif county == '新竹縣':
-        county_list.append('Hsinchu')
-      elif county == '新竹市':
-        county_list.append('Hsinchu_C')
-      elif county == '苗栗縣':
-        county_list.append('Miaoli')
-        
-      elif county == '台中市':
-        county_list.append('Taichung')
-      elif county == '彰化縣':
-        county_list.append('Changhua')
-      elif county == '南投縣':
-        county_list.append('Nantou')
-      elif county == '雲林縣':
-        county_list.append('Yunlin')
-      
-      elif county == '嘉義縣':
-        county_list.append('Chiayi')
-      elif county == '嘉義市':
-        county_list.append('Chiayi_C')
-      elif county == '台南市':
-        county_list.append('Tainan')
-      elif county == '高雄市':
-        county_list.append('Kaohsiung')
-      elif county == '屏東縣':
-        county_list.append('Pingtung')
-        
-      elif county == '宜蘭縣':
-        county_list.append('Yilan')
-      elif county == '花蓮縣':
-        county_list.append('Hualien')
-      elif county == '台東縣':
-        county_list.append('Taitung')
-        
-      elif county == '澎湖縣':
-        county_list.append('Penghu')
-      elif county == '金門縣':
-        county_list.append('Kinmen')
-      elif county == '連江縣':
-        county_list.append('Matsu')
-        
-      elif county == '空值':
-        county_list.append('unknown')
-      else:
+      try:
+        county_list.append(COUNTY_DICT_2[county])
+      except KeyError:
         print('County, %s' % county)
         county_list.append('unknown')
     
@@ -2817,7 +2790,7 @@ class CountySheet(Template):
     ## Loop over page
     for page, stock in stock_dict.items():
       if 'latest' == page:
-        label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
+        label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_-8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
       else:
         label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
       
@@ -3300,18 +3273,18 @@ class VaccinationSheet(Template):
   def saveCsv_vaccinationByDose(self):
     stock = self.makeStock_vaccinationByDose()
     stock = pd.DataFrame(stock)
+    ord_ref = ISODateToOrd(ISO_DATE_REF)
     
     for page in PAGE_LIST:
       if page == PAGE_2020:
         continue
       
-      ## Vaccination trunk
       if page == PAGE_LATEST:
-        ind = getTodayOrdinal() - ISODateToOrd(ISO_DATE_REF) - 90
+        ind = getTodayOrdinal() - ord_ref - 90
       elif page == PAGE_2021:
-        ind = ISODateToOrd('2021-01-01') - ISODateToOrd(ISO_DATE_REF)
+        ind = ISODateToOrd('2021-01-01') - ord_ref
       elif page == PAGE_OVERALL:
-        ind = ISODateToOrd(ISO_DATE_REF_VACC) - ISODateToOrd(ISO_DATE_REF)
+        ind = ISODateToOrd(ISO_DATE_REF_VACC) - ord_ref
         
       ind_arr = stock['index'] >= ind
       data = stock[ind_arr]
@@ -3324,6 +3297,148 @@ class VaccinationSheet(Template):
     self.saveCsv_vaccinationByBrand()
     self.saveCsv_vaccinationProgress()
     self.saveCsv_vaccinationByDose()
+    return
+  
+################################################################################
+## Classes - Vaccination
+
+class VaccinationCountySheet(Template):
+  
+  def __init__(self, verbose=True):
+    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.json' % DATA_PATH
+    data = loadJson(name, verbose=verbose)
+    #https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_city_can2_c2&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYyNjU1MDY4MQ==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=date&d[]=NO&c[]=a02&t[]=varchar&d[]=NO&c[]=a03&t[]=int&d[]=NO&c[]=a04&t[]=int&d[]=YES&c[]=a05&t[]=int&d[]=YES&c[]=a06&t[]=decimal&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=int&d[]=NO&c[]=a09&t[]=decimal&d[]=NO&c[]=a10&t[]=int&d[]=NO&c[]=a11&t[]=int&d[]=NO&c[]=a12&t[]=decimal&d[]=NO&c[]=a13&t[]=int&d[]=NO&c[]=a14&t[]=int&d[]=NO&c[]=a15&t[]=decimal&d[]=NO&c[]=a16&t[]=int&d[]=NO&c[]=a17&t[]=int&d[]=NO&c[]=a18&t[]=decimal&d[]=NO&c[]=a19&t[]=int&d[]=NO&c[]=a20&t[]=int&d[]=NO&c[]=a21&t[]=int&d[]=NO
+  
+    self.key_row_id = 'DT_RowId'
+    self.key_id = 'id'
+    self.key_report_date = 'a01'
+    self.key_county = 'a02'
+    self.key_population = 'a03'
+    
+    self.key_new_vacc = 'a04'
+    self.key_cum_vacc = 'a05'
+    self.key_vacc_rate = 'a06'
+    self.key_cum_supplies = 'a07'
+    self.key_remaining_doses = 'a08'
+    self.key_remaining_ratio = 'a09'
+    
+    self.key_new_AZ = 'a10'
+    self.key_cum_AZ = 'a11'
+    self.key_AZ_rate = 'a12'
+    self.key_AZ_supplies = 'a13'
+    self.key_remaining_AZ = 'a14'
+    self.key_AZ_remaining_ratio = 'a15'
+    
+    self.key_new_Moderna = 'a16'
+    self.key_cum_Moderna = 'a17'
+    self.key_Moderna_rate = 'a18'
+    self.key_Moderna_supplies = 'a19'
+    self.key_remaining_Moderna = 'a20'
+    self.key_Moderna_remaining_ratio = 'a21'
+    
+    self.data = data
+    self.processed_data = {}
+    self.process()
+    self.county_key_list = [
+      'Keelung', 'Taipei', 'New_Taipei', 'Taoyuan', 'Hsinchu', 'Hsinchu_C', 'Miaoli', 
+      'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Chiayi' ,'Chiayi_C', 'Tainan', 'Kaohsiung', 'Pingtung', 
+      'Yilan', 'Hualien', 'Taitung', 
+      'Penghu', 'Kinmen', 'Matsu', 
+    ]
+    
+    if verbose:
+      print('N_total = %d' % len(self.processed_data))
+    return
+  
+  def process(self):
+    for row in self.data['data']:
+      report_date = row[self.key_report_date]
+      county = row[self.key_county]
+      
+      try:
+        county = COUNTY_DICT_2[county]
+      except KeyError:
+        print('County label, %s' % county)
+        county = 'unknown'
+      
+      try:
+        self.processed_data[report_date][county] = row
+      except KeyError:
+        self.processed_data[report_date] = {county: row}
+    
+    self.processed_data = dict(sorted(self.processed_data.items()))
+    return
+    
+  def getReportDate(self):
+    return list(self.processed_data.keys())
+  
+  def getCumVacc(self, county):
+    cum_vacc_list = []
+    
+    for county_dict in self.processed_data.values():
+      if 'total' == county:
+        value_list = [int(row[self.key_cum_vacc]) for row in county_dict.values()]
+        cum_vacc_list.append(sum(value_list))
+        
+      else:
+        row = county_dict[county]
+        cum_vacc_list.append(int(row[self.key_cum_vacc]))
+        
+    return cum_vacc_list
+    
+  def getCumAZ(self, county):
+    cum_az_list = []
+    
+    for county_dict in self.processed_data.values():
+      if 'total' == county:
+        value_list = [int(row[self.key_cum_AZ]) for row in county_dict.values()]
+        cum_az_list.append(sum(value_list))
+        
+      else:
+        row = county_dict[county]
+        cum_az_list.append(int(row[self.key_cum_AZ]))
+        
+    return cum_az_list
+    
+  def getCumModerna(self, county):
+    cum_moderna_list = []
+    
+    for county_dict in self.processed_data.values():
+      if 'total' == county:
+        value_list = [int(row[self.key_cum_Moderna]) for row in county_dict.values()]
+        cum_moderna_list.append(sum(value_list))
+        
+      else:
+        row = county_dict[county]
+        cum_moderna_list.append(int(row[self.key_cum_Moderna]))
+        
+    return cum_moderna_list
+    
+  def saveCsv_vaccinationByCounty(self):
+    county_key_list = ['total'] + self.county_key_list
+    pop_dict = {value_dict['tag']: value_dict['population'] for value_dict in COUNTY_DICT.values()}
+    
+    date = self.getReportDate()[-1]
+    key_list = ['latest_date']
+    value_list = [date]
+    
+    ## Make stock
+    for county in county_key_list:
+      cum_vacc = self.getCumVacc(county)[-1]
+      value = float(cum_vacc) / float(pop_dict[county])
+      key_list.append(county)
+      value_list.append('%.4f' % value)
+      
+    stock = {'key': key_list, 'value': value_list}
+    data = pd.DataFrame(stock)
+      
+    name = '%sprocessed_data/%s/vaccination_by_county.csv' % (DATA_PATH, PAGE_LATEST)
+    saveCsv(name, data)
+    return
+
+  def saveCsv(self):
+    self.saveCsv_vaccinationByCounty()
     return
   
 ################################################################################
@@ -3450,8 +3565,11 @@ def sandbox():
   #county_sheet = CountySheet()
   #county_sheet.saveCsv_incidenceEvolutionByAge()
   
-  vacc_sheet = VaccinationSheet()
-  vacc_sheet.saveCsv_vaccinationByDose()
+  #vacc_sheet = VaccinationSheet()
+  #vacc_sheet.saveCsv_vaccinationByDose()
+  
+  vacc_county_sheet = VaccinationCountySheet()
+  vacc_county_sheet.saveCsv_vaccinationByCounty()
   
   #main_sheet = MainSheet()
   #status_sheet = StatusSheet()
@@ -3492,6 +3610,10 @@ def saveCsv_all():
   print()
   vacc_sheet = VaccinationSheet()
   vacc_sheet.saveCsv()
+  
+  #print()
+  #vacc_county_sheet = VaccinationCountySheet()
+  #vacc_county_sheet.saveCsv_vaccinationByCounty()
   
   print()
   saveCsv_incidenceRates(main_sheet, border_sheet)
