@@ -16,7 +16,7 @@ function CBT_InitFig(wrap) {
 
 function CBT_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr("case_by_transmission_title", "各感染源之每日確診人數");
+    LS_AddStr("case_by_transmission_title", "各感染源確診人數");
     LS_AddStr("case_by_transmission_button_daily", "逐日");
     LS_AddStr("case_by_transmission_button_cumul", "累計");
     LS_AddStr("case_by_transmission_button_total", "合計");
@@ -26,7 +26,7 @@ function CBT_ResetText() {
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr("case_by_transmission_title", "Cas confirmés par moyen de transmission");
+    LS_AddStr("case_by_transmission_title", "Nombre de cas confirmés");
     LS_AddStr("case_by_transmission_button_daily", "Quotidiens");
     LS_AddStr("case_by_transmission_button_cumul", "Cumulés");
     LS_AddStr("case_by_transmission_button_total", "Totaux");
@@ -36,7 +36,7 @@ function CBT_ResetText() {
   }
   
   else { //-- En
-    LS_AddStr("case_by_transmission_title", "Confirmed Cases by Transmission Type");
+    LS_AddStr("case_by_transmission_title", "Confirmed Case Counts");
     LS_AddStr("case_by_transmission_button_daily", "Daily");
     LS_AddStr("case_by_transmission_button_cumul", "Cumulative");
     LS_AddStr("case_by_transmission_button_total", "Total");
@@ -238,8 +238,7 @@ function CBT_Replot(wrap) {
   GP_ReplotCountAsY(wrap, 'count');
   
   //-- Replot ylabel
-  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
-  GP_ReplotYLabel(wrap, ylabel_dict);
+  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_case);
   
   //-- Define legend position
   var legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_[LS_lang]};

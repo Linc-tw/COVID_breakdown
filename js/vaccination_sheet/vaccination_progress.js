@@ -146,7 +146,7 @@ function VP_FormatData2(wrap, data) {
   var formatted_data = [block];
   
   //-- Get today's value as legend value
-  var legend_value = [y];
+  var legend_value_raw = [y];
   
   //-- Continue loop over row
   block = [{x: x, y: y}];
@@ -184,7 +184,7 @@ function VP_FormatData2(wrap, data) {
   wrap.x_list = x_list;
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
-  wrap.legend_value = legend_value;
+  wrap.legend_value_raw = legend_value_raw;
 }
 
 //-- Injection
@@ -252,7 +252,7 @@ function VP_FormatData3(wrap, data) {
     ytick.push(i)
   
   //-- Get latest value as legend value
-  wrap.legend_value.push(y);
+  wrap.legend_value_raw.push(y);
   
   //-- Save to wrapper
   wrap.y_max = y_max;
@@ -511,16 +511,18 @@ function VP_Replot(wrap) {
   
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap, 'count');
-    
-  //-- Update ylabel
-  var ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '疫苗劑數'};
-  GP_ReplotYLabel(wrap, ylabel_dict);
+  
+  //-- Replot ylabel
+  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_dose);
   
   //-- Define legend position
   wrap.legend_pos = {x: wrap.legend_pos_x, y: wrap.legend_pos_y, dx: 10, dy: 27};
   
   //-- Define legend color
   wrap.legend_color = wrap.color_list.slice();
+  
+  //-- Define legend value
+  wrap.legend_value = wrap.legend_value_raw.slice();
   
   //-- Define legend label
   wrap.legend_label = [];

@@ -16,8 +16,7 @@ function VBB_InitFig(wrap) {
 
 function VBB_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('vaccination_by_brand_title', '疫苗接種');
-    LS_AddStr('vaccination_by_brand_text', '資料不全');
+    LS_AddStr('vaccination_by_brand_title', '各廠牌疫苗接種數');
     LS_AddStr('vaccination_by_brand_button_daily', '逐日');
     LS_AddStr('vaccination_by_brand_button_cumul', '累計');
     LS_AddStr('vaccination_by_brand_button_total', '合計');
@@ -27,7 +26,6 @@ function VBB_ResetText() {
   
   else if (LS_lang == 'fr') {
     LS_AddStr('vaccination_by_brand_title', 'Vaccins administrés par marque');
-    LS_AddStr('vaccination_by_brand_text', 'Données incomplètes');
     LS_AddStr('vaccination_by_brand_button_daily', 'Quotidiens');
     LS_AddStr('vaccination_by_brand_button_cumul', 'Cumulés');
     LS_AddStr('vaccination_by_brand_button_total', 'Totaux');
@@ -37,7 +35,6 @@ function VBB_ResetText() {
   
   else { //-- En
     LS_AddStr('vaccination_by_brand_title', 'Administrated Vaccines by Brand');
-    LS_AddStr('vaccination_by_brand_text', 'Incomplete data');
     LS_AddStr('vaccination_by_brand_button_daily', 'Daily');
     LS_AddStr('vaccination_by_brand_button_cumul', 'Cumulative');
     LS_AddStr('vaccination_by_brand_button_total', 'Total');
@@ -127,8 +124,8 @@ function VBB_FormatData(wrap, data) {
     ytick.push(i)
   
   //-- Make legend value
-  var legend_value = y_sum.slice(1, nb_col);
-  legend_value.push(y_sum[0]);
+  var legend_value_raw = y_sum.slice(1, nb_col);
+  legend_value_raw.push(y_sum[0]);
     
   //-- Save to wrapper
   wrap.formatted_data = data;
@@ -140,7 +137,7 @@ function VBB_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = legend_value;
+  wrap.legend_value_raw = legend_value_raw;
 }
 
 function VBB_FormatData2(wrap, data2) {
@@ -246,9 +243,8 @@ function VBB_Replot(wrap) {
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap, 'count');
   
-  //-- Update ylabel
-  var ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '施打劑數'};
-  GP_ReplotYLabel(wrap, ylabel_dict);
+  //-- Replot ylabel
+  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_dose);
   
   //-- Define legend position
   wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -261,7 +257,8 @@ function VBB_Replot(wrap) {
   i = (wrap.nb_col + wrap.col_ind - 1) % wrap.nb_col;
   wrap.legend_color[i] = wrap.color;
   
-  //-- No need to update legend value
+  //-- Define legend value
+  wrap.legend_value = wrap.legend_value_raw.slice();
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')

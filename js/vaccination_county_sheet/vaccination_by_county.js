@@ -158,7 +158,7 @@ function VBC_FormatData(wrap, data) {
   wrap.x_key = x_key;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = y_last;
+  wrap.legend_value_raw = y_last;
 }
 
 function VBC_FormatData2(wrap, data2) {
@@ -339,9 +339,8 @@ function VBC_Replot(wrap) {
   
   return;
   
-  //-- Update ylabel
-  var ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '施打劑數'};
-  GP_ReplotYLabel(wrap, ylabel_dict);
+  //-- Replot ylabel
+  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_dose);
   
   //-- Define legend position
   wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -354,7 +353,8 @@ function VBC_Replot(wrap) {
   i = (wrap.nb_col + wrap.col_ind - 1) % wrap.nb_col;
   wrap.legend_color[i] = wrap.color;
   
-  //-- No need to update legend value
+  //-- Define legend value
+  wrap.legend_value = wrap.legend_value_raw.slice();
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')

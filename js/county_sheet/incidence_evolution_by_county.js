@@ -21,7 +21,7 @@ function IEBC_InitFig(wrap) {
 
 function IEBC_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('incidence_evolution_by_county_title', '各縣市確診率變化');
+    LS_AddStr('incidence_evolution_by_county_title', '各縣市盛行率變化');
   }
   
   else if (LS_lang == 'fr') {

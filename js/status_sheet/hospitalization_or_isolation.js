@@ -1,11 +1,11 @@
 
 //-- Filename:
-//--   status_evolution.js
+//--   hospitalization_or_isolation.js
 //--
 //-- Author:
 //--   Chieh-An Lin
 
-function SE_InitFig(wrap) {
+function HOI_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
     GP_InitFig_Mini(wrap);
   else if (wrap.tag.includes('overall'))
@@ -14,89 +14,62 @@ function SE_InitFig(wrap) {
     GP_InitFig_Standard(wrap);
 }
 
-function SE_ResetText() {
+function HOI_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr("status_evolution_title", "疫情變化");
+    LS_AddStr('hospitalization_or_isolation_title', '住院或確診隔離人數');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr("status_evolution_title", "Évolution de la situation");
+    LS_AddStr('hospitalization_or_isolation_title', "Nombre d'hospitalisation ou de cas confirmés en isolation");
   }
   
   else { //-- En
-    LS_AddStr("status_evolution_title", "Status Evolution");
+    LS_AddStr('hospitalization_or_isolation_title', 'Hospitalization or Confirmed Cases in Isolation');
   }
 }
 
-function SE_FormatData(wrap, data) {
+function HOI_FormatData(wrap, data) {
   //-- Variables for data
   var col_tag_list = data.columns.slice(1); //-- 0 = date
+  var col_tag = col_tag_list[0];
+  var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
   var i, j, x, y, row;
   
   //-- Variables for plot
-  var formatted_data = [];
-  var x_list = [];
-  var h, h_list, block;
+  var x_key = 'date';
+  var x_list = []; //-- For age
   
   //-- Variables for xaxis
   var r = GP_GetRForTickPos(wrap, data.length);
+  var xtick = [];
   var xticklabel = [];
   
   //-- Variables for yaxis
   var y_max = 4.5;
   
   //-- Variables for legend
-  var y_last = [];
-  for (j=0; j<nb_col; j++) //-- Initialize with 0
-    y_last.push(0);
+  var y_sum = 0; 
   
   //-- Main loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
-    h_list = [];
-    x = row['date'];
-    y = 0;
+    x = row[x_key];
+    y = row[col_tag];
     x_list.push(x);
     
-    //-- Determine where to have xtick
-    if (i % wrap.xlabel_path == r)
+    //-- Determine whether to have xtick
+    if (i % wrap.xlabel_path == r) {
+      xtick.push(i)
       xticklabel.push(x);
-    
-    //-- Loop over column
-    for (j=0; j<nb_col; j++) {
-      h = row[col_tag_list[j]];
-      h_list.push(+h);
-      
-      //-- Update y_last
-      if (h != '') {
-        y_last[j] = +h;
-      }
     }
     
-    //-- Loop over column again (reversed order)
-    for (j=nb_col-1; j>=0; j--) {
-      //-- Current value
-      h = h_list[j];
-      
-      //-- Make data block
-      block = {
-        'x': x,
-        'y0': y,
-        'y1': y+h,
-        'h_list': h_list.slice(),
-        'col_ind': j
-      };
-      
-      //-- Update total height
-      y += h;
-      
-      //-- Stock
-      formatted_data.push(block);
-    }
+    //-- Update y_last
+    if (y != '')
+      y_last = +y;
     
     //-- Update y_max
-    y_max = Math.max(y_max, y);
+    y_max = Math.max(y_max, +y);
   }
   
   //-- Calculate y_max
@@ -109,22 +82,44 @@ function SE_FormatData(wrap, data) {
   
   //-- Generate yticks
   var ytick = [];
-  for (i=0; i<y_max; i+=y_path) 
+  for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
   //-- Save to wrapper
-  wrap.formatted_data = formatted_data;
+  wrap.formatted_data = data;
   wrap.col_tag_list = col_tag_list;
+  wrap.col_tag = col_tag;
   wrap.nb_col = nb_col;
+  wrap.x_key = x_key;
   wrap.x_list = x_list;
+  wrap.xtick = xtick;
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value_raw = y_last;
+  wrap.legend_value_raw = [y_last];
+}
+
+function HOI_FormatData2(wrap, data2) {
+  if (!wrap.tag.includes('overall'))
+    return;
+  
+  //-- Loop over row
+  var i;
+  for (i=0; i<data2.length; i++) {
+    //-- Get value of `n_tot`
+    if ('timestamp' == data2[i]['key'])
+      wrap.timestamp = data2[i]['value'];
+  }
+  
+  //-- Set iso_begin
+  wrap.iso_begin = GP_wrap.iso_ref;
+  
+  //-- Calculate xlim
+  GP_MakeXLim(wrap, 'band');
 }
 
 //-- Tooltip
-function SE_MouseMove(wrap, d) {
+function HOI_MouseMove(wrap, d) {
   if (wrap.tag.includes('mini'))
     return;
     
@@ -134,30 +129,15 @@ function SE_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw')
-    col_label_list = ['解隔離', '隔離中', '死亡']
+    col_label = '住院人數';
   else if (LS_lang == 'fr')
-    col_label_list = ['Rétablis', 'Hospitalisés', 'Décédés']
+    col_label = 'Hospitalisés';
   else
-    col_label_list = ['Discharged', 'Hospitalized', 'Deaths']
+    col_label = 'Hospitalized';
   
   //-- Define tooltip texts
-  var tooltip_text = d.x;
-  var sum = 0;
-  var i;
-  
-  for (i=0; i<wrap.nb_col; i++) {
-    tooltip_text += "<br>" + col_label_list[i] + " = " + d.h_list[i];
-    sum += d.h_list[i];
-  }
-  
-  //-- Add text for sum
-  if (LS_lang == 'zh-tw')
-    tooltip_text += "<br>合計 = ";
-  else if (LS_lang == 'fr')
-    tooltip_text += "<br>Total = ";
-  else
-    tooltip_text += "<br>Total = ";
-  tooltip_text += sum;
+  var tooltip_text = d.date;
+  tooltip_text += '<br>' + col_label + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag]);
   
   //-- Generate tooltip
   wrap.tooltip
@@ -166,7 +146,7 @@ function SE_MouseMove(wrap, d) {
     .style("top", new_pos[1] + "px")
 }
 
-function SE_Plot(wrap) {
+function HOI_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
@@ -177,23 +157,23 @@ function SE_Plot(wrap) {
   //-- Add ylabel
   GP_PlotYLabel(wrap);
   
-  //-- Add tooltip
+  //-- Make tooltip
   if (!wrap.tag.includes('mini'))
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color_list = GP_wrap.c_list.slice(0, wrap.nb_col);
+  wrap.color = GP_wrap.c_list[3];
   
   //-- Define mouse-move
-  wrap.mouse_move = SE_MouseMove;
+  wrap.mouse_move = HOI_MouseMove;
   
   //-- Plot bar
-  GP_PlotMultipleBar(wrap);
+  GP_PlotSingleBar(wrap);
 }
 
-function SE_Replot(wrap) {
-  //-- Replot bar
-  GP_ReplotMultipleBar(wrap);
+function HOI_Replot(wrap) {
+  //-- Update bar
+  GP_ReplotSingleBar(wrap);
   
   //-- Frameline for mini
   if (wrap.tag.includes('mini')) {
@@ -211,53 +191,61 @@ function SE_Replot(wrap) {
   GP_ReplotCountAsY(wrap, 'count');
   
   //-- Replot ylabel
-  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
-  GP_ReplotYLabel(wrap, ylabel_dict);
-  
-  //-- Define legend position
-  wrap.legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27};
+  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_case);
   
   //-- Define legend color
-  wrap.legend_color = wrap.color_list.slice();
-  wrap.legend_color.push('#000000');
+  wrap.legend_color = [wrap.color];
+  
+  //-- Define legend position
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   
   //-- Define legend value
   wrap.legend_value = wrap.legend_value_raw.slice();
-  var sum = wrap.legend_value.reduce((a, b) => a + b, 0);
-  wrap.legend_value.push(sum);
   
   //-- Define legend label
-  if (LS_lang == 'zh-tw')
-    wrap.legend_label = ['解隔離', '隔離中', '死亡', '合計'];
-  else if (LS_lang == 'fr')
-    wrap.legend_label = ['Rétablis', 'Hospitalisés', 'Décédés', 'Total'];
-  else
-    wrap.legend_label = ['Discharged', 'Hospitalized', 'Deaths', 'Total'];
+  var legend_label_dict = {en: 'Hospitalized', fr: 'Hospitalisés', 'zh-tw': '住院或確診隔離人數'};
+  wrap.legend_label = [legend_label_dict[LS_lang]];
   
   //-- Update legend title
   GP_UpdateLegendTitle(wrap);
   
   //-- Replot legend
-  GP_ReplotLegend(wrap, 'count', '1.2rem');
+  GP_ReplotLegend(wrap, 'count', 'normal');
 }
 
 //-- Load
-function SE_Load(wrap) {
+function HOI_Load(wrap) {
+  d3.queue()
+    .defer(d3.csv, wrap.data_path_list[0])
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
+      if (error)
+        return console.warn(error);
+      
+      HOI_FormatData(wrap, data);
+      HOI_FormatData2(wrap, data2);
+      HOI_Plot(wrap);
+      HOI_Replot(wrap);
+    });
+}
+
+function HOI_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      SE_FormatData(wrap, data);
-      SE_Plot(wrap);
-      SE_Replot(wrap);
+      HOI_FormatData(wrap, data);
+      HOI_Replot(wrap);
     });
 }
 
-function SE_ButtonListener(wrap) {
+function HOI_ButtonListener(wrap) {
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
+    var tag1;
+    
     name = wrap.tag + '_' + LS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
@@ -268,20 +256,20 @@ function SE_ButtonListener(wrap) {
     Cookies.set("lang", LS_lang);
     
     //-- Replot
-    SE_ResetText();
-    SE_Replot(wrap);
+    HOI_ResetText();
+    HOI_Replot(wrap);
   });
 }
 
 //-- Main
-function SE_Main(wrap) {
-  wrap.id = '#' + wrap.tag
-  
+function HOI_Main(wrap) {
+  wrap.id = '#' + wrap.tag;
+
   //-- Load
-  SE_InitFig(wrap);
-  SE_ResetText();
-  SE_Load(wrap);
+  HOI_InitFig(wrap);
+  HOI_ResetText();
+  HOI_Load(wrap);
   
   //-- Setup button listeners
-  SE_ButtonListener(wrap);
+  HOI_ButtonListener(wrap);
 }

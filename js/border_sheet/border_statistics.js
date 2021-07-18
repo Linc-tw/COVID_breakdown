@@ -118,7 +118,7 @@ function BS_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = y_last;
+  wrap.legend_value_raw = y_last;
 }
 
 function BS_FormatData2(wrap, data2) {
@@ -226,7 +226,7 @@ function BS_Replot(wrap) {
   GP_ReplotCountAsY(wrap, 'count');
   
   //-- Update ylabel
-  var ylabel_dict = {en: 'Number of people', fr: 'Nombre de voyageurs', 'zh-tw': '旅客人數'};
+  var ylabel_dict = {en: 'Number of passengers', fr: 'Nombre de voyageurs', 'zh-tw': '人次'};
   GP_ReplotYLabel(wrap, ylabel_dict);
   
   //-- Define legend position
@@ -239,7 +239,8 @@ function BS_Replot(wrap) {
     wrap.legend_color.push(GP_wrap.gray);
   wrap.legend_color[wrap.col_ind] = wrap.color;
   
-  //-- No need to update legend value
+  //-- Define legend value
+  wrap.legend_value = wrap.legend_value_raw.slice();
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')

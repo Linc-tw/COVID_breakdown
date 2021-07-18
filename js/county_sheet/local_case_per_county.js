@@ -16,7 +16,7 @@ function LCPC_InitFig(wrap) {
 
 function LCPC_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('local_case_per_county_title', '各縣市之每日確診人數');
+    LS_AddStr('local_case_per_county_title', '各縣市本土病例數');
     LS_AddStr('local_case_per_county_button_total', '本土合計');
     LS_AddStr('local_case_per_county_button_keelung', '基隆');
     LS_AddStr('local_case_per_county_button_taipei', '台北');
@@ -292,10 +292,9 @@ function LCPC_Replot(wrap) {
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap, 'count');
   
-  //-- Update ylabel
-  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
-  GP_ReplotYLabel(wrap, ylabel_dict);
-    
+  //-- Replot ylabel
+  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_case);
+  
   //-- Define legend position
   wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
   

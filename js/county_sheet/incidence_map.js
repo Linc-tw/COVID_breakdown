@@ -21,9 +21,9 @@ function IM_InitFig(wrap) {
 
 function IM_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('incidence_map_title', '縣市確診地圖');
-    LS_AddStr('incidence_map_button_count', '案例數');
-    LS_AddStr('incidence_map_button_rate', '確診率');
+    LS_AddStr('incidence_map_title', '縣市疫情地圖');
+    LS_AddStr('incidence_map_button_count', '病例數');
+    LS_AddStr('incidence_map_button_rate', '盛行率');
     LS_AddStr('incidence_map_button_total', '本土合計');
     LS_AddStr('incidence_map_button_w-1', '0-6天前');
     LS_AddStr('incidence_map_button_w-2', '7-13天前');

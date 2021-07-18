@@ -131,7 +131,7 @@ function IR_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = y_last_list;
+  wrap.legend_value_raw = y_last_list;
 }
 
 function IR_FormatData2(wrap, data2) {
@@ -235,9 +235,8 @@ function IR_Replot(wrap) {
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap, 'percentage');
   
-  //-- Update ylabel
-  var ylabel_dict = {en: 'Rate', fr: 'Taux', 'zh-tw': '比率'};
-  GP_ReplotYLabel(wrap, ylabel_dict);
+  //-- Replot ylabel
+  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_rate);
   
   //-- Define legend position
   wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -245,7 +244,8 @@ function IR_Replot(wrap) {
   //-- Define legend color
   wrap.legend_color = wrap.color_list.slice();
   
-  //-- No need to update legend value
+  //-- Define legend value
+  wrap.legend_value = wrap.legend_value_raw.slice();
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')

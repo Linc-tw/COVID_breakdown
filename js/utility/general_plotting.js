@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
+//Cumulative for LCPC
 //vaccination map => like IM
 //Overall IM
 //Overall CBA
@@ -46,6 +47,11 @@ var GP_wrap = {
   
   //-- Transparency
   opacity: 0.3,
+  
+  //-- Legend
+  ylabel_dict_case: {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'},
+  ylabel_dict_rate: {en: 'Percentage', fr: 'Pourcentage', 'zh-tw': '百分比'},
+  ylabel_dict_dose: {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '疫苗劑數'},
   
   //-- Transition delay
   trans_delay: 800,

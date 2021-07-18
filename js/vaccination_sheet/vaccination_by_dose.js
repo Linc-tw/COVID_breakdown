@@ -120,7 +120,7 @@ function VBD_FormatData(wrap, data) {
   wrap.nb_col = nb_col;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = y_last_list;
+  wrap.legend_value_raw = y_last_list;
 }
 
 function VBD_FormatData2(wrap, data2) {
@@ -262,7 +262,7 @@ function VBD_Replot(wrap) {
   GP_ReplotCountAsY(wrap, 'percentage');
   
   //-- Update ylabel
-  var ylabel_dict = {en: 'Proportion of the population', fr: 'Part de la population', 'zh-tw': '佔人口比例'};
+  var ylabel_dict = {en: 'Proportion of the population', fr: 'Part de la population', 'zh-tw': '人口比'};
   GP_ReplotYLabel(wrap, ylabel_dict);
     
   //-- Define legend position
@@ -271,7 +271,8 @@ function VBD_Replot(wrap) {
   //-- Define legend color
   wrap.legend_color = wrap.color_list.slice();
   
-  //-- No need to update legend value
+  //-- Define legend value
+  wrap.legend_value = wrap.legend_value_raw.slice();
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')

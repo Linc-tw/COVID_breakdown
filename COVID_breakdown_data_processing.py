@@ -9,6 +9,7 @@ import os
 import sys
 import warnings
 import collections as clt
+import calendar as cld
 import datetime as dtt
 import copy
 import json
@@ -212,7 +213,7 @@ AGE_DICT_2 = {
     '60-64': {'zh-tw': '60-64歲', 'fr': '60-64 ans', 'en': '60-64 yo'}, 
     '65-69': {'zh-tw': '65-69歲', 'fr': '65-69 ans', 'en': '65-69 yo'}, 
     '70+': {'zh-tw': '70+歲', 'fr': '70+ ans', 'en': '70+ yo'},
-    'total': {'zh-tw': '全國', 'fr': 'National', 'en': 'Nationalwide'},
+    'total': {'zh-tw': '所有年齡', 'fr': 'Tous âges', 'en': 'All ages'},
   },
   
   '2019': {
@@ -432,6 +433,9 @@ def getTodayOrdinal():
   delta = dtt.timedelta(hours=12)
   ord_today = (today - delta).toordinal() + 1
   return ord_today
+
+def numMonthToAbbr(num):
+  return cld.month_abbr[num]
 
 def normalizeBoolArr(bool_arr):
   bool_arr = bool_arr.astype(float)
@@ -2764,6 +2768,10 @@ class CountySheet(Template):
     stock = [case_hist.copy() for i in range(13)]
     stock_dict = initializeStockDict_general(stock)
     
+    ## Add 12 empty hist for overall
+    for i in range(12):
+      stock_dict[PAGE_OVERALL].append(case_hist.copy())
+    
     ## Loop over series
     for report_date, age, nb_cases in zip(report_date_list, age_list, nb_cases_list):
       index_list = makeIndexList(report_date)
@@ -2774,10 +2782,17 @@ class CountySheet(Template):
         
         stock[0][age] += nb_cases
       
-        if page == PAGE_LATEST:
+        if PAGE_LATEST == page:
           lookback_week = (ind - NB_LOOKBACK_DAYS) // 7 ## ind - NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
           if lookback_week >= -12:
             stock[-lookback_week][age] += nb_cases
+            
+        elif PAGE_OVERALL == page:
+          yyyy = int(report_date[:4])
+          mm = int(report_date[5:7])
+          yyyymm = mm + 12 * (yyyy - 2020)
+          stock[yyyymm][age] += nb_cases
+          
         else:
           mm = int(report_date[5:7])
           stock[mm][age] += nb_cases
@@ -2789,10 +2804,12 @@ class CountySheet(Template):
     
     ## Loop over page
     for page, stock in stock_dict.items():
-      if 'latest' == page:
-        label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_-8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
+      if PAGE_LATEST == page:
+        label_list = ['total'] + ['week_-%d' % (i+1) for i in range(12)]
+      elif PAGE_OVERALL == page:
+        label_list = ['total'] + ['%s_2020' % (numMonthToAbbr(i+1)) for i in range(12)] + ['%s_2021' % (numMonthToAbbr(i+1)) for i in range(12)]
       else:
-        label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+        label_list = ['total'] + [numMonthToAbbr(i+1) for i in range(12)]
       
       data = {'age': self.age_key_list}
       data.update({label: case_hist.values() for label, case_hist in zip(label_list, stock)})
@@ -2814,6 +2831,10 @@ class CountySheet(Template):
     stock = [case_hist.copy() for i in range(13)]
     stock_dict = initializeStockDict_general(stock)
     
+    ## Add 12 empty hist for overall
+    for i in range(12):
+      stock_dict[PAGE_OVERALL].append(case_hist.copy())
+    
     ## Loop over series
     for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):
       if 'unknown' == county:
@@ -2828,11 +2849,19 @@ class CountySheet(Template):
         stock[0]['total'] += nb_cases
         stock[0][county] += nb_cases
       
-        if page == PAGE_LATEST:
+        if PAGE_LATEST == page:
           lookback_week = (ind - NB_LOOKBACK_DAYS) // 7 ## ind - NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
           if lookback_week >= -12:
             stock[-lookback_week]['total'] += nb_cases
             stock[-lookback_week][county] += nb_cases
+            
+        elif PAGE_OVERALL == page:
+          yyyy = int(report_date[:4])
+          mm = int(report_date[5:7])
+          yyyymm = mm + 12 * (yyyy - 2020)
+          stock[yyyymm]['total'] += nb_cases
+          stock[yyyymm][county] += nb_cases
+          
         else:
           mm = int(report_date[5:7])
           stock[mm]['total'] += nb_cases
@@ -2846,13 +2875,12 @@ class CountySheet(Template):
     
     ## Loop over page
     for page, stock in stock_dict.items():
-      if page == PAGE_LATEST:
-        continue
-      
-      if 'latest' == page:
-        label_list = ['total', 'week_-1', 'week_-2', 'week_-3', 'week_-4', 'week_-5', 'week_-6', 'week_-7', 'week_8', 'week_-9', 'week_-10', 'week_-11', 'week_-12']
+      if PAGE_LATEST == page:
+        label_list = ['total'] + ['week_-%d' % (i+1) for i in range(12)]
+      elif PAGE_OVERALL == page:
+        label_list = ['total'] + ['%s_2020' % (numMonthToAbbr(i+1)) for i in range(12)] + ['%s_2021' % (numMonthToAbbr(i+1)) for i in range(12)]
       else:
-        label_list = ['total', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+        label_list = ['total'] + [numMonthToAbbr(i+1) for i in range(12)]
     
       ## Data for population & label
       inv_dict = {dict_['tag']: code for code, dict_ in COUNTY_DICT.items()}
@@ -3562,14 +3590,14 @@ def sandbox():
   #timeline_sheet = TimelineSheet()
   #timeline_sheet.saveCsv_evtTimeline()
   
-  #county_sheet = CountySheet()
-  #county_sheet.saveCsv_incidenceEvolutionByAge()
+  county_sheet = CountySheet()
+  county_sheet.saveCsv_incidenceMap()
   
   #vacc_sheet = VaccinationSheet()
   #vacc_sheet.saveCsv_vaccinationByDose()
   
-  vacc_county_sheet = VaccinationCountySheet()
-  vacc_county_sheet.saveCsv_vaccinationByCounty()
+  #vacc_county_sheet = VaccinationCountySheet()
+  #vacc_county_sheet.saveCsv_vaccinationByCounty()
   
   #main_sheet = MainSheet()
   #status_sheet = StatusSheet()

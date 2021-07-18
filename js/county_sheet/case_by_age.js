@@ -289,9 +289,8 @@ function CBA_Replot(wrap) {
   var xlabel_dict = {en: 'Age', fr: 'Âge', 'zh-tw': '年齡'};
   GP_ReplotXLabel(wrap, xlabel_dict);
   
-  //-- Update ylabel
-  var ylabel_dict = {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'};
-  GP_ReplotYLabel(wrap, ylabel_dict);
+  //-- Replot ylabel
+  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_case);
   
   //-- Define legend position
   wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};

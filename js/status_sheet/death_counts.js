@@ -1,11 +1,11 @@
 
 //-- Filename:
-//--   test_by_criterion.js
+//--   death_counts.js
 //--
 //-- Author:
 //--   Chieh-An Lin
 
-function TBC_InitFig(wrap) {
+function DC_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
     GP_InitFig_Mini(wrap);
   else if (wrap.tag.includes('overall'))
@@ -14,27 +14,27 @@ function TBC_InitFig(wrap) {
     GP_InitFig_Standard(wrap);
 }
 
-function TBC_ResetText() {
+function DC_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('test_by_criterion_title', '檢驗數量');
-    LS_AddStr('test_by_criterion_button_daily', '逐日');
-    LS_AddStr('test_by_criterion_button_cumul', '累計');
+    LS_AddStr('death_counts_title', '死亡人數');
+    LS_AddStr('death_counts_button_daily', '逐日');
+    LS_AddStr('death_counts_button_cumul', '累計');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('test_by_criterion_title', 'Nombre de tests');
-    LS_AddStr('test_by_criterion_button_daily', 'Quotidiens');
-    LS_AddStr('test_by_criterion_button_cumul', 'Cumulés');
+    LS_AddStr('death_counts_title', 'Nombre de décédés');
+    LS_AddStr('death_counts_button_daily', 'Quotidiens');
+    LS_AddStr('death_counts_button_cumul', 'Cumulés');
   }
   
   else { //-- En
-    LS_AddStr('test_by_criterion_title', 'Test Counts');
-    LS_AddStr('test_by_criterion_button_daily', 'Daily');
-    LS_AddStr('test_by_criterion_button_cumul', 'Cumulative');
+    LS_AddStr('death_counts_title', 'Death Counts');
+    LS_AddStr('death_counts_button_daily', 'Daily');
+    LS_AddStr('death_counts_button_cumul', 'Cumulative');
   }
 }
 
-function TBC_FormatData(wrap, data) {
+function DC_FormatData(wrap, data) {
   //-- Variables for data
   var col_tag_list = data.columns.slice(1, 2); //-- 0 = date
   var col_tag = col_tag_list[0];
@@ -61,7 +61,7 @@ function TBC_FormatData(wrap, data) {
   if (wrap.cumul == 1)
     GP_CumSum(data, col_tag_list);
   
-  //-- Main loop over row
+  //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
     x = row['date'];
@@ -116,10 +116,10 @@ function TBC_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value = [y_sum];
+  wrap.legend_value_raw = [y_sum];
 }
 
-function TBC_FormatData2(wrap, data2) {
+function DC_FormatData2(wrap, data2) {
   if (!wrap.tag.includes('overall'))
     return;
   
@@ -139,7 +139,7 @@ function TBC_FormatData2(wrap, data2) {
 }
 
 //-- Tooltip
-function TBC_MouseMove(wrap, d) {
+function DC_MouseMove(wrap, d) {
   if (wrap.tag.includes('mini'))
     return;
     
@@ -149,15 +149,15 @@ function TBC_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw') {
-    col_label = '檢驗量';
+    col_label = '死亡人數';
     avg_text = '過去七日平均';
   }
   else if (LS_lang == 'fr') {
-    col_label = 'Nombre de tests';
+    col_label = 'Nombre de décédés';
     avg_text = 'Moyenne sur 7 jours';
   }
   else {
-    col_label = 'Number of tests';
+    col_label = 'Number of deaths';
     avg_text = '7-day average';
   }
   
@@ -173,7 +173,7 @@ function TBC_MouseMove(wrap, d) {
     .style('top', new_pos[1] + 'px')
 }
 
-function TBC_Plot(wrap) {
+function DC_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
@@ -189,10 +189,10 @@ function TBC_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color = GP_wrap.c_list[2];
+  wrap.color = GP_wrap.c_list[7];
   
   //-- Define mouse-move
-  wrap.mouse_move = TBC_MouseMove;
+  wrap.mouse_move = DC_MouseMove;
   
   //-- Plot bar
   GP_PlotFaintSingleBar(wrap);
@@ -201,7 +201,7 @@ function TBC_Plot(wrap) {
   GP_PlotAvgLine(wrap);
 }
 
-function TBC_Replot(wrap) {
+function DC_Replot(wrap) {
   //-- Replot bar
   GP_ReplotFaintSingleBar(wrap);
   
@@ -224,8 +224,7 @@ function TBC_Replot(wrap) {
   GP_ReplotCountAsY(wrap, 'count');
   
   //-- Replot ylabel
-  var ylabel_dict = {en: 'Number of tests', fr: 'Nombre de tests', 'zh-tw': '檢驗量'};
-  GP_ReplotYLabel(wrap, ylabel_dict);
+  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_case);
   
   //-- Define legend position
   wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
@@ -233,10 +232,11 @@ function TBC_Replot(wrap) {
   //-- Define legend color
   wrap.legend_color = [wrap.color];
   
-  //-- No need to update legend value
+  //-- Define legend value
+  wrap.legend_value = wrap.legend_value_raw.slice();
   
   //-- Define legend label
-  var legend_label_dict = {en: 'Number of tests', fr: 'Nombre de tests', 'zh-tw': '檢驗量'};
+  var legend_label_dict = {en: 'Deaths', fr: 'Décédés', 'zh-tw': '死亡'};
   wrap.legend_label = [legend_label_dict[LS_lang]];
   
   //-- Update legend title
@@ -247,7 +247,7 @@ function TBC_Replot(wrap) {
 }
 
 //-- Load
-function TBC_Load(wrap) {
+function DC_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .defer(d3.csv, wrap.data_path_list[1])
@@ -255,31 +255,31 @@ function TBC_Load(wrap) {
       if (error)
         return console.warn(error);
       
-      TBC_FormatData(wrap, data);
-      TBC_FormatData2(wrap, data2);
-      TBC_Plot(wrap);
-      TBC_Replot(wrap);
+      DC_FormatData(wrap, data);
+      DC_FormatData2(wrap, data2);
+      DC_Plot(wrap);
+      DC_Replot(wrap);
     });
 }
 
-function TBC_Reload(wrap) {
+function DC_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      TBC_FormatData(wrap, data);
-      TBC_Replot(wrap);
+      DC_FormatData(wrap, data);
+      DC_Replot(wrap);
     });
 }
 
-function TBC_ButtonListener(wrap) {
+function DC_ButtonListener(wrap) {
   //-- Daily or cumulative
   $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
     GP_PressRadioButton(wrap, 'cumul', wrap.cumul, this.value);
     wrap.cumul = this.value;
-    TBC_Reload(wrap);
+    DC_Reload(wrap);
   });
 
   //-- Save
@@ -301,13 +301,13 @@ function TBC_ButtonListener(wrap) {
     Cookies.set("lang", LS_lang);
     
     //-- Replot
-    TBC_ResetText();
-    TBC_Replot(wrap);
+    DC_ResetText();
+    DC_Replot(wrap);
   });
 }
 
 //-- Main
-function TBC_Main(wrap) {
+function DC_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
   //-- Swap active to current value
@@ -319,10 +319,10 @@ function TBC_Main(wrap) {
   }
   
   //-- Load
-  TBC_InitFig(wrap);
-  TBC_ResetText();
-  TBC_Load(wrap);
+  DC_InitFig(wrap);
+  DC_ResetText();
+  DC_Load(wrap);
   
   //-- Setup button listeners
-  TBC_ButtonListener(wrap);
+  DC_ButtonListener(wrap);
 }

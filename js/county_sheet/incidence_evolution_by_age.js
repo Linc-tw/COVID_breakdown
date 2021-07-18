@@ -21,7 +21,7 @@ function IEBA_InitFig(wrap) {
 
 function IEBA_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('incidence_evolution_by_age_title', '各年齡層確診率變化');
+    LS_AddStr('incidence_evolution_by_age_title', '各年齡層盛行率變化');
   }
   
   else if (LS_lang == 'fr') {
