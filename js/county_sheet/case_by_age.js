@@ -382,7 +382,7 @@ function CBA_Replot(wrap) {
   wrap.legend_value = [wrap.legend_value_raw[1], wrap.legend_value_raw[0]];
   
   //-- Define legend label
-  var i, label_list, legend_label_sum, legend_label_list;
+  var i, label_list, label_sum_dict, legend_label_list;
   if (wrap.tag.includes('latest')) {
     if (LS_lang == 'zh-tw')
       label_list = ['', '到', '天前之確診個案'];
@@ -426,14 +426,10 @@ function CBA_Replot(wrap) {
     else
       legend_label_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   }
-  if (LS_lang == 'zh-tw')
-    legend_label_sum = '合計';
-  else if (LS_lang == 'fr')
-    legend_label_sum = 'Totaux';
-  else 
-    legend_label_sum = 'Total';
+  label_sum_dict = {'en': 'Total', 'fr': 'Totaux', 'zh-tw': '合計'};
+  legend_label_list = [label_sum_dict[LS_lang]].concat(legend_label_list);
   
-  wrap.legend_label = [legend_label_list[wrap.col_ind], legend_label_sum];
+  wrap.legend_label = [legend_label_list[wrap.col_ind], legend_label_list[0]];
   
   //-- Remove redundancy from legend if col_ind = 0
   if (wrap.col_ind == 0) {

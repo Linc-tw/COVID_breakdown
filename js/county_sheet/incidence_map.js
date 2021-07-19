@@ -276,7 +276,7 @@ function IM_MouseOver(wrap, d, i) {
     .style('opacity', 0.8);
     
   wrap.svg.select(wrap.id+'_label_'+d.properties.COUNTYCODE)
-      .style('font-size', '1.2rem');
+    .style('font-size', '1.3rem');
 }
 
 function IM_MouseLeave(wrap, d, i) {
