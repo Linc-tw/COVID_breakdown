@@ -49,6 +49,30 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_m10', '10月');
     LS_AddStr('incidence_map_button_m11', '11月');
     LS_AddStr('incidence_map_button_m12', '12月');
+    LS_AddStr('incidence_map_button_2020_01', '2020年1月');
+    LS_AddStr('incidence_map_button_2020_02', '2020年2月');
+    LS_AddStr('incidence_map_button_2020_03', '2020年3月');
+    LS_AddStr('incidence_map_button_2020_04', '2020年4月');
+    LS_AddStr('incidence_map_button_2020_05', '2020年5月');
+    LS_AddStr('incidence_map_button_2020_06', '2020年6月');
+    LS_AddStr('incidence_map_button_2020_07', '2020年7月');
+    LS_AddStr('incidence_map_button_2020_08', '2020年8月');
+    LS_AddStr('incidence_map_button_2020_09', '2020年9月');
+    LS_AddStr('incidence_map_button_2020_10', '2020年10月');
+    LS_AddStr('incidence_map_button_2020_11', '2020年11月');
+    LS_AddStr('incidence_map_button_2020_12', '2020年12月');
+    LS_AddStr('incidence_map_button_2021_01', '2021年1月');
+    LS_AddStr('incidence_map_button_2021_02', '2021年2月');
+    LS_AddStr('incidence_map_button_2021_03', '2021年3月');
+    LS_AddStr('incidence_map_button_2021_04', '2021年4月');
+    LS_AddStr('incidence_map_button_2021_05', '2021年5月');
+    LS_AddStr('incidence_map_button_2021_06', '2021年6月');
+    LS_AddStr('incidence_map_button_2021_07', '2021年7月');
+    LS_AddStr('incidence_map_button_2021_08', '2021年8月');
+    LS_AddStr('incidence_map_button_2021_09', '2021年9月');
+    LS_AddStr('incidence_map_button_2021_10', '2021年10月');
+    LS_AddStr('incidence_map_button_2021_11', '2021年11月');
+    LS_AddStr('incidence_map_button_2021_12', '2021年12月');
   }
   
   else if (LS_lang == 'fr') {
@@ -80,6 +104,30 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_m10', 'Octobre');
     LS_AddStr('incidence_map_button_m11', 'Novembre');
     LS_AddStr('incidence_map_button_m12', 'Décembre');
+    LS_AddStr('incidence_map_button_2020_01', 'Janv 2020');
+    LS_AddStr('incidence_map_button_2020_02', 'Févr 2020');
+    LS_AddStr('incidence_map_button_2020_03', 'Mars 2020');
+    LS_AddStr('incidence_map_button_2020_04', 'Avr 2020');
+    LS_AddStr('incidence_map_button_2020_05', 'Mai 2020');
+    LS_AddStr('incidence_map_button_2020_06', 'Juin 2020');
+    LS_AddStr('incidence_map_button_2020_07', 'Juil 2020');
+    LS_AddStr('incidence_map_button_2020_08', 'Août 2020');
+    LS_AddStr('incidence_map_button_2020_09', 'Sept 2020');
+    LS_AddStr('incidence_map_button_2020_10', 'Oct 2020');
+    LS_AddStr('incidence_map_button_2020_11', 'Nov 2020');
+    LS_AddStr('incidence_map_button_2020_12', 'Déc 2020');
+    LS_AddStr('incidence_map_button_2021_01', 'Janv 2021');
+    LS_AddStr('incidence_map_button_2021_02', 'Févr 2021');
+    LS_AddStr('incidence_map_button_2021_03', 'Mars 2021');
+    LS_AddStr('incidence_map_button_2021_04', 'Avr 2021');
+    LS_AddStr('incidence_map_button_2021_05', 'Mai 2021');
+    LS_AddStr('incidence_map_button_2021_06', 'Juin 2021');
+    LS_AddStr('incidence_map_button_2021_07', 'Juil 2021');
+    LS_AddStr('incidence_map_button_2021_08', 'Août 2021');
+    LS_AddStr('incidence_map_button_2021_09', 'Sept 2021');
+    LS_AddStr('incidence_map_button_2021_10', 'Oct 2021');
+    LS_AddStr('incidence_map_button_2021_11', 'Nov 2021');
+    LS_AddStr('incidence_map_button_2021_12', 'Déc 2021');
   }
   
   else { //-- En
@@ -111,6 +159,30 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_m10', 'October');
     LS_AddStr('incidence_map_button_m11', 'November');
     LS_AddStr('incidence_map_button_m12', 'December');
+    LS_AddStr('incidence_map_button_2020_01', 'Jan 2020');
+    LS_AddStr('incidence_map_button_2020_02', 'Feb 2020');
+    LS_AddStr('incidence_map_button_2020_03', 'Mar 2020');
+    LS_AddStr('incidence_map_button_2020_04', 'Apr 2020');
+    LS_AddStr('incidence_map_button_2020_05', 'May 2020');
+    LS_AddStr('incidence_map_button_2020_06', 'Jun 2020');
+    LS_AddStr('incidence_map_button_2020_07', 'Jul 2020');
+    LS_AddStr('incidence_map_button_2020_08', 'Aug 2020');
+    LS_AddStr('incidence_map_button_2020_09', 'Sep 2020');
+    LS_AddStr('incidence_map_button_2020_10', 'Oct 2020');
+    LS_AddStr('incidence_map_button_2020_11', 'Nov 2020');
+    LS_AddStr('incidence_map_button_2020_12', 'Dec 2020');
+    LS_AddStr('incidence_map_button_2021_01', 'Jan 2021');
+    LS_AddStr('incidence_map_button_2021_02', 'Feb 2021');
+    LS_AddStr('incidence_map_button_2021_03', 'Mar 2021');
+    LS_AddStr('incidence_map_button_2021_04', 'Apr 2021');
+    LS_AddStr('incidence_map_button_2021_05', 'May 2021');
+    LS_AddStr('incidence_map_button_2021_06', 'Jun 2021');
+    LS_AddStr('incidence_map_button_2021_07', 'Jul 2021');
+    LS_AddStr('incidence_map_button_2021_08', 'Aug 2021');
+    LS_AddStr('incidence_map_button_2021_09', 'Sep 2021');
+    LS_AddStr('incidence_map_button_2021_10', 'Oct 2021');
+    LS_AddStr('incidence_map_button_2021_11', 'Nov 2021');
+    LS_AddStr('incidence_map_button_2021_12', 'Dec 2021');
   }
 }
 
@@ -370,21 +442,46 @@ function IM_Replot(wrap) {
   
   //-- Define legend title
   var legend_title_list;
-  if (LS_lang == 'zh-tw')
-    legend_title_list = [
-      '0-6天前', '7-13天前', '14-20天前', '21-27天前', '28-34天前', '35-41天前', 
-      '42-48天前', '49-55天前', '56-62天前', '63-69天前', '70-76天前', '77-83天前'
-    ];
-  else if (LS_lang == 'fr')
-    legend_title_list = [
-      '0-6 jours plus tôt', '7-13 jours plus tôt', '14-20 jours plus tôt', '21-27 jours plus tôt', '28-34 jours plus tôt', '35-41 jours plus tôt', 
-      '42-48 jours plus tôt', '49-55 jours plus tôt', '56-62 jours plus tôt', '63-69 jours plus tôt', '70-76 jours plus tôt', '77-83 jours plus tôt'
-    ];
-  else
-    legend_title_list = [
-      '0-6 days ago', '7-13 days ago', '14-20 days ago', '21-27 days ago', '28-34 days ago', '35-41 days ago', 
-      '42-48 days ago', '49-55 days ago', '56-62 days ago', '63-69 days ago', '70-76 days ago', '77-83 days ago'
-    ]; 
+  if (wrap.tag.includes('latest')) {
+    if (LS_lang == 'zh-tw')
+      legend_title_list = [
+        '0-6天前', '7-13天前', '14-20天前', '21-27天前', '28-34天前', '35-41天前', 
+        '42-48天前', '49-55天前', '56-62天前', '63-69天前', '70-76天前', '77-83天前'
+      ];
+    else if (LS_lang == 'fr')
+      legend_title_list = [
+        '0-6 jours plus tôt', '7-13 jours plus tôt', '14-20 jours plus tôt', '21-27 jours plus tôt', '28-34 jours plus tôt', '35-41 jours plus tôt', 
+        '42-48 jours plus tôt', '49-55 jours plus tôt', '56-62 jours plus tôt', '63-69 jours plus tôt', '70-76 jours plus tôt', '77-83 jours plus tôt'
+      ];
+    else
+      legend_title_list = [
+        '0-6 days ago', '7-13 days ago', '14-20 days ago', '21-27 days ago', '28-34 days ago', '35-41 days ago', 
+        '42-48 days ago', '49-55 days ago', '56-62 days ago', '63-69 days ago', '70-76 days ago', '77-83 days ago'
+      ]; 
+  }
+  else if (wrap.tag.includes('overall')) {
+    if (LS_lang == 'zh-tw')
+      legend_title_list = [
+        '2020年1月', '2020年2月','2020年3月', '2020年4月','2020年5月', '2020年6月',
+        '2020年7月', '2020年8月','2020年9月', '2020年10月','2020年11月', '2020年12月',
+        '2021年1月', '2021年2月','2021年3月', '2021年4月','2021年5月', '2021年6月',
+        '2021年7月', '2021年8月','2021年9月', '2021年10月','2021年11月', '2021年12月'
+      ];
+    else if (LS_lang == 'fr')
+      legend_title_list = [
+        'Janvier 2020', 'Février 2020', 'Mars 2020', 'Avril 2020', 'Mai 2020', 'Juin 2020', 
+        'Juillet 2020', 'Août 2020', 'Septembre 2020', 'Octobre 2020', 'Novembre 2020', 'Décembre 2020', 
+        'Janvier 2021', 'Février 2021', 'Mars 2021', 'Avril 2021', 'Mai 2021', 'Juin 2021', 
+        'Juillet 2021', 'Août 2021', 'Septembre 2021', 'Octobre 2021', 'Novembre 2021', 'Décembre 2021', 
+      ];
+    else
+      legend_title_list = [
+        'January 2020', 'February 2020', 'March 2020', 'April 2020', 'May 2020', 'June 2020', 
+        'July 2020', 'Auguest 2020', 'September 2020', 'October 2020', 'November 2020', 'December 2020', 
+        'January 2021', 'February 2021', 'March 2021', 'April 2021', 'May 2021', 'June 2021', 
+        'July 2021', 'Auguest 2021', 'September 2021', 'October 2021', 'November 2021', 'December 2021', 
+      ]; 
+  }
   legend_title_list = [LS_GetLegendTitle_Page(wrap)].concat(legend_title_list);
   
   //-- Define bottom legend caption

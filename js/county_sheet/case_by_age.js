@@ -13,7 +13,6 @@ function CBA_InitFig(wrap) {
 function CBA_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('case_by_age_title', '確診個案年齡分布');
-    LS_AddStr('case_by_age_text', '資料遲一日更新');
     LS_AddStr('case_by_age_button_total', '合計');
     LS_AddStr('case_by_age_button_w-1', '0-6天前');
     LS_AddStr('case_by_age_button_w-2', '7-13天前');
@@ -39,11 +38,34 @@ function CBA_ResetText() {
     LS_AddStr('case_by_age_button_m10', '10月');
     LS_AddStr('case_by_age_button_m11', '11月');
     LS_AddStr('case_by_age_button_m12', '12月');
+    LS_AddStr('case_by_age_button_2020_01', '2020年1月');
+    LS_AddStr('case_by_age_button_2020_02', '2020年2月');
+    LS_AddStr('case_by_age_button_2020_03', '2020年3月');
+    LS_AddStr('case_by_age_button_2020_04', '2020年4月');
+    LS_AddStr('case_by_age_button_2020_05', '2020年5月');
+    LS_AddStr('case_by_age_button_2020_06', '2020年6月');
+    LS_AddStr('case_by_age_button_2020_07', '2020年7月');
+    LS_AddStr('case_by_age_button_2020_08', '2020年8月');
+    LS_AddStr('case_by_age_button_2020_09', '2020年9月');
+    LS_AddStr('case_by_age_button_2020_10', '2020年10月');
+    LS_AddStr('case_by_age_button_2020_11', '2020年11月');
+    LS_AddStr('case_by_age_button_2020_12', '2020年12月');
+    LS_AddStr('case_by_age_button_2021_01', '2021年1月');
+    LS_AddStr('case_by_age_button_2021_02', '2021年2月');
+    LS_AddStr('case_by_age_button_2021_03', '2021年3月');
+    LS_AddStr('case_by_age_button_2021_04', '2021年4月');
+    LS_AddStr('case_by_age_button_2021_05', '2021年5月');
+    LS_AddStr('case_by_age_button_2021_06', '2021年6月');
+    LS_AddStr('case_by_age_button_2021_07', '2021年7月');
+    LS_AddStr('case_by_age_button_2021_08', '2021年8月');
+    LS_AddStr('case_by_age_button_2021_09', '2021年9月');
+    LS_AddStr('case_by_age_button_2021_10', '2021年10月');
+    LS_AddStr('case_by_age_button_2021_11', '2021年11月');
+    LS_AddStr('case_by_age_button_2021_12', '2021年12月');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('case_by_age_title', 'Cas confirmés par âge');
-    LS_AddStr('case_by_age_text', 'Mise à jour avec 1 jour de retard');
     LS_AddStr('case_by_age_button_total', 'Total');
     LS_AddStr('case_by_age_button_w-1', '0-6 jours plus tôt');
     LS_AddStr('case_by_age_button_w-2', '7-13 jours plus tôt');
@@ -69,11 +91,34 @@ function CBA_ResetText() {
     LS_AddStr('case_by_age_button_m10', 'Octobre');
     LS_AddStr('case_by_age_button_m11', 'Novembre');
     LS_AddStr('case_by_age_button_m12', 'Décembre');
+    LS_AddStr('case_by_age_button_2020_01', 'Janv 2020');
+    LS_AddStr('case_by_age_button_2020_02', 'Févr 2020');
+    LS_AddStr('case_by_age_button_2020_03', 'Mars 2020');
+    LS_AddStr('case_by_age_button_2020_04', 'Avr 2020');
+    LS_AddStr('case_by_age_button_2020_05', 'Mai 2020');
+    LS_AddStr('case_by_age_button_2020_06', 'Juin 2020');
+    LS_AddStr('case_by_age_button_2020_07', 'Juil 2020');
+    LS_AddStr('case_by_age_button_2020_08', 'Août 2020');
+    LS_AddStr('case_by_age_button_2020_09', 'Sept 2020');
+    LS_AddStr('case_by_age_button_2020_10', 'Oct 2020');
+    LS_AddStr('case_by_age_button_2020_11', 'Nov 2020');
+    LS_AddStr('case_by_age_button_2020_12', 'Déc 2020');
+    LS_AddStr('case_by_age_button_2021_01', 'Janv 2021');
+    LS_AddStr('case_by_age_button_2021_02', 'Févr 2021');
+    LS_AddStr('case_by_age_button_2021_03', 'Mars 2021');
+    LS_AddStr('case_by_age_button_2021_04', 'Avr 2021');
+    LS_AddStr('case_by_age_button_2021_05', 'Mai 2021');
+    LS_AddStr('case_by_age_button_2021_06', 'Juin 2021');
+    LS_AddStr('case_by_age_button_2021_07', 'Juil 2021');
+    LS_AddStr('case_by_age_button_2021_08', 'Août 2021');
+    LS_AddStr('case_by_age_button_2021_09', 'Sept 2021');
+    LS_AddStr('case_by_age_button_2021_10', 'Oct 2021');
+    LS_AddStr('case_by_age_button_2021_11', 'Nov 2021');
+    LS_AddStr('case_by_age_button_2021_12', 'Déc 2021');
   }
   
   else { //-- En
     LS_AddStr('case_by_age_title', 'Confirmed Cases by Age');
-    LS_AddStr('case_by_age_text', 'Updated typically with 1 day delay');
     LS_AddStr('case_by_age_button_total', 'Total');
     LS_AddStr('case_by_age_button_w-1', '0-6 days ago');
     LS_AddStr('case_by_age_button_w-2', '7-13 days ago');
@@ -99,6 +144,30 @@ function CBA_ResetText() {
     LS_AddStr('case_by_age_button_m10', 'October');
     LS_AddStr('case_by_age_button_m11', 'November');
     LS_AddStr('case_by_age_button_m12', 'December');
+    LS_AddStr('case_by_age_button_2020_01', 'Jan 2020');
+    LS_AddStr('case_by_age_button_2020_02', 'Feb 2020');
+    LS_AddStr('case_by_age_button_2020_03', 'Mar 2020');
+    LS_AddStr('case_by_age_button_2020_04', 'Apr 2020');
+    LS_AddStr('case_by_age_button_2020_05', 'May 2020');
+    LS_AddStr('case_by_age_button_2020_06', 'Jun 2020');
+    LS_AddStr('case_by_age_button_2020_07', 'Jul 2020');
+    LS_AddStr('case_by_age_button_2020_08', 'Aug 2020');
+    LS_AddStr('case_by_age_button_2020_09', 'Sep 2020');
+    LS_AddStr('case_by_age_button_2020_10', 'Oct 2020');
+    LS_AddStr('case_by_age_button_2020_11', 'Nov 2020');
+    LS_AddStr('case_by_age_button_2020_12', 'Dec 2020');
+    LS_AddStr('case_by_age_button_2021_01', 'Jan 2021');
+    LS_AddStr('case_by_age_button_2021_02', 'Feb 2021');
+    LS_AddStr('case_by_age_button_2021_03', 'Mar 2021');
+    LS_AddStr('case_by_age_button_2021_04', 'Apr 2021');
+    LS_AddStr('case_by_age_button_2021_05', 'May 2021');
+    LS_AddStr('case_by_age_button_2021_06', 'Jun 2021');
+    LS_AddStr('case_by_age_button_2021_07', 'Jul 2021');
+    LS_AddStr('case_by_age_button_2021_08', 'Aug 2021');
+    LS_AddStr('case_by_age_button_2021_09', 'Sep 2021');
+    LS_AddStr('case_by_age_button_2021_10', 'Oct 2021');
+    LS_AddStr('case_by_age_button_2021_11', 'Nov 2021');
+    LS_AddStr('case_by_age_button_2021_12', 'Dec 2021');
   }
 }
 
@@ -187,9 +256,14 @@ function CBA_MouseMove(wrap, d) {
     month_label = ['Total', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       
   //-- Generate column label
-  var col_label;
+  var m, yyyy, col_label;
   if (wrap.tag.includes('latest'))
     col_label = (7*(wrap.col_ind-1)) + '-' + (7*wrap.col_ind-1);
+  else if (wrap.tag.includes('overall')) {
+    yyyy = 2020 + Math.floor((wrap.col_ind-1) / 12);
+    m = (wrap.col_ind - 1) % 12 + 1;
+    col_label = month_label[m];
+  }
   else
     col_label = month_label[wrap.col_ind];
   
@@ -201,6 +275,8 @@ function CBA_MouseMove(wrap, d) {
       tooltip_text = '全部案例中有';
     else if (wrap.tag.includes('latest'))
       tooltip_text = col_label + '天前之案例中有';
+    else if (wrap.tag.includes('overall'))
+      tooltip_text = yyyy + '年' + m + '月案例中有';
     else
       tooltip_text = wrap.col_ind + '月案例中有';
     
@@ -218,9 +294,11 @@ function CBA_MouseMove(wrap, d) {
     if (wrap.col_ind == 0)
       tooltip_text += " de l'ensemble des cas";
     else if (wrap.tag.includes('latest'))
-      tooltip_text += " cas confirmés<br>de " + col_label + ' jours plus tôt';
+      tooltip_text += ' cas confirmés<br>de ' + col_label + ' jours plus tôt';
+    else if (wrap.tag.includes('overall'))
+      tooltip_text += ' cas ' + col_label + ' ' + yyyy;
     else
-      tooltip_text += " cas " + col_label;
+      tooltip_text += ' cas ' + col_label;
     
     tooltip_text += '<br>sont âgés de ' + d['age'] + ' ans';
   }
@@ -232,6 +310,8 @@ function CBA_MouseMove(wrap, d) {
       tooltip_text += ' of all confirmed cases';
     else if (wrap.tag.includes('latest'))
       tooltip_text += ' confirmed cases<br>of ' + col_label + ' days ago';
+    else if (wrap.tag.includes('overall'))
+      tooltip_text += ' cases from ' + col_label + ' ' + yyyy;
     else
       tooltip_text += ' cases from ' + col_label;
     
@@ -302,29 +382,58 @@ function CBA_Replot(wrap) {
   wrap.legend_value = [wrap.legend_value_raw[1], wrap.legend_value_raw[0]];
   
   //-- Define legend label
-  var legend_label;
-  var i, label_list;
+  var i, label_list, legend_label_sum, legend_label_list;
   if (wrap.tag.includes('latest')) {
     if (LS_lang == 'zh-tw')
-      label_list = ['合計', '', '到', '天前之確診個案'];
+      label_list = ['', '到', '天前之確診個案'];
     else if (LS_lang == 'fr')
-      label_list = ['Total', '', ' & ', ' jours plus tôt'];
+      label_list = ['', ' & ', ' jours plus tôt'];
     else 
-      label_list = ['Total', 'Between ', ' & ', ' days ago'];
+      label_list = ['Between ', ' & ', ' days ago'];
     
-    legend_label = [label_list[0]];
+    legend_label_list = [];
     for (i=1; i<wrap.nb_col; i++)
-      legend_label.push(label_list[1] + (7*(i-1)) + label_list[2] + (7*i-1) + label_list[3]);
+      legend_label_list.push(label_list[0] + (7*(i-1)) + label_list[1] + (7*i-1) + label_list[3]);
+  }
+  else if (wrap.tag.includes('overall')) {
+    if (LS_lang == 'zh-tw')
+      legend_label_list = [
+        '2020年1月', '2020年2月','2020年3月', '2020年4月','2020年5月', '2020年6月',
+        '2020年7月', '2020年8月','2020年9月', '2020年10月','2020年11月', '2020年12月',
+        '2021年1月', '2021年2月','2021年3月', '2021年4月','2021年5月', '2021年6月',
+        '2021年7月', '2021年8月','2021年9月', '2021年10月','2021年11月', '2021年12月'
+      ];
+    else if (LS_lang == 'fr')
+      legend_label_list = [
+        'Janvier 2020', 'Février 2020', 'Mars 2020', 'Avril 2020', 'Mai 2020', 'Juin 2020', 
+        'Juillet 2020', 'Août 2020', 'Septembre 2020', 'Octobre 2020', 'Novembre 2020', 'Décembre 2020', 
+        'Janvier 2021', 'Février 2021', 'Mars 2021', 'Avril 2021', 'Mai 2021', 'Juin 2021', 
+        'Juillet 2021', 'Août 2021', 'Septembre 2021', 'Octobre 2021', 'Novembre 2021', 'Décembre 2021', 
+      ];
+    else
+      legend_label_list = [
+        'January 2020', 'February 2020', 'March 2020', 'April 2020', 'May 2020', 'June 2020', 
+        'July 2020', 'Auguest 2020', 'September 2020', 'October 2020', 'November 2020', 'December 2020', 
+        'January 2021', 'February 2021', 'March 2021', 'April 2021', 'May 2021', 'June 2021', 
+        'July 2021', 'Auguest 2021', 'September 2021', 'October 2021', 'November 2021', 'December 2021', 
+      ]; 
   }
   else {
     if (LS_lang == 'zh-tw')
-      legend_label = ['合計', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+      legend_label_list = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
     else if (LS_lang == 'fr')
-      legend_label = ['Total', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+      legend_label_list = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
     else
-      legend_label = ['Total', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      legend_label_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   }
-  wrap.legend_label = [legend_label[wrap.col_ind], legend_label[0]];
+  if (LS_lang == 'zh-tw')
+    legend_label_sum = '合計';
+  else if (LS_lang == 'fr')
+    legend_label_sum = 'Totaux';
+  else 
+    legend_label_sum = 'Total';
+  
+  wrap.legend_label = [legend_label_list[wrap.col_ind], legend_label_sum];
   
   //-- Remove redundancy from legend if col_ind = 0
   if (wrap.col_ind == 0) {

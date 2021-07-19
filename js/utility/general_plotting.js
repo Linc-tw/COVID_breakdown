@@ -8,14 +8,14 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//Cumulative for LCPC
-//vaccination map => like IM
-//Overall IM
+//vaccination by county => horizontal bar
 //Overall CBA
 //Note with "Collapse"
 //Clean processed_data
 //Change plot name
 //Automize README generation
+//Cumulative for LCPC?
+//Linear/log?
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
