@@ -8,8 +8,7 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//vaccination by county => horizontal bar
-//Overall CBA
+//`vaccination_progress.js` (latest)
 //Note with "Collapse"
 //Clean processed_data
 //Change plot name
@@ -231,6 +230,15 @@ function GP_MakeLinearY(wrap) {
   var yscale = d3.scaleLinear()
     .domain([0, wrap.y_max])
     .range([wrap.height, 0]);
+  return yscale;
+}
+
+//-- Require y_list
+function GP_MakeBandYForBar(wrap) {
+  var yscale = d3.scaleBand()
+    .domain(wrap.y_list)
+    .range([0, wrap.height])
+    .padding(GP_wrap.bar_padding);
   return yscale;
 }
 

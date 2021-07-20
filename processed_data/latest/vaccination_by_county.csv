@@ -1,25 +1,25 @@
-key,value
-latest_date,2021-07-16
-total,0.2084
-Keelung,0.2247
-Taipei,0.2861
-New_Taipei,0.2044
-Taoyuan,0.2180
-Hsinchu,0.1412
-Hsinchu_C,0.1872
-Miaoli,0.1698
-Taichung,0.1868
-Changhua,0.1776
-Nantou,0.1462
-Yunlin,0.1771
-Chiayi,0.1826
-Chiayi_C,0.2207
-Tainan,0.1840
-Kaohsiung,0.2175
-Pingtung,0.2215
-Yilan,0.1927
-Hualien,0.2304
-Taitung,0.2296
-Penghu,0.3205
-Kinmen,0.2187
-Matsu,0.7021
+key,value,label,label_fr,label_zh
+latest_date,2021-07-19,,,
+total,0.2298,Nationalwide,National,全國
+Keelung,0.2479,Keelung,Keelung,基隆
+Taipei,0.3101,Taipei,Taipei,台北
+New_Taipei,0.2298,New Taipei,Nouveau Taipei,新北
+Taoyuan,0.2373,Taoyuan,Taoyuan,桃園
+Hsinchu,0.1590,Hsinchu County,Comté de Hsinchu,竹縣
+Hsinchu_C,0.2092,Hsinchu City,Ville de Hsinchu,竹市
+Miaoli,0.1859,Miaoli,Miaoli,苗栗
+Taichung,0.1961,Taichung,Taichung,台中
+Changhua,0.2002,Changhua,Changhua,彰化
+Nantou,0.1899,Nantou,Nantou,南投
+Yunlin,0.2050,Yunlin,Yunlin,雲林
+Chiayi,0.2092,Chiayi County,Comté de Chiayi,嘉縣
+Chiayi_C,0.2575,Chiayi City,Ville de Chiayi,嘉市
+Tainan,0.1990,Tainan,Tainan,台南
+Kaohsiung,0.2395,Kaohsiung,Kaohsiung,高雄
+Pingtung,0.2491,Pingtung,Pingtung,屏東
+Yilan,0.2148,Yilan,Yilan,宜蘭
+Hualien,0.2557,Hualien,Hualien,花蓮
+Taitung,0.2517,Taitung,Taitung,台東
+Penghu,0.3451,Penghu,Penghu,澎湖
+Kinmen,0.2298,Kinmen,Kinmen,金門
+Matsu,0.7022,Matsu,Matsu,馬祖

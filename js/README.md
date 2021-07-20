@@ -50,19 +50,19 @@ Structure by page
 `cases.html`
   - `case_by_transmission.js`
   - `local_case_per_county.js`
-  - `case_by_age.js` (TODO: Which time range to split for overall?)
+  - `case_by_age.js`
 
 `incidence.html`
   - `incidence_rates.js`
-  - `incidence_map.js` (TODO: Which time range to split overall?)
+  - `incidence_map.js`
   - `incidence_evolution_by_county.js` (no overall)
   - `incidence_evolution_by_age.js` (no overall)
 
 `vaccination.html`
   - `vaccination_by_brand.js`
-  - `vaccination_progress.js` (only overall)
+  - `vaccination_progress.js` (only overall TODO latest)
   - `vaccination_by_dose.js`
-  - TODO vaccination by county
+  - `vaccination_by_county.js` (only latest)
 
 `others.html`
   - `test_by_criterion.js`

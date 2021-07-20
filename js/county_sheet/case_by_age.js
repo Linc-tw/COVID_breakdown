@@ -6,8 +6,11 @@
 //--   Chieh-An Lin
 
 function CBA_InitFig(wrap) {
+  if (wrap.tag.includes('mini'))
+    GP_InitFig_Mini(wrap);
   //-- No GP_InitFig_Overall because it doesn't change axis
-  GP_InitFig_SimpleBar(wrap);
+  else
+    GP_InitFig_SimpleBar(wrap);
 }
 
 function CBA_ResetText() {

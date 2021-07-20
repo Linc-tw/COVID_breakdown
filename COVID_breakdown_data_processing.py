@@ -2,7 +2,7 @@
     ##########################################
     ##  COVID_breakdown_data_processing.py  ##
     ##  Chieh-An Lin                        ##
-    ##  Version 2021.07.18                  ##
+    ##  Version 2021.07.21                  ##
     ##########################################
 
 import os
@@ -3447,18 +3447,23 @@ class VaccinationCountySheet(Template):
     county_key_list = ['total'] + self.county_key_list
     pop_dict = {value_dict['tag']: value_dict['population'] for value_dict in COUNTY_DICT.values()}
     
+    ## Data for population & label
     date = self.getReportDate()[-1]
-    key_list = ['latest_date']
-    value_list = [date]
+    county_dict = {dict_['tag']: dict_ for dict_ in COUNTY_DICT.values()}
     
+    key_list = ['latest_date'] + county_key_list
+    value_list = [date]
+    label_list_en = [''] + [county_dict[county]['label'][0] for county in county_key_list]
+    label_list_fr = [''] + [county_dict[county]['label'][1] for county in county_key_list]
+    label_list_zh = [''] + [county_dict[county]['label'][2] for county in county_key_list]
+      
     ## Make stock
     for county in county_key_list:
       cum_vacc = self.getCumVacc(county)[-1]
       value = float(cum_vacc) / float(pop_dict[county])
-      key_list.append(county)
       value_list.append('%.4f' % value)
       
-    stock = {'key': key_list, 'value': value_list}
+    stock = {'key': key_list, 'value': value_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data = pd.DataFrame(stock)
       
     name = '%sprocessed_data/%s/vaccination_by_county.csv' % (DATA_PATH, PAGE_LATEST)
@@ -3590,14 +3595,14 @@ def sandbox():
   #timeline_sheet = TimelineSheet()
   #timeline_sheet.saveCsv_evtTimeline()
   
-  county_sheet = CountySheet()
-  county_sheet.saveCsv_incidenceMap()
+  #county_sheet = CountySheet()
+  #county_sheet.saveCsv_incidenceMap()
   
   #vacc_sheet = VaccinationSheet()
   #vacc_sheet.saveCsv_vaccinationByDose()
   
-  #vacc_county_sheet = VaccinationCountySheet()
-  #vacc_county_sheet.saveCsv_vaccinationByCounty()
+  vacc_county_sheet = VaccinationCountySheet()
+  vacc_county_sheet.saveCsv_vaccinationByCounty()
   
   #main_sheet = MainSheet()
   #status_sheet = StatusSheet()
