@@ -396,7 +396,7 @@ function CBA_Replot(wrap) {
     
     legend_label_list = [];
     for (i=1; i<wrap.nb_col; i++)
-      legend_label_list.push(label_list[0] + (7*(i-1)) + label_list[1] + (7*i-1) + label_list[3]);
+      legend_label_list.push(label_list[0] + (7*(i-1)) + label_list[1] + (7*i-1) + label_list[2]);
   }
   else if (wrap.tag.includes('overall')) {
     if (LS_lang == 'zh-tw')
