@@ -34,6 +34,8 @@ PAGE_2021 = '2021'
 PAGE_2020 = '2020'
 PAGE_LIST = [PAGE_LATEST, PAGE_OVERALL, PAGE_2021, PAGE_2020]
 
+README_DICT = {}
+
 SYMPTOM_DICT = {
   'sneezing': {'zh-tw': '鼻腔症狀', 'fr': 'éternuement'},
   'cough': {'zh-tw': '咳嗽', 'fr': 'toux'},
@@ -617,6 +619,46 @@ def truncateStock(stock, page):
     
   ## If overall
   return stock
+
+################################################################################
+## Functions - README
+
+def initializeReadme():
+  for page in PAGE_LIST:
+    stock = []
+    stock.append('processed_data/%s/' % page)
+    stock.append('================' + '='*len(page) + '')
+    stock.append('')
+    
+    stock.append('')
+    stock.append('Summary')
+    stock.append('-------')
+    stock.append('')
+    dict_ = {PAGE_LATEST: 'last 90 days', PAGE_OVERALL: 'the entire pandemic', PAGE_2021: PAGE_2021, PAGE_2020: PAGE_2020}
+    stock.append('This folder hosts data files which summarize COVID statistics in Taiwan during %s.' % dict_[page])
+    stock.append('')
+    
+    stock.append('')
+    stock.append('Contents')
+    stock.append('--------')
+    stock.append('')
+    
+    README_DICT[page] = stock
+  return
+
+def saveMarkdown_readme(verbose=True):
+  for page in PAGE_LIST:
+    name = 'test_readme_%s.md' % page
+    f = open(name, 'w')
+    
+    for row in README_DICT[page]:
+      f.write(row)
+      f.write('\n')
+    f.close()
+    
+    if verbose:
+      print('Saved \"%s\"' % name)
+  return
 
 ################################################################################
 ## Classes - template
@@ -3211,12 +3253,13 @@ class VaccinationSheet(Template):
       saveCsv(name, data)
     return
   
-  def makeDeliveries_vaccinationProgress(self):
+  def makeSupplies_vaccinationProgress(self):
     ord_ref = ISODateToOrd(ISO_DATE_REF)
     nb_rows = len(DELIVERY_LIST)
+    brand_list = ['total'] + self.brand_list
     
-    stock = {col: [] for col in ['index', 'date', 'source']}
-    stock.update({brand: np.zeros(nb_rows, dtype=int) for brand in self.brand_list})
+    cum_dict = {brand: 0 for brand in brand_list}
+    stock = {col: [] for col in ['index', 'date', 'source'] + brand_list}
     
     ## brand, source, quantity, delivery_date, available_date, delivery_news, available_news
     for i, row in enumerate(DELIVERY_LIST):
@@ -3227,17 +3270,22 @@ class VaccinationSheet(Template):
       available_date = row[4]
       
       if available_date is None or available_date == '':
-        ind = ''
+        ind = -1
       else:
         ind = ISODateToOrd(available_date) - ord_ref 
+      
+      cum_dict['total'] += quantity
+      cum_dict[brand] += quantity
       
       stock['index'].append(ind)
       stock['date'].append(available_date)
       stock['source'].append(source)
-      stock[brand][i] = quantity
+      for brand in brand_list:
+        stock[brand].append(cum_dict[brand])
+        
     return stock
     
-  def makeAdministrated_vaccinationProgress(self):
+  def makeInjections_vaccinationProgress(self):
     date_list = self.getDate()
     cum_vacc_list = self.getCumVacc()
     cum_az_list = self.getCumAZ()
@@ -3261,16 +3309,58 @@ class VaccinationSheet(Template):
     stock = {'index': index_list, 'date': date_list, 'total': cum_vacc_list, 'AZ': cum_az_list, 'Moderna': cum_moderna_list}
     return stock
     
-  def saveCsv_vaccinationProgress(self):
-    stock_d = self.makeDeliveries_vaccinationProgress()
-    stock_d = pd.DataFrame(stock_d)
-    stock_a = self.makeAdministrated_vaccinationProgress()
-    stock_a = pd.DataFrame(stock_a)
+  def appendReadme_vaccinationProgress(self, page):
+    README_DICT[page].append('`vaccination_progress_supplies.csv`')
+    README_DICT[page].append('- Row: report date')
+    README_DICT[page].append('- Column')
+    README_DICT[page].append('  - `index`: day difference to %s' % ISO_DATE_REF)
+    README_DICT[page].append('  - `date`')
+    README_DICT[page].append('  - `source`: origin of the supply batch')
+    README_DICT[page].append('  - `total`: all brands, cumulative number of doses')
+    README_DICT[page].append('  - `AZ`')
+    README_DICT[page].append('  - `Moderna`')
+    README_DICT[page].append('')
     
-    name = '%sprocessed_data/%s/vaccination_progress_deliveries.csv' % (DATA_PATH, PAGE_OVERALL)
-    saveCsv(name, stock_d)
-    name = '%sprocessed_data/%s/vaccination_progress_administrated.csv' % (DATA_PATH, PAGE_OVERALL)
-    saveCsv(name, stock_a)
+    README_DICT[page].append('`vaccination_progress_injections.csv`')
+    README_DICT[page].append('- Row = report date')
+    README_DICT[page].append('- Column')
+    README_DICT[page].append('  - `index`: day difference to %s' % ISO_DATE_REF)
+    README_DICT[page].append('  - `date`')
+    README_DICT[page].append('  - `total`: all brands, cumulative number of doses')
+    README_DICT[page].append('  - `AZ`')
+    README_DICT[page].append('  - `Moderna`')
+    README_DICT[page].append('')
+    return
+  
+  def saveCsv_vaccinationProgress(self):
+    stock_s = self.makeSupplies_vaccinationProgress()
+    stock_s = pd.DataFrame(stock_s)
+    stock_i = self.makeInjections_vaccinationProgress()
+    stock_i = pd.DataFrame(stock_i)
+    ord_ref = ISODateToOrd(ISO_DATE_REF)
+    
+    for page in PAGE_LIST:
+      if page == PAGE_2020:
+        continue
+      
+      if page == PAGE_LATEST:
+        ind = getTodayOrdinal() - ord_ref - 90
+      elif page == PAGE_2021:
+        ind = ISODateToOrd('2021-01-01') - ord_ref
+      elif page == PAGE_OVERALL:
+        ind = ISODateToOrd(ISO_DATE_REF_VACC) - ord_ref
+        
+      ## No cut on supplies
+      data_s = stock_s
+      ind_arr = (stock_i['index'] == -1) | (stock_i['index'] >= ind)
+      data_i = stock_i[ind_arr]
+      
+      name = '%sprocessed_data/%s/vaccination_progress_supplies.csv' % (DATA_PATH, page)
+      saveCsv(name, data_s)
+      name = '%sprocessed_data/%s/vaccination_progress_injections.csv' % (DATA_PATH, page)
+      saveCsv(name, data_i)
+      
+      self.appendReadme_vaccinationProgress(page)
     return
   
   def makeStock_vaccinationByDose(self):
@@ -3598,11 +3688,11 @@ def sandbox():
   #county_sheet = CountySheet()
   #county_sheet.saveCsv_incidenceMap()
   
-  #vacc_sheet = VaccinationSheet()
-  #vacc_sheet.saveCsv_vaccinationByDose()
+  vacc_sheet = VaccinationSheet()
+  vacc_sheet.saveCsv_vaccinationProgress()
   
-  vacc_county_sheet = VaccinationCountySheet()
-  vacc_county_sheet.saveCsv_vaccinationByCounty()
+  #vacc_county_sheet = VaccinationCountySheet()
+  #vacc_county_sheet.saveCsv_vaccinationByCounty()
   
   #main_sheet = MainSheet()
   #status_sheet = StatusSheet()
@@ -3616,6 +3706,8 @@ def sandbox():
 ## Functions - save
 
 def saveCsv_all():
+  initializeReadme()
+  
   print()
   main_sheet = MainSheet()
   main_sheet.saveCsv()
@@ -3651,6 +3743,8 @@ def saveCsv_all():
   print()
   saveCsv_incidenceRates(main_sheet, border_sheet)
   saveCsv_positivityAndFatality(main_sheet, status_sheet, test_sheet)
+  print()
+  saveMarkdown_readme()
   print()
   return
 

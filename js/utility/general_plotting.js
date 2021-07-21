@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//`vaccination_progress.js` (latest)
 //Note with "Collapse"
 //Clean processed_data
 //Change plot name

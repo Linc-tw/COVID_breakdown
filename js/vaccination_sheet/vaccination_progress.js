@@ -48,7 +48,10 @@ function VP_FormatData(wrap, data) {
   }
   
   //-- Set iso_begin
-  wrap.iso_begin = GP_wrap.iso_ref_vacc;
+  if (wrap.tag.includes('latest'))
+    wrap.iso_begin = GP_ISODateAddition(wrap.timestamp.slice(0, 10), -90+1);
+  else if (wrap.tag.includes('overall'))
+    wrap.iso_begin = GP_wrap.iso_ref_vacc;
   
   //-- Calculate xlim
   GP_MakeXLim(wrap, 'dot');
@@ -57,10 +60,30 @@ function VP_FormatData(wrap, data) {
   var iso_today = wrap.iso_end;
   var x_today = wrap.x_max;
   var nb_extended_days = (x_today - wrap.x_min) * (wrap.x_max_factor - 1);
-  var x_max = x_today + Math.ceil(nb_extended_days);
+  nb_extended_days = Math.ceil(nb_extended_days);
+  var x_max = x_today + nb_extended_days;
   
   //-- Add real end
   var iso_end = GP_ISODateAddition(iso_today, nb_extended_days);
+  
+  //-- Variables for xaxis
+  var xticklabel = [];
+  var x_list = [];
+  var r, x;
+  
+  if (wrap.tag.includes('latest')) {
+    r = GP_GetRForTickPos(wrap, 90+nb_extended_days);
+    
+    //-- For xtick
+    for (i=0; i<90+nb_extended_days; i++) {
+      //-- Determine where to have xtick
+      if (i % wrap.xlabel_path == r) {
+        x = GP_ISODateAddition(wrap.iso_begin, i);
+        x_list.push(i+wrap.x_min);
+        xticklabel.push(x);
+      }
+    }
+  }
   
   //-- Save to wrapper
   wrap.population = population;
@@ -68,14 +91,15 @@ function VP_FormatData(wrap, data) {
   wrap.iso_end = iso_end;
   wrap.x_today = x_today;
   wrap.x_max = x_max;
+  wrap.x_list = x_list;
+  wrap.xticklabel = xticklabel;
 }
 
 //-- Supply
 function VP_FormatData2(wrap, data) {
   //-- Variables for data
   var col_tag_list = data.columns.slice(3); //-- 0 = index, 1 = date, 2 = source
-  var col_tag = col_tag_list[0];
-  var col_tag_avg = col_tag + '_avg';
+  var col_tag = col_tag_list[wrap.brand];
   var nb_col = col_tag_list.length;
   var i, j, row;
   
@@ -83,18 +107,10 @@ function VP_FormatData2(wrap, data) {
   var x_key = 'date';
   var x = wrap.x_min;
   var y = 0;
+  var y_prev = 0;
   var block = [{x: x, y: y}];
-  var x_list = [];
   var annotation = [];
-  var dy, date;
-  
-  //-- Variables for xaxis
-  var xticklabel = [];
-  var q, r;
-  if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
-    q = data.length % wrap.xlabel_path;
-    r = wrap.r_list[q];
-  }
+  var date;
   
   //-- Main loop over row
   for (i=0; i<data.length; i++) {
@@ -105,36 +121,28 @@ function VP_FormatData2(wrap, data) {
     if ('' == date)
       break;
     
-    //-- Determine where to have xtick
-    x_list.push(date);
-    if (!wrap.tag.includes('overall') && !wrap.tag.includes('mini')) {
-      if (i % wrap.xlabel_path == r)
-        xticklabel.push(date);
-    }
-    
     //-- Before delivery
     x = +row['index'] - 0.5;
+    
+    if (x < wrap.x_min) {
+      y = +row[col_tag];
+      block[0].y = y;
+      continue;
+    }
     
     //-- Stock
     block.push({x: x, y: y});
     
     //-- After delivery
-    if (0 == wrap.brand) {
-      dy = 0;
-      //-- Loop over column
-      for (j=0; j<nb_col; j++)
-        dy += +row[col_tag_list[j]];
-    }
-    else 
-      dy = +row[col_tag_list[wrap.brand-1]];
-    y += dy;
+    y_prev = y;
+    y = +row[col_tag];
     
     //-- Stock
     block.push({x: x, y: y});
     
     //-- Annotation
     source = row['source'];
-    if (dy > 0 && source != 'COVAX' && !col_tag_list.includes(source))
+    if (y > y_prev && source != 'COVAX' && !col_tag_list.includes(source))
       annotation.push({x: x, y: y, source: source});
   }
   
@@ -148,21 +156,10 @@ function VP_FormatData2(wrap, data) {
   //-- Get today's value as legend value
   var legend_value_raw = [y];
   
-  //-- Continue loop over row
+  //-- Continue loop over row (for supplies under checks)
   block = [{x: x, y: y}];
   while (i<data.length) {
-    row = data[i];
-    
-    if (0 == wrap.brand) {
-      dy = 0;
-      //-- Loop over column
-      for (j=0; j<nb_col; j++)
-        dy += +row[col_tag_list[j]];
-    }
-    else 
-      dy = +row[col_tag_list[wrap.brand-1]];
-    y += dy;
-    
+    y = +data[i][col_tag];
     i++; 
   }
   block.push({x: x, y: y});
@@ -181,8 +178,6 @@ function VP_FormatData2(wrap, data) {
   wrap.annotation = annotation;
   wrap.col_tag_list = col_tag_list;
   wrap.nb_col = nb_col;
-  wrap.x_list = x_list;
-  wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.legend_value_raw = legend_value_raw;
 }
@@ -326,20 +321,6 @@ function VP_FormatData4(wrap) {
   wrap.formatted_data.push(block_line);
   
   //-- No today annotation
-  
-  //-- Population line
-  y = wrap.population * wrap.threshold;
-  block_line = [{x: wrap.x_min, y: y}, {x: wrap.x_max, y: y}];
-  wrap.formatted_data.push(block_line);
-  
-  //-- Population annotation
-  y_anno = (1 - y / wrap.y_max) * wrap.height;
-  if (y_anno > 10) {
-    threshold = d3.format('.0f')(wrap.threshold*100);
-    text_dict = {en: '% of population', fr: '% de la population', 'zh-tw': '%人口'};
-    block_anno = {tag: '', points: '', text: threshold+text_dict[LS_lang], x_text: wrap.threshold_pos_x, y_text: y_anno-eps, 'text-anchor': 'start'};
-    wrap.annotation.push(block_anno);
-  }
 }
 
 //-- Tooltip
@@ -385,14 +366,14 @@ function VP_Plot(wrap) {
   
   //-- Define color & linestyle
   //-- AZ, Moderna
-  var color_list = GP_wrap.c_list.slice(4, 4+wrap.nb_col);
+  var color_list = GP_wrap.c_list.slice(4, 4+2);
   var linewidth_list = ['2.5px', '2.5px'];
   var linestyle_list = ['none', 'none'];
   
   //-- Under QC, extrapolation, today, population
-  color_list = color_list.concat([GP_wrap.c_list[4], GP_wrap.c_list[5], GP_wrap.gray, GP_wrap.gray]);
-  linewidth_list = linewidth_list.concat(['2.5px', '1.5px', '1.5px', '1.5px']);
-  linestyle_list = linestyle_list.concat(['8,5', '8,5', '8,5', '8,5']);
+  color_list = color_list.concat([GP_wrap.c_list[4], GP_wrap.c_list[5], GP_wrap.gray]);
+  linewidth_list = linewidth_list.concat(['2.5px', '1.5px', '1.5px']);
+  linestyle_list = linestyle_list.concat(['8,5', '8,5', '8,5']);
   
   //-- Define xscale
   var xscale = GP_MakeLinearX(wrap);
@@ -506,8 +487,27 @@ function VP_Replot(wrap) {
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
     GP_ReplotOverallXTick(wrap, 'dot');
-  else
-    GP_ReplotDateAsX(wrap);
+  else {
+    //-- Define xaxis
+    var xaxis = d3.axisBottom(xscale)
+      .tickSize(10)
+      .tickSizeOuter(0)
+      .tickValues(wrap.x_list)
+      .tickFormat(function (d, i) {return LS_ISODateToMDDate(wrap.xticklabel[i]);});
+    
+    //-- Add xaxis
+    wrap.svg.select('.xaxis')
+      .transition()
+      .duration(wrap.trans_delay)
+      .call(xaxis)
+      .selectAll('text')
+        .attr('transform', 'translate(-20,15) rotate(-90)')
+        .style('text-anchor', 'end');
+        
+    //-- Tick style
+    wrap.svg.selectAll('.xaxis line')
+      .style('stroke-opacity', '0.4');
+  }
   
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap, 'count');
@@ -526,22 +526,23 @@ function VP_Replot(wrap) {
   
   //-- Define legend label
   wrap.legend_label = [];
-  var i, legend_label, col_tag_list;
+  var col_tag_list = wrap.col_tag_list.slice(1);
+  var i, legend_label;
   if (LS_lang == 'zh-tw') {
     legend_label = ['供應量', '接種量'];
-    col_tag_list = ['總'].concat(wrap.col_tag_list);
+    col_tag_list = ['總'].concat(col_tag_list);
     for (i=0; i<legend_label.length; i++)
       wrap.legend_label.push(col_tag_list[wrap.brand]+legend_label[i]);
   }
   else if (LS_lang == 'fr') {
     legend_label = ['Approvisionnements ', ' Injections '];
-    col_tag_list = [['totaux'].concat(wrap.col_tag_list), ['totales'].concat(wrap.col_tag_list)];
+    col_tag_list = [['totaux'].concat(col_tag_list), ['totales'].concat(col_tag_list)];
     for (i=0; i<legend_label.length; i++)
       wrap.legend_label.push(legend_label[i]+col_tag_list[i][wrap.brand]);
   }
   else {
     legend_label = [' supplies', ' injections'];
-    col_tag_list = ['Total'].concat(wrap.col_tag_list);
+    col_tag_list = ['Total'].concat(col_tag_list);
     for (i=0; i<legend_label.length; i++)
       wrap.legend_label.push(col_tag_list[wrap.brand]+legend_label[i]);
   }

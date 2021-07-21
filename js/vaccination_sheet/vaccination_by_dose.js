@@ -142,12 +142,13 @@ function VBD_FormatData2(wrap, data2) {
   GP_MakeXLim(wrap, 'area');
   
   //-- Variables for xaxis
-  var r = GP_GetRForTickPos(wrap, 90);
   var xticklabel = [];
   var x_list = [];
-  var x;
+  var r, x;
   
   if (wrap.tag.includes('latest')) {
+    r = GP_GetRForTickPos(wrap, 90);
+    
     //-- For xtick
     for (i=0; i<90; i++) {
       //-- Determine where to have xtick
