@@ -8,11 +8,11 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//Note with "Collapse"
+//Automize README generation
+//vertical lines for VBC
 //Clean processed_data
 //Change plot name
-//Automize README generation
-//Cumulative for LCPC?
+//Note with "Collapse"
 //Linear/log?
 
 //------------------------------------------------------------------------------

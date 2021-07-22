@@ -401,9 +401,9 @@ DELIVERY_LIST = [
   ['Moderna', 'Moderna', 409800, '2021-06-30', '2021-07-08', 'https://www.cna.com.tw/news/firstnews/202106305007.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600434'],
   ['AZ', 'AZ', 625900, '2021-07-07', '2021-07-15', 'https://www.cna.com.tw/news/firstnews/202107070181.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600446'],
   ['AZ', 'Japan', 1131780, '2021-07-08', '2021-07-16', 'https://www.cna.com.tw/news/firstnews/202107085007.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600448'],
-  ['AZ', 'Japan', 973480, '2021-07-15', '', 'https://www.cna.com.tw/news/firstnews/202107155011.aspx', ''],
-  ['AZ', 'AZ', 560100, '2021-07-15', '', 'https://www.cna.com.tw/news/firstnews/202107150245.aspx', ''],
-  ['Moderna', 'Moderna', 349200, '2021-07-15', '', 'https://www.cna.com.tw/news/firstnews/202107150215.aspx',''],
+  ['AZ', 'Japan', 973480, '2021-07-15', '2021-07-23', 'https://www.cna.com.tw/news/firstnews/202107155011.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600455'],
+  ['AZ', 'AZ', 560100, '2021-07-15', '2021-07-23', 'https://www.cna.com.tw/news/firstnews/202107150245.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600455'],
+  ['Moderna', 'Moderna', 349200, '2021-07-15', '2021-07-23', 'https://www.cna.com.tw/news/firstnews/202107150215.aspx','https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600455'],
 ]
 
 ################################################################################
