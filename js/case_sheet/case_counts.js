@@ -1,11 +1,11 @@
 
 //-- Filename:
-//--   case_by_transmission.js
+//--   case_counts.js
 //--
 //-- Author:
 //--   Chieh-An Lin
 
-function CBT_InitFig(wrap) {
+function CC_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
     GP_InitFig_Mini(wrap);
   else if (wrap.tag.includes('overall'))
@@ -14,39 +14,39 @@ function CBT_InitFig(wrap) {
     GP_InitFig_Standard(wrap);
 }
 
-function CBT_ResetText() {
+function CC_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr("case_by_transmission_title", "各感染源確診人數");
-    LS_AddStr("case_by_transmission_button_daily", "逐日");
-    LS_AddStr("case_by_transmission_button_cumul", "累計");
-    LS_AddStr("case_by_transmission_button_total", "合計");
-    LS_AddStr("case_by_transmission_button_imported", "境外移入");
-    LS_AddStr("case_by_transmission_button_local", "本土");
-    LS_AddStr("case_by_transmission_button_others", "其他");
+    LS_AddStr("case_counts_title", "各感染源確診人數");
+    LS_AddStr("case_counts_button_daily", "逐日");
+    LS_AddStr("case_counts_button_cumul", "累計");
+    LS_AddStr("case_counts_button_total", "合計");
+    LS_AddStr("case_counts_button_imported", "境外移入");
+    LS_AddStr("case_counts_button_local", "本土");
+    LS_AddStr("case_counts_button_others", "其他");
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr("case_by_transmission_title", "Nombre de cas confirmés");
-    LS_AddStr("case_by_transmission_button_daily", "Quotidiens");
-    LS_AddStr("case_by_transmission_button_cumul", "Cumulés");
-    LS_AddStr("case_by_transmission_button_total", "Totaux");
-    LS_AddStr("case_by_transmission_button_imported", "Importés");
-    LS_AddStr("case_by_transmission_button_local", "Locaux");
-    LS_AddStr("case_by_transmission_button_others", "Divers");
+    LS_AddStr("case_counts_title", "Nombre de cas confirmés");
+    LS_AddStr("case_counts_button_daily", "Quotidiens");
+    LS_AddStr("case_counts_button_cumul", "Cumulés");
+    LS_AddStr("case_counts_button_total", "Totaux");
+    LS_AddStr("case_counts_button_imported", "Importés");
+    LS_AddStr("case_counts_button_local", "Locaux");
+    LS_AddStr("case_counts_button_others", "Divers");
   }
   
   else { //-- En
-    LS_AddStr("case_by_transmission_title", "Confirmed Case Counts");
-    LS_AddStr("case_by_transmission_button_daily", "Daily");
-    LS_AddStr("case_by_transmission_button_cumul", "Cumulative");
-    LS_AddStr("case_by_transmission_button_total", "Total");
-    LS_AddStr("case_by_transmission_button_imported", "Imported");
-    LS_AddStr("case_by_transmission_button_local", "Local");
-    LS_AddStr("case_by_transmission_button_others", "Others");
+    LS_AddStr("case_counts_title", "Confirmed Case Counts");
+    LS_AddStr("case_counts_button_daily", "Daily");
+    LS_AddStr("case_counts_button_cumul", "Cumulative");
+    LS_AddStr("case_counts_button_total", "Total");
+    LS_AddStr("case_counts_button_imported", "Imported");
+    LS_AddStr("case_counts_button_local", "Local");
+    LS_AddStr("case_counts_button_others", "Others");
   }
 }
 
-function CBT_FormatData(wrap, data) {
+function CC_FormatData(wrap, data) {
   //-- Variables for data
   var col_tag_list = data.columns.slice(1, 5); //-- 0 = date
   var col_tag = col_tag_list[wrap.col_ind];
@@ -133,7 +133,7 @@ function CBT_FormatData(wrap, data) {
   wrap.legend_value_raw = y_sum;
 }
 
-function CBT_FormatData2(wrap, data2) {
+function CC_FormatData2(wrap, data2) {
   if (!wrap.tag.includes('overall'))
     return;
   
@@ -153,7 +153,7 @@ function CBT_FormatData2(wrap, data2) {
 }
 
 //-- Tooltip
-function CBT_MouseMove(wrap, d) {
+function CC_MouseMove(wrap, d) {
   if (wrap.tag.includes('mini'))
     return;
     
@@ -187,7 +187,7 @@ function CBT_MouseMove(wrap, d) {
     .style('top', new_pos[1] + 'px')
 }
 
-function CBT_Plot(wrap) {
+function CC_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
@@ -206,7 +206,7 @@ function CBT_Plot(wrap) {
   wrap.color = GP_wrap.c_list[0];
   
   //-- Define mouse-move
-  wrap.mouse_move = CBT_MouseMove;
+  wrap.mouse_move = CC_MouseMove;
   
   //-- Plot bar
   GP_PlotFaintSingleBar(wrap);
@@ -215,7 +215,7 @@ function CBT_Plot(wrap) {
   GP_PlotAvgLine(wrap);
 }
 
-function CBT_Replot(wrap) {
+function CC_Replot(wrap) {
   //-- Replot bar
   GP_ReplotFaintSingleBar(wrap);
   
@@ -309,7 +309,7 @@ function CBT_Replot(wrap) {
 }
 
 //-- Load
-function CBT_Load(wrap) {
+function CC_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .defer(d3.csv, wrap.data_path_list[1])
@@ -317,37 +317,37 @@ function CBT_Load(wrap) {
       if (error)
         return console.warn(error);
       
-      CBT_FormatData(wrap, data);
-      CBT_FormatData2(wrap, data2);
-      CBT_Plot(wrap);
-      CBT_Replot(wrap);
+      CC_FormatData(wrap, data);
+      CC_FormatData2(wrap, data2);
+      CC_Plot(wrap);
+      CC_Replot(wrap);
     });
 }
 
-function CBT_Reload(wrap) {
+function CC_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      CBT_FormatData(wrap, data);
-      CBT_Replot(wrap);
+      CC_FormatData(wrap, data);
+      CC_Replot(wrap);
     });
 }
 
-function CBT_ButtonListener(wrap) {
+function CC_ButtonListener(wrap) {
   //-- Daily or cumulative
   $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
     GP_PressRadioButton(wrap, 'cumul', wrap.cumul, this.value);
     wrap.cumul = this.value;
-    CBT_Reload(wrap);
+    CC_Reload(wrap);
   });
   
   //-- Transmission type
   d3.select(wrap.id +'_trans').on('change', function() {
     wrap.col_ind = this.value;
-    CBT_Reload(wrap);
+    CC_Reload(wrap);
   });
   
   //-- Save
@@ -378,13 +378,13 @@ function CBT_ButtonListener(wrap) {
     Cookies.set("lang", LS_lang);
     
     //-- Replot
-    CBT_ResetText();
-    CBT_Replot(wrap);
+    CC_ResetText();
+    CC_Replot(wrap);
   });
 }
 
 //-- Main
-function CBT_Main(wrap) {
+function CC_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
   //-- Swap active to current value
@@ -399,10 +399,10 @@ function CBT_Main(wrap) {
   }
   
   //-- Load
-  CBT_InitFig(wrap);
-  CBT_ResetText();
-  CBT_Load(wrap);
+  CC_InitFig(wrap);
+  CC_ResetText();
+  CC_Load(wrap);
   
   //-- Setup button listeners
-  CBT_ButtonListener(wrap);
+  CC_ButtonListener(wrap);
 }

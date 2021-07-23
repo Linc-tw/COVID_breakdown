@@ -11,7 +11,6 @@
 //Automize README generation
 //vertical lines for VBC
 //Clean processed_data
-//Change plot name
 //Note with "Collapse"
 //Linear/log?
 

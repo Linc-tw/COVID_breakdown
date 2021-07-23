@@ -1,14 +1,14 @@
 
 //-- Filename:
-//--   test_by_criterion_param.js
+//--   test_counts_param.js
 //--
 //-- Author:
 //--   Chieh-An Lin
 
-var TBC_mini_wrap = {
-  tag: 'test_by_criterion_mini',
+var TC_mini_wrap = {
+  tag: 'test_counts_mini',
   data_path_list: [
-    '../processed_data/latest/test_by_criterion.csv', 
+    '../processed_data/latest/test_counts.csv', 
     '../processed_data/key_numbers.csv',
   ],
 
@@ -17,10 +17,10 @@ var TBC_mini_wrap = {
   trans_delay: GP_wrap.trans_delay,
 };
 
-var TBC_latest_wrap = {
-  tag: 'test_by_criterion_latest', 
+var TC_latest_wrap = {
+  tag: 'test_counts_latest', 
   data_path_list: [
-    '../processed_data/latest/test_by_criterion.csv', 
+    '../processed_data/latest/test_counts.csv', 
     '../processed_data/key_numbers.csv',
   ],
 
@@ -30,10 +30,10 @@ var TBC_latest_wrap = {
   trans_delay: GP_wrap.trans_delay,
 };
 
-var TBC_overall_wrap = {
-  tag: 'test_by_criterion_overall', 
+var TC_overall_wrap = {
+  tag: 'test_counts_overall', 
   data_path_list: [
-    '../processed_data/overall/test_by_criterion.csv', 
+    '../processed_data/overall/test_counts.csv', 
     '../processed_data/key_numbers.csv',
   ],
   
@@ -43,10 +43,10 @@ var TBC_overall_wrap = {
   trans_delay: GP_wrap.trans_delay,
 };
 
-var TBC_2021_wrap = {
-  tag: 'test_by_criterion_2021',
+var TC_2021_wrap = {
+  tag: 'test_counts_2021',
   data_path_list: [
-    '../processed_data/2021/test_by_criterion.csv',
+    '../processed_data/2021/test_counts.csv',
     '../processed_data/key_numbers.csv',
   ],
 
@@ -56,10 +56,10 @@ var TBC_2021_wrap = {
   trans_delay: GP_wrap.trans_delay,
 };
 
-var TBC_2020_wrap = {
-  tag: 'test_by_criterion_2020',
+var TC_2020_wrap = {
+  tag: 'test_counts_2020',
   data_path_list: [
-    '../processed_data/2020/test_by_criterion.csv',
+    '../processed_data/2020/test_counts.csv',
     '../processed_data/key_numbers.csv',
   ],
 

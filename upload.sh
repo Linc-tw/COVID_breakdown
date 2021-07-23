@@ -42,7 +42,7 @@ echo
 
 echo "## Process data"
 echo
-/usr/bin/python3.8 COVID_breakdown_data_processing.py & sleep 10
+/usr/bin/python3.8 python/COVID_process.py & sleep 10
 echo
 
 echo "## Push to repo"

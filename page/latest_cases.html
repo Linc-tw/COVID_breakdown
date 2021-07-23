@@ -150,38 +150,38 @@
                         <h4 id="title_latest_cases" class="mb-4"></h4>
                         <div class="row">
                         
-                            <!-- case_by_transmission -->
+                            <!-- case_counts -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-head-side-cough me-1"></i> <span id="case_by_transmission_title"></span>
+                                        <i class="fas fa-head-side-cough me-1"></i> <span id="case_counts_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos"> 
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">
-                                                <label class="btn btn-covid active" id="case_by_transmission_latest_cumul_0">
-                                                    <input type="radio" class="btn-check" name="case_by_transmission_latest_cumul" value=0 checked>
-                                                    <span id="case_by_transmission_button_daily"></span>
+                                                <label class="btn btn-covid active" id="case_counts_latest_cumul_0">
+                                                    <input type="radio" class="btn-check" name="case_counts_latest_cumul" value=0 checked>
+                                                    <span id="case_counts_button_daily"></span>
                                                 </label>
-                                                <label class="btn btn-covid" id="case_by_transmission_latest_cumul_1">
-                                                    <input type="radio" class="btn-check" name="case_by_transmission_latest_cumul" value=1>
-                                                    <span id="case_by_transmission_button_cumul"></span>
+                                                <label class="btn btn-covid" id="case_counts_latest_cumul_1">
+                                                    <input type="radio" class="btn-check" name="case_counts_latest_cumul" value=1>
+                                                    <span id="case_counts_button_cumul"></span>
                                                 </label>
                                             </div>
                                             
-                                            <select id="case_by_transmission_latest_trans" class="form-select form-select-sm me-2" aria-label="case_by_transmission_latest_trans">
-                                                <option value="0" id="case_by_transmission_button_total" selected></option>
-                                                <option value="1" id="case_by_transmission_button_imported"></option>
-                                                <option value="2" id="case_by_transmission_button_local"></option>
-                                                <option value="3" id="case_by_transmission_button_others"></option>
+                                            <select id="case_counts_latest_trans" class="form-select form-select-sm me-2" aria-label="case_counts_latest_trans">
+                                                <option value="0" id="case_counts_button_total" selected></option>
+                                                <option value="1" id="case_counts_button_imported"></option>
+                                                <option value="2" id="case_counts_button_local"></option>
+                                                <option value="3" id="case_counts_button_others"></option>
                                             </select>
                                             
-                                            <button id='case_by_transmission_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                            <button id='case_counts_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
                                     
-                                    <div class="card-body" id="case_by_transmission_latest"></div>
+                                    <div class="card-body" id="case_counts_latest"></div>
                                 </div>
                             </div>
                             
@@ -297,8 +297,8 @@
         <script src="../js/utility/general_plotting.js"></script>
 
         <!-- Plots -->
-        <script src="../js/main_sheet/case_by_transmission.js"></script>
-        <script src="../js/main_sheet/case_by_transmission_param.js"></script>
+        <script src="../js/case_sheet/case_counts.js"></script>
+        <script src="../js/case_sheet/case_counts_param.js"></script>
         <script src="../js/county_sheet/local_case_per_county.js"></script>
         <script src="../js/county_sheet/local_case_per_county_param.js"></script>
         <script src="../js/county_sheet/case_by_age.js"></script>

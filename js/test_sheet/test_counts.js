@@ -1,11 +1,11 @@
 
 //-- Filename:
-//--   test_by_criterion.js
+//--   test_counts.js
 //--
 //-- Author:
 //--   Chieh-An Lin
 
-function TBC_InitFig(wrap) {
+function TC_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
     GP_InitFig_Mini(wrap);
   else if (wrap.tag.includes('overall'))
@@ -14,27 +14,27 @@ function TBC_InitFig(wrap) {
     GP_InitFig_Standard(wrap);
 }
 
-function TBC_ResetText() {
+function TC_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('test_by_criterion_title', '檢驗數量');
-    LS_AddStr('test_by_criterion_button_daily', '逐日');
-    LS_AddStr('test_by_criterion_button_cumul', '累計');
+    LS_AddStr('test_counts_title', '檢驗數量');
+    LS_AddStr('test_counts_button_daily', '逐日');
+    LS_AddStr('test_counts_button_cumul', '累計');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('test_by_criterion_title', 'Nombre de tests');
-    LS_AddStr('test_by_criterion_button_daily', 'Quotidiens');
-    LS_AddStr('test_by_criterion_button_cumul', 'Cumulés');
+    LS_AddStr('test_counts_title', 'Nombre de tests');
+    LS_AddStr('test_counts_button_daily', 'Quotidiens');
+    LS_AddStr('test_counts_button_cumul', 'Cumulés');
   }
   
   else { //-- En
-    LS_AddStr('test_by_criterion_title', 'Test Counts');
-    LS_AddStr('test_by_criterion_button_daily', 'Daily');
-    LS_AddStr('test_by_criterion_button_cumul', 'Cumulative');
+    LS_AddStr('test_counts_title', 'Test Counts');
+    LS_AddStr('test_counts_button_daily', 'Daily');
+    LS_AddStr('test_counts_button_cumul', 'Cumulative');
   }
 }
 
-function TBC_FormatData(wrap, data) {
+function TC_FormatData(wrap, data) {
   //-- Variables for data
   var col_tag_list = data.columns.slice(1, 2); //-- 0 = date
   var col_tag = col_tag_list[0];
@@ -119,7 +119,7 @@ function TBC_FormatData(wrap, data) {
   wrap.legend_value_raw = [y_sum];
 }
 
-function TBC_FormatData2(wrap, data2) {
+function TC_FormatData2(wrap, data2) {
   if (!wrap.tag.includes('overall'))
     return;
   
@@ -139,7 +139,7 @@ function TBC_FormatData2(wrap, data2) {
 }
 
 //-- Tooltip
-function TBC_MouseMove(wrap, d) {
+function TC_MouseMove(wrap, d) {
   if (wrap.tag.includes('mini'))
     return;
     
@@ -173,7 +173,7 @@ function TBC_MouseMove(wrap, d) {
     .style('top', new_pos[1] + 'px')
 }
 
-function TBC_Plot(wrap) {
+function TC_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
@@ -192,7 +192,7 @@ function TBC_Plot(wrap) {
   wrap.color = GP_wrap.c_list[2];
   
   //-- Define mouse-move
-  wrap.mouse_move = TBC_MouseMove;
+  wrap.mouse_move = TC_MouseMove;
   
   //-- Plot bar
   GP_PlotFaintSingleBar(wrap);
@@ -201,7 +201,7 @@ function TBC_Plot(wrap) {
   GP_PlotAvgLine(wrap);
 }
 
-function TBC_Replot(wrap) {
+function TC_Replot(wrap) {
   //-- Replot bar
   GP_ReplotFaintSingleBar(wrap);
   
@@ -248,7 +248,7 @@ function TBC_Replot(wrap) {
 }
 
 //-- Load
-function TBC_Load(wrap) {
+function TC_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .defer(d3.csv, wrap.data_path_list[1])
@@ -256,31 +256,31 @@ function TBC_Load(wrap) {
       if (error)
         return console.warn(error);
       
-      TBC_FormatData(wrap, data);
-      TBC_FormatData2(wrap, data2);
-      TBC_Plot(wrap);
-      TBC_Replot(wrap);
+      TC_FormatData(wrap, data);
+      TC_FormatData2(wrap, data2);
+      TC_Plot(wrap);
+      TC_Replot(wrap);
     });
 }
 
-function TBC_Reload(wrap) {
+function TC_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      TBC_FormatData(wrap, data);
-      TBC_Replot(wrap);
+      TC_FormatData(wrap, data);
+      TC_Replot(wrap);
     });
 }
 
-function TBC_ButtonListener(wrap) {
+function TC_ButtonListener(wrap) {
   //-- Daily or cumulative
   $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
     GP_PressRadioButton(wrap, 'cumul', wrap.cumul, this.value);
     wrap.cumul = this.value;
-    TBC_Reload(wrap);
+    TC_Reload(wrap);
   });
 
   //-- Save
@@ -302,13 +302,13 @@ function TBC_ButtonListener(wrap) {
     Cookies.set("lang", LS_lang);
     
     //-- Replot
-    TBC_ResetText();
-    TBC_Replot(wrap);
+    TC_ResetText();
+    TC_Replot(wrap);
   });
 }
 
 //-- Main
-function TBC_Main(wrap) {
+function TC_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
   //-- Swap active to current value
@@ -320,10 +320,10 @@ function TBC_Main(wrap) {
   }
   
   //-- Load
-  TBC_InitFig(wrap);
-  TBC_ResetText();
-  TBC_Load(wrap);
+  TC_InitFig(wrap);
+  TC_ResetText();
+  TC_Load(wrap);
   
   //-- Setup button listeners
-  TBC_ButtonListener(wrap);
+  TC_ButtonListener(wrap);
 }

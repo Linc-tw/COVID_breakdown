@@ -6,7 +6,7 @@
 //--   Chieh-An Lin
 
 var POC_plot_list = [
-  [CBT_Main, CBT_overall_wrap, 1000],
+  [CC_Main, CC_overall_wrap, 1000],
   [LCPC_Main, LCPC_overall_wrap, 1000],
   [CBA_Main, CBA_overall_wrap, 1000],
 ];

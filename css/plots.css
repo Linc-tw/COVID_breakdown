@@ -156,10 +156,10 @@ body,
   margin-bottom: -65px;
 }
 
-#case_by_transmission_latest .tooltip, 
-#case_by_transmission_overall .tooltip, 
-#case_by_transmission_2021 .tooltip, 
-#case_by_transmission_2020 .tooltip {
+#case_counts_latest .tooltip, 
+#case_counts_overall .tooltip, 
+#case_counts_2021 .tooltip, 
+#case_counts_2020 .tooltip {
   margin-left: -60px;
   margin-right: -60px;
   margin-top: -50px;
@@ -216,10 +216,10 @@ body,
   margin-bottom: -45px;
 }
 
-#test_by_criterion_latest .tooltip, 
-#test_by_criterion_overall .tooltip, 
-#test_by_criterion_2021 .tooltip, 
-#test_by_criterion_2020 .tooltip {
+#test_counts_latest .tooltip, 
+#test_counts_overall .tooltip, 
+#test_counts_2021 .tooltip, 
+#test_counts_2020 .tooltip {
   margin-left: -75px;
   margin-right: -75px;
   margin-top: -55px;

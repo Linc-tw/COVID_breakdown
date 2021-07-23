@@ -1,14 +1,14 @@
 
 //-- Filename:
-//--   case_by_transmission_param.js
+//--   case_counts_param.js
 //--
 //-- Author:
 //--   Chieh-An Lin
 
-var CBT_mini_wrap = {
-  tag: 'case_by_transmission_mini',
+var CC_mini_wrap = {
+  tag: 'case_counts_mini',
   data_path_list: [
-    '../processed_data/latest/case_by_transmission_by_report_day.csv',
+    '../processed_data/latest/case_counts_by_report_day.csv',
     '../processed_data/key_numbers.csv',
   ],
   
@@ -16,10 +16,10 @@ var CBT_mini_wrap = {
   trans_delay: GP_wrap.trans_delay,
 };
 
-var CBT_latest_wrap = {
-  tag: 'case_by_transmission_latest',
+var CC_latest_wrap = {
+  tag: 'case_counts_latest',
   data_path_list: [
-    '../processed_data/latest/case_by_transmission_by_report_day.csv',
+    '../processed_data/latest/case_counts_by_report_day.csv',
     '../processed_data/key_numbers.csv',
   ],
   
@@ -30,10 +30,10 @@ var CBT_latest_wrap = {
   trans_delay: GP_wrap.trans_delay,
 };
 
-var CBT_overall_wrap = {
-  tag: 'case_by_transmission_overall',
+var CC_overall_wrap = {
+  tag: 'case_counts_overall',
   data_path_list: [
-    '../processed_data/overall/case_by_transmission_by_report_day.csv',
+    '../processed_data/overall/case_counts_by_report_day.csv',
     '../processed_data/key_numbers.csv',
   ],
   
@@ -44,10 +44,10 @@ var CBT_overall_wrap = {
   trans_delay: GP_wrap.trans_delay,
 };
 
-var CBT_2021_wrap = {
-  tag: 'case_by_transmission_2021',
+var CC_2021_wrap = {
+  tag: 'case_counts_2021',
   data_path_list: [
-    '../processed_data/2021/case_by_transmission_by_report_day.csv',
+    '../processed_data/2021/case_counts_by_report_day.csv',
     '../processed_data/key_numbers.csv',
   ],
 
@@ -58,10 +58,10 @@ var CBT_2021_wrap = {
   trans_delay: GP_wrap.trans_delay,
 };
 
-var CBT_2020_wrap = {
-  tag: 'case_by_transmission_2020',
+var CC_2020_wrap = {
+  tag: 'case_counts_2020',
   data_path_list: [
-    '../processed_data/2020/case_by_transmission_by_report_day.csv',
+    '../processed_data/2020/case_counts_by_report_day.csv',
     '../processed_data/key_numbers.csv',
   ],
   
