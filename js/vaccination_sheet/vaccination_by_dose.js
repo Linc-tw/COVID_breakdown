@@ -38,7 +38,7 @@ function VBD_FormatData(wrap, data) {
   var x_key = 'date';
   var formatted_data = [];
   var y_list_list = [];
-  var y_list, block, block2;
+  var y_list, block, block2, last_date;
   
   //-- Variables for yaxis
   var y_max = 0;
@@ -51,6 +51,7 @@ function VBD_FormatData(wrap, data) {
   for (i=0; i<data.length; i++) {
     row = data[i];
     y_list = [];
+    last_date = row['date'];
     
     //-- Loop over column
     for (j=0; j<nb_col; j++) {
@@ -121,6 +122,7 @@ function VBD_FormatData(wrap, data) {
   wrap.y_max = y_max;
   wrap.ytick = ytick;
   wrap.legend_value_raw = y_last_list;
+  wrap.last_date = last_date;
 }
 
 function VBD_FormatData2(wrap, data2) {
@@ -284,7 +286,9 @@ function VBD_Replot(wrap) {
     wrap.legend_label = ['1st dose', '2nd dose'];
   
   //-- Update legend title
-  GP_UpdateLegendTitle(wrap);
+  wrap.legend_color.splice(0, 0, '#000000');
+  wrap.legend_value.splice(0, 0, '');
+  wrap.legend_label.splice(0, 0, wrap.last_date);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'percentage', 'normal');

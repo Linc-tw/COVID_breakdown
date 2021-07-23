@@ -194,7 +194,7 @@ function VP_FormatData3(wrap, data) {
   var i_delivery = 0;
   var delivery = wrap.formatted_data[0][i_delivery+1];
   var block2 = [];
-  var block;
+  var block, last_date;
   
   //-- Variables for yaxis
   var y_max = 0;
@@ -211,8 +211,10 @@ function VP_FormatData3(wrap, data) {
       delivery = wrap.formatted_data[0][i_delivery+1];
     }
     
+    last_date = row['date'];
+    
     block = {
-      'date': row['date'],
+      'date': last_date,
       'x': x,
       'y': y,
       'y_delivery': delivery.y,
@@ -252,6 +254,7 @@ function VP_FormatData3(wrap, data) {
   //-- Save to wrapper
   wrap.y_max = y_max;
   wrap.ytick = ytick;
+  wrap.last_date = last_date;
 }
 
 //-- Post processing
@@ -548,7 +551,9 @@ function VP_Replot(wrap) {
   }
   
   //-- Update legend title
-  GP_UpdateLegendTitle(wrap);
+  wrap.legend_color.splice(0, 0, '#000000');
+  wrap.legend_value.splice(0, 0, '');
+  wrap.legend_label.splice(0, 0, wrap.last_date);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'count', '1.2rem');
