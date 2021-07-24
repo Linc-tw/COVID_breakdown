@@ -12,64 +12,175 @@ Contents
 --------
 
 `border_statistics.csv`
-- TODO
+- Row: report date
+- Column
+  - `date`
+  - `entry`
+  - `exit`
+  - `total`: entry + exit
+  - `entry_avg`: 7-day moving average of `entry`
+  - `exit_avg`: 7-day moving average of `exit`
+  - `total_avg`: 7-day moving average of `total`
 
 `case_by_age.csv`
-- Row = age group of 5 up to 70
-- Column = time period
-  - `total` = last 90 days
-  - `week_-1` = between 0 to 6 days ago
-  - `week_-2` = between 7 to 13 days ago
-  - etc.
-- Value = confirmed case counts
+- Row: age range
+- Column
+  - `age`
+  - `total`: overall stats
+  - `MMM_YYYY`: during month `MMM` of year `YYYY`
+
+`case_by_transmission_by_onset_day.csv`
+- Row: onset date
+- Column
+  - `date`
+  - `imported`
+  - `linked`: local cases linked to known ones
+  - `unlinked`: local cases with unknown origin
+  - `fleet`: on boat`
+  - `plane`: on plane`
+  - `unknown`: undetermined`
+- Cases without onset date do not show up in the file
 
 `case_by_transmission_by_report_day.csv`
-- TODO
+- Row: report date
+- Column
+  - `date`
+  - `imported`
+  - `linked`: local cases linked to known ones
+  - `unlinked`: local cases with unknown origin
+  - `fleet`: on boat`
+  - `plane`: on plane`
+  - `unknown`: undetermined`
+
+`case_counts_by_report_day.csv`
+- Row: report date
+- Column
+  - `date`
+  - `total`: `imported` + `local` + `others`
+  - `imported`: imported cases
+  - `local`: local cases
+  - `others`: on plane, on boat, & unknown
+  - `total_avg`: 7-day moving average of `total`
+  - `imported_avg`: 7-day moving average of `imported`
+  - `local_avg`: 7-day moving average of `local`
+  - `others_avg`: 7-day moving average of `others`
 
 `death_counts.csv`
-- TODO
+- Row: report date
+- Column
+  - `date`
+  - `death`
+  - `death_avg`: 7-day moving average of `death`
 
 `hospitalization_or_isolation.csv`
-- TODO
+- Row: report date
+- Column
+  - `date`
+  - `hospitalized`: number of cases that are confirmed & not closed, either in hospitalization or isolation
+
+`incidence_map.csv`
+- Row: city or county
+- Column
+  - `county`
+  - `total`: overall stats
+  - `MMM_YYYY`: during month `MMM` of year `YYYY`
+
+`incidence_map_label.csv`
+- Row: city or county
+- Column
+  - `key`
+  - `code`: unique code attributed to city or county by Ministry of Interior
+  - `population`
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
 
 `incidence_rates.csv`
-- TODO
+- Row: date
+- Column
+  - `date`
+  - `arr_incidence`: number of imported confirmed cases over number of arrival passengers
+  - `local_incidence`: number of local confirmed cases over population
 
 `local_case_per_county.csv`
-- Row = report date
-- Column = city or county
-- Value = confirmed case counts
+- Row: report date
+- Column
+  - `date`
+  - `total`: nationalwide
+  - `Keelung` to `Matsu`: individual city or county
+  - `Hsinchu`: Hsinchu county
+  - `Hsinchu_C`: Hsinchu city
+  - `Chiayi`: Chiayi county
+  - `Chiayi_C`: Chiayi city
+  - `*_avg`: 7-day moving average of `*`
 
-`positicity_and_fatality.csv`
-- TODO
+`positivity_and_fatality.csv`
+- Row: date
+- Column
+  - `date`
+  - `positivity`: number of confirmed cases over number of tests
+  - `fatality`: number of deaths over number of confirmed cases
 
 `status_evolution.csv`
-- Row = date
+- Row: report date
 - Column
-  - `discharged` = number of people discharged from isolation
-  - `hospitalized`
+  - `date`
+  - `discharged`
+  - `hospitalized`: number of cases that are confirmed & not closed, either in hospitalization or isolation
   - `death`
-- Value = number counts
 
 `test_by_criterion.csv`
-- TODO
+- Row: report date
+- Column
+  - `date`
+  - `clinical`: based on clinical criteria
+  - `quarantine`: on people in quarantine (obsolete)
+  - `extended`: extended community search
+
+`test_counts.csv`
+- Row: report date
+- Column
+  - `date`
+  - `total`: total test counts
+  - `total_avg`: 7-day moving average of `total`
 
 `vaccination_by_brand.csv`
-- Row = date
+- Row: report date
 - Column
+  - `date`
   - `interpolated`
-    - Original data are provided in cumulative counts but with missing values. Here, the processed data set provides daily counts where missing values are estimated from interpolation.
+    - Original data are provided in cumulative counts but with missing values. Here, the file provides daily counts where missing values are estimated from interpolation.
     - 0 = true value, not interpolated
     - 1 = interpolated value
-    - -1 = interpolated value, but the cumulative count on this day is a real value
+    - -1 = interpolated value, but the cumulative count on this day is known
+  - `total`: all brands
+  - `AZ`
+  - `Moderna`
+  - `*_avg`: 7-day moving average of `*`
+
+`vaccination_by_dose.csv`
+- Row: report date
+- Column
+  - `index`: day difference from 2020-01-01
+  - `date`
+  - `ppl_vacc_rate`: proportion of the population vaccinated with their 1st dose
+  - `ppl_fully_vacc_rate`: proportion of the population fully vaccinated
+
+`vaccination_progress_injections.csv`
+- Row = report date
+- Column
+  - `index`: day difference from 2020-01-01
+  - `date`
+  - `total`: all brands, cumulative number of doses
   - `AZ`
   - `Moderna`
 
-`vaccination_by_dose.csv`
-- TODO
-
-`vaccination_progress_administrated.csv`
-- TODO
-
-`vaccination_progress_deliveries.csv`
-- TODO
+`vaccination_progress_supplies.csv`
+- Row: report date
+- Column
+  - `index`: day difference from 2020-01-01
+  - `date`
+  - `source`: origin of the supply
+  - `total`: all brands, cumulative number of doses
+  - `AZ`
+  - `Moderna`

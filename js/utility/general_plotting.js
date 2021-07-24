@@ -8,8 +8,7 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//Automize README generation
-//vertical lines for VBC
+//vertical lines for VBC (or lighter color)
 //Clean processed_data
 //Note with "Collapse"
 //Linear/log?

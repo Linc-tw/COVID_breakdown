@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_county.py         ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.07.22      ##
+    ##  Version 2021.07.24      ##
     ##############################
 
 import os
@@ -130,7 +130,6 @@ class CountySheet(ccm.Template):
       stock[key] = ccm.makeMovingAverage(stock[col_tag])
     return stock
   
-  #TODO
   def makeReadme_localCasePerCounty(self, page):
     key = 'local_case_per_county'
     stock = []
@@ -138,12 +137,13 @@ class CountySheet(ccm.Template):
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `total`: nationalwide')
+    stock.append('  - `Keelung` to `Matsu`: individual city or county')
+    stock.append('  - `Hsinchu`: Hsinchu county')
+    stock.append('  - `Hsinchu_C`: Hsinchu city')
+    stock.append('  - `Chiayi`: Chiayi county')
+    stock.append('  - `Chiayi_C`: Chiayi city')
+    stock.append('  - `*_avg`: 7-day moving average of `*`')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -157,6 +157,8 @@ class CountySheet(ccm.Template):
       ## Save
       name = '%sprocessed_data/%s/local_case_per_county.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
+      
+      self.makeReadme_localCasePerCounty(page)
     return
 
   def increment_caseByAge(self):
@@ -200,20 +202,22 @@ class CountySheet(ccm.Template):
             
     return stock_dict
   
-  #TODO
   def makeReadme_caseByAge(self, page):
     key = 'case_by_age'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: age range')
     stock.append('- Column')
-    stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `age`')
+    if page == ccm.PAGE_LATEST:
+      stock.append('  - `total`: last 90 days')
+      stock.append('  - `week_-N`: between 7*`N`-7 & 7*`N`-1 days ago')
+    elif page == ccm.PAGE_OVERALL:
+      stock.append('  - `total`: overall stats')
+      stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
+    elif page == ccm.PAGE_2020 or page == ccm.PAGE_2021:
+      stock.append('  - `total`: all year %s' % page)
+      stock.append('  - `MMM`: during month `MMM`')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -236,6 +240,8 @@ class CountySheet(ccm.Template):
       ## Save
       name = '%sprocessed_data/%s/case_by_age.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
+      
+      self.makeReadme_caseByAge(page)
     return
 
   def increment_incidenceMap(self):
@@ -287,34 +293,35 @@ class CountySheet(ccm.Template):
     
     return stock_dict
   
-  #TODO
   def makeReadme_incidenceMap(self, page):
     key = 'incidence_map'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: city or county')
     stock.append('- Column')
-    stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `county`')
+    if page == ccm.PAGE_LATEST:
+      stock.append('  - `total`: last 90 days')
+      stock.append('  - `week_-N`: between 7*`N`-7 & 7*`N`-1 days ago')
+    elif page == ccm.PAGE_OVERALL:
+      stock.append('  - `total`: overall stats')
+      stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
+    elif page == ccm.PAGE_2020 or page == ccm.PAGE_2021:
+      stock.append('  - `total`: all year %s' % page)
+      stock.append('  - `MMM`: during month `MMM`')
     ccm.README_DICT[page][key] = stock
     
     key = 'incidence_map_label'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: city or county')
     stock.append('- Column')
-    stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `key`')
+    stock.append('  - `code`: unique code attributed to city or county by Ministry of Interior')
+    stock.append('  - `population`')
+    stock.append('  - `label`: label in English')
+    stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
+    stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -351,6 +358,8 @@ class CountySheet(ccm.Template):
       ccm.saveCsv(name, data_c)
       name = '%sprocessed_data/%s/incidence_map_label.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_p)
+      
+      self.makeReadme_incidenceMap(page)
     return
 
   def increment_incidenceEvolutionByCounty(self):
@@ -393,7 +402,6 @@ class CountySheet(ccm.Template):
       stock[county] = np.around(nb_cases_arr, decimals=2)
     return stock
   
-  #TODO
   def makeReadme_incidenceEvolutionByCounty(self, page):
     key = 'incidence_evolution_by_county'
     stock = []
@@ -401,26 +409,23 @@ class CountySheet(ccm.Template):
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `total`: nationalwide')
+    stock.append('  - `Keelung` to `Matsu`: individual city or county')
+    stock.append('  - `Hsinchu`: Hsinchu county')
+    stock.append('  - `Hsinchu_C`: Hsinchu city')
+    stock.append('  - `Chiayi`: Chiayi county')
+    stock.append('  - `Chiayi_C`: Chiayi city')
     ccm.README_DICT[page][key] = stock
     
     key = 'incidence_evolution_by_county_label'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: city or county')
     stock.append('- Column')
-    stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `key`')
+    stock.append('  - `label`: label in English')
+    stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
+    stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -435,14 +440,18 @@ class CountySheet(ccm.Template):
     label_list_fr = [county_dict[county]['label'][1] for county in county_key_list]
     label_list_zh = [county_dict[county]['label'][2] for county in county_key_list]
       
-    data_l = {'county': county_key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+    data_l = {'key': county_key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data_l = pd.DataFrame(data_l)
     
-    name = '%sprocessed_data/%s/incidence_evolution_by_county.csv' % (ccm.DATA_PATH, ccm.PAGE_LATEST)
+    page = ccm.PAGE_LATEST
+    
+    name = '%sprocessed_data/%s/incidence_evolution_by_county.csv' % (ccm.DATA_PATH, page)
     ccm.saveCsv(name, data_r)
     
-    name = '%sprocessed_data/%s/incidence_evolution_by_county_label.csv' % (ccm.DATA_PATH, ccm.PAGE_LATEST)
+    name = '%sprocessed_data/%s/incidence_evolution_by_county_label.csv' % (ccm.DATA_PATH, page)
     ccm.saveCsv(name, data_l)
+    
+    self.makeReadme_incidenceEvolutionByCounty(page)
     return
   
   def increment_incidenceEvolutionByAge(self):
@@ -496,7 +505,6 @@ class CountySheet(ccm.Template):
       stock[age] = np.around(nb_cases_arr, decimals=2)
     return stock
   
-  #TODO
   def makeReadme_incidenceEvolutionByAge(self, page):
     key = 'incidence_evolution_by_age'
     stock = []
@@ -504,26 +512,19 @@ class CountySheet(ccm.Template):
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `total`: all ages')
+    stock.append('  - `70+` to `0-4`: age range')
     ccm.README_DICT[page][key] = stock
     
     key = 'incidence_evolution_by_age_label'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: age range')
     stock.append('- Column')
-    stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `key`')
+    stock.append('  - `label`: label in English')
+    stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
+    stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -539,14 +540,18 @@ class CountySheet(ccm.Template):
     label_list_fr = [ccm.AGE_DICT_2['label'][age]['fr'] for age in age_key_list]
     label_list_zh = [ccm.AGE_DICT_2['label'][age]['zh-tw'] for age in age_key_list]
     
-    data_l = {'age': age_key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+    data_l = {'key': age_key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data_l = pd.DataFrame(data_l)
     
-    name = '%sprocessed_data/%s/incidence_evolution_by_age.csv' % (ccm.DATA_PATH, ccm.PAGE_LATEST)
+    page = ccm.PAGE_LATEST
+    
+    name = '%sprocessed_data/%s/incidence_evolution_by_age.csv' % (ccm.DATA_PATH, page)
     ccm.saveCsv(name, data_r)
     
-    name = '%sprocessed_data/%s/incidence_evolution_by_age_label.csv' % (ccm.DATA_PATH, ccm.PAGE_LATEST)
+    name = '%sprocessed_data/%s/incidence_evolution_by_age_label.csv' % (ccm.DATA_PATH, page)
     ccm.saveCsv(name, data_l)
+    
+    self.makeReadme_incidenceEvolutionByAge(page)
     return
   
   def saveCsv(self):

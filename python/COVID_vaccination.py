@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_vaccination.py    ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.07.22      ##
+    ##  Version 2021.07.24      ##
     ##############################
 
 import os
@@ -149,7 +149,26 @@ class VaccinationSheet(ccm.Template):
     
     ## This contains daily doses & a column indicating whether it's interpolated or not.
     return stock
-          
+  
+  def makeReadme_vaccinationByBrand(self, page):
+    key = 'vaccination_by_brand'
+    stock = []
+    stock.append('`%s.csv`' % key)
+    stock.append('- Row: report date')
+    stock.append('- Column')
+    stock.append('  - `date`')
+    stock.append('  - `interpolated`')
+    stock.append('    - Original data are provided in cumulative counts but with missing values. Here, the file provides daily counts where missing values are estimated from interpolation.')
+    stock.append('    - 0 = true value, not interpolated')
+    stock.append('    - 1 = interpolated value')
+    stock.append('    - -1 = interpolated value, but the cumulative count on this day is known')
+    stock.append('  - `total`: all brands')
+    stock.append('  - `AZ`')
+    stock.append('  - `Moderna`')
+    stock.append('  - `*_avg`: 7-day moving average of `*`')
+    ccm.README_DICT[page][key] = stock
+    return
+  
   def saveCsv_vaccinationByBrand(self):
     stock_prev = self.incrementWithInterpolation_vaccinationByBrand()
     stock_tmp = {brand: new_doses_arr for brand, new_doses_arr in zip(stock_prev['brand_list'], stock_prev['new_doses'])}
@@ -180,6 +199,8 @@ class VaccinationSheet(ccm.Template):
       ## Save
       name = '%sprocessed_data/%s/vaccination_by_brand.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
+      
+      self.makeReadme_vaccinationByBrand(page)
     return
   
   def makeSupplies_vaccinationProgress(self):
@@ -246,7 +267,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('- Column')
     stock.append('  - `index`: day difference from %s' % ccm.ISO_DATE_REF)
     stock.append('  - `date`')
-    stock.append('  - `source`: origin of the supply batch')
+    stock.append('  - `source`: origin of the supply')
     stock.append('  - `total`: all brands, cumulative number of doses')
     stock.append('  - `AZ`')
     stock.append('  - `Moderna`')

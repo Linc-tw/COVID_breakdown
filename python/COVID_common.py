@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_common.py         ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.07.22      ##
+    ##  Version 2021.07.24      ##
     ##############################
 
 import os
@@ -97,6 +97,7 @@ TRAVEL_HISTORY_DICT = {
   'Vietnam': {'zh-tw': '越南', 'fr': 'Vietnam'},
   
   ## West & Central Asia
+  'Afghanistan': {'zh-tw': '阿富汗', 'fr': 'Afghanistan'},
   'Kazakhstan': {'zh-tw': '哈薩克', 'fr': 'Kazakhstan'}, 
   'Kyrgyzstan': {'zh-tw': '吉爾吉斯', 'fr': 'Kirghizistan'},
   'Oman': {'zh-tw': '阿曼', 'fr': 'Oman'},
@@ -144,6 +145,7 @@ TRAVEL_HISTORY_DICT = {
   'Ethiopia': {'zh-tw': '衣索比亞', 'fr': 'Éthiopie'},
   'Ghana': {'zh-tw': '迦納', 'fr': 'Ghana'},
   'Lesotho': {'zh-tw': '賴索托', 'fr': 'Lesotho'},
+  'Mauritania': {'zh-tw': '茅利塔尼亞', 'fr': 'Mauritanie'},
   'Morocco': {'zh-tw': '摩洛哥', 'fr': 'Maroc'},
   'Nigeria': {'zh-tw': '奈及利亞', 'fr': 'Nigéria'}, 
   'Senegal': {'zh-tw': '塞內加爾', 'fr': 'Sénégal'},
@@ -637,37 +639,94 @@ def truncateStock(stock, page):
 ################################################################################
 ## Functions - README
 
+def initializeReadme_root():
+  page = 'root'
+  stock = []
+  
+  stock.append('processed_data/')
+  stock.append('===============')
+  stock.append('')
+  
+  stock.append('')
+  stock.append('Processed data')
+  stock.append('--------------')
+  stock.append('')
+  stock.append('Processed data contain various files that are directly used for plotting.')
+  stock.append('')
+  stock.append('All `csv` files were generated from files in `raw_data/` by executing')
+  stock.append('```python')
+  stock.append('python COVID_breakdown_data_processing.py')
+  stock.append('```')
+  stock.append('A `geojson` file containing a modified version of Taiwan map is also added.')
+  stock.append('')
+  stock.append('All files here only contain ASCII characters unless specified.')
+  stock.append('')
+  
+  stock.append('')
+  stock.append('Contents')
+  stock.append('--------')
+  stock.append('')
+  stock.append('`2020/`')
+  stock.append('- Contains statistics of 2020')
+  stock.append('')
+  stock.append('`2021/`')
+  stock.append('- Contains statistics of 2021')
+  stock.append('')
+  stock.append('`latest/`')
+  stock.append('- Contains statistics of last 90 days')
+  stock.append('')
+  stock.append('`overall/`')
+  stock.append('- Contains statistics of the entire pandemic')
+  stock.append('')
+  README_DICT[page] = {'header': stock}
+  
+  stock = []
+  key = 'adminMap_byCounties_offsetIslands_sphe'
+  stock.append('`%s.geojson`' % key)
+  stock.append('- Map of Taiwan with its islands rearranged')
+  stock.append('- Contain non-ASCII characters')
+  README_DICT[page][key] = stock
+  return
+
+def initializeReadme_page(page):
+  stock = []
+  stock.append('processed_data/%s/' % page)
+  stock.append('================' + '='*len(page) + '')
+  stock.append('')
+  
+  stock.append('')
+  stock.append('Summary')
+  stock.append('-------')
+  stock.append('')
+  dict_ = {PAGE_LATEST: 'last 90 days', PAGE_OVERALL: 'the entire pandemic', PAGE_2021: PAGE_2021, PAGE_2020: PAGE_2020}
+  stock.append('This folder hosts data files which summarize COVID statistics in Taiwan during %s.' % dict_[page])
+  stock.append('')
+  
+  stock.append('')
+  stock.append('Contents')
+  stock.append('--------')
+  stock.append('')
+  
+  README_DICT[page] = {'header': stock}
+  return
+
 def initializeReadme():
+  initializeReadme_root()
   for page in PAGE_LIST:
-    stock = []
-    stock.append('processed_data/%s/' % page)
-    stock.append('================' + '='*len(page) + '')
-    stock.append('')
-    
-    stock.append('')
-    stock.append('Summary')
-    stock.append('-------')
-    stock.append('')
-    dict_ = {PAGE_LATEST: 'last 90 days', PAGE_OVERALL: 'the entire pandemic', PAGE_2021: PAGE_2021, PAGE_2020: PAGE_2020}
-    stock.append('This folder hosts data files which summarize COVID statistics in Taiwan during %s.' % dict_[page])
-    stock.append('')
-    
-    stock.append('')
-    stock.append('Contents')
-    stock.append('--------')
-    stock.append('')
-    
-    README_DICT[page] = {'header': stock}
+    initializeReadme_page(page)
   return
 
 def saveMarkdown_readme(verbose=True):
-  for page in PAGE_LIST:
+  for page in ['root']+PAGE_LIST:
     hdr = README_DICT[page].pop('header')
     
     ## Sort
     sect_dict = {key: value for key, value in sorted(README_DICT[page].items(), key=lambda item: item[0])}
     
-    name = 'test_readme_%s.md' % page
+    if page == 'root':
+      page = ''
+    
+    name = '%sprocessed_data/%s/README.md' % (DATA_PATH, page)
     f = open(name, 'w')
     
     ## Print header

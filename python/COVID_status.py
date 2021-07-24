@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_status.py         ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.07.22      ##
+    ##  Version 2021.07.24      ##
     ##############################
 
 import os
@@ -101,7 +101,6 @@ class StatusSheet(ccm.Template):
   def getCumHospitalized(self):
     return self.getCol(self.coltag_cum_hosp).astype(int)
     
-  #TODO
   def makeReadme_statusEvolution(self, page):
     key = 'status_evolution'
     stock = []
@@ -109,12 +108,9 @@ class StatusSheet(ccm.Template):
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `discharged`')
+    stock.append('  - `hospitalized`: number of cases that are confirmed & not closed, either in hospitalization or isolation')
+    stock.append('  - `death`')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -134,9 +130,10 @@ class StatusSheet(ccm.Template):
       ## Save
       name = '%sprocessed_data/%s/status_evolution.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
+      
+      self.makeReadme_statusEvolution(page)
     return
     
-  #TODO
   def makeReadme_deathCounts(self, page):
     key = 'death_counts'
     stock = []
@@ -144,12 +141,8 @@ class StatusSheet(ccm.Template):
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `death`')
+    stock.append('  - `death_avg`: 7-day moving average of `death`')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -170,9 +163,10 @@ class StatusSheet(ccm.Template):
       ## Save
       name = '%sprocessed_data/%s/death_counts.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
+      
+      self.makeReadme_deathCounts(page)
     return
     
-  #TODO
   def makeReadme_hospitalizationOrIsolation(self, page):
     key = 'hospitalization_or_isolation'
     stock = []
@@ -180,12 +174,7 @@ class StatusSheet(ccm.Template):
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `hospitalized`: number of cases that are confirmed & not closed, either in hospitalization or isolation')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -203,6 +192,8 @@ class StatusSheet(ccm.Template):
       ## Save
       name = '%sprocessed_data/%s/hospitalization_or_isolation.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
+      
+      self.makeReadme_hospitalizationOrIsolation(page)
     return
     
   def updateCumCounts(self, stock):

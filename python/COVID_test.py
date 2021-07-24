@@ -240,21 +240,18 @@ class TestSheet(ccm.Template):
         print()
     return
   
-  #TODO
   def makeReadme_criteriaTimeline(self):
-    #key = 'criteria_timeline'
-    #stock = []
-    #stock.append('`%s.csv`' % key)
-    #stock.append('- Row: report date')
-    #stock.append('- Column')
-    #stock.append('  - `date`')
-    #stock.append('  - `entry`')
-    #stock.append('  - `exit`')
-    #stock.append('  - `total`: entry + exit')
-    #stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    #stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    #stock.append('  - `total_avg`: 7-day moving average of `total`')
-    #ccm.README_DICT[page][key] = stock
+    key = 'criteria_timeline'
+    stock = []
+    stock.append('`%s.csv`' % key)
+    stock.append('- Row: date')
+    stock.append('- Column: language')
+    stock.append('  - `en`')
+    stock.append('  - `fr`')
+    stock.append('  - `zh-tw`')
+    stock.append('- Timeline table for evolution of testing criteria in Taiwan')
+    stock.append('- Contains non-ASCII characters')
+    ccm.README_DICT['root'][key] = stock
     return
   
   def saveCsv_criteriaTimeline(self):
@@ -366,6 +363,8 @@ class TestSheet(ccm.Template):
     
     name = '%sprocessed_data/criteria_timeline.csv' % ccm.DATA_PATH
     ccm.saveCsv(name, data)
+    
+    self.makeReadme_criteriaTimeline()
     return
   
   def updateNewTestCounts(self, stock):

@@ -35,6 +35,7 @@ var HOI_2021_wrap = {
   tag: 'hospitalization_or_isolation_2021',
   data_path_list: [
     '../processed_data/2021/hospitalization_or_isolation.csv',
+    '../processed_data/key_numbers.csv',
   ],
 
   y_max_factor: 1.4,
@@ -47,6 +48,7 @@ var HOI_2020_wrap = {
   tag: 'hospitalization_or_isolation_2020',
   data_path_list: [
     '../processed_data/2020/hospitalization_or_isolation.csv',
+    '../processed_data/key_numbers.csv',
   ],
 
   y_max_factor: 1.4,

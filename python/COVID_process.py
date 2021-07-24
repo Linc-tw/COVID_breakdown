@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_process.py        ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.07.22      ##
+    ##  Version 2021.07.24      ##
     ##############################
 
 import os
@@ -61,6 +61,18 @@ def makeIncidenceRates(case_sheet, border_sheet):
     stock_new['local_incidence'] = value_arr
   
   return stock_new
+
+def makeReadme_incidenceRates(page):
+  key = 'incidence_rates'
+  stock = []
+  stock.append('`%s.csv`' % key)
+  stock.append('- Row: date')
+  stock.append('- Column')
+  stock.append('  - `date`')
+  stock.append('  - `arr_incidence`: number of imported confirmed cases over number of arrival passengers')
+  stock.append('  - `local_incidence`: number of local confirmed cases over population')
+  ccm.README_DICT[page][key] = stock
+  return
   
 def saveCsv_incidenceRates(case_sheet, border_sheet):
   stock = makeIncidenceRates(case_sheet, border_sheet)
@@ -72,6 +84,8 @@ def saveCsv_incidenceRates(case_sheet, border_sheet):
     ## Save
     name = '%sprocessed_data/%s/incidence_rates.csv' % (ccm.DATA_PATH, page)
     ccm.saveCsv(name, data)
+    
+    makeReadme_incidenceRates(page)
   return
   
 def makePositivityAndFatality(case_sheet, status_sheet, test_sheet):
@@ -114,6 +128,18 @@ def makePositivityAndFatality(case_sheet, status_sheet, test_sheet):
     value_arr[ind_cum_cases] = np.nan
     stock_new['fatality'] = value_arr
   return stock_new
+
+def makeReadme_positivityAndFatality(page):
+  key = 'positivity_and_fatality'
+  stock = []
+  stock.append('`%s.csv`' % key)
+  stock.append('- Row: date')
+  stock.append('- Column')
+  stock.append('  - `date`')
+  stock.append('  - `positivity`: number of confirmed cases over number of tests')
+  stock.append('  - `fatality`: number of deaths over number of confirmed cases')
+  ccm.README_DICT[page][key] = stock
+  return
   
 def saveCsv_positivityAndFatality(case_sheet, status_sheet, test_sheet):
   stock = makePositivityAndFatality(case_sheet, status_sheet, test_sheet)
@@ -125,6 +151,8 @@ def saveCsv_positivityAndFatality(case_sheet, status_sheet, test_sheet):
     ## Save
     name = '%sprocessed_data/%s/positivity_and_fatality.csv' % (ccm.DATA_PATH, page)
     ccm.saveCsv(name, data)
+    
+    makeReadme_positivityAndFatality(page)
   return
 
 ################################################################################

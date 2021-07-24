@@ -133,20 +133,17 @@ class VaccinationCountySheet(ccm.Template):
         
     return cum_moderna_list
       
-  #TODO
   def makeReadme_vaccinationByCounty(self, page):
     key = 'vaccination_by_county'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: date, city, or county')
     stock.append('- Column')
-    stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `key`: name of key')
+    stock.append('  - `value`: number of doses over population')
+    stock.append('  - `label`: label in English')
+    stock.append('  - `label_fr`: label in French')
+    stock.append('  - `label_zh`: label in Mandarin')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -173,8 +170,12 @@ class VaccinationCountySheet(ccm.Template):
     stock = {'key': key_list, 'value': value_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data = pd.DataFrame(stock)
       
-    name = '%sprocessed_data/%s/vaccination_by_county.csv' % (ccm.DATA_PATH, ccm.PAGE_LATEST)
+    page = ccm.PAGE_LATEST
+      
+    name = '%sprocessed_data/%s/vaccination_by_county.csv' % (ccm.DATA_PATH, page)
     ccm.saveCsv(name, data)
+    
+    self.makeReadme_vaccinationByCounty(page)
     return
 
   def saveCsv(self):

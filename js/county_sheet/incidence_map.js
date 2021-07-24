@@ -195,20 +195,20 @@ function IM_FormatData(wrap, data) {
 //-- Label
 function IM_FormatData2(wrap, data2) {
   var code_dict = {}
-  var label_list_dict = {'tag': [], 'en': [], 'fr': [], 'zh-tw': []};
-  var i, code, tag, population; 
+  var label_list_dict = {'key': [], 'en': [], 'fr': [], 'zh-tw': []};
+  var i, code, key, population; 
   
   //-- Loop over row
   for (i=0; i<data2.length; i++) {
-    tag = data2[i]['key'];
+    key = data2[i]['key'];
     code = data2[i]['code'];
     population = +data2[i]['population'];
-    code_dict[tag] = {'code': code, 'population': population/100000};
+    code_dict[key] = {'code': code, 'population': population/100000};
     
-    if (tag == 'total')
+    if (key == 'total')
       continue;
     
-    label_list_dict['tag'].push(tag);
+    label_list_dict['key'].push(key);
     label_list_dict['en'].push(data2[i]['label']);
     label_list_dict['fr'].push(data2[i]['label_fr']);
     label_list_dict['zh-tw'].push(data2[i]['label_zh']);
@@ -373,7 +373,7 @@ function IM_Replot(wrap) {
     .enter()
     .append('text')
       .attr('class', 'content text')
-      .attr('id', function (d, i) {return wrap.tag+'_label_'+wrap.code_dict[wrap.label_list_dict.tag[i]]['code'];})
+      .attr('id', function (d, i) {return wrap.tag+'_label_'+wrap.code_dict[wrap.label_list_dict.key[i]]['code'];})
       .attr('x', function (d, i) {return anno_offset.x+anno_pos[i].lab_x;})
       .attr('y', function (d, i) {return anno_offset.y+anno_pos[i].lab_y;})
       .attr('text-anchor', function (d, i) {if (anno_pos[i].sign > 0) return 'end'; return 'start';})

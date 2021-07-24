@@ -7,7 +7,7 @@ Processed data
 
 Processed data contain various files that are directly used for plotting.
 
-All `csv` files were generated from files in `raw_data/` by executing 
+All `csv` files were generated from files in `raw_data/` by executing
 ```python
 python COVID_breakdown_data_processing.py
 ```
@@ -35,21 +35,9 @@ Contents
 - Map of Taiwan with its islands rearranged
 - Contain non-ASCII characters
 
-`key_numbers.csv`
-- Row
-  - `n_total` = total confirmed case counts
-  - `n_latest` = confirmed case counts during last 90 days
-  - `n_2020` = confirmed case counts during 2020
-  - `n_2021` = confirmed case counts during 2021
-  - `n_empty` = number of cases that have been proven later as false positive
-  - `timestamp` = time of last update
-- Column
-  - `key`
-  - `value`
-
 `criteria_timeline.csv`
-- Row = date
-- Column = language
+- Row: date
+- Column: language
   - `en`
   - `fr`
   - `zh-tw`
@@ -57,10 +45,22 @@ Contents
 - Contains non-ASCII characters
 
 `event_timeline_zh-tw.csv`
-- Row = date
+- Row: date
 - Column
   - `Taiwan_event`
   - `global_event`
   - `key_event`
 - Timeline table for major pandemic events
 - Contains non-ASCII characters
+
+`key_numbers.csv`
+- Row
+  - `n_total`: total confirmed case counts
+  - `n_latest`: number of confirmed cases during last 90 days
+  - `n_2020`: number of confirmed cases during 2020
+  - `n_2021`: number of confirmed cases during 2021
+  - `n_empty`: number of cases that have been shown later as false positive
+  - `timestamp`: time of last update
+- Column
+  - `key`
+  - `value`

@@ -2,13 +2,14 @@
     ##############################
     ##  COVID_case.py           ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.07.22      ##
+    ##  Version 2021.07.24      ##
     ##############################
 
 import os
 import sys
 import warnings
 import datetime as dtt
+import collections as clt
 
 import numpy as np
 import scipy as sp
@@ -145,8 +146,10 @@ class CaseSheet(ccm.Template):
         age_list.append('90s')
         
       elif age in [
-        '<5-4X', '<5-6X', '<5-7X', '<5-8X', '<5-9X', '<5-1XX', '<10-4X', '<10-8X', '<10-9X', '3-77', 
-        '1X-2X', '1X-4X', '1X-7X', '2X-3X', '2X-4X', '2X-6X', '3X-4X', '3X-8X', '5X-7X', '5X-8X'
+        '<5-4X', '<5-6X', '<5-7X', '<5-8X', '<5-9X', '<5-1XX', '3-77', 
+        '<10-4X', '<10-8X', '<10-9X', '<1X-6X', '<1X-8X', 
+        '1X-2X', '1X-4X', '1X-7X', '2X-3X', '2X-4X', '2X-5X', '2X-6X', '2X-7X', '2X-8X', '2X-9X', 
+        '3X-4X', '3X-8X', '5X-7X', '5X-8X'
       ]:
         age_list.append(np.nan)
       elif age != age:
@@ -212,11 +215,12 @@ class CaseSheet(ccm.Template):
       'Vietnam': ['越南'],
       
       ## West & Central Asia
+      'Afghanistan': ['阿富汗'],
       'Kazakhstan': ['哈薩克'], 
       'Kyrgyzstan': ['吉爾吉斯'],
       'Oman': ['阿曼'],
       'Qatar': ['阿拉伯－卡達', '卡達'], 
-      'Saudi Arabia': ['沙烏地阿拉伯'],
+      'Saudi Arabia': ['沙烏地阿拉伯', '阿拉伯'],
       'Syria': ['敘利亞'], 
       'Turkey': ['土耳其'], 
       'UAE': ['阿拉伯－杜拜', '杜拜'], 
@@ -259,6 +263,7 @@ class CaseSheet(ccm.Template):
       'Ethiopia': ['衣索比亞'],
       'Ghana': ['迦納'], 
       'Lesotho': ['賴索托'],
+      'Mauritania': ['茅利塔尼亞'],
       'Morocco': ['摩洛哥'], 
       'Nigeria': ['奈及利亞'], 
       'Senegal': ['塞內加爾'],
@@ -423,9 +428,9 @@ class CaseSheet(ccm.Template):
         '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/18-6/24', '5/19-6/10', 
         '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
         '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', '6/4-19', '6/4-23', '6/8-20', '6/10-22', '6/10-26', '6/10-7/5', '6/11-25', '6/14-21', 
-        '6/16-28', '6/17-7/3', '6/19-27', '6/19-7/4', '6/20-29', '6/22-30', '6/22-7/1', '6/22-7/2', '6/22-7/9', '6/26-7/6', '6/26-7/10', 
-        '7/1-7', '7/1-8', 
-        '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X',
+        '6/16-28', '6/17-7/3', '6/19-27', '6/19-7/4', '6/20-29', '6/20-7/11', '6/22-30', '6/22-7/1', '6/22-7/2', '6/22-7/9', '6/26-7/6', '6/26-7/10', '6/26-7/12', 
+        '7/1-7', '7/1-8', '7/5-15', '7/7-13', '7/7-14', '7/10-17', '7/10-22', '7/12-19', '7/14-17', '7/19-23',
+        '9月下旬', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', 'x', 'X', 'x\n*6/25',
       ]:
         onset_date_list.append(np.nan)
         
@@ -493,7 +498,7 @@ class CaseSheet(ccm.Template):
         channel_list.append('monitoring')
         
       elif channel in [
-        '入院', '專案', '快篩站', '自行就醫', '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行通報', '定期篩檢', '定期監測', '定期監控', 
+        '入院', '專案', '快篩站', '慢性病', '自行就醫', '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行快篩', '自行通報', '定期篩檢', '定期監測', '定期監控', 
         '入院篩檢', '入院採檢', '入院檢查', '院內採檢', '社區快篩', '社區專案', '社區篩檢', '專案篩檢', '常規篩檢', 
         '萬華專案', '擴大採檢', '擴大篩檢', '預防性快篩', '預防性採檢', '鄰家擴大採檢', '入院前預防性採檢', '解隔離後自行就醫'
       ]:
@@ -512,7 +517,7 @@ class CaseSheet(ccm.Template):
   
   def getSymptom(self):
     key_dict = {
-      'sneezing': ['伴隨感冒症狀', '感冒症狀', '鼻涕倒流', '打噴嚏', '流鼻水', '流鼻涕', '鼻塞', '鼻水', '鼻炎', '感冒'],
+      'sneezing': ['伴隨感冒症狀', '類似感冒症狀', '感冒症狀', '鼻涕倒流', '打噴嚏', '流鼻水', '流鼻涕', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': ['輕微咳嗽', '咳嗽症狀', '咳嗽加劇', '咳嗽併痰', '咳嗽有痰', '痰有血絲', '喉嚨有痰', '有點咳嗽', '咳嗽', '乾咳', '輕咳', '有痰'],
       'throatache': [
         '上呼吸道症狀', '上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '咽喉不適', '急性咽炎', '聲音沙啞', '口乾舌燥', 
@@ -538,19 +543,20 @@ class CaseSheet(ccm.Template):
       'headache': ['頭暈目眩', '輕度頭痛', '頭骨痛', '偏頭痛', '頭痛', '頭暈', '頭脹', '頭昏', '暈眩', '頭重'],
       'eyes sore': ['結膜充血', '後眼窩痛', '眼睛癢', '眼睛痛', '眼壓高'], 
       'chest pain+backache': ['胸背痛'], 
-      'chest pain': ['呼吸時胸痛', '心臟不舒服', '胸部不適', '胸痛', '胸悶'],
+      'chest pain': ['呼吸時胸痛', '心臟不舒服', '胸部不適', '胸痛', '胸悶', '心悸'],
       'stomachache': ['腸胃不舒服', '腸胃道不適', '腸胃不適', '胃部不適', '腹部不適', '肚子不適', '腹悶痛', '胃痛', '腹痛', '胃脹', '腹脹'],
-      'backache': ['腰酸背痛', '背痛'], 
+      'backache': ['腰酸背痛', '腰痠背痛', '背痛'], 
       'toothache': ['牙痛'], 
       'rash': ['出疹'],
       
       'fatigue': [
-        '全身倦怠無力', '左側肢體無力', '全身倦怠', '全身疲憊', '全身疲倦', '身體無力', '全身無力', '走路無力', '四肢無力', '精神倦怠', '體力不支', '體力變差', '全身虛弱', '全身疲軟', 
+        '全身倦怠無力', '左側肢體無力', '全身倦怠', '全身疲憊', '全身疲倦', '全身虛弱', '全身疲軟', 
+        '身體無力', '全身無力', '走路無力', '四肢無力', '肌肉無力', '精神倦怠', '體力不支', '體力變差', 
         '疲倦感', '倦怠情', '體力差', '沒精神', '倦怠', '疲憊', '疲倦', '疲勞', '疲累', '無力', '虛弱'
       ],
       'soreness': [
         '全身肌肉痠痛', '上半身骨頭刺痛', '小腿肌肉痠痛', '肌肉痠痛症狀', '肌肉關節痠痛', '手部肌肉痠痛', '關節肌肉痛', '肌肉 痠痛', '肌肉酸痛', '肌肉痠痛', '肩膀痠痛', 
-        '全身痠痛', '全身酸痛', '骨頭痠痛', '骨頭酸痛', '關節痠痛', '身體痠痛', '肌肉痛', '骨頭酸', '關節痛', '身體痛', '痠痛'
+        '全身痠痛', '全身酸痛', '骨頭痠痛', '骨頭酸痛', '關節痠痛', '身體痠痛', '四肢痠痛', '肌肉痛', '骨頭酸', '關節痛', '身體痛', '痠痛'
       ],
       'hypersomnia': ['嗜睡'],
       'insomnia': ['睡不著'], 
@@ -566,8 +572,8 @@ class CaseSheet(ccm.Template):
       'arrhythmia': ['心律不整'],
       'coma': ['意識不清', '意識改變'],
       
-      'symptomatic': ['全身不舒服', '出現症狀', '身體不適', '有症狀', '不舒服', '不適'] + \
-        ['排尿疼痛', '眼球上吊', '肢體變黑', '鼻子乾', '低血壓', '猝死', '抽搐', '手抖', '吐血', '口渴'],
+      'symptomatic': ['全身不舒服', '出現症狀', '身體不適', '有症狀', '不舒服', '活動差', '不適'] + \
+        ['排尿疼痛', '眼球上吊', '肢體變黑', '血氧下降', '鼻子乾', '低血壓', '猝死', '抽搐', '手抖', '吐血', '口渴'],
       'asymptomatic': ['首例無症狀', '無症狀', 'x', 'X'],
     }
     symp_list = []
@@ -674,7 +680,24 @@ class CaseSheet(ccm.Template):
         print('Link, Case %d, %s' % (i+1, link))
         link_list.append(np.nan)
     return link_list
-    
+  
+  def makeReadme_keyNb(self):
+    key = 'key_numbers'
+    stock = []
+    stock.append('`%s.csv`' % key)
+    stock.append('- Row')
+    stock.append('  - `n_total`: total confirmed case counts')
+    stock.append('  - `n_latest`: number of confirmed cases during last 90 days')
+    stock.append('  - `n_2020`: number of confirmed cases during 2020')
+    stock.append('  - `n_2021`: number of confirmed cases during 2021')
+    stock.append('  - `n_empty`: number of cases that have been shown later as false positive')
+    stock.append('  - `timestamp`: time of last update')
+    stock.append('- Column')
+    stock.append('  - `key`')
+    stock.append('  - `value`')
+    ccm.README_DICT['root'][key] = stock
+    return
+  
   def saveCsv_keyNb(self):
     self.getReportDate()
     timestamp = dtt.datetime.now().astimezone()
@@ -691,6 +714,8 @@ class CaseSheet(ccm.Template):
     
     name = '%sprocessed_data/key_numbers.csv' % ccm.DATA_PATH
     ccm.saveCsv(name, data)
+    
+    self.makeReadme_keyNb()
     return
     
   def increment_caseCounts(self):
@@ -725,20 +750,21 @@ class CaseSheet(ccm.Template):
       stock[key] = ccm.makeMovingAverage(stock[col_tag])
     return stock
     
-  #TODO
   def makeReadme_caseCounts(self, page):
-    key = 'case_counts'
+    key = 'case_counts_by_report_day'
     stock = []
     stock.append('`%s.csv`' % key)
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
+    stock.append('  - `total`: `imported` + `local` + `others`')
+    stock.append('  - `imported`: imported cases')
+    stock.append('  - `local`: local cases')
+    stock.append('  - `others`: on plane, on boat, & unknown')
     stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `imported_avg`: 7-day moving average of `imported`')
+    stock.append('  - `local_avg`: 7-day moving average of `local`')
+    stock.append('  - `others_avg`: 7-day moving average of `others`')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -754,6 +780,8 @@ class CaseSheet(ccm.Template):
       ## Save
       name = '%sprocessed_data/%s/case_counts_by_report_day.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
+      
+      self.makeReadme_caseCounts(page)
     return
   
   def increment_caseByTransmission(self):
@@ -773,7 +801,7 @@ class CaseSheet(ccm.Template):
         continue
       
       ## Determine column tag
-      if trans == 'indigenous':
+      if trans == 'local':
         if link == 'unlinked':
           col_tag = link
         else:
@@ -799,7 +827,6 @@ class CaseSheet(ccm.Template):
       
     return stock_r, stock_o
   
-  #TODO
   def makeReadme_caseByTransmission(self, page):
     key = 'case_by_transmission_by_report_day'
     stock = []
@@ -807,26 +834,27 @@ class CaseSheet(ccm.Template):
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `imported`')
+    stock.append('  - `linked`: local cases linked to known ones')
+    stock.append('  - `unlinked`: local cases with unknown origin')
+    stock.append('  - `fleet`: on boat`')
+    stock.append('  - `plane`: on plane`')
+    stock.append('  - `unknown`: undetermined`')
     ccm.README_DICT[page][key] = stock
     
     key = 'case_by_transmission_by_onset_day'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: onset date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `imported`')
+    stock.append('  - `linked`: local cases linked to known ones')
+    stock.append('  - `unlinked`: local cases with unknown origin')
+    stock.append('  - `fleet`: on boat`')
+    stock.append('  - `plane`: on plane`')
+    stock.append('  - `unknown`: undetermined`')
+    stock.append('- Cases without onset date do not show up in the file')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -848,6 +876,8 @@ class CaseSheet(ccm.Template):
       ccm.saveCsv(name, data_r)
       name = '%sprocessed_data/%s/case_by_transmission_by_onset_day.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_o)
+      
+      self.makeReadme_caseByTransmission(page)
     return
   
   def increment_caseByDetection(self):
@@ -890,7 +920,6 @@ class CaseSheet(ccm.Template):
       
     return stock_r, stock_o
     
-  #TODO
   def makeReadme_caseByDetection(self, page):
     key = 'case_by_detection_by_report_day'
     stock = []
@@ -898,41 +927,44 @@ class CaseSheet(ccm.Template):
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `airport`')
+    stock.append('  - `quarantine`: during isolation because of having high-risk travel history')
+    stock.append('  - `isolation`: during isolation because of being close contact of confirmed cases')
+    stock.append('  - `monitoring`: during 7 days after quarantine or isolation`')
+    stock.append('  - `hospital`: detected in community`')
+    stock.append('  - `overseas`: diagnosed overseas`')
+    stock.append('  - `no_data`: no detection channel data`')
     ccm.README_DICT[page][key] = stock
     
     key = 'case_by_detection_by_onset_day'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: onset date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `airport`')
+    stock.append('  - `quarantine`: during isolation because of having high-risk travel history')
+    stock.append('  - `isolation`: during isolation because of being close contact of confirmed cases')
+    stock.append('  - `monitoring`: during 7 days after quarantine or isolation`')
+    stock.append('  - `hospital`: detected in community`')
+    stock.append('  - `overseas`: diagnosed overseas`')
+    stock.append('  - `no_data`: no detection channel data`')
     ccm.README_DICT[page][key] = stock
     return
   
   def saveCsv_caseByDetection(self):
     stock_r, stock_o = self.increment_caseByDetection()
     
-    stock_r = ccm.addMovingAverageToStock(stock_r)
     stock_r = pd.DataFrame(stock_r)
     stock_r = ccm.adjustDateRange(stock_r)
     
-    stock_o = ccm.addMovingAverageToStock(stock_o)
     stock_o = pd.DataFrame(stock_o)
     stock_o = ccm.adjustDateRange(stock_o)
     
     for page in ccm.PAGE_LIST:
+      if page != ccm.PAGE_2020:
+        continue
+      
       data_r = ccm.truncateStock(stock_r, page)
       data_o = ccm.truncateStock(stock_o, page)
       
@@ -941,6 +973,8 @@ class CaseSheet(ccm.Template):
       ccm.saveCsv(name, data_r)
       name = '%sprocessed_data/%s/case_by_detection_by_onset_day.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_o)
+      
+      self.makeReadme_caseByDetection(page)
     return
   
   def increment_travHistSymptomCorr(self):
@@ -1019,34 +1053,28 @@ class CaseSheet(ccm.Template):
       stock['count_mat'] = y_bool_mat.dot(x_bool_mat.T);
     return stock_dict
   
-  #TODO
   def makeReadme_travHistSymptomCorr(self, page):
     key = 'travel_history_symptom_correlations'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: matrix element')
     stock.append('- Column')
-    stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `symptom`')
+    stock.append('  - `trav_hist`: country as travel history')
+    stock.append('  - `corr`: correlation coefficient between `symptom` & `trav_hist`')
+    stock.append('  - `count`: number of confirmed cases having `symptom` & `trav_hist` simultaneously')
     ccm.README_DICT[page][key] = stock
     
     key = 'travel_history_symptom_correlations_label'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: symptom or travel history')
     stock.append('- Column')
-    stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `key`')
+    stock.append('  - `count`: number of confirmed cases of `key`')
+    stock.append('  - `label`: label in English')
+    stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
+    stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -1057,7 +1085,7 @@ class CaseSheet(ccm.Template):
     n_symp = 10 ## For x
     
     for page, stock in stock_dict.items():
-      if ccm.PAGE_2020 != page:
+      if page != ccm.PAGE_2020:
         continue
       
       ## Truncate
@@ -1100,6 +1128,8 @@ class CaseSheet(ccm.Template):
       ccm.saveCsv(name, data_c)
       name = '%sprocessed_data/%s/travel_history_symptom_correlations_label.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_l)
+      
+      self.makeReadme_travHistSymptomCorr(page)
     return
   
   def increment_ageSymptomCorr(self):
@@ -1174,34 +1204,28 @@ class CaseSheet(ccm.Template):
       stock['count_mat'] = y_bool_mat.dot(x_bool_mat.T);
     return stock_dict
   
-  #TODO
   def makeReadme_ageSymptomCorr(self, page):
     key = 'age_symptom_correlations'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: matrix element')
     stock.append('- Column')
-    stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `symptom`')
+    stock.append('  - `age`: age range')
+    stock.append('  - `corr`: correlation coefficient between `symptom` & `age`')
+    stock.append('  - `count`: number of confirmed cases from `age` having `symptom`')
     ccm.README_DICT[page][key] = stock
     
     key = 'age_symptom_correlations_label'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: symptom or age range')
     stock.append('- Column')
-    stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `key`')
+    stock.append('  - `count`: number of confirmed cases of `key`')
+    stock.append('  - `label`: label in English')
+    stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
+    stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -1209,7 +1233,7 @@ class CaseSheet(ccm.Template):
     stock_dict = self.calculateCorr_ageSymptomCorr()
     
     for page, stock in stock_dict.items():
-      if ccm.PAGE_2020 != page:
+      if page != ccm.PAGE_2020:
         continue
       
       n_age = stock['corr_mat'].shape[0] ## For y
@@ -1255,6 +1279,8 @@ class CaseSheet(ccm.Template):
       ccm.saveCsv(name, data_c)
       name = '%sprocessed_data/%s/age_symptom_correlations_label.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_l)
+      
+      self.makeReadme_ageSymptomCorr(page)
     return
   
   def increment_diffByTransmission(self):
@@ -1290,20 +1316,22 @@ class CaseSheet(ccm.Template):
           
     return stock_dict
   
-  #TODO
   def makeReadme_diffByTransmission(self, page):
     key = 'difference_by_transmission' 
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
-    stock.append('- Column')
-    stock.append('  - `date`')
-    stock.append('  - `entry`')
-    stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
-    stock.append('  - `entry_avg`: 7-day moving average of `entry`')
-    stock.append('  - `exit_avg`: 7-day moving average of `exit`')
-    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('- Row: delay in number of days before identifying a transmission')
+    stock.append('  - For local cases, it is defined as the delay between the report date & the onset date.')
+    stock.append('  - For imported cases, it is defined as the delay between the report date & the later one of the onset date & the entry date.')
+    stock.append('- Column: transmission type')
+    stock.append('  - `difference`: see row')
+    stock.append('  - `total`: `imported` + `local` + `others`')
+    stock.append('  - `imported`: imported cases')
+    stock.append('  - `local`: local cases')
+    stock.append('  - `others`: on plane, on boat, & unknown')
+    stock.append('- Value: number of case counts')
+    stock.append('- This information is not available for all cases.')
+
     ccm.README_DICT[page][key] = stock
     return
   
@@ -1315,12 +1343,12 @@ class CaseSheet(ccm.Template):
     bins[-1] = 999
     
     for page, stock in stock_dict.items():
-      if ccm.PAGE_2020 != page:
+      if page != ccm.PAGE_2020:
         continue
       
       n_imp, ctr_bins = ccm.makeHist(stock['imported'], bins)
       n_local, ctr_bins = ccm.makeHist(stock['local'], bins)
-      n_other, ctr_bins = ccm.makeHist(stock['other'], bins)
+      n_other, ctr_bins = ccm.makeHist(stock['others'], bins)
       n_tot = n_imp + n_local + n_other
       
       n_imp = n_imp.round(0).astype(int)
@@ -1330,11 +1358,13 @@ class CaseSheet(ccm.Template):
       ctr_bins = ctr_bins.round(0).astype(int)
       ctr_bins[-1] = 30
       
-      data = {'difference': ctr_bins, 'all': n_tot, 'imported': n_imp, 'local': n_local, 'other': n_other}
+      data = {'difference': ctr_bins, 'total': n_tot, 'imported': n_imp, 'local': n_local, 'others': n_other}
       data = pd.DataFrame(data)
       
       name = '%sprocessed_data/%s/difference_by_transmission.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
+      
+      self.makeReadme_diffByTransmission(page)
     return
   
   def updateNewCaseCounts(self, stock):
@@ -1374,11 +1404,11 @@ class CaseSheet(ccm.Template):
   def saveCsv(self):
     self.saveCsv_keyNb()
     self.saveCsv_caseCounts()
-    #self.saveCsv_caseByTransmission()
-    #self.saveCsv_caseByDetection()
-    #self.saveCsv_travHistSymptomCorr()
-    #self.saveCsv_ageSymptomCorr()
-    #self.saveCsv_diffByTransmission()
+    self.saveCsv_caseByTransmission()
+    self.saveCsv_caseByDetection()
+    self.saveCsv_travHistSymptomCorr()
+    self.saveCsv_ageSymptomCorr()
+    self.saveCsv_diffByTransmission()
     return
 
 ## End of file

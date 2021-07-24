@@ -11,203 +11,219 @@ This folder hosts data files which summarize COVID statistics in Taiwan during l
 Contents
 --------
 
-`age_symptom_correlations.csv` (obsolete)
-- Row = matrix element
-- Column
-  - `symptom`
-  - `age`
-  - `corr` = correlation coefficient
-  - `count` = confirmed case counts
-
-`age_symptom_correlations_label.csv` (obsolete)
-- Row = symptom or age group
-- Column
-  - `key`
-  - `count` = confirmed case counts of `key`
-  - `label` = label in English for `key`
-  - `label_fr` = label in French for `key` (contains non-ASCII characters)
-  - `label_zh` = label in Mandarin for `key` (contains non-ASCII characters)
-
 `border_statistics.csv`
-- TODO
-
-`border_statistics_both.csv` (obsolete)  
-`border_statistics_entry.csv` (obsolete)  
-`border_statistics_exit.csv` (obsolete)
-- Row = date
+- Row: report date
 - Column
-  - `airports`
-  - `seaports`
-  - `not specified`
-- Value = passenger counts
+  - `date`
+  - `entry`
+  - `exit`
+  - `total`: entry + exit
+  - `entry_avg`: 7-day moving average of `entry`
+  - `exit_avg`: 7-day moving average of `exit`
+  - `total_avg`: 7-day moving average of `total`
 
 `case_by_age.csv`
-- Row = age group of 5 up to 70
-- Column = time period
-  - `total` = last 90 days
-  - `week_-1` = between 0 to 6 days ago
-  - `week_-2` = between 7 to 13 days ago
-  - etc.
-- Value = confirmed case counts
+- Row: age range
+- Column
+  - `age`
+  - `total`: last 90 days
+  - `week_-N`: between 7*`N`-7 & 7*`N`-1 days ago
 
-`case_by_detection_by_onset_day.csv` (obsolete)
-- Row = onset date
-- Column = detection channel
-  - `airport` = airport
-  - `quarantine` = isolated due to risky travel history
-  - `isolation` = isolated due to being a close contact of confirmed cases
-  - `monitoring` = within 7 days after the end of quarantine or isolation
-  - `hospital` = other domestic channels
-  - `overseas` = by foreign health authorities
-  - `no_data` = detection channel not available
-- Value = confirmed case counts
-
-`case_by_detection_by_report_day.csv` (obsolete)
-- Row = report date
-- Column = detection channel (same as above)
-- Value = confirmed case counts
-
-`case_by_transmission_by_onset_day.csv` (obsolete)
-- Row = onset date
-- Column = transmission type
-  - `imported` = imported cases 
-  - `linked` = local cases that are linked to other confirmed cases
-  - `unlinked` = local cases that are unlinked to other confirmed cases
-  - `fleet` = from the Pan-Shi warship cluster
-  - `plane` = transmission on plane
-  - `unknown` = ambiguous & untraceable origin
-- Value = confirmed case counts
+`case_by_transmission_by_onset_day.csv`
+- Row: onset date
+- Column
+  - `date`
+  - `imported`
+  - `linked`: local cases linked to known ones
+  - `unlinked`: local cases with unknown origin
+  - `fleet`: on boat`
+  - `plane`: on plane`
+  - `unknown`: undetermined`
+- Cases without onset date do not show up in the file
 
 `case_by_transmission_by_report_day.csv`
-- TODO
+- Row: report date
+- Column
+  - `date`
+  - `imported`
+  - `linked`: local cases linked to known ones
+  - `unlinked`: local cases with unknown origin
+  - `fleet`: on boat`
+  - `plane`: on plane`
+  - `unknown`: undetermined`
+
+`case_counts_by_report_day.csv`
+- Row: report date
+- Column
+  - `date`
+  - `total`: `imported` + `local` + `others`
+  - `imported`: imported cases
+  - `local`: local cases
+  - `others`: on plane, on boat, & unknown
+  - `total_avg`: 7-day moving average of `total`
+  - `imported_avg`: 7-day moving average of `imported`
+  - `local_avg`: 7-day moving average of `local`
+  - `others_avg`: 7-day moving average of `others`
 
 `death_counts.csv`
-- TODO
-
-`difference_by_transmission.csv` (obsolete)
-- Row = delay in number of days before identifying a transmission
-  - For local cases, it's defined as the delay between the report date & the onset date.
-  - For imported cases, it's defined as the delay between the report date & the later one of the onset date & the entry date.
-- Column = transmission type
-  - `total` = all types combined
-  - `imported` = imported cases
-  - `indigenous` = all local cases, linked & unlinked
-  - `other` = includes fleet, plane, & unknown
-- Value = confirmed case counts
+- Row: report date
+- Column
+  - `date`
+  - `death`
+  - `death_avg`: 7-day moving average of `death`
 
 `hospitalization_or_isolation.csv`
-- TODO
+- Row: report date
+- Column
+  - `date`
+  - `hospitalized`: number of cases that are confirmed & not closed, either in hospitalization or isolation
 
 `incidence_evolution_by_age.csv`
-- Row = date
-- Column = age group
-- Value = 7-day moving sum of number of confirmed cases per 100k inhabitants
+- Row: report date
+- Column
+  - `date`
+  - `total`: all ages
+  - `70+` to `0-4`: age range
 
 `incidence_evolution_by_age_label.csv`
-- Row = age group
+- Row: age range
 - Column
   - `key`
-  - `count` = confirmed case counts of `key`
-  - `label` = label in English for `key`
-  - `label_fr` = label in French for `key` (contains non-ASCII characters)
-  - `label_zh` = label in Mandarin for `key` (contains non-ASCII characters)
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
 
 `incidence_evolution_by_county.csv`
-- Row = date
-- Column = city or county
-- Value = 7-day moving sum of number of confirmed cases per 100k inhabitants
+- Row: report date
+- Column
+  - `date`
+  - `total`: nationalwide
+  - `Keelung` to `Matsu`: individual city or county
+  - `Hsinchu`: Hsinchu county
+  - `Hsinchu_C`: Hsinchu city
+  - `Chiayi`: Chiayi county
+  - `Chiayi_C`: Chiayi city
 
 `incidence_evolution_by_county_label.csv`
-- Row = city or county
+- Row: city or county
 - Column
   - `key`
-  - `count` = confirmed case counts of `key`
-  - `label` = label in English for `key`
-  - `label_fr` = label in French for `key` (contains non-ASCII characters)
-  - `label_zh` = label in Mandarin for `key` (contains non-ASCII characters)
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
 
 `incidence_map.csv`
-- Row = city or county
-- Column = time period
-  - `total` = last 90 days
-  - `week_-1` = between 0 to 6 days ago
-  - `week_-2` = between 7 to 13 days ago
-  - etc.
-- Value = confirmed case counts
+- Row: city or county
+- Column
+  - `county`
+  - `total`: last 90 days
+  - `week_-N`: between 7*`N`-7 & 7*`N`-1 days ago
 
 `incidence_map_label.csv`
-- Row = city or county
+- Row: city or county
 - Column
   - `key`
-  - `code` = 5-digit code for `key` given by the Ministry of the Interior
+  - `code`: unique code attributed to city or county by Ministry of Interior
   - `population`
-  - `label` = label in English for `key`
-  - `label_fr` = label in French for `key` (contains non-ASCII characters)
-  - `label_zh` = label in Mandarin for `key` (contains non-ASCII characters)
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
 
 `incidence_rates.csv`
-- TODO
+- Row: date
+- Column
+  - `date`
+  - `arr_incidence`: number of imported confirmed cases over number of arrival passengers
+  - `local_incidence`: number of local confirmed cases over population
 
 `local_case_per_county.csv`
-- Row = report date
-- Column = city or county
-- Value = confirmed case counts
+- Row: report date
+- Column
+  - `date`
+  - `total`: nationalwide
+  - `Keelung` to `Matsu`: individual city or county
+  - `Hsinchu`: Hsinchu county
+  - `Hsinchu_C`: Hsinchu city
+  - `Chiayi`: Chiayi county
+  - `Chiayi_C`: Chiayi city
+  - `*_avg`: 7-day moving average of `*`
 
-`positicity_and_fatality.csv`
-- TODO
+`positivity_and_fatality.csv`
+- Row: date
+- Column
+  - `date`
+  - `positivity`: number of confirmed cases over number of tests
+  - `fatality`: number of deaths over number of confirmed cases
 
 `status_evolution.csv`
-- Row = date
+- Row: report date
 - Column
-  - `discharged` = number of people discharged from isolation
-  - `hospitalized`
+  - `date`
+  - `discharged`
+  - `hospitalized`: number of cases that are confirmed & not closed, either in hospitalization or isolation
   - `death`
-- Value = number counts
 
 `test_by_criterion.csv`
-- TODO
-
-`travel_history_symptom_correlations.csv` (obsolete)
-- Row = matrix element
+- Row: report date
 - Column
-  - `symptom`
-  - `trav_hist`
-  - `corr` = correlation coefficient
-  - `count` = confirmed case counts
+  - `date`
+  - `clinical`: based on clinical criteria
+  - `quarantine`: on people in quarantine (obsolete)
+  - `extended`: extended community search
 
-`travel_history_symptom_correlations_label.csv` (obsolete)
-- Row = symptom or travel history
+`test_counts.csv`
+- Row: report date
 - Column
-  - `key`
-  - `count` = confirmed case counts of `key`
-  - `label` = label in English for `key`
-  - `label_fr` = label in French for `key` (contains non-ASCII characters)
-  - `label_zh` = label in Mandarin for `key` (contains non-ASCII characters)
+  - `date`
+  - `total`: total test counts
+  - `total_avg`: 7-day moving average of `total`
 
 `vaccination_by_brand.csv`
-- Row = date
+- Row: report date
 - Column
+  - `date`
   - `interpolated`
-    - Original data are provided in cumulative counts but with missing values. Here, the processed data set provides daily counts where missing values are estimated from interpolation.
+    - Original data are provided in cumulative counts but with missing values. Here, the file provides daily counts where missing values are estimated from interpolation.
     - 0 = true value, not interpolated
     - 1 = interpolated value
-    - -1 = interpolated value, but the cumulative count on this day is a real value
+    - -1 = interpolated value, but the cumulative count on this day is known
+  - `total`: all brands
+  - `AZ`
+  - `Moderna`
+  - `*_avg`: 7-day moving average of `*`
+
+`vaccination_by_county.csv`
+- Row: date, city, or county
+- Column
+  - `key`: name of key
+  - `value`: number of doses over population
+  - `label`: label in English
+  - `label_fr`: label in French
+  - `label_zh`: label in Mandarin
+
+`vaccination_by_dose.csv`
+- Row: report date
+- Column
+  - `index`: day difference from 2020-01-01
+  - `date`
+  - `ppl_vacc_rate`: proportion of the population vaccinated with their 1st dose
+  - `ppl_fully_vacc_rate`: proportion of the population fully vaccinated
+
+`vaccination_progress_injections.csv`
+- Row = report date
+- Column
+  - `index`: day difference from 2020-01-01
+  - `date`
+  - `total`: all brands, cumulative number of doses
   - `AZ`
   - `Moderna`
 
-`vaccination_by_dose.csv`
-- TODO
-
-`vaccination_progress_administrated.csv`
-- TODO
-
-`vaccination_progress_deliveries.csv`
-- TODO
-
-`various_rates.csv` (obsolete)
-- Row = date
+`vaccination_progress_supplies.csv`
+- Row: report date
 - Column
-  - `positive_rate` = number of confirmed cases over number of tests
-  - `imp_inci_rate` = number of imported cases over number of border entries
-  - `indi_inci_rate` = number of local cases over national population
-- Value = rate calculated based on counts over 7 days
+  - `index`: day difference from 2020-01-01
+  - `date`
+  - `source`: origin of the supply
+  - `total`: all brands, cumulative number of doses
+  - `AZ`
+  - `Moderna`

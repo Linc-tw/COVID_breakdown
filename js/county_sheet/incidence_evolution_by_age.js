@@ -95,12 +95,12 @@ function IEBA_FormatData(wrap, data) {
 }
 
 function IEBA_FormatData2(wrap, data2) {
-  var yticklabel_dict = {'tag': [], 'en': [], 'fr': [], 'zh-tw': []};
-  var i, tag; 
+  var yticklabel_dict = {'key': [], 'en': [], 'fr': [], 'zh-tw': []};
+  var i; 
   
   //-- Loop over row
   for (i=0; i<data2.length; i++) {
-    yticklabel_dict['tag'].push(data2[i]['county']);
+    yticklabel_dict['key'].push(data2[i]['key']);
     yticklabel_dict['en'].push(data2[i]['label']);
     yticklabel_dict['fr'].push(data2[i]['label_fr']);
     yticklabel_dict['zh-tw'].push(data2[i]['label_zh']);
