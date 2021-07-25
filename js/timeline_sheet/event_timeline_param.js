@@ -10,5 +10,6 @@ var ET_wrap = {
   data_path_list: [
     '../processed_data/event_timeline_zh-tw.csv',
   ],
+  
   size: '0.9rem',
 };

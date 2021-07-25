@@ -14,7 +14,6 @@ var CBA_latest_wrap = {
   y_max_factor: 1.6,
   nb_yticks: 4,
   legend_pos_x: 95,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var CBA_overall_wrap = {
@@ -26,7 +25,6 @@ var CBA_overall_wrap = {
   y_max_factor: 1.6,
   nb_yticks: 4,
   legend_pos_x: 95,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var CBA_2021_wrap = {
@@ -38,7 +36,6 @@ var CBA_2021_wrap = {
   y_max_factor: 1.4,
   nb_yticks: 4,
   legend_pos_x: 95,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var CBA_2020_wrap = {
@@ -50,5 +47,4 @@ var CBA_2020_wrap = {
   y_max_factor: 1.4,
   nb_yticks: 4,
   legend_pos_x: 90,
-  trans_delay: GP_wrap.trans_delay,
 };

@@ -15,7 +15,6 @@ var HOI_latest_wrap = {
   y_max_factor: 1.5,
   nb_yticks: 4,
   legend_pos_x: 85,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var HOI_overall_wrap = {
@@ -28,7 +27,6 @@ var HOI_overall_wrap = {
   y_max_factor: 1.1, 
   nb_yticks: 4,
   legend_pos_x: 85,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var HOI_2021_wrap = {
@@ -41,7 +39,6 @@ var HOI_2021_wrap = {
   y_max_factor: 1.4,
   nb_yticks: 4,
   legend_pos_x: 90,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var HOI_2020_wrap = {
@@ -54,5 +51,4 @@ var HOI_2020_wrap = {
   y_max_factor: 1.4,
   nb_yticks: 4,
   legend_pos_x: 90,
-  trans_delay: GP_wrap.trans_delay,
 };

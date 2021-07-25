@@ -142,6 +142,9 @@ function CT_Plot(wrap) {
   //-- Add tooltip
   GP_MakeTooltip(wrap);
   
+  //-- Define opacity
+  wrap.plot_opacity = 0.6;
+  
   //-- Define title
   var title;
   if (LS_lang == 'zh-tw')
@@ -321,9 +324,9 @@ function CT_Plot(wrap) {
       .attr('stroke', 'black')
       .attr('stroke-width', 1)
         .on('click', function (d, j) {CT_Click_Timeline(wrap, d, j);})
-        .on('mouseover', function (d) {GP_MouseOver3(wrap, d);})
+        .on('mouseover', function (d) {GP_MouseOver_Bright(wrap, d);})
         .on('mousemove', function (d) {CT_MouseMove(wrap, d);})
-        .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
+        .on('mouseleave', function (d) {GP_MouseLeave_Bright(wrap, d);});
   
   //-- Circle
   
@@ -349,9 +352,9 @@ function CT_Plot(wrap) {
       .attr('stroke', 'black')
       .attr('stroke-width', 0.3)
         .on('click', function (d, i) {CT_Click_Circle(wrap, d, i);})
-        .on('mouseover', function (d) {GP_MouseOver3(wrap, d);})
+        .on('mouseover', function (d) {GP_MouseOver_Bright(wrap, d);})
         .on('mousemove', function (d) {CT_MouseMove(wrap, d);})
-        .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
+        .on('mouseleave', function (d) {GP_MouseLeave_Bright(wrap, d);});
   
   //-- Define circle text position
   var x_list_c, y_list_c;

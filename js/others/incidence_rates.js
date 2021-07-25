@@ -205,6 +205,8 @@ function IR_Plot(wrap) {
   
   //-- Define mouse-move
   wrap.mouse_move = IR_MouseMove;
+  wrap.plot_opacity = GP_wrap.trans_opacity_bright;
+  wrap.trans_delay = GP_wrap.trans_delay;
   
   //-- Plot line
   GP_PlotLine(wrap);
@@ -256,7 +258,7 @@ function IR_Replot(wrap) {
     wrap.legend_label = ['Arrival incidence', 'Local incidence (multiplied by 1000)'];
     
   //-- Update legend title
-  GP_UpdateLegendTitle(wrap);
+  GP_UpdateLegendTitle_Standard(wrap);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'percentage', 'normal');

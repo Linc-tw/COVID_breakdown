@@ -214,6 +214,8 @@ function VBB_Plot(wrap) {
   
   //-- Define mouse-move
   wrap.mouse_move = VBB_MouseMove;
+  wrap.plot_opacity = GP_wrap.faint_opacity;
+  wrap.trans_delay = GP_wrap.trans_delay;
   
   //-- Plot bar
   GP_PlotFaintSingleBar(wrap);
@@ -269,7 +271,7 @@ function VBB_Replot(wrap) {
     wrap.legend_label = ['AstraZeneca', 'Moderna', 'Total'];
   
   //-- Update legend title
-  GP_UpdateLegendTitle(wrap);
+  GP_UpdateLegendTitle_Standard(wrap);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'count', 'normal');

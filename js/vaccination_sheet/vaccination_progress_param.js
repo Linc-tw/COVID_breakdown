@@ -21,7 +21,6 @@ var VP_latest_wrap = {
   legend_pos_y: 46,
   threshold_pos_x: 250,
   r: 3, //-- Dot radius
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var VP_overall_wrap = {
@@ -40,5 +39,4 @@ var VP_overall_wrap = {
   legend_pos_y: 46,
   threshold_pos_x: 250,
   r: 3, //-- Dot radius
-  trans_delay: GP_wrap.trans_delay,
 };

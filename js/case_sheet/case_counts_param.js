@@ -13,7 +13,6 @@ var CC_mini_wrap = {
   ],
   
   y_max_factor: 1.1,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var CC_latest_wrap = {
@@ -27,7 +26,6 @@ var CC_latest_wrap = {
   nb_yticks: 5,
   legend_pos_x: 85,
   legend_pos_x1_: {en: 170, fr: 180, 'zh-tw': 170},
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var CC_overall_wrap = {
@@ -41,7 +39,6 @@ var CC_overall_wrap = {
   nb_yticks: 5,
   legend_pos_x: 85,
   legend_pos_x1_: {en: 170, fr: 180, 'zh-tw': 170},
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var CC_2021_wrap = {
@@ -55,7 +52,6 @@ var CC_2021_wrap = {
   nb_yticks: 5,
   legend_pos_x: 80,
   legend_pos_x1_: {en: 190, fr: 270, 'zh-tw': 240},
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var CC_2020_wrap = {
@@ -69,5 +65,4 @@ var CC_2020_wrap = {
   nb_yticks: 5,
   legend_pos_x: 80,
   legend_pos_x1_: {en: 240, fr: 250, 'zh-tw': 210},
-  trans_delay: GP_wrap.trans_delay,
 };

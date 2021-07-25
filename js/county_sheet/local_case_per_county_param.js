@@ -15,7 +15,6 @@ var LCPC_latest_wrap = {
   y_max_factor: 1.55,
   nb_yticks: 4,
   legend_pos_x: 95,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var LCPC_overall_wrap = {
@@ -28,7 +27,6 @@ var LCPC_overall_wrap = {
   y_max_factor: 1.1, 
   nb_yticks: 4,
   legend_pos_x: 95,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var LCPC_2021_wrap = {
@@ -41,7 +39,6 @@ var LCPC_2021_wrap = {
   y_max_factor: 1.4,
   nb_yticks: 4,
   legend_pos_x: 95,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var LCPC_2020_wrap = {
@@ -54,5 +51,4 @@ var LCPC_2020_wrap = {
   y_max_factor: 1.4,
   nb_yticks: 4,
   legend_pos_x: 90,
-  trans_delay: GP_wrap.trans_delay,
 };

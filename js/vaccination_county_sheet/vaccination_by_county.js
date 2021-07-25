@@ -16,9 +16,9 @@ function VBC_InitFig(wrap) {
     wrap.tot_height_['fr'] = 400;
     wrap.tot_height_['en'] = 400;
     wrap.margin_ = {};
-    wrap.margin_['zh-tw'] = {left: 40, right: 5, bottom: 55, top: 5};
-    wrap.margin_['fr'] = {left: 130, right: 5, bottom: 55, top: 5};
-    wrap.margin_['en'] = {left: 110, right: 5, bottom: 55, top: 5};
+    wrap.margin_['zh-tw'] = {left: 40, right: 5, bottom: 60, top: 5};
+    wrap.margin_['fr'] = {left: 130, right: 5, bottom: 60, top: 5};
+    wrap.margin_['en'] = {left: 110, right: 5, bottom: 60, top: 5};
     
     GP_InitFig(wrap);
   }
@@ -136,6 +136,8 @@ function VBC_Plot(wrap) {
   
   //-- Define mouse-move
   wrap.mouse_move = VBC_MouseMove;
+  wrap.plot_opacity = 0.7;
+  wrap.trans_delay = GP_wrap.trans_delay;
   
   //-- Define xscale
   var xscale = GP_MakeLinearX(wrap);
@@ -156,9 +158,10 @@ function VBC_Plot(wrap) {
     .attr('width', 0)
     .attr('height', yscale.bandwidth())
     .attr('fill', wrap.color)
-      .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
+    .style('opacity', wrap.plot_opacity)
+      .on('mouseover', function (d) {GP_MouseOver_Faint(wrap, d);})
       .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave_Faint(wrap, d);})
       
   //-- Save to wrapper
   wrap.bar = bar;
@@ -202,10 +205,6 @@ function VBC_Replot(wrap) {
     .selectAll('text')
     .style('font-size', '0.9rem');
       
-  //-- Adjust ytick style
-  wrap.svg.selectAll('.yaxis line')
-    .style('stroke-opacity', '0.4');
-      
   //-- Define xaxis
   var xaxis = d3.axisBottom(xscale)
       .tickSize(-wrap.height)
@@ -216,7 +215,9 @@ function VBC_Replot(wrap) {
   wrap.svg.select('.xaxis')
     .transition()
     .duration(wrap.trans_delay)
-    .call(xaxis);
+    .call(xaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(0,3)');
       
   //-- Update xlabel
   var xlabel_dict = {en: 'Proportion of the population', fr: 'Part de la population', 'zh-tw': '人口比'};
@@ -240,9 +241,7 @@ function VBC_Replot(wrap) {
     wrap.legend_label = ['Nationalwide level'];
   
   //-- Update legend title
-  wrap.legend_color.splice(0, 0, '#000000');
-  wrap.legend_value.splice(0, 0, '');
-  wrap.legend_label.splice(0, 0, wrap.legend_value_raw[0]);
+  GP_UpdateLegendTitle(wrap, wrap.legend_value_raw[0]);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'percentage', 'normal');

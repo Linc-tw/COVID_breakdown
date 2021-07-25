@@ -207,6 +207,8 @@ function CC_Plot(wrap) {
   
   //-- Define mouse-move
   wrap.mouse_move = CC_MouseMove;
+  wrap.plot_opacity = GP_wrap.faint_opacity;
+  wrap.trans_delay = GP_wrap.trans_delay;
   
   //-- Plot bar
   GP_PlotFaintSingleBar(wrap);
@@ -273,7 +275,7 @@ function CC_Replot(wrap) {
   }
   
   //-- Update legend title
-  GP_UpdateLegendTitle(wrap);
+  GP_UpdateLegendTitle_Standard(wrap);
   var legend_length = wrap.legend_color.length;
   
   //-- Update legend value

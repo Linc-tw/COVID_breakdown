@@ -204,6 +204,8 @@ function PAF_Plot(wrap) {
   
   //-- Define mouse-move
   wrap.mouse_move = PAF_MouseMove;
+  wrap.plot_opacity = GP_wrap.trans_opacity_bright;
+  wrap.trans_delay = GP_wrap.trans_delay;
   
   //-- Plot line
   GP_PlotLine(wrap);
@@ -255,7 +257,7 @@ function PAF_Replot(wrap) {
     wrap.legend_label = ['Positive rate', 'Fatality rate (cumulative)'];
     
   //-- Update legend title
-  GP_UpdateLegendTitle(wrap);
+  GP_UpdateLegendTitle_Standard(wrap);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'percentage', 'normal');

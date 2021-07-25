@@ -8,8 +8,6 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//vertical lines for VBC (or lighter color)
-//Clean processed_data
 //Note with "Collapse"
 //Linear/log?
 
@@ -42,7 +40,8 @@ var GP_wrap = {
   gray: '#999999',
   
   //-- Transparency
-  opacity: 0.3,
+  trans_opacity_bright: 0.8,
+  faint_opacity: 0.3,
   
   //-- Legend
   ylabel_dict_case: {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'},
@@ -431,17 +430,28 @@ function GP_GetRForTickPos(wrap, data_length) {
   return r;
 }
 
+//-- Require xticklabel
 function GP_ReplotDateAsX(wrap) {
   //-- Define xscale
   var xscale = GP_MakeBandXForBar(wrap);
   
   //-- Define xaxis
-  var xaxis = d3.axisBottom(xscale)
-    .tickSize(10)
-    .tickSizeOuter(0)
-    .tickValues(wrap.xticklabel)
-    .tickFormat(function (d) {return LS_ISODateToMDDate(d);});
-  
+  var xaxis;
+  if (wrap.tag.includes('vaccination_progress') || wrap.tag.includes('vaccination_by_dose')) {
+    xaxis = d3.axisBottom(xscale)
+      .tickSize(10)
+      .tickSizeOuter(0)
+      .tickValues(wrap.x_list)
+      .tickFormat(function (d, i) {return LS_ISODateToMDDate(wrap.xticklabel[i]);});
+  }
+  else {
+    xaxis = d3.axisBottom(xscale)
+      .tickSize(10)
+      .tickSizeOuter(0)
+      .tickValues(wrap.xticklabel)
+      .tickFormat(function (d) {return LS_ISODateToMDDate(d);});
+  }
+    
   //-- Add xaxis
   wrap.svg.select('.xaxis')
     .transition()
@@ -838,9 +848,9 @@ function GP_PlotMultipleBar(wrap) {
     .attr('width', xscale.bandwidth())
     .attr('height', 0)
     .attr('fill', function (d) {return wrap.color_list[d.col_ind];})
-      .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
+      .on('mouseover', function (d) {GP_MouseOver_Bright(wrap, d);})
       .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave_Bright(wrap, d);})
       
   //-- Save to wrapper
   wrap.bar = bar;
@@ -879,9 +889,9 @@ function GP_PlotSingleBar(wrap) {
     .attr('width', xscale.bandwidth())
     .attr('height', 0)
     .attr('fill', wrap.color)
-      .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
+      .on('mouseover', function (d) {GP_MouseOver_Bright(wrap, d);})
       .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave_Bright(wrap, d);})
       
   //-- Save to wrapper
   wrap.bar = bar;
@@ -920,10 +930,10 @@ function GP_PlotFaintSingleBar(wrap) {
     .attr('width', xscale.bandwidth())
     .attr('height', 0)
     .attr('fill', wrap.color)
-    .attr('opacity', GP_wrap.opacity)
-      .on('mouseover', function (d) {GP_MouseOver4(wrap, d);})
+    .attr('opacity', wrap.plot_opacity)
+      .on('mouseover', function (d) {GP_MouseOver_Faint(wrap, d);})
       .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave4(wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave_Faint(wrap, d);})
       
   //-- Save to wrapper
   wrap.bar = bar;
@@ -1015,9 +1025,9 @@ function GP_PlotDot(wrap) {
         .attr('cx', function (d) {return xscale(d.x);})
         .attr('cy', yscale(0))
         .attr('r', 0)
-          .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
+          .on('mouseover', function (d) {GP_MouseOver_Bright(wrap, d);})
           .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
-          .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
+          .on('mouseleave', function (d) {GP_MouseLeave_Bright(wrap, d);});
   
     dot_list.push(dot);
   }
@@ -1118,8 +1128,8 @@ function GP_PlotCorr(wrap) {
       .attr('width', xscale.bandwidth())
       .attr('height', yscale.bandwidth())
       .style('fill', '#FFFFFF')
-        .on('mouseover', function (d) {GP_MouseOver2(wrap, d);})
-        .on('mouseleave', function (d) {GP_MouseLeave2(wrap, d);});
+        .on('mouseover', function (d) {GP_MouseOver_Bright(wrap, d);})
+        .on('mouseleave', function (d) {GP_MouseLeave_Bright(wrap, d);});
     
   //-- Add text
   wrap.svg.selectAll()
@@ -1184,8 +1194,8 @@ function GP_PlotHotMap(wrap) {
       .attr('width', xscale.bandwidth())
       .attr('height', yscale.bandwidth())
       .style('fill', '#FFFFFF')
-        .on('mouseover', function (d) {GP_MouseOver2(wrap, d);})
-        .on('mouseleave', function (d) {GP_MouseLeave2(wrap, d);});
+        .on('mouseover', function (d) {GP_MouseOver_Bright(wrap, d);})
+        .on('mouseleave', function (d) {GP_MouseLeave_Bright(wrap, d);});
     
   //-- Add text
   wrap.svg.selectAll()
@@ -1227,11 +1237,16 @@ function GP_GetLegendYPos(legend_pos, legend_length, i) {
   return legend_pos.y + (i-Math.floor(legend_length/2))*legend_pos.dy;
 }
 
-function GP_UpdateLegendTitle(wrap) {
+function GP_UpdateLegendTitle(wrap, title) {
   //-- Update legend title
   wrap.legend_color.splice(0, 0, '#000000');
   wrap.legend_value.splice(0, 0, '');
-  wrap.legend_label.splice(0, 0, LS_GetLegendTitle_Page(wrap));
+  wrap.legend_label.splice(0, 0, title);
+}
+
+function GP_UpdateLegendTitle_Standard(wrap) {
+  var title = LS_GetLegendTitle_Page(wrap);
+  GP_UpdateLegendTitle(wrap, title);
 }
 
 function GP_ReplotLegend(wrap, format, legend_size) {
@@ -1278,24 +1293,24 @@ function GP_ReplotLegend(wrap, format, legend_size) {
 
 function GP_MakeTooltip(wrap) {
   wrap.tooltip = d3.select(wrap.id)
-    .append("div")
-    .attr("class", "tooltip")
+    .append('div')
+    .attr('class', 'tooltip')
 }
 
-function GP_MouseOver(wrap, d) {
+function GP_MouseOver_Bright(wrap, d) {
   //-- Change opacity when moving mouse over
-  if (!wrap.tag.includes('mini'))
+  if (wrap.hasOwnProperty('tooltip'))
     wrap.tooltip.transition()
       .duration(200)
-      .style("opacity", 0.9);
+      .style('opacity', 0.9);
       
   d3.select(d3.event.target)
-    .style("opacity", 0.8);
+    .style('opacity', wrap.plot_opacity);
 }
 
-function GP_MouseLeave(wrap, d) {
+function GP_MouseLeave_Bright(wrap, d) {
   //-- Change opacity when moving mouse away
-  if (!wrap.tag.includes('mini'))
+  if (wrap.hasOwnProperty('tooltip'))
     wrap.tooltip.html('')
       .transition()
       .duration(10)
@@ -1305,27 +1320,27 @@ function GP_MouseLeave(wrap, d) {
     .style('opacity', 1);
 }
 
-function GP_MouseOver4(wrap, d) {
+function GP_MouseOver_Faint(wrap, d) {
   //-- Change opacity when moving mouse over
-  if (!wrap.tag.includes('mini'))
+  if (wrap.hasOwnProperty('tooltip'))
     wrap.tooltip.transition()
       .duration(200)
-      .style("opacity", 0.9);
+      .style('opacity', 0.9);
   
   d3.select(d3.event.target)
-    .style("opacity", 1);
+    .style('opacity', 1);
 }
 
-function GP_MouseLeave4(wrap, d) {
+function GP_MouseLeave_Faint(wrap, d) {
   //-- Change opacity when moving mouse away
-  if (!wrap.tag.includes('mini'))
+  if (wrap.hasOwnProperty('tooltip'))
     wrap.tooltip.html('')
       .transition()
       .duration(10)
       .style('opacity', 0);
   
   d3.select(d3.event.target)
-    .style('opacity', GP_wrap.opacity);
+    .style('opacity', wrap.plot_opacity);
 }
 
 function GP_GetTooltipPos(wrap, y_alpha, d) {
@@ -1360,29 +1375,6 @@ function GP_GetTooltipPos(wrap, y_alpha, d) {
   y_pos = (y_pos + wrap.margin.top) * y_aspect + buffer + card_hdr + button;
   
   return [x_pos, y_pos];
-}
-
-//-- For THSC, ASC, IEBC, & IEBA (no tooltip)
-function GP_MouseOver2(wrap, d) {
-  d3.select(d3.event.target)
-    .style("opacity", 0.8);
-}
-
-//-- For THSC & ASC (no tooltip)
-function GP_MouseLeave2(wrap, d) {
-  d3.select(d3.event.target)
-    .style("opacity", 1);
-}
-
-//-- For CT & ET
-function GP_MouseOver3(wrap, d) {
-  if (!wrap.tag.includes('mini'))
-    wrap.tooltip.transition()
-      .duration(200)
-      .style("opacity", 0.9);
-      
-  d3.select(d3.event.target)
-    .style("opacity", 0.6);
 }
 
 //------------------------------------------------------------------------------

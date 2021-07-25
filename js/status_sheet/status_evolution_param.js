@@ -14,7 +14,6 @@ var SE_latest_wrap = {
   y_max_factor: 1.2,
   nb_yticks: 4,
   legend_pos_x: 80,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var SE_2021_wrap = {
@@ -26,7 +25,6 @@ var SE_2021_wrap = {
   y_max_factor: 1.2,
   nb_yticks: 4,
   legend_pos_x: 80,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 
@@ -39,6 +37,5 @@ var SE_2020_wrap = {
   y_max_factor: 1.15,
   nb_yticks: 4,
   legend_pos_x: 70,
-  trans_delay: GP_wrap.trans_delay,
 };
 

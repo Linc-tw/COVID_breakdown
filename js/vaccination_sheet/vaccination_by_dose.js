@@ -181,6 +181,10 @@ function VBD_Plot(wrap) {
   //-- Define color
   wrap.color_list = GP_wrap.c_list.slice(2, 2+wrap.nb_col).reverse();
   
+  //-- Define opacity & delay
+  wrap.plot_opacity = 0.7;
+  wrap.trans_delay = GP_wrap.trans_delay;
+  
   //-- Define xscale
   var xscale = GP_MakeLinearX(wrap);
   
@@ -203,8 +207,9 @@ function VBD_Plot(wrap) {
     .attr('class', 'content area')
     .attr('d', function (d) {return draw_area(d);})
     .style('fill', function (d, i) {return wrap.color_list[i];})
-      .on('mouseover', function (d) {GP_MouseOver2(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave2(wrap, d);});
+    .style('opacity', wrap.plot_opacity)
+      .on('mouseover', function (d) {GP_MouseOver_Faint(wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave_Faint(wrap, d);});
     
   //-- Save to wrapper
   wrap.area = area;
@@ -239,27 +244,8 @@ function VBD_Replot(wrap) {
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
     GP_ReplotOverallXTick(wrap, 'area');
-  else {
-    //-- Define xaxis
-    var xaxis = d3.axisBottom(xscale)
-      .tickSize(10)
-      .tickSizeOuter(0)
-      .tickValues(wrap.x_list)
-      .tickFormat(function (d, i) {return LS_ISODateToMDDate(wrap.xticklabel[i]);});
-    
-    //-- Add xaxis
-    wrap.svg.select('.xaxis')
-      .transition()
-      .duration(wrap.trans_delay)
-      .call(xaxis)
-      .selectAll('text')
-        .attr('transform', 'translate(-20,15) rotate(-90)')
-        .style('text-anchor', 'end');
-        
-    //-- Tick style
-    wrap.svg.selectAll('.xaxis line')
-      .style('stroke-opacity', '0.4');
-  }
+  else
+    GP_ReplotDateAsX(wrap);
   
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap, 'percentage');
@@ -286,9 +272,7 @@ function VBD_Replot(wrap) {
     wrap.legend_label = ['1st dose', '2nd dose'];
   
   //-- Update legend title
-  wrap.legend_color.splice(0, 0, '#000000');
-  wrap.legend_value.splice(0, 0, '');
-  wrap.legend_label.splice(0, 0, wrap.last_date);
+  GP_UpdateLegendTitle(wrap, wrap.last_date);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'percentage', 'normal');

@@ -186,6 +186,8 @@ function SE_Plot(wrap) {
   
   //-- Define mouse-move
   wrap.mouse_move = SE_MouseMove;
+  wrap.plot_opacity = GP_wrap.trans_opacity_bright;
+  wrap.trans_delay = GP_wrap.trans_delay;
   
   //-- Plot bar
   GP_PlotMultipleBar(wrap);
@@ -234,7 +236,7 @@ function SE_Replot(wrap) {
     wrap.legend_label = ['Discharged', 'Hospitalized', 'Deaths', 'Total'];
   
   //-- Update legend title
-  GP_UpdateLegendTitle(wrap);
+  GP_UpdateLegendTitle_Standard(wrap);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'count', '1.2rem');

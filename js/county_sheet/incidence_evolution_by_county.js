@@ -120,6 +120,10 @@ function IEBC_Plot(wrap) {
     .domain([0, wrap.value_max])
     .interpolator(t => d3.interpolatePuRd(t));
   
+  //-- Define opacity & delay
+  wrap.plot_opacity = GP_wrap.trans_opacity_bright;
+  wrap.trans_delay = GP_wrap.trans_delay_long;
+  
   //-- Plot hot map
   GP_PlotHotMap(wrap);
 }

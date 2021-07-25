@@ -13,7 +13,6 @@ var VBB_mini_wrap = {
   ],
 
   y_max_factor: 1.1, 
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var VBB_latest_wrap = {
@@ -26,7 +25,6 @@ var VBB_latest_wrap = {
   y_max_factor: 1.15, 
   nb_yticks: 4,
   legend_pos_x: 115, 
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var VBB_overall_wrap = {
@@ -39,7 +37,6 @@ var VBB_overall_wrap = {
   y_max_factor: 1.2, 
   nb_yticks: 4,
   legend_pos_x: 115, 
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var VBB_2021_wrap = {
@@ -52,5 +49,4 @@ var VBB_2021_wrap = {
   y_max_factor: 1.2,
   nb_yticks: 4,
   legend_pos_x: 115, 
-  trans_delay: GP_wrap.trans_delay,
 };

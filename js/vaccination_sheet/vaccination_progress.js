@@ -378,6 +378,10 @@ function VP_Plot(wrap) {
   linewidth_list = linewidth_list.concat(['2.5px', '1.5px', '1.5px']);
   linestyle_list = linestyle_list.concat(['8,5', '8,5', '8,5']);
   
+  //-- Define opacity & delay
+  wrap.plot_opacity = GP_wrap.trans_opacity_bright;
+  wrap.trans_delay = GP_wrap.trans_delay;
+  
   //-- Define xscale
   var xscale = GP_MakeLinearX(wrap);
   
@@ -416,9 +420,9 @@ function VP_Plot(wrap) {
       .attr('cx', function (d) {return xscale(d.x);})
       .attr('cy', yscale(0))
       .attr('r', 0)
-        .on('mouseover', function (d) {GP_MouseOver(wrap, d);})
+        .on('mouseover', function (d) {GP_MouseOver_Bright(wrap, d);})
         .on('mousemove', function (d) {VP_MouseMove(wrap, d);})
-        .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);});
+        .on('mouseleave', function (d) {GP_MouseLeave_Bright(wrap, d);});
   
   //-- Save to wrapper
   wrap.color_list = color_list;
@@ -490,27 +494,8 @@ function VP_Replot(wrap) {
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
     GP_ReplotOverallXTick(wrap, 'dot');
-  else {
-    //-- Define xaxis
-    var xaxis = d3.axisBottom(xscale)
-      .tickSize(10)
-      .tickSizeOuter(0)
-      .tickValues(wrap.x_list)
-      .tickFormat(function (d, i) {return LS_ISODateToMDDate(wrap.xticklabel[i]);});
-    
-    //-- Add xaxis
-    wrap.svg.select('.xaxis')
-      .transition()
-      .duration(wrap.trans_delay)
-      .call(xaxis)
-      .selectAll('text')
-        .attr('transform', 'translate(-20,15) rotate(-90)')
-        .style('text-anchor', 'end');
-        
-    //-- Tick style
-    wrap.svg.selectAll('.xaxis line')
-      .style('stroke-opacity', '0.4');
-  }
+  else 
+    GP_ReplotDateAsX(wrap);
   
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap, 'count');
@@ -551,9 +536,7 @@ function VP_Replot(wrap) {
   }
   
   //-- Update legend title
-  wrap.legend_color.splice(0, 0, '#000000');
-  wrap.legend_value.splice(0, 0, '');
-  wrap.legend_label.splice(0, 0, wrap.last_date);
+  GP_UpdateLegendTitle(wrap, wrap.last_date);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'count', '1.2rem');

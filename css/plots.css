@@ -135,7 +135,6 @@ body,
   shape-rendering: optimizeSpeed;
 }
 
-
 /* Tooltip */
 
 .tooltip {
@@ -210,6 +209,16 @@ body,
 #vaccination_progress_overall .tooltip, 
 #vaccination_progress_2021 .tooltip, 
 #vaccination_progress_2020 .tooltip {
+  margin-left: -60px;
+  margin-right: -60px;
+  margin-top: -45px;
+  margin-bottom: -45px;
+}
+
+#vaccination_by_county_latest .tooltip, 
+#vaccination_by_county_overall .tooltip, 
+#vaccination_by_county_2021 .tooltip, 
+#vaccination_by_county_2020 .tooltip {
   margin-left: -60px;
   margin-right: -60px;
   margin-top: -45px;

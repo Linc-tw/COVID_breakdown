@@ -193,6 +193,8 @@ function TC_Plot(wrap) {
   
   //-- Define mouse-move
   wrap.mouse_move = TC_MouseMove;
+  wrap.plot_opacity = GP_wrap.faint_opacity;
+  wrap.trans_delay = GP_wrap.trans_delay;
   
   //-- Plot bar
   GP_PlotFaintSingleBar(wrap);
@@ -241,7 +243,7 @@ function TC_Replot(wrap) {
   wrap.legend_label = [legend_label_dict[LS_lang]];
   
   //-- Update legend title
-  GP_UpdateLegendTitle(wrap);
+  GP_UpdateLegendTitle_Standard(wrap);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'count', 'normal');

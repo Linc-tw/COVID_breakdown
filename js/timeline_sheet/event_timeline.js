@@ -626,6 +626,9 @@ function ET_Plot(wrap) {
   //-- Add tooltip
   GP_MakeTooltip(wrap);
   
+  //-- Define opacity
+  wrap.plot_opacity = 0.6;
+  
   //-- Parameters for half year block
   var x0 = 35;
   var y0 = 45;
@@ -752,9 +755,9 @@ function ET_Replot(wrap) {
       .style('fill', '#FFFFFF')
       .style('stroke', '#CCCCCC')
       .datum(d3.timeFormat('%Y-%m-%d'))
-        .on('mouseover', function (d) {GP_MouseOver3(wrap, d);})
+        .on('mouseover', function (d) {GP_MouseOver_Bright(wrap, d);})
         .on('mousemove', function (d) {ET_MouseMove(wrap, d);})
-        .on('mouseleave', function (d) {GP_MouseLeave(wrap, d);})
+        .on('mouseleave', function (d) {GP_MouseLeave_Bright(wrap, d);})
         .on('click', function (d, i) {ET_Click(wrap, d, i);});
   
   //-- Define color

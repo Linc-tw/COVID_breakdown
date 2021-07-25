@@ -13,7 +13,6 @@ var VBC_latest_wrap = {
 
   nb_yticks: 9,
   legend_pos_x_: {en: 460, fr: 460, 'zh-tw': 580},
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var VBC_overall_wrap = {
@@ -24,7 +23,6 @@ var VBC_overall_wrap = {
   
   nb_yticks: 4,
   legend_pos_x: 115, 
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var VBC_2021_wrap = {
@@ -35,5 +33,4 @@ var VBC_2021_wrap = {
 
   nb_yticks: 4,
   legend_pos_x: 115, 
-  trans_delay: GP_wrap.trans_delay,
 };

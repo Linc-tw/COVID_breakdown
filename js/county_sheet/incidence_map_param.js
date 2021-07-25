@@ -12,8 +12,6 @@ var IM_latest_wrap = {
     '../processed_data/latest/incidence_map_label.csv',
     '../processed_data/latest/incidence_map.csv',
   ],
-
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var IM_overall_wrap = {
@@ -23,8 +21,6 @@ var IM_overall_wrap = {
     '../processed_data/overall/incidence_map_label.csv',
     '../processed_data/overall/incidence_map.csv',
   ],
-
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var IM_2021_wrap = {
@@ -34,8 +30,6 @@ var IM_2021_wrap = {
     'processed_data/2021/incidence_map_label.csv',
     'processed_data/2021/incidence_map.csv',
   ],
-
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var IM_2020_wrap = {
@@ -45,6 +39,4 @@ var IM_2020_wrap = {
     'processed_data/2020/incidence_map_label.csv',
     'processed_data/2020/incidence_map.csv',
   ],
-
-  trans_delay: GP_wrap.trans_delay,
 };

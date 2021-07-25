@@ -15,7 +15,6 @@ var VBD_latest_wrap = {
   y_max_factor: 1.2,
   nb_yticks: 4,
   legend_pos_x: 110, 
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var VBD_overall_wrap = {
@@ -28,5 +27,4 @@ var VBD_overall_wrap = {
   y_max_factor: 1.2,
   nb_yticks: 4,
   legend_pos_x: 110,
-  trans_delay: GP_wrap.trans_delay,
 };

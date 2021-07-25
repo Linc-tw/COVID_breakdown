@@ -15,7 +15,6 @@ var DC_latest_wrap = {
   y_max_factor: 1.5, 
   nb_yticks: 4,
   legend_pos_x: 75,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var DC_overall_wrap = {
@@ -28,7 +27,6 @@ var DC_overall_wrap = {
   y_max_factor: 1.1, 
   nb_yticks: 4,
   legend_pos_x: 75,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var DC_2021_wrap = {
@@ -41,7 +39,6 @@ var DC_2021_wrap = {
   y_max_factor: 1.2,
   nb_yticks: 4,
   legend_pos_x: 75,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var DC_2020_wrap = {
@@ -54,5 +51,4 @@ var DC_2020_wrap = {
   y_max_factor: 1.2,
   nb_yticks: 4,
   legend_pos_x: 75,
-  trans_delay: GP_wrap.trans_delay,
 };

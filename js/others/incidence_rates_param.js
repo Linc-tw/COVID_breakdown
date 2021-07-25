@@ -15,7 +15,6 @@ var IR_mini_wrap = {
   y_max_factor: 1.1,
   nb_yticks: 4,
   r: 2, //-- Dot radius
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var IR_latest_wrap = {
@@ -29,7 +28,6 @@ var IR_latest_wrap = {
   nb_yticks: 4,
   legend_pos_x: 95,
   r: 3, //-- Dot radius
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var IR_overall_wrap = {
@@ -43,7 +41,6 @@ var IR_overall_wrap = {
   nb_yticks: 4,
   legend_pos_x: 95,
   r: 1.5, //-- Dot radius
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var IR_2021_wrap = {
@@ -57,7 +54,6 @@ var IR_2021_wrap = {
   nb_yticks: 4,
   legend_pos_x: 85,
   r: 2,
-  trans_delay: GP_wrap.trans_delay,
 };
 
 var IR_2020_wrap = {
@@ -71,5 +67,4 @@ var IR_2020_wrap = {
   nb_yticks: 4,
   legend_pos_x: 290,
   r: 1.5,
-  trans_delay: GP_wrap.trans_delay,
 };

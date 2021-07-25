@@ -273,7 +273,7 @@ function IM_FormatData3(wrap, data3) {
 //-- Tooltip
 function IM_MouseOver(wrap, d, i) {
   d3.select(d3.event.target)
-    .style('opacity', 0.8);
+    .style('opacity', wrap.plot_opacity);
     
   wrap.svg.select(wrap.id+'_label_'+d.properties.COUNTYCODE)
     .style('font-size', '1.3rem');
@@ -294,6 +294,10 @@ function IM_Plot(wrap) {
   var ctr_dec = 23+48/60; //-- Center was  23 58' 26"
   var projection = d3.geoGnomonic()
     .rotate([-ctr_ra, -ctr_dec]).scale(scale*180/Math.PI).translate([0.5*wrap.width, 0.5*wrap.height]);
+    
+  //-- Define opacity & delay
+  wrap.plot_opacity = GP_wrap.trans_opacity_bright;
+  wrap.trans_delay = GP_wrap.trans_delay;
     
   //-- Add map
   var map = wrap.svg.selectAll('.content.map')
