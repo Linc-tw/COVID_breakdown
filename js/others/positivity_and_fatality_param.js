@@ -5,18 +5,6 @@
 //-- Author:
 //--   Chieh-An Lin
 
-var PAF_mini_wrap = {
-  tag: 'positivity_and_fatality_mini',
-  data_path_list: [
-    '../processed_data/latest/positivity_and_fatality.csv',
-    '../processed_data/key_numbers.csv',
-  ],
-
-  y_max_factor: 1.1,
-  nb_yticks: 4,
-  r: 2, //-- Dot radius
-};
-
 var PAF_latest_wrap = {
   tag: 'positivity_and_fatality_latest',
   data_path_list: [

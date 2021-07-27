@@ -1258,11 +1258,11 @@ function GP_ReplotLegend(wrap, format, legend_size) {
     .enter()
     .append('text')
       .attr('class', 'legend value')
-      .attr('x', wrap.legend_pos.x)
-      .attr('y', function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy;})
+      .attr('x', function (d, i) {if (format.includes('fold')) return GP_GetLegendXPos(wrap.legend_pos, wrap.legend_color.length, i); return wrap.legend_pos.x;})
+      .attr('y', function (d, i) {if (format.includes('fold')) return GP_GetLegendYPos(wrap.legend_pos, wrap.legend_color.length, i); return wrap.legend_pos.y+i*wrap.legend_pos.dy;})
       .attr('text-anchor', 'end')
       .style('fill', function (d, i) {return wrap.legend_color[i];})
-      .text(function (d, i) {if (0 == i) return ''; if (format == 'count') return d; return d3.format('.2%')(d);});
+      .text(function (d, i) {if (0 == i) return ''; if (format.includes('count')) return d; return d3.format('.2%')(d);});
       
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')
@@ -1272,8 +1272,8 @@ function GP_ReplotLegend(wrap, format, legend_size) {
     .enter()
     .append('text')
       .attr('class', 'legend label')
-      .attr('x', wrap.legend_pos.x+wrap.legend_pos.dx)
-      .attr('y', function (d, i) {return wrap.legend_pos.y + i*wrap.legend_pos.dy;})
+      .attr('x', function (d, i) {if (format.includes('fold')) return GP_GetLegendXPos(wrap.legend_pos, wrap.legend_color.length, i)+wrap.legend_pos.dx; return wrap.legend_pos.x+wrap.legend_pos.dx;})
+      .attr('y', function (d, i) {if (format.includes('fold')) return GP_GetLegendYPos(wrap.legend_pos, wrap.legend_color.length, i); return wrap.legend_pos.y+i*wrap.legend_pos.dy;})
       .attr('text-anchor', 'start')
       .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
       .style('fill', function (d, i) {return wrap.legend_color[i];})

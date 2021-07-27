@@ -12,7 +12,7 @@ var IR_mini_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  y_max_factor: 1.1,
+  y_max_factor: 1.15,
   nb_yticks: 4,
   r: 2, //-- Dot radius
 };

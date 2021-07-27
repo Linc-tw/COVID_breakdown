@@ -504,7 +504,7 @@ function VP_Replot(wrap) {
   GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_dose);
   
   //-- Define legend position
-  wrap.legend_pos = {x: wrap.legend_pos_x, y: wrap.legend_pos_y, dx: 10, dy: 27};
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27};
   
   //-- Define legend color
   wrap.legend_color = wrap.color_list.slice();

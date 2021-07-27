@@ -243,7 +243,7 @@ function CC_Replot(wrap) {
   GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_case);
   
   //-- Define legend position
-  var legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_[LS_lang]};
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_[LS_lang]};
   
   //-- Define legend color
   var i;
@@ -276,38 +276,9 @@ function CC_Replot(wrap) {
   
   //-- Update legend title
   GP_UpdateLegendTitle_Standard(wrap);
-  var legend_length = wrap.legend_color.length;
   
-  //-- Update legend value
-  wrap.svg.selectAll('.legend.value')
-    .remove()
-    .exit()
-    .data(wrap.legend_value)
-    .enter()
-    .append('text')
-      .attr('class', 'legend value')
-      .attr('x', function (d, i) {return GP_GetLegendXPos(legend_pos, legend_length, i);})
-      .attr('y', function (d, i) {return GP_GetLegendYPos(legend_pos, legend_length, i);})
-      .attr('text-anchor', 'end')
-      .style('fill', function (d, i) {return wrap.legend_color[i];})
-      .style('font-size', '1.2rem')
-      .text(function (d) {return d;});
-  
-  //-- Update legend label
-  wrap.svg.selectAll('.legend.label')
-    .remove()
-    .exit()
-    .data(wrap.legend_label)
-    .enter()
-    .append('text')
-      .attr('class', 'legend label')
-      .attr('x', function (d, i) {return GP_GetLegendXPos(legend_pos, legend_length, i) + legend_pos.dx;})
-      .attr('y', function (d, i) {return GP_GetLegendYPos(legend_pos, legend_length, i);})
-      .attr('text-anchor', 'start')
-      .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
-      .style('fill', function (d, i) {return wrap.legend_color[i];})
-      .style('font-size', '1.2rem')
-      .text(function (d) {return d;});
+  //-- Replot legend
+  GP_ReplotLegend(wrap, 'count_fold', '1.2rem');
 }
 
 //-- Load

@@ -216,7 +216,7 @@ function SE_Replot(wrap) {
   GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_case);
   
   //-- Define legend position
-  wrap.legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27};
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_[LS_lang]};
   
   //-- Define legend color
   wrap.legend_color = wrap.color_list.slice();
@@ -239,7 +239,7 @@ function SE_Replot(wrap) {
   GP_UpdateLegendTitle_Standard(wrap);
   
   //-- Replot legend
-  GP_ReplotLegend(wrap, 'count', '1.2rem');
+  GP_ReplotLegend(wrap, 'count_fold', '1.2rem');
 }
 
 //-- Load
