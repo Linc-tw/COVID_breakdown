@@ -13,8 +13,8 @@ var VP_latest_wrap = {
     '../processed_data/latest/vaccination_progress_injections.csv',
   ],
 
-  x_max_factor: 1.19,
-  y_max_factor: 1.25,
+  x_max_factor: 1.22,
+  y_max_factor: 1.48,
   y_max_fixed: 0,
   nb_yticks: 4,
   legend_pos_x: 105,
@@ -31,7 +31,7 @@ var VP_overall_wrap = {
   ],
 
   x_max_factor: 1.19,
-  y_max_factor: 1.25,
+  y_max_factor: 1.28,
   y_max_fixed: 0,
   nb_yticks: 4,
   legend_pos_x: 105,

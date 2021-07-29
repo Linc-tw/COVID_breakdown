@@ -25,7 +25,7 @@ function VBB_ResetText() {
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('vaccination_by_brand_title', 'Vaccins administrés par marque');
+    LS_AddStr('vaccination_by_brand_title', 'Vaccination par marque');
     LS_AddStr('vaccination_by_brand_button_daily', 'Quotidiens');
     LS_AddStr('vaccination_by_brand_button_cumul', 'Cumulés');
     LS_AddStr('vaccination_by_brand_button_total', 'Totaux');
@@ -34,7 +34,7 @@ function VBB_ResetText() {
   }
   
   else { //-- En
-    LS_AddStr('vaccination_by_brand_title', 'Administrated Vaccines by Brand');
+    LS_AddStr('vaccination_by_brand_title', 'Vaccination by Brand');
     LS_AddStr('vaccination_by_brand_button_daily', 'Daily');
     LS_AddStr('vaccination_by_brand_button_cumul', 'Cumulative');
     LS_AddStr('vaccination_by_brand_button_total', 'Total');

@@ -30,11 +30,11 @@ function VBC_ResetText() {
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('vaccination_by_county_title', 'Vaccins administrés par ville et comté');
+    LS_AddStr('vaccination_by_county_title', 'Vaccination par ville et comté');
   }
   
   else { //-- En
-    LS_AddStr('vaccination_by_county_title', 'Administrated Vaccines by City & County');
+    LS_AddStr('vaccination_by_county_title', 'Vaccination by City & County');
   }
 }
 
@@ -105,9 +105,9 @@ function VBC_MouseMove(wrap, d) {
   if (LS_lang == 'zh-tw')
     label_list = ['<br>已接種疫苗數<br>= ', '人口'];
   else if (LS_lang == 'fr')
-    label_list = ['<br>Vaccins administrés<br>= ', ' de la population'];
+    label_list = ["<br>Nombre d'injections<br>= ", ' de la population'];
   else
-    label_list = ['<br>Administrated vaccines<br>= ', ' of the population'];
+    label_list = ['<br>Number of injections<br>= ', ' of the population'];
   
   //-- Define tooltip texts
   var tooltip_text = wrap.legend_value_raw[0];

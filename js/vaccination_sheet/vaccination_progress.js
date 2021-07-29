@@ -110,7 +110,7 @@ function VP_FormatData2(wrap, data) {
   var y_prev = 0;
   var block = [{x: x, y: y}];
   var annotation = [];
-  var date;
+  var date, x_prev;
   
   //-- Main loop over row
   for (i=0; i<data.length; i++) {
@@ -134,6 +134,7 @@ function VP_FormatData2(wrap, data) {
     block.push({x: x, y: y});
     
     //-- After delivery
+    x_prev = x;
     y_prev = y;
     y = +row[col_tag];
     
@@ -143,7 +144,7 @@ function VP_FormatData2(wrap, data) {
     //-- Annotation
     source = row['source'];
     if (y > y_prev && source != 'COVAX' && !col_tag_list.includes(source))
-      annotation.push({x: x, y: y, source: source});
+      annotation.push({x: x, y: y, x_prev: x_prev, y_prev: y_prev, source: source});
   }
   
   //-- Stock last point
@@ -259,31 +260,53 @@ function VP_FormatData3(wrap, data) {
 
 //-- Post processing
 function VP_FormatData4(wrap) {
-  var eps = 10;
-  var i, x, y, x_anno, y_anno;
+  var eps = 10; //-- [px]
+  var i, x, y, x_prev, y_prev;
+  var x_anno, y_anno, xp_anno, yp_anno;
   var block_line, block_anno;
   
   //-- No donation line
   
   //-- Donation annotations
-  var alpha = 2; //-- Distance factor for annotation
+  var annotation = [];
+  var alpha = 2.5; //-- Distance factor for annotation
+  var beta = 1.5;
+  var delta = 2.5; //-- [px]
   for (i=0; i<wrap.annotation.length; i++) {
     x = wrap.annotation[i].x;
     y = wrap.annotation[i].y;
+    x_prev = wrap.annotation[i].x_prev;
+    y_prev = wrap.annotation[i].y_prev;
     x_anno = (x - wrap.x_min) / (wrap.x_max - wrap.x_min) * wrap.width;
     y_anno = (1 - y / wrap.y_max) * wrap.height;
+    xp_anno = (x_prev - wrap.x_min) / (wrap.x_max - wrap.x_min) * wrap.width;
+    yp_anno = (1 - y_prev / wrap.y_max) * wrap.height;
     
     text_dict = {
       'Japan': {en: 'Donated by Japan', fr: 'Offert par le Japon', 'zh-tw': '日本捐贈'},
       'USA': {en: 'Donated by USA', fr: 'Offert par les É-U', 'zh-tw': '美國捐贈'}
     };
+    
+    //-- Filter & get those only in frame
+    if (x_anno < 180)
+      continue;
+    
     wrap.annotation[i]['tag'] = '';
-    wrap.annotation[i]['points'] = x_anno + ',' + y_anno + ' ' + x_anno + ',' + (y_anno-alpha*eps);
+    wrap.annotation[i]['points'] =
+      (x_anno-alpha*eps) + ',' + (y_anno-beta*eps) + ' ' +
+      (x_anno-alpha*eps) + ',' + y_anno + ' ' + 
+      (x_anno-delta) + ',' + y_anno + ' ' + 
+      (x_anno-delta) + ',' + yp_anno;
     wrap.annotation[i]['text'] = text_dict[wrap.annotation[i].source][LS_lang];
-    wrap.annotation[i]['x_text'] = x_anno;
-    wrap.annotation[i]['y_text'] = y_anno - (alpha+1)*eps;
+    wrap.annotation[i]['x_text'] = x_anno - alpha*eps;
+    wrap.annotation[i]['y_text'] = y_anno - (beta+1)*eps;
     wrap.annotation[i]['text-anchor'] = 'end';
+    
+    annotation.push(wrap.annotation[i]);
   }
+  
+  //-- Replace
+  wrap.annotation = annotation;
   
   //-- Under QC line
   wrap.formatted_data.push(wrap.under_qc);
@@ -375,7 +398,7 @@ function VP_Plot(wrap) {
   
   //-- Under QC, extrapolation, today, population
   color_list = color_list.concat([GP_wrap.c_list[4], GP_wrap.c_list[5], GP_wrap.gray]);
-  linewidth_list = linewidth_list.concat(['2.5px', '1.5px', '1.5px']);
+  linewidth_list = linewidth_list.concat(['2.5px', '1px', '1.5px']);
   linestyle_list = linestyle_list.concat(['8,5', '8,5', '8,5']);
   
   //-- Define opacity & delay
