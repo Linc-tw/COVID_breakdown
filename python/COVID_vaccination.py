@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_vaccination.py    ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.07.24      ##
+    ##  Version 2021.07.30      ##
     ##############################
 
 import os
@@ -143,9 +143,11 @@ class VaccinationSheet(ccm.Template):
         stock['interpolated'].append(1)
     
     ## Homogenize length caused by trailing zeros
-    nb_rows = len(stock['new_doses'][0])
+    nb_rows = ord_prev + 1 - ord_ref
     stock['date'] = stock['date'][:nb_rows]
     stock['interpolated'] = stock['interpolated'][:nb_rows]
+    for i, _ in enumerate(brand_list):
+      stock['new_doses'][i] = stock['new_doses'][i][:nb_rows]
     
     ## This contains daily doses & a column indicating whether it's interpolated or not.
     return stock

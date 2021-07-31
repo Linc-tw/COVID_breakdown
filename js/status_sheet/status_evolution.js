@@ -69,9 +69,8 @@ function SE_FormatData(wrap, data) {
       h_list.push(+h);
       
       //-- Update y_last
-      if (h != '') {
+      if (h != '')
         y_last[j] = +h;
-      }
     }
     
     //-- Loop over column again (reversed order)

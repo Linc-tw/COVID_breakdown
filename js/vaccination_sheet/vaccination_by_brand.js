@@ -91,10 +91,15 @@ function VBB_FormatData(wrap, data) {
       else 
         y_sum[j] = Math.max(y_sum[j], +row[col_tag_list[j]]);
     }
+      
+    //-- Update y_max
+    y_max = Math.max(y_max, y);
     
     //-- Update moving avg
-    if ('' == avg)
+    if ('' == avg) {
+      row[col_tag] = NaN;
       row[col_tag_avg] = NaN;
+    }
     else if (wrap.cumul == 1)
       row[col_tag_avg] = y;
     else
@@ -105,9 +110,6 @@ function VBB_FormatData(wrap, data) {
       row[col_tag] = 0;
     else if (0 == wrap.cumul && 0 != +row['interpolated'])
       row[col_tag] = 0;
-      
-    //-- Update y_max
-    y_max = Math.max(y_max, +row[col_tag]);
   }
   
   //-- Calculate y_max

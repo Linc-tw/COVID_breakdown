@@ -577,18 +577,6 @@ def makeIndexList(iso):
   ind_2020 = indexFor2020(iso)
   return [ind_latest, ind_overall, ind_2021, ind_2020]
 
-def addMovingAverageToStock(stock):
-  date = stock.pop('date')
-  count_mat = list(stock.values())
-  
-  avg_arr = np.sum(count_mat, axis=0)
-  avg_arr = sevenDayMovingAverage(avg_arr)
-  avg_arr = np.around(avg_arr, decimals=4)
-  
-  stock_new = {'date': date, 'moving_avg': avg_arr}
-  stock_new.update(stock)
-  return stock_new
-    
 def makeMovingAverage(value_arr):
   avg_arr = sevenDayMovingAverage(value_arr)
   avg_arr = np.around(avg_arr, decimals=4)

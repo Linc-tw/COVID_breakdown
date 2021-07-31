@@ -180,7 +180,7 @@ def sandbox():
   #county_sheet.saveCsv_incidenceMap()
   
   vacc_sheet = COVID_vaccination.VaccinationSheet()
-  vacc_sheet.saveCsv_vaccinationByDose()
+  vacc_sheet.saveCsv_vaccinationByBrand()
   
   #vacc_county_sheet = COVID_vaccination_county.VaccinationCountySheet()
   #vacc_county_sheet.saveCsv_vaccinationByCounty()

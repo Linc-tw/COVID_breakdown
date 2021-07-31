@@ -136,14 +136,16 @@ function LCPC_FormatData(wrap, data) {
     y_sum[0] += +row[col_tag_list[0]];
     y_sum[1] += y;
     
-    //-- Update moving avg
-    if ('' == avg)
-      row[col_tag_avg] = NaN;
-    else
-      row[col_tag_avg] = +avg;
-    
     //-- Update y_max
     y_max = Math.max(y_max, y);
+    
+    //-- Update moving avg
+    if ('' == avg) {
+      row[col_tag] = NaN;
+      row[col_tag_avg] = NaN;
+    }
+    else
+      row[col_tag_avg] = +avg;
   }
   
   //-- Calculate y_max

@@ -95,16 +95,18 @@ function CC_FormatData(wrap, data) {
         y_sum[j] = Math.max(y_sum[j], +row[col_tag_list[j]]);
     }
     
+    //-- Update y_max
+    y_max = Math.max(y_max, y);
+    
     //-- Update moving avg
-    if ('' == avg)
+    if ('' == avg) {
+      row[col_tag] = NaN;
       row[col_tag_avg] = NaN;
+    }
     else if (wrap.cumul == 1)
       row[col_tag_avg] = y;
     else
       row[col_tag_avg] = +avg;
-    
-    //-- Update y_max
-    y_max = Math.max(y_max, y);
   }
   
   //-- Calculate y_max

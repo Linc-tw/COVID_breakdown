@@ -32,7 +32,6 @@ function HOI_FormatData(wrap, data) {
   //-- Variables for data
   var col_tag_list = data.columns.slice(1); //-- 0 = date
   var col_tag = col_tag_list[0];
-  var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
   var i, j, x, y, row;
   
@@ -70,6 +69,10 @@ function HOI_FormatData(wrap, data) {
     
     //-- Update y_max
     y_max = Math.max(y_max, +y);
+    
+    //-- Update data
+    if ('' == y)
+      row[col_tag] = NaN;
   }
   
   //-- Calculate y_max
