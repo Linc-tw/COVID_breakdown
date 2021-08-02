@@ -284,7 +284,8 @@ function VP_FormatData4(wrap) {
     
     text_dict = {
       'Japan': {en: 'Donated by Japan', fr: 'Offert par le Japon', 'zh-tw': '日本捐贈'},
-      'USA': {en: 'Donated by USA', fr: 'Offert par les É-U', 'zh-tw': '美國捐贈'}
+      'USA': {en: 'Donated by USA', fr: 'Offert par les É-U', 'zh-tw': '美國捐贈'},
+      'Lithuania': {en: 'Donated by Lithuania', fr: 'Offert par la Lituanie', 'zh-tw': '立陶宛捐贈'},
     };
     
     //-- Filter & get those only in frame
