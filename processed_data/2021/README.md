@@ -156,6 +156,7 @@ Contents
   - `total`: all brands
   - `AZ`
   - `Moderna`
+  - `Medigen`
   - `*_avg`: 7-day moving average of `*`
 
 `vaccination_by_dose.csv`
@@ -174,6 +175,7 @@ Contents
   - `total`: all brands, cumulative number of doses
   - `AZ`
   - `Moderna`
+  - `Medigen`
 
 `vaccination_progress_supplies.csv`
 - Row: report date
@@ -184,3 +186,4 @@ Contents
   - `total`: all brands, cumulative number of doses
   - `AZ`
   - `Moderna`
+  - `Medigen`
