@@ -565,7 +565,9 @@ function VP_Replot(wrap) {
   }
   
   //-- Update legend title
-  GP_UpdateLegendTitle(wrap, wrap.last_date);
+  var wrap2 = {tag: 'overall'};
+  var title = LS_GetLegendTitle_Page(wrap2);
+  GP_UpdateLegendTitle(wrap, title);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'count', '1.2rem');

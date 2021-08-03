@@ -235,7 +235,9 @@ function SE_Replot(wrap) {
     wrap.legend_label = ['Discharged', 'Hospitalized', 'Deaths', 'Total'];
   
   //-- Update legend title
-  GP_UpdateLegendTitle_Standard(wrap);
+  var wrap2 = {tag: 'overall'};
+  var title = LS_GetLegendTitle_Page(wrap2);
+  GP_UpdateLegendTitle(wrap, title);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'count_fold', '1.2rem');
