@@ -250,14 +250,15 @@ function PAF_Replot(wrap) {
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')
-    wrap.legend_label = ['陽性率', '致死率（累計）'];
+    wrap.legend_label = ['陽性率（過去7日）', '致死率（整體）'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ['Taux de positivité', 'Taux de létalité (cumulé)'];
+    wrap.legend_label = ['Taux de positivité (7 derniers jours)', 'Taux de létalité (cumulé)'];
   else
-    wrap.legend_label = ['Positive rate', 'Fatality rate (cumulative)'];
+    wrap.legend_label = ['Positive rate (last 7 days)', 'Fatality rate (overall)'];
     
   //-- Update legend title
-  GP_UpdateLegendTitle_Standard(wrap);
+  legend_title_dict = {en: 'Latest value', fr: 'Derniers chiffres', 'zh-tw': '最新統計'};
+  GP_UpdateLegendTitle(wrap, legend_title_dict[LS_lang]);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'percentage', 'normal');

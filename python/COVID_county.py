@@ -111,18 +111,25 @@ class CountySheet(ccm.Template):
     col_tag_list = ['total'] + self.county_key_list
     stock = ccm.initializeStock_dailyCounts(col_tag_list)
     
+    ind_max = 0
+    
     ## Loop over series
     for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):
       if 'unknown' == county:
         continue
       
       ind = ccm.indexForOverall(report_date)
+      ind_max = max(ind_max, ind+1)
       
       try:
         stock['total'][ind] += nb_cases
         stock[county][ind] += nb_cases
       except IndexError: ## If NaN
         pass
+    
+    ind_today = ccm.getTodayOrdinal() - ccm.ISODateToOrd(ccm.ISO_DATE_REF)
+    ind = max(ind_max, ind_today-1) ## Take the max of data date & today
+    stock = {k: v[:ind] for k, v in stock.items()}
       
     ## Moving average
     for col_tag in col_tag_list:
@@ -150,6 +157,7 @@ class CountySheet(ccm.Template):
   def saveCsv_localCasePerCounty(self):
     stock = self.increment_localCasePerCounty()
     stock = pd.DataFrame(stock)
+    stock = ccm.adjustDateRange(stock)
     
     for page in ccm.PAGE_LIST:
       data = ccm.truncateStock(stock, page)

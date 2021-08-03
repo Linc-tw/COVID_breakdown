@@ -54,7 +54,7 @@ class VaccinationSheet(ccm.Template):
     
     self.data = data
     self.n_total = len(self.data['data'])
-    self.brand_list = ['AZ', 'Moderna']
+    self.brand_list = ['AZ', 'Moderna', 'Medigen']
     
     if (self.n_total > 1.5 * (ccm.getTodayOrdinal() - ccm.ISODateToOrd('2021-03-21'))):
       self.n_total //= 2
@@ -97,7 +97,7 @@ class VaccinationSheet(ccm.Template):
     ## Declare all brands
     cum_doses_dict = {}
     for date, cum_vacc, cum_az, cum_moderna in zip(date_list, cum_vacc_list, cum_az_list, cum_moderna_list):
-      cum_doses_dict[date] = [cum_vacc, cum_az, cum_moderna]
+      cum_doses_dict[date] = [cum_vacc, cum_az, cum_moderna, 0]
     
     brand_list = ['total'] + self.brand_list
     
@@ -167,6 +167,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('  - `total`: all brands')
     stock.append('  - `AZ`')
     stock.append('  - `Moderna`')
+    stock.append('  - `Medigen`')
     stock.append('  - `*_avg`: 7-day moving average of `*`')
     ccm.README_DICT[page][key] = stock
     return
@@ -248,17 +249,18 @@ class VaccinationSheet(ccm.Template):
     for date, cum_vacc, cum_az, cum_moderna in zip(date_list, cum_vacc_list, cum_az_list, cum_moderna_list):
       if 0 == cum_vacc and date != '2021-03-21':
         continue
-      stock.append([date, cum_vacc, cum_az, cum_moderna])
+      stock.append([date, cum_vacc, cum_az, cum_moderna, 0])
       
     date_list = [row[0] for row in stock]
     cum_vacc_list = [row[1] for row in stock]
     cum_az_list = [row[2] for row in stock]
     cum_moderna_list = [row[3] for row in stock]
+    cum_medigen_list = [row[4] for row in stock]
     
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
     index_list = [ccm.ISODateToOrd(iso)-ord_ref for iso in date_list]
     
-    stock = {'index': index_list, 'date': date_list, 'total': cum_vacc_list, 'AZ': cum_az_list, 'Moderna': cum_moderna_list}
+    stock = {'index': index_list, 'date': date_list, 'total': cum_vacc_list, 'AZ': cum_az_list, 'Moderna': cum_moderna_list, 'Medigen': cum_medigen_list}
     return stock
     
   def makeReadme_vaccinationProgress(self, page):
@@ -273,6 +275,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('  - `total`: all brands, cumulative number of doses')
     stock.append('  - `AZ`')
     stock.append('  - `Moderna`')
+    stock.append('  - `Medigen`')
     ccm.README_DICT[page][key] = stock
     
     key = 'vaccination_progress_injections'
@@ -285,6 +288,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('  - `total`: all brands, cumulative number of doses')
     stock.append('  - `AZ`')
     stock.append('  - `Moderna`')
+    stock.append('  - `Medigen`')
     ccm.README_DICT[page][key] = stock
     return
   

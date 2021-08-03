@@ -258,7 +258,8 @@ function IR_Replot(wrap) {
     wrap.legend_label = ['Arrival incidence', 'Local incidence (multiplied by 1000)'];
     
   //-- Update legend title
-  GP_UpdateLegendTitle_Standard(wrap);
+  legend_title_dict = {en: 'Latest value', fr: 'Derniers chiffres', 'zh-tw': '最新統計'};
+  GP_UpdateLegendTitle(wrap, legend_title_dict[LS_lang]);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'percentage', 'normal');

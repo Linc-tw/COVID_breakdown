@@ -176,11 +176,11 @@ def sandbox():
   #timeline_sheet = COVID_timeline.TimelineSheet()
   #timeline_sheet.saveCsv_evtTimeline()
   
-  #county_sheet = COVID_county.CountySheet()
-  #county_sheet.saveCsv_incidenceMap()
+  county_sheet = COVID_county.CountySheet()
+  county_sheet.saveCsv_localCasePerCounty()
   
-  vacc_sheet = COVID_vaccination.VaccinationSheet()
-  vacc_sheet.saveCsv_vaccinationByBrand()
+  #vacc_sheet = COVID_vaccination.VaccinationSheet()
+  #vacc_sheet.saveCsv_vaccinationByBrand()
   
   #vacc_county_sheet = COVID_vaccination_county.VaccinationCountySheet()
   #vacc_county_sheet.saveCsv_vaccinationByCounty()

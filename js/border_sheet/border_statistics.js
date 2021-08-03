@@ -51,7 +51,7 @@ function BS_FormatData(wrap, data) {
   //-- Variables for plot
   var x_key = 'date';
   var x_list = [];
-  var avg;
+  var avg, last_date;
   
   //-- Variables for xaxis
   var r = GP_GetRForTickPos(wrap, data.length);
@@ -77,24 +77,26 @@ function BS_FormatData(wrap, data) {
     if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
     
-    //-- Update y_last
-    if (y != '') {
-      for (j=0; j<nb_col; j++)
-        y_last[j] = +row[col_tag_list[j]];
-    }
-    
-    //-- Update y_max
-    y_max = Math.max(y_max, y);
-    
     //-- Update moving avg
     if ('' == avg) {
       row[col_tag] = NaN;
       row[col_tag_avg] = NaN;
+      continue;
     }
     else if (wrap.cumul == 1)
       row[col_tag_avg] = y;
     else
       row[col_tag_avg] = +avg;
+    
+    //-- Update last date
+    last_date = row['date'];
+    
+    //-- Update y_last
+    for (j=0; j<nb_col; j++)
+      y_last[j] = +row[col_tag_list[j]];
+    
+    //-- Update y_max
+    y_max = Math.max(y_max, y);
   }
   
   //-- Calculate y_max
@@ -120,6 +122,7 @@ function BS_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
+  wrap.last_date = last_date;
   wrap.legend_value_raw = y_last;
 }
 
@@ -255,7 +258,7 @@ function BS_Replot(wrap) {
     wrap.legend_label = ['Arrival', 'Departure', 'Total'];
   
   //-- Update legend title
-  GP_UpdateLegendTitle_Standard(wrap);
+  GP_UpdateLegendTitle(wrap, wrap.last_date);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'count', 'normal');

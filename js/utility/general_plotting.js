@@ -9,7 +9,6 @@
 //-- TODO
 
 //Tooltip when cumulative
-//IR legend title
 //LCPC tooltip for 7-day average
 //Note with "Collapse"
 //Linear/log?
@@ -1248,7 +1247,12 @@ function GP_UpdateLegendTitle(wrap, title) {
 }
 
 function GP_UpdateLegendTitle_Standard(wrap) {
-  var title = LS_GetLegendTitle_Page(wrap);
+  var title;
+  if (wrap.cumul == 0)
+    title = wrap.last_date;
+  else
+    title = LS_GetLegendTitle_Page(wrap);
+  
   GP_UpdateLegendTitle(wrap, title);
 }
 

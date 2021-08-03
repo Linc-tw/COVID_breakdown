@@ -403,6 +403,7 @@ DELIVERY_LIST = [
   ['AZ', 'Japan', 973480, '2021-07-15', '2021-07-23', 'https://www.cna.com.tw/news/firstnews/202107155011.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600455'],
   ['AZ', 'AZ', 560100, '2021-07-15', '2021-07-23', 'https://www.cna.com.tw/news/firstnews/202107150245.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600455'],
   ['Moderna', 'Moderna', 349200, '2021-07-15', '2021-07-23', 'https://www.cna.com.tw/news/firstnews/202107150215.aspx','https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600455'],
+  ['Medigen', 'Medigen', 265528, '', '2021-07-31', '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600469'],
   ['AZ', 'AZ', 581400, '2021-07-27', '', 'https://www.cna.com.tw/news/firstnews/202107270203.aspx', ''],
   ['AZ', 'Lithuania', 19400, '2021-07-31', '', 'https://www.cna.com.tw/news/aipl/202107310085.aspx', ''],
 ]

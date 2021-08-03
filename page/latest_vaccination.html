@@ -174,6 +174,7 @@
                                                 <option value="0" id="vaccination_by_brand_button_total" selected></option>
                                                 <option value="1" id="vaccination_by_brand_button_AZ"></option>
                                                 <option value="2" id="vaccination_by_brand_button_Moderna"></option>
+                                                <option value="3" id="vaccination_by_brand_button_Medigen"></option>
                                             </select>
                                             
                                             <button id='vaccination_by_brand_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
@@ -193,20 +194,12 @@
                                     
                                     <div class="card-img">
                                         <div class="btn-pos">
-                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active" id="vaccination_progress_latest_brand_0">
-                                                    <input type="radio" class="btn-check" name="vaccination_progress_latest_brand" value=0 checked>
-                                                    <span id="vaccination_progress_button_total"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="vaccination_progress_latest_brand_1">
-                                                    <input type="radio" class="btn-check" name="vaccination_progress_latest_brand" value=1>
-                                                    <span id="vaccination_progress_button_AZ"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="vaccination_progress_latest_brand_2">
-                                                    <input type="radio" class="btn-check" name="vaccination_progress_latest_brand" value=2>
-                                                    <span id="vaccination_progress_button_Moderna"></span>
-                                                </label>
-                                            </div>
+                                            <select id="vaccination_progress_latest_brand" class="form-select form-select-sm me-2" aria-label="vaccination_progress_latest_brand">
+                                                <option value="0" id="vaccination_progress_button_total" selected></option>
+                                                <option value="1" id="vaccination_progress_button_AZ"></option>
+                                                <option value="2" id="vaccination_progress_button_Moderna"></option>
+                                                <option value="3" id="vaccination_progress_button_Medigen"></option>
+                                            </select>
                                             
                                             <button id='vaccination_progress_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>

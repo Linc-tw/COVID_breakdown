@@ -38,6 +38,7 @@ function HOI_FormatData(wrap, data) {
   //-- Variables for plot
   var x_key = 'date';
   var x_list = []; //-- For age
+  var last_date;
   
   //-- Variables for xaxis
   var r = GP_GetRForTickPos(wrap, data.length);
@@ -48,7 +49,9 @@ function HOI_FormatData(wrap, data) {
   var y_max = 4.5;
   
   //-- Variables for legend
-  var y_sum = 0; 
+  var y_last = []; 
+  for (j=0; j<nb_col; j++) //-- Initialize with 0
+    y_last.push(0);
   
   //-- Main loop over row
   for (i=0; i<data.length; i++) {
@@ -63,16 +66,21 @@ function HOI_FormatData(wrap, data) {
       xticklabel.push(x);
     }
     
+    //-- Update data
+    if ('' == y) {
+      row[col_tag] = NaN;
+      continue;
+    }
+    
+    //-- Update last date
+    last_date = row['date'];
+    
     //-- Update y_last
-    if (y != '')
-      y_last = +y;
+    for (j=0; j<nb_col; j++)
+      y_last[j] = +y;
     
     //-- Update y_max
     y_max = Math.max(y_max, +y);
-    
-    //-- Update data
-    if ('' == y)
-      row[col_tag] = NaN;
   }
   
   //-- Calculate y_max
@@ -99,7 +107,8 @@ function HOI_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value_raw = [y_last];
+  wrap.last_date = last_date;
+  wrap.legend_value_raw = y_last;
 }
 
 function HOI_FormatData2(wrap, data2) {
@@ -212,7 +221,7 @@ function HOI_Replot(wrap) {
   wrap.legend_label = [legend_label_dict[LS_lang]];
   
   //-- Update legend title
-  GP_UpdateLegendTitle_Standard(wrap);
+  GP_UpdateLegendTitle(wrap, wrap.last_date);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'count', 'normal');

@@ -194,6 +194,17 @@
                                     
                                     <div class="card-img">
                                         <div class="btn-pos">
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">
+                                                <label class="btn btn-covid active" id="local_case_per_county_overall_cumul_0">
+                                                    <input type="radio" class="btn-check" name="local_case_per_county_overall_cumul" value=0 checked>
+                                                    <span id="local_case_per_county_button_daily"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="local_case_per_county_overall_cumul_1">
+                                                    <input type="radio" class="btn-check" name="local_case_per_county_overall_cumul" value=1>
+                                                    <span id="local_case_per_county_button_cumul"></span>
+                                                </label>
+                                            </div>
+                                            
                                             <select id="local_case_per_county_overall_county" class="form-select form-select-sm me-2" aria-label="local_case_per_county_overall_county">
                                                 <option value="0" id="local_case_per_county_button_total" selected></option>
                                                 <option value="1" id="local_case_per_county_button_keelung"></option>

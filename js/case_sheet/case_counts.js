@@ -16,33 +16,33 @@ function CC_InitFig(wrap) {
 
 function CC_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr("case_counts_title", "各感染源確診人數");
-    LS_AddStr("case_counts_button_daily", "逐日");
-    LS_AddStr("case_counts_button_cumul", "累計");
-    LS_AddStr("case_counts_button_total", "合計");
-    LS_AddStr("case_counts_button_imported", "境外移入");
-    LS_AddStr("case_counts_button_local", "本土");
-    LS_AddStr("case_counts_button_others", "其他");
+    LS_AddStr('case_counts_title', '各感染源確診人數');
+    LS_AddStr('case_counts_button_daily', '逐日');
+    LS_AddStr('case_counts_button_cumul', '累計');
+    LS_AddStr('case_counts_button_total', '合計');
+    LS_AddStr('case_counts_button_imported', '境外移入');
+    LS_AddStr('case_counts_button_local', '本土');
+    LS_AddStr('case_counts_button_others', '其他');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr("case_counts_title", "Nombre de cas confirmés");
-    LS_AddStr("case_counts_button_daily", "Quotidiens");
-    LS_AddStr("case_counts_button_cumul", "Cumulés");
-    LS_AddStr("case_counts_button_total", "Totaux");
-    LS_AddStr("case_counts_button_imported", "Importés");
-    LS_AddStr("case_counts_button_local", "Locaux");
-    LS_AddStr("case_counts_button_others", "Divers");
+    LS_AddStr('case_counts_title', 'Nombre de cas confirmés');
+    LS_AddStr('case_counts_button_daily', 'Quotidiens');
+    LS_AddStr('case_counts_button_cumul', 'Cumulés');
+    LS_AddStr('case_counts_button_total', 'Totaux');
+    LS_AddStr('case_counts_button_imported', 'Importés');
+    LS_AddStr('case_counts_button_local', 'Locaux');
+    LS_AddStr('case_counts_button_others', 'Divers');
   }
   
   else { //-- En
-    LS_AddStr("case_counts_title", "Confirmed Case Counts");
-    LS_AddStr("case_counts_button_daily", "Daily");
-    LS_AddStr("case_counts_button_cumul", "Cumulative");
-    LS_AddStr("case_counts_button_total", "Total");
-    LS_AddStr("case_counts_button_imported", "Imported");
-    LS_AddStr("case_counts_button_local", "Local");
-    LS_AddStr("case_counts_button_others", "Others");
+    LS_AddStr('case_counts_title', 'Confirmed Case Counts');
+    LS_AddStr('case_counts_button_daily', 'Daily');
+    LS_AddStr('case_counts_button_cumul', 'Cumulative');
+    LS_AddStr('case_counts_button_total', 'Total');
+    LS_AddStr('case_counts_button_imported', 'Imported');
+    LS_AddStr('case_counts_button_local', 'Local');
+    LS_AddStr('case_counts_button_others', 'Others');
   }
 }
 
@@ -57,7 +57,7 @@ function CC_FormatData(wrap, data) {
   //-- Variables for plot
   var x_key = 'date';
   var x_list = [];
-  var avg;
+  var avg, last_date;
   
   //-- Variables for xaxis
   var r = GP_GetRForTickPos(wrap, data.length);
@@ -67,9 +67,9 @@ function CC_FormatData(wrap, data) {
   var y_max = 4.5;
   
   //-- Variables for legend
-  var y_sum = []; 
+  var y_last = []; 
   for (j=0; j<nb_col; j++) //-- Initialize with 0
-    y_sum.push(0);
+    y_last.push(0);
   
   //-- Convert data form
   if (wrap.cumul == 1)
@@ -87,26 +87,30 @@ function CC_FormatData(wrap, data) {
     if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
     
-    //-- Update y_sum
-    for (j=0; j<nb_col; j++) {
-      if (wrap.cumul == 0)
-        y_sum[j] += +row[col_tag_list[j]];
-      else 
-        y_sum[j] = Math.max(y_sum[j], +row[col_tag_list[j]]);
-    }
-    
-    //-- Update y_max
-    y_max = Math.max(y_max, y);
-    
     //-- Update moving avg
     if ('' == avg) {
       row[col_tag] = NaN;
       row[col_tag_avg] = NaN;
+      continue;
     }
     else if (wrap.cumul == 1)
       row[col_tag_avg] = y;
     else
       row[col_tag_avg] = +avg;
+    
+    //-- Update last date
+    last_date = row['date'];
+    
+    //-- Update y_last
+    for (j=0; j<nb_col; j++) {
+      if (wrap.cumul == 0)
+        y_last[j] = +row[col_tag_list[j]];
+      else 
+        y_last[j] = Math.max(y_last[j], +row[col_tag_list[j]]);
+    }
+    
+    //-- Update y_max
+    y_max = Math.max(y_max, y);
   }
   
   //-- Calculate y_max
@@ -132,7 +136,8 @@ function CC_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value_raw = y_sum;
+  wrap.last_date = last_date;
+  wrap.legend_value_raw = y_last;
 }
 
 function CC_FormatData2(wrap, data2) {
@@ -267,14 +272,14 @@ function CC_Replot(wrap) {
   else
     wrap.legend_label = ['Imported', 'Local', 'Others', 'Total'];
   
-  //-- Remove from legend if value = 0
-  for (i=wrap.legend_value.length-1; i>=0; i--) {
-    if (0 == wrap.legend_value[i]) {
-      wrap.legend_color.splice(i, 1);
-      wrap.legend_value.splice(i, 1);
-      wrap.legend_label.splice(i, 1);
-    }
-  }
+//   //-- Remove from legend if value = 0
+//   for (i=wrap.legend_value.length-1; i>=0; i--) {
+//     if (0 == wrap.legend_value[i]) {
+//       wrap.legend_color.splice(i, 1);
+//       wrap.legend_value.splice(i, 1);
+//       wrap.legend_label.splice(i, 1);
+//     }
+//   }
   
   //-- Update legend title
   GP_UpdateLegendTitle_Standard(wrap);

@@ -17,7 +17,9 @@ function LCPC_InitFig(wrap) {
 function LCPC_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('local_case_per_county_title', '各縣市本土病例數');
-    LS_AddStr('local_case_per_county_button_total', '本土合計');
+    LS_AddStr('local_case_per_county_button_daily', '逐日');
+    LS_AddStr('local_case_per_county_button_cumul', '累計');
+    LS_AddStr('local_case_per_county_button_total', '全國合計');
     LS_AddStr('local_case_per_county_button_keelung', '基隆');
     LS_AddStr('local_case_per_county_button_taipei', '台北');
     LS_AddStr('local_case_per_county_button_new_taipei', '新北');
@@ -44,7 +46,9 @@ function LCPC_ResetText() {
   
   else if (LS_lang == 'fr') {
     LS_AddStr('local_case_per_county_title', 'Cas confirmés locaux par ville et comté');
-    LS_AddStr('local_case_per_county_button_total', 'Locaux totaux');
+    LS_AddStr('local_case_per_county_button_daily', 'Quotidiens');
+    LS_AddStr('local_case_per_county_button_cumul', 'Cumulés');
+    LS_AddStr('local_case_per_county_button_total', 'Totaux nationaux');
     LS_AddStr('local_case_per_county_button_keelung', 'Keelung');
     LS_AddStr('local_case_per_county_button_taipei', 'Taipei');
     LS_AddStr('local_case_per_county_button_new_taipei', 'Nouveau Taipei');
@@ -71,7 +75,9 @@ function LCPC_ResetText() {
   
   else { //-- En
     LS_AddStr('local_case_per_county_title', 'Local Confirmed Cases per City & County');
-    LS_AddStr('local_case_per_county_button_total', 'Total local');
+    LS_AddStr('local_case_per_county_button_daily', 'Daily');
+    LS_AddStr('local_case_per_county_button_cumul', 'Cumulative');
+    LS_AddStr('local_case_per_county_button_total', 'Nationalwide total');
     LS_AddStr('local_case_per_county_button_keelung', 'Keelung');
     LS_AddStr('local_case_per_county_button_taipei', 'Taipei');
     LS_AddStr('local_case_per_county_button_new_taipei', 'New Taipei');
@@ -99,7 +105,9 @@ function LCPC_ResetText() {
 
 function LCPC_FormatData(wrap, data) {
   //-- Variables for data
-  var col_tag_list = data.columns.slice(1); //-- 0 = date
+  var col_tag_list = data.columns.slice(1, 24); //-- 0 = date
+  var col_tag_0 = col_tag_list[0];
+  var col_tag_avg_0 = col_tag_0 + '_avg';
   var col_tag = col_tag_list[wrap.col_ind];
   var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
@@ -108,7 +116,7 @@ function LCPC_FormatData(wrap, data) {
   //-- Variables for plot
   var x_key = 'date';
   var x_list = [];
-  var avg;
+  var avg, last_date;
   
   //-- Variables for xaxis
   var r = GP_GetRForTickPos(wrap, data.length);
@@ -118,7 +126,11 @@ function LCPC_FormatData(wrap, data) {
   var y_max = 4.5;
   
   //-- Variables for legend
-  var y_sum = [0, 0]; //-- 0 (total) & county
+  var y_last = [0, 0]; //-- 0 (total) & county
+  
+  //-- Convert data form
+  if (wrap.cumul == 1)
+    GP_CumSum(data, col_tag_list);
   
   //-- Main loop over row
   for (i=0; i<data.length; i++) {
@@ -132,20 +144,38 @@ function LCPC_FormatData(wrap, data) {
     if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
     
-    //-- Update y_sum
-    y_sum[0] += +row[col_tag_list[0]];
-    y_sum[1] += y;
+    //-- Update moving avg
+    if ('' == avg) {
+      row[col_tag_0] = NaN;
+      row[col_tag] = NaN;
+      row[col_tag_avg_0] = NaN;
+      row[col_tag_avg] = NaN;
+      continue;
+    }
+    else if (wrap.cumul == 1) {
+      row[col_tag_avg_0] = +row[col_tag_0];
+      row[col_tag_avg] = y;
+    }
+    else {
+      row[col_tag_avg_0] = +row[col_tag_avg_0];
+      row[col_tag_avg] = +avg;
+    }
+    
+    //-- Update last date
+    last_date = row['date'];
+    
+    //-- Update y_last
+    if (wrap.cumul == 0) {
+      y_last[0] = +row[col_tag_0];
+      y_last[1] = y;
+    }
+    else {
+      y_last[0] = Math.max(y_last[0], +row[col_tag_0]);
+      y_last[1] = Math.max(y_last[1], y);
+    }
     
     //-- Update y_max
     y_max = Math.max(y_max, y);
-    
-    //-- Update moving avg
-    if ('' == avg) {
-      row[col_tag] = NaN;
-      row[col_tag_avg] = NaN;
-    }
-    else
-      row[col_tag_avg] = +avg;
   }
   
   //-- Calculate y_max
@@ -171,7 +201,8 @@ function LCPC_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value_raw = y_sum;
+  wrap.last_date = last_date;
+  wrap.legend_value_raw = y_last;
 }
 
 function LCPC_FormatData2(wrap, data2) {
@@ -209,7 +240,7 @@ function LCPC_MouseMove(wrap, d) {
   var legend_label;
   if (LS_lang == 'zh-tw') {
     legend_label = [
-      '本土合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
+      '全國合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
       '嘉縣', '嘉市', '台南', '高雄', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '馬祖'
     ];
     tooltip_text += legend_label[wrap.col_ind] + d[wrap.col_tag] + '例';
@@ -217,7 +248,7 @@ function LCPC_MouseMove(wrap, d) {
   
   else if (LS_lang == 'fr') {
     legend_label = [
-      'Locaux totaux', 'à Keelung', 'à Taipei', 'à Nouveau Taipei', 'à Taoyuan', 'au comté de Hsinchu', 'à la ville de Hsinchu', 'à Miaoli', 'à Taichung', 'à Changhua', 'à Nantou', 'à Yunlin', 
+      'Totaux nationaux', 'à Keelung', 'à Taipei', 'à Nouveau Taipei', 'à Taoyuan', 'au comté de Hsinchu', 'à la ville de Hsinchu', 'à Miaoli', 'à Taichung', 'à Changhua', 'à Nantou', 'à Yunlin', 
       'au comté de Chiayi', 'à la ville de Chiayi', 'à Tainan', 'à Kaohsiung', 'à Pingtung', 'à Yilan', 'à Hualien', 'à Taitung', 'à Penghu', 'à Kinmen', 'à Matsu'
     ];
     if (wrap.col_ind == 0)
@@ -228,7 +259,7 @@ function LCPC_MouseMove(wrap, d) {
   
   else {
     legend_label = [
-      'Total local', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Nationalwide total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
     if (wrap.col_ind == 0)
@@ -312,17 +343,17 @@ function LCPC_Replot(wrap) {
   var legend_label;
   if (LS_lang == 'zh-tw')
     legend_label = [
-      '本土合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
+      '全國合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
       '嘉縣', '嘉市', '台南', '高雄', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '馬祖'
     ];
   else if (LS_lang == 'fr')
     legend_label = [
-      'Cas locaux au total', 'Keelung', 'Taipei', 'Nouveau Taipei', 'Taoyuan', 'Comté de Hsinchu', 'Ville de Hsinchu', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Totaux nationaux', 'Keelung', 'Taipei', 'Nouveau Taipei', 'Taoyuan', 'Comté de Hsinchu', 'Ville de Hsinchu', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Comté de Chiayi', 'Ville de Chiayi', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
   else
     legend_label = [
-      'Total local cases', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Nationalwide total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
   wrap.legend_label = [legend_label[wrap.col_ind], legend_label[0]];
@@ -370,6 +401,13 @@ function LCPC_Reload(wrap) {
 }
 
 function LCPC_ButtonListener(wrap) {
+  //-- Daily or cumulative
+  $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
+    GP_PressRadioButton(wrap, 'cumul', wrap.cumul, this.value);
+    wrap.cumul = this.value;
+    LCPC_Reload(wrap);
+  });
+  
   //-- Period
   d3.select(wrap.id +'_county').on('change', function() {
     wrap.col_ind = this.value;
@@ -378,13 +416,20 @@ function LCPC_ButtonListener(wrap) {
   
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
+    var tag1, tag2;
+    
     var col_label = [
       'total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
-    var tag1 = col_label[wrap.col_ind];
+    tag1 = col_label[wrap.col_ind];
     
-    name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png';
+    if (wrap.cumul == 1)
+      tag2 = 'cumulative';
+    else
+      tag2 = 'daily';
+    
+    name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + LS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
@@ -404,10 +449,15 @@ function LCPC_Main(wrap) {
   wrap.id = '#' + wrap.tag;
 
   //-- Swap active to current value
-  if (wrap.tag.includes('mini'))
+  if (wrap.tag.includes('mini')) {
+    wrap.cumul = 0;
     wrap.col_ind = 0;
-  else
+  }
+  else {
+    wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
+    GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
     wrap.col_ind = document.getElementById(wrap.tag + "_county").value;
+  }
   
   //-- Load
   LCPC_InitFig(wrap);

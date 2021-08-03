@@ -21,7 +21,8 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_cumul', '累計');
     LS_AddStr('vaccination_by_brand_button_total', '合計');
     LS_AddStr('vaccination_by_brand_button_AZ', 'AZ');
-    LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
+    LS_AddStr('vaccination_by_brand_button_Moderna', '莫德納');
+    LS_AddStr('vaccination_by_brand_button_Medigen', '高端');
   }
   
   else if (LS_lang == 'fr') {
@@ -31,6 +32,7 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_total', 'Totaux');
     LS_AddStr('vaccination_by_brand_button_AZ', 'AZ');
     LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
+    LS_AddStr('vaccination_by_brand_button_Medigen', 'Medigen');
   }
   
   else { //-- En
@@ -40,12 +42,13 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_total', 'Total');
     LS_AddStr('vaccination_by_brand_button_AZ', 'AZ');
     LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
+    LS_AddStr('vaccination_by_brand_button_Medigen', 'Medigen');
   }
 }
 
 function VBB_FormatData(wrap, data) {
   //-- Variables for data
-  var col_tag_list = data.columns.slice(2, 5); //-- 0 = date, 1 = interpolated
+  var col_tag_list = data.columns.slice(2, 6); //-- 0 = date, 1 = interpolated
   var col_tag = col_tag_list[wrap.col_ind];
   var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
@@ -54,7 +57,7 @@ function VBB_FormatData(wrap, data) {
   //-- Variables for plot
   var x_key = 'date';
   var x_list = [];
-  var avg;
+  var avg, last_date;
   
   //-- Variables for xaxis
   var r = GP_GetRForTickPos(wrap, data.length);
@@ -64,9 +67,9 @@ function VBB_FormatData(wrap, data) {
   var y_max = 4.5;
   
   //-- Variables for legend
-  var y_sum = []; 
+  var y_last = []; 
   for (j=0; j<nb_col; j++) //-- Initialize with 0
-    y_sum.push(0);
+    y_last.push(0);
   
   //-- Convert data form
   if (wrap.cumul == 1)
@@ -84,32 +87,36 @@ function VBB_FormatData(wrap, data) {
     if (i % wrap.xlabel_path == r)
       xticklabel.push(x);
     
-    //-- Update y_sum
-    for (j=0; j<nb_col; j++) {
-      if (wrap.cumul == 0)
-        y_sum[j] += +row[col_tag_list[j]];
-      else 
-        y_sum[j] = Math.max(y_sum[j], +row[col_tag_list[j]]);
-    }
-      
-    //-- Update y_max
-    y_max = Math.max(y_max, y);
-    
     //-- Update moving avg
     if ('' == avg) {
       row[col_tag] = NaN;
       row[col_tag_avg] = NaN;
+      continue;
     }
     else if (wrap.cumul == 1)
       row[col_tag_avg] = y;
     else
       row[col_tag_avg] = +avg;
     
+    //-- Update last date
+    last_date = row['date'];
+    
     //-- Update to exclude interpolation
     if (0 < wrap.cumul && 0 < +row['interpolated'])
       row[col_tag] = 0;
     else if (0 == wrap.cumul && 0 != +row['interpolated'])
       row[col_tag] = 0;
+    
+    //-- Update y_last
+    for (j=0; j<nb_col; j++) {
+      if (wrap.cumul == 0)
+        y_last[j] = +row[col_tag_list[j]];
+      else 
+        y_last[j] = Math.max(y_last[j], +row[col_tag_list[j]]);
+    }
+      
+    //-- Update y_max
+    y_max = Math.max(y_max, y);
   }
   
   //-- Calculate y_max
@@ -126,8 +133,8 @@ function VBB_FormatData(wrap, data) {
     ytick.push(i)
   
   //-- Make legend value
-  var legend_value_raw = y_sum.slice(1, nb_col);
-  legend_value_raw.push(y_sum[0]);
+  var legend_value_raw = y_last.slice(1, nb_col);
+  legend_value_raw.push(y_last[0]);
     
   //-- Save to wrapper
   wrap.formatted_data = data;
@@ -139,6 +146,7 @@ function VBB_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
+  wrap.last_date = last_date;
   wrap.legend_value_raw = legend_value_raw;
 }
 
@@ -172,15 +180,15 @@ function VBB_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw') {
-    col_label_list = ['合計', 'AZ', 'Moderna'];
+    col_label_list = ['合計', 'AZ', 'Moderna', 'Medigen'];
     avg_text = '過去七日平均';
   }
   else if (LS_lang == 'fr') {
-    col_label_list = ['Totaux', 'AZ', 'Moderna'];
+    col_label_list = ['Totaux', 'AZ', 'Moderna', 'Medigen'];
     avg_text = 'Moyenne sur 7 jours';
   }
   else {
-    col_label_list = ['Total', 'AZ', 'Moderna'];
+    col_label_list = ['Total', 'AZ', 'Moderna', 'Medigen'];
     avg_text = '7-day average';
   }
   
@@ -251,7 +259,7 @@ function VBB_Replot(wrap) {
   GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_dose);
   
   //-- Define legend position
-  wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_[LS_lang]};
   
   //-- Define legend color
   var i;
@@ -266,17 +274,17 @@ function VBB_Replot(wrap) {
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')
-    wrap.legend_label = ['AstraZeneca', 'Moderna', '合計'];
+    wrap.legend_label = ['AZ', '莫德納', '高端', '合計'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ['AstraZeneca', 'Moderna', 'Totaux'];
+    wrap.legend_label = ['AZ', 'Moderna', 'Medigen', 'Totaux'];
   else
-    wrap.legend_label = ['AstraZeneca', 'Moderna', 'Total'];
+    wrap.legend_label = ['AZ', 'Moderna', 'Medigen', 'Total'];
   
   //-- Update legend title
   GP_UpdateLegendTitle_Standard(wrap);
   
   //-- Replot legend
-  GP_ReplotLegend(wrap, 'count', 'normal');
+  GP_ReplotLegend(wrap, 'count_fold', '1.2rem');
 }
 
 //-- Load
@@ -329,8 +337,10 @@ function VBB_ButtonListener(wrap) {
       tag1 = 'total';
     else if (wrap.col_ind == 1)
       tag1 = 'AZ';
-    else
+    else if (wrap.col_ind == 2)
       tag1 = 'Moderna';
+    else
+      tag1 = 'Medigen';
     
     if (wrap.cumul == 1)
       tag2 = 'cumulative';

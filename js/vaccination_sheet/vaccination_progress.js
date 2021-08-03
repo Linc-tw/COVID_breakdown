@@ -19,7 +19,8 @@ function VP_ResetText() {
     LS_AddStr('vaccination_progress_title', '疫苗到貨與接種進度');
     LS_AddStr('vaccination_progress_button_total', '全部');
     LS_AddStr('vaccination_progress_button_AZ', 'AZ');
-    LS_AddStr('vaccination_progress_button_Moderna', 'Moderna');
+    LS_AddStr('vaccination_progress_button_Moderna', '莫德納');
+    LS_AddStr('vaccination_progress_button_Medigen', '高端');
   }
   
   else if (LS_lang == 'fr') {
@@ -27,6 +28,7 @@ function VP_ResetText() {
     LS_AddStr('vaccination_progress_button_total', 'Tous');
     LS_AddStr('vaccination_progress_button_AZ', 'AZ');
     LS_AddStr('vaccination_progress_button_Moderna', 'Moderna');
+    LS_AddStr('vaccination_progress_button_Medigen', 'Medigen');
   }
   
   else { //-- En
@@ -34,6 +36,7 @@ function VP_ResetText() {
     LS_AddStr('vaccination_progress_button_total', 'All');
     LS_AddStr('vaccination_progress_button_AZ', 'AZ');
     LS_AddStr('vaccination_progress_button_Moderna', 'Moderna');
+    LS_AddStr('vaccination_progress_button_Medigen', 'Medigen');
   }
 }
 
@@ -99,7 +102,7 @@ function VP_FormatData(wrap, data) {
 function VP_FormatData2(wrap, data) {
   //-- Variables for data
   var col_tag_list = data.columns.slice(3); //-- 0 = index, 1 = date, 2 = source
-  var col_tag = col_tag_list[wrap.brand];
+  var col_tag = col_tag_list[wrap.col_ind];
   var nb_col = col_tag_list.length;
   var i, j, row;
   
@@ -187,7 +190,7 @@ function VP_FormatData2(wrap, data) {
 function VP_FormatData3(wrap, data) {
   //-- Variables for data
   var col_tag_list = data.columns.slice(2); //-- 0 = index, 1 = date
-  var col_tag = col_tag_list[wrap.brand];
+  var col_tag = col_tag_list[wrap.col_ind];
   var nb_col = col_tag_list.length;
   var i, j, x, y, row;
   
@@ -205,14 +208,13 @@ function VP_FormatData3(wrap, data) {
     row = data[i];
     x = +row['index'];
     y = +row[col_tag];
+    last_date = row['date'];
     
     //-- Get delivery data to stock in block, for tooltip
     if (x >= delivery.x) {
       i_delivery += 2;
       delivery = wrap.formatted_data[0][i_delivery+1];
     }
-    
-    last_date = row['date'];
     
     block = {
       'date': last_date,
@@ -542,21 +544,24 @@ function VP_Replot(wrap) {
   var i, legend_label;
   if (LS_lang == 'zh-tw') {
     legend_label = ['供應量', '接種量'];
-    col_tag_list = ['總'].concat(col_tag_list);
+    col_tag_list = ['總', 'AZ', '莫德納', '高端'];
+    
     for (i=0; i<legend_label.length; i++)
-      wrap.legend_label.push(col_tag_list[wrap.brand]+legend_label[i]);
+      wrap.legend_label.push(col_tag_list[wrap.col_ind]+legend_label[i]);
   }
   else if (LS_lang == 'fr') {
     legend_label = ['Approvisionnements ', ' Injections '];
-    col_tag_list = [['totaux'].concat(col_tag_list), ['totales'].concat(col_tag_list)];
+    col_tag_list = [['totaux', 'AZ', 'Moderna', 'Medigen'], ['totales', 'AZ', 'Moderna', 'Medigen']];
+    
     for (i=0; i<legend_label.length; i++)
-      wrap.legend_label.push(legend_label[i]+col_tag_list[i][wrap.brand]);
+      wrap.legend_label.push(legend_label[i]+col_tag_list[i][wrap.col_ind]);
   }
   else {
     legend_label = [' supplies', ' injections'];
-    col_tag_list = ['Total'].concat(col_tag_list);
+    col_tag_list = ['Total', 'AZ', 'Moderna', 'Medigen'];
+    
     for (i=0; i<legend_label.length; i++)
-      wrap.legend_label.push(col_tag_list[wrap.brand]+legend_label[i]);
+      wrap.legend_label.push(col_tag_list[wrap.col_ind]+legend_label[i]);
   }
   
   //-- Update legend title
@@ -602,20 +607,21 @@ function VP_Reload(wrap) {
 
 function VP_ButtonListener(wrap) {
   //-- Brand
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_brand']", function (event) {
-    GP_PressRadioButton(wrap, 'brand', wrap.brand, this.value);
-    wrap.brand = this.value;
+  d3.select(wrap.id +'_brand').on('change', function() {
+    wrap.col_ind = this.value;
     VP_Reload(wrap);
   });
-
+  
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
     var tag1;
     
-    if (wrap.brand == 1)
+    if (wrap.col_ind == 1)
       tag1 = 'AZ';
-    else if (wrap.brand == 2)
+    else if (wrap.col_ind == 2)
       tag1 = 'Moderna';
+    else if (wrap.col_ind == 3)
+      tag1 = 'Medigen';
     else
       tag1 = 'all';
     
@@ -640,12 +646,10 @@ function VP_Main(wrap) {
   
   //-- Swap active to current value
   if (wrap.tag.includes('mini'))
-    wrap.brand = 0;
-  else {
-    wrap.brand = document.querySelector("input[name='" + wrap.tag + "_brand']:checked").value;
-    GP_PressRadioButton(wrap, 'brand', 0, wrap.brand); //-- 0 from .html
-  }
-  
+    wrap.col_ind = 0;
+  else
+    wrap.col_ind = document.getElementById(wrap.tag + '_brand').value;
+    
   //-- Load
   VP_InitFig(wrap);
   VP_ResetText();
