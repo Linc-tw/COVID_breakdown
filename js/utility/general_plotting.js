@@ -8,8 +8,6 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//Tooltip when cumulative
-//LCPC tooltip for 7-day average
 //Note with "Collapse"
 //Linear/log?
 

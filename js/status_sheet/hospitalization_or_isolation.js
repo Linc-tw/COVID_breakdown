@@ -143,9 +143,9 @@ function HOI_MouseMove(wrap, d) {
   if (LS_lang == 'zh-tw')
     col_label = '住院人數';
   else if (LS_lang == 'fr')
-    col_label = 'Hospitalisés';
+    col_label = 'Nombre de patients<br>hospitalisés';
   else
-    col_label = 'Hospitalized';
+    col_label = 'Number of hospitalized<br>patients';
   
   //-- Define tooltip texts
   var tooltip_text = d.date;

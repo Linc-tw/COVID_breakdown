@@ -233,40 +233,37 @@ function LCPC_MouseMove(wrap, d) {
   var y_alpha = 0.5;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
-  //-- Generate tooltip text
-  var tooltip_text = d.date + '<br>';
-  
-  //-- Define legend label
-  var legend_label;
+  //-- Get column tags
+  var col_label_list, avg_text;
   if (LS_lang == 'zh-tw') {
-    legend_label = [
+    col_label_list = [
       '全國合計', '基隆', '台北', '新北', '桃園', '竹縣', '竹市', '苗栗', '台中', '彰化', '南投', '雲林', 
       '嘉縣', '嘉市', '台南', '高雄', '屏東', '宜蘭', '花蓮', '台東', '澎湖', '金門', '馬祖'
     ];
-    tooltip_text += legend_label[wrap.col_ind] + d[wrap.col_tag] + '例';
+    avg_text = '過去七日平均';
   }
   
   else if (LS_lang == 'fr') {
-    legend_label = [
-      'Totaux nationaux', 'à Keelung', 'à Taipei', 'à Nouveau Taipei', 'à Taoyuan', 'au comté de Hsinchu', 'à la ville de Hsinchu', 'à Miaoli', 'à Taichung', 'à Changhua', 'à Nantou', 'à Yunlin', 
-      'au comté de Chiayi', 'à la ville de Chiayi', 'à Tainan', 'à Kaohsiung', 'à Pingtung', 'à Yilan', 'à Hualien', 'à Taitung', 'à Penghu', 'à Kinmen', 'à Matsu'
+    col_label_list = [
+      'Totaux nationaux', 'Keelung', 'Taipei', 'Nouveau Taipei', 'Taoyuan', 'Comté de Hsinchu', 'Ville de Hsinchu', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Comté de Chiayi', 'Ville de Chiayi', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
-    if (wrap.col_ind == 0)
-      tooltip_text += d[wrap.col_tag] + ' cas locaux au total';
-    else
-      tooltip_text += d[wrap.col_tag] + ' cas ' + legend_label[wrap.col_ind];
+    avg_text = 'Moyenne sur 7 jours';
   }
   
   else {
-    legend_label = [
+    col_label_list = [
       'Nationalwide total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
-    if (wrap.col_ind == 0)
-      tooltip_text += d[wrap.col_tag] + ' local cases in total';
-    else
-      tooltip_text += d[wrap.col_tag] + ' cases in ' + legend_label[wrap.col_ind];
+    avg_text = '7-day average';
   }
+  
+  //-- Define tooltip texts
+  var tooltip_text = d.date;
+  tooltip_text += '<br>' + col_label_list[wrap.col_ind] + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag]);
+  if (wrap.cumul == 0)
+    tooltip_text += '<br>' + avg_text + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag_avg]);
   
   //-- Generate tooltip
   wrap.tooltip

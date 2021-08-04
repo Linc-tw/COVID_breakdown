@@ -253,73 +253,62 @@ function CBA_MouseMove(wrap, d) {
   var y_alpha = 0.5;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
-  if (LS_lang == 'fr')
-    month_label = ['Total', 'de janvier', 'de février', 'de mars', "d'avril", 'de mai', 'de juin', 'de juillet', "d'août", 'de septembre', "d'octobre", 'de novembre', 'de décembre'];
-  else
-    month_label = ['Total', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      
-  //-- Generate column label
-  var m, yyyy, col_label;
-  if (wrap.tag.includes('latest'))
-    col_label = (7*(wrap.col_ind-1)) + '-' + (7*wrap.col_ind-1);
-  else if (wrap.tag.includes('overall')) {
-    yyyy = 2020 + Math.floor((wrap.col_ind-1) / 12);
-    m = (wrap.col_ind - 1) % 12 + 1;
-    col_label = month_label[m];
+  //-- Define legend title
+  var legend_title_list;
+  if (wrap.tag.includes('latest')) {
+    if (LS_lang == 'zh-tw')
+      legend_title_list = [
+        '0-6天前', '7-13天前', '14-20天前', '21-27天前', '28-34天前', '35-41天前', 
+        '42-48天前', '49-55天前', '56-62天前', '63-69天前', '70-76天前', '77-83天前'
+      ];
+    else if (LS_lang == 'fr')
+      legend_title_list = [
+        '0-6 jours plus tôt', '7-13 jours plus tôt', '14-20 jours plus tôt', '21-27 jours plus tôt', '28-34 jours plus tôt', '35-41 jours plus tôt', 
+        '42-48 jours plus tôt', '49-55 jours plus tôt', '56-62 jours plus tôt', '63-69 jours plus tôt', '70-76 jours plus tôt', '77-83 jours plus tôt'
+      ];
+    else
+      legend_title_list = [
+        '0-6 days ago', '7-13 days ago', '14-20 days ago', '21-27 days ago', '28-34 days ago', '35-41 days ago', 
+        '42-48 days ago', '49-55 days ago', '56-62 days ago', '63-69 days ago', '70-76 days ago', '77-83 days ago'
+      ]; 
   }
+  else if (wrap.tag.includes('overall')) {
+    if (LS_lang == 'zh-tw')
+      legend_title_list = [
+        '2020年1月', '2020年2月','2020年3月', '2020年4月','2020年5月', '2020年6月',
+        '2020年7月', '2020年8月','2020年9月', '2020年10月','2020年11月', '2020年12月',
+        '2021年1月', '2021年2月','2021年3月', '2021年4月','2021年5月', '2021年6月',
+        '2021年7月', '2021年8月','2021年9月', '2021年10月','2021年11月', '2021年12月'
+      ];
+    else if (LS_lang == 'fr')
+      legend_title_list = [
+        'Janvier 2020', 'Février 2020', 'Mars 2020', 'Avril 2020', 'Mai 2020', 'Juin 2020', 
+        'Juillet 2020', 'Août 2020', 'Septembre 2020', 'Octobre 2020', 'Novembre 2020', 'Décembre 2020', 
+        'Janvier 2021', 'Février 2021', 'Mars 2021', 'Avril 2021', 'Mai 2021', 'Juin 2021', 
+        'Juillet 2021', 'Août 2021', 'Septembre 2021', 'Octobre 2021', 'Novembre 2021', 'Décembre 2021', 
+      ];
+    else
+      legend_title_list = [
+        'January 2020', 'February 2020', 'March 2020', 'April 2020', 'May 2020', 'June 2020', 
+        'July 2020', 'Auguest 2020', 'September 2020', 'October 2020', 'November 2020', 'December 2020', 
+        'January 2021', 'February 2021', 'March 2021', 'April 2021', 'May 2021', 'June 2021', 
+        'July 2021', 'Auguest 2021', 'September 2021', 'October 2021', 'November 2021', 'December 2021', 
+      ]; 
+  }
+  legend_title_list = [LS_GetLegendTitle_Page(wrap)].concat(legend_title_list);
+  
+  //-- Get column tags
+  var age_label;
+  if (LS_lang == 'zh-tw')
+    age_label = '歲';
+  else if (LS_lang == 'fr')
+    age_label = ' ans';
   else
-    col_label = month_label[wrap.col_ind];
+    age_label = ' years old';
   
   //-- Generate tooltip text
-  var tooltip_text;
-  
-  if (LS_lang == 'zh-tw') {
-    if (wrap.col_ind == 0)
-      tooltip_text = '全部案例中有';
-    else if (wrap.tag.includes('latest'))
-      tooltip_text = col_label + '天前之案例中有';
-    else if (wrap.tag.includes('overall'))
-      tooltip_text = yyyy + '年' + m + '月案例中有';
-    else
-      tooltip_text = wrap.col_ind + '月案例中有';
-    
-    tooltip_text += d[wrap.col_tag];
-    
-    if (d['age'] == '70+')
-      tooltip_text += '位<br>年齡在70歲以上';
-    else
-      tooltip_text += '位<br>年齡在' + d['age'] + '歲之間';
-  }
-  
-  else if (LS_lang == 'fr') {
-    tooltip_text = d[wrap.col_tag];
-    
-    if (wrap.col_ind == 0)
-      tooltip_text += " de l'ensemble des cas";
-    else if (wrap.tag.includes('latest'))
-      tooltip_text += ' cas confirmés<br>de ' + col_label + ' jours plus tôt';
-    else if (wrap.tag.includes('overall'))
-      tooltip_text += ' cas ' + col_label + ' ' + yyyy;
-    else
-      tooltip_text += ' cas ' + col_label;
-    
-    tooltip_text += '<br>sont âgés de ' + d['age'] + ' ans';
-  }
-  
-  else {
-    tooltip_text = d[wrap.col_tag];
-    
-    if (wrap.col_ind == 0)
-      tooltip_text += ' of all confirmed cases';
-    else if (wrap.tag.includes('latest'))
-      tooltip_text += ' confirmed cases<br>of ' + col_label + ' days ago';
-    else if (wrap.tag.includes('overall'))
-      tooltip_text += ' cases from ' + col_label + ' ' + yyyy;
-    else
-      tooltip_text += ' cases from ' + col_label;
-    
-    tooltip_text += '<br>are ' + d['age'] + ' years old';
-  }
+  var tooltip_text = legend_title_list[wrap.col_ind];
+  tooltip_text += '<br>' + d['age'] + age_label + ' = ' + d[wrap.col_tag];
   
   //-- Generate tooltip
   wrap.tooltip
