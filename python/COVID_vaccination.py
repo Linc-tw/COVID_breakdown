@@ -127,7 +127,7 @@ class VaccinationSheet(ccm.Template):
       cum_doses = cum_doses_dict[date]
       
       ## If data non-missing
-      if 0 < sum(cum_doses):
+      if 0 < sum(cum_doses[1:]):
         ord_ = ccm.ISODateToOrd(date)
         length = ord_ - ord_prev
         
@@ -248,6 +248,8 @@ class VaccinationSheet(ccm.Template):
     
     for date, cum_vacc, cum_az, cum_moderna in zip(date_list, cum_vacc_list, cum_az_list, cum_moderna_list):
       if 0 == cum_vacc and date != '2021-03-21':
+        continue
+      if cum_az + cum_moderna == 0:
         continue
       stock.append([date, cum_vacc, cum_az, cum_moderna, 0])
       
