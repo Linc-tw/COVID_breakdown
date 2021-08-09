@@ -149,7 +149,7 @@ class CaseSheet(ccm.Template):
         '<5-4X', '<5-6X', '<5-7X', '<5-8X', '<5-9X', '<5-1XX', '3-77', 
         '<10-4X', '<10-6X','<10-8X', '<10-9X', '<1X-6X', '<1X-8X', 
         '1X-2X', '1X-4X', '1X-7X', '2X-3X', '2X-4X', '2X-5X', '2X-6X', '2X-7X', '2X-8X', '2X-9X', 
-        '3X-4X', '3X-6X', '3X-8X', '5X-7X', '5X-8X'
+        '3X-4X', '3X-5X', '3X-6X', '3X-8X', '5X-7X', '5X-8X'
       ]:
         age_list.append(np.nan)
       elif age != age:
@@ -451,6 +451,8 @@ class CaseSheet(ccm.Template):
         onset_date_list.append('2021-07-30')
       elif onset_date in ['8/4-5']:
         onset_date_list.append('2021-08-04')
+      elif onset_date in ['8/7-8']:
+        onset_date_list.append('2021-08-07')
         
       else:
         try:
