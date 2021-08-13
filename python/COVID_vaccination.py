@@ -36,21 +36,22 @@ class VaccinationSheet(ccm.Template):
     self.key_cum_vacc = 'a04'
     self.key_ppl_vacc = 'a05'
     self.key_ppl_fully_vacc = 'a06'
-    self.key_new_vacc_raw = 'a07' ## Unsure
-    self.key_new_vacc = 'a08'
-    self.key_cum_vacc_per_100 = 'a09'
-    self.key_ppl_vacc_per_100 = 'a10'
-    self.key_ppl_fully_vacc_per_100 = 'a11'
-    self.key_new_vacc_per_1m = 'a12'
     
+    self.key_new_vacc_raw = 'a08' ## Unsure
+    self.key_new_vacc = 'a09'
+    self.key_cum_vacc_per_100 = 'a10'
+    self.key_ppl_vacc_per_100 = 'a11'
+    self.key_ppl_fully_vacc_per_100 = 'a12'
     self.key_manu = 'a13'
-    self.key_cum_jj = 'a14'
-    self.key_cum_moderna = 'a15'
-    self.key_cum_az = 'a16'
-    self.key_cum_pfizer = 'a17'
-    self.key_cum_sinovac = 'a18'
-    self.key_cum_sputnik = 'a19'
-    self.key_cum_sinopharm = 'a20'
+    self.key_new_vacc_per_1m = 'a14'
+    
+    self.key_cum_jj = 'a16'
+    self.key_cum_moderna = 'a17'
+    self.key_cum_az = 'a18'
+    self.key_cum_pfizer = 'a19'
+    self.key_cum_sinovac = 'a20'
+    self.key_cum_sputnik = 'a21'
+    self.key_cum_sinopharm = 'a22'
     
     self.data = data
     self.n_total = len(self.data['data'])
@@ -71,22 +72,22 @@ class VaccinationSheet(ccm.Template):
     return [row[self.key_date] for row in self.data['data']]
   
   def getCumVacc(self):
-    return [int(row[self.key_cum_vacc]) for row in self.data['data']]
+    return [int(value) for value in self.getColData(self.key_cum_vacc)]
   
   def getPplVacc(self):
-    return [int(row[self.key_ppl_vacc]) for row in self.data['data']]
+    return [int(value) for value in self.getColData(self.key_ppl_vacc)]
   
   def getPplFullyVacc(self):
-    return [int(row[self.key_ppl_fully_vacc]) for row in self.data['data']]
+    return [int(value) for value in self.getColData(self.key_ppl_fully_vacc)]
   
   def getNewVacc(self):
-    return [int(row[self.key_new_vacc]) for row in self.data['data']]
+    return [int(value) for value in self.getColData(self.key_new_vacc)]
   
   def getCumAZ(self):
-    return [int(row[self.key_cum_az]) for row in self.data['data']]
+    return [int(value) for value in self.getColData(self.key_cum_az)]
   
   def getCumModerna(self):
-    return [int(row[self.key_cum_moderna]) for row in self.data['data']]
+    return [int(value) for value in self.getColData(self.key_cum_moderna)]
   
   def incrementWithInterpolation_vaccinationByBrand(self):
     date_list = self.getDate()

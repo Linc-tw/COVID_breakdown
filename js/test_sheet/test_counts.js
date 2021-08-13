@@ -16,7 +16,7 @@ function TC_InitFig(wrap) {
 
 function TC_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('test_counts_title', '檢驗數量');
+    LS_AddStr('test_counts_title', '檢驗人次');
     LS_AddStr('test_counts_button_daily', '逐日');
     LS_AddStr('test_counts_button_cumul', '累計');
   }

@@ -402,7 +402,7 @@ function GP_PlotYLabel(wrap) {
   wrap.svg.append('text')
     .attr('class', 'ylabel')
     .attr('text-anchor', 'middle')
-    .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (wrap.height/2).toString() + ')rotate(-90)');
+    .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (0.5*wrap.height).toString() + ')rotate(-90)');
 }
 
 //------------------------------------------------------------------------------
@@ -930,7 +930,7 @@ function GP_PlotFaintSingleBar(wrap) {
     .attr('width', xscale.bandwidth())
     .attr('height', 0)
     .attr('fill', wrap.color)
-    .attr('opacity', wrap.plot_opacity)
+    .style('opacity', wrap.plot_opacity)
       .on('mouseover', function (d) {GP_MouseOver_Faint(wrap, d);})
       .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
       .on('mouseleave', function (d) {GP_MouseLeave_Faint(wrap, d);})

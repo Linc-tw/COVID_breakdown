@@ -11,6 +11,7 @@ var PLO_plot_list = [
   [DC_Main, DC_latest_wrap, 1000],
   [HOI_Main, HOI_latest_wrap, 1000],
   [BS_Main, BS_latest_wrap, 1000],
+  [SIM_Main, SIM_latest_wrap, 1000],
 ];
 
 GP_Cascade(PLO_plot_list);
