@@ -17,42 +17,42 @@ Features
 --------
 
 The most recent statisitcs can be found in _Last 90 days_.
-In total, 15 charts are shown on 3 pages, 
-[_Case breakdown_](https://linc-tw.github.io/COVID_breakdown/latest_breakdown.html),
-[_Incidence rates_](https://linc-tw.github.io/COVID_breakdown/latest_incidence.html), & 
-[_Other stats_](https://linc-tw.github.io/COVID_breakdown/latest_others.html).
+The overall statistics can be found in _Overall stats_.
+In these two sections, 17 plots are shown on 4 pages: 
+- _Case breakdown_
+- _Incidence rates_
+- _Vaccination_
+- _Other stats_
 
-In _Case breakdown_:
-- Confirmed Cases by Transmission Type
-- Confirmed Cases by Detection Channel
+Plots on [_Case breakdown_](https://linc-tw.github.io/COVID_breakdown/page/latest_cases.html) are:
+- Confirmed Case Counts
 - Local Confirmed Cases per City & County
 - Confirmed Cases by Age
-- Correlations between Travel History & Symptoms
-- Correlations between Age & Symptoms
-- Delay Before Identifying a Transmission
 
-In _Incidence rates_:
-- 7-day Average of Various Rates
+Plots on [_Incidence rates_](https://linc-tw.github.io/COVID_breakdown/page/latest_incidence.html) are:
+- Arrival & Local Incidence Rates
 - Incidence Map
-- Evolution of Incidence Rate by City & County
-- Evolution of Incidence Rate by Age Group
+- Evolution of Incidence Rate by City & County (only in _Last 90 days_)
+- Evolution of Incidence Rate by Age Group (only in _Last 90 days_)
 
-In _Other stats_:
-- Status Evolution
-- Number of Tests by Reporting Criterion
-- Administrated Vaccines by Brand
+Plots on [_Vaccination_](https://linc-tw.github.io/COVID_breakdown/page/latest_vaccination.html) are:
+- Vaccination by Brand
+- Vaccination Progress & Deliveries
+- Vaccination Progress by Dose
+- Vaccination by City & County (only in _Last 90 days_)
+
+Plots on [_Other stats_](https://linc-tw.github.io/COVID_breakdown/page/latest_others.html) are:
+- Test Counts
+- Positive Rate & Case Fatality Rate
+- Death Counts
+- Hospitalization or Confirmed Cases in Isolation
 - Border Crossing
+- Statistics in Mirror
 
-The above charts are all generated with data of last 90 days.
-A selection of these figures can be found in _Highlight_, constituting a dashboard.
+There is an additional plot is on the _Home_ page:
+- Status Evolution
 
-The same charts made from all-year statistics & can be found in _Stats 2020_ & _Stats 2021_,
-except that:
-- _Administrated Vaccines by Brand_ only exists for _Stats 2021_ and
-- no _Evolution of Incidence Rate by City & County_ or _Evolution of Incidence Rate by Age Group_for either of two.
-Loading can be slow for some pages of these categories due to large files.
-
-There are also 2 charts in _Timeline_:
+And 2 other plots on the _Timeline_ page:
 - Chronology of Systematic Testing
 - Pandemic Timeline (text in Mandarin)
 
@@ -105,4 +105,3 @@ taken from [here](https://github.com/exupero/saveSvgAsPng) and is released under
 The website template is released under [MIT License © Blackrock Digital LLC](https://github.com/BlackrockDigital/startbootstrap-sb-admin/blob/gh-pages/LICENSE).
 
 All other texts and plots created by this repository are released under [CC0 1.0 Universal Public Domain Dedication](https://creativecommons.org/publicdomain/zero/1.0/deed.en).
-

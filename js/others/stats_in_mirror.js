@@ -29,29 +29,19 @@ function SIM_InitFig(wrap) {
     GP_InitFig(wrap);
   }
   
-  var new_wrap = {
-    tot_height: wrap.tot_height,
-    tot_width: wrap.tot_width,
-    height: wrap.height,
-    width: wrap.width,
-    corner: wrap.corner,
-    margin: wrap.margin,
-    
-    tag: wrap.tag,
-    id: wrap.id,
-    
-    y_max_factor: wrap.y_max_factor, 
-    nb_yticks: wrap.nb_yticks,
-//     legend_pos_x: 75,
-//     legend_pos_x1_: {en: 170, fr: 180, 'zh-tw': 170},
-  };
+  //-- Pop out svg
+  var svg = wrap.svg;
+  delete wrap['svg'];
   
-  wrap.wrap_list = [
-    JSON.parse(JSON.stringify(new_wrap)),
-    JSON.parse(JSON.stringify(new_wrap))
-  ];
-  wrap.wrap_list[0].svg = wrap.svg;
-  wrap.wrap_list[1].svg = wrap.svg;
+  //-- Copy wrap
+  var new_wrap_0 = JSON.parse(JSON.stringify(wrap));
+  var new_wrap_1 = JSON.parse(JSON.stringify(wrap));
+  wrap.sub_wrap_list = [new_wrap_0, new_wrap_1];
+  
+  //-- Restore with the same svg
+  wrap.svg = svg;
+  new_wrap_0.svg = svg;
+  new_wrap_1.svg = svg;
 }
 
 function SIM_ResetText() {
@@ -80,7 +70,7 @@ function SIM_ResetText() {
   }
   
   else { //-- En
-    LS_AddStr('stats_in_mirror_title', 'Stats in Mirror');
+    LS_AddStr('stats_in_mirror_title', 'Statistics in Mirror');
     LS_AddStr('stats_in_mirror_button_test_0', 'Test counts');
     LS_AddStr('stats_in_mirror_button_test_1', 'Test counts');
     LS_AddStr('stats_in_mirror_button_case_0', 'Case counts');
@@ -94,18 +84,18 @@ function SIM_ResetText() {
 
 function SIM_FormatData(wrap, data, index) {
   var stat = wrap.stat_list[index];
-  var new_wrap = wrap.wrap_list[index];
+  var sub_wrap = wrap.sub_wrap_list[index];
   
   if (stat == 0)
-    TC_FormatData(new_wrap, data);
+    TC_FormatData(sub_wrap, data);
   else if (stat == 1) {
-    new_wrap.col_ind = 0;
-    CC_FormatData(new_wrap, data);
+    sub_wrap.col_ind = 0;
+    CC_FormatData(sub_wrap, data);
   }
   else if (stat == 2)
-    HOI_FormatData(new_wrap, data);
+    HOI_FormatData(sub_wrap, data);
   else
-    DC_FormatData(new_wrap, data);
+    DC_FormatData(sub_wrap, data);
 }
 
 function SIM_FormatData2(wrap, data2) {
@@ -196,6 +186,7 @@ function SIM_PlotAvgLine(wrap, index) {
 }
 
 function SIM_Plot(wrap) {
+  //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
   //-- Replot xaxis
@@ -203,13 +194,13 @@ function SIM_Plot(wrap) {
     GP_PlotBottomOverallEmptyAxis(wrap);
   
   GP_MakeTooltip(wrap);
-  wrap.wrap_list[0].tooltip = wrap.tooltip;
-  wrap.wrap_list[1].tooltip = wrap.tooltip;
+  wrap.sub_wrap_list[0].tooltip = wrap.tooltip;
+  wrap.sub_wrap_list[1].tooltip = wrap.tooltip;
   
-  var i, stat, new_wrap;
+  var i, stat, sub_wrap;
   for (i=0; i<2; i++) {
     stat = wrap.stat_list[i];
-    new_wrap = wrap.wrap_list[i];
+    sub_wrap = wrap.sub_wrap_list[i];
     
     //-- Placeholder for yaxis
     wrap.svg.append('g')
@@ -222,26 +213,26 @@ function SIM_Plot(wrap) {
       .attr('transform', 'translate(' + (-wrap.margin.left*0.75).toString() + ', ' + (0.5*wrap.height+(2*i-1)*0.25*wrap.height).toString() + ')rotate(-90)');
 
     if (stat == 0) {
-      SIM_PlotFaintSingleBar(new_wrap, i);
-      SIM_PlotAvgLine(new_wrap, i);
+      SIM_PlotFaintSingleBar(sub_wrap, i);
+      SIM_PlotAvgLine(sub_wrap, i);
     }
     else if (stat == 1) {
-      SIM_PlotFaintSingleBar(new_wrap, i);
-      SIM_PlotAvgLine(new_wrap, i);
+      SIM_PlotFaintSingleBar(sub_wrap, i);
+      SIM_PlotAvgLine(sub_wrap, i);
     }
     else if (stat == 2) {
-      SIM_PlotSingleBar(new_wrap, i);
-      SIM_PlotAvgLine(new_wrap, i);
+      SIM_PlotSingleBar(sub_wrap, i);
+      SIM_PlotAvgLine(sub_wrap, i);
     }
     else {
-      SIM_PlotFaintSingleBar(new_wrap, i);
-      SIM_PlotAvgLine(new_wrap, i);
+      SIM_PlotFaintSingleBar(sub_wrap, i);
+      SIM_PlotAvgLine(sub_wrap, i);
     }
   }
 }
 
 function SIM_ReplotSingleBar(wrap, index) {
-  var new_wrap = wrap.wrap_list[index];
+  var sub_wrap = wrap.sub_wrap_list[index];
   var range_max;
   if (index > 0)
     range_max = wrap.height;
@@ -250,27 +241,25 @@ function SIM_ReplotSingleBar(wrap, index) {
   
   //-- Define yscale
   var yscale = d3.scaleLinear()
-    .domain([0, new_wrap.y_max])
+    .domain([0, sub_wrap.y_max])
     .range([0.5*wrap.height, range_max]);
   
-  var bar = wrap.svg.selectAll('.content.bar'+index);
-  
   //-- Update bar
-  bar.on('mouseover', function (d) {GP_MouseOver_Bright(new_wrap, d);})
-    .on('mousemove', function (d) {new_wrap.mouse_move(new_wrap, d);})
-    .on('mouseleave', function (d) {GP_MouseLeave_Bright(new_wrap, d);});
-
-  bar.data(new_wrap.formatted_data)
+  wrap.svg.selectAll('.content.bar'+index)
+      .on('mouseover', function (d) {GP_MouseOver_Bright(sub_wrap, d);})
+      .on('mousemove', function (d) {sub_wrap.mouse_move(sub_wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave_Bright(sub_wrap, d);})
+    .data(sub_wrap.formatted_data)
     .transition()
-    .duration(new_wrap.trans_delay)
-      .attr('y', function (d) {if (index > 0) return yscale(0); return yscale(d[new_wrap.col_tag]);})
-      .attr('height', function (d) {return (1-2*index)*(yscale(0)-yscale(d[new_wrap.col_tag]));})
-      .attr('fill', new_wrap.color)
+    .duration(sub_wrap.trans_delay)
+      .attr('y', function (d) {if (index > 0) return yscale(0); return yscale(d[sub_wrap.col_tag]);})
+      .attr('height', function (d) {return (1-2*index)*(yscale(0)-yscale(d[sub_wrap.col_tag]));})
+      .attr('fill', sub_wrap.color)
       .style('opacity', 1);
 }
 
 function SIM_ReplotFaintSingleBar(wrap, index) {
-  var new_wrap = wrap.wrap_list[index];
+  var sub_wrap = wrap.sub_wrap_list[index];
   var range_max;
   if (index > 0)
     range_max = wrap.height;
@@ -279,27 +268,25 @@ function SIM_ReplotFaintSingleBar(wrap, index) {
   
   //-- Define yscale
   var yscale = d3.scaleLinear()
-    .domain([0, new_wrap.y_max])
+    .domain([0, sub_wrap.y_max])
     .range([0.5*wrap.height, range_max]);
     
-  var bar = wrap.svg.selectAll('.content.bar'+index);
-  
   //-- Update bar
-  bar.on('mouseover', function (d) {GP_MouseOver_Faint(new_wrap, d);})
-    .on('mousemove', function (d) {new_wrap.mouse_move(new_wrap, d);})
-    .on('mouseleave', function (d) {GP_MouseLeave_Faint(new_wrap, d);});
-  
-  bar.data(new_wrap.formatted_data)
+  var bar = wrap.svg.selectAll('.content.bar'+index)
+      .on('mouseover', function (d) {GP_MouseOver_Faint(sub_wrap, d);})
+      .on('mousemove', function (d) {sub_wrap.mouse_move(sub_wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave_Faint(sub_wrap, d);})
+    .data(sub_wrap.formatted_data)
     .transition()
-    .duration(new_wrap.trans_delay)
-      .attr('y', function (d) {if (index > 0) return yscale(0); return yscale(d[new_wrap.col_tag]);})
-      .attr('height', function (d) {return (1-2*index)*(yscale(0)-yscale(d[new_wrap.col_tag]));})
-      .attr('fill', new_wrap.color)
-      .style('opacity', new_wrap.plot_opacity);
+    .duration(sub_wrap.trans_delay)
+      .attr('y', function (d) {if (index > 0) return yscale(0); return yscale(d[sub_wrap.col_tag]);})
+      .attr('height', function (d) {return (1-2*index)*(yscale(0)-yscale(d[sub_wrap.col_tag]));})
+      .attr('fill', sub_wrap.color)
+      .style('opacity', sub_wrap.plot_opacity);
 }
 
 function SIM_ReplotAvgLine(wrap, index) {
-  var new_wrap = wrap.wrap_list[index];
+  var sub_wrap = wrap.sub_wrap_list[index];
   var range_max;
   if (index > 0)
     range_max = wrap.height;
@@ -308,33 +295,32 @@ function SIM_ReplotAvgLine(wrap, index) {
   
   //-- Define xscale
   var xscale = d3.scaleBand()
-    .domain(new_wrap.x_list)
+    .domain(sub_wrap.x_list)
     .range([0, wrap.width])
     .padding(GP_wrap.bar_padding);
   
   //-- Define yscale
   var yscale = d3.scaleLinear()
-    .domain([0, new_wrap.y_max])
+    .domain([0, sub_wrap.y_max])
     .range([0.5*wrap.height, range_max]);
   
   //-- Define line
   var draw_line = d3.line()
-    .defined(d => !isNaN(d[new_wrap.col_tag_avg]))//-- Don't show line if NaN
+    .defined(d => !isNaN(d[sub_wrap.col_tag_avg])) //-- Don't show line if NaN
     .x(function (d) {return xscale(d.date) + 0.5*xscale.bandwidth();})
-    .y(function (d) {return yscale(d[new_wrap.col_tag_avg]);});
+    .y(function (d) {return yscale(d[sub_wrap.col_tag_avg]);});
   
-  var line = wrap.svg.selectAll('.content.line'+index);
-    
   //-- Update line
-  line.data([new_wrap.formatted_data])
+  var line = wrap.svg.selectAll('.content.line'+index)
+    .data([sub_wrap.formatted_data])
     .transition()
-    .duration(new_wrap.trans_delay)
+    .duration(sub_wrap.trans_delay)
       .attr('d', function (d) {return draw_line(d);})
-      .style('stroke', new_wrap.color);
+      .style('stroke', sub_wrap.color);
 }
 
 function SIM_ReplotCountAsY(wrap, format, index) {
-  var new_wrap = wrap.wrap_list[index];
+  var sub_wrap = wrap.sub_wrap_list[index];
   var range_max;
   if (index > 0)
     range_max = wrap.height;
@@ -343,83 +329,83 @@ function SIM_ReplotCountAsY(wrap, format, index) {
   
   //-- Define yscale
   var yscale = d3.scaleLinear()
-    .domain([0, new_wrap.y_max])
+    .domain([0, sub_wrap.y_max])
     .range([0.5*wrap.height, range_max]);
   
   //-- Define yaxis
   var yaxis, yticklabel_format;
   if (format == 'percentage') {
-    if (new_wrap.ytick[new_wrap.ytick.length-1] >= 0.1) 
+    if (sub_wrap.ytick[sub_wrap.ytick.length-1] >= 0.1) 
       yticklabel_format = '.0%';
     else
       yticklabel_format = '.1%';
   
     yaxis = d3.axisLeft(yscale)
       .tickSize(-wrap.width) //-- Top & bottom frameline
-      .tickValues(new_wrap.ytick)
+      .tickValues(sub_wrap.ytick)
       .tickFormat(d3.format(yticklabel_format));
   }
   else {
-    if (new_wrap.ytick[new_wrap.ytick.length-1] > 9999) 
+    if (sub_wrap.ytick[sub_wrap.ytick.length-1] > 9999) 
       yticklabel_format = '.2s';
     else
       yticklabel_format = 'd';
   
     yaxis = d3.axisLeft(yscale)
       .tickSize(-wrap.width) //-- Top & bottom frameline
-      .tickValues(new_wrap.ytick)
+      .tickValues(sub_wrap.ytick)
       .tickFormat(d3.format(yticklabel_format));
   }
   
   //-- Add yaxis
   wrap.svg.select('.yaxis.ind'+index)
     .transition()
-    .duration(new_wrap.trans_delay)
+    .duration(sub_wrap.trans_delay)
     .call(yaxis);
 }
 
 function SIM_Replot(wrap) {
-  var i, stat, new_wrap;
+  var i, stat, sub_wrap, ylabel_dict;
+  
   for (i=0; i<2; i++) {
     stat = wrap.stat_list[i];
-    new_wrap = wrap.wrap_list[i];
-    var ylabel_dict;
+    sub_wrap = wrap.sub_wrap_list[i];
     
     if (stat == 0) {
-      new_wrap.color = GP_wrap.c_list[2];
-      new_wrap.mouse_move = TC_MouseMove;
-      new_wrap.plot_opacity = GP_wrap.faint_opacity;
-      new_wrap.trans_delay = GP_wrap.trans_delay;
+      sub_wrap.color = GP_wrap.c_list[2];
+      sub_wrap.mouse_move = TC_MouseMove;
+      sub_wrap.plot_opacity = GP_wrap.faint_opacity;
+      sub_wrap.trans_delay = GP_wrap.trans_delay;
       ylabel_dict = {en: 'Number of tests', fr: 'Nombre de tests', 'zh-tw': '檢驗人次'};
       
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotAvgLine(wrap, i);
     }
     else if (stat == 1) {
-      new_wrap.color = GP_wrap.c_list[0];
-      new_wrap.mouse_move = CC_MouseMove;
-      new_wrap.plot_opacity = GP_wrap.faint_opacity;
-      new_wrap.trans_delay = GP_wrap.trans_delay;
+      sub_wrap.color = GP_wrap.c_list[0];
+      sub_wrap.mouse_move = CC_MouseMove;
+      sub_wrap.plot_opacity = GP_wrap.faint_opacity;
+      sub_wrap.trans_delay = GP_wrap.trans_delay;
       ylabel_dict = {en: 'Confirmed cases', fr: 'Cas confirmés', 'zh-tw': '確診人數'};
       
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotAvgLine(wrap, i);
     }
     else if (stat == 2) {
-      new_wrap.color = GP_wrap.c_list[3];
-      new_wrap.mouse_move = HOI_MouseMove;
-      new_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
-      new_wrap.trans_delay = GP_wrap.trans_delay;
+      sub_wrap.color = GP_wrap.c_list[3];
+      sub_wrap.mouse_move = HOI_MouseMove;
+      sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
+      sub_wrap.trans_delay = GP_wrap.trans_delay;
       ylabel_dict = {en: 'Hospitalization', fr: 'Hospitalisation', 'zh-tw': '住院人數'};
       
       SIM_ReplotSingleBar(wrap, i);
       SIM_ReplotAvgLine(wrap, i);
     }
     else {
-      new_wrap.color = GP_wrap.c_list[7];
-      new_wrap.mouse_move = DC_MouseMove;
-      new_wrap.plot_opacity = GP_wrap.faint_opacity;
-      new_wrap.trans_delay = GP_wrap.trans_delay;
+      sub_wrap.color = GP_wrap.c_list[7];
+      sub_wrap.mouse_move = DC_MouseMove;
+      sub_wrap.plot_opacity = GP_wrap.faint_opacity;
+      sub_wrap.trans_delay = GP_wrap.trans_delay;
       ylabel_dict = {en: 'Number of deaths', fr: 'Nombre de décédés', 'zh-tw': '死亡人數'};
       
       SIM_ReplotFaintSingleBar(wrap, i);
@@ -433,15 +419,14 @@ function SIM_Replot(wrap) {
       .text(ylabel_dict[LS_lang]);
   }
   
-  wrap.x_list = wrap.wrap_list[0].x_list;
-  wrap.xticklabel = wrap.wrap_list[0].xticklabel;
+  wrap.x_list = wrap.sub_wrap_list[0].x_list;
+  wrap.xticklabel = wrap.sub_wrap_list[0].xticklabel;
   
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
     GP_ReplotOverallXTick(wrap, 'band');
   else
     GP_ReplotDateAsX(wrap);
-  
 }
 
 //-- Load
@@ -477,13 +462,13 @@ function SIM_Reload(wrap) {
 }
 
 function SIM_ButtonListener(wrap) {
-  //-- Stat 1
+  //-- Stat 0
   d3.select(wrap.id +'_stat_0').on('change', function() {
     wrap.stat_list[0] = this.value;
     SIM_Reload(wrap);
   });
   
-  //-- Stat 2
+  //-- Stat 1
   d3.select(wrap.id +'_stat_1').on('change', function() {
     wrap.stat_list[1] = this.value;
     SIM_Reload(wrap);
@@ -491,39 +476,27 @@ function SIM_ButtonListener(wrap) {
   
   //-- Save
   d3.select(wrap.id + '_save').on('click', function(){
+    var stat_0 = wrap.stat_list[0];
+    var stat_1 = wrap.stat_list[1];
     var tag1, tag2;
     
-    switch (wrap.stat_list[0]) {
-      case 0:
-        tag1 = 'test';
-        break;
-      case 1:
-        tag1 = 'case';
-        break;
-      case 2:
-        tag1 = 'hospitalization';
-        break;
-      case 3:
-      default:
-        tag1 = 'death';
-        break;
-    }
+    if (stat_0 == 0)
+      tag1 = 'test';
+    else if (stat_0 == 1)
+      tag1 = 'case';
+    else if (stat_0 == 2)
+      tag1 = 'hospitalization';
+    else 
+      tag1 = 'death';
     
-    switch (wrap.stat_list[1]) {
-      case 0:
-        tag2 = 'test';
-        break;
-      case 1:
-        tag2 = 'case';
-        break;
-      case 2:
-        tag2 = 'hospitalization';
-        break;
-      case 3:
-      default:
-        tag2 = 'death';
-        break;
-    }
+    if (stat_1 == 0)
+      tag2 = 'test';
+    else if (stat_1 == 1)
+      tag2 = 'case';
+    else if (stat_1 == 2)
+      tag2 = 'hospitalization';
+    else 
+      tag2 = 'death';
     
     name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);

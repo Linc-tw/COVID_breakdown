@@ -2,8 +2,8 @@ Script structure
 ================
 
 
-Structure by raw data
----------------------
+Structure by folders
+--------------------
 
 `archives/`
   - `age_symptom_correlations.js`
@@ -11,6 +11,12 @@ Structure by raw data
   - `difference_by_transmission.js`
   - `travel_history_symptom_correlations.js`
 
+`border_sheet/`
+  - `border_statistics.js`
+  
+`case_sheet/`
+  - `case_counts.js`
+  
 `county_sheet/`
   - `case_by_age.js`
   - `incidence_evolution_by_age.js`
@@ -18,22 +24,26 @@ Structure by raw data
   - `incidence_map.js`
   - `local_case_per_county.js`
   
-`main_sheet/`
-  - `case_by_transmission.js`
-  
 `others/`
-  - `border_statistics.js`
-  - `death_counts.js`
-  - `hospitalization_or_isolation.js`
   - `incidence_rates.js`
   - `positivity_and_fatality.js`
+  - `stats_in_mirror.js`
+
+`status_sheet/`
+  - `death_counts.js`
+  - `hospitalization_or_isolation.js`
   - `status_evolution.js`
+
+`test_sheet/`
   - `test_by_criterion.js`
 
 `timeline/`
   - `criteria_timeline.js`
   - `event_timeline.js`
   
+`vaccination_county_sheet/`
+  - `vaccination_by_county.js`
+
 `vaccination_sheet/`
   - `vaccination_by_brand.js`
   - `vaccination_by_dose.js`
@@ -70,6 +80,7 @@ Structure by page
   - `death_counts.js`
   - `hospitalization_or_isolation.js`
   - `border_statistics.js`
+  - `stats_in_mirror.js`
 
 `timeline.html`
   - `criteria_timeline.js`
@@ -81,7 +92,7 @@ Structure by axis type
 
 Multiple bar
   - `status_evolution.js`
-  
+
 Single bar
   - `case_by_age.js`
   - `hospitalization_or_isolation.js`
@@ -110,3 +121,6 @@ No axis
   - `incidence_map.js`
   - `criteria_timeline.js`
   - `event_timeline.js`
+
+Combined
+  - `stats_in_mirror.js`
