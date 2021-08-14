@@ -27,14 +27,32 @@ function VBC_InitFig(wrap) {
 function VBC_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('vaccination_by_county_title', '各縣市疫苗接種進度');
+    
+    LS_AddHtml('vaccination_by_county_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('vaccination_by_county_title', 'Vaccination par ville et comté');
+    
+    LS_AddHtml('vaccination_by_county_description', '\
+    ');
   }
   
   else { //-- En
     LS_AddStr('vaccination_by_county_title', 'Vaccination by City & County');
+    
+    LS_AddHtml('vaccination_by_county_description', '\
+      The vaccination rates of Taipei, Penghu, & Matsu are particularly high for various reasons:\
+      <br>\
+      - Matsu: prioritized due to lack of medical resources,\
+      <br>\
+      - Penghu: discovery of a cluster of Delta variant, &\
+      <br>\
+      - Taipei: epicenter of the last outbreak.\
+      <br><br>\
+      Since July 26th, the update of data for this plot has been suspended.\
+    ');
   }
 }
 

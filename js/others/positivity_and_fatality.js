@@ -17,14 +17,35 @@ function PAF_InitFig(wrap) {
 function PAF_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('positivity_and_fatality_title', '陽性率與致死率');
+    
+    LS_AddHtml('positivity_and_fatality_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('positivity_and_fatality_title', 'Taux de positivité et de létalité');
+    
+    LS_AddHtml('positivity_and_fatality_description', '\
+    ');
   }
   
   else { //-- En
     LS_AddStr('positivity_and_fatality_title', 'Positive Rate & Case Fatality Rate');
+    
+    LS_AddHtml('positivity_and_fatality_description', "\
+      The positive rate or positivity is defined as the number of confirmed cases over the number of tests.\
+      The higher the positivity, the more there are transmissions among the targeted population,\
+      and the more likely there are unidentified patients.\
+      Here for positivity, the 7-day moving average is shown.\
+      <br><br>\
+      The case fatality rate (CFR) is defined as the number of deaths over the confirmed case counts.\
+      Since the death usually happens a while after being diagnosed,\
+      CFR can only be calculated on a long period.\
+      Here we choose to show the overall CFR,\
+      i.e. since the beginning of the pandemic.\
+      <br><br>\
+      CFR is high in Taiwan as the infected people during the outbreak were quite aged.\
+    ");
   }
 }
 

@@ -55,6 +55,9 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_hospitalization_1', '住院人數');
     LS_AddStr('stats_in_mirror_button_death_0', '死亡人數');
     LS_AddStr('stats_in_mirror_button_death_1', '死亡人數');
+    
+    LS_AddHtml('stats_in_mirror_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
@@ -67,6 +70,9 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_hospitalization_1', 'Hospitalisation');
     LS_AddStr('stats_in_mirror_button_death_0', 'Décédés');
     LS_AddStr('stats_in_mirror_button_death_1', 'Décédés');
+    
+    LS_AddHtml('stats_in_mirror_description', '\
+    ');
   }
   
   else { //-- En
@@ -79,6 +85,21 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_hospitalization_1', 'Hospitalization');
     LS_AddStr('stats_in_mirror_button_death_0', 'Death counts');
     LS_AddStr('stats_in_mirror_button_death_1', 'Death counts');
+    
+    LS_AddHtml('stats_in_mirror_description', '\
+      This panel allows users to choose between:\
+      <br>\
+      - test counts,\
+      <br>\
+      - confirmed case counts,\
+      <br>\
+      - number of hospitalization, and\
+      <br>\
+      - death counts,\
+      <br>\
+      and display any 2 of them side-by-side.\
+      This may provide a better comparison between the evolutions of different statistics.\
+    ');
   }
 }
 
@@ -121,8 +142,10 @@ function SIM_PlotSingleBar(wrap, index) {
   //-- Define xscale for bar
   var xscale = GP_MakeBandXForBar(wrap);
   
-  //-- Define yscale for counts
-  var yscale = GP_MakeLinearY(wrap);
+  //-- Define yscale
+  var yscale = d3.scaleLinear()
+    .domain([0, 1])
+    .range([0.5*wrap.height, wrap.height]);
   
   //-- Add bar
   var bar = wrap.svg.selectAll('.content.bar'+index)
@@ -142,8 +165,10 @@ function SIM_PlotFaintSingleBar(wrap, index) {
   //-- Define xscale for bar
   var xscale = GP_MakeBandXForBar(wrap);
   
-  //-- Define yscale for counts
-  var yscale = GP_MakeLinearY(wrap);
+  //-- Define yscale
+  var yscale = d3.scaleLinear()
+    .domain([0, 1])
+    .range([0.5*wrap.height, wrap.height]);
   
   //-- Add bar
   var bar = wrap.svg.selectAll('.content.bar'+index)
@@ -164,7 +189,9 @@ function SIM_PlotAvgLine(wrap, index) {
   var xscale = GP_MakeBandXForBar(wrap);
   
   //-- Define yscale
-  var yscale = GP_MakeLinearY(wrap);
+  var yscale = d3.scaleLinear()
+    .domain([0, 1])
+    .range([0.5*wrap.height, wrap.height]);
   
   //-- Define dummy line
   var draw_line_0 = d3.line()

@@ -22,14 +22,24 @@ function IEBC_InitFig(wrap) {
 function IEBC_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('incidence_evolution_by_county_title', '各縣市盛行率變化');
+    
+    LS_AddHtml('incidence_evolution_by_county_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('incidence_evolution_by_county_title', "Évolution du taux d'incidence par ville et comté");
+    
+    LS_AddHtml('incidence_evolution_by_county_description', '\
+    ');
   }
   
   else { //-- En
     LS_AddStr('incidence_evolution_by_county_title', 'Evolution of Incidence Rate by City & County');
+    
+    LS_AddHtml('incidence_evolution_by_county_description', '\
+      In this plot, the incidence rate is defined as the sum of local cases over 7 lookback days per 100k inhabitants.\
+    ');
   }
 }
 

@@ -17,14 +17,25 @@ function VBD_InitFig(wrap) {
 function VBD_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('vaccination_by_dose_title', '疫苗劑次接種進度');
+    
+    LS_AddHtml('vaccination_by_dose_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('vaccination_by_dose_title', 'Avancement de vaccination par nombre de doses');
+    
+    LS_AddHtml('vaccination_by_dose_description', '\
+    ');
   }
   
   else { //-- En
     LS_AddStr('vaccination_by_dose_title', 'Vaccination Progress by Dose');
+    
+    LS_AddHtml('vaccination_by_dose_description', '\
+      Taiwan prioritizes the 1st-dose coverage over full vaccination.\
+      This plot shows the consequence of this policy.\
+    ');
   }
 }
 

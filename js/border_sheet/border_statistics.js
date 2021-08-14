@@ -21,6 +21,9 @@ function BS_ResetText() {
     LS_AddStr('border_statistics_button_entry', '入境');
     LS_AddStr('border_statistics_button_exit', '出境');
     LS_AddStr('border_statistics_button_total', '合計');
+    
+    LS_AddHtml('border_statistics_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
@@ -29,6 +32,9 @@ function BS_ResetText() {
     LS_AddStr('border_statistics_button_entry', 'Arrivées');
     LS_AddStr('border_statistics_button_exit', 'Départs');
     LS_AddStr('border_statistics_button_total', 'Totaux');
+    
+    LS_AddHtml('border_statistics_description', '\
+    ');
   }
   
   else { //-- En
@@ -37,6 +43,10 @@ function BS_ResetText() {
     LS_AddStr('border_statistics_button_entry', 'Arrival');
     LS_AddStr('border_statistics_button_exit', 'Departure');
     LS_AddStr('border_statistics_button_total', 'Total');
+    
+    LS_AddHtml('border_statistics_description', '\
+      The border statistics are updated monthly at the beginning of each month.\
+    ');
   }
 }
 

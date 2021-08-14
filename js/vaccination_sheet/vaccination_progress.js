@@ -21,6 +21,9 @@ function VP_ResetText() {
     LS_AddStr('vaccination_progress_button_AZ', 'AZ');
     LS_AddStr('vaccination_progress_button_Moderna', '莫德納');
     LS_AddStr('vaccination_progress_button_Medigen', '高端');
+  
+    LS_AddHtml('vaccination_progress_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
@@ -29,6 +32,9 @@ function VP_ResetText() {
     LS_AddStr('vaccination_progress_button_AZ', 'AZ');
     LS_AddStr('vaccination_progress_button_Moderna', 'Moderna');
     LS_AddStr('vaccination_progress_button_Medigen', 'Medigen');
+  
+    LS_AddHtml('vaccination_progress_description', '\
+    ');
   }
   
   else { //-- En
@@ -37,6 +43,14 @@ function VP_ResetText() {
     LS_AddStr('vaccination_progress_button_AZ', 'AZ');
     LS_AddStr('vaccination_progress_button_Moderna', 'Moderna');
     LS_AddStr('vaccination_progress_button_Medigen', 'Medigen');
+    
+    LS_AddHtml('vaccination_progress_description', '\
+      The number of injections can be greater than supplies, \
+      since additional doses can be extracted. \
+      This bonus takes about 10% of the nominal available doses.\
+      <br><br>\
+      The vaccination progress has been limited several times by lack of supplies.\
+    ');
   }
 }
 

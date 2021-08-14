@@ -19,18 +19,38 @@ function TC_ResetText() {
     LS_AddStr('test_counts_title', '檢驗人次');
     LS_AddStr('test_counts_button_daily', '逐日');
     LS_AddStr('test_counts_button_cumul', '累計');
+    
+    LS_AddHtml('test_counts_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('test_counts_title', 'Nombre de tests');
     LS_AddStr('test_counts_button_daily', 'Quotidiens');
     LS_AddStr('test_counts_button_cumul', 'Cumulés');
+    
+    LS_AddHtml('test_counts_description', '\
+    ');
   }
   
   else { //-- En
     LS_AddStr('test_counts_title', 'Test Counts');
     LS_AddStr('test_counts_button_daily', 'Daily');
     LS_AddStr('test_counts_button_cumul', 'Cumulative');
+    
+    LS_AddHtml('test_counts_description', '\
+      Taiwan is rather conservative about testing for 3 reasons:\
+      <br>\
+      - to avoid false positives overwhelming the trace-and-isolate system,\
+      <br>\
+      - low incidence rate, &\
+      <br>\
+      - lack of human resource.\
+      <br><br>\
+      Although there is clearly a policy shift after the outbreak in May 2021,\
+      the number of conducted tests remains low compared to most countries.\
+      The daily number of tests has ever been more than 38k.\
+    ');
   }
 }
 

@@ -390,8 +390,8 @@ COUNTY_DICT_2 = {
 
 DELIVERY_LIST = [
   ## brand, source, quantity, delivery_date, available_date, delivery_news, available_news
-  [     'AZ',        'AZ',  117000, '2021-03-03', '2021-03-22', 'https://www.cna.com.tw/news/firstnews/202103035003.aspx', 'https://www.cna.com.tw/news/firstnews/202103225002.aspx'],
-  [     'AZ',     'COVAX',  199200, '2021-04-04', '2021-04-13', 'https://www.cna.com.tw/news/firstnews/202104040008.aspx', 'https://www.cna.com.tw/news/firstnews/202104120047.aspx'],
+  [     'AZ',        'AZ',  116500, '2021-03-03', '2021-03-22', 'https://www.cna.com.tw/news/firstnews/202103035003.aspx', 'https://www.cna.com.tw/news/firstnews/202103225002.aspx'],
+  [     'AZ',     'COVAX',  198600, '2021-04-04', '2021-04-13', 'https://www.cna.com.tw/news/firstnews/202104040008.aspx', 'https://www.cna.com.tw/news/firstnews/202104120047.aspx'],
   [     'AZ',     'COVAX',  409800, '2021-05-19', '2021-05-27', 'https://www.cna.com.tw/news/firstnews/202105190224.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600326'],
   ['Moderna',   'Moderna',  148800, '2021-05-28', '2021-06-08', 'https://www.cna.com.tw/news/firstnews/202105285010.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600375'],
   [     'AZ',     'Japan', 1237860, '2021-06-04', '2021-06-12', 'https://www.cna.com.tw/news/firstnews/202106045008.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600389'],
@@ -409,6 +409,7 @@ DELIVERY_LIST = [
   [     'AZ', 'Lithuania',   19400, '2021-07-31', '2021-08-10', 'https://www.cna.com.tw/news/firstnews/202107310085.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600484'],
   ['Moderna',   'Moderna',   99600, '2021-08-08', '', 'https://www.cna.com.tw/news/firstnews/202108090129.aspx', ''],
   [     'AZ',        'AZ',  524200, '2021-08-12', '', 'https://www.cna.com.tw/news/firstnews/202108120201.aspx', ''],
+  ['Moderna',   'Moderna',       0, '2021-08-15', '', '', ''],
 ]
 
 ################################################################################

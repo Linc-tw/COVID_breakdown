@@ -65,6 +65,9 @@ function CBA_ResetText() {
     LS_AddStr('case_by_age_button_2021_10', '2021年10月');
     LS_AddStr('case_by_age_button_2021_11', '2021年11月');
     LS_AddStr('case_by_age_button_2021_12', '2021年12月');
+    
+    LS_AddHtml('case_by_age_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
@@ -118,6 +121,9 @@ function CBA_ResetText() {
     LS_AddStr('case_by_age_button_2021_10', 'Oct 2021');
     LS_AddStr('case_by_age_button_2021_11', 'Nov 2021');
     LS_AddStr('case_by_age_button_2021_12', 'Déc 2021');
+    
+    LS_AddHtml('case_by_age_description', '\
+    ');
   }
   
   else { //-- En
@@ -171,6 +177,12 @@ function CBA_ResetText() {
     LS_AddStr('case_by_age_button_2021_10', 'Oct 2021');
     LS_AddStr('case_by_age_button_2021_11', 'Nov 2021');
     LS_AddStr('case_by_age_button_2021_12', 'Dec 2021');
+    
+    LS_AddHtml('case_by_age_description', "\
+      A lot more aged people than younger ones were infected by COVID in Taiwan especially during the outbreak,\
+      while patients were much younger at the beginning of the pandemic in 2020.\
+      This was the reason for Taiwan's high case fatality rate.\
+    ");
   }
 }
 

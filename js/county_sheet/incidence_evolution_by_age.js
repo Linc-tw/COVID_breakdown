@@ -22,14 +22,24 @@ function IEBA_InitFig(wrap) {
 function IEBA_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('incidence_evolution_by_age_title', '各年齡層盛行率變化');
+    
+    LS_AddHtml('incidence_evolution_by_age_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('incidence_evolution_by_age_title', "Évolution du taux d'incidence par tranche d'âge");
+    
+    LS_AddHtml('incidence_evolution_by_age_description', '\
+    ');
   }
   
   else { //-- En
     LS_AddStr('incidence_evolution_by_age_title', 'Evolution of Incidence Rate by Age Group');
+    
+    LS_AddHtml('incidence_evolution_by_age_description', '\
+      In this plot, the incidence rate is defined as the sum of confirmed cases over 7 lookback days per 100k inhabitants of a specific age range.\
+    ');
   }
 }
 

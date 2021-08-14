@@ -16,15 +16,34 @@ function SE_InitFig(wrap) {
 
 function SE_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr("status_evolution_title", "疫情變化");
+    LS_AddStr('status_evolution_title', '疫情變化');
+    
+    LS_AddHtml('status_evolution_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr("status_evolution_title", "Évolution de la situation");
+    LS_AddStr('status_evolution_title', 'Évolution de la situation');
+    
+    LS_AddHtml('status_evolution_description', '\
+    ');
   }
   
   else { //-- En
-    LS_AddStr("status_evolution_title", "Status Evolution");
+    LS_AddStr('status_evolution_title', 'Status Evolution');
+    
+    LS_AddHtml('status_evolution_description', "\
+      All COVID patients in Taiwan are isolated.\
+      They are isolated in hospitals unless hospitals are full.\
+      In such case, patients with light symptoms will be moved to centralized facilities or dedicated hotels.\
+      <br><br>\
+      A patient is discharged when he/she is considered uncontagious.\
+      The exact criteria for discharge vary depending on patient's symptoms\
+      and have been modified several times.\
+      <br><br>\
+      All confirmed cases are in any of the 3 following states:\
+      discharged, hospitalized (isolated), or death.\
+    ");
   }
 }
 

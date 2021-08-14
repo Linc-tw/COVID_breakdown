@@ -17,14 +17,30 @@ function HOI_InitFig(wrap) {
 function HOI_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('hospitalization_or_isolation_title', '住院或確診隔離人數');
+    
+    LS_AddHtml('hospitalization_or_isolation_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('hospitalization_or_isolation_title', "Nombre d'hospitalisation ou de cas confirmés en isolation");
+    
+    LS_AddHtml('hospitalization_or_isolation_description', '\
+    ');
   }
   
   else { //-- En
     LS_AddStr('hospitalization_or_isolation_title', 'Hospitalization or Confirmed Cases in Isolation');
+    
+    LS_AddHtml('hospitalization_or_isolation_description', '\
+      All COVID patients in Taiwan are isolated.\
+      They are isolated in hospitals unless hospitals are full.\
+      In such case, patients with light symptoms will be moved to centralized facilities or dedicated hotels.\
+      <br><br>\
+      The data contain a discontinuous break on June 13th 2021.\
+      This was because the government, overwhelmed by the outbreak, stopped updating the discharged cases.\
+      The highest watermark of number of COVID patients in charge is likely to be around 8k.\
+    ');
   }
 }
 

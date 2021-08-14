@@ -42,6 +42,9 @@ function LCPC_ResetText() {
     LS_AddStr('local_case_per_county_button_penghu', '澎湖');
     LS_AddStr('local_case_per_county_button_kinmen', '金門');
     LS_AddStr('local_case_per_county_button_matsu', '馬祖');
+    
+    LS_AddHtml('local_case_per_county_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
@@ -71,6 +74,9 @@ function LCPC_ResetText() {
     LS_AddStr('local_case_per_county_button_penghu', 'Penghu');
     LS_AddStr('local_case_per_county_button_kinmen', 'Kinmen');
     LS_AddStr('local_case_per_county_button_matsu', 'Matsu');
+    
+    LS_AddHtml('local_case_per_county_description', '\
+    ');
   }
   
   else { //-- En
@@ -100,6 +106,10 @@ function LCPC_ResetText() {
     LS_AddStr('local_case_per_county_button_penghu', 'Penghu');
     LS_AddStr('local_case_per_county_button_kinmen', 'Kinmen');
     LS_AddStr('local_case_per_county_button_matsu', 'Matsu');
+    
+    LS_AddHtml('local_case_per_county_description', '\
+      Most cases were concentrated in Taipei & New Taipei.\
+    ');
   }
 }
 

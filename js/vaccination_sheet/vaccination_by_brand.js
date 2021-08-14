@@ -23,6 +23,9 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_AZ', 'AZ');
     LS_AddStr('vaccination_by_brand_button_Moderna', '莫德納');
     LS_AddStr('vaccination_by_brand_button_Medigen', '高端');
+    
+    LS_AddHtml('vaccination_by_brand_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
@@ -33,6 +36,9 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_AZ', 'AZ');
     LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
     LS_AddStr('vaccination_by_brand_button_Medigen', 'Medigen');
+    
+    LS_AddHtml('vaccination_by_brand_description', '\
+    ');
   }
   
   else { //-- En
@@ -43,6 +49,16 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_AZ', 'AZ');
     LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
     LS_AddStr('vaccination_by_brand_button_Medigen', 'Medigen');
+    
+    LS_AddHtml('vaccination_by_brand_description', "\
+      The count of the previous day is released everyday except for Sunday.\
+      Therefore Saturday's data are always missing.\
+      Some days' data are also missing for unknown reasons.\
+      <br><br>\
+      As the data are released under cumulative counts,\
+      daily counts are only available when cumulative counts are known for two consecutive days.\
+      This explains why there are more missing data in daily counts.\
+    ");
   }
 }
 

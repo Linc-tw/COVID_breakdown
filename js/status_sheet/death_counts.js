@@ -19,18 +19,30 @@ function DC_ResetText() {
     LS_AddStr('death_counts_title', '死亡人數');
     LS_AddStr('death_counts_button_daily', '逐日');
     LS_AddStr('death_counts_button_cumul', '累計');
+    
+    LS_AddHtml('death_counts_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('death_counts_title', 'Nombre de décédés');
     LS_AddStr('death_counts_button_daily', 'Quotidiens');
     LS_AddStr('death_counts_button_cumul', 'Cumulés');
+    
+    LS_AddHtml('death_counts_description', '\
+    ');
   }
   
   else { //-- En
     LS_AddStr('death_counts_title', 'Death Counts');
     LS_AddStr('death_counts_button_daily', 'Daily');
     LS_AddStr('death_counts_button_cumul', 'Cumulative');
+    
+    LS_AddHtml('death_counts_description', '\
+      This statistic is likely to be close to the real death counts.\
+      Since even during the toughest moment of the outbreak,\
+      the situation in Taiwan was far less dramatic than most countries.\
+    ');
   }
 }
 

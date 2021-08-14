@@ -158,8 +158,18 @@
                                     </div>
                                     
                                     <div class="card-img">
-                                        <div class="btn-pos"> 
+                                        <div class="btn-pos">
+                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#status_evolution_collapse" aria-expanded="false" aria-controls="status_evolution_collapse">
+                                                <i class="far fa-comment-alt"></i>
+                                            </button>
+                                            
                                             <button id='status_evolution_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="collapse" id="status_evolution_collapse">
+                                        <div class="card-body">
+                                            <span id="status_evolution_description">
                                         </div>
                                     </div>
                                     
@@ -183,7 +193,17 @@
                                                 <option value="3" id="vaccination_progress_button_Medigen"></option>
                                             </select>
                                             
+                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#vaccination_progress_collapse" aria-expanded="false" aria-controls="vaccination_progress_collapse">
+                                                <i class="far fa-comment-alt"></i>
+                                            </button>
+                                            
                                             <button id='vaccination_progress_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="collapse" id="vaccination_progress_collapse">
+                                        <div class="card-body">
+                                            <span id="vaccination_progress_description">
                                         </div>
                                     </div>
                                     

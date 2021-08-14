@@ -17,14 +17,28 @@ function IR_InitFig(wrap) {
 function IR_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('incidence_rates_title', '境外移入與本土盛行率');
+    
+    LS_AddHtml('incidence_rates_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('incidence_rates_title', "Taux d'incidence frontalier & local");
+    
+    LS_AddHtml('incidence_rates_description', '\
+    ');
   }
   
   else { //-- En
     LS_AddStr('incidence_rates_title', 'Arrival & Local Incidence Rates');
+    
+    LS_AddHtml('incidence_rates_description', '\
+      The arrival incidence rate is defined as the number of imported cases over arrival passenger counts.\
+      This is updated monthly as the border statistics are so.\
+      <br><br>\
+      The local incidence rate is given by the number of local cases over the population.\
+      Here we define it as 7-day moving average per 100k inhabitants.\
+    ');
   }
 }
 
@@ -76,7 +90,6 @@ function IR_FormatData(wrap, data) {
     
     y_list_list.push(y_list)
   }
-  
   
   //-- Main loop over column
   for (j=0; j<nb_col; j++) {

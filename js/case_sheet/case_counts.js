@@ -23,6 +23,9 @@ function CC_ResetText() {
     LS_AddStr('case_counts_button_imported', '境外移入');
     LS_AddStr('case_counts_button_local', '本土');
     LS_AddStr('case_counts_button_others', '其他');
+    
+    LS_AddHtml('case_counts_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
@@ -33,6 +36,9 @@ function CC_ResetText() {
     LS_AddStr('case_counts_button_imported', 'Importés');
     LS_AddStr('case_counts_button_local', 'Locaux');
     LS_AddStr('case_counts_button_others', 'Divers');
+    
+    LS_AddHtml('case_counts_description', '\
+    ');
   }
   
   else { //-- En
@@ -43,6 +49,10 @@ function CC_ResetText() {
     LS_AddStr('case_counts_button_imported', 'Imported');
     LS_AddStr('case_counts_button_local', 'Local');
     LS_AddStr('case_counts_button_others', 'Others');
+    
+    LS_AddHtml('case_counts_description', '\
+      The transmission type \"Others\" includes \"on boat\", \"on plane\", & \"unknown origin\".\
+    ');
   }
 }
 

@@ -73,6 +73,9 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_2021_10', '2021年10月');
     LS_AddStr('incidence_map_button_2021_11', '2021年11月');
     LS_AddStr('incidence_map_button_2021_12', '2021年12月');
+    
+    LS_AddHtml('incidence_map_description', '\
+    ');
   }
   
   else if (LS_lang == 'fr') {
@@ -128,6 +131,9 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_2021_10', 'Oct 2021');
     LS_AddStr('incidence_map_button_2021_11', 'Nov 2021');
     LS_AddStr('incidence_map_button_2021_12', 'Déc 2021');
+    
+    LS_AddHtml('incidence_map_description', '\
+    ');
   }
   
   else { //-- En
@@ -183,6 +189,11 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_2021_10', 'Oct 2021');
     LS_AddStr('incidence_map_button_2021_11', 'Nov 2021');
     LS_AddStr('incidence_map_button_2021_12', 'Dec 2021');
+    
+    LS_AddHtml('incidence_map_description', '\
+      The outbreak of May 2021 was concentrated at Taipei & New Taipei.\
+      More than 80% of the total cases were observed in these 2 areas.\
+    ');
   }
 }
 
