@@ -41,7 +41,7 @@ function SE_ResetText() {
       The exact criteria for discharge vary depending on patient's symptoms\
       and have been modified several times.\
       <br><br>\
-      All confirmed cases are in any of the 3 following states:\
+      All confirmed cases are in 1 of the 3 following states:\
       discharged, hospitalized (isolated), or death.\
     ");
   }

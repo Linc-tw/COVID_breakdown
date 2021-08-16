@@ -126,6 +126,7 @@ TRAVEL_HISTORY_DICT = {
   'Ireland': {'zh-tw': '愛爾蘭', 'fr': 'Irlande'},
   'Italy': {'zh-tw': '義大利', 'fr': 'Italie'},
   'Hungary': {'zh-tw': '匈牙利',  'fr': 'Hongrie'},
+  'Lithuania': {'zh-tw': '立陶宛', 'fr': 'Lituanie'},
   'Luxemburg': {'zh-tw': '盧森堡', 'fr': 'Luxembourg'},
   'Netherlands': {'zh-tw': '荷蘭', 'fr': 'Pays-Bas'},
   'Poland': {'zh-tw': '波蘭', 'fr': 'Pologne'},
@@ -409,7 +410,7 @@ DELIVERY_LIST = [
   [     'AZ', 'Lithuania',   19400, '2021-07-31', '2021-08-10', 'https://www.cna.com.tw/news/firstnews/202107310085.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600484'],
   ['Moderna',   'Moderna',   99600, '2021-08-08', '', 'https://www.cna.com.tw/news/firstnews/202108090129.aspx', ''],
   [     'AZ',        'AZ',  524200, '2021-08-12', '', 'https://www.cna.com.tw/news/firstnews/202108120201.aspx', ''],
-  ['Moderna',   'Moderna',       0, '2021-08-15', '', '', ''],
+  ['Moderna',   'Moderna',  249000, '2021-08-15', '', 'https://www.cna.com.tw/news/firstnews/202108155005.aspx', ''],
 ]
 
 ################################################################################

@@ -19,14 +19,26 @@ function HOI_ResetText() {
     LS_AddStr('hospitalization_or_isolation_title', '住院或確診隔離人數');
     
     LS_AddHtml('hospitalization_or_isolation_description', '\
+      在台灣，所有嚴重特殊傳染性肺炎患者需依法隔離。\
+      衛生單位會盡可能安排病患住院，當醫療量能滿載時，則將輕症病患轉往集中檢疫所或防疫旅館。\
+      <br><br>\
+      隔離人數資料在2021年6月13日有個斷點，原因是指揮中心先前因疫情爆發無暇整理，\
+      一夕之間更新數字，進而造成不連續變化。\
     ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('hospitalization_or_isolation_title', "Nombre d'hospitalisation ou de cas confirmés en isolation");
     
-    LS_AddHtml('hospitalization_or_isolation_description', '\
-    ');
+    LS_AddHtml('hospitalization_or_isolation_description', "\
+      Tous les patients de covid sont isolés à Taïwan.\
+      Ils sont isolés aux hôpitaux sauf si les hôpitaux sont pleins.\
+      Dans le cas échéant, les patients avec symptômes légers sont mis dans des infrastructures centralisées ou des hôtels dédiés.\
+      <br><br>\
+      Il existe une discontinuité au 13 juin 2021 dans les données.\
+      Ceci est dû au gouvernement, dépassé par la vague, a arrêté de mettre les données des cas rétablis à jour pendant un certain temps avant d'y revenir.\
+      Au moment le plus chargé, il y aurait 8000 patients de covid en même temps.\
+    ");
   }
   
   else { //-- En
@@ -38,7 +50,7 @@ function HOI_ResetText() {
       In such case, patients with light symptoms will be moved to centralized facilities or dedicated hotels.\
       <br><br>\
       The data contain a discontinuous break on June 13th 2021.\
-      This was because the government, overwhelmed by the outbreak, stopped updating the discharged cases.\
+      This was because the government, overwhelmed by the outbreak, stopped updating the discharged cases before coming back suddenly.\
       The highest watermark of number of COVID patients in charge is likely to be around 8k.\
     ');
   }

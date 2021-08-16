@@ -21,6 +21,15 @@ function TC_ResetText() {
     LS_AddStr('test_counts_button_cumul', '累計');
     
     LS_AddHtml('test_counts_description', '\
+      台灣政府長久以來對於廣篩相對保守，原因有三：\
+      <br>\
+      - 盛行率不高、\
+      <br>\
+      - 避免偽陽性癱瘓疫調系統和消耗隔離量能、\
+      <br>\
+      - 檢驗人力不足。\
+      <br><br>\
+      即便2021年5月的高峰後有明顯政策改變，和多數國家相比台灣的篩檢量依舊算少，每日篩檢量不曾超過38000人次。\
     ');
   }
   
@@ -29,8 +38,19 @@ function TC_ResetText() {
     LS_AddStr('test_counts_button_daily', 'Quotidiens');
     LS_AddStr('test_counts_button_cumul', 'Cumulés');
     
-    LS_AddHtml('test_counts_description', '\
-    ');
+    LS_AddHtml('test_counts_description', "\
+      Taïwan se restreint à tester massivement pour 3 raisons :\
+      <br>\
+      - le taux d'incidence est plutôt bas,\
+      <br>\
+      - éviter le débordement du système du traçage et d'isolation par les faux-positifs,\
+      <br>\
+      - manque de personnels.\
+      <br><br>\
+      Même s'il y a clairement un changement de politique entre avant et après la vague de mai 2021,\
+      le nombre de tests reste bas par rapport à la plupart des pays.\
+      Le nombre de tests conduits par jour n'a jamais dépassé 38k.\
+    ");
   }
   
   else { //-- En
@@ -41,9 +61,9 @@ function TC_ResetText() {
     LS_AddHtml('test_counts_description', '\
       Taiwan is rather conservative about testing for 3 reasons:\
       <br>\
-      - to avoid false positives overwhelming the trace-and-isolate system,\
+      - low incidence rate,\
       <br>\
-      - low incidence rate, &\
+      - to avoid false positives overwhelming the trace-and-isolate system, &\
       <br>\
       - lack of human resource.\
       <br><br>\

@@ -21,6 +21,9 @@ function DC_ResetText() {
     LS_AddStr('death_counts_button_cumul', '累計');
     
     LS_AddHtml('death_counts_description', '\
+      台灣的死亡統計應該不會偏離實際死亡人數太多，\
+      因為即便是在疫情最緊張的時期，\
+      醫院的情況都比多數國家還要好上許多。\
     ');
   }
   
@@ -29,8 +32,10 @@ function DC_ResetText() {
     LS_AddStr('death_counts_button_daily', 'Quotidiens');
     LS_AddStr('death_counts_button_cumul', 'Cumulés');
     
-    LS_AddHtml('death_counts_description', '\
-    ');
+    LS_AddHtml('death_counts_description', "\
+      Cette statistique semberait d'être proche de la réalité car même pendant le moment le plus dûr de la pandémie,\
+      la situation hospitalière à Taïwan était beaucoup moins dramatique que la plupart des pays.\
+    ");
   }
   
   else { //-- En
@@ -39,9 +44,9 @@ function DC_ResetText() {
     LS_AddStr('death_counts_button_cumul', 'Cumulative');
     
     LS_AddHtml('death_counts_description', '\
-      This statistic is likely to be close to the real death counts.\
+      This statistic would likely be close to the real death counts.\
       Since even during the toughest moment of the outbreak,\
-      the situation in Taiwan was far less dramatic than most countries.\
+      the situation of hospitals in Taiwan was far less dramatic than most countries.\
     ');
   }
 }

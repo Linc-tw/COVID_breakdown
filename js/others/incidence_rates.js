@@ -19,14 +19,24 @@ function IR_ResetText() {
     LS_AddStr('incidence_rates_title', '境外移入與本土盛行率');
     
     LS_AddHtml('incidence_rates_description', '\
+      入境盛行率之定義為境外移入個案數除以入境旅客數。\
+      此統計受入出境資料影響，只在每月初更新。\
+      <br><br>\
+      本土盛行率之定義為本土個案數除以總人口。\
+      此圖所呈現之本土盛行率，為自該日起回推七日內之平均（而非總合），再乘以1000。\
     ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('incidence_rates_title', "Taux d'incidence frontalier & local");
     
-    LS_AddHtml('incidence_rates_description', '\
-    ');
+    LS_AddHtml('incidence_rates_description', "\
+      Le taux d'incidence frontalier est défini comme le nombre de cas importés sur le nombre de passagers arrivés.\
+      Ceci est mis à jour au début de chaque mois car la statistique frontalière en est ainsi.\
+      <br><br>\
+      Le taux d'incidence local est définit comme le nombre de cas locaux sur la population.\
+      Dans cette figure, on le définit comme la moyenne glissante sur 7 jours multipliée par 1000.\
+    ");
   }
   
   else { //-- En
@@ -34,10 +44,10 @@ function IR_ResetText() {
     
     LS_AddHtml('incidence_rates_description', '\
       The arrival incidence rate is defined as the number of imported cases over arrival passenger counts.\
-      This is updated monthly as the border statistics are so.\
+      This is updated only at the beginning of each month as the border statistics are so.\
       <br><br>\
       The local incidence rate is given by the number of local cases over the population.\
-      Here we define it as 7-day moving average per 100k inhabitants.\
+      In this plot, we define it as 7-day moving average multiplied by 1000.\
     ');
   }
 }

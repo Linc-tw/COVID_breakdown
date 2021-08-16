@@ -67,6 +67,9 @@ function CBA_ResetText() {
     LS_AddStr('case_by_age_button_2021_12', '2021年12月');
     
     LS_AddHtml('case_by_age_description', '\
+      在2020疫情剛開始時，確診個案平均年齡偏低，\
+      但2021年5月所爆發的感染則是老人多於年輕人。\
+      這也是台灣致死率偏高的原因。\
     ');
   }
   
@@ -122,8 +125,12 @@ function CBA_ResetText() {
     LS_AddStr('case_by_age_button_2021_11', 'Nov 2021');
     LS_AddStr('case_by_age_button_2021_12', 'Déc 2021');
     
-    LS_AddHtml('case_by_age_description', '\
-    ');
+    LS_AddHtml('case_by_age_description', "\
+      Il y a plus de personnes âges que les jeunes qui ont été infectées par la covid à Taïwan,\
+      surtout pendant la vague de mai 2021.\
+      La moyenne d'âge des patients était plus basse au début de la pandémic en 2020.\
+      Ceci est la raison pour laquelle la mortalité est élevée à Taïwan.\
+    ");
   }
   
   else { //-- En
@@ -180,7 +187,7 @@ function CBA_ResetText() {
     
     LS_AddHtml('case_by_age_description', "\
       A lot more aged people than younger ones were infected by COVID in Taiwan especially during the outbreak,\
-      while patients were much younger at the beginning of the pandemic in 2020.\
+      while the age of patients was much lower at the beginning of the pandemic in 2020.\
       This was the reason for Taiwan's high case fatality rate.\
     ");
   }

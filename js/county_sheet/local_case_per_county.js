@@ -44,6 +44,7 @@ function LCPC_ResetText() {
     LS_AddStr('local_case_per_county_button_matsu', '馬祖');
     
     LS_AddHtml('local_case_per_county_description', '\
+      大多數案例集中在雙北地區。\
     ');
   }
   
@@ -76,6 +77,7 @@ function LCPC_ResetText() {
     LS_AddStr('local_case_per_county_button_matsu', 'Matsu');
     
     LS_AddHtml('local_case_per_county_description', '\
+      La plupart des cas se concentraient à Taipei et à Nouveau Taipei.\
     ');
   }
   

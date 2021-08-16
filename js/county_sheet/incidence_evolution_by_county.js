@@ -24,21 +24,25 @@ function IEBC_ResetText() {
     LS_AddStr('incidence_evolution_by_county_title', '各縣市盛行率變化');
     
     LS_AddHtml('incidence_evolution_by_county_description', '\
+      此圖中，盛行率之定義為自該日起回推七日內，指定縣市每十萬人本土個案數之總合（而非平均）。\
     ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('incidence_evolution_by_county_title', "Évolution du taux d'incidence par ville et comté");
     
-    LS_AddHtml('incidence_evolution_by_county_description', '\
-    ');
+    LS_AddHtml('incidence_evolution_by_county_description', "\
+      Dans cette figure, le taux d'incidence est défini comme la somme (non pas la moyenne) des cas locaux pendant 7 derniers jours,\
+      pour 100k habitants de la ville ou du comté indiqué.\
+    ");
   }
   
   else { //-- En
     LS_AddStr('incidence_evolution_by_county_title', 'Evolution of Incidence Rate by City & County');
     
     LS_AddHtml('incidence_evolution_by_county_description', '\
-      In this plot, the incidence rate is defined as the sum of local cases over 7 lookback days per 100k inhabitants.\
+      In this plot, the incidence rate is defined as the sum (instead of average) of local cases during 7 lookback days,\
+      for every 100k inhabitants of the indicated city or county.\
     ');
   }
 }
@@ -185,7 +189,7 @@ function IEBC_Replot(wrap) {
   if (LS_lang == 'zh-tw')
     legend_caption = ['近45日統計', '每十萬人過去七日確診數總合'];
   else if (LS_lang == 'fr')
-    legend_caption = ['45 derniers jours', 'Nombre de cas confirmés sur 7 jours par 100k habitants'];
+    legend_caption = ['45 derniers jours', 'Nombre de cas confirmés sur 7 jours pour 100k habitants'];
   else 
     legend_caption = ['Last 45 days', 'Number of confirmed cases over 7 days per 100k inhabitants'];
   

@@ -75,6 +75,10 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_2021_12', '2021年12月');
     
     LS_AddHtml('incidence_map_description', '\
+      2021年5月所爆發的感染多半集中於雙北地區，\
+      其確診個案佔全國總數八成以上。\
+      <br><br>\
+      此圖中，盛行率之定義為指定期間內，每十萬人本土個案數之總合（而非平均）。\
     ');
   }
   
@@ -132,8 +136,13 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_2021_11', 'Nov 2021');
     LS_AddStr('incidence_map_button_2021_12', 'Déc 2021');
     
-    LS_AddHtml('incidence_map_description', '\
-    ');
+    LS_AddHtml('incidence_map_description', "\
+      La vague de mai 2021 se concentraient à Taipei et à Nouveau Taipei.\
+      Plus de 80% des cas ont été observés dans ces 2 régions.\
+      <br><br>\
+      Le taux d'incidence est défini comme la somme (non pas la moyenne) des cas locaux pendant la période spécifique,\
+      pour 100k habitants de la ville ou du comté indiqué.\
+    ");
   }
   
   else { //-- En
@@ -193,6 +202,9 @@ function IM_ResetText() {
     LS_AddHtml('incidence_map_description', '\
       The outbreak of May 2021 was concentrated at Taipei & New Taipei.\
       More than 80% of the total cases were observed in these 2 areas.\
+      <br><br>\
+      The incidence rate is defined as the sum (instead of average) of local cases during the chosen period,\
+      for every 100k inhabitants of the indicated city or county.\
     ');
   }
 }
@@ -428,7 +440,7 @@ function IM_Replot(wrap) {
     if (LS_lang == 'zh-tw')
       legend_caption_top = ['每十萬人確診率'];
     else if (LS_lang == 'fr')
-      legend_caption_top = ["Taux d'incidence par 100k habitants"];
+      legend_caption_top = ["Taux d'incidence pour 100k habitants"];
     else 
       legend_caption_top = ['Incidence rate per 100k inhabitants'];
   }

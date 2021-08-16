@@ -23,6 +23,7 @@ function BS_ResetText() {
     LS_AddStr('border_statistics_button_total', '合計');
     
     LS_AddHtml('border_statistics_description', '\
+      入出境統計僅於每月初更新。\
     ');
   }
   
@@ -34,6 +35,7 @@ function BS_ResetText() {
     LS_AddStr('border_statistics_button_total', 'Totaux');
     
     LS_AddHtml('border_statistics_description', '\
+      Les statistiques frontalières sont mises à jour uniquement au début du mois.\
     ');
   }
   
@@ -45,7 +47,7 @@ function BS_ResetText() {
     LS_AddStr('border_statistics_button_total', 'Total');
     
     LS_AddHtml('border_statistics_description', '\
-      The border statistics are updated monthly at the beginning of each month.\
+      The border statistics are updated only at the beginning of each month.\
     ');
   }
 }
