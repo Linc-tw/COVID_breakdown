@@ -57,6 +57,18 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_death_1', '死亡人數');
     
     LS_AddHtml('stats_in_mirror_description', '\
+      使用者可於此圖挑選：\
+      <br>\
+      - 檢驗人次\
+      <br>\
+      - 確診人數\
+      <br>\
+      - 住院人數\
+      <br>\
+      - 死亡人數\
+      <br>\
+      當中之任兩者並列比較。\
+      此設計將有助於突顯比較不同統計隨時間之變化。\
     ');
   }
   
@@ -71,8 +83,20 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_death_0', 'Décédés');
     LS_AddStr('stats_in_mirror_button_death_1', 'Décédés');
     
-    LS_AddHtml('stats_in_mirror_description', '\
-    ');
+    LS_AddHtml('stats_in_mirror_description', "\
+      Ce panneau permet les utilisateurs de choisir parmi :\
+      <br>\
+      - le nombre de tests,\
+      <br>\
+      - le nombre de cas confirmés,\
+      <br>\
+      - le nombre d'hospitalisation et\
+      <br>\
+      - le nombre de décédés,\
+      <br>\
+      et de présenter n'importe quels 2 de ceux-ci côte-à-côte.\
+      Ceci fournit une meilleure comparaison entre les évolutions des statistiques différentes.\
+    ");
   }
   
   else { //-- En
@@ -93,7 +117,7 @@ function SIM_ResetText() {
       <br>\
       - confirmed case counts,\
       <br>\
-      - number of hospitalization, and\
+      - the number of hospitalization, and\
       <br>\
       - death counts,\
       <br>\

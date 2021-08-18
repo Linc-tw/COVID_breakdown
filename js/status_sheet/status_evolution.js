@@ -19,30 +19,44 @@ function SE_ResetText() {
     LS_AddStr('status_evolution_title', '疫情變化');
     
     LS_AddHtml('status_evolution_description', '\
+      確診個案有三種狀態：解隔離、住院（隔離）中、死亡。\
+      <br><br>\
+      在台灣，所有嚴重特殊傳染性肺炎患者需依法隔離。\
+      衛生單位會盡可能安排病患住院，當醫療量能滿載時，則將輕症病患轉往集中檢疫所或防疫旅館。\
+      <br><br>\
+      確診者若不再有傳染力，則可解除隔離，至於傳染與否之判斷標準因先前症狀而異。\
     ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('status_evolution_title', 'Évolution de la situation');
     
-    LS_AddHtml('status_evolution_description', '\
-    ');
+    LS_AddHtml('status_evolution_description', "\
+      Tous les cas confirmés sont dans 1 des 3 états suivant :\
+      rétabli, hospitalisé (isolé) ou décédé.\
+      <br><br>\
+      Tous les patients de covid sont isolés à Taïwan.\
+      Ils sont isolés aux hôpitaux sauf si les hôpitaux sont pleins.\
+      Dans le cas échéant, les patients avec symptômes légers sont mis dans des infrastructures centralisées ou des hôtels dédiés.\
+      <br><br>\
+      Un patient est rétabli quand il/elle est considéré sans contagiosité.\
+      Les critères exactes pour le juger varient selon les symptômes d'avant.\
+    ");
   }
   
   else { //-- En
     LS_AddStr('status_evolution_title', 'Status Evolution');
     
     LS_AddHtml('status_evolution_description', "\
-      All COVID patients in Taiwan are isolated.\
-      They are isolated in hospitals unless hospitals are full.\
-      In such case, patients with light symptoms will be moved to centralized facilities or dedicated hotels.\
-      <br><br>\
-      A patient is discharged when he/she is considered uncontagious.\
-      The exact criteria for discharge vary depending on patient's symptoms\
-      and have been modified several times.\
-      <br><br>\
       All confirmed cases are in 1 of the 3 following states:\
       discharged, hospitalized (isolated), or death.\
+      <br><br>\
+      All COVID patients in Taiwan are isolated.\
+      They are isolated in hospitals unless hospitals are full.\
+      In such case, patients with light symptoms will be transferred to centralized facilities or dedicated hotels.\
+      <br><br>\
+      A patient is discharged when he/she is considered uncontagious.\
+      The exact criteria for discharge vary depending on patient's symptoms.\
     ");
   }
 }

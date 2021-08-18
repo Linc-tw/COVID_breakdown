@@ -47,7 +47,7 @@ function HOI_ResetText() {
     LS_AddHtml('hospitalization_or_isolation_description', '\
       All COVID patients in Taiwan are isolated.\
       They are isolated in hospitals unless hospitals are full.\
-      In such case, patients with light symptoms will be moved to centralized facilities or dedicated hotels.\
+      In such case, patients with light symptoms will be transferred to centralized facilities or dedicated hotels.\
       <br><br>\
       The data contain a discontinuous break on June 13th 2021.\
       This was because the government, overwhelmed by the outbreak, stopped updating the discharged cases before coming back suddenly.\

@@ -19,14 +19,36 @@ function PAF_ResetText() {
     LS_AddStr('positivity_and_fatality_title', '陽性率與致死率');
     
     LS_AddHtml('positivity_and_fatality_description', '\
+      陽性率的定義為確診人數除以檢驗人次。\
+      陽性率越高代表篩檢族群中的傳播鍊越多，尚未揪出之潛在確診者也可能越多。\
+      這裡所呈現之陽性率為7日平均。\
+      <br><br>\
+      致死率的定義為死亡人數除以確診人數。\
+      由於死亡往往不會立即在確診後發生，\
+      因此通常得用累積一段時間的統計才能計算。\
+      這裡呈現的是整體致死率的變化，每點都是疫情初期到當日的統計結果。\
+      <br><br>\
+      台灣之所以致死率偏高，是因為大爆發時確診病患以年長者居多。\
     ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('positivity_and_fatality_title', 'Taux de positivité et de létalité');
     
-    LS_AddHtml('positivity_and_fatality_description', '\
-    ');
+    LS_AddHtml('positivity_and_fatality_description', "\
+      Le taux de positivité ou la positivité est défini comme le nombre de cas confirmés sur le nombre de tests conduits.\
+      Plus la positivité est élevée, plus il y a des transmissions au sein de la population examinée\
+      et plus il est possible qu'il y a des patients non identifiés.\
+      Ici pour la positivité, la moyenne glissante sur 7 jours est présentée.\
+      <br><br>\
+      Le taux de létalité est défini comme le nombre de décédés sur le nombre de cas confirmés.\
+      Comme les décès n'ont souvent pas lieu tout de suite après être diagnostiqués,\
+      il est plus commode de calculer la létalité sur une période longue.\
+      Ici, on choisit de montrer l'évolution de la létalité globale,\
+      i.e. calculée à partir du début de la pandémie.\
+      <br><br>\
+      La létalité est élevée à Taïwan car les patients sont plutôt âgés pendant la vague importante.\
+    ");
   }
   
   else { //-- En
@@ -41,7 +63,7 @@ function PAF_ResetText() {
       The case fatality rate (CFR) is defined as the number of deaths over the confirmed case counts.\
       Since the death usually happens a while after being diagnosed,\
       CFR can only be calculated on a long period.\
-      Here we choose to show the overall CFR,\
+      Here we choose to show the evolution of the overall CFR,\
       i.e. since the beginning of the pandemic.\
       <br><br>\
       CFR is high in Taiwan as the infected people during the outbreak were quite aged.\

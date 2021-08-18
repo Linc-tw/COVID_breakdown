@@ -21,9 +21,9 @@ function DC_ResetText() {
     LS_AddStr('death_counts_button_cumul', '累計');
     
     LS_AddHtml('death_counts_description', '\
-      台灣的死亡統計應該不會偏離實際死亡人數太多，\
-      因為即便是在疫情最緊張的時期，\
-      醫院的情況都比多數國家還要好上許多。\
+      台灣死亡統計應不會偏離實際死亡人數太多，\
+      因為即便是疫情最緊張的時期，\
+      醫院情況都比多數國家好上許多。\
     ');
   }
   
