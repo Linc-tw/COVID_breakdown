@@ -19,6 +19,8 @@ function VBD_ResetText() {
     LS_AddStr('vaccination_by_dose_title', '疫苗劑次接種進度');
     
     LS_AddHtml('vaccination_by_dose_description', '\
+      台灣的接種策略為拉長兩劑間距以提升第一劑覆蓋率，\
+      此圖充分反映該措施所致結果。\
     ');
   }
   
@@ -26,6 +28,8 @@ function VBD_ResetText() {
     LS_AddStr('vaccination_by_dose_title', 'Avancement de vaccination par nombre de doses');
     
     LS_AddHtml('vaccination_by_dose_description', '\
+      Taïwan favorise la couverture vaccinale de la 1ère dose à la couverture totale.\
+      Cette figure montre la conséquence de cette mesure.\
     ');
   }
   

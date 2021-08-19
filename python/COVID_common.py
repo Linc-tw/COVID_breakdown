@@ -98,6 +98,7 @@ TRAVEL_HISTORY_DICT = {
   
   ## West & Central Asia
   'Afghanistan': {'zh-tw': '阿富汗', 'fr': 'Afghanistan'},
+  'Iran': {'zh-tw': '伊朗', 'fr': 'Iran'},
   'Kazakhstan': {'zh-tw': '哈薩克', 'fr': 'Kazakhstan'}, 
   'Kyrgyzstan': {'zh-tw': '吉爾吉斯', 'fr': 'Kirghizistan'},
   'Oman': {'zh-tw': '阿曼', 'fr': 'Oman'},

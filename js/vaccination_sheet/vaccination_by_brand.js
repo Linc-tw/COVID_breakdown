@@ -25,6 +25,13 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_Medigen', '高端');
     
     LS_AddHtml('vaccination_by_brand_description', '\
+      除週日外，衛服部每日公佈前一日之疫苗接種人數，\
+      因此無星期六資料。\
+      其他日資料則偶有缺陷，原因不詳。\
+      <br><br>\
+      由於原始資料為累計施打人數，\
+      因此只有接連兩日資料完整時才能計算每日施打人數，\
+      這解釋了為何逐日人數缺資料比累計人數多。\
     ');
   }
   
@@ -37,8 +44,15 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
     LS_AddStr('vaccination_by_brand_button_Medigen', 'Medigen');
     
-    LS_AddHtml('vaccination_by_brand_description', '\
-    ');
+    LS_AddHtml('vaccination_by_brand_description', "\
+      Tous les jours sauf dimanche le résultat de la veille est publié.\
+      C'est pour cela que les données de samedi est toujours manquées.\
+      Parfois les données d'autres jours sont manquées pour une raison inconnue.\
+      <br><br>\
+      Comme les résultats sont publiés en nombres cumulés,\
+      il faut que les données de 2 jours consécutifs sont connues pour pouvoir calculer le nombre de doses quotidien.\
+      Ceci explique pourquoi il y a plus de données manquantes pour le comptage quotidien que pour le compage cumulé.\
+    ");
   }
   
   else { //-- En
@@ -51,7 +65,7 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_Medigen', 'Medigen');
     
     LS_AddHtml('vaccination_by_brand_description', "\
-      The count of the previous day is released everyday except for Sunday.\
+      Everyday except for Sunday the result of the previous day is released .\
       Therefore Saturday's data are always missing.\
       Some days' data are also missing for unknown reasons.\
       <br><br>\

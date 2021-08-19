@@ -23,6 +23,11 @@ function VP_ResetText() {
     LS_AddStr('vaccination_progress_button_Medigen', '高端');
   
     LS_AddHtml('vaccination_progress_description', '\
+      疫苗之實際施打劑數可能大於到貨劑量數，\
+      因為抽完常規劑量後的殘餘液往往足以再供人施打，\
+      這些殘劑大約有總到貨量的10%。\
+      <br><br>\
+      台灣疫苗接種已多次發生因延誤到貨導致進度停滯的現象。\
     ');
   }
   
@@ -33,8 +38,13 @@ function VP_ResetText() {
     LS_AddStr('vaccination_progress_button_Moderna', 'Moderna');
     LS_AddStr('vaccination_progress_button_Medigen', 'Medigen');
   
-    LS_AddHtml('vaccination_progress_description', '\
-    ');
+    LS_AddHtml('vaccination_progress_description', "\
+      Le nombre de doses administrées peut être supérieur au nombre de doses approvisionnées,\
+      car les doses supplémentaires peuvent être extraites de chaque flacon.\
+      Ces bonus prennent jusqu'à 10% de l'approvisionnement total.\
+      <br><br>\
+      L'avancement de la campagne de vaccination a été limité à plusieurs reprises par le retard des livraisons.\
+    ");
   }
   
   else { //-- En

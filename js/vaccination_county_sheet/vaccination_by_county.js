@@ -29,6 +29,13 @@ function VBC_ResetText() {
     LS_AddStr('vaccination_by_county_title', '各縣市疫苗接種進度');
     
     LS_AddHtml('vaccination_by_county_description', '\
+      各縣市疫苗接種率高的原因：\
+      <br>\
+      - 馬祖、澎湖：因醫療資源不足優先施打\
+      <br>\
+      - 台北：疫情爆發最嚴重\
+      <br><br>\
+      本圖資料似於2021年7月26日起停止更新。\
     ');
   }
   
@@ -36,6 +43,13 @@ function VBC_ResetText() {
     LS_AddStr('vaccination_by_county_title', 'Vaccination par ville et comté');
     
     LS_AddHtml('vaccination_by_county_description', '\
+      Le taux de vaccination est particulièrement élevé à Taipei, Penghu et Matsu pour des raisons différentes :\
+      <br>\
+      - Matsu & Penghu: priorisés à cause du manque de ressources médicales &\
+      <br>\
+      - Taipei: épicentre de la dernière vague.\
+      <br><br>\
+      Les données de cette figure ne sont plus mises à jour depuis à partir du 26 juillet 2021.\
     ');
   }
   
@@ -45,13 +59,11 @@ function VBC_ResetText() {
     LS_AddHtml('vaccination_by_county_description', '\
       The vaccination rates of Taipei, Penghu, & Matsu are particularly high for various reasons:\
       <br>\
-      - Matsu: prioritized due to lack of medical resources,\
-      <br>\
-      - Penghu: discovery of a cluster of Delta variant, &\
+      - Matsu & Penghu: prioritized due to lack of medical resources &\
       <br>\
       - Taipei: epicenter of the last outbreak.\
       <br><br>\
-      Since July 26th, the update of data for this plot has been suspended.\
+      Since July 26th 2021, the update of data for this plot has been suspended.\
     ');
   }
 }
