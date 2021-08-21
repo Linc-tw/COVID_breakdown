@@ -250,6 +250,7 @@ class CaseSheet(ccm.Template):
       'Netherlands': ['荷蘭'], 
       'Poland': ['波蘭'], 
       'Portugal': ['葡萄牙'], 
+      'Romania': ['羅馬尼亞'],
       'Russia': ['俄羅斯'],
       'Slovakia': ['斯洛伐克'],
       'Spain': ['西班牙'], 

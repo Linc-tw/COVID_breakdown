@@ -132,6 +132,7 @@ TRAVEL_HISTORY_DICT = {
   'Netherlands': {'zh-tw': '荷蘭', 'fr': 'Pays-Bas'},
   'Poland': {'zh-tw': '波蘭', 'fr': 'Pologne'},
   'Portugal': {'zh-tw': '葡萄牙', 'fr': 'Portugal'},
+  'Romania': {'zh-tw': '羅馬尼亞', 'fr': 'Roumanie'},
   'Russia': {'zh-tw': '俄羅斯', 'fr': 'Russie'},
   'Slovakia': {'zh-tw': '斯洛伐克', 'fr': 'Slovaquie'},
   'Spain': {'zh-tw': '西班牙', 'fr': 'Espagne'},
@@ -411,7 +412,7 @@ DELIVERY_LIST = [
   [     'AZ', 'Lithuania',   19400, '2021-07-31', '2021-08-10', 'https://www.cna.com.tw/news/firstnews/202107310085.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600484'],
   ['Moderna',   'Moderna',   99000, '2021-08-08', '2021-08-17', 'https://www.cna.com.tw/news/firstnews/202108090129.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600498'],
   ['Medigen',   'Medigen',  261766,           '', '2021-08-17',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600498'],
-  [     'AZ',        'AZ',  524200, '2021-08-12', '', 'https://www.cna.com.tw/news/firstnews/202108120201.aspx', ''],
+  [     'AZ',        'AZ',  524200, '2021-08-12', '2021-08-20', 'https://www.cna.com.tw/news/firstnews/202108120201.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600505'],
   ['Moderna',   'Moderna',  249000, '2021-08-15', '', 'https://www.cna.com.tw/news/firstnews/202108155005.aspx', ''],
 ]
 

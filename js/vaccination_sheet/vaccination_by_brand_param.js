@@ -22,7 +22,7 @@ var VBB_latest_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  y_max_factor: 1.15, 
+  y_max_factor: 1.4, 
   nb_yticks: 4,
   legend_pos_x: 115, 
   legend_pos_x1_: {en: 190, fr: 190, 'zh-tw': 170},
