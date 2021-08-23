@@ -17,7 +17,6 @@ function BS_InitFig(wrap) {
 function BS_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('border_statistics_title', '入出境人數統計');
-    LS_AddStr('border_statistics_text', '逐月更新');
     LS_AddStr('border_statistics_button_entry', '入境');
     LS_AddStr('border_statistics_button_exit', '出境');
     LS_AddStr('border_statistics_button_total', '合計');
