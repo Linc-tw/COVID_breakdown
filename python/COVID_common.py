@@ -413,7 +413,8 @@ DELIVERY_LIST = [
   ['Moderna',   'Moderna',   99000, '2021-08-08', '2021-08-17', 'https://www.cna.com.tw/news/firstnews/202108090129.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600498'],
   ['Medigen',   'Medigen',  261766,           '', '2021-08-17',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600498'],
   [     'AZ',        'AZ',  524200, '2021-08-12', '2021-08-20', 'https://www.cna.com.tw/news/firstnews/202108120201.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600505'],
-  ['Moderna',   'Moderna',  249000, '2021-08-15', '', 'https://www.cna.com.tw/news/firstnews/202108155005.aspx', ''],
+  ['Moderna',   'Moderna',  249000, '2021-08-15', '2021-08-24', 'https://www.cna.com.tw/news/firstnews/202108155005.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600513'],
+  ['Medigen',   'Medigen',  263586,           '', '2021-08-24',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600513'],
 ]
 
 ################################################################################
