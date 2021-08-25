@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_common.py         ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.08.04      ##
+    ##  Version 2021.08.25      ##
     ##############################
 
 import os
@@ -389,6 +389,14 @@ COUNTY_DICT_2 = {
   '金門縣': 'Kinmen',
   '連江縣': 'Matsu',
   '空值': 'unknown',
+}
+
+BRAND_DICT = {
+  'ALL': 'total',
+  'Oxford/AstraZeneca': 'AZ',
+  'Moderna': 'Moderna',
+  '高端': 'Medigen',
+  '\u9ad8\u7aef': 'Medigen',
 }
 
 DELIVERY_LIST = [

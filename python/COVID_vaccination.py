@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_vaccination.py    ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.07.30      ##
+    ##  Version 2021.08.25      ##
     ##############################
 
 import os
@@ -25,41 +25,21 @@ class VaccinationSheet(ccm.Template):
   def __init__(self, verbose=True):
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_vaccination.json' % ccm.DATA_PATH
     data = ccm.loadJson(name, verbose=verbose)
-    #https://covid-19.nchc.org.tw/dt_002-csse_covid_19_daily_reports_vaccine.php?countryCode=TW/taiwan
-    #https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine&limitColumn=a01&limitValue=taiwan%&equalValue= like &encodeKey=MTYyNjQyODMwOQ==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=varchar&d[]=NO&c[]=a02&t[]=varchar&d[]=NO&c[]=a03&t[]=date&d[]=NO&c[]=a04&t[]=int&d[]=NO&c[]=a05&t[]=int&d[]=YES&c[]=a06&t[]=int&d[]=YES&c[]=a07&t[]=int&d[]=YES&c[]=a08&t[]=decimal&d[]=YES&c[]=a09&t[]=decimal&d[]=YES&c[]=a10&t[]=decimal&d[]=YES&c[]=a11&t[]=decimal&d[]=YES&c[]=a12&t[]=decimal&d[]=YES&c[]=a13&t[]=text&d[]=NO&c[]=a14&t[]=int&d[]=NO&c[]=a15&t[]=int&d[]=NO&c[]=a16&t[]=int&d[]=NO&c[]=a17&t[]=int&d[]=NO&c[]=a18&t[]=int&d[]=NO&c[]=a19&t[]=int&d[]=NO&c[]=a20&t[]=int&d[]=NO&c[]=a21&t[]=int&d[]=NO",
-                                  
+    ## https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_manufacture&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYyOTg2Mzk2Ng==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=varchar&d[]=NO&c[]=a02&t[]=date&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=NO&c[]=a05&t[]=int&d[]=NO&c[]=a06&t[]=int&d[]=NO
+    ## Old: https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_city_can3_c&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYyOTg2Mzk2Ng==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=date&d[]=NO&c[]=a02&t[]=varchar&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=YES&c[]=a05&t[]=int&d[]=YES&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=decimal&d[]=NO
+    
     self.key_row_id = 'DT_RowId'
     self.key_id = 'id'
     self.key_location = 'a01'
-    self.key_iso_code = 'a02'
-    self.key_date = 'a03'
-    self.key_cum_vacc = 'a04'
-    self.key_ppl_vacc = 'a05'
-    self.key_ppl_fully_vacc = 'a06'
-    
-    self.key_new_vacc_raw = 'a08' ## Unsure
-    self.key_new_vacc = 'a09'
-    self.key_cum_vacc_per_100 = 'a10'
-    self.key_ppl_vacc_per_100 = 'a11'
-    self.key_ppl_fully_vacc_per_100 = 'a12'
-    self.key_manu = 'a13'
-    self.key_new_vacc_per_1m = 'a14'
-    
-    self.key_cum_jj = 'a16'
-    self.key_cum_moderna = 'a17'
-    self.key_cum_az = 'a18'
-    self.key_cum_pfizer = 'a19'
-    self.key_cum_sinovac = 'a20'
-    self.key_cum_sputnik = 'a21'
-    self.key_cum_sinopharm = 'a22'
+    self.key_date = 'a02'
+    self.key_brand = 'a03'
+    self.key_cum_1st = 'a04'
+    self.key_cum_2nd = 'a05'
+    self.key_cum_tot = 'a06'
     
     self.data = data
-    self.n_total = len(self.data['data'])
     self.brand_list = ['AZ', 'Moderna', 'Medigen']
-    
-    if (self.n_total > 1.5 * (ccm.getTodayOrdinal() - ccm.ISODateToOrd('2021-03-21'))):
-      self.n_total //= 2
-      self.data['data'] = self.data['data'][:self.n_total]
+    self.n_total = len(set(self.getDate()))
     
     if verbose:
       print('N_total = %d' % self.n_total)
@@ -71,43 +51,49 @@ class VaccinationSheet(ccm.Template):
   def getDate(self):
     return [row[self.key_date] for row in self.data['data']]
   
-  def getCumVacc(self):
-    return [int(value) for value in self.getColData(self.key_cum_vacc)]
+  def getBrand(self):
+    brand_list = []
+    
+    for row in self.data['data']:
+      brand = row[self.key_brand]
+      try:
+        brand_list.append(ccm.BRAND_DICT[brand])
+      except KeyError:
+        print('Brand, %s' % brand)
+        brand_list.append('unknown')
+    return brand_list
   
-  def getPplVacc(self):
-    return [int(value) for value in self.getColData(self.key_ppl_vacc)]
+  def getCum1st(self):
+    return [int(value) for value in self.getColData(self.key_cum_1st)]
   
-  def getPplFullyVacc(self):
-    return [int(value) for value in self.getColData(self.key_ppl_fully_vacc)]
+  def getCum2nd(self):
+    return [int(value) for value in self.getColData(self.key_cum_2nd)]
   
-  def getNewVacc(self):
-    return [int(value) for value in self.getColData(self.key_new_vacc)]
-  
-  def getCumAZ(self):
-    return [int(value) for value in self.getColData(self.key_cum_az)]
-  
-  def getCumModerna(self):
-    return [int(value) for value in self.getColData(self.key_cum_moderna)]
+  def getCumTot(self):
+    return [int(value) for value in self.getColData(self.key_cum_tot)]
   
   def incrementWithInterpolation_vaccinationByBrand(self):
     date_list = self.getDate()
-    cum_vacc_list = self.getCumVacc()
-    cum_az_list = self.getCumAZ()
-    cum_moderna_list = self.getCumModerna()
+    brand_list = self.getBrand()
+    cum_tot_list = self.getCumTot()
     
-    ## Declare all brands
+    ## Make dictionary of date & brand
     cum_doses_dict = {}
-    for date, cum_vacc, cum_az, cum_moderna in zip(date_list, cum_vacc_list, cum_az_list, cum_moderna_list):
-      cum_doses_dict[date] = [cum_vacc, cum_az, cum_moderna, 0]
+    for date, brand, cum_tot in zip(date_list, brand_list, cum_tot_list):
+      try:
+        cum_doses_dict[date][brand] = cum_tot
+      except KeyError:
+        cum_doses_dict[date] = {}
+        cum_doses_dict[date][brand] = cum_tot
     
-    brand_list = ['total'] + self.brand_list
+    key_brand_list = ['total'] + self.brand_list
     
     ## Make stock dict
-    stock = {'date': [], 'interpolated': [], 'brand_list': brand_list, 'new_doses': [[] for brand in brand_list]}
+    stock = {'date': [], 'interpolated': [], 'new_doses': {brand: [] for brand in key_brand_list}}
     
     ## For recording last non-missing data
-    prev = [0] * len(brand_list)
-    ord_prev = ccm.ISODateToOrd(date_list[0]) - 1
+    prev = {brand: 0 for brand in key_brand_list}
+    ord_prev = ccm.ISODateToOrd('2021-03-21')
     
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
     ord_today = ccm.getTodayOrdinal()
@@ -120,35 +106,31 @@ class VaccinationSheet(ccm.Template):
       ## Out of provided range
       if date not in cum_doses_dict:
         stock['interpolated'].append(1)
-        for list_ in stock['new_doses']:
-          list_.append(0)
+        if ord_ <= ord_prev:
+          for list_ in stock['new_doses'].values():
+            list_.append(0)
         continue
       
       ## In range
       cum_doses = cum_doses_dict[date]
+      length = ord_ - ord_prev
       
-      ## If data non-missing
-      if 0 < cum_doses[0]:
-        ord_ = ccm.ISODateToOrd(date)
-        length = ord_ - ord_prev
+      for brand in key_brand_list:
+        try:
+          stock['new_doses'][brand] += ccm.itpFromCumul(prev[brand], cum_doses[brand], length)
+        except KeyError:
+          stock['new_doses'][brand] += [0] * length
         
-        for i, _ in enumerate(brand_list):
-          stock['new_doses'][i] += ccm.itpFromCumul(prev[i], cum_doses[i], length)
-          
-        stock['interpolated'].append(-int(1 < length))
-        prev = cum_doses
-        ord_prev = ord_
-        
-      ## If data are missing
-      else:
-        stock['interpolated'].append(1)
+      stock['interpolated'].append(-int(1 < length))
+      prev.update(cum_doses)
+      ord_prev = ord_
     
-    ## Homogenize length caused by trailing zeros
+    ## Cut the days w/o data
     nb_rows = ord_prev + 1 - ord_ref
     stock['date'] = stock['date'][:nb_rows]
     stock['interpolated'] = stock['interpolated'][:nb_rows]
-    for i, _ in enumerate(brand_list):
-      stock['new_doses'][i] = stock['new_doses'][i][:nb_rows]
+    for brand in stock['new_doses'].keys():
+      stock['new_doses'][brand] = stock['new_doses'][brand][:nb_rows]
     
     ## This contains daily doses & a column indicating whether it's interpolated or not.
     return stock
@@ -175,17 +157,16 @@ class VaccinationSheet(ccm.Template):
   
   def saveCsv_vaccinationByBrand(self):
     stock_prev = self.incrementWithInterpolation_vaccinationByBrand()
-    stock_tmp = {brand: new_doses_arr for brand, new_doses_arr in zip(stock_prev['brand_list'], stock_prev['new_doses'])}
     
     ## For order
     stock = {'date': stock_prev['date'], 'interpolated': stock_prev['interpolated']}
-    stock.update(stock_tmp)
+    stock.update(stock_prev['new_doses'])
     
     ## Loop over column
-    for col_tag in stock_prev['brand_list']:
+    for col_tag in stock_prev['new_doses'].keys():
       key = col_tag + '_avg'
       stock[key] = ccm.makeMovingAverage(stock[col_tag])
-      
+    
     stock = pd.DataFrame(stock)
     stock = ccm.adjustDateRange(stock)
     
@@ -241,28 +222,37 @@ class VaccinationSheet(ccm.Template):
     
   def makeInjections_vaccinationProgress(self):
     date_list = self.getDate()
-    cum_vacc_list = self.getCumVacc()
-    cum_az_list = self.getCumAZ()
-    cum_moderna_list = self.getCumModerna()
+    brand_list = self.getBrand()
+    cum_tot_list = self.getCumTot()
     
-    stock = []
+    ## Make dictionary of date & brand
+    cum_doses_dict = {}
+    for date, brand, cum_tot in zip(date_list, brand_list, cum_tot_list):
+      try:
+        cum_doses_dict[date][brand] = cum_tot
+      except KeyError:
+        cum_doses_dict[date] = {}
+        cum_doses_dict[date][brand] = cum_tot
     
-    for date, cum_vacc, cum_az, cum_moderna in zip(date_list, cum_vacc_list, cum_az_list, cum_moderna_list):
-      if 0 == cum_vacc and date != '2021-03-21':
-        continue
-      
-      stock.append([date, cum_vacc, cum_az, cum_moderna, 0])
-      
-    date_list = [row[0] for row in stock]
-    cum_vacc_list = [row[1] for row in stock]
-    cum_az_list = [row[2] for row in stock]
-    cum_moderna_list = [row[3] for row in stock]
-    cum_medigen_list = [row[4] for row in stock]
+    date_list = list(cum_doses_dict.keys())
+    cum_tot_list = [dict_.get('total', 0) for dict_ in cum_doses_dict.values()]
+    cum_az_list = [dict_.get('AZ', 0) for dict_ in cum_doses_dict.values()]
+    cum_moderna_list = [dict_.get('Moderna', 0) for dict_ in cum_doses_dict.values()]
+    cum_medigen_list = [dict_.get('Medigen', 0) for dict_ in cum_doses_dict.values()]
     
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
     index_list = [ccm.ISODateToOrd(iso)-ord_ref for iso in date_list]
+    ind = np.argsort(index_list)
     
-    stock = {'index': index_list, 'date': date_list, 'total': cum_vacc_list, 'AZ': cum_az_list, 'Moderna': cum_moderna_list, 'Medigen': cum_medigen_list}
+    ## Sort
+    index_list = np.array(index_list)[ind]
+    date_list = np.array(date_list)[ind]
+    cum_tot_list = np.array(cum_tot_list)[ind]
+    cum_az_list = np.array(cum_az_list)[ind]
+    cum_moderna_list = np.array(cum_moderna_list)[ind]
+    cum_medigen_list = np.array(cum_medigen_list)[ind]
+    
+    stock = {'index': index_list, 'date': date_list, 'total': cum_tot_list, 'AZ': cum_az_list, 'Moderna': cum_moderna_list, 'Medigen': cum_medigen_list}
     return stock
     
   def makeReadme_vaccinationProgress(self, page):
@@ -326,33 +316,38 @@ class VaccinationSheet(ccm.Template):
     return
   
   def makeStock_vaccinationByDose(self):
-    date_list = self.getDate()
-    ppl_vacc_list = self.getPplVacc()
-    ppl_fully_vacc_list = self.getPplFullyVacc()
+    date_list_raw = self.getDate()
+    brand_list = self.getBrand()
+    cum_1st_list_raw = self.getCum1st()
+    cum_2nd_list_raw = self.getCum2nd()
     
     ## Get variables
     population_twn = ccm.COUNTY_DICT['00000']['population']
-    stock = []
+    date_list = []
+    cum_1st_list = []
+    cum_2nd_list = []
     
-    ## Loop, skip 0
-    for date, ppl_vacc, ppl_fully_vacc in zip(date_list, ppl_vacc_list, ppl_fully_vacc_list):
-      if 0 == ppl_vacc + ppl_fully_vacc and date != '2021-03-21':
-        continue
-      stock.append([date, float(ppl_vacc)/float(population_twn), float(ppl_fully_vacc)/float(population_twn)])
-    
-    ## Make lists
-    date_list = [row[0] for row in stock]
-    ppl_vacc_rate_list = [row[1] for row in stock]
-    ppl_fully_vacc_rate_list = [row[2] for row in stock]
+    for date, brand, cum_1st, cum_2nd in zip(date_list_raw, brand_list, cum_1st_list_raw, cum_2nd_list_raw):
+      if brand == 'total':
+        date_list.append(date)
+        cum_1st_list.append(float(cum_1st) / float(population_twn))
+        cum_2nd_list.append(float(cum_2nd) / float(population_twn))
     
     ## Adjustment
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
     index_list = [ccm.ISODateToOrd(iso)-ord_ref for iso in date_list]
-    ppl_vacc_rate_list = np.around(ppl_vacc_rate_list, decimals=4)
-    ppl_fully_vacc_rate_list = np.around(ppl_fully_vacc_rate_list, decimals=4)
+    cum_1st_list = np.around(cum_1st_list, decimals=4)
+    cum_2nd_list = np.around(cum_2nd_list, decimals=4)
+    ind = np.argsort(index_list)
+    
+    ## Sort
+    index_list = np.array(index_list)[ind]
+    date_list = np.array(date_list)[ind]
+    cum_1st_list = cum_1st_list[ind]
+    cum_2nd_list = cum_2nd_list[ind]
     
     ## Stock
-    stock = {'index': index_list, 'date': date_list, 'ppl_vacc_rate': ppl_vacc_rate_list, 'ppl_fully_vacc_rate': ppl_fully_vacc_rate_list}
+    stock = {'index': index_list, 'date': date_list, 'ppl_vacc_rate': cum_1st_list, 'ppl_fully_vacc_rate': cum_2nd_list}
     return stock
     
   def makeReadme_vaccinationByDose(self, page):
