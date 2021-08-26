@@ -129,7 +129,7 @@ function IEBC_Plot(wrap) {
   GP_PlotBottomLeft(wrap);
   
   //-- Define square color
-  wrap.value_max = Math.max(3, wrap.value_max);
+  wrap.value_max = Math.max(10, wrap.value_max);
   wrap.color = d3.scaleSequential()
     .domain([0, wrap.value_max])
     .interpolator(t => d3.interpolatePuRd(t));
