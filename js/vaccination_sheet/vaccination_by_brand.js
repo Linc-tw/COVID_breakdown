@@ -23,6 +23,7 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_AZ', 'AZ');
     LS_AddStr('vaccination_by_brand_button_Moderna', '莫德納');
     LS_AddStr('vaccination_by_brand_button_Medigen', '高端');
+    LS_AddStr('vaccination_by_brand_button_Pfizer', 'BNT');
     
     LS_AddHtml('vaccination_by_brand_description', '\
       除週日外，衛服部每日公佈前一日之疫苗接種人數，\
@@ -43,6 +44,7 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_AZ', 'AZ');
     LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
     LS_AddStr('vaccination_by_brand_button_Medigen', 'Medigen');
+    LS_AddStr('vaccination_by_brand_button_Pfizer', 'Pfizer');
     
     LS_AddHtml('vaccination_by_brand_description', "\
       Tous les jours sauf dimanche le résultat de la veille est publié.\
@@ -63,6 +65,7 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_AZ', 'AZ');
     LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
     LS_AddStr('vaccination_by_brand_button_Medigen', 'Medigen');
+    LS_AddStr('vaccination_by_brand_button_Pfizer', 'Pfizer');
     
     LS_AddHtml('vaccination_by_brand_description', "\
       Everyday except for Sunday the result of the previous day is released .\
@@ -78,7 +81,7 @@ function VBB_ResetText() {
 
 function VBB_FormatData(wrap, data) {
   //-- Variables for data
-  var col_tag_list = data.columns.slice(2, 6); //-- 0 = date, 1 = interpolated
+  var col_tag_list = data.columns.slice(2, 7); //-- 0 = date, 1 = interpolated
   var col_tag = col_tag_list[wrap.col_ind];
   var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
@@ -210,15 +213,15 @@ function VBB_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw') {
-    col_label_list = ['合計', 'AZ', 'Moderna', 'Medigen'];
+    col_label_list = ['合計', 'AZ', '莫德納', '高端', 'BNT'];
     avg_text = '過去七日平均';
   }
   else if (LS_lang == 'fr') {
-    col_label_list = ['Totaux', 'AZ', 'Moderna', 'Medigen'];
+    col_label_list = ['Totaux', 'AZ', 'Moderna', 'Medigen', 'Pfizer'];
     avg_text = 'Moyenne sur 7 jours';
   }
   else {
-    col_label_list = ['Total', 'AZ', 'Moderna', 'Medigen'];
+    col_label_list = ['Total', 'AZ', 'Moderna', 'Medigen', 'Pfizer'];
     avg_text = '7-day average';
   }
   
@@ -305,11 +308,11 @@ function VBB_Replot(wrap) {
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')
-    wrap.legend_label = ['AZ', '莫德納', '高端', '合計'];
+    wrap.legend_label = ['AZ', '莫德納', '高端', 'BNT', '合計'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ['AZ', 'Moderna', 'Medigen', 'Totaux'];
+    wrap.legend_label = ['AZ', 'Moderna', 'Medigen', 'Pfizer', 'Totaux'];
   else
-    wrap.legend_label = ['AZ', 'Moderna', 'Medigen', 'Total'];
+    wrap.legend_label = ['AZ', 'Moderna', 'Medigen', 'Pfizer', 'Total'];
   
   //-- Update legend title
   GP_UpdateLegendTitle_Standard(wrap);
@@ -364,14 +367,16 @@ function VBB_ButtonListener(wrap) {
   d3.select(wrap.id + '_save').on('click', function(){
     var tag1, tag2;
     
-    if (wrap.col_ind == 0)
-      tag1 = 'total';
-    else if (wrap.col_ind == 1)
+    if (wrap.col_ind == 1)
       tag1 = 'AZ';
     else if (wrap.col_ind == 2)
       tag1 = 'Moderna';
-    else
+    else if (wrap.col_ind == 3)
       tag1 = 'Medigen';
+    else if (wrap.col_ind == 4)
+      tag1 = 'Pfizer';
+    else
+      tag1 = 'total';
     
     if (wrap.cumul == 1)
       tag2 = 'cumulative';

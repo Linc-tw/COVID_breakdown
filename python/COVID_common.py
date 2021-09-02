@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_common.py         ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.08.25      ##
+    ##  Version 2021.08.26      ##
     ##############################
 
 import os
@@ -136,6 +136,7 @@ TRAVEL_HISTORY_DICT = {
   'Russia': {'zh-tw': '俄羅斯', 'fr': 'Russie'},
   'Slovakia': {'zh-tw': '斯洛伐克', 'fr': 'Slovaquie'},
   'Spain': {'zh-tw': '西班牙', 'fr': 'Espagne'},
+  'Sweden': {'zh-tw': '瑞典', 'fr': 'Suède'}, 
   'Switzerland': {'zh-tw': '瑞士', 'fr': 'Suisse'},
   'UK': {'zh-tw': '英國', 'fr': 'Royaume-Uni'},
   'Ukraine': {'zh-tw': '烏克蘭', 'fr': 'Ukraine'},
@@ -168,6 +169,7 @@ TRAVEL_HISTORY_DICT = {
   'Honduras': {'zh-tw': '宏都拉斯', 'fr': 'Honduras'}, 
   'Latin America': {'zh-tw': '中南美洲', 'fr': 'Amérique latine'},
   'Mexico': {'zh-tw': '墨西哥', 'fr': 'Mexique'},
+  'Nicaragua': {'zh-tw': '尼加拉瓜', 'fr': 'Nicaragua'},
   'Paraguay': {'zh-tw': '巴拉圭', 'fr': 'Paraguay'},
   'Peru': {'zh-tw': '秘魯', 'fr': 'Pérou'},
   'USA': {'zh-tw': '美國', 'fr': 'États-Unis'},
@@ -423,6 +425,9 @@ DELIVERY_LIST = [
   [     'AZ',        'AZ',  524200, '2021-08-12', '2021-08-20', 'https://www.cna.com.tw/news/firstnews/202108120201.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600505'],
   ['Moderna',   'Moderna',  249000, '2021-08-15', '2021-08-24', 'https://www.cna.com.tw/news/firstnews/202108155005.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600513'],
   ['Medigen',   'Medigen',  263586,           '', '2021-08-24',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600513'],
+  [     'AZ',        'AZ',  264400, '2021-08-27',           '', 'https://www.cna.com.tw/news/firstnews/202108275002.aspx', ''],
+  ['Moderna',     'Czech',   30000, '2021-08-29',           '', 'https://www.cna.com.tw/news/firstnews/202108290099.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  933072, '2021-09-02',           '', 'https://www.cna.com.tw/news/firstnews/202109025001.aspx', ''],
 ]
 
 ################################################################################

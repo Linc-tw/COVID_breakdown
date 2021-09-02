@@ -108,14 +108,23 @@ class TimelineSheet(ccm.Template):
     global_evt_list = []
     key_evt_list = []
     
-    for date, twn_evt, global_evt, key_evt in zip(self.getDate(), self.getTWNEvt(), self.getGlobalEvt(), self.getKeyEvt()):
-      if twn_evt != twn_evt and global_evt != global_evt and key_evt != key_evt:
+    #for date, twn_evt, global_evt, key_evt in zip(self.getDate(), self.getTWNEvt(), self.getGlobalEvt(), self.getKeyEvt()):
+      #if twn_evt != twn_evt and global_evt != global_evt and key_evt != key_evt:
+        #continue
+      #else:
+        #date_list.append(date)
+        #twn_evt_list.append(twn_evt)
+        #global_evt_list.append(global_evt)
+        #key_evt_list.append(key_evt)
+    
+    for date, twn_evt, global_evt in zip(self.getDate(), self.getTWNEvt(), self.getGlobalEvt()):
+      if twn_evt != twn_evt and global_evt != global_evt:
         continue
       else:
         date_list.append(date)
         twn_evt_list.append(twn_evt)
         global_evt_list.append(global_evt)
-        key_evt_list.append(key_evt)
+        key_evt_list.append(' ')
     
     stock = {'date': date_list, 'Taiwan_event': twn_evt_list, 'global_event': global_evt_list, 'key_event': key_evt_list}
     data = pd.DataFrame(stock)

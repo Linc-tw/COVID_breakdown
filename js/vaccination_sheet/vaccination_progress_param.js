@@ -14,7 +14,7 @@ var VP_latest_wrap = {
   ],
 
   x_max_factor: 1.22,
-  y_max_factor: 1.44,
+  y_max_factor: 1.6,
   y_max_fixed: 0,
   nb_yticks: 4,
   legend_pos_x: 110,

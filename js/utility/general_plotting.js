@@ -9,6 +9,8 @@
 //-- TODO
 
 //Linear/log?
+//R estimation
+//Phase plot case-hospitalization
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable

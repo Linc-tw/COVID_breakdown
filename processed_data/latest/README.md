@@ -191,6 +191,7 @@ Contents
   - `AZ`
   - `Moderna`
   - `Medigen`
+  - `Pfizer`
   - `*_avg`: 7-day moving average of `*`
 
 `vaccination_by_county.csv`
@@ -219,6 +220,7 @@ Contents
   - `AZ`
   - `Moderna`
   - `Medigen`
+  - `Pfizer`
 
 `vaccination_progress_supplies.csv`
 - Row: report date
@@ -230,3 +232,4 @@ Contents
   - `AZ`
   - `Moderna`
   - `Medigen`
+  - `Pfizer`

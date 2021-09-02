@@ -21,6 +21,7 @@ function VP_ResetText() {
     LS_AddStr('vaccination_progress_button_AZ', 'AZ');
     LS_AddStr('vaccination_progress_button_Moderna', '莫德納');
     LS_AddStr('vaccination_progress_button_Medigen', '高端');
+    LS_AddStr('vaccination_progress_button_Pfizer', 'BNT');
   
     LS_AddHtml('vaccination_progress_description', '\
       疫苗之實際施打劑數可能大於到貨劑量數，\
@@ -37,6 +38,7 @@ function VP_ResetText() {
     LS_AddStr('vaccination_progress_button_AZ', 'AZ');
     LS_AddStr('vaccination_progress_button_Moderna', 'Moderna');
     LS_AddStr('vaccination_progress_button_Medigen', 'Medigen');
+    LS_AddStr('vaccination_progress_button_Pfizer', 'Pfizer');
   
     LS_AddHtml('vaccination_progress_description', "\
       Le nombre de doses administrées peut être supérieur au nombre de doses approvisionnées,\
@@ -53,6 +55,7 @@ function VP_ResetText() {
     LS_AddStr('vaccination_progress_button_AZ', 'AZ');
     LS_AddStr('vaccination_progress_button_Moderna', 'Moderna');
     LS_AddStr('vaccination_progress_button_Medigen', 'Medigen');
+    LS_AddStr('vaccination_progress_button_Pfizer', 'Pfizer');
     
     LS_AddHtml('vaccination_progress_description', '\
       The number of injections can be greater than supplies, \
@@ -568,21 +571,21 @@ function VP_Replot(wrap) {
   var i, legend_label;
   if (LS_lang == 'zh-tw') {
     legend_label = ['供應量', '接種量'];
-    col_tag_list = ['總', 'AZ', '莫德納', '高端'];
+    col_tag_list = ['總', 'AZ', '莫德納', '高端', 'BNT'];
     
     for (i=0; i<legend_label.length; i++)
       wrap.legend_label.push(col_tag_list[wrap.col_ind]+legend_label[i]);
   }
   else if (LS_lang == 'fr') {
     legend_label = ['Approvisionnements ', ' Injections '];
-    col_tag_list = [['totaux', 'AZ', 'Moderna', 'Medigen'], ['totales', 'AZ', 'Moderna', 'Medigen']];
+    col_tag_list = [['totaux', 'AZ', 'Moderna', 'Medigen', 'Pfizer'], ['totales', 'AZ', 'Moderna', 'Medigen', 'Pfizer']];
     
     for (i=0; i<legend_label.length; i++)
       wrap.legend_label.push(legend_label[i]+col_tag_list[i][wrap.col_ind]);
   }
   else {
     legend_label = [' supplies', ' injections'];
-    col_tag_list = ['Total', 'AZ', 'Moderna', 'Medigen'];
+    col_tag_list = ['Total', 'AZ', 'Moderna', 'Medigen', 'Pfizer'];
     
     for (i=0; i<legend_label.length; i++)
       wrap.legend_label.push(col_tag_list[wrap.col_ind]+legend_label[i]);
@@ -648,6 +651,8 @@ function VP_ButtonListener(wrap) {
       tag1 = 'Moderna';
     else if (wrap.col_ind == 3)
       tag1 = 'Medigen';
+    else if (wrap.col_ind == 4)
+      tag1 = 'Pfizer';
     else
       tag1 = 'all';
     
