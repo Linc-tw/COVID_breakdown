@@ -252,6 +252,7 @@ class CaseSheet(ccm.Template):
       'Portugal': ['葡萄牙'], 
       'Romania': ['羅馬尼亞'],
       'Russia': ['俄羅斯'],
+      'Serbia': ['塞爾維亞'],
       'Slovakia': ['斯洛伐克'],
       'Spain': ['西班牙'], 
       'Sweden': ['瑞典'], 
@@ -261,6 +262,7 @@ class CaseSheet(ccm.Template):
       
       ## Africa
       'Africa': ['非洲'],
+      'Burkina Faso': ['布吉納法索'],
       'Cameroon': ['喀麥隆'],
       'Eswatini': ['史瓦帝尼'],
       'Egypt': ['埃及'], 
@@ -330,6 +332,7 @@ class CaseSheet(ccm.Template):
       trav_hist = ''.join(trav_hist.split('轉機'))
       trav_hist = ''.join(trav_hist.split('出海'))
       trav_hist = ''.join(trav_hist.split('出境'))
+      trav_hist = ''.join(trav_hist.split('或前'))
       trav_hist = ''.join(trav_hist.split('上旬'))
       trav_hist = ''.join(trav_hist.split('中旬'))
       trav_hist = ''.join(trav_hist.split('下旬'))

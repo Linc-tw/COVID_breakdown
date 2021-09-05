@@ -34,5 +34,5 @@ var VP_overall_wrap = {
   y_max_fixed: 0,
   nb_yticks: 4,
   legend_pos_x: 110,
-  r: 2.5, //-- Dot radius
+  r: 2, //-- Dot radius
 };

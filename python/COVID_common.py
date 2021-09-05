@@ -134,6 +134,7 @@ TRAVEL_HISTORY_DICT = {
   'Portugal': {'zh-tw': '葡萄牙', 'fr': 'Portugal'},
   'Romania': {'zh-tw': '羅馬尼亞', 'fr': 'Roumanie'},
   'Russia': {'zh-tw': '俄羅斯', 'fr': 'Russie'},
+  'Serbia': {'zh-tw': '塞爾維亞', 'fr': 'Serbie'},
   'Slovakia': {'zh-tw': '斯洛伐克', 'fr': 'Slovaquie'},
   'Spain': {'zh-tw': '西班牙', 'fr': 'Espagne'},
   'Sweden': {'zh-tw': '瑞典', 'fr': 'Suède'}, 
@@ -143,6 +144,7 @@ TRAVEL_HISTORY_DICT = {
   
   ## Africa
   'Africa': {'zh-tw': '非洲', 'fr': 'Afrique'},
+  'Burkina Faso': {'zh-tw': '布吉納法索', 'fr': 'Burkina Faso'},
   'Cameroon': {'zh-tw': '喀麥隆', 'fr': 'Cameroun'},
   'Eswatini': {'zh-tw': '史瓦帝尼', 'fr': 'Eswatini'},
   'Egypt': {'zh-tw': '埃及', 'fr': 'Égypte'},
@@ -426,8 +428,10 @@ DELIVERY_LIST = [
   ['Moderna',   'Moderna',  249000, '2021-08-15', '2021-08-24', 'https://www.cna.com.tw/news/firstnews/202108155005.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600513'],
   ['Medigen',   'Medigen',  263586,           '', '2021-08-24',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600513'],
   [     'AZ',        'AZ',  264400, '2021-08-27', '2021-09-04', 'https://www.cna.com.tw/news/firstnews/202108275002.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600542'],
-  ['Moderna',     'Czech',   30000, '2021-08-29',           '', 'https://www.cna.com.tw/news/firstnews/202108290099.aspx', ''],
+  ['Moderna',   'Czechia',   30000, '2021-08-29',           '', 'https://www.cna.com.tw/news/firstnews/202108290099.aspx', ''],
   [ 'Pfizer',    'Pfizer',  933072, '2021-09-02',           '', 'https://www.cna.com.tw/news/firstnews/202109025001.aspx', ''],
+  [     'AZ',    'Poland',  400000, '2021-09-05',           '', 'https://www.cna.com.tw/news/firstnews/202109050008.aspx', ''],
+  [     'AZ',     'COVAX',  409800, '2021-09-05',           '', 'https://www.cna.com.tw/news/firstnews/202109055005.aspx', ''],
 ]
 
 ################################################################################
@@ -536,7 +540,7 @@ def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
 
 def sevenDayMovingAverage(value_arr):
   value_arr = np.array(value_arr, dtype=float)
-  kernel = [1/7] * 7 + [0.0] * 6 ## Sum not mean
+  kernel = [1/7] * 7 + [0.0] * 6 ## Mean
   value_arr = signal.convolve(value_arr, kernel[::-1], mode='same')
   return value_arr
 
