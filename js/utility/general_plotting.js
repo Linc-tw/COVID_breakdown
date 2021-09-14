@@ -30,7 +30,7 @@ var GP_wrap = {
   iso_ref: '2020-01-01',
   iso_ref_vacc: '2021-03-01',
   xticklabel_min_space: 16,
-  xticklabel_min_space_vacc: 12,
+  xticklabel_min_space_vacc: 15,
   
   //-- padding
   bar_padding: 0.2,

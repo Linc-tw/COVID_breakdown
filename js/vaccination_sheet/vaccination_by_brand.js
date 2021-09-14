@@ -135,10 +135,10 @@ function VBB_FormatData(wrap, data) {
     last_date = row['date'];
     
     //-- Update to exclude interpolation
-    if (0 < wrap.cumul && 0 < +row['interpolated'])
-      row[col_tag] = 0;
-    else if (0 == wrap.cumul && 0 != +row['interpolated'])
-      row[col_tag] = 0;
+    if ((0 < wrap.cumul && 0 < +row['interpolated']) || (0 == wrap.cumul && 0 != +row['interpolated'])) {
+      for (j=0; j<nb_col; j++)
+        row[col_tag_list[j]] = 0;
+    }
     
     //-- Update y_last
     for (j=0; j<nb_col; j++) {
@@ -165,10 +165,6 @@ function VBB_FormatData(wrap, data) {
   for (i=0; i<y_max; i+=y_path)
     ytick.push(i)
   
-  //-- Make legend value
-  var legend_value_raw = y_last.slice(1, nb_col);
-  legend_value_raw.push(y_last[0]);
-    
   //-- Save to wrapper
   wrap.formatted_data = data;
   wrap.col_tag = col_tag;
@@ -180,7 +176,7 @@ function VBB_FormatData(wrap, data) {
   wrap.y_max = y_max;
   wrap.ytick = ytick;
   wrap.last_date = last_date;
-  wrap.legend_value_raw = legend_value_raw;
+  wrap.legend_value_raw = y_last;
 }
 
 function VBB_FormatData2(wrap, data2) {
@@ -304,7 +300,8 @@ function VBB_Replot(wrap) {
   wrap.legend_color[i] = wrap.color;
   
   //-- Define legend value
-  wrap.legend_value = wrap.legend_value_raw.slice();
+  wrap.legend_value = wrap.legend_value_raw.slice(1, wrap.nb_col);
+  wrap.legend_value.push(wrap.legend_value_raw[0]); //-- Move last to first
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')

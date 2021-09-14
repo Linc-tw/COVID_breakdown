@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_common.py         ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.08.26      ##
+    ##  Version 2021.09.05      ##
     ##############################
 
 import os
@@ -112,6 +112,7 @@ TRAVEL_HISTORY_DICT = {
   ## Europe
   'Europe': {'zh-tw': '歐洲', 'fr': 'Europe'},
   'Albania': {'zh-tw': '阿爾巴尼亞', 'fr': 'Albanie'}, 
+  'Armania': {'zh-tw': '亞美尼亞', 'fr': 'Arménie'},
   'Austria': {'zh-tw': '奧地利', 'fr': 'Autriche'},
   'Belarus': {'zh-tw': '白俄羅斯', 'fr': 'Biélorussie'},
   'Belgium': {'zh-tw': '比利時', 'fr': 'Belgique'},
@@ -149,6 +150,7 @@ TRAVEL_HISTORY_DICT = {
   'Eswatini': {'zh-tw': '史瓦帝尼', 'fr': 'Eswatini'},
   'Egypt': {'zh-tw': '埃及', 'fr': 'Égypte'},
   'Ethiopia': {'zh-tw': '衣索比亞', 'fr': 'Éthiopie'},
+  'Gambia': {'zh-tw': '甘比亞', 'fr': 'Gambie'},
   'Ghana': {'zh-tw': '迦納', 'fr': 'Ghana'},
   'Lesotho': {'zh-tw': '賴索托', 'fr': 'Lesotho'},
   'Mauritania': {'zh-tw': '茅利塔尼亞', 'fr': 'Mauritanie'},
@@ -428,10 +430,14 @@ DELIVERY_LIST = [
   ['Moderna',   'Moderna',  249000, '2021-08-15', '2021-08-24', 'https://www.cna.com.tw/news/firstnews/202108155005.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600513'],
   ['Medigen',   'Medigen',  263586,           '', '2021-08-24',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600513'],
   [     'AZ',        'AZ',  264400, '2021-08-27', '2021-09-04', 'https://www.cna.com.tw/news/firstnews/202108275002.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600542'],
-  ['Moderna',   'Czechia',   30000, '2021-08-29',           '', 'https://www.cna.com.tw/news/firstnews/202108290099.aspx', ''],
+  ['Moderna',   'Czechia',   28800, '2021-08-29', '2021-09-07', 'https://www.cna.com.tw/news/firstnews/202108290099.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600550'],
+  [     'AZ',        'AZ',  594900, '2021-08-31', '2021-09-07', 'https://www.cna.com.tw/news/firstnews/202108310186.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600550'],
+  ['Medigen',   'Medigen',   86935,           '', '2021-09-08',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600550'],
   [ 'Pfizer',    'Pfizer',  933072, '2021-09-02',           '', 'https://www.cna.com.tw/news/firstnews/202109025001.aspx', ''],
   [     'AZ',    'Poland',  400000, '2021-09-05',           '', 'https://www.cna.com.tw/news/firstnews/202109050008.aspx', ''],
   [     'AZ',     'COVAX',  409800, '2021-09-05',           '', 'https://www.cna.com.tw/news/firstnews/202109055005.aspx', ''],
+  [     'AZ',     'Japan',   64000, '2021-09-07',           '', 'https://www.cna.com.tw/news/firstnews/202109075007.aspx', ''],
+  [     'AZ',        'AZ',  458000, '2021-09-10',           '', 'https://www.cna.com.tw/news/firstnews/202109105008.aspx', ''],
 ]
 
 ################################################################################
