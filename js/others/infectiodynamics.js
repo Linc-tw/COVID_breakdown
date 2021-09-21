@@ -25,7 +25,7 @@ function ID_InitFig(wrap) {
 function ID_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('infectiodynamics_title', '感染相位變化');
-    LS_AddStr('infectiodynamics_button_all', 'All time');
+    LS_AddStr('infectiodynamics_button_all', '完整疫情');
     LS_AddStr('infectiodynamics_button_2020_1st', '2020 上半年');
     LS_AddStr('infectiodynamics_button_2020_2nd', '2020 下半年');
     LS_AddStr('infectiodynamics_button_2021_1st', '2021 上半年');
@@ -48,7 +48,7 @@ function ID_ResetText() {
   
   else if (LS_lang == 'fr') {
     LS_AddStr('infectiodynamics_title', "Dynamique d'infection");
-    LS_AddStr('infectiodynamics_button_all', 'All time');
+    LS_AddStr('infectiodynamics_button_all', 'Toute la pandémie');
     LS_AddStr('infectiodynamics_button_2020_1st', '2020 1er semestre');
     LS_AddStr('infectiodynamics_button_2020_2nd', '2020 2nd semestre');
     LS_AddStr('infectiodynamics_button_2021_1st', '2021 1er semestre');

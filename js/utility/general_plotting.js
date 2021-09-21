@@ -8,8 +8,6 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//ID:
-//Description
 //Linear/log?
 //R estimation
 //Description for timelines
