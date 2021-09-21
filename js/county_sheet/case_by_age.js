@@ -378,7 +378,7 @@ function CBA_Replot(wrap) {
   //-- Replot yaxis
   GP_ReplotCountAsY(wrap, 'count');
   
-  //-- Update xlabel
+  //-- Replot xlabel
   var xlabel_dict = {en: 'Age', fr: 'Âge', 'zh-tw': '年齡'};
   GP_ReplotXLabel(wrap, xlabel_dict);
   

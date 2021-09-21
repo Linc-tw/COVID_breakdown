@@ -322,6 +322,9 @@
                                 </div>
                             </div>
                             
+                            <div class="col-xl-6">
+                            </div>
+                            
                             <!-- stats_in_mirror -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
@@ -331,14 +334,14 @@
                                     
                                     <div class="card-img">
                                         <div class="btn-pos">
-                                            <select id="stats_in_mirror_overall_stat_0" class="form-select form-select-sm me-2" aria-label="stats_in_mirror_overall_period">
+                                            <select id="stats_in_mirror_overall_stat_0" class="form-select form-select-sm me-2" aria-label="stats_in_mirror_overall_stat_0">
                                                 <option value="0" id="stats_in_mirror_button_test_0"></option>
                                                 <option value="1" id="stats_in_mirror_button_case_0" selected></option>
                                                 <option value="2" id="stats_in_mirror_button_hospitalization_0"></option>
                                                 <option value="3" id="stats_in_mirror_button_death_0"></option>
                                             </select>
                                             
-                                            <select id="stats_in_mirror_overall_stat_1" class="form-select form-select-sm me-2" aria-label="stats_in_mirror_overall_period">
+                                            <select id="stats_in_mirror_overall_stat_1" class="form-select form-select-sm me-2" aria-label="stats_in_mirror_overall_stat_1">
                                                 <option value="0" id="stats_in_mirror_button_test_1"></option>
                                                 <option value="1" id="stats_in_mirror_button_case_1"></option>
                                                 <option value="2" id="stats_in_mirror_button_hospitalization_1"></option>
@@ -360,6 +363,41 @@
                                     </div>
                                     
                                     <div class="card-body" id="stats_in_mirror_overall"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- infectiodynamics -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-sync-alt me-1"></i> <span id="infectiodynamics_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <select id="infectiodynamics_overall_period" class="form-select form-select-sm me-2" aria-label="infectiodynamics_overall_period">
+                                                <option value="0" id="infectiodynamics_button_all"></option>
+                                                <option value="1" id="infectiodynamics_button_2020_1st"></option>
+                                                <option value="2" id="infectiodynamics_button_2020_2nd" selected></option>
+                                                <option value="3" id="infectiodynamics_button_2021_1st"></option>
+                                                <option value="4" id="infectiodynamics_button_2021_2nd"></option>
+                                            </select>
+                                            
+                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#infectiodynamics_collapse" aria-expanded="false" aria-controls="infectiodynamics_collapse">
+                                                <i class="far fa-comment-alt"></i>
+                                            </button>
+                                            
+                                            <button id='infectiodynamics_overall_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="collapse" id="infectiodynamics_collapse">
+                                        <div class="card-body">
+                                            <span id="infectiodynamics_description">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="infectiodynamics_overall"></div>
                                 </div>
                             </div>
                             
@@ -413,6 +451,8 @@
         <script src="../js/case_sheet/case_counts_param.js"></script>
         <script src="../js/others/stats_in_mirror.js"></script>
         <script src="../js/others/stats_in_mirror_param.js"></script>
+        <script src="../js/others/infectiodynamics.js"></script>
+        <script src="../js/others/infectiodynamics_param.js"></script>
         
         <!-- Main -->
         <script src="../js/plot/plot_overall_others.js"></script>

@@ -8,9 +8,11 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
+//ID:
+//Description
 //Linear/log?
 //R estimation
-//Phase plot case-hospitalization
+//Description for timelines
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
@@ -90,6 +92,10 @@ function GP_ISODateAddition(iso, nb_days) {
   new_iso.setDate(new_iso.getDate() + nb_days);
   new_iso = new_iso.getFullYear() + '-' + (new_iso.getMonth()+1).toLocaleString(undefined, {minimumIntegerDigits: 2}) + '-' + new_iso.getDate().toLocaleString(undefined, {minimumIntegerDigits: 2});
   return new_iso;
+}
+
+function GP_DateOrdinal(iso) {
+  return (new Date(iso) - new Date(GP_wrap.iso_ref)) / 86400000;
 }
 
 //------------------------------------------------------------------------------
@@ -544,7 +550,7 @@ function GP_ReplotDateAsTileX(wrap) {
 
 function GP_MakeXLim(wrap, format) {
   //-- Calculate x_min
-  var x_min = (new Date(wrap.iso_begin) - new Date(GP_wrap.iso_ref)) / 86400000;
+  var x_min = GP_DateOrdinal(wrap.iso_begin);
   if (format == 'band') //-- Edge correction
     x_min -= 0.2;
   else if (format == 'dot')
@@ -552,7 +558,7 @@ function GP_MakeXLim(wrap, format) {
   
   //-- Calculate x_max
   var iso_today = wrap.timestamp.slice(0, 10);
-  var x_max = (new Date(iso_today) - new Date(GP_wrap.iso_ref)) / 86400000;
+  var x_max = GP_DateOrdinal(iso_today);
   if (format == 'band') //-- Edge correction
     x_max += 1;
   else if (format == 'dot')
@@ -774,7 +780,7 @@ function GP_ReplotCountAsY(wrap, format) {
     yaxis = d3.axisLeft(yscale)
       .tickSize(-wrap.width) //-- Top & bottom frameline
       .tickValues(wrap.ytick)
-      .tickFormat(d3.format(yticklabel_format));
+      .tickFormat(function (d) {if (d == 0) return '0%'; return d3.format(yticklabel_format)(d);});
   }
   else {
     if (wrap.ytick[wrap.ytick.length-1] > 9999) 
@@ -785,7 +791,7 @@ function GP_ReplotCountAsY(wrap, format) {
     yaxis = d3.axisLeft(yscale)
       .tickSize(-wrap.width) //-- Top & bottom frameline
       .tickValues(wrap.ytick)
-      .tickFormat(d3.format(yticklabel_format));
+      .tickFormat(function (d) {if (d == 0) return '0'; return d3.format(yticklabel_format)(d);});
   }
   
   //-- Add yaxis
@@ -1047,8 +1053,7 @@ function GP_ReplotDot(wrap) {
   //-- Update dot
   var i;
   for (i=0; i<wrap.nb_col; i++) {
-    wrap.dot_list[i]
-      .selectAll('.content.dot')
+    wrap.dot_list[i].selectAll('.content.dot')
       .data(wrap.formatted_data[i])
       .transition()
       .duration(wrap.trans_delay)
