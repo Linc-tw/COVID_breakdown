@@ -23,25 +23,49 @@ function ET_InitFig(wrap) {
 function ET_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr("event_timeline_title", "疫情時間軸");
-    LS_AddStr("event_timeline_button_1", "週日為首");
-    LS_AddStr("event_timeline_button_2", "週一為首");
+    LS_AddStr("event_timeline_button_sun", "週日為首");
+    LS_AddStr("event_timeline_button_mon", "週一為首");
+    
+    LS_AddHtml('event_timeline_description', '\
+      此月曆標示台灣與全球之重大疫情事件，\
+      以及衛服部疾管署之重大決策。\
+      <br><br>\
+      點方格可查看哪些重要事件於該日發生。\
+    ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr("event_timeline_title", "Chronologie de la pandémie");
-    LS_AddStr("event_timeline_button_1", "1er jour dimanche");
-    LS_AddStr("event_timeline_button_2", "1er jour lundi");
+    LS_AddStr("event_timeline_button_sun", "1er jour dimanche");
+    LS_AddStr("event_timeline_button_mon", "1er jour lundi");
+    
+    LS_AddHtml('event_timeline_description', "\
+      Ce calendrier permet de documenter les événements majeurs qui sont liés à la covid\
+      au sein de Taïwan, dans le monde et dans la vision du CDC taïwanais.\
+      <br><br>\
+      Cliquez sur les carrés pour montrer les événements du jour concerné.\
+      <br><br>\
+      Seuls les textes en mandarin sont disponibles.\
+    ");
   }
   
   else { //-- En
     LS_AddStr("event_timeline_title", "Pandemic Timeline");
-    LS_AddStr("event_timeline_button_1", "1st day Sunday");
-    LS_AddStr("event_timeline_button_2", "1st day Monday");
+    LS_AddStr("event_timeline_button_sun", "1st day Sunday");
+    LS_AddStr("event_timeline_button_mon", "1st day Monday");
+    
+    LS_AddHtml('event_timeline_description', "\
+      This calendar records major COVID events in Taiwan, the world, and in the scope of Taiwan's CDC.\
+      <br><br>\
+      Click on the squares to show events happening on that day.\
+      <br><br>\
+      Only Mandarin texts are available.\
+    ");
   }
 }
 
 function ET_FormatData(wrap, data) {
-  var lim = 40; //-- Number of characters
+  var lim = 38; //-- Number of characters
   var item = '★ '; //-- Item symbol
   var formatted_data = {}
   var row, split_a1, split_a2, split_a3, split_b1, split_b2, split_b3;
@@ -54,7 +78,7 @@ function ET_FormatData(wrap, data) {
     //-- Get text from data & split into paragraphs
     split_a1 = row['Taiwan_event'].split('\n');
     split_a2 = row['global_event'].split('\n');
-    split_a3 = row['key_event'].split('\n');
+    split_a3 = row['CDC_event'].split('\n');
     
     //-- Force empty text to empty list (iterable)
     if (split_a1[0] == '')
@@ -67,7 +91,7 @@ function ET_FormatData(wrap, data) {
     //-- Initialize beginning of each section
     split_b1 = ['', '台灣事件'];
     split_b2 = ['', '全球事件'];
-    split_b3 = ['', '重點事件'];
+    split_b3 = ['', 'CDC時間軸'];
     
     //-- Loop over paragraphs
     for (j=0; j<split_a1.length; j++) {
@@ -697,6 +721,7 @@ function ET_Plot(wrap) {
       .attr('fill', 'black')
       .attr('text-anchor', 'start')
       .attr('dominant-baseline', 'middle')
+      .style('font-size', '0.9rem')
       .text(function (d) {return d;});
       
   //-- Save to wrapper
@@ -762,7 +787,7 @@ function ET_Replot(wrap) {
   
   //-- Define color
   var color2 = d3.scaleSequential()
-    .domain([0, 32])
+    .domain([0, 45])
     .interpolator(t => d3.interpolateBuPu(t));
   
   //-- Update square with color

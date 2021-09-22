@@ -22,26 +22,77 @@ function CT_InitFig(wrap) {
 function CT_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('criteria_timeline_title', '檢驗通報標準演進圖');
-    LS_AddStr('criteria_timeline_button_1', '精選');
-    LS_AddStr('criteria_timeline_button_2', '完整');
-    LS_AddStr('criteria_timeline_button_3', '軸狀');
-    LS_AddStr('criteria_timeline_button_4', '碟狀');
+    LS_AddStr('criteria_timeline_button_selected', '精選');
+    LS_AddStr('criteria_timeline_button_full', '完整');
+    LS_AddStr('criteria_timeline_button_axis', '軸狀');
+    LS_AddStr('criteria_timeline_button_disk', '碟狀');
+    
+    LS_AddHtml('criteria_timeline_description', '\
+      TOCC為衛服部所建議用以診斷傳染性疾病的標準，其中：\
+      <br>\
+      - T為旅遊史（travel history）、\
+      <br>\
+      - O為職業別（occupation）、\
+      <br>\
+      - 第一C為接觸史（contact history）、\
+      <br>\
+      - 第二C為是否群聚（cluster）。\
+      <br><br>\
+      疫情初期台灣絕大多數確診個案皆屬境外移入，\
+      因此旅遊史成為區分病人風險的最重要關鍵。\
+      此圖顯示高風險國家名單隨時間逐漸增長，\
+      最終遍及全球，進而突顯疫情監測之重要性。\
+    ');
   }
   
   else if (LS_lang == 'fr') {
     LS_AddStr('criteria_timeline_title', 'Chronologie des dépistages systématiques');
-    LS_AddStr('criteria_timeline_button_1', 'Selectionnée');
-    LS_AddStr('criteria_timeline_button_2', 'Complète');
-    LS_AddStr('criteria_timeline_button_3', 'Frise');
-    LS_AddStr('criteria_timeline_button_4', 'Disques');
+    LS_AddStr('criteria_timeline_button_selected', 'Selectionnée');
+    LS_AddStr('criteria_timeline_button_full', 'Complète');
+    LS_AddStr('criteria_timeline_button_axis', 'Frise');
+    LS_AddStr('criteria_timeline_button_disk', 'Disques');
+    
+    LS_AddHtml('criteria_timeline_description', "\
+      Pour diagnostiquer une épidémie, le standard Taïwan recommande à suivre les critères TOCC, à savoir :\
+      <br>\
+      - T comme antécédents de voyage (<i>travel history</i>),\
+      <br>\
+      - O comme occupation,\
+      <br>\
+      - C comme cas contact et\
+      <br>\
+      - C comme cluster.\
+      <br><br>\
+      Au début de la pandémie, Taïwan était dominé par les cas importés.\
+      Les antécédents de voyage étaient donc la seule critère effective pour différencier les risques chez les patients potentiels.\
+      Cette figure illustre comment la liste des pays à hauts risques s'élargissait au fil du temps,\
+      grâce à une surveillance très étroite de la situation dans le monde entier.\
+    ");
   }
   
   else { //-- En
     LS_AddStr('criteria_timeline_title', 'Chronology of Systematic Testing');
-    LS_AddStr('criteria_timeline_button_1', 'Selected');
-    LS_AddStr('criteria_timeline_button_2', 'Full');
-    LS_AddStr('criteria_timeline_button_3', 'Timeline');
-    LS_AddStr('criteria_timeline_button_4', 'Disks');
+    LS_AddStr('criteria_timeline_button_selected', 'Selected');
+    LS_AddStr('criteria_timeline_button_full', 'Full');
+    LS_AddStr('criteria_timeline_button_axis', 'Timeline');
+    LS_AddStr('criteria_timeline_button_disk', 'Disks');
+    
+    LS_AddHtml('criteria_timeline_description', '\
+      To diagnose a transmissive disease, Taiwanese standard recommends the TOCC criteria, where:\
+      <br>\
+      - T as travel history,\
+      <br>\
+      - O as occupation,\
+      <br>\
+      - C as contact history, and\
+      <br>\
+      - C as cluster.\
+      <br><br>\
+      At the beginning of the pandemic, the imported cases were dominant in Taiwan.\
+      Travel history became then the only effective criterion for distinguish risks from potential patients.\
+      This plot shows how the list of high-risk countries expanded as time passed.\
+      The updates were made based on monitoring of the worldwide situation.\
+    ');
   }
 }
 

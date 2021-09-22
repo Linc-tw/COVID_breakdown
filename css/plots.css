@@ -275,6 +275,26 @@ body,
   margin-bottom: -50px;
 }
 
+#stats_in_mirror_latest .tooltip, 
+#stats_in_mirror_overall .tooltip, 
+#stats_in_mirror_2021 .tooltip, 
+#stats_in_mirror_2020 .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
+  margin-top: -50px;
+  margin-bottom: -50px;
+}
+
+#infectiodynamics_latest .tooltip, 
+#infectiodynamics_overall .tooltip, 
+#infectiodynamics_2021 .tooltip, 
+#infectiodynamics_2020 .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
+  margin-top: -50px;
+  margin-bottom: -50px;
+}
+
 /* Buttons */
 .sb-sidenav-menu-heading-nouppercase {
   padding: 1.75rem 1rem 0.75rem;

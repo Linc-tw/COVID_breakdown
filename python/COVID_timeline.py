@@ -27,7 +27,7 @@ class TimelineSheet(ccm.Template):
     self.coltag_twn_evt = '台灣事件'
     self.coltag_criteria = '台灣檢驗標準'
     self.coltag_global_evt = '全球事件'
-    self.coltag_key_evt = '重點事件'
+    self.coltag_cdc_evt = 'CDC時間軸'
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_timeline.csv' % ccm.DATA_PATH
     data = ccm.loadCsv(name, verbose=verbose)
@@ -79,9 +79,9 @@ class TimelineSheet(ccm.Template):
         global_evt_list.append(global_evt)
     return global_evt_list
   
-  def getKeyEvt(self):
+  def getCDCEvt(self):
     key_evt_list = []
-    for key_evt in self.getCol(self.coltag_key_evt):
+    for key_evt in self.getCol(self.coltag_cdc_evt):
       if key_evt == key_evt:
         key_evt_list.append(key_evt.rstrip('\n'))
       else:
@@ -106,27 +106,18 @@ class TimelineSheet(ccm.Template):
     date_list = []
     twn_evt_list = []
     global_evt_list = []
-    key_evt_list = []
+    cdc_evt_list = []
     
-    #for date, twn_evt, global_evt, key_evt in zip(self.getDate(), self.getTWNEvt(), self.getGlobalEvt(), self.getKeyEvt()):
-      #if twn_evt != twn_evt and global_evt != global_evt and key_evt != key_evt:
-        #continue
-      #else:
-        #date_list.append(date)
-        #twn_evt_list.append(twn_evt)
-        #global_evt_list.append(global_evt)
-        #key_evt_list.append(key_evt)
-    
-    for date, twn_evt, global_evt in zip(self.getDate(), self.getTWNEvt(), self.getGlobalEvt()):
-      if twn_evt != twn_evt and global_evt != global_evt:
+    for date, twn_evt, global_evt, cdc_evt in zip(self.getDate(), self.getTWNEvt(), self.getGlobalEvt(), self.getCDCEvt()):
+      if twn_evt != twn_evt and global_evt != global_evt and cdc_evt != cdc_evt:
         continue
       else:
         date_list.append(date)
         twn_evt_list.append(twn_evt)
         global_evt_list.append(global_evt)
-        key_evt_list.append(' ')
+        cdc_evt_list.append(cdc_evt)
     
-    stock = {'date': date_list, 'Taiwan_event': twn_evt_list, 'global_event': global_evt_list, 'key_event': key_evt_list}
+    stock = {'date': date_list, 'Taiwan_event': twn_evt_list, 'global_event': global_evt_list, 'CDC_event': cdc_evt_list}
     data = pd.DataFrame(stock)
     
     name = '%sprocessed_data/event_timeline_zh-tw.csv' % ccm.DATA_PATH

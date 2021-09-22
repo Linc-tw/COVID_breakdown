@@ -289,7 +289,7 @@ function ID_MouseMove(wrap, d) {
     return;
     
   //-- Get tooltip position
-  var y_alpha = 0.2;
+  var y_alpha = 0.35;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags

@@ -10,7 +10,8 @@
 
 //Linear/log?
 //R estimation
-//Description for timelines
+//CT:
+// generalized tests 
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
