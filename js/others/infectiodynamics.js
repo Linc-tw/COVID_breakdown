@@ -714,7 +714,22 @@ function ID_ButtonListener(wrap) {
   
   //-- Save
   d3.select(wrap.id + '_save').on('click', function(){
-    name = wrap.tag + '_' + LS_lang + '.png'
+    var tag1;
+    
+    if (wrap.period == 1)
+      tag1 = '2020_1st';
+    else if (wrap.period == 2)
+      tag1 = '2020_2nd';
+    else if (wrap.period == 3)
+      tag1 = '2021_1st';
+    else if (wrap.period == 4)
+      tag1 = '2021_2nd';
+    else if (wrap.period == 5)
+      tag1 = '2022_1st';
+    else
+      tag1 = 'all';
+    
+    name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 

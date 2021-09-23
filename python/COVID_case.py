@@ -271,6 +271,7 @@ class CaseSheet(ccm.Template):
       'Ethiopia': ['衣索比亞'],
       'Gambia': ['甘比亞'],
       'Ghana': ['迦納'], 
+      'Kenya': ['肯亞'],
       'Lesotho': ['賴索托'],
       'Mauritania': ['茅利塔尼亞'],
       'Morocco': ['摩洛哥'], 
