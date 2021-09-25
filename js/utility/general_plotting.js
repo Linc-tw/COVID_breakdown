@@ -56,12 +56,39 @@ var GP_wrap = {
 //------------------------------------------------------------------------------
 //-- Function declarations - utility
 
-function GP_AbbreviateValue(value) {
-  if (value >= 1e+6)
-    return (1e-6*value).toPrecision(3) + 'M';
-  if (value >= 1e+4)
+function GP_ValueStr_Tooltip(value) {
+  if (value < 1e+4)
+    return value.toFixed(0);
+  if (value < 1e+6)
     return (1e-3*value).toPrecision(3) + 'k';
-  return value.toFixed(0);
+  return (1e-6*value).toPrecision(3) + 'M';
+}
+
+function GP_ValueStr_Tick(value, ref) {
+  if (ref < 1e+4)
+    return d3.format('d')(value);
+  
+  var log_precision_ref = Math.floor(Math.log10(ref)); 
+  var log_precision_value = Math.floor(Math.log10(value)); 
+  
+  if (log_precision_value >= log_precision_ref)
+    return d3.format('.2s')(value);
+  return d3.format('.1s')(value);
+}
+
+function GP_ValueStr_Legend(value) {
+  if (+value < 1e+3)
+    return value;
+  
+  var k = Math.floor(value/1e+3);
+  var r = value % 1e+3;
+  
+  if (+value < 1e+6)
+    return d3.format('d')(k) + ' ' + d3.format('03d')(r);
+    
+  var m = Math.floor(k/1e+3);
+  k = k % 1e+3;
+  return d3.format('d')(m) + ' ' + d3.format('03d')(k) + ' ' + d3.format('03d')(r);
 }
 
 function GP_CumSum(data, col_tag_list) {
@@ -780,15 +807,10 @@ function GP_ReplotCountAsY(wrap, format) {
       .tickFormat(function (d) {if (d == 0) return '0%'; return d3.format(yticklabel_format)(d);});
   }
   else {
-    if (wrap.ytick[wrap.ytick.length-1] > 9999) 
-      yticklabel_format = '.2s';
-    else
-      yticklabel_format = 'd';
-  
     yaxis = d3.axisLeft(yscale)
       .tickSize(-wrap.width) //-- Top & bottom frameline
       .tickValues(wrap.ytick)
-      .tickFormat(function (d) {if (d == 0) return '0'; return d3.format(yticklabel_format)(d);});
+      .tickFormat(function (d) {return GP_ValueStr_Tick(d, wrap.ytick[wrap.ytick.length-1]);});
   }
   
   //-- Add yaxis
@@ -1270,7 +1292,7 @@ function GP_ReplotLegend(wrap, format, legend_size) {
       .attr('y', function (d, i) {if (format.includes('fold')) return GP_GetLegendYPos(wrap.legend_pos, wrap.legend_color.length, i); return wrap.legend_pos.y+i*wrap.legend_pos.dy;})
       .attr('text-anchor', 'end')
       .style('fill', function (d, i) {return wrap.legend_color[i];})
-      .text(function (d, i) {if (0 == i) return ''; if (format.includes('count')) return d; return d3.format('.2%')(d);});
+      .text(function (d, i) {if (0 == i) return ''; if (format.includes('count')) return GP_ValueStr_Legend(d); return d3.format('.2%')(d);});
       
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')

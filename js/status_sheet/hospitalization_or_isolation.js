@@ -177,7 +177,7 @@ function HOI_MouseMove(wrap, d) {
   
   //-- Define tooltip texts
   var tooltip_text = d.date;
-  tooltip_text += '<br>' + col_label + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag]);
+  tooltip_text += '<br>' + col_label + ' = ' + GP_ValueStr_Tooltip(+d[wrap.col_tag]);
   
   //-- Generate tooltip
   wrap.tooltip

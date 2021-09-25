@@ -327,7 +327,7 @@ function CBA_MouseMove(wrap, d) {
   
   //-- Generate tooltip text
   var tooltip_text = legend_title_list[wrap.col_ind];
-  tooltip_text += '<br>' + d['age'] + age_label + ' = ' + d[wrap.col_tag];
+  tooltip_text += '<br>' + d['age'] + age_label + ' = ' + GP_ValueStr_Tooltip(+d[wrap.col_tag]);
   
   //-- Generate tooltip
   wrap.tooltip

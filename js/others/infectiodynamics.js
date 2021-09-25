@@ -301,10 +301,9 @@ function ID_MouseMove(wrap, d) {
     col_label_list = ['Hospitalization', 'Local cases'];
   
   //-- Define tooltip texts
-  var fct_format = d3.format('d');
   var tooltip_text = d.date;
-  tooltip_text += '<br>' + col_label_list[0] + ' = ' + fct_format(d.y0);
-  tooltip_text += '<br>' + col_label_list[1] + ' = ' + fct_format(d.y1);
+  tooltip_text += '<br>' + col_label_list[0] + ' = ' + GP_ValueStr_Tooltip(+d.y0);
+  tooltip_text += '<br>' + col_label_list[1] + ' = ' + GP_ValueStr_Tooltip(+d.y1);
   
   //-- Generate tooltip
   wrap.tooltip

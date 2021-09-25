@@ -283,6 +283,7 @@ class CaseSheet(ccm.Template):
       
       ## North & South America
       'Argentina': ['阿根廷'], 
+      'Belize': ['貝里斯'],
       'Bolivia': ['玻利維亞'], 
       'Brazil': ['巴西'],
       'Canada': ['加拿大'], 

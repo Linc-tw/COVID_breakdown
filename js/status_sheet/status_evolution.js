@@ -178,7 +178,7 @@ function SE_MouseMove(wrap, d) {
   var i;
   
   for (i=0; i<wrap.nb_col; i++) {
-    tooltip_text += "<br>" + col_label_list[i] + " = " + d.h_list[i];
+    tooltip_text += "<br>" + col_label_list[i] + " = " + GP_ValueStr_Tooltip(+d.h_list[i]);
     sum += d.h_list[i];
   }
   
@@ -189,7 +189,7 @@ function SE_MouseMove(wrap, d) {
     tooltip_text += "<br>Total = ";
   else
     tooltip_text += "<br>Total = ";
-  tooltip_text += sum;
+  tooltip_text += GP_ValueStr_Tooltip(sum);
   
   //-- Generate tooltip
   wrap.tooltip

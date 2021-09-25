@@ -164,6 +164,7 @@ TRAVEL_HISTORY_DICT = {
   
   ## North & South America
   'Argentina': {'zh-tw': '阿根廷', 'fr': 'Argentine'},
+  'Belize': {'zh-tw': '貝里斯', 'fr': 'Belize'},
   'Bolivia': {'zh-tw': '玻利維亞', 'fr': 'Bolivie'},
   'Brazil': {'zh-tw': '巴西', 'fr': 'Brésil'},
   'Canada': {'zh-tw': '加拿大', 'fr': 'Canada'},
@@ -404,6 +405,7 @@ BRAND_DICT = {
   'Moderna': 'Moderna',
   '高端': 'Medigen',
   '\u9ad8\u7aef': 'Medigen',
+  'BNT': 'Pfizer', 
 }
 
 DELIVERY_LIST = [
@@ -441,6 +443,7 @@ DELIVERY_LIST = [
   [     'AZ',        'AZ',  458000, '2021-09-10',           '', 'https://www.cna.com.tw/news/firstnews/202109105008.aspx', ''],
   [     'AZ',        'AZ',  640000, '2021-09-17',           '', 'https://www.cna.com.tw/news/firstnews/202109175007.aspx', ''],
   ['Moderna',   'Moderna', 1080000, '2021-09-17',           '', 'https://www.cna.com.tw/news/firstnews/202109180003.aspx', ''],
+  [     'AZ',     'Japan',  500000, '2021-09-25',           '', 'https://www.cna.com.tw/news/firstnews/202109250088.aspx', ''],
 ]
 
 ################################################################################

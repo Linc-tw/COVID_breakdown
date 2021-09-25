@@ -189,9 +189,9 @@ function DC_MouseMove(wrap, d) {
   
   //-- Define tooltip texts
   var tooltip_text = d.date;
-  tooltip_text += '<br>' + col_label + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag]);
+  tooltip_text += '<br>' + col_label + ' = ' + GP_ValueStr_Tooltip(+d[wrap.col_tag]);
   if (wrap.cumul == 0)
-    tooltip_text += '<br>' + avg_text + ' = ' + GP_AbbreviateValue(+d[wrap.col_tag_avg]);
+    tooltip_text += '<br>' + avg_text + ' = ' + GP_ValueStr_Tooltip(+d[wrap.col_tag_avg]);
   
   //-- Generate tooltip
   wrap.tooltip

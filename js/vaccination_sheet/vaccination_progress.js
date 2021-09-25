@@ -398,8 +398,8 @@ function VP_MouseMove(wrap, d) {
   
   //-- Define tooltip texts
   var tooltip_text = d.date;
-  tooltip_text += '<br>' + col_label_list[0] + ' = ' + GP_AbbreviateValue(d.y_delivery);
-  tooltip_text += '<br>' + col_label_list[1] + ' = ' + GP_AbbreviateValue(d.y);
+  tooltip_text += '<br>' + col_label_list[0] + ' = ' + GP_ValueStr_Tooltip(d.y_delivery);
+  tooltip_text += '<br>' + col_label_list[1] + ' = ' + GP_ValueStr_Tooltip(d.y);
   
   //-- Generate tooltip
   wrap.tooltip
