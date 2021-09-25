@@ -229,7 +229,11 @@ class TestSheet(ccm.Template):
       '2020-04-01': 'http://at.cdc.tw/zU3557', ##   [(F|R|P|Ag|An)   & (global | contact therein F|R)] | [F|R|P|Ag|An & contact] | [F|R|P|Ag|An & cluster] | [P & unknown] + [F|R & unknown]
       '2020-04-03': 'http://at.cdc.tw/1vI50K', ##   [(F|R|P|Ag|An)   & (global | contact therein F|R)] | [F|R|P|Ag|An & contact] | [F|R|P|Ag|An & cluster] | [P & unknown] + [F|R|Ag|An & unknown]
       '2020-04-05': 'http://at.cdc.tw/Q96xrb', ##   [(F|R|D-unknown) & (global | contact therein F|R)] | [F|R|D-unknown & contact] | [F|R & cluster] | [P] + [F|R|Ag|An & unknown]
-      '2020-04-24': 'http://at.cdc.tw/R3sI9v'  ##   [(F|R|D-unknown) & (global | contact therein F|R)] | [F|R|D-unknown & contact] | [F|R & cluster] | [P] + [F|R|Ag|An & (cluster | unknown)]
+      '2020-04-24': 'http://at.cdc.tw/R3sI9v', ##   [(F|R|D-unknown) & (global | contact therein F|R)] | [F|R|D-unknown & contact] | [F|R & cluster] | [P] + [F|R|Ag|An & (cluster | unknown)]
+      
+      '2020-07-26': 'http://at.cdc.tw/6E3xJ6', ## Philippines all passengers
+      '2020-12-01': 'http://at.cdc.tw/07gjm3', ## Negative COVID tests
+      '2021-07-02': 'http://at.cdc.tw/9ZY9Od', ## Entry tests
     }
     
     for date, crit in zip(date_list, crit_list):
@@ -257,12 +261,12 @@ class TestSheet(ccm.Template):
   def saveCsv_criteriaTimeline(self):
     crit_dict = {
       '2020-01-16': {
-        'en': 'Wuhan with fever or resp. symp. or pneumonia\nClose contact of confirmed cases', ## Close contact of confirmed cases or ppl satisfying prev. cond.
+        'en': 'Wuhan w/ fever or resp. symp. or pneumonia\nClose contact of confirmed cases', ## Close contact of confirmed cases or ppl satisfying prev. cond.
         'fr': 'Wuhan avec fièvre ou sympt. resp. ou pneumonie\nContacts proches des cas confirmés',
         'zh-tw': '武漢旅遊史且有發燒或呼吸道症狀或肺炎\n確診案例之密切接觸者'
       },
       '2020-01-21': {
-        'en': 'China with pneumonia',
+        'en': 'China w/ pneumonia',
         'fr': 'Chine avec pneumonie',
         'zh-tw': '中國旅遊史且有肺炎'
       },
@@ -302,12 +306,12 @@ class TestSheet(ccm.Template):
         'zh-tw': '新加坡、泰國旅遊史',
       },
       '2020-02-16': {
-        'en': 'Started community monitoring\nMedics or local cluster with pneumonia',
+        'en': 'Started community monitoring\nMedics or local cluster w/ pneumonia',
         'fr': 'Surveillance supplémentaire des\ntransmissions locales\nClusters locaux ou de soignants\navec pneumonie',
         'zh-tw': '啟動擴大社區監測\n醫護或本土肺炎群聚',
       },
       '2020-02-29': {
-        'en': 'Korea, Italy\nAll pneumonia\nLocal cluster with resp. symp.', ## Merged QT into clinical
+        'en': 'Korea, Italy\nAll pneumonia\nLocal cluster w/ resp. symp.', ## Merged QT into clinical
         'fr': 'Corée, Italie\nToute pneumonie\nRegroupement local\navec sympt. resp.', 
         'zh-tw': '韓國、義大利旅遊史\n所有肺炎\n本土呼吸道症狀群聚'
       },
@@ -332,7 +336,7 @@ class TestSheet(ccm.Template):
         'zh-tw': '所有入境旅客',
       },
       '2020-03-25': {
-        'en': 'Medics with resp. symp.',
+        'en': 'Medics w/ resp. symp.',
         'fr': 'Soignants avec sympt. resp.',
         'zh-tw': '有呼吸道症狀之醫護',
       },
@@ -350,7 +354,17 @@ class TestSheet(ccm.Template):
         'en': 'Philippines all passengers',
         'fr': 'Philippines tous les passagers',
         'zh-tw': '菲律賓所有旅客'
-      }
+      },
+      '2020-12-01': {
+        'en': 'Negative PCR result required',
+        'fr': 'PCR négatif obligatoire',
+        'zh-tw': '需檢附陰性證明'
+      },  ## Negative COVID tests
+      '2021-07-02': {
+        'en': 'All passengers w/ or w/o symp.',
+        'fr': 'Tous les passagers avec ou sans sympt.',
+        'zh-tw': '所有旅客無論有無症狀'
+      },
     }
     
     date_list = [key for key, value in crit_dict.items()]

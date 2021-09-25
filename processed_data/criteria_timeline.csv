@@ -1,9 +1,9 @@
 date,en,fr,zh-tw
-2020-01-16,"Wuhan with fever or resp. symp. or pneumonia
+2020-01-16,"Wuhan w/ fever or resp. symp. or pneumonia
 Close contact of confirmed cases","Wuhan avec fièvre ou sympt. resp. ou pneumonie
 Contacts proches des cas confirmés","武漢旅遊史且有發燒或呼吸道症狀或肺炎
 確診案例之密切接觸者"
-2020-01-21,China with pneumonia,Chine avec pneumonie,中國旅遊史且有肺炎
+2020-01-21,China w/ pneumonia,Chine avec pneumonie,中國旅遊史且有肺炎
 2020-01-25,Hubei,Hubei,湖北旅遊史
 2020-02-02,"Started home quarantine scheme
 Guangdong","Début de la quarantaine à domicile
@@ -15,14 +15,14 @@ Guangdong","啟動居家檢疫與居家隔離
 2020-02-12,Checked back on flu-negative cases,Vérification des cas négatifs de grippe,回溯採檢有呼吸道症狀但流感陰性之病患
 2020-02-15,"Singapore, Thailand","Singapour, Thaïlande",新加坡、泰國旅遊史
 2020-02-16,"Started community monitoring
-Medics or local cluster with pneumonia","Surveillance supplémentaire des
+Medics or local cluster w/ pneumonia","Surveillance supplémentaire des
 transmissions locales
 Clusters locaux ou de soignants
 avec pneumonie","啟動擴大社區監測
 醫護或本土肺炎群聚"
 2020-02-29,"Korea, Italy
 All pneumonia
-Local cluster with resp. symp.","Corée, Italie
+Local cluster w/ resp. symp.","Corée, Italie
 Toute pneumonie
 Regroupement local
 avec sympt. resp.","韓國、義大利旅遊史
@@ -34,7 +34,9 @@ Asie centrale, Afrique du Nord",歐洲、中東、西亞、北非旅遊史
 2020-03-19,"Asia, USA, Canada, Australia, New Zealand","Asie, États-Unis, Canada,
 Australie, Nouvelle-Zélande",亞洲、美國、加拿大、澳洲、紐西蘭旅遊史
 2020-03-21,Global,Monde entier,所有入境旅客
-2020-03-25,Medics with resp. symp.,Soignants avec sympt. resp.,有呼吸道症狀之醫護
+2020-03-25,Medics w/ resp. symp.,Soignants avec sympt. resp.,有呼吸道症狀之醫護
 2020-04-01,"Dysnosmia, dysgeusia","Anosmie, agueusie",味嗅覺異常
 2020-04-05,Diarrhea,Diarrhée,腹瀉
 2020-07-26,Philippines all passengers,Philippines tous les passagers,菲律賓所有旅客
+2020-12-01,Negative PCR result required,PCR négatif obligatoire,需檢附陰性證明
+2021-07-02,All passengers w/ or w/o symp.,Tous les passagers avec ou sans sympt.,所有旅客無論有無症狀

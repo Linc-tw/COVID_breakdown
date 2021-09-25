@@ -10,8 +10,6 @@
 
 //Linear/log?
 //R estimation
-//CT:
-// generalized tests 
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
