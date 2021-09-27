@@ -169,10 +169,10 @@ Contents
   - `ppl_fully_vacc_rate`: proportion of the population fully vaccinated
 
 `vaccination_progress_injections.csv`
-- Row = report date
+- Row = available date
 - Column
   - `index`: day difference from 2020-01-01
-  - `date`
+  - `date`: When the available date is not available, the value is given as delivery date plus 8 days.
   - `total`: all brands, cumulative number of doses
   - `AZ`
   - `Moderna`

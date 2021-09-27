@@ -196,6 +196,7 @@ class VaccinationSheet(ccm.Template):
     
     cum_dict = {brand: 0 for brand in brand_list}
     stock = {col: [] for col in ['index', 'date', 'source'] + brand_list}
+    today_ord = ccm.getTodayOrdinal()
     
     ## brand, source, quantity, delivery_date, available_date, delivery_news, available_news
     for i, row in enumerate(ccm.DELIVERY_LIST):
@@ -206,7 +207,12 @@ class VaccinationSheet(ccm.Template):
       available_date = row[4]
       
       if available_date is None or available_date == '':
-        ind = -1
+        estimated_avail = ccm.ISODateToOrd(delivery_date) + 8
+        if estimated_avail > today_ord: 
+          ind = -1
+        else:
+          available_date = ccm.ordDateToISO(estimated_avail)
+          ind = estimated_avail - ord_ref
       else:
         ind = ccm.ISODateToOrd(available_date) - ord_ref 
       
@@ -277,10 +283,10 @@ class VaccinationSheet(ccm.Template):
     key = 'vaccination_progress_injections'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row = report date')
+    stock.append('- Row = available date')
     stock.append('- Column')
     stock.append('  - `index`: day difference from %s' % ccm.ISO_DATE_REF)
-    stock.append('  - `date`')
+    stock.append('  - `date`: When the available date is not available, the value is given as delivery date plus 8 days.')
     stock.append('  - `total`: all brands, cumulative number of doses')
     stock.append('  - `AZ`')
     stock.append('  - `Moderna`')
