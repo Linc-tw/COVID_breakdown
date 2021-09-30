@@ -446,6 +446,8 @@ DELIVERY_LIST = [
   [     'AZ',        'AZ',  640000, '2021-09-17',           '', 'https://www.cna.com.tw/news/firstnews/202109175007.aspx', ''],
   ['Moderna',   'Moderna', 1080000, '2021-09-17',           '', 'https://www.cna.com.tw/news/firstnews/202109180003.aspx', ''],
   [     'AZ',     'Japan',  500000, '2021-09-25',           '', 'https://www.cna.com.tw/news/firstnews/202109250088.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  550000, '2021-09-30',           '', 'https://www.cna.com.tw/news/firstnews/202109300013.aspx', ''],
+  [     'AZ',        'AZ',  656000, '2021-09-30',           '', 'https://www.cna.com.tw/news/firstnews/202109305005.aspx', ''],
 ]
 
 ################################################################################

@@ -419,7 +419,10 @@ class CaseSheet(ccm.Template):
           elif i+1 >= 800 and m <= 6:
             y = 2021
             
-          entry_date = '%04d-%02d-%02d' % (y, m, d)
+          if m == 109:
+            entry_date = np.nan
+          else:
+            entry_date = '%04d-%02d-%02d' % (y, m, d)
           entry_date_list.append(entry_date)
         except:
           print('Entry date, Case %d, %s' % (i+1, entry_date))

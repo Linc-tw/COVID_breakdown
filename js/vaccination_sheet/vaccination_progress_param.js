@@ -30,7 +30,7 @@ var VP_overall_wrap = {
   ],
 
   x_max_factor: 1.19,
-  y_max_factor: 1.3,
+  y_max_factor: 1.15,
   y_max_fixed: 0,
   nb_yticks: 4,
   legend_pos_x: 125,
