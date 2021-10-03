@@ -335,7 +335,7 @@ function VP_FormatData4(wrap) {
     wrap.annotation[i]['y_text'] = y_anno - (beta+1)*eps;
     wrap.annotation[i]['text-anchor'] = 'end';
     
-    annotation.push(wrap.annotation[i]);
+//     annotation.push(wrap.annotation[i]);
   }
   
   //-- Replace

@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_case.py           ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.09.05      ##
+    ##  Version 2021.10.02      ##
     ##############################
 
 import os
@@ -603,7 +603,7 @@ class CaseSheet(ccm.Template):
       
       'tonsillitis': ['淋巴腫脹', '扁桃腺腫痛'], 
       'hypoglycemia': ['低血糖'],
-      'hypoxemia': ['血氧濃度54%', '血氧降低', '低血氧'],
+      'hypoxemia': ['血氧濃度54%', '血氧降低', '低血氧', '低 血氧'],
       'anorexia': ['食慾不佳', '食慾不振', '食慾下降', '食欲不振', '胃口變差', '沒有食慾', '食慾差', '無食慾'],
       'fatigue+anorexia': ['食慾及活動力差'],
       'arrhythmia': ['心律不整'],
