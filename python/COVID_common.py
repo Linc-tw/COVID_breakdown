@@ -88,6 +88,7 @@ TRAVEL_HISTORY_DICT = {
   'Korea': {'zh-tw': '韓國', 'fr': 'Corée'},
   'Macao': {'zh-tw': '澳門', 'fr': 'Macao'},
   'Malaysia': {'zh-tw': '馬來西亞', 'fr': 'Malaisie'},
+  'Mongolia': {'zh-tw': '蒙古', 'fr': 'Mongolie'},
   'Myanmar': {'zh-tw': '緬甸', 'fr': 'Myanmar'},
   'Nepal': {'zh-tw': '尼泊爾', 'fr': 'Népal'},
   'Pakistan': {'zh-tw': '巴基斯坦', 'fr': 'Pakistan'},
@@ -158,6 +159,7 @@ TRAVEL_HISTORY_DICT = {
   'Morocco': {'zh-tw': '摩洛哥', 'fr': 'Maroc'},
   'Nigeria': {'zh-tw': '奈及利亞', 'fr': 'Nigéria'}, 
   'Senegal': {'zh-tw': '塞內加爾', 'fr': 'Sénégal'},
+  'Somaliland': {'zh-tw': '索馬利蘭', 'fr': 'Somaliland'},
   'South Africa': {'zh-tw': '南非', 'fr': 'Afrique du Sud'},
   'Tunisia': {'zh-tw': '突尼西亞', 'fr': 'Tunisie'},
   'Uganda': {'zh-tw': '烏干達', 'fr': 'Ouganda'},
@@ -445,9 +447,11 @@ DELIVERY_LIST = [
   ['Medigen',   'Medigen',  171681,           '', '2021-09-18',                                                        '', 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637679223404230332'],
   [     'AZ',        'AZ',  640000, '2021-09-17',           '', 'https://www.cna.com.tw/news/firstnews/202109175007.aspx', ''],
   ['Moderna',   'Moderna', 1080000, '2021-09-17',           '', 'https://www.cna.com.tw/news/firstnews/202109180003.aspx', ''],
+  ['Medigen',   'Medigen',  560000,           '', '2021-09-30',                                                        '', 'https://newtalk.tw/news/view/2021-09-30/644088'],
   [     'AZ',     'Japan',  500000, '2021-09-25',           '', 'https://www.cna.com.tw/news/firstnews/202109250088.aspx', ''],
   [ 'Pfizer',    'Pfizer',  550000, '2021-09-30',           '', 'https://www.cna.com.tw/news/firstnews/202109300013.aspx', ''],
   [     'AZ',        'AZ',  656000, '2021-09-30',           '', 'https://www.cna.com.tw/news/firstnews/202109305005.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  670000, '2021-10-01',           '', 'https://www.cna.com.tw/news/firstnews/202110010026.aspx', ''],
 ]
 
 ################################################################################
