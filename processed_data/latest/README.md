@@ -194,15 +194,6 @@ Contents
   - `Pfizer`
   - `*_avg`: 7-day moving average of `*`
 
-`vaccination_by_county.csv`
-- Row: date, city, or county
-- Column
-  - `key`: name of key
-  - `value`: number of doses over population
-  - `label`: label in English
-  - `label_fr`: label in French
-  - `label_zh`: label in Mandarin
-
 `vaccination_by_dose.csv`
 - Row: report date
 - Column

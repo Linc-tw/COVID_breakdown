@@ -227,9 +227,9 @@ def saveCsv_all():
   vacc_sheet = COVID_vaccination.VaccinationSheet()
   vacc_sheet.saveCsv()
   
-  print()
-  vacc_county_sheet = COVID_vaccination_county.VaccinationCountySheet()
-  vacc_county_sheet.saveCsv_vaccinationByCounty()
+  #print()
+  #vacc_county_sheet = COVID_vaccination_county.VaccinationCountySheet()
+  #vacc_county_sheet.saveCsv_vaccinationByCounty()
   
   print()
   saveCsv_incidenceRates(case_sheet, border_sheet)
