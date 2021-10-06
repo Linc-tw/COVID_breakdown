@@ -70,7 +70,7 @@ Language support
 Current workflow
 ----------------
 
-An automatic update is scheduled at 14:40 everyday.
+An automatic update is scheduled at 16:45 everyday.
 This is done by executing `upload.sh`. It will:
 - download raw data from the sources;
 - execute `python COVID_breakdown_data_processing.py` to generate processed data; and
