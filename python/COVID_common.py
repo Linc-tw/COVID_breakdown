@@ -452,6 +452,11 @@ DELIVERY_LIST = [
   [ 'Pfizer',    'Pfizer',  550000, '2021-09-30',           '', 'https://www.cna.com.tw/news/firstnews/202109300013.aspx', ''],
   [     'AZ',        'AZ',  656000, '2021-09-30',           '', 'https://www.cna.com.tw/news/firstnews/202109305005.aspx', ''],
   [ 'Pfizer',    'Pfizer',  670000, '2021-10-01',           '', 'https://www.cna.com.tw/news/firstnews/202110010026.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  270000, '2021-10-04',           '', 'https://www.cna.com.tw/news/firstnews/202110040005.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  889200, '2021-10-07',           '', 'https://www.cna.com.tw/news/firstnews/202110070168.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  800000, '2021-10-08',           '', 'https://www.cna.com.tw/news/ahel/202110080023.aspx', ''],
+  ['Moderna',   'Moderna', 1132100, '2021-10-09',           '', 'https://www.cna.com.tw/news/firstnews/202110090004.aspx', ''],
+  [     'AZ', 'Lithuania',  235900, '2021-10-09',           '', 'https://www.cna.com.tw/news/firstnews/202110095008.aspx', ''],
 ]
 
 ################################################################################
