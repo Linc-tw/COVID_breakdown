@@ -119,6 +119,7 @@ TRAVEL_HISTORY_DICT = {
   'Belgium': {'zh-tw': '比利時', 'fr': 'Belgique'},
   'Bulgaria': {'zh-tw': '保加利亞', 'fr': 'Bulgarie'},
   'Croatia': {'zh-tw': '克羅埃西亞', 'fr': 'Croatie'},
+  'Cyprus': {'zh-tw': '賽普勒斯', 'fr': 'Chypre'},
   'Czechia': {'zh-tw': '捷克', 'fr': 'Tchéquie'},
   'Danmark': {'zh-tw': '丹麥', 'fr': 'Danemark'},
   'Finland': {'zh-tw': '芬蘭', 'fr': 'Finlande'},
@@ -457,8 +458,10 @@ DELIVERY_LIST = [
   [ 'Pfizer',    'Pfizer',  800000, '2021-10-08',           '', 'https://www.cna.com.tw/news/firstnews/202110080023.aspx', ''],
   ['Moderna',   'Moderna', 1132100, '2021-10-09',           '', 'https://www.cna.com.tw/news/firstnews/202110090004.aspx', ''],
   [     'AZ', 'Lithuania',  235900, '2021-10-09',           '', 'https://www.cna.com.tw/news/firstnews/202110095008.aspx', ''],
+  ['Medigen',   'Medigen',  778344,           '', '2021-10-19',                                                        '', ''],
   [     'AZ',        'AZ', 1360000, '2021-10-13',           '', 'https://www.cna.com.tw/news/firstnews/202110135010.aspx', ''],
   [ 'Pfizer',    'Pfizer',  827000, '2021-10-14',           '', 'https://www.cna.com.tw/news/firstnews/202110140028.aspx', ''],
+  [     'AZ',     'Japan',  300000, '2021-10-27',           '', 'https://www.cna.com.tw/news/firstnews/202110270032.aspx', ''],
 ]
 
 ################################################################################
