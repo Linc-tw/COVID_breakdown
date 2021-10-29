@@ -413,20 +413,32 @@ BRAND_DICT = {
 
 DELIVERY_LIST = [
   ## brand, source, quantity, delivery_date, available_date, delivery_news, available_news
-  [     'AZ',        'AZ',  116500, '2021-03-03', '2021-03-22', 'https://www.cna.com.tw/news/firstnews/202103035003.aspx', 'https://www.cna.com.tw/news/firstnews/202103225002.aspx'],
+  
+  ## 2021/03
+  [     'AZ',        'AZ',  116500, '2021-03-03', '2021-03-19', 'https://www.cna.com.tw/news/firstnews/202103035003.aspx', 'https://www.cna.com.tw/news/firstnews/202103225002.aspx'],
+  
+  ## 2021/04
   [     'AZ',     'COVAX',  198600, '2021-04-04', '2021-04-13', 'https://www.cna.com.tw/news/firstnews/202104040008.aspx', 'https://www.cna.com.tw/news/firstnews/202104120047.aspx'],
+  
+  ## 2021/05
   [     'AZ',     'COVAX',  409800, '2021-05-19', '2021-05-27', 'https://www.cna.com.tw/news/firstnews/202105190224.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600326'],
+  
+  ## 2021/06
   ['Moderna',   'Moderna',  148800, '2021-05-28', '2021-06-08', 'https://www.cna.com.tw/news/firstnews/202105285010.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600375'],
   [     'AZ',     'Japan', 1237860, '2021-06-04', '2021-06-12', 'https://www.cna.com.tw/news/firstnews/202106045008.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600389'],
   ['Moderna',   'Moderna',  239400, '2021-06-18', '2021-06-26', 'https://www.cna.com.tw/news/firstnews/202106180294.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600409'],
   ['Moderna',       'USA', 2498440, '2021-06-20', '2021-06-29', 'https://www.cna.com.tw/news/firstnews/202106205005.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600416'],
-  ['Moderna',   'Moderna',  409800, '2021-06-30', '2021-07-08', 'https://www.cna.com.tw/news/firstnews/202106305007.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600434'],
+  
+  ## 2021/07
+  ['Moderna',   'Moderna',  409800, '2021-06-30', '2021-07-09', 'https://www.cna.com.tw/news/firstnews/202106305007.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600434'],
   [     'AZ',        'AZ',  625900, '2021-07-07', '2021-07-15', 'https://www.cna.com.tw/news/firstnews/202107070181.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600446'],
   [     'AZ',     'Japan', 1131780, '2021-07-08', '2021-07-16', 'https://www.cna.com.tw/news/firstnews/202107085007.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600448'],
   [     'AZ',     'Japan',  973480, '2021-07-15', '2021-07-23', 'https://www.cna.com.tw/news/firstnews/202107155011.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600455'],
   [     'AZ',        'AZ',  560100, '2021-07-15', '2021-07-23', 'https://www.cna.com.tw/news/firstnews/202107150245.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600455'],
   ['Moderna',   'Moderna',  349200, '2021-07-15', '2021-07-23', 'https://www.cna.com.tw/news/firstnews/202107150215.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600455'],
-  ['Medigen',   'Medigen',  265528,           '', '2021-07-31',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600469'],
+  
+  ## 2021/08
+  ['Medigen',   'Medigen',  265528,           '', '2021-08-02',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600469'],
   [     'AZ',        'AZ',  581400, '2021-07-27', '2021-08-04', 'https://www.cna.com.tw/news/firstnews/202107270203.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600479'],
   ['Medigen',   'Medigen',   86910,           '', '2021-08-05',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600479'],
   [     'AZ', 'Lithuania',   19400, '2021-07-31', '2021-08-10', 'https://www.cna.com.tw/news/firstnews/202107310085.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600484'],
@@ -435,20 +447,25 @@ DELIVERY_LIST = [
   [     'AZ',        'AZ',  524200, '2021-08-12', '2021-08-20', 'https://www.cna.com.tw/news/firstnews/202108120201.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600505'],
   ['Moderna',   'Moderna',  249000, '2021-08-15', '2021-08-24', 'https://www.cna.com.tw/news/firstnews/202108155005.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600513'],
   ['Medigen',   'Medigen',  263586,           '', '2021-08-24',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600513'],
+  
+  ## 2021/09
   [     'AZ',        'AZ',  264400, '2021-08-27', '2021-09-04', 'https://www.cna.com.tw/news/firstnews/202108275002.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600542'],
   ['Moderna',   'Czechia',   28800, '2021-08-29', '2021-09-07', 'https://www.cna.com.tw/news/firstnews/202108290099.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600550'],
   [     'AZ',        'AZ',  594900, '2021-08-31', '2021-09-07', 'https://www.cna.com.tw/news/firstnews/202108310186.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600550'],
-  ['Medigen',   'Medigen',   86935,           '', '2021-09-08',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600550'],
-  [     'AZ',    'Poland',  400000, '2021-09-05',           '', 'https://www.cna.com.tw/news/firstnews/202109050008.aspx', 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637679223404230332'],
-  [     'AZ',     'COVAX',  409800, '2021-09-05',           '', 'https://www.cna.com.tw/news/firstnews/202109055005.aspx', 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637679223404230332'],
-  [     'AZ',     'Japan',   64000, '2021-09-07',           '', 'https://www.cna.com.tw/news/firstnews/202109075007.aspx', 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637679223404230332'],
-  [ 'Pfizer',    'Pfizer',  933072, '2021-09-02', '2021-09-17', 'https://www.cna.com.tw/news/firstnews/202109025001.aspx', 'https://www.cna.com.tw/news/firstnews/202109160346.aspx'],
+  ['Medigen',   'Medigen',   86935,           '', '2021-09-07',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600550'],
+  [     'AZ',    'Poland',  400200, '2021-09-05', '2021-09-14', 'https://www.cna.com.tw/news/firstnews/202109050008.aspx', ''],
+  [     'AZ',     'COVAX',  409800, '2021-09-05', '2021-09-14', 'https://www.cna.com.tw/news/firstnews/202109055005.aspx', ''],
+  ['Medigen',   'Medigen',  171681,           '', '2021-09-14',                                                        '', ''],
+  [     'AZ',     'Japan',   62800, '2021-09-07', '2021-09-15', 'https://www.cna.com.tw/news/firstnews/202109075007.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  930732, '2021-09-02', '2021-09-17', 'https://www.cna.com.tw/news/firstnews/202109025001.aspx', 'https://www.cna.com.tw/news/firstnews/202109160346.aspx'],
   [ 'Pfizer',    'Pfizer',  909672, '2021-09-09', '2021-09-17', 'https://www.cna.com.tw/news/firstnews/202109090011.aspx', 'https://www.cna.com.tw/news/firstnews/202109160346.aspx'],
-  [     'AZ',        'AZ',  458000, '2021-09-10',           '', 'https://www.cna.com.tw/news/firstnews/202109105008.aspx', 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637679223404230332'],
-  ['Medigen',   'Medigen',  171681,           '', '2021-09-18',                                                        '', 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637679223404230332'],
-  [     'AZ',        'AZ',  640000, '2021-09-17',           '', 'https://www.cna.com.tw/news/firstnews/202109175007.aspx', ''],
-  ['Moderna',   'Moderna', 1080000, '2021-09-17',           '', 'https://www.cna.com.tw/news/firstnews/202109180003.aspx', ''],
-  ['Medigen',   'Medigen',  560000,           '', '2021-09-30',                                                        '', 'https://newtalk.tw/news/view/2021-09-30/644088'],
+  [     'AZ',        'AZ',  457800, '2021-09-10', '2021-09-18', 'https://www.cna.com.tw/news/firstnews/202109105008.aspx', ''],
+  ['Medigen',   'Medigen',   84280,           '', '2021-09-24',                                                        '', ''],
+  [     'AZ',        'AZ',  640900, '2021-09-17', '2021-09-25', 'https://www.cna.com.tw/news/firstnews/202109175007.aspx', ''],
+  ['Moderna',   'Moderna', 1082500, '2021-09-17', '2021-09-26', 'https://www.cna.com.tw/news/firstnews/202109180003.aspx', ''],
+  ['Medigen',   'Medigen',  385680,           '', '2021-09-28',                                                        '', ''],
+  
+  ## 2021/10 
   [     'AZ',     'Japan',  500000, '2021-09-25',           '', 'https://www.cna.com.tw/news/firstnews/202109250088.aspx', ''],
   [ 'Pfizer',    'Pfizer',  550000, '2021-09-30',           '', 'https://www.cna.com.tw/news/firstnews/202109300013.aspx', ''],
   [     'AZ',        'AZ',  656000, '2021-09-30',           '', 'https://www.cna.com.tw/news/firstnews/202109305005.aspx', ''],
@@ -462,7 +479,22 @@ DELIVERY_LIST = [
   [     'AZ',        'AZ', 1360000, '2021-10-13',           '', 'https://www.cna.com.tw/news/firstnews/202110135010.aspx', ''],
   [ 'Pfizer',    'Pfizer',  827000, '2021-10-14',           '', 'https://www.cna.com.tw/news/firstnews/202110140028.aspx', ''],
   [     'AZ',     'Japan',  300000, '2021-10-27',           '', 'https://www.cna.com.tw/news/firstnews/202110270032.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  902100, '2021-10-28',           '', 'https://www.cna.com.tw/news/firstnews/202110280177.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  910300, '2021-10-29',           '', 'https://www.cna.com.tw/news/firstnews/202110290017.aspx', ''],
+  
+  ## 2021/11 
+  
 ]
+
+QC_REF_DICT = {
+  '2021-03': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637535562081700777',
+  '2021-04': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637558184907650191',
+  '2021-05': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637584168929602989',
+  '2021-06': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637608147658280725',
+  '2021-07': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637641134152043482',
+  '2021-08': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637707534805440075',
+  '2021-09': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637697404423272822',
+}
 
 ################################################################################
 ## Global variables

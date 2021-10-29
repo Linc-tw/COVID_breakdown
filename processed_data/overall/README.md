@@ -169,10 +169,10 @@ Contents
   - `ppl_fully_vacc_rate`: proportion of the population fully vaccinated
 
 `vaccination_progress_injections.csv`
-- Row = available date
+- Row = report date
 - Column
   - `index`: day difference from 2020-01-01
-  - `date`: When the available date is not available, the value is given as delivery date plus 8 days.
+  - `date`
   - `total`: all brands, cumulative number of doses
   - `AZ`
   - `Moderna`
@@ -180,10 +180,11 @@ Contents
   - `Pfizer`
 
 `vaccination_progress_supplies.csv`
-- Row: report date
+- Row: available date
 - Column
   - `index`: day difference from 2020-01-01
-  - `date`
+  - `date`: available date of the supply
+    - If the available date is not available, the date is estimated as the delivery date plus 8 days
   - `source`: origin of the supply
   - `total`: all brands, cumulative number of doses
   - `AZ`

@@ -268,10 +268,11 @@ class VaccinationSheet(ccm.Template):
     key = 'vaccination_progress_supplies'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row: report date')
+    stock.append('- Row: available date')
     stock.append('- Column')
     stock.append('  - `index`: day difference from %s' % ccm.ISO_DATE_REF)
-    stock.append('  - `date`')
+    stock.append('  - `date`: available date of the supply')
+    stock.append('    - If the available date is not available, the date is estimated as the delivery date plus 8 days')
     stock.append('  - `source`: origin of the supply')
     stock.append('  - `total`: all brands, cumulative number of doses')
     stock.append('  - `AZ`')
@@ -283,10 +284,10 @@ class VaccinationSheet(ccm.Template):
     key = 'vaccination_progress_injections'
     stock = []
     stock.append('`%s.csv`' % key)
-    stock.append('- Row = available date')
+    stock.append('- Row = report date')
     stock.append('- Column')
     stock.append('  - `index`: day difference from %s' % ccm.ISO_DATE_REF)
-    stock.append('  - `date`: When the available date is not available, the value is given as delivery date plus 8 days.')
+    stock.append('  - `date`')
     stock.append('  - `total`: all brands, cumulative number of doses')
     stock.append('  - `AZ`')
     stock.append('  - `Moderna`')
@@ -322,6 +323,73 @@ class VaccinationSheet(ccm.Template):
       ccm.saveCsv(name, data_s)
       name = '%sprocessed_data/%s/vaccination_progress_injections.csv' % (ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_i)
+      
+      self.makeReadme_vaccinationProgress(page)
+    return
+  
+  def makeDeliveries_vaccinationDeliveries(self):
+    brand_list          = [delivery[0] for delivery in ccm.DELIVERY_LIST]
+    source_list         = [delivery[1] for delivery in ccm.DELIVERY_LIST]
+    quantity_list       = [delivery[2] for delivery in ccm.DELIVERY_LIST]
+    delivery_date_list  = [delivery[3] for delivery in ccm.DELIVERY_LIST]
+    available_date_list = [delivery[4] for delivery in ccm.DELIVERY_LIST]
+    delivery_news_list  = [delivery[5] for delivery in ccm.DELIVERY_LIST]
+    available_news_list = [delivery[6] for delivery in ccm.DELIVERY_LIST]
+    stock = {
+      'brand': brand_list, 'source': source_list, 'quantity': quantity_list, 
+      'delivery_date': delivery_date_list, 'available_date': available_date_list, 
+      'delivery_news': delivery_news_list, 'available_news': available_news_list,
+    }
+    return stock
+  
+  def makeRef_vaccinationDeliveries(self):
+    month_list = list(ccm.QC_REF_DICT.keys())
+    link_list  = list(ccm.QC_REF_DICT.values())
+    stock = {'month': month_list, 'link': link_list}
+    return stock
+  
+  def makeReadme_vaccinationDeliveries(self, page):
+    key = 'vaccination_deliveries_list'
+    stock = []
+    stock.append('`%s.csv`' % key)
+    stock.append('- Row: deliveries')
+    stock.append('- Column')
+    stock.append('  - `brand`')
+    stock.append('  - `source`: expeditor of the delivery')
+    stock.append('  - `quantity`: number of doses after quality checks fulfilled')
+    stock.append('    - Quality checks always consume some doses, typically 600.')
+    stock.append('    - The exact quantity can be found in FDA\'s monthly report.')
+    stock.append('    - The links to these reports are listed in `vaccination_deliveries_reference.csv`.')
+    stock.append('  - `delivery_date`')
+    stock.append('  - `available_date`: date after quality checks fulfilled')
+    stock.append('  - `delivery_news`: CNA news on the delivery')
+    stock.append('  - `available_news`: CNA news or FDA press release on quality checks')
+    ccm.README_DICT[page][key] = stock
+    
+    key = 'vaccination_deliveries_reference'
+    stock = []
+    stock.append('`%s.csv`' % key)
+    stock.append('- Row = month')
+    stock.append('- Column')
+    stock.append('  - `month`')
+    stock.append('  - `link`: link to the reference pdf file published by FDA')
+    ccm.README_DICT[page][key] = stock
+    return
+  
+  def saveCsv_vaccinationDeliveries(self):
+    stock_d = self.makeDeliveries_vaccinationDeliveries()
+    stock_d = pd.DataFrame(stock_d)
+    stock_r = self.makeRef_vaccinationDeliveries()
+    stock_r = pd.DataFrame(stock_r)
+    
+    for page in ccm.PAGE_LIST:
+      if page != ccm.PAGE_OVERALL:
+        continue
+      
+      name = '%sprocessed_data/%s/vaccination_deliveries_list.csv' % (ccm.DATA_PATH, page)
+      ccm.saveCsv(name, stock_d)
+      name = '%sprocessed_data/%s/vaccination_deliveries_reference.csv' % (ccm.DATA_PATH, page)
+      ccm.saveCsv(name, stock_r)
       
       self.makeReadme_vaccinationProgress(page)
     return
@@ -402,6 +470,7 @@ class VaccinationSheet(ccm.Template):
   def saveCsv(self):
     self.saveCsv_vaccinationByBrand()
     self.saveCsv_vaccinationProgress()
+    self.saveCsv_vaccinationDeliveries()
     self.saveCsv_vaccinationByDose()
     return
   
