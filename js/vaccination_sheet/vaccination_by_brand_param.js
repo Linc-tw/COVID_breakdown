@@ -25,7 +25,7 @@ var VBB_latest_wrap = {
   y_max_factor: 1.6, 
   nb_yticks: 4,
   legend_pos_x: 115, 
-  legend_pos_x1_: {en: 225, fr: 225, 'zh-tw': 205},
+  legend_pos_x1_: {en: 230, fr: 230, 'zh-tw': 210},
 };
 
 var VBB_overall_wrap = {
@@ -37,8 +37,8 @@ var VBB_overall_wrap = {
   
   y_max_factor: 1.2, 
   nb_yticks: 4,
-  legend_pos_x: 115, 
-  legend_pos_x1_: {en: 225, fr: 225, 'zh-tw': 205},
+  legend_pos_x: 125, 
+  legend_pos_x1_: {en: 235, fr: 235, 'zh-tw': 215},
 };
 
 var VBB_2021_wrap = {
@@ -50,6 +50,6 @@ var VBB_2021_wrap = {
 
   y_max_factor: 1.2,
   nb_yticks: 4,
-  legend_pos_x: 115, 
-  legend_pos_x1_: {en: 225, fr: 225, 'zh-tw': 205},
+  legend_pos_x: 125, 
+  legend_pos_x1_: {en: 235, fr: 235, 'zh-tw': 215},
 };
