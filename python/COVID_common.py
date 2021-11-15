@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_common.py         ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.09.05      ##
+    ##  Version 2021.11.13      ##
     ##############################
 
 import os
@@ -181,13 +181,15 @@ TRAVEL_HISTORY_DICT = {
   'Nicaragua': {'zh-tw': '尼加拉瓜', 'fr': 'Nicaragua'},
   'Paraguay': {'zh-tw': '巴拉圭', 'fr': 'Paraguay'},
   'Peru': {'zh-tw': '秘魯', 'fr': 'Pérou'},
+  'Saint Kitts and Nevis': {'zh-tw': '聖克里斯多福及尼維斯', 'fr': 'Saint-Christophe-et-Niévès'},
+  'Saint Lucia': {'zh-tw': '聖露西亞', 'fr': 'Sainte-Lucie'},
   'USA': {'zh-tw': '美國', 'fr': 'États-Unis'},
   
   ## Oceania
   'Australia': {'zh-tw': '澳洲', 'fr': 'Australie'},
   'Marshall Islands': {'zh-tw': '馬紹爾', 'fr': 'Îles Marshall'},
   'New Zealand': {'zh-tw': '紐西蘭', 'fr': 'Nouvelle-Zélande'},
-  'Palau': {'zh-tw': '帛琉', 'fr': 'Palaos'},
+  'Palau': {'zh-tw': '帛琉', 'fr': 'Palaos'}, 
   
   ## Others
   'Antarctica': {'zh-tw': '南極', 'fr': 'Antartique'},
@@ -488,9 +490,12 @@ DELIVERY_LIST = [
   [     'AZ',     'Japan',  300000, '2021-10-27',           '', 'https://www.cna.com.tw/news/firstnews/202110270032.aspx', ''],
   [ 'Pfizer',    'Pfizer',  902100, '2021-10-28',           '', 'https://www.cna.com.tw/news/firstnews/202110280177.aspx', ''],
   [ 'Pfizer',    'Pfizer',  910300, '2021-10-29',           '', 'https://www.cna.com.tw/news/firstnews/202110290017.aspx', ''],
-  [ 'Moderna',      'USA', 1500000, '2021-11-01',           '', 'https://www.cna.com.tw/news/firstnews/202111010135.aspx', ''],
+  ['Moderna',       'USA', 1500000, '2021-11-01',           '', 'https://www.cna.com.tw/news/firstnews/202111010135.aspx', ''],
   [ 'Pfizer',    'Pfizer',  811700, '2021-11-05',           '', 'https://www.cna.com.tw/news/firstnews/202111050020.aspx', ''],
-  
+  [     'AZ',        'AZ',  594000, '2021-11-06',           '', 'https://www.cna.com.tw/news/firstnews/202111065006.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  926600, '2021-11-12',           '', 'https://www.cna.com.tw/news/firstnews/202111120148.aspx', ''],
+  ['Moderna',   'Moderna', 1226100, '2021-11-12',           '', 'https://www.cna.com.tw/news/firstnews/202111125008.aspx', ''],
+  #['',   '', , '2021-11-',           '', '', ''],
 ]
 
 QC_REF_DICT = {
@@ -501,7 +506,8 @@ QC_REF_DICT = {
   '2021-07': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637641134152043482',
   '2021-08': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637707534805440075',
   '2021-09': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637697404423272822',
-  '2021-10': '',
+  '2021-10': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637716363065289877',
+  #'2021-11': '',
 }
 
 ################################################################################

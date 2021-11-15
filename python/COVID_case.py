@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_case.py           ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.10.02      ##
+    ##  Version 2021.11.13      ##
     ##############################
 
 import os
@@ -300,6 +300,8 @@ class CaseSheet(ccm.Template):
       'Nicaragua': ['尼加拉瓜'],
       'Paraguay': ['巴拉圭'],
       'Peru': ['秘魯', '祕魯'], 
+      'Saint Kitts and Nevis': ['聖克里斯多福及尼維斯'],
+      'Saint Lucia': ['聖露西亞'],
       'USA': ['美國', '加州', '紐約'], 
       
       ## Oceania
