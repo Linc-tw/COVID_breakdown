@@ -495,6 +495,7 @@ DELIVERY_LIST = [
   [     'AZ',        'AZ',  594000, '2021-11-06',           '', 'https://www.cna.com.tw/news/firstnews/202111065006.aspx', ''],
   [ 'Pfizer',    'Pfizer',  926600, '2021-11-12',           '', 'https://www.cna.com.tw/news/firstnews/202111120148.aspx', ''],
   ['Moderna',   'Moderna', 1226100, '2021-11-12',           '', 'https://www.cna.com.tw/news/firstnews/202111125008.aspx', ''],
+  ['Moderna',   'Moderna', 1150380, '2021-11-19',           '', 'https://www.cna.com.tw/news/firstnews/202111180261.aspx', ''],
   #['',   '', , '2021-11-',           '', '', ''],
 ]
 
