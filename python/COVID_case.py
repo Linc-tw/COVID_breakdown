@@ -47,6 +47,7 @@ class CaseSheet(ccm.Template):
     self.coltag_conf_press_rel = '疾管署新聞稿'
     self.coltag_dis_press_rel = '出院新聞稿'
     
+    ## new_year_token
     self.n_total = 0
     self.n_latest = 0
     self.n_2022 = 0
@@ -64,8 +65,10 @@ class CaseSheet(ccm.Template):
     self.setCaseCounts()
     
     if verbose:
+      ## new_year_token
       print('N_total = %d' % self.n_total)
       print('N_latest = %d' % self.n_latest)
+      print('N_2022 = %d' % self.n_2022)
       print('N_2021 = %d' % self.n_2021)
       print('N_2020 = %d' % self.n_2020)
       print('N_empty = %d' % self.n_empty)
@@ -79,11 +82,13 @@ class CaseSheet(ccm.Template):
       
       self.n_total += 1
       
+      ## new_year_token
       ind_latest = ccm.indexForLatest(report_date)
-      ind_2022 = np.nan
+      ind_2022 = ccm.indexFor2022(report_date)
       ind_2021 = ccm.indexFor2021(report_date)
       ind_2020 = ccm.indexFor2020(report_date)
       
+      ## new_year_token
       ## If not NaN
       if ind_latest == ind_latest:
         self.n_latest += 1
@@ -505,7 +510,7 @@ class CaseSheet(ccm.Template):
   
   def getChannel(self):
     channel_list = []
-    key_list_out = ['採檢']
+    key_list_out = ['其他', '採檢']
     
     for i, channel in enumerate(self.getCol(self.coltag_channel)):
       if channel != channel: ## Is nan
@@ -731,8 +736,10 @@ class CaseSheet(ccm.Template):
     stock.append('- Row')
     stock.append('  - `n_total`: total confirmed case counts')
     stock.append('  - `n_latest`: number of confirmed cases during last 90 days')
+    ## new_year_token
     stock.append('  - `n_2020`: number of confirmed cases during 2020')
     stock.append('  - `n_2021`: number of confirmed cases during 2021')
+    stock.append('  - `n_2022`: number of confirmed cases during 2022')
     stock.append('  - `n_empty`: number of cases that have been shown later as false positive')
     stock.append('  - `timestamp`: time of last update')
     stock.append('- Column')
@@ -748,8 +755,9 @@ class CaseSheet(ccm.Template):
     
     population_twn = ccm.COUNTY_DICT['00000']['population']
     
-    key = ['n_overall', 'n_latest', 'n_2020', 'n_2021', 'n_empty', 'timestamp', 'population_twn']
-    value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_empty, timestamp, population_twn]
+    ## new_year_token
+    key = ['n_overall', 'n_latest', 'n_2020', 'n_2021', 'n_2022', 'n_empty', 'timestamp', 'population_twn']
+    value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_2022, self.n_empty, timestamp, population_twn]
     
     ## Make data frame
     data = {'key': key, 'value': value}
@@ -1065,6 +1073,9 @@ class CaseSheet(ccm.Template):
     for stock in stock_dict.values():
       assert len(stock['x_list_list']) == len(stock['y_list_list'])
       
+      if 0 == stock['nb_dict']['N_data']:
+        continue
+      
       ## Make histogram
       x_hist = clt.Counter([x for x_list in stock['x_list_list'] for x in x_list])
       x_hist = sorted(x_hist.items(), key=lambda t: t[1], reverse=True)
@@ -1213,6 +1224,9 @@ class CaseSheet(ccm.Template):
     ## Loop over page
     for stock in stock_dict.values():
       assert len(stock['x_list_list']) == len(stock['y_list_list'])
+      
+      if 0 == stock['nb_dict']['N_data']:
+        continue
       
       ## Make histogram
       x_hist = clt.Counter([x for x_list in stock['x_list_list'] for x in x_list])

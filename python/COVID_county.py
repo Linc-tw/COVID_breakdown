@@ -223,7 +223,7 @@ class CountySheet(ccm.Template):
     elif page == ccm.PAGE_OVERALL:
       stock.append('  - `total`: overall stats')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
-    elif page == ccm.PAGE_2020 or page == ccm.PAGE_2021:
+    elif page == ccm.PAGE_2020 or page == ccm.PAGE_2021 or page == ccm.PAGE_2022: ## new_year_token
       stock.append('  - `total`: all year %s' % page)
       stock.append('  - `MMM`: during month `MMM`')
     ccm.README_DICT[page][key] = stock
@@ -237,7 +237,8 @@ class CountySheet(ccm.Template):
       if ccm.PAGE_LATEST == page:
         label_list = ['total'] + ['week_-%d' % (i+1) for i in range(12)]
       elif ccm.PAGE_OVERALL == page:
-        label_list = ['total'] + ['%s_2020' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + ['%s_2021' % (ccm.numMonthToAbbr(i+1)) for i in range(12)]
+        label_list = ['total'] + ['%s_2020' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + ['%s_2021' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
+          ['%s_2022' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token
       else:
         label_list = ['total'] + [ccm.numMonthToAbbr(i+1) for i in range(12)]
       
@@ -314,7 +315,7 @@ class CountySheet(ccm.Template):
     elif page == ccm.PAGE_OVERALL:
       stock.append('  - `total`: overall stats')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
-    elif page == ccm.PAGE_2020 or page == ccm.PAGE_2021:
+    elif page == ccm.PAGE_2020 or page == ccm.PAGE_2021 or page == ccm.PAGE_2022: ## new_year_token
       stock.append('  - `total`: all year %s' % page)
       stock.append('  - `MMM`: during month `MMM`')
     ccm.README_DICT[page][key] = stock
@@ -342,7 +343,8 @@ class CountySheet(ccm.Template):
       if ccm.PAGE_LATEST == page:
         label_list = ['total'] + ['week_-%d' % (i+1) for i in range(12)]
       elif ccm.PAGE_OVERALL == page:
-        label_list = ['total'] + ['%s_2020' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + ['%s_2021' % (ccm.numMonthToAbbr(i+1)) for i in range(12)]
+        label_list = ['total'] + ['%s_2020' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + ['%s_2021' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
+          ['%s_2022' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token
       else:
         label_list = ['total'] + [ccm.numMonthToAbbr(i+1) for i in range(12)]
     

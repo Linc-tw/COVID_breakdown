@@ -307,8 +307,11 @@ class VaccinationSheet(ccm.Template):
       if page == ccm.PAGE_2020:
         continue
       
+      ## new_year_token
       if page == ccm.PAGE_LATEST:
         ind = ccm.getTodayOrdinal() - ord_ref - 90
+      elif page == ccm.PAGE_2022:
+        ind = ccm.ISODateToOrd('2022-01-01') - ord_ref
       elif page == ccm.PAGE_2021:
         ind = ccm.ISODateToOrd('2021-01-01') - ord_ref
       elif page == ccm.PAGE_OVERALL:
@@ -451,8 +454,11 @@ class VaccinationSheet(ccm.Template):
       if page == ccm.PAGE_2020:
         continue
       
+      ## new_year_token
       if page == ccm.PAGE_LATEST:
         ind = ccm.getTodayOrdinal() - ord_ref - 90
+      elif page == ccm.PAGE_2022:
+        ind = ccm.ISODateToOrd('2022-01-01') - ord_ref
       elif page == ccm.PAGE_2021:
         ind = ccm.ISODateToOrd('2021-01-01') - ord_ref
       elif page == ccm.PAGE_OVERALL:

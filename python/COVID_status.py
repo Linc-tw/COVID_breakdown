@@ -59,6 +59,7 @@ class StatusSheet(ccm.Template):
     data = ccm.loadCsv(name, verbose=verbose)
     
     date_list = data[self.coltag_date].values
+    ## new_year_token
     self.ind_2021 = (date_list == '2021分隔線').argmax()
     
     cum_dis_list = data[self.coltag_cum_dis].values
@@ -74,9 +75,10 @@ class StatusSheet(ccm.Template):
     date_list = []
     y = 2020
     
+    ## new_year_token
     for i, date in enumerate(self.getCol(self.coltag_date)):
       if i >= self.ind_2021:
-        y = 2021 #WARNING
+        y = 2021
         
       mmdd_zh = date.split('月')
       m = int(mmdd_zh[0])

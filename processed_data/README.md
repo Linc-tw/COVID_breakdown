@@ -25,6 +25,9 @@ Contents
 `2021/`
 - Contains statistics of 2021
 
+`2022/`
+- Contains statistics of 2022
+
 `latest/`
 - Contains statistics of last 90 days
 
@@ -59,6 +62,7 @@ Contents
   - `n_latest`: number of confirmed cases during last 90 days
   - `n_2020`: number of confirmed cases during 2020
   - `n_2021`: number of confirmed cases during 2021
+  - `n_2022`: number of confirmed cases during 2022
   - `n_empty`: number of cases that have been shown later as false positive
   - `timestamp`: time of last update
 - Column

@@ -28,10 +28,11 @@ ISO_DATE_REF_VACC = '2021-03-01'
 NB_LOOKBACK_DAYS = 90
 PAGE_LATEST = 'latest'
 PAGE_OVERALL = 'overall'
+## new_year_token
 PAGE_2022 = '2022'
 PAGE_2021 = '2021'
 PAGE_2020 = '2020'
-PAGE_LIST = [PAGE_LATEST, PAGE_OVERALL, PAGE_2021, PAGE_2020]
+PAGE_LIST = [PAGE_LATEST, PAGE_OVERALL, PAGE_2022, PAGE_2021, PAGE_2020] ## new_year_token
 
 SYMPTOM_DICT = {
   'sneezing': {'zh-tw': '鼻腔症狀', 'fr': 'éternuement'},
@@ -508,7 +509,8 @@ QC_REF_DICT = {
   '2021-08': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637707534805440075',
   '2021-09': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637697404423272822',
   '2021-10': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637716363065289877',
-  #'2021-11': '',
+  '2021-11': '',
+  #'2021-12': '',
 }
 
 ################################################################################
@@ -661,6 +663,14 @@ def indexForOverall(iso):
     return np.nan
   return ind
 
+## new_year_token
+def indexFor2022(iso):
+  ord_begin_2022 = ISODateToOrd('2022-01-01')
+  ind = ISODateToOrd(iso) - ord_begin_2022
+  if ind < 0 or ind >= 365:
+    return np.nan
+  return ind
+
 def indexFor2021(iso):
   ord_begin_2021 = ISODateToOrd('2021-01-01')
   ind = ISODateToOrd(iso) - ord_begin_2021
@@ -678,9 +688,11 @@ def indexFor2020(iso):
 def makeIndexList(iso):
   ind_latest = indexForLatest(iso)
   ind_overall = indexForOverall(iso)
+  ## new_year_token
+  ind_2022 = indexFor2022(iso)
   ind_2021 = indexFor2021(iso)
   ind_2020 = indexFor2020(iso)
-  return [ind_latest, ind_overall, ind_2021, ind_2020]
+  return [ind_latest, ind_overall, ind_2022, ind_2021, ind_2020]
 
 def makeMovingAverage(value_arr):
   avg_arr = sevenDayMovingAverage(value_arr)
@@ -717,6 +729,8 @@ def adjustDateRange(data):
 def truncateStock(stock, page):
   if PAGE_LATEST == page:
     return stock.iloc[-NB_LOOKBACK_DAYS:]
+  
+  ## new_year_token
   
   if PAGE_2022 == page:
     return stock.iloc[731:1096]
@@ -756,6 +770,7 @@ def initializeReadme_root():
   stock.append('All files here only contain ASCII characters unless specified.')
   stock.append('')
   
+  ## new_year_token
   stock.append('')
   stock.append('Contents')
   stock.append('--------')
@@ -765,6 +780,9 @@ def initializeReadme_root():
   stock.append('')
   stock.append('`2021/`')
   stock.append('- Contains statistics of 2021')
+  stock.append('')
+  stock.append('`2022/`')
+  stock.append('- Contains statistics of 2022')
   stock.append('')
   stock.append('`latest/`')
   stock.append('- Contains statistics of last 90 days')
@@ -792,7 +810,8 @@ def initializeReadme_page(page):
   stock.append('Summary')
   stock.append('-------')
   stock.append('')
-  dict_ = {PAGE_LATEST: 'last 90 days', PAGE_OVERALL: 'the entire pandemic', PAGE_2021: PAGE_2021, PAGE_2020: PAGE_2020}
+  ## new_year_token
+  dict_ = {PAGE_LATEST: 'last 90 days', PAGE_OVERALL: 'the entire pandemic', PAGE_2022: PAGE_2022, PAGE_2021: PAGE_2021, PAGE_2020: PAGE_2020}
   stock.append('This folder hosts data files which summarize COVID statistics in Taiwan during %s.' % dict_[page])
   stock.append('')
   
