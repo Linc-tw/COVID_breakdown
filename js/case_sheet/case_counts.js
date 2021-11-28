@@ -383,7 +383,7 @@ function CC_Main(wrap) {
   //-- Swap active to current value
   if (wrap.tag.includes('mini')) {
     wrap.cumul = 0;
-    wrap.col_ind = 0;
+    wrap.col_ind = 2;
   }
   else {
     wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;

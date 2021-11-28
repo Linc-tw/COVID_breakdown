@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_common.py         ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.11.13      ##
+    ##  Version 2021.11.22      ##
     ##############################
 
 import os
@@ -497,7 +497,11 @@ DELIVERY_LIST = [
   [ 'Pfizer',    'Pfizer',  926600, '2021-11-12',           '', 'https://www.cna.com.tw/news/firstnews/202111120148.aspx', ''],
   ['Moderna',   'Moderna', 1226100, '2021-11-12',           '', 'https://www.cna.com.tw/news/firstnews/202111125008.aspx', ''],
   ['Moderna',   'Moderna', 1150380, '2021-11-19',           '', 'https://www.cna.com.tw/news/firstnews/202111180261.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  938300, '2021-11-25',           '', 'https://www.cna.com.tw/news/firstnews/202111250017.aspx', ''],
   #['',   '', , '2021-11-',           '', '', ''],
+  #['',   '', , '2021-12-',           '', '', ''],
+  #['',   '', , '2021-12-',           '', '', ''],
+  #['',   '', , '2021-12-',           '', '', ''],
 ]
 
 QC_REF_DICT = {
