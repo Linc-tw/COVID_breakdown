@@ -334,8 +334,6 @@ function VP_FormatData4(wrap) {
     wrap.annotation[i]['x_text'] = x_anno - alpha*eps;
     wrap.annotation[i]['y_text'] = y_anno - (beta+1)*eps;
     wrap.annotation[i]['text-anchor'] = 'end';
-    
-//     annotation.push(wrap.annotation[i]);
   }
   
   //-- Replace
@@ -363,7 +361,11 @@ function VP_FormatData4(wrap) {
   var length = administrated.length;
   var last = administrated[length-1];
   var gradient = (last.y - administrated[length-8].y) / 7;
-  var extra_days = 14; //Math.ceil(0.75 * (wrap.x_max_factor-1) * (wrap.x_today-wrap.x_min));
+  var extra_days;
+  if (wrap.tag.includes('overall'))
+    extra_days = 45;
+  else
+    extra_days = 14;
   block_line = [last, {x: last.x+extra_days, y: last.y+extra_days*gradient}];
   wrap.formatted_data.push(block_line);
   

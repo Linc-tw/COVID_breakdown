@@ -210,6 +210,7 @@ class CaseSheet(ccm.Template):
       'Indonesia': ['印尼'], 
       'Japan': ['日本', '東京', '大阪', '北海道'],
       'Korea': ['韓國', '首爾'],
+      'Laos': ['寮國'],
       'Macao': ['澳門'],
       'Malaysia': ['馬來西亞'], 
       'Mongolia': ['蒙古'],

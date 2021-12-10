@@ -87,6 +87,7 @@ TRAVEL_HISTORY_DICT = {
   'India': {'zh-tw': '印度', 'fr': 'Inde'},
   'Japan': {'zh-tw': '日本', 'fr': 'Japon'},
   'Korea': {'zh-tw': '韓國', 'fr': 'Corée'},
+  'Laos': {'zh-tw': '寮國', 'fr': 'Laos'},
   'Macao': {'zh-tw': '澳門', 'fr': 'Macao'},
   'Malaysia': {'zh-tw': '馬來西亞', 'fr': 'Malaisie'},
   'Mongolia': {'zh-tw': '蒙古', 'fr': 'Mongolie'},
@@ -488,18 +489,25 @@ DELIVERY_LIST = [
   ['Medigen',   'Medigen',   85937,           '', '2021-10-27',                                                        '', ''],
   
   ## 2021/11
-  [     'AZ',     'Japan',  300000, '2021-10-27',           '', 'https://www.cna.com.tw/news/firstnews/202110270032.aspx', ''],
-  [ 'Pfizer',    'Pfizer',  902100, '2021-10-28',           '', 'https://www.cna.com.tw/news/firstnews/202110280177.aspx', ''],
-  [ 'Pfizer',    'Pfizer',  910300, '2021-10-29',           '', 'https://www.cna.com.tw/news/firstnews/202110290017.aspx', ''],
-  ['Moderna',       'USA', 1500000, '2021-11-01',           '', 'https://www.cna.com.tw/news/firstnews/202111010135.aspx', ''],
-  [ 'Pfizer',    'Pfizer',  811700, '2021-11-05',           '', 'https://www.cna.com.tw/news/firstnews/202111050020.aspx', ''],
-  [     'AZ',        'AZ',  594000, '2021-11-06',           '', 'https://www.cna.com.tw/news/firstnews/202111065006.aspx', ''],
-  [ 'Pfizer',    'Pfizer',  926600, '2021-11-12',           '', 'https://www.cna.com.tw/news/firstnews/202111120148.aspx', ''],
-  ['Moderna',   'Moderna', 1226100, '2021-11-12',           '', 'https://www.cna.com.tw/news/firstnews/202111125008.aspx', ''],
-  ['Moderna',   'Moderna', 1150380, '2021-11-19',           '', 'https://www.cna.com.tw/news/firstnews/202111180261.aspx', ''],
+  ['Medigen',   'Medigen',  541000,           '', '2021-10-30',                                                        '', ''],
+  ['Medigen',   'Medigen',  255810,           '', '2021-11-03',                                                        '', ''],
+  [     'AZ',     'Japan',  300400, '2021-10-27', '2021-11-05', 'https://www.cna.com.tw/news/firstnews/202110270032.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  895632, '2021-10-28', '2021-11-05', 'https://www.cna.com.tw/news/firstnews/202110280177.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  909672, '2021-10-29', '2021-11-09', 'https://www.cna.com.tw/news/firstnews/202110290017.aspx', ''],
+  ['Moderna',       'USA', 1499540, '2021-11-01', '2021-11-10', 'https://www.cna.com.tw/news/firstnews/202111010135.aspx', ''],
+  ['Medigen',   'Medigen',  271440,           '', '2021-11-11',                                                        '', ''],
+  [     'AZ',        'AZ',  141300, '2021-11-04', '2021-11-13', 'https://www.cna.com.tw/news/firstnews/202111040163.aspx', ''],
+  [     'AZ',        'AZ',  593500, '2021-11-06', '2021-11-15', 'https://www.cna.com.tw/news/firstnews/202111065006.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  830112, '2021-11-05', '2021-11-16', 'https://www.cna.com.tw/news/firstnews/202111050020.aspx', ''],
+  ['Medigen',   'Medigen',  549570,           '', '2021-11-19',                                                        '', ''],
+  [ 'Pfizer',    'Pfizer',  926052, '2021-11-12', '2021-11-23', 'https://www.cna.com.tw/news/firstnews/202111120148.aspx', ''],
+  ['Moderna',   'Moderna', 1225500, '2021-11-12', '2021-11-23', 'https://www.cna.com.tw/news/firstnews/202111125008.aspx', ''],
+  [     'AZ',        'AZ',  675100, '2021-11-19', '2021-11-27', 'https://www.cna.com.tw/news/firstnews/202111195010.aspx', ''],
+  ['Moderna',   'Moderna', 1149820, '2021-11-19', '2021-11-30', 'https://www.cna.com.tw/news/firstnews/202111180261.aspx', ''],
+  
+  ## 2021/12
   [ 'Pfizer',    'Pfizer',  938300, '2021-11-25',           '', 'https://www.cna.com.tw/news/firstnews/202111250017.aspx', ''],
-  #['',   '', , '2021-11-',           '', '', ''],
-  #['',   '', , '2021-12-',           '', '', ''],
+  [ 'Pfizer',    'Pfizer', 1923500, '2021-12-09',           '', 'https://www.cna.com.tw/news/firstnews/202112090163.aspx', ''],
   #['',   '', , '2021-12-',           '', '', ''],
   #['',   '', , '2021-12-',           '', '', ''],
 ]
@@ -513,8 +521,11 @@ QC_REF_DICT = {
   '2021-08': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637707534805440075',
   '2021-09': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637697404423272822',
   '2021-10': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637716363065289877',
-  '2021-11': '',
-  #'2021-12': '',
+  '2021-11': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637741191377186898',
+  '2021-12': '',
+  
+  '2022-01': '',
+  '2022-02': '',
 }
 
 ################################################################################
