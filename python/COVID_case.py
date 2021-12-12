@@ -362,7 +362,7 @@ class CaseSheet(ccm.Template):
       ]:
         trav_hist = ''.join(trav_hist.split(key))
       
-      trav_hist = trav_hist.lstrip(' 0123456789-/()、月及到等經\n→ ?')
+      trav_hist = trav_hist.lstrip(' 0123456789*-/()、月及到等經\n→ ?')
       
       ## Complain if unrecognized texts remain
       if len(trav_hist) > 0:
@@ -621,9 +621,16 @@ class CaseSheet(ccm.Template):
       'coma': ['意識不清', '意識改變'],
       
       'symptomatic': ['全身不舒服', '出現症狀', '身體不適', '有症狀', '不舒服', '活動差', '不適'] + \
-        ['疑似中暑症狀', '排尿疼痛', '眼球上吊', '呼吸衰竭', '肢體變黑', '血氧下降', '鼻子乾', '低血壓', '過敏', '猝死', '抽搐', '手抖', '吐血', '口渴', '休克', '煩躁'],
+        ['疑似中暑症狀', '排尿疼痛', '眼球上吊', '呼吸衰竭', '肢體變黑', '血氧下降', '鼻子乾', '舌頭痛', '低血壓', '過敏', '猝死', '抽搐', '手抖', '吐血', '口渴', '休克', '煩躁'],
       'asymptomatic': ['首例無症狀', '無症狀', 'x', 'X'],
     }
+    
+    rev_key_dict = {}
+    for key, value_list in key_dict.items():
+      for value in value_list:
+        rev_key_dict[value] = key
+    value_list = sorted(rev_key_dict.keys(), key=lambda str_: (len(str_), str_[0]), reverse=True) ## Reorder
+    
     symp_list = []
     
     for i, symp in enumerate(self.getCol(self.coltag_symptom)):
@@ -637,13 +644,13 @@ class CaseSheet(ccm.Template):
       symp = ''.join(symp.split('入境已無症狀'))
       symp = ''.join(symp.split('#68 #69 #70 #73其中一人無症狀'))
       
-      for key, value_list in key_dict.items():
-        for value in value_list:
-          if value in symp:
-            symp = ''.join(symp.split(value))
-            for k in key.split('+'):
-              stock.append(k)
-      
+      for value in value_list:
+        if value in symp:
+          symp = ''.join(symp.split(value))
+          key = rev_key_dict[value]
+          for k in key.split('+'):
+            stock.append(k)
+        
       symp = ''.join(symp.split('(耳溫量測37.7度)'))
       symp = ''.join(symp.split('到37.5度'))
       symp = ''.join(symp.split('(37.5度)'))

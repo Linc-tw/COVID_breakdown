@@ -162,7 +162,16 @@ def sandbox():
   ccm.initializeReadme()
   
   #case_sheet = COVID_case.CaseSheet()
-  #case_sheet.saveCsv_keyNb()
+  #symp_list = case_sheet.getSymptom()
+  #import collections as clt
+  #symp_list_2 = []
+  #for symp in symp_list:
+    #if symp != symp:
+      #continue
+    #for s in symp:
+      #symp_list_2.append(s)
+  #result = clt.Counter(symp_list_2)
+  #print(result)
   
   #status_sheet = COVID_status.StatusSheet()
   #status_sheet.saveCsv_deathCounts()
@@ -179,8 +188,7 @@ def sandbox():
   #county_sheet = COVID_county.CountySheet()
   #county_sheet.saveCsv_localCasePerCounty()
   
-  vacc_sheet = COVID_vaccination.VaccinationSheet()
-  print(vacc_sheet)
+  #vacc_sheet = COVID_vaccination.VaccinationSheet()
   #vacc_sheet.saveCsv_vaccinationByDose()
   
   #vacc_county_sheet = COVID_vaccination_county.VaccinationCountySheet()
