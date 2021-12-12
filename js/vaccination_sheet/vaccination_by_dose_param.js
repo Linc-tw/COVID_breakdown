@@ -12,9 +12,10 @@ var VBD_latest_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  y_max_factor: 1.46,
+  y_max_factor: 1.35,
   nb_yticks: 4,
-  legend_pos_x: 110, 
+  legend_pos_x: 110,
+  legend_pos_x1: 190,
 };
 
 var VBD_overall_wrap = {
@@ -27,4 +28,5 @@ var VBD_overall_wrap = {
   y_max_factor: 1.3,
   nb_yticks: 4,
   legend_pos_x: 110,
+//   legend_pos_x1: 190,
 };

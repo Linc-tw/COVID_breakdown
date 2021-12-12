@@ -235,11 +235,14 @@ function HOI_Replot(wrap) {
   //-- Replot ylabel
   GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_case);
   
-  //-- Define legend color
-  wrap.legend_color = [wrap.color];
+  //-- Set legend parameters
+  GP_SetLegendParam(wrap, 'normal');
   
   //-- Define legend position
-  wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: wrap.legend_pos_y, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy};
+  
+  //-- Define legend color
+  wrap.legend_color = [wrap.color];
   
   //-- Define legend value
   wrap.legend_value = wrap.legend_value_raw.slice();
@@ -252,7 +255,7 @@ function HOI_Replot(wrap) {
   GP_UpdateLegendTitle(wrap, wrap.last_date);
   
   //-- Replot legend
-  GP_ReplotLegend(wrap, 'count', 'normal');
+  GP_ReplotLegend(wrap, 'count', wrap.legend_size);
 }
 
 //-- Load

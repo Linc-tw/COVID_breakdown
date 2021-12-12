@@ -12,7 +12,7 @@ var CC_mini_wrap = {
     '../processed_data/key_numbers.csv',
   ],
   
-  y_max_factor: 1.1,
+  y_max_factor: 1.2,
 };
 
 var CC_latest_wrap = {
@@ -35,7 +35,7 @@ var CC_overall_wrap = {
     '../processed_data/key_numbers.csv',
   ],
   
-  y_max_factor: 1.1, 
+  y_max_factor: 1.2, 
   nb_yticks: 5,
   legend_pos_x: 85,
   legend_pos_x1_: {en: 170, fr: 180, 'zh-tw': 170},

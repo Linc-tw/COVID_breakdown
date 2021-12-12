@@ -288,8 +288,11 @@ function VBB_Replot(wrap) {
   //-- Replot ylabel
   GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_dose);
   
+  //-- Set legend parameters
+  GP_SetLegendParam(wrap, 'small');
+  
   //-- Define legend position
-  wrap.legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27, x1: wrap.legend_pos_x1_[LS_lang]};
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: wrap.legend_pos_y, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy, x1: wrap.legend_pos_x1_[LS_lang]};
   
   //-- Define legend color
   var i;
@@ -315,7 +318,7 @@ function VBB_Replot(wrap) {
   GP_UpdateLegendTitle_Standard(wrap);
   
   //-- Replot legend
-  GP_ReplotLegend(wrap, 'count_fold', '1.2rem');
+  GP_ReplotLegend(wrap, 'count_fold', wrap.legend_size);
 }
 
 //-- Load

@@ -542,7 +542,7 @@ function IM_Replot(wrap) {
     .append('text')
       .attr('class', 'legend caption')
       .attr('x', wrap.tot_width-20)
-      .attr('y', function (d, i) {return wrap.tot_height-20-(legend_caption_bottom.length-1-i)*27;})
+      .attr('y', function (d, i) {return wrap.tot_height-20-(legend_caption_bottom.length-1-i)*anno_dy;})
       .attr('text-anchor', 'end')
       .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
       .style('fill', '#000000')

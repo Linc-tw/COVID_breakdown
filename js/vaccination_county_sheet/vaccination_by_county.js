@@ -253,8 +253,11 @@ function VBC_Replot(wrap) {
   var xlabel_dict = {en: 'Proportion of the population', fr: 'Part de la population', 'zh-tw': '人口比'};
   GP_ReplotXLabel(wrap, xlabel_dict);
   
+  //-- Set legend parameters
+  GP_SetLegendParam(wrap, 'normal');
+  
   //-- Define legend position
-  wrap.legend_pos = {x: wrap.legend_pos_x_[LS_lang], y: 45, dx: 12, dy: 30};
+  wrap.legend_pos = {x: wrap.legend_pos_x_[LS_lang], y: wrap.legend_pos_y, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy};
   
   //-- Define legend color
   wrap.legend_color = [wrap.color];
@@ -274,7 +277,7 @@ function VBC_Replot(wrap) {
   GP_UpdateLegendTitle(wrap, wrap.legend_value_raw[0]);
   
   //-- Replot legend
-  GP_ReplotLegend(wrap, 'percentage', 'normal');
+  GP_ReplotLegend(wrap, 'percentage', wrap.legend_size);
 }
 
 //-- Load

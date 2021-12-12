@@ -561,8 +561,11 @@ function VP_Replot(wrap) {
   //-- Replot ylabel
   GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_dose);
   
+  //-- Set legend parameters
+  GP_SetLegendParam(wrap, 'small');
+  
   //-- Define legend position
-  wrap.legend_pos = {x: wrap.legend_pos_x, y: 40, dx: 10, dy: 27};
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: wrap.legend_pos_y, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy};
   
   //-- Define legend color
   wrap.legend_color = wrap.color_list.slice();
@@ -602,7 +605,7 @@ function VP_Replot(wrap) {
   GP_UpdateLegendTitle(wrap, title);
   
   //-- Replot legend
-  GP_ReplotLegend(wrap, 'count', '1.2rem');
+  GP_ReplotLegend(wrap, 'count', wrap.legend_size);
 }
 
 //-- Load

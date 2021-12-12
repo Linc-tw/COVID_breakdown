@@ -263,8 +263,11 @@ function IR_Replot(wrap) {
   //-- Replot ylabel
   GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_rate);
   
+  //-- Set legend parameters
+  GP_SetLegendParam(wrap, 'normal');
+  
   //-- Define legend position
-  wrap.legend_pos = {x: wrap.legend_pos_x, y: 45, dx: 12, dy: 30};
+  wrap.legend_pos = {x: wrap.legend_pos_x, y: wrap.legend_pos_y, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy};
   
   //-- Define legend color
   wrap.legend_color = wrap.color_list.slice();
@@ -276,16 +279,35 @@ function IR_Replot(wrap) {
   if (LS_lang == 'zh-tw')
     wrap.legend_label = ['入境盛行率', '本土盛行率（乘以1000）'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ["Taux d'incidence frontalier", "Taux d'incidence local (multiplié par 1000)"];
+    wrap.legend_label = ["Taux d'incidence frontalier", "Taux d'incidence local"];
   else
-    wrap.legend_label = ['Arrival incidence', 'Local incidence (multiplied by 1000)'];
+    wrap.legend_label = ['Arrival incidence', 'Local incidence'];
     
+  if (wrap.tag.includes('overall')) {
+    if (LS_lang == 'zh-tw') {}
+    else if (LS_lang == 'fr') {
+      wrap.legend_color.push(wrap.legend_color[1])
+      wrap.legend_label.push("(multiplié par 1000)");
+    }
+    else {
+      wrap.legend_color.push(wrap.legend_color[1])
+      wrap.legend_label.push('(multiplied by 1000)');
+    }
+  }
+  else {
+    if (LS_lang == 'zh-tw') {}
+    else if (LS_lang == 'fr')
+      wrap.legend_label[1] += " (multiplié par 1000)";
+    else
+      wrap.legend_label[1] += ' (multiplied by 1000)';
+  }
+  
   //-- Update legend title
   legend_title_dict = {en: 'Latest value', fr: 'Derniers chiffres', 'zh-tw': '最新統計'};
   GP_UpdateLegendTitle(wrap, legend_title_dict[LS_lang]);
   
   //-- Replot legend
-  GP_ReplotLegend(wrap, 'percentage', 'normal');
+  GP_ReplotLegend(wrap, 'percentage', wrap.legend_size);
 }
 
 //-- Load

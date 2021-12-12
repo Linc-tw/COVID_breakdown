@@ -651,8 +651,11 @@ function ID_Replot(wrap) {
   var ylabel_dict = {en: 'Local cases (7-day average)', fr: 'Cas locaux (moyenne sur 7 jours)', 'zh-tw': '本土案例數（七日平均）'};
   GP_ReplotYLabel(wrap, ylabel_dict);
   
+  //-- Set legend parameters
+  GP_SetLegendParam(wrap, 'normal');
+  
   //-- Define legend position
-  wrap.legend_pos = {x: 40, y: 30, dx: 10, dy: 27};
+  wrap.legend_pos = {x: 25, y: wrap.legend_pos_y-wrap.legend_pos_dy, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy};
   
   //-- Define legend color
   wrap.legend_color = wrap.color_list.slice(0, 4).concat([GP_wrap.gray, '#000000']);
@@ -678,7 +681,7 @@ function ID_Replot(wrap) {
   GP_UpdateLegendTitle(wrap, '');
   
   //-- Replot legend
-  GP_ReplotLegend(wrap, 'count', '1.2rem');
+  GP_ReplotLegend(wrap, 'count', wrap.legend_size);
   
   //-- Replot color
   ID_ReplotColor(wrap);

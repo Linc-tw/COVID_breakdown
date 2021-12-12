@@ -24,7 +24,7 @@ var LCPC_overall_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  y_max_factor: 1.1, 
+  y_max_factor: 1.2, 
   nb_yticks: 4,
   legend_pos_x: 95,
 };

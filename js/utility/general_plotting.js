@@ -32,8 +32,8 @@ var GP_wrap = {
   xticklabel_min_space_vacc: 15,
   
   //-- padding
-  bar_padding: 0.2,
-  tile_padding: 0.04,
+  padding_bar: 0.2,
+  padding_tile: 0.04,
   
   //-- Color
   c_list: ['#3366BB', '#CC6677', '#55BB44', '#EE9977', '#9977AA', '#AAAA55', '#222288', '#660022', '#117733', '#DD6622', '#7733AA', '#BB8811'],
@@ -44,6 +44,14 @@ var GP_wrap = {
   faint_opacity: 0.3,
   
   //-- Legend
+  legend_pos_y_normal: 45,
+  legend_pos_y_small: 40,
+  legend_pos_dx_normal: 12,
+  legend_pos_dx_small: 10,
+  legend_pos_dy_normal: 30,
+  legend_pos_dy_small: 27,
+  legend_size_normal: 'normal',
+  legend_size_small: '1.2rem',
   ylabel_dict_case: {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'},
   ylabel_dict_rate: {en: 'Percentage', fr: 'Pourcentage', 'zh-tw': '百分比'},
   ylabel_dict_dose: {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '疫苗劑數'},
@@ -230,7 +238,7 @@ function GP_MakeBandXForBar(wrap) {
   var xscale = d3.scaleBand()
     .domain(wrap.x_list)
     .range([0, wrap.width])
-    .padding(GP_wrap.bar_padding);
+    .padding(GP_wrap.padding_bar);
   return xscale;
 }
 
@@ -248,7 +256,7 @@ function GP_MakeBandXForTile(wrap) {
   var xscale = d3.scaleBand()
     .domain(wrap.x_list)
     .range([0, wrap.width])
-    .padding(GP_wrap.tile_padding);
+    .padding(GP_wrap.padding_tile);
   return xscale;
 }
 
@@ -265,7 +273,7 @@ function GP_MakeBandYForBar(wrap) {
   var yscale = d3.scaleBand()
     .domain(wrap.y_list)
     .range([0, wrap.height])
-    .padding(GP_wrap.bar_padding);
+    .padding(GP_wrap.padding_bar);
   return yscale;
 }
 
@@ -274,7 +282,7 @@ function GP_MakeBandYForTile(wrap) {
   var yscale = d3.scaleBand()
     .domain(wrap.y_list)
     .range([0, wrap.height])
-    .padding(GP_wrap.tile_padding);
+    .padding(GP_wrap.padding_tile);
   return yscale;
 }
 
@@ -1248,15 +1256,30 @@ function GP_ReplotHotMap(wrap) {
 //------------------------------------------------------------------------------
 //-- Function declarations - legend
 
+function GP_SetLegendParam(wrap, tag) {
+  if (tag.includes('normal')) {
+    wrap.legend_pos_y = GP_wrap.legend_pos_y_normal;
+    wrap.legend_pos_dx = GP_wrap.legend_pos_dx_normal;
+    wrap.legend_pos_dy = GP_wrap.legend_pos_dy_normal;
+    wrap.legend_size = GP_wrap.legend_size_normal;
+  }
+  else {
+    wrap.legend_pos_y = GP_wrap.legend_pos_y_small;
+    wrap.legend_pos_dx = GP_wrap.legend_pos_dx_small;
+    wrap.legend_pos_dy = GP_wrap.legend_pos_dy_small;
+    wrap.legend_size = GP_wrap.legend_size_small;
+  }
+}
+
 function GP_GetLegendXPos(legend_pos, legend_length, i) {
-  if (legend_length <= 4 || 2*i < legend_length)
+  if (legend_length <= 3 || 2*i < legend_length)
     return legend_pos.x;
   
   return legend_pos.x + legend_pos.x1;
 }
 
 function GP_GetLegendYPos(legend_pos, legend_length, i) {
-  if (legend_length <= 4 || 2*i < legend_length)
+  if (legend_length <= 3 || 2*i < legend_length)
     return legend_pos.y + i*legend_pos.dy;
   
   return legend_pos.y + (i-Math.floor(legend_length/2))*legend_pos.dy;
