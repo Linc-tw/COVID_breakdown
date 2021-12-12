@@ -2,7 +2,7 @@
     ##############################
     ##  COVID_common.py         ##
     ##  Chieh-An Lin            ##
-    ##  Version 2021.11.22      ##
+    ##  Version 2021.12.12      ##
     ##############################
 
 import os
@@ -874,11 +874,17 @@ def saveMarkdown_readme(verbose=True):
 ## Classes - template
 
 class Template:
+  def __str__(self):
+    return str(self.data)
+
+  def __getitem__(self, ind):
+    return self.data.iloc[ind]
+  
   def getCol(self, col):
     return self.data[col].values
   
-  def __str__(self):
-    return str(self.data.head(25))
+  def getNbRows(self):
+    return self.data.shape[0]
 
 ## End of file
 ################################################################################

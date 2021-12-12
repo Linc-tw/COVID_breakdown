@@ -79,9 +79,9 @@ function VBD_FormatData(wrap, data) {
       
       y_list.push(y);
     }
-    y_list.push(0);
+    y_list.push(0); //-- Additional 0 as lower bound
     
-    y_list_list.push(y_list)
+    y_list_list.push(y_list) //-- `y_list` contains `nb_col` + 1 values
   }
   
   //-- Main loop over column
@@ -97,8 +97,8 @@ function VBD_FormatData(wrap, data) {
       //-- Make data block; redundant information is for toolpix text
       block = {
         'x': data[i]['index'],
-        'y0': y_list[j+1],
-        'y1': y_list[j],
+        'y0': y_list[j+1], //-- Lower bound
+        'y1': y_list[j], //-- Uppder bound
         'y_list': y_list
       };
       
@@ -194,7 +194,7 @@ function VBD_Plot(wrap) {
   GP_PlotYLabel(wrap);
   
   //-- Define color
-  wrap.color_list = GP_wrap.c_list.slice(2, 2+wrap.nb_col).reverse();
+  wrap.color_list = [GP_wrap.c_list[3], GP_wrap.c_list[2], GP_wrap.c_list[6]];
   
   //-- Define opacity & delay
   wrap.plot_opacity = 0.7;
@@ -280,11 +280,11 @@ function VBD_Replot(wrap) {
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')
-    wrap.legend_label = ['已施打一劑', '已施打兩劑'];
+    wrap.legend_label = ['已施打一劑', '已施打兩劑', '已施打三劑'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ['1er dose ', '2nd dose'];
+    wrap.legend_label = ['1er dose ', '2e dose', '3e dose'];
   else
-    wrap.legend_label = ['1st dose', '2nd dose'];
+    wrap.legend_label = ['1st dose', '2nd dose', '3rd dose'];
   
   //-- Update legend title
   GP_UpdateLegendTitle(wrap, wrap.last_date);

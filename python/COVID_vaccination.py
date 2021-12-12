@@ -25,7 +25,7 @@ class VaccinationSheet(ccm.Template):
   def __init__(self, verbose=True):
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_vaccination.json' % ccm.DATA_PATH
     data = ccm.loadJson(name, verbose=verbose)
-    ## https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_manufacture&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYyOTg2Mzk2Ng==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=varchar&d[]=NO&c[]=a02&t[]=date&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=NO&c[]=a05&t[]=int&d[]=NO&c[]=a06&t[]=int&d[]=NO
+    ## https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_manufacture_v1&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYzOTI1MzQ4Nw==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=varchar&d[]=NO&c[]=a02&t[]=date&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=NO&c[]=a05&t[]=int&d[]=NO&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO
     ## Old: https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_city_can3_c&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYyOTg2Mzk2Ng==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=date&d[]=NO&c[]=a02&t[]=varchar&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=YES&c[]=a05&t[]=int&d[]=YES&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=decimal&d[]=NO
     
     self.key_row_id = 'DT_RowId'
@@ -35,7 +35,8 @@ class VaccinationSheet(ccm.Template):
     self.key_brand = 'a03'
     self.key_cum_1st = 'a04'
     self.key_cum_2nd = 'a05'
-    self.key_cum_tot = 'a06'
+    self.key_cum_3rd = 'a06'
+    self.key_cum_tot = 'a07'
     
     self.data = data
     self.brand_list = ['AZ', 'Moderna', 'Medigen', 'Pfizer']
@@ -45,6 +46,9 @@ class VaccinationSheet(ccm.Template):
       print('N_total = %d' % self.n_total)
     return
   
+  def __str__(self):
+    return str(self.data['data'])
+
   def getColData(self, key):
     return [row[key] for row in self.data['data']]
   
@@ -68,6 +72,9 @@ class VaccinationSheet(ccm.Template):
   
   def getCum2nd(self):
     return [int(value) for value in self.getColData(self.key_cum_2nd)]
+  
+  def getCum3rd(self):
+    return [int(value) for value in self.getColData(self.key_cum_3rd)]
   
   def getCumTot(self):
     return [int(value) for value in self.getColData(self.key_cum_tot)]
@@ -402,24 +409,28 @@ class VaccinationSheet(ccm.Template):
     brand_list = self.getBrand()
     cum_1st_list_raw = self.getCum1st()
     cum_2nd_list_raw = self.getCum2nd()
+    cum_3rd_list_raw = self.getCum3rd()
     
     ## Get variables
     population_twn = ccm.COUNTY_DICT['00000']['population']
     date_list = []
     cum_1st_list = []
     cum_2nd_list = []
+    cum_3rd_list = []
     
-    for date, brand, cum_1st, cum_2nd in zip(date_list_raw, brand_list, cum_1st_list_raw, cum_2nd_list_raw):
+    for date, brand, cum_1st, cum_2nd, cum_3rd in zip(date_list_raw, brand_list, cum_1st_list_raw, cum_2nd_list_raw, cum_3rd_list_raw):
       if brand == 'total':
         date_list.append(date)
         cum_1st_list.append(float(cum_1st) / float(population_twn))
         cum_2nd_list.append(float(cum_2nd) / float(population_twn))
+        cum_3rd_list.append(float(cum_3rd) / float(population_twn))
     
     ## Adjustment
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
     index_list = [ccm.ISODateToOrd(iso)-ord_ref for iso in date_list]
     cum_1st_list = np.around(cum_1st_list, decimals=4)
     cum_2nd_list = np.around(cum_2nd_list, decimals=4)
+    cum_3rd_list = np.around(cum_3rd_list, decimals=4)
     ind = np.argsort(index_list)
     
     ## Sort
@@ -427,9 +438,10 @@ class VaccinationSheet(ccm.Template):
     date_list = np.array(date_list)[ind]
     cum_1st_list = cum_1st_list[ind]
     cum_2nd_list = cum_2nd_list[ind]
+    cum_3rd_list = cum_3rd_list[ind]
     
     ## Stock
-    stock = {'index': index_list, 'date': date_list, 'ppl_vacc_rate': cum_1st_list, 'ppl_fully_vacc_rate': cum_2nd_list}
+    stock = {'index': index_list, 'date': date_list, 'ppl_vacc_rate': cum_1st_list, 'ppl_fully_vacc_rate': cum_2nd_list, 'ppl_vacc_3_rate': cum_3rd_list}
     return stock
     
   def makeReadme_vaccinationByDose(self, page):
