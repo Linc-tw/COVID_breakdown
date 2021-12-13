@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   death_counts_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  death_counts_param.js     --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 var DC_latest_wrap = {
   tag: 'death_counts_latest', 

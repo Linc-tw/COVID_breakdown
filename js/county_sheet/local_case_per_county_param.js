@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   local_case_per_county_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------------//
+    //--  local_case_per_county_param.js  --//
+    //--  Chieh-An Lin                    --//
+    //--  2021.12.13                      --//
+    //--------------------------------------//
 
 var LCPC_latest_wrap = {
   tag: 'local_case_per_county_latest',

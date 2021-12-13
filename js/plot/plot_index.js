@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   plot_index.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  plot_index.js             --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 var PI_plot_list = [
   [CC_Main, CC_latest_wrap, 1000],

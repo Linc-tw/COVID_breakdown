@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   event_timeline_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  event_timeline_param.js   --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 var ET_wrap = {
   tag: 'event_timeline',

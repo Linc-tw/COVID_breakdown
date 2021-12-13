@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   case_by_age.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  case_by_age.js            --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function CBA_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

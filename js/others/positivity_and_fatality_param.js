@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   positivity_and_fatality_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //----------------------------------------//
+    //--  positivity_and_fatality_param.js  --//
+    //--  Chieh-An Lin                      --//
+    //--  2021.12.13                        --//
+    //----------------------------------------//
 
 var PAF_latest_wrap = {
   tag: 'positivity_and_fatality_latest',

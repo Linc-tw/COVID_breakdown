@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   plot_overall_vaccination.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //-----------------------------------//
+    //--  plot_overall_vaccination.js  --//
+    //--  Chieh-An Lin                 --//
+    //--  2021.12.13                   --//
+    //-----------------------------------//
 
 var POV_plot_list = [
   [VBB_Main, VBB_overall_wrap, 1000],

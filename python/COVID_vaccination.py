@@ -1,9 +1,9 @@
 
-    ##############################
-    ##  COVID_vaccination.py    ##
-    ##  Chieh-An Lin            ##
-    ##  Version 2021.12.12      ##
-    ##############################
+    ################################
+    ##  COVID_vaccination.py      ##
+    ##  Chieh-An Lin              ##
+    ##  2021.12.12                ##
+    ################################
 
 import os
 import sys
@@ -18,7 +18,7 @@ import pandas as pd
 import COVID_common as ccm
 
 ################################################################################
-## Classes - Vaccination
+## Class - vaccination sheet
 
 class VaccinationSheet(ccm.Template):
   

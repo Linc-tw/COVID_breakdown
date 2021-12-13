@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   vaccination_progress.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  vaccination_progress.js   --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function VP_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

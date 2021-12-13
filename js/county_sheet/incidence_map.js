@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   incidence_map.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  incidence_map.js          --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function IM_InitFig(wrap) {
   wrap.tot_width = 800;

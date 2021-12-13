@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   status_evolution.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  status_evolution.js       --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function SE_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

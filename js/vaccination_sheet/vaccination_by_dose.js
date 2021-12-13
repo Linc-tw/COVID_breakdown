@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   vaccination_by_dose.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  vaccination_by_dose.js    --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function VBD_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

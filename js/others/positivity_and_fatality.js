@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   positivity_and_fatality.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //----------------------------------//
+    //--  positivity_and_fatality.js  --//
+    //--  Chieh-An Lin                --//
+    //--  2021.12.13                  --//
+    //----------------------------------//
 
 function PAF_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

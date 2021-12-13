@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   vaccination_by_brand.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  vaccination_by_brand.js   --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function VBB_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

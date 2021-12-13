@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   incidence_rates_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  incidence_rates_param.js  --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 var IR_mini_wrap = {
   tag: 'incidence_rates_mini',

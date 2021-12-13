@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   plot_overall_cases.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  plot_overall_cases.js     --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 var POC_plot_list = [
   [CC_Main, CC_overall_wrap, 1000],

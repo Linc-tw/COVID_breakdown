@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   death_counts.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  death_counts.js           --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function DC_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

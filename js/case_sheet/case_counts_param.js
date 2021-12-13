@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   case_counts_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  case_counts_param.js      --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 var CC_mini_wrap = {
   tag: 'case_counts_mini',

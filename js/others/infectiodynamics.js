@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   infectiodynamics.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  infectiodynamics.js       --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 //------------------------------------------------------------------------------
 //-- Function declarations - initialization & data

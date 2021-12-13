@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   local_case_per_county.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  local_case_per_county.js  --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function LCPC_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

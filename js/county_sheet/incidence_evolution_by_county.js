@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   incidence_evolution_by_county.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //----------------------------------------//
+    //--  incidence_evolution_by_county.js  --//
+    //--  Chieh-An Lin                      --//
+    //--  2021.12.13                        --//
+    //----------------------------------------//
 
 function IEBC_InitFig(wrap) {
   wrap.tot_width = 1200;

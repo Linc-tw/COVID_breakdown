@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   infectiodynamics_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //---------------------------------//
+    //--  infectiodynamics_param.js  --//
+    //--  Chieh-An Lin               --//
+    //--  2021.12.13                 --//
+    //---------------------------------//
 
 var ID_latest_wrap = {
   tag: 'infectiodynamics_latest', 

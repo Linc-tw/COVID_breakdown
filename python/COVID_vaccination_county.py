@@ -2,7 +2,7 @@
     ###################################
     ##  COVID_vaccination_county.py  ##
     ##  Chieh-An Lin                 ##
-    ##  Version 2021.07.22           ##
+    ##  2021.07.22                   ##
     ###################################
 
 import os
@@ -18,7 +18,7 @@ import pandas as pd
 import COVID_common as ccm
 
 ################################################################################
-## Classes - Vaccination
+## Class - vaccination county sheet
 
 class VaccinationCountySheet(ccm.Template):
   

@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   vaccination_by_county.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  vaccination_by_county.js  --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function VBC_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

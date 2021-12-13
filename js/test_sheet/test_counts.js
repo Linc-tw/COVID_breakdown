@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   test_counts.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  test_counts.js            --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function TC_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

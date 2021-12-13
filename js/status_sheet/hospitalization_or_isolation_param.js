@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   hospitalization_or_isolation_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //---------------------------------------------//
+    //--  hospitalization_or_isolation_param.js  --//
+    //--  Chieh-An Lin                           --//
+    //--  2021.12.13                             --//
+    //---------------------------------------------//
 
 var HOI_latest_wrap = {
   tag: 'hospitalization_or_isolation_latest',

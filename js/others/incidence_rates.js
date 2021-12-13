@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   incidence_rates.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  incidence_rates.js        --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function IR_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

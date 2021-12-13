@@ -1,9 +1,9 @@
 
-    ##############################
-    ##  COVID_case.py           ##
-    ##  Chieh-An Lin            ##
-    ##  Version 2021.11.22      ##
-    ##############################
+    ################################
+    ##  COVID_case.py             ##
+    ##  Chieh-An Lin              ##
+    ##  2021.11.22                ##
+    ################################
 
 import os
 import sys
@@ -20,7 +20,7 @@ import statsmodels as sm
 import COVID_common as ccm
 
 ################################################################################
-## Classes - case sheet
+## Class - case sheet
 
 class CaseSheet(ccm.Template):
   

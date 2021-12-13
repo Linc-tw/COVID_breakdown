@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   plot_latest_cases.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  plot_latest_cases.js      --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 var PLC_plot_list = [
   [CC_Main, CC_latest_wrap, 1000],

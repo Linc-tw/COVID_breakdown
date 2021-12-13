@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   status_evolution_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //---------------------------------//
+    //--  status_evolution_param.js  --//
+    //--  Chieh-An Lin               --//
+    //--  2021.12.13                 --//
+    //---------------------------------//
 
 var SE_latest_wrap = {
   tag: 'status_evolution_latest',

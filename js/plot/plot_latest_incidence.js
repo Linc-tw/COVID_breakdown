@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   plot_latest_incidence.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  plot_latest_incidence.js  --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 var PLI_plot_list = [
   [IR_Main, IR_latest_wrap, 1000],

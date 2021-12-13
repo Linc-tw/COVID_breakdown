@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   criteria_timeline_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //----------------------------------//
+    //--  criteria_timeline_param.js  --//
+    //--  Chieh-An Lin                --//
+    //--  2021.12.13                  --//
+    //----------------------------------//
 
 var CT_wrap = {
   tag: 'criteria_timeline',

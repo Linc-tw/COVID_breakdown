@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   incidence_map_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  incidence_map_param.js    --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 var IM_latest_wrap = {
   tag: 'incidence_map_latest',

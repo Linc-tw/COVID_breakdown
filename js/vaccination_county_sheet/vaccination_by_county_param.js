@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   vaccination_by_county_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------------//
+    //--  vaccination_by_county_param.js  --//
+    //--  Chieh-An Lin                    --//
+    //--  2021.12.13                      --//
+    //--------------------------------------//
 
 var VBC_latest_wrap = {
   tag: 'vaccination_by_county_latest', 

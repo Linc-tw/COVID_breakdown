@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   stats_in_mirror_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  stats_in_mirror_param.js  --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 var SIM_latest_wrap = {
   tag: 'stats_in_mirror_latest', 

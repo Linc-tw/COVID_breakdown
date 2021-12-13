@@ -1,9 +1,9 @@
 
-    ##############################
-    ##  COVID_common.py         ##
-    ##  Chieh-An Lin            ##
-    ##  Version 2021.12.12      ##
-    ##############################
+    ################################
+    ##  COVID_common.py           ##
+    ##  Chieh-An Lin              ##
+    ##  2021.12.12                ##
+    ################################
 
 import os
 import sys
@@ -871,7 +871,7 @@ def saveMarkdown_readme(verbose=True):
   return
 
 ################################################################################
-## Classes - template
+## Class - template
 
 class Template:
   def __str__(self):

@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   incidence_evolution_by_age.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //-------------------------------------//
+    //--  incidence_evolution_by_age.js  --//
+    //--  Chieh-An Lin                   --//
+    //--  2021.12.13                     --//
+    //-------------------------------------//
 
 function IEBA_InitFig(wrap) {
   wrap.tot_width = 1200;

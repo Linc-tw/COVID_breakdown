@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   plot_latest_others.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  plot_latest_others.js     --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 var PLO_plot_list = [
   [TC_Main, TC_latest_wrap, 1000],

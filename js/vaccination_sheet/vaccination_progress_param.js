@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   vaccination_progress_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //-------------------------------------//
+    //--  vaccination_progress_param.js  --//
+    //--  Chieh-An Lin                   --//
+    //--  2021.12.13                     --//
+    //-------------------------------------//
 
 var VP_latest_wrap = {
   tag: 'vaccination_progress_latest',

@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   vaccination_by_brand_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //-------------------------------------//
+    //--  vaccination_by_brand_param.js  --//
+    //--  Chieh-An Lin                   --//
+    //--  2021.12.13                     --//
+    //-------------------------------------//
 
 var VBB_mini_wrap = {
   tag: 'vaccination_by_brand_mini', 

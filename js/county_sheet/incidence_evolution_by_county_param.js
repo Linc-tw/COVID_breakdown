@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   incidence_evolution_by_county_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //----------------------------------------------//
+    //--  incidence_evolution_by_county_param.js  --//
+    //--  Chieh-An Lin                            --//
+    //--  2021.12.13                              --//
+    //----------------------------------------------//
 
 var IEBC_latest_wrap = {
   tag: 'incidence_evolution_by_county_latest',

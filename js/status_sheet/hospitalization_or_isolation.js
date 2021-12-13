@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   hospitalization_or_isolation.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //---------------------------------------//
+    //--  hospitalization_or_isolation.js  --//
+    //--  Chieh-An Lin                     --//
+    //--  2021.12.13                       --//
+    //---------------------------------------//
 
 function HOI_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

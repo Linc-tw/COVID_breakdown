@@ -1,9 +1,9 @@
 
-    ##############################
-    ##  COVID_test.py           ##
-    ##  Chieh-An Lin            ##
-    ##  Version 2021.11.22      ##
-    ##############################
+    ################################
+    ##  COVID_test.py             ##
+    ##  Chieh-An Lin              ##
+    ##  2021.11.22                ##
+    ################################
 
 import os
 import sys
@@ -18,7 +18,7 @@ import pandas as pd
 import COVID_common as ccm
 
 ################################################################################
-## Classes - test sheet
+## Class - test sheet
 
 class TestSheet(ccm.Template):
   

@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   border_statistics.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  border_statistics.js      --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function BS_InitFig(wrap) {
   if (wrap.tag.includes('mini'))

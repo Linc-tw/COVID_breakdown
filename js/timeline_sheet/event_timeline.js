@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   event_timeline.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  event_timeline.js         --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function ET_InitFig(wrap) {
   wrap.tot_width = 1200;

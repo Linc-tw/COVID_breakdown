@@ -1,3 +1,10 @@
+
+    //--------------------------------//
+    //--  saveSvgAsPng.js           --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
+
 //-- Taken from https://github.com/exupero/saveSvgAsPng
 
 (function() {

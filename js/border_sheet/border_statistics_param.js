@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   border_statistics_param.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //----------------------------------//
+    //--  border_statistics_param.js  --//
+    //--  Chieh-An Lin                --//
+    //--  2021.12.13                  --//
+    //----------------------------------//
 
 var BS_latest_wrap = {
   tag: 'border_statistics_latest', 

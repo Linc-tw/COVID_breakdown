@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   stats_in_mirror.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  stats_in_mirror.js        --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function SIM_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
@@ -348,7 +348,7 @@ function SIM_ReplotAvgLine(wrap, index) {
   var xscale = d3.scaleBand()
     .domain(sub_wrap.x_list)
     .range([0, wrap.width])
-    .padding(GP_wrap.bar_padding);
+    .padding(GP_wrap.padding_bar);
   
   //-- Define yscale
   var yscale = d3.scaleLinear()

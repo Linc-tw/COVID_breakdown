@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   plot_timeline.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  plot_timeline.js          --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 var PT_plot_list = [
   [CT_Main, CT_wrap, 1500],

@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   criteria_timeline.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  criteria_timeline.js      --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function CT_InitFig(wrap) {
   wrap.tot_width = 800;

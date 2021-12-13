@@ -1,9 +1,9 @@
 
-//-- Filename:
-//--   case_counts.js
-//--
-//-- Author:
-//--   Chieh-An Lin
+    //--------------------------------//
+    //--  case_counts.js            --//
+    //--  Chieh-An Lin              --//
+    //--  2021.12.13                --//
+    //--------------------------------//
 
 function CC_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
