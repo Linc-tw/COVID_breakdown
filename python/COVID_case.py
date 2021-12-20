@@ -2,7 +2,7 @@
     ################################
     ##  COVID_case.py             ##
     ##  Chieh-An Lin              ##
-    ##  2021.11.22                ##
+    ##  2021.12.20                ##
     ################################
 
 import os
@@ -201,7 +201,7 @@ class CaseSheet(ccm.Template):
   
   def getTravHist(self):
     key_dict = {
-      ## East & South-East Asia
+      ## East & South Asia
       'Bangladesh': ['孟加拉'],
       'Cambodia': ['柬埔寨'],
       'China': ['中國', '武漢', '深圳', '廣州', '遼寧', '江蘇', '浙江', '大陸'],
@@ -213,6 +213,7 @@ class CaseSheet(ccm.Template):
       'Laos': ['寮國'],
       'Macao': ['澳門'],
       'Malaysia': ['馬來西亞'], 
+      'Maldives': ['馬爾地夫'], 
       'Mongolia': ['蒙古'],
       'Myanmar' : ['緬甸'],
       'Nepal': ['尼泊爾'],
@@ -323,6 +324,16 @@ class CaseSheet(ccm.Template):
       'Pan-Shi': ['海軍敦睦支隊磐石艦', '整隊登艦', '台灣啟航', '左營靠泊檢疫'],
       'local': ['無', 'x', 'X']
     }
+    
+    ## Make reverse dictionary
+    rev_key_dict = {}
+    for key, value_list in key_dict.items():
+      for value in value_list:
+        rev_key_dict[value] = key
+        
+    ## Make decreasingly-ordered Mandarin word list
+    value_list = sorted(rev_key_dict.keys(), key=lambda str_: (len(str_), str_[0]), reverse=True) ## Reorder
+    
     nat_list = self.getNationality()
     trav_hist_list = []
     
@@ -333,12 +344,12 @@ class CaseSheet(ccm.Template):
       
       stock = []
       
-      ## Scan the content with all keys
-      for key, value_list in key_dict.items():
-        for value in value_list:
-          if value in trav_hist:
-            trav_hist = ''.join(trav_hist.split(value))
-            stock.append(key) ## Put the translation in stock
+      ## Mandarin word matching
+      for value in value_list:
+        if value in trav_hist:
+          trav_hist = ''.join(trav_hist.split(value))
+          key = rev_key_dict[value]
+          stock.append(key) ## Put the translation in stock
       
       ## Remove meaningless words
       trav_hist = ''.join(trav_hist.split('2017年8月就入境台灣，期間並未出境'))
@@ -370,11 +381,11 @@ class CaseSheet(ccm.Template):
       
       ## If no travel history but imported, add nationality (only for i >= 460)
       if i >= 460 and len(stock) == 0:
-        for key, value_list in key_dict.items():
-          for value in value_list:
-            if value in nat_list[i]:
-              stock.append(key)
-              break
+        for value in value_list:
+          if value in nat_list[i]:
+            key = rev_key_dict[value]
+            stock.append(key) ## Put the translation in stock
+            break
       
       stock = list(set(stock))
       trav_hist_list.append(stock)
@@ -569,7 +580,7 @@ class CaseSheet(ccm.Template):
         '喉嚨有異物感', '喉嚨乾澀想咳', '喉嚨刺激感', '喉嚨不適', '喉嚨痛癢', '喉嚨乾癢', '喉嚨乾痛', '喉嚨痛', '喉嚨癢', '喉嚨腫', 
         '喉嚨乾', '喉嚨'
       ],
-      'earache': ['耳朵痛', '耳鳴'],
+      'earache': ['左耳神經痛', '耳朵痛', '耳鳴'],
       'dyspnea': [
         '講話、呼吸吃力', '活動後呼吸喘', '重度呼吸窘迫', '些微呼吸急促', '呼吸喘 困難', '呼吸窘迫', '呼吸不順', '呼吸困難', '呼吸微喘', '呼吸短促', '呼吸急促', '走路會喘', 
         '喘不過氣', '走路喘', '呼吸喘', '輕微喘', '微喘', '氣喘', '喘嗚', '喘'
@@ -612,7 +623,7 @@ class CaseSheet(ccm.Template):
       'dysnosmia': ['嗅覺異常症狀', '嗅覺不靈敏', '失去嗅覺', '嗅覺喪失', '嗅覺變差', '嗅覺遲鈍', '嗅覺異常', '喪失嗅覺', '嗅覺降低', '無嗅覺'], 
       'dysgeusia': ['味覺喪失', '味覺異常', '喪失味覺', '失去味覺', '味覺變差', '口苦'], 
       
-      'tonsillitis': ['淋巴腫脹', '扁桃腺腫痛'], 
+      'tonsillitis': ['右側扁桃體腫脹及壓痛', '淋巴腫脹', '扁桃腺腫痛'], 
       'hypoglycemia': ['低血糖'],
       'hypoxemia': ['血氧濃度54%', '血氧降低', '低血氧', '低 血氧'],
       'anorexia': ['食慾不佳', '食慾不振', '食慾下降', '食欲不振', '胃口變差', '沒有食慾', '食慾差', '無食慾'],
@@ -625,10 +636,13 @@ class CaseSheet(ccm.Template):
       'asymptomatic': ['首例無症狀', '無症狀', 'x', 'X'],
     }
     
+    ## Make reverse dictionary
     rev_key_dict = {}
     for key, value_list in key_dict.items():
       for value in value_list:
         rev_key_dict[value] = key
+        
+    ## Make decreasingly-ordered Mandarin word list
     value_list = sorted(rev_key_dict.keys(), key=lambda str_: (len(str_), str_[0]), reverse=True) ## Reorder
     
     symp_list = []
@@ -644,6 +658,7 @@ class CaseSheet(ccm.Template):
       symp = ''.join(symp.split('入境已無症狀'))
       symp = ''.join(symp.split('#68 #69 #70 #73其中一人無症狀'))
       
+      ## Mandarin word matching
       for value in value_list:
         if value in symp:
           symp = ''.join(symp.split(value))

@@ -2,7 +2,7 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2021.12.12                ##
+    ##  2021.12.20                ##
     ################################
 
 import os
@@ -78,7 +78,7 @@ SYMPTOM_DICT = {
 }
 
 TRAVEL_HISTORY_DICT = {
-  ## Far-East Asia
+  ## East & South Asia
   'Bangladesh': {'zh-tw': '孟加拉', 'fr': 'Bangladesh'},
   'Cambodia': {'zh-tw': '柬埔寨', 'fr': 'Cambodge'},
   'China': {'zh-tw': '中國', 'fr': 'Chine'},
@@ -90,6 +90,7 @@ TRAVEL_HISTORY_DICT = {
   'Laos': {'zh-tw': '寮國', 'fr': 'Laos'},
   'Macao': {'zh-tw': '澳門', 'fr': 'Macao'},
   'Malaysia': {'zh-tw': '馬來西亞', 'fr': 'Malaisie'},
+  'Maldives': {'zh-tw': '馬爾地夫', 'fr': 'Maldives'}, 
   'Mongolia': {'zh-tw': '蒙古', 'fr': 'Mongolie'},
   'Myanmar': {'zh-tw': '緬甸', 'fr': 'Myanmar'},
   'Nepal': {'zh-tw': '尼泊爾', 'fr': 'Népal'},
