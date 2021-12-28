@@ -298,6 +298,7 @@ class CaseSheet(ccm.Template):
       'Brazil': ['巴西'],
       'Canada': ['加拿大'], 
       'Chile': ['智利', '聖地牙哥'], 
+      'Colombia': ['哥倫比亞'],
       'Dominican Republic': ['多明尼加'],
       'Guatemala': ['瓜地馬拉'], 
       'Haiti': ['海地'], 

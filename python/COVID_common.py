@@ -175,6 +175,7 @@ TRAVEL_HISTORY_DICT = {
   'Brazil': {'zh-tw': '巴西', 'fr': 'Brésil'},
   'Canada': {'zh-tw': '加拿大', 'fr': 'Canada'},
   'Chile': {'zh-tw': '智利', 'fr': 'Chili'},
+  'Colombia': {'zh-tw': '哥倫比亞', 'fr': 'Colombie'},
   'Dominican Republic': {'zh-tw': '多明尼加', 'fr': 'République dominicaine'},
   'Guatemala': {'zh-tw': '瓜地馬拉', 'fr': 'Guatemala'}, 
   'Haiti': {'zh-tw': '海地', 'fr': 'Haïti'}, 
@@ -509,7 +510,7 @@ DELIVERY_LIST = [
   ## 2021/12
   [ 'Pfizer',    'Pfizer',  938300, '2021-11-25',           '', 'https://www.cna.com.tw/news/firstnews/202111250017.aspx', ''],
   [ 'Pfizer',    'Pfizer', 1923500, '2021-12-09',           '', 'https://www.cna.com.tw/news/firstnews/202112090163.aspx', ''],
-  #['',   '', , '2021-12-',           '', '', ''],
+  [     'AZ',        'AZ',  738400, '2021-12-21',           '', 'https://www.cna.com.tw/news/firstnews/202112210201.aspx', ''],
   #['',   '', , '2021-12-',           '', '', ''],
 ]
 
