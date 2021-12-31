@@ -18,14 +18,14 @@ Features
 
 The most recent statisitcs can be found in _Last 90 days_.
 The overall statistics can be found in _Overall stats_.
-In these two sections, 17 plots are shown on 4 pages: 
+In these two sections, 21 plots are shown on 4 pages: 
 - _Case breakdown_
 - _Incidence rates_
 - _Vaccination_
 - _Other stats_
 
 Plots on [_Case breakdown_](https://linc-tw.github.io/COVID_breakdown/page/latest_cases.html) are:
-- Confirmed Case Counts
+- Confirmed Case Counts (also shown in _Home_)
 - Local Confirmed Cases per City & County
 - Confirmed Cases by Age
 
@@ -37,9 +37,8 @@ Plots on [_Incidence rates_](https://linc-tw.github.io/COVID_breakdown/page/late
 
 Plots on [_Vaccination_](https://linc-tw.github.io/COVID_breakdown/page/latest_vaccination.html) are:
 - Vaccination by Brand
-- Vaccination Progress & Deliveries
+- Vaccination Progress & Deliveries (also shown in _Home_)
 - Vaccination Progress by Dose
-- Vaccination by City & County (only in _Last 90 days_)
 
 Plots on [_Other stats_](https://linc-tw.github.io/COVID_breakdown/page/latest_others.html) are:
 - Test Counts
@@ -48,9 +47,7 @@ Plots on [_Other stats_](https://linc-tw.github.io/COVID_breakdown/page/latest_o
 - Hospitalization or Confirmed Cases in Isolation
 - Border Crossing
 - Statistics in Mirror
-
-There is an additional plot is on the _Home_ page:
-- Status Evolution
+- Infection Dynamics (only in _Overall stats_)
 
 And 2 other plots on the _Timeline_ page:
 - Chronology of Systematic Testing
@@ -73,7 +70,7 @@ Current workflow
 An automatic update is scheduled at 16:45 everyday.
 This is done by executing `upload.sh`. It will:
 - download raw data from the sources;
-- execute `python COVID_breakdown_data_processing.py` to generate processed data; and
+- execute `python python/COVID_process.py` to generate processed data; and
 - commit & push the data to the repository.
 
 Manual data regularization will be done from time to time in late evening.

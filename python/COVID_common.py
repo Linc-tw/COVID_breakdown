@@ -411,6 +411,7 @@ COUNTY_DICT_2 = {
 BRAND_DICT = {
   'ALL': 'total',
   'Oxford/AstraZeneca': 'AZ',
+  'Oxford\/AstraZeneca': 'AZ',
   'Moderna': 'Moderna',
   '高端': 'Medigen',
   '\u9ad8\u7aef': 'Medigen',
@@ -511,6 +512,11 @@ DELIVERY_LIST = [
   [ 'Pfizer',    'Pfizer',  938300, '2021-11-25',           '', 'https://www.cna.com.tw/news/firstnews/202111250017.aspx', ''],
   [ 'Pfizer',    'Pfizer', 1923500, '2021-12-09',           '', 'https://www.cna.com.tw/news/firstnews/202112090163.aspx', ''],
   [     'AZ',        'AZ',  738400, '2021-12-21',           '', 'https://www.cna.com.tw/news/firstnews/202112210201.aspx', ''],
+  [ 'Pfizer',     'Pfizer', 938300, '2021-12-30',           '', 'https://www.cna.com.tw/news/firstnews/202112300017.aspx', ''],
+  #['',   '', , '2021-12-',           '', '', ''],
+  #['',   '', , '2021-12-',           '', '', ''],
+  #['',   '', , '2021-12-',           '', '', ''],
+  #['',   '', , '2021-12-',           '', '', ''],
   #['',   '', , '2021-12-',           '', '', ''],
 ]
 

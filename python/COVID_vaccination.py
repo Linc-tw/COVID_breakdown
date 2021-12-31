@@ -25,7 +25,7 @@ class VaccinationSheet(ccm.Template):
   def __init__(self, verbose=True):
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_vaccination.json' % ccm.DATA_PATH
     data = ccm.loadJson(name, verbose=verbose)
-    ## https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_manufacture_v1&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYzOTI1MzQ4Nw==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=varchar&d[]=NO&c[]=a02&t[]=date&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=NO&c[]=a05&t[]=int&d[]=NO&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO
+    ## https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_manufacture_v1&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTY0MDgxOTQ1Mg==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=varchar&d[]=NO&c[]=a02&t[]=date&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=NO&c[]=a05&t[]=int&d[]=NO&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=int&d[]=NO
     ## Old: https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_city_can3_c&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYyOTg2Mzk2Ng==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=date&d[]=NO&c[]=a02&t[]=varchar&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=YES&c[]=a05&t[]=int&d[]=YES&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=decimal&d[]=NO
     
     self.key_row_id = 'DT_RowId'
@@ -35,8 +35,9 @@ class VaccinationSheet(ccm.Template):
     self.key_brand = 'a03'
     self.key_cum_1st = 'a04'
     self.key_cum_2nd = 'a05'
-    self.key_cum_3rd = 'a06'
-    self.key_cum_tot = 'a07'
+    self.key_cum_3rd_1 = 'a06'
+    self.key_cum_3rd_2 = 'a07'
+    self.key_cum_tot = 'a08'
     
     self.data = data
     self.brand_list = ['AZ', 'Moderna', 'Medigen', 'Pfizer']
@@ -74,7 +75,7 @@ class VaccinationSheet(ccm.Template):
     return [int(value) for value in self.getColData(self.key_cum_2nd)]
   
   def getCum3rd(self):
-    return [int(value) for value in self.getColData(self.key_cum_3rd)]
+    return [int(value_1)+int(value_2) for value_1, value_2 in zip(self.getColData(self.key_cum_3rd_1), self.getColData(self.key_cum_3rd_2))]
   
   def getCumTot(self):
     return [int(value) for value in self.getColData(self.key_cum_tot)]
