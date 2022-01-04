@@ -2,14 +2,19 @@
     //--------------------------------//
     //--  general_plotting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.01.04                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
 //-- TODO
 
 //Linear/log?
-//R estimation
+//
+//population 2022
+//year tick length
+//buttons phase diagram
+//buttons for age & incidence map
+//timeline
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable

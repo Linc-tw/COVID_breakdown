@@ -2,7 +2,7 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2021.12.20                ##
+    ##  2022.01.04                ##
     ################################
 
 import os
@@ -56,7 +56,7 @@ SYMPTOM_DICT = {
   'stomachache': {'zh-tw': '腹痛', 'fr': 'mal de ventre'},
   'backache': {'zh-tw': '背痛', 'fr': 'mal de dos'}, 
   'toothache': {'zh-tw': '牙痛', 'fr': 'mal de dents'}, 
-  'rash': {'zh-tw': '出疹', 'fr': 'rash'},
+  'dermatitis': {'zh-tw': '皮膚炎', 'fr': 'dermatite'},
   
   'fatigue': {'zh-tw': '倦怠', 'fr': 'fatigue'},
   'soreness': {'zh-tw': '痠痛', 'fr': 'myalgie'},
@@ -67,6 +67,7 @@ SYMPTOM_DICT = {
   'dysgeusia': {'zh-tw': '味覺異常', 'fr': 'dysgueusie'},
   
   'tonsillitis': {'zh-tw': '淋巴腫脹', 'fr': 'adénopathie'}, 
+  'hypotension': {'zh-tw': '低血壓', 'fr': 'hypotension'},
   'hypoglycemia': {'zh-tw': '低血糖', 'fr': 'hypoglycémie'}, 
   'hypoxemia': {'zh-tw': '低血氧', 'fr': 'hypoxémie'},
   'anorexia': {'zh-tw': '食慾不佳', 'fr': 'anorexie'},
@@ -136,6 +137,7 @@ TRAVEL_HISTORY_DICT = {
   'Lithuania': {'zh-tw': '立陶宛', 'fr': 'Lituanie'},
   'Luxemburg': {'zh-tw': '盧森堡', 'fr': 'Luxembourg'},
   'Netherlands': {'zh-tw': '荷蘭', 'fr': 'Pays-Bas'},
+  'Norway': {'zh-tw': '挪威', 'fr': 'Norvège'},
   'Poland': {'zh-tw': '波蘭', 'fr': 'Pologne'},
   'Portugal': {'zh-tw': '葡萄牙', 'fr': 'Portugal'},
   'Romania': {'zh-tw': '羅馬尼亞', 'fr': 'Roumanie'},
@@ -187,6 +189,7 @@ TRAVEL_HISTORY_DICT = {
   'Peru': {'zh-tw': '秘魯', 'fr': 'Pérou'},
   'Saint Kitts and Nevis': {'zh-tw': '聖克里斯多福及尼維斯', 'fr': 'Saint-Christophe-et-Niévès'},
   'Saint Lucia': {'zh-tw': '聖露西亞', 'fr': 'Sainte-Lucie'},
+  'Trinidad and Tobago': {'zh-tw': '千里達及托巴哥', 'fr': 'Trinité-et-Tobago'},
   'USA': {'zh-tw': '美國', 'fr': 'États-Unis'},
   
   ## Oceania
@@ -245,6 +248,13 @@ AGE_DICT_2 = {
   },
   
   '2020': {
+    '0-4': 925302, '5-9': 1064186, '10-14': 973908, '15-19': 1154426, '20-24': 1494883, '25-29': 1597613, 
+    '30-34': 1583943, '35-39': 1894274, '40-44': 2016609, '45-49': 1760217, '50-54': 1806643, '55-59': 1824832,
+    '60-64': 1677085, '65-69': 1445839, '70-74': 902349, '75-79': 588493, '80-84': 445423, '85-89': 255428,
+    '90-94': 117104, '95-99': 28437, '100+': 4242,
+  },
+  
+  '2021': { #TODO
     '0-4': 925302, '5-9': 1064186, '10-14': 973908, '15-19': 1154426, '20-24': 1494883, '25-29': 1597613, 
     '30-34': 1583943, '35-39': 1894274, '40-44': 2016609, '45-49': 1760217, '50-54': 1806643, '55-59': 1824832,
     '60-64': 1677085, '65-69': 1445839, '70-74': 902349, '75-79': 588493, '80-84': 445423, '85-89': 255428,

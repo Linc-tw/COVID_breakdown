@@ -26,10 +26,11 @@ function ID_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('infectiodynamics_title', '感染相位變化');
     LS_AddStr('infectiodynamics_button_all', '完整疫情');
-    LS_AddStr('infectiodynamics_button_2020_1st', '2020 上半年');
+    LS_AddStr('infectiodynamics_button_2020_1st', '2020 上半年'); //new_year_token
     LS_AddStr('infectiodynamics_button_2020_2nd', '2020 下半年');
     LS_AddStr('infectiodynamics_button_2021_1st', '2021 上半年');
     LS_AddStr('infectiodynamics_button_2021_2nd', '2021 下半年');
+    LS_AddStr('infectiodynamics_button_2022_1st', '2022 上半年');
     
     LS_AddHtml('infectiodynamics_description', '\
       動態系統是個物理概念，\
@@ -49,10 +50,11 @@ function ID_ResetText() {
   else if (LS_lang == 'fr') {
     LS_AddStr('infectiodynamics_title', "Dynamique d'infection");
     LS_AddStr('infectiodynamics_button_all', 'Toute la pandémie');
-    LS_AddStr('infectiodynamics_button_2020_1st', '2020 1er semestre');
+    LS_AddStr('infectiodynamics_button_2020_1st', '2020 1er semestre'); //new_year_token
     LS_AddStr('infectiodynamics_button_2020_2nd', '2020 2nd semestre');
     LS_AddStr('infectiodynamics_button_2021_1st', '2021 1er semestre');
     LS_AddStr('infectiodynamics_button_2021_2nd', '2021 2nd semestre');
+    LS_AddStr('infectiodynamics_button_2022_1st', '2022 1er semestre');
     
     LS_AddHtml('infectiodynamics_description', "\
       Dans la physique, un système dont l'état peut être entièrement décrit par sa position et sa vitesse est appelé un système dynamique.\
@@ -74,10 +76,11 @@ function ID_ResetText() {
   else { //-- En
     LS_AddStr('infectiodynamics_title', 'Infection Dynamics');
     LS_AddStr('infectiodynamics_button_all', 'All time');
-    LS_AddStr('infectiodynamics_button_2020_1st', '2020 1st half year');
+    LS_AddStr('infectiodynamics_button_2020_1st', '2020 1st half year'); //new_year_token
     LS_AddStr('infectiodynamics_button_2020_2nd', '2020 2nd half year');
     LS_AddStr('infectiodynamics_button_2021_1st', '2021 1st half year');
     LS_AddStr('infectiodynamics_button_2021_2nd', '2021 2nd half year');
+    LS_AddStr('infectiodynamics_button_2022_1st', '2022 1st half year');
     
     LS_AddHtml('infectiodynamics_description', '\
       In physics, a system of which the state can be fully described by its position & speed is called a dynamical system.\
@@ -658,22 +661,22 @@ function ID_Replot(wrap) {
   wrap.legend_pos = {x: 25, y: wrap.legend_pos_y-wrap.legend_pos_dy, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy};
   
   //-- Define legend color
-  wrap.legend_color = wrap.color_list.slice(0, 4).concat([GP_wrap.gray, '#000000']);
+  wrap.legend_color = wrap.color_list.slice(0, 5).concat([GP_wrap.gray, '#000000']); //new_year_token
   
   //-- Define legend value
   wrap.legend_value = ['', '', '', ''];
   
   //-- Define legend label
   if (LS_lang == 'zh-tw') { 
-    wrap.legend_label = ['2020 上半年', '2020 下半年', '2021 上半年', '2021 下半年'];
+    wrap.legend_label = ['2020 上半年', '2020 下半年', '2021 上半年', '2021 下半年', '2022 上半年']; //new_year_token
     wrap.legend_label = wrap.legend_label.concat(['◉ 起始日', '◉ ' + wrap.last.date]);
   }
   else if (LS_lang == 'fr') {
-    wrap.legend_label = ['2020 1er semestre', '2020 2nd semestre', '2021 1er semestre', '2021 2nd semestre'];
+    wrap.legend_label = ['2020 1er semestre', '2020 2nd semestre', '2021 1er semestre', '2021 2nd semestre', '2022 1er semestre']; //new_year_token
     wrap.legend_label = wrap.legend_label.concat(['◉ Début de la période', '◉ ' + wrap.last.date]);
   }
   else {
-    wrap.legend_label = ['2020 1st half year', '2020 2nd half year', '2021 1st half year', '2021 2nd half year'];
+    wrap.legend_label = ['2020 1st half year', '2020 2nd half year', '2021 1st half year', '2021 2nd half year', '2022 1st half year']; //new_year_token
     wrap.legend_label = wrap.legend_label.concat(['◉ Period start', '◉ ' + wrap.last.date]);
   }
   

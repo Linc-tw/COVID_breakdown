@@ -2,7 +2,7 @@
     ################################
     ##  COVID_county.py           ##
     ##  Chieh-An Lin              ##
-    ##  2021.11.22                ##
+    ##  2022.01.04                ##
     ################################
 
 import os
@@ -176,11 +176,11 @@ class CountySheet(ccm.Template):
     
     ## Initialize stock dict
     case_hist = {age: 0 for age in self.age_key_list}
-    stock = [case_hist.copy() for i in range(13)]
+    stock = [case_hist.copy() for i in range(13)] ## Total + 12 weeks or months
     stock_dict = ccm.initializeStockDict_general(stock)
     
-    ## Add 12 empty hist for overall
-    for i in range(12):
+    ## Add 24 empty hist for overall (24 months)
+    for i in range(24): ## new_year_token
       stock_dict[ccm.PAGE_OVERALL].append(case_hist.copy())
     
     ## Loop over series
@@ -264,8 +264,8 @@ class CountySheet(ccm.Template):
     stock = [case_hist.copy() for i in range(13)]
     stock_dict = ccm.initializeStockDict_general(stock)
     
-    ## Add 12 empty hist for overall
-    for i in range(12):
+    ## Add 24 empty hist for overall (24 months)
+    for i in range(24): ## new_year_token
       stock_dict[ccm.PAGE_OVERALL].append(case_hist.copy())
     
     ## Loop over series

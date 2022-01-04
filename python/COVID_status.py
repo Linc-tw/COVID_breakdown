@@ -2,7 +2,7 @@
     ################################
     ##  COVID_status.py           ##
     ##  Chieh-An Lin              ##
-    ##  2021.11.22                ##
+    ##  2022.01.04                ##
     ################################
 
 import os
@@ -61,9 +61,10 @@ class StatusSheet(ccm.Template):
     date_list = data[self.coltag_date].values
     ## new_year_token
     self.ind_2021 = (date_list == '2021分隔線').argmax()
+    self.ind_2022 = (date_list == '2022分隔線').argmax() - 2
     
     cum_dis_list = data[self.coltag_cum_dis].values
-    ind = (cum_dis_list == cum_dis_list) * (date_list != '2021分隔線')
+    ind = (cum_dis_list == cum_dis_list)# * (date_list != '2021分隔線') * (date_list != '2022分隔線')
     self.data    = data[ind]
     self.n_total = ind.sum()
     
@@ -77,7 +78,9 @@ class StatusSheet(ccm.Template):
     
     ## new_year_token
     for i, date in enumerate(self.getCol(self.coltag_date)):
-      if i >= self.ind_2021:
+      if i >= self.ind_2022:
+        y = 2022
+      elif i >= self.ind_2021:
         y = 2021
         
       mmdd_zh = date.split('月')

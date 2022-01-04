@@ -2,7 +2,7 @@
     ################################
     ##  COVID_test.py             ##
     ##  Chieh-An Lin              ##
-    ##  2021.11.22                ##
+    ##  2022.01.04                ##
     ################################
 
 import os
@@ -46,6 +46,7 @@ class TestSheet(ccm.Template):
     from_extended_list = data[self.coltag_from_extended].values
     ## new_year_token
     self.ind_2021 = (from_extended_list == '2021分隔線').argmax()
+    self.ind_2022 = (from_extended_list == '2022分隔線').argmax() - 1
     
     date_list = data[self.coltag_date].values
     ind = date_list == date_list
@@ -62,7 +63,9 @@ class TestSheet(ccm.Template):
     
     ## new_year_token
     for i, date in enumerate(self.getCol(self.coltag_date)):
-      if i >= self.ind_2021:
+      if i >= self.ind_2022:
+        y = 2022
+      elif i >= self.ind_2021:
         y = 2021
       
       md_slash = date.split('/')
@@ -398,7 +401,7 @@ class TestSheet(ccm.Template):
     for date, from_clin_def, from_qt, from_ext in zip(date_list, from_clin_def_list, from_qt_list, from_ext_list):
       ind = ccm.ISODateToOrd(date) - ord_ref
       if ind < 0 or ind >= nb_days:
-        print('Bad ind_r = %d' % ind)
+        print('Bad date = %s' % date)
         continue
       
       stock['new_tests'][ind] = from_clin_def + from_qt + from_ext
