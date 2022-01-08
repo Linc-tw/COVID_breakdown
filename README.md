@@ -1,7 +1,7 @@
 COVID-19 Statistics in Taiwan
 =============================
 
-This repository hosts and generates a [dashboard](https://linc-tw.github.io/COVID_breakdown/index.html) for COVID-19 statistics in Taiwan.
+This repository hosts and generates a [dashboard](http://covidtaiwan.linc.tw/) for COVID-19 statistics in Taiwan.
 
 ![image](figures/screenshot.png)
 
@@ -24,23 +24,23 @@ In these two sections, 21 plots are shown on 4 pages:
 - _Vaccination_
 - _Other stats_
 
-Plots on [_Case breakdown_](https://linc-tw.github.io/COVID_breakdown/page/latest_cases.html) are:
-- Confirmed Case Counts (also shown in _Home_)
+Plots on [_Case breakdown_](http://covidtaiwan.linc.tw/page/latest_cases.html) are:
+- Confirmed Case Counts (also shown in [_Home_](http://covidtaiwan.linc.tw/page/index.html))
 - Local Confirmed Cases per City & County
 - Confirmed Cases by Age
 
-Plots on [_Incidence rates_](https://linc-tw.github.io/COVID_breakdown/page/latest_incidence.html) are:
+Plots on [_Incidence rates_](http://covidtaiwan.linc.tw/page/latest_incidence.html) are:
 - Arrival & Local Incidence Rates
 - Incidence Map
 - Evolution of Incidence Rate by City & County (only in _Last 90 days_)
 - Evolution of Incidence Rate by Age Group (only in _Last 90 days_)
 
-Plots on [_Vaccination_](https://linc-tw.github.io/COVID_breakdown/page/latest_vaccination.html) are:
+Plots on [_Vaccination_](http://covidtaiwan.linc.tw/page/latest_vaccination.html) are:
 - Vaccination by Brand
-- Vaccination Progress & Deliveries (also shown in _Home_)
+- Vaccination Progress & Deliveries (also shown in [_Home_](http://covidtaiwan.linc.tw/page/index.html))
 - Vaccination Progress by Dose
 
-Plots on [_Other stats_](https://linc-tw.github.io/COVID_breakdown/page/latest_others.html) are:
+Plots on [_Other stats_](http://covidtaiwan.linc.tw/page/latest_others.html) are:
 - Test Counts
 - Positive Rate & Case Fatality Rate
 - Death Counts
@@ -49,7 +49,7 @@ Plots on [_Other stats_](https://linc-tw.github.io/COVID_breakdown/page/latest_o
 - Statistics in Mirror
 - Infection Dynamics (only in _Overall stats_)
 
-And 2 other plots on the _Timeline_ page:
+And 2 other plots on the [_Timeline_](http://covidtaiwan.linc.tw/page/timeline.html) page:
 - Chronology of Systematic Testing
 - Pandemic Timeline (text in Mandarin)
 
@@ -69,8 +69,8 @@ Current workflow
 
 An automatic update is scheduled at 16:45 everyday.
 This is done by executing `upload.sh`. It will:
-- download raw data from the sources;
-- execute `python python/COVID_process.py` to generate processed data; and
+- download raw data from the sources,
+- execute `python python/COVID_process.py` to generate processed data, and
 - commit & push the data to the repository.
 
 Manual data regularization will be done from time to time in late evening.
@@ -86,8 +86,8 @@ They also collect fragmental information from daily press releases and conferenc
 
 Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.
 
-See [_Data Sources_](https://linc-tw.github.io/COVID_breakdown/data_source.html) or 
-`README.md` of [`raw_data/`](https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data)
+See [_Data Sources_](http://covidtaiwan.linc.tw/page/data_source.html) or 
+`README.md` in [`raw_data/`](https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data)
 for details.
 
 

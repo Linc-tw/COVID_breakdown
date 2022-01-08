@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  incidence_map.js          --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.01.08                --//
     //--------------------------------//
 
 function IM_InitFig(wrap) {
@@ -37,6 +37,10 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_w-10', '63-69天前');
     LS_AddStr('incidence_map_button_w-11', '70-76天前');
     LS_AddStr('incidence_map_button_w-12', '77-83天前');
+    LS_AddStr('incidence_map_button_2020', '2020');
+    LS_AddStr('incidence_map_button_2021', '2021');
+    LS_AddStr('incidence_map_button_2022', '2022');
+    LS_AddStr('incidence_map_button_all_year', '全年');
     LS_AddStr('incidence_map_button_m1', '1月');
     LS_AddStr('incidence_map_button_m2', '2月');
     LS_AddStr('incidence_map_button_m3', '3月');
@@ -49,30 +53,6 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_m10', '10月');
     LS_AddStr('incidence_map_button_m11', '11月');
     LS_AddStr('incidence_map_button_m12', '12月');
-    LS_AddStr('incidence_map_button_2020_01', '2020年1月');
-    LS_AddStr('incidence_map_button_2020_02', '2020年2月');
-    LS_AddStr('incidence_map_button_2020_03', '2020年3月');
-    LS_AddStr('incidence_map_button_2020_04', '2020年4月');
-    LS_AddStr('incidence_map_button_2020_05', '2020年5月');
-    LS_AddStr('incidence_map_button_2020_06', '2020年6月');
-    LS_AddStr('incidence_map_button_2020_07', '2020年7月');
-    LS_AddStr('incidence_map_button_2020_08', '2020年8月');
-    LS_AddStr('incidence_map_button_2020_09', '2020年9月');
-    LS_AddStr('incidence_map_button_2020_10', '2020年10月');
-    LS_AddStr('incidence_map_button_2020_11', '2020年11月');
-    LS_AddStr('incidence_map_button_2020_12', '2020年12月');
-    LS_AddStr('incidence_map_button_2021_01', '2021年1月');
-    LS_AddStr('incidence_map_button_2021_02', '2021年2月');
-    LS_AddStr('incidence_map_button_2021_03', '2021年3月');
-    LS_AddStr('incidence_map_button_2021_04', '2021年4月');
-    LS_AddStr('incidence_map_button_2021_05', '2021年5月');
-    LS_AddStr('incidence_map_button_2021_06', '2021年6月');
-    LS_AddStr('incidence_map_button_2021_07', '2021年7月');
-    LS_AddStr('incidence_map_button_2021_08', '2021年8月');
-    LS_AddStr('incidence_map_button_2021_09', '2021年9月');
-    LS_AddStr('incidence_map_button_2021_10', '2021年10月');
-    LS_AddStr('incidence_map_button_2021_11', '2021年11月');
-    LS_AddStr('incidence_map_button_2021_12', '2021年12月');
     
     LS_AddHtml('incidence_map_description', '\
       2021年5月所爆發的感染多半集中於雙北地區，\
@@ -99,6 +79,10 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_w-10', '63-69 jours plus tôt');
     LS_AddStr('incidence_map_button_w-11', '70-76 jours plus tôt');
     LS_AddStr('incidence_map_button_w-12', '77-83 jours plus tôt');
+    LS_AddStr('incidence_map_button_2020', '2020');
+    LS_AddStr('incidence_map_button_2021', '2021');
+    LS_AddStr('incidence_map_button_2022', '2022');
+    LS_AddStr('incidence_map_button_all_year', "Toute l'année");
     LS_AddStr('incidence_map_button_m1', 'Janvier');
     LS_AddStr('incidence_map_button_m2', 'Février');
     LS_AddStr('incidence_map_button_m3', 'Mars');
@@ -111,30 +95,6 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_m10', 'Octobre');
     LS_AddStr('incidence_map_button_m11', 'Novembre');
     LS_AddStr('incidence_map_button_m12', 'Décembre');
-    LS_AddStr('incidence_map_button_2020_01', 'Janv 2020');
-    LS_AddStr('incidence_map_button_2020_02', 'Févr 2020');
-    LS_AddStr('incidence_map_button_2020_03', 'Mars 2020');
-    LS_AddStr('incidence_map_button_2020_04', 'Avr 2020');
-    LS_AddStr('incidence_map_button_2020_05', 'Mai 2020');
-    LS_AddStr('incidence_map_button_2020_06', 'Juin 2020');
-    LS_AddStr('incidence_map_button_2020_07', 'Juil 2020');
-    LS_AddStr('incidence_map_button_2020_08', 'Août 2020');
-    LS_AddStr('incidence_map_button_2020_09', 'Sept 2020');
-    LS_AddStr('incidence_map_button_2020_10', 'Oct 2020');
-    LS_AddStr('incidence_map_button_2020_11', 'Nov 2020');
-    LS_AddStr('incidence_map_button_2020_12', 'Déc 2020');
-    LS_AddStr('incidence_map_button_2021_01', 'Janv 2021');
-    LS_AddStr('incidence_map_button_2021_02', 'Févr 2021');
-    LS_AddStr('incidence_map_button_2021_03', 'Mars 2021');
-    LS_AddStr('incidence_map_button_2021_04', 'Avr 2021');
-    LS_AddStr('incidence_map_button_2021_05', 'Mai 2021');
-    LS_AddStr('incidence_map_button_2021_06', 'Juin 2021');
-    LS_AddStr('incidence_map_button_2021_07', 'Juil 2021');
-    LS_AddStr('incidence_map_button_2021_08', 'Août 2021');
-    LS_AddStr('incidence_map_button_2021_09', 'Sept 2021');
-    LS_AddStr('incidence_map_button_2021_10', 'Oct 2021');
-    LS_AddStr('incidence_map_button_2021_11', 'Nov 2021');
-    LS_AddStr('incidence_map_button_2021_12', 'Déc 2021');
     
     LS_AddHtml('incidence_map_description', "\
       La vague de mai 2021 se concentraient à Taipei et à Nouveau Taipei.\
@@ -162,6 +122,10 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_w-10', '63-69 days ago');
     LS_AddStr('incidence_map_button_w-11', '70-76 days ago');
     LS_AddStr('incidence_map_button_w-12', '77-83 days ago');
+    LS_AddStr('incidence_map_button_2020', '2020');
+    LS_AddStr('incidence_map_button_2021', '2021');
+    LS_AddStr('incidence_map_button_2022', '2022');
+    LS_AddStr('incidence_map_button_all_year', 'All year');
     LS_AddStr('incidence_map_button_m1', 'January');
     LS_AddStr('incidence_map_button_m2', 'February');
     LS_AddStr('incidence_map_button_m3', 'March');
@@ -174,30 +138,6 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_m10', 'October');
     LS_AddStr('incidence_map_button_m11', 'November');
     LS_AddStr('incidence_map_button_m12', 'December');
-    LS_AddStr('incidence_map_button_2020_01', 'Jan 2020');
-    LS_AddStr('incidence_map_button_2020_02', 'Feb 2020');
-    LS_AddStr('incidence_map_button_2020_03', 'Mar 2020');
-    LS_AddStr('incidence_map_button_2020_04', 'Apr 2020');
-    LS_AddStr('incidence_map_button_2020_05', 'May 2020');
-    LS_AddStr('incidence_map_button_2020_06', 'Jun 2020');
-    LS_AddStr('incidence_map_button_2020_07', 'Jul 2020');
-    LS_AddStr('incidence_map_button_2020_08', 'Aug 2020');
-    LS_AddStr('incidence_map_button_2020_09', 'Sep 2020');
-    LS_AddStr('incidence_map_button_2020_10', 'Oct 2020');
-    LS_AddStr('incidence_map_button_2020_11', 'Nov 2020');
-    LS_AddStr('incidence_map_button_2020_12', 'Dec 2020');
-    LS_AddStr('incidence_map_button_2021_01', 'Jan 2021');
-    LS_AddStr('incidence_map_button_2021_02', 'Feb 2021');
-    LS_AddStr('incidence_map_button_2021_03', 'Mar 2021');
-    LS_AddStr('incidence_map_button_2021_04', 'Apr 2021');
-    LS_AddStr('incidence_map_button_2021_05', 'May 2021');
-    LS_AddStr('incidence_map_button_2021_06', 'Jun 2021');
-    LS_AddStr('incidence_map_button_2021_07', 'Jul 2021');
-    LS_AddStr('incidence_map_button_2021_08', 'Aug 2021');
-    LS_AddStr('incidence_map_button_2021_09', 'Sep 2021');
-    LS_AddStr('incidence_map_button_2021_10', 'Oct 2021');
-    LS_AddStr('incidence_map_button_2021_11', 'Nov 2021');
-    LS_AddStr('incidence_map_button_2021_12', 'Dec 2021');
     
     LS_AddHtml('incidence_map_description', '\
       The outbreak of May 2021 was concentrated at Taipei & New Taipei.\
@@ -246,7 +186,7 @@ function IM_FormatData2(wrap, data2) {
 function IM_FormatData3(wrap, data3) {
   //-- Variables for data
   var col_tag_list = data3.columns.slice(1);
-  var col_tag = col_tag_list[wrap.period];
+  var col_tag = col_tag_list[wrap.col_ind];
   var i, j, x, y;
   
   //-- Variables for plot
@@ -487,27 +427,31 @@ function IM_Replot(wrap) {
       ]; 
   }
   else if (wrap.tag.includes('overall')) {
-    if (LS_lang == 'zh-tw')
-      legend_title_list = [
-        '2020年1月', '2020年2月','2020年3月', '2020年4月','2020年5月', '2020年6月',
-        '2020年7月', '2020年8月','2020年9月', '2020年10月','2020年11月', '2020年12月',
-        '2021年1月', '2021年2月','2021年3月', '2021年4月','2021年5月', '2021年6月',
-        '2021年7月', '2021年8月','2021年9月', '2021年10月','2021年11月', '2021年12月'
-      ];
-    else if (LS_lang == 'fr')
-      legend_title_list = [
-        'Janvier 2020', 'Février 2020', 'Mars 2020', 'Avril 2020', 'Mai 2020', 'Juin 2020', 
-        'Juillet 2020', 'Août 2020', 'Septembre 2020', 'Octobre 2020', 'Novembre 2020', 'Décembre 2020', 
-        'Janvier 2021', 'Février 2021', 'Mars 2021', 'Avril 2021', 'Mai 2021', 'Juin 2021', 
-        'Juillet 2021', 'Août 2021', 'Septembre 2021', 'Octobre 2021', 'Novembre 2021', 'Décembre 2021', 
-      ];
-    else
-      legend_title_list = [
-        'January 2020', 'February 2020', 'March 2020', 'April 2020', 'May 2020', 'June 2020', 
-        'July 2020', 'Auguest 2020', 'September 2020', 'October 2020', 'November 2020', 'December 2020', 
-        'January 2021', 'February 2021', 'March 2021', 'April 2021', 'May 2021', 'June 2021', 
-        'July 2021', 'Auguest 2021', 'September 2021', 'October 2021', 'November 2021', 'December 2021', 
-      ]; 
+    year_list = ['2020', '2021', '2022'];
+    legend_title_list = [];
+    
+    if (LS_lang == 'zh-tw') {
+      month_list = ['全年', '年1月', '年2月','年3月', '年4月','年5月', '年6月', '年7月', '年8月','年9月', '年10月','年11月', '年12月'];
+      for (j=0; j<year_list.length; j++)
+        for (i=0; i<month_list.length; i++)
+          legend_title_list.push(year_list[j] + month_list[i]);
+    }
+    else if (LS_lang == 'fr') {
+      month_list = ['Année ', 'Janvier ', 'Février ', 'Mars ', 'Avril ', 'Mai ', 'Juin ', 'Juillet ', 'Août ', 'Septembre ', 'Octobre ', 'Novembre ', 'Décembre '];
+      for (j=0; j<year_list.length; j++)
+        for (i=0; i<month_list.length; i++)
+          legend_title_list.push(month_list[i] + year_list[j]);
+    }
+    else {
+      month_list = [' all year', 'January ', 'February ', 'March ', 'April ', 'May ', 'June ', 'July ', 'Auguest ', 'September ', 'October ', 'November ', 'December '];
+      for (j=0; j<year_list.length; j++)
+        for (i=0; i<month_list.length; i++) {
+          if (i == 0)
+            legend_title_list.push(year_list[j] + month_list[i]);
+          else
+            legend_title_list.push(month_list[i] + year_list[j]);
+        }
+    }
   }
   legend_title_list = [LS_GetLegendTitle_Page(wrap)].concat(legend_title_list);
   
@@ -531,7 +475,7 @@ function IM_Replot(wrap) {
       legend_label = 'Nationalwide total ';
     legend_label += wrap.legend_value;
   }
-  legend_caption_bottom = [legend_title_list[wrap.period], legend_label];
+  legend_caption_bottom = [legend_title_list[wrap.col_ind], legend_label];
   
   //-- Update legend caption
   wrap.svg.selectAll('.legend.caption')
@@ -589,10 +533,29 @@ function IM_ButtonListener(wrap) {
   });
   
   //-- Period
-  d3.select(wrap.id +'_period').on('change', function() {
-    wrap.period = this.value;
-    IM_Reload(wrap);
-  });
+  if (wrap.tag.includes('overall')) {
+    d3.select(wrap.id +'_year').on('change', function() {
+      wrap.year = +this.value;
+      if (wrap.year == 0) {
+        document.getElementById(wrap.tag + "_month").disabled = true;
+        document.getElementById(wrap.tag + "_month").value = 0;
+      }
+      else
+        document.getElementById(wrap.tag + "_month").disabled = false;
+      wrap.col_ind = GP_YMToIndex(wrap.year, wrap.month);
+      IM_Reload(wrap);
+    });
+    d3.select(wrap.id +'_month').on('change', function() {
+      wrap.month = +this.value;
+      wrap.col_ind = GP_YMToIndex(wrap.year, wrap.month);
+      IM_Reload(wrap);
+    });
+  }
+  else
+    d3.select(wrap.id +'_period').on('change', function() {
+      wrap.col_ind = this.value;
+      IM_Reload(wrap);
+    });
   
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
@@ -603,12 +566,17 @@ function IM_ButtonListener(wrap) {
     else
       tag1 = 'rate';
     
-    if (wrap.period == 0)
+    if (wrap.col_ind == 0)
       tag2 = 'total';
     else if (wrap.tag.includes('latest'))
-      tag2 = 'w' + (-wrap.period);
+      tag2 = 'w' + (-wrap.col_ind);
+    else if (wrap.tag.includes('overall')) {
+      tag2 = '' + (wrap.year + 2019);
+      if (wrap.month > 0)
+        tag2 += '_m' + wrap.month;
+    }
     else
-      tag2 = 'm' + wrap.period;
+      tag2 = 'm' + wrap.col_ind;
     
     name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + LS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
@@ -632,7 +600,19 @@ function IM_Main(wrap) {
   //-- Swap active to current value
   wrap.rate = document.querySelector("input[name='" + wrap.tag + "_rate']:checked").value;
   GP_PressRadioButton(wrap, 'rate', 0, wrap.rate); //-- 0 from .html
-  wrap.period = document.getElementById(wrap.tag + '_period').value;
+  if (wrap.tag.includes('overall')) {
+    wrap.year = +document.getElementById(wrap.tag + "_year").value;
+    if (wrap.year == 0) {
+      document.getElementById(wrap.tag + "_month").disabled = true;
+      document.getElementById(wrap.tag + "_month").value = 0;
+    }
+    else
+      document.getElementById(wrap.tag + "_month").disabled = false;
+    wrap.month = +document.getElementById(wrap.tag + "_month").value;
+    wrap.col_ind = GP_YMToIndex(wrap.year, wrap.month);
+  }
+  else
+    wrap.col_ind = document.getElementById(wrap.tag + "_period").value;
   
   //-- Load
   IM_InitFig(wrap);

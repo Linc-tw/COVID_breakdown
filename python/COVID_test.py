@@ -2,7 +2,7 @@
     ################################
     ##  COVID_test.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.04                ##
+    ##  2022.01.08                ##
     ################################
 
 import os
@@ -44,8 +44,8 @@ class TestSheet(ccm.Template):
     #https://covid19dashboard.cdc.gov.tw/dash4
     
     from_extended_list = data[self.coltag_from_extended].values
-    ## new_year_token
-    self.ind_2021 = (from_extended_list == '2021分隔線').argmax()
+    
+    self.ind_2021 = (from_extended_list == '2021分隔線').argmax() ## new_year_token
     self.ind_2022 = (from_extended_list == '2022分隔線').argmax() - 1
     
     date_list = data[self.coltag_date].values
@@ -63,7 +63,7 @@ class TestSheet(ccm.Template):
     
     ## new_year_token
     for i, date in enumerate(self.getCol(self.coltag_date)):
-      if i >= self.ind_2022:
+      if i >= self.ind_2022: ## new_year_token
         y = 2022
       elif i >= self.ind_2021:
         y = 2021

@@ -2,7 +2,7 @@
     //----------------------------------------//
     //--  positivity_and_fatality_param.js  --//
     //--  Chieh-An Lin                      --//
-    //--  2021.12.13                        --//
+    //--  2022.01.08                        --//
     //----------------------------------------//
 
 var PAF_latest_wrap = {
@@ -27,7 +27,7 @@ var PAF_overall_wrap = {
 
   y_max_factor: 1.2,
   nb_yticks: 4,
-  legend_pos_x: 190,
+  legend_pos_x: 140,
   r: 1.5, //-- Dot radius
 };
 

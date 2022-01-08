@@ -11,10 +11,7 @@
 //Linear/log?
 //
 //population 2022
-//year tick length
-//buttons phase diagram
 //buttons for age & incidence map
-//timeline
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
@@ -133,6 +130,12 @@ function GP_ISODateAddition(iso, nb_days) {
 
 function GP_DateOrdinal(iso) {
   return (new Date(iso) - new Date(GP_wrap.iso_ref)) / 86400000;
+}
+
+function GP_YMToIndex(year, month) {
+  if (year == 0)
+    return 0;
+  return 1 + month + 13 * (year - 1);
 }
 
 //------------------------------------------------------------------------------
@@ -694,7 +697,7 @@ function GP_MakeOverallXTick(wrap, format) {
   if (format == 'band') //-- For edge
     x_prev += 0.1;
   
-  for (i=yyyy_begin; i<yyyy_end+1; i++) {
+  for (i=yyyy_begin; i<=yyyy_end; i++) {
     //-- Get tick date
     iso = i + '-12-31';
     
@@ -710,7 +713,7 @@ function GP_MakeOverallXTick(wrap, format) {
     if (i == yyyy_end) {
       x = wrap.x_max;
       if (format == 'band') //-- For edge
-        x -= 0.1; 
+        x -= 0.1;
     }
     else
       xtick_sep_year.push(x);
@@ -757,7 +760,7 @@ function GP_ReplotOverallXTick(wrap, format) {
     
   //-- Define & update xaxis_tick_year
   var xaxis_tick_year = d3.axisBottom(xscale)
-    .tickSize(30)
+    .tickSize(60)
     .tickSizeOuter(0)
     .tickValues(wrap.xtick_sep_year)
     .tickFormat('');
@@ -1368,11 +1371,12 @@ function GP_MouseOver_Bright(wrap, d) {
 
 function GP_MouseLeave_Bright(wrap, d) {
   //-- Change opacity when moving mouse away
-  if (wrap.hasOwnProperty('tooltip'))
+  if (wrap.hasOwnProperty('tooltip')) {
     wrap.tooltip.html('')
       .transition()
-      .duration(10)
+      .duration(1)
       .style('opacity', 0);
+  }
   
   d3.select(d3.event.target)
     .style('opacity', 1);
@@ -1391,11 +1395,12 @@ function GP_MouseOver_Faint(wrap, d) {
 
 function GP_MouseLeave_Faint(wrap, d) {
   //-- Change opacity when moving mouse away
-  if (wrap.hasOwnProperty('tooltip'))
+  if (wrap.hasOwnProperty('tooltip')) {
     wrap.tooltip.html('')
       .transition()
-      .duration(10)
+      .duration(1)
       .style('opacity', 0);
+  }
   
   d3.select(d3.event.target)
     .style('opacity', wrap.plot_opacity);

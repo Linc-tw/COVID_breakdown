@@ -2,7 +2,7 @@
     ################################
     ##  COVID_county.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.04                ##
+    ##  2022.01.08                ##
     ################################
 
 import os
@@ -179,8 +179,8 @@ class CountySheet(ccm.Template):
     stock = [case_hist.copy() for i in range(13)] ## Total + 12 weeks or months
     stock_dict = ccm.initializeStockDict_general(stock)
     
-    ## Add 24 empty hist for overall (24 months)
-    for i in range(24): ## new_year_token
+    ## Add 27 empty hist for overall (24 months + 3 all year)
+    for i in range(27): ## new_year_token
       stock_dict[ccm.PAGE_OVERALL].append(case_hist.copy())
     
     ## Loop over series
@@ -199,10 +199,12 @@ class CountySheet(ccm.Template):
             stock[-lookback_week][age] += nb_cases
             
         elif ccm.PAGE_OVERALL == page:
-          yyyy = int(report_date[:4])
-          mm = int(report_date[5:7])
-          yyyymm = mm + 12 * (yyyy - 2020)
-          stock[yyyymm][age] += nb_cases
+          y_ind = int(report_date[:4]) - 2020
+          m_ind = int(report_date[5:7])
+          yy_ind = 1 + 13 * y_ind
+          ym_ind = 1 + m_ind + 13 * y_ind
+          stock[yy_ind][age] += nb_cases
+          stock[ym_ind][age] += nb_cases
           
         else:
           mm = int(report_date[5:7])
@@ -222,6 +224,7 @@ class CountySheet(ccm.Template):
       stock.append('  - `week_-N`: between 7*`N`-7 & 7*`N`-1 days ago')
     elif page == ccm.PAGE_OVERALL:
       stock.append('  - `total`: overall stats')
+      stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
     elif page == ccm.PAGE_2020 or page == ccm.PAGE_2021 or page == ccm.PAGE_2022: ## new_year_token
       stock.append('  - `total`: all year %s' % page)
@@ -237,8 +240,10 @@ class CountySheet(ccm.Template):
       if ccm.PAGE_LATEST == page:
         label_list = ['total'] + ['week_-%d' % (i+1) for i in range(12)]
       elif ccm.PAGE_OVERALL == page:
-        label_list = ['total'] + ['%s_2020' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + ['%s_2021' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
-          ['%s_2022' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token
+        label_list = ['total'] + \
+          ['2020'] + ['%s_2020' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
+          ['2021'] + ['%s_2021' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
+          ['2022'] + ['%s_2022' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token
       else:
         label_list = ['total'] + [ccm.numMonthToAbbr(i+1) for i in range(12)]
       
@@ -264,8 +269,8 @@ class CountySheet(ccm.Template):
     stock = [case_hist.copy() for i in range(13)]
     stock_dict = ccm.initializeStockDict_general(stock)
     
-    ## Add 24 empty hist for overall (24 months)
-    for i in range(24): ## new_year_token
+    ## Add 27 empty hist for overall (24 months + 3 all year)
+    for i in range(27): ## new_year_token
       stock_dict[ccm.PAGE_OVERALL].append(case_hist.copy())
     
     ## Loop over series
@@ -289,11 +294,14 @@ class CountySheet(ccm.Template):
             stock[-lookback_week][county] += nb_cases
             
         elif ccm.PAGE_OVERALL == page:
-          yyyy = int(report_date[:4])
-          mm = int(report_date[5:7])
-          yyyymm = mm + 12 * (yyyy - 2020)
-          stock[yyyymm]['total'] += nb_cases
-          stock[yyyymm][county] += nb_cases
+          y_ind = int(report_date[:4]) - 2020
+          m_ind = int(report_date[5:7])
+          yy_ind = 1 + 13 * y_ind
+          ym_ind = 1 + m_ind + 13 * y_ind
+          stock[yy_ind]['total'] += nb_cases
+          stock[yy_ind][county] += nb_cases
+          stock[ym_ind]['total'] += nb_cases
+          stock[ym_ind][county] += nb_cases
           
         else:
           mm = int(report_date[5:7])
@@ -314,6 +322,7 @@ class CountySheet(ccm.Template):
       stock.append('  - `week_-N`: between 7*`N`-7 & 7*`N`-1 days ago')
     elif page == ccm.PAGE_OVERALL:
       stock.append('  - `total`: overall stats')
+      stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
     elif page == ccm.PAGE_2020 or page == ccm.PAGE_2021 or page == ccm.PAGE_2022: ## new_year_token
       stock.append('  - `total`: all year %s' % page)
@@ -343,8 +352,10 @@ class CountySheet(ccm.Template):
       if ccm.PAGE_LATEST == page:
         label_list = ['total'] + ['week_-%d' % (i+1) for i in range(12)]
       elif ccm.PAGE_OVERALL == page:
-        label_list = ['total'] + ['%s_2020' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + ['%s_2021' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
-          ['%s_2022' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token
+        label_list = ['total'] + \
+          ['2020'] + ['%s_2020' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
+          ['2021'] + ['%s_2021' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
+          ['2022'] + ['%s_2022' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token
       else:
         label_list = ['total'] + [ccm.numMonthToAbbr(i+1) for i in range(12)]
     

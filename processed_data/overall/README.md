@@ -27,6 +27,7 @@ Contents
 - Column
   - `age`
   - `total`: overall stats
+  - `YYYY`: during year `YYYY`
   - `MMM_YYYY`: during month `MMM` of year `YYYY`
 
 `case_by_transmission_by_onset_day.csv`
@@ -83,6 +84,7 @@ Contents
 - Column
   - `county`
   - `total`: overall stats
+  - `YYYY`: during year `YYYY`
   - `MMM_YYYY`: during month `MMM` of year `YYYY`
 
 `incidence_map_label.csv`
