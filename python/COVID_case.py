@@ -2,7 +2,7 @@
     ################################
     ##  COVID_case.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.08                ##
+    ##  2022.01.11                ##
     ################################
 
 import os
@@ -302,6 +302,7 @@ class CaseSheet(ccm.Template):
       'Colombia': ['哥倫比亞'],
       'Costa Rica': ['哥斯大黎加'],
       'Dominican Republic': ['多明尼加'],
+      'Ecuador': ['厄瓜多'],
       'Guatemala': ['瓜地馬拉'], 
       'Haiti': ['海地'], 
       'Honduras': ['宏都拉斯'], 
@@ -582,7 +583,7 @@ class CaseSheet(ccm.Template):
       'throatache': [
         '上呼吸道相關症狀', '上呼吸道症狀', '上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '咽喉不適', '急性咽炎', '聲音沙啞', '口乾舌燥', '吞嚥困難', 
         '異物感', '樓龍痛', '呼吸道', '呼吸痛', '咽喉痛', '鼻子乾', '沙啞', '乾嘔', '口渴', '口乾', 
-        '喉嚨有異物感', '喉嚨乾澀想咳', '喉嚨刺激感', '喉嚨不適', '喉嚨痛癢', '喉嚨乾癢', '喉嚨乾痛', '喉嚨痛 癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', 
+        '喉嚨有異物感', '喉嚨乾澀想咳', '喉嚨刺激感', '喉嚨不適', '喉嚨痛癢', '喉嚨乾癢', '喉嚨乾痛', '喉嚨紅腫', '喉嚨痛 癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', 
         '喉嚨乾', '喉嚨', '痰'
       ],
       'earache': ['左耳神經痛', '耳朵痛', '耳鳴'],
@@ -599,8 +600,7 @@ class CaseSheet(ccm.Template):
       ], 
       'chills': ['忽冷忽熱症狀', '全身冒冷汗', '忽冷忽熱', '冒冷汗', '畏寒', '發冷', '寒顫'], 
       
-      'nausea': ['噁心', '想吐'],
-      'vomiting': ['嘔吐感', '嘔吐'],
+      'nausea': ['嘔吐感', '嘔吐', '噁心', '想吐', '反胃'],
       'diarrhea': ['腹瀉'], 
       
       'headache': ['頭暈目眩', '輕度頭痛', '頭骨痛', '偏頭痛', '頭痛', '頭暈', '頭量', '頭脹', '頭昏', '暈眩', '頭重'],
@@ -702,6 +702,8 @@ class CaseSheet(ccm.Template):
     link_list = []
     for i, link in enumerate(self.getCol(self.coltag_link)):
       if link == '未知':
+        link_list.append('unlinked')
+      elif link == '未知\n機場清潔':
         link_list.append('unlinked')
       elif link == '院內尚不明':
         link_list.append('unlinked')

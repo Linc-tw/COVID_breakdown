@@ -2,7 +2,7 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.04                ##
+    ##  2022.01.11                ##
     ################################
 
 import os
@@ -47,7 +47,6 @@ SYMPTOM_DICT = {
   'chills': {'zh-tw': '畏寒', 'fr': 'frissons'}, 
   
   'nausea': {'zh-tw': '噁心', 'fr': 'nausée'},
-  'vomiting': {'zh-tw': '嘔吐', 'fr': 'vomissement'},
   'diarrhea': {'zh-tw': '腹瀉', 'fr': 'diarrhée'}, 
   
   'headache': {'zh-tw': '頭痛', 'fr': 'mal de tête'},
@@ -180,6 +179,7 @@ TRAVEL_HISTORY_DICT = {
   'Colombia': {'zh-tw': '哥倫比亞', 'fr': 'Colombie'},
   'Costa Rica': {'zh-tw': '哥斯大黎加', 'fr': 'Costa Rica'},
   'Dominican Republic': {'zh-tw': '多明尼加', 'fr': 'République dominicaine'},
+  'Ecuador': {'zh-tw': '厄瓜多', 'fr': 'Équateur'},
   'Guatemala': {'zh-tw': '瓜地馬拉', 'fr': 'Guatemala'}, 
   'Haiti': {'zh-tw': '海地', 'fr': 'Haïti'}, 
   'Honduras': {'zh-tw': '宏都拉斯', 'fr': 'Honduras'}, 
@@ -521,15 +521,20 @@ DELIVERY_LIST = [
   ['Moderna',   'Moderna', 1149820, '2021-11-19', '2021-11-30', 'https://www.cna.com.tw/news/firstnews/202111180261.aspx', ''],
   
   ## 2021/12
-  [ 'Pfizer',    'Pfizer',  938300, '2021-11-25',           '', 'https://www.cna.com.tw/news/firstnews/202111250017.aspx', ''],
-  [ 'Pfizer',    'Pfizer', 1923500, '2021-12-09',           '', 'https://www.cna.com.tw/news/firstnews/202112090163.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  937752, '2021-11-25', '2021-12-03', 'https://www.cna.com.tw/news/firstnews/202111250017.aspx', ''],
+  ['Medigen',   'Medigen',  173297,           '', '2021-12-09',                                                        '', ''],
+  ['Medigen',   'Medigen',  255693,           '', '2021-12-14',                                                        '', ''],
+  [ 'Pfizer',    'Pfizer', 1922892, '2021-12-09', '2021-12-17', 'https://www.cna.com.tw/news/firstnews/202112090163.aspx', ''],
+  ['Medigen',   'Medigen',  151600,           '', '2021-12-27',                                                        '', ''],
+  
+  ## 2022/01
   [     'AZ',        'AZ',  738400, '2021-12-21',           '', 'https://www.cna.com.tw/news/firstnews/202112210201.aspx', ''],
   [ 'Pfizer',     'Pfizer', 938300, '2021-12-30',           '', 'https://www.cna.com.tw/news/firstnews/202112300017.aspx', ''],
-  #['',   '', , '2021-12-',           '', '', ''],
-  #['',   '', , '2021-12-',           '', '', ''],
-  #['',   '', , '2021-12-',           '', '', ''],
-  #['',   '', , '2021-12-',           '', '', ''],
-  #['',   '', , '2021-12-',           '', '', ''],
+  #['',   '', , '2022-01-',           '', '', ''],
+  #['',   '', , '2022-01-',           '', '', ''],
+  #['',   '', , '2022-01-',           '', '', ''],
+  #['',   '', , '2022-01-',           '', '', ''],
+  #['',   '', , '2022-01-',           '', '', ''],
 ]
 
 QC_REF_DICT = {
@@ -542,7 +547,7 @@ QC_REF_DICT = {
   '2021-09': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637697404423272822',
   '2021-10': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637716363065289877',
   '2021-11': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637741191377186898',
-  '2021-12': '',
+  '2021-12': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637769115557703107',
   
   '2022-01': '',
   '2022-02': '',
