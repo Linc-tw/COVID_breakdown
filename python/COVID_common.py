@@ -529,8 +529,8 @@ DELIVERY_LIST = [
   
   ## 2022/01
   [     'AZ',        'AZ',  738400, '2021-12-21',           '', 'https://www.cna.com.tw/news/firstnews/202112210201.aspx', ''],
-  [ 'Pfizer',     'Pfizer', 938300, '2021-12-30',           '', 'https://www.cna.com.tw/news/firstnews/202112300017.aspx', ''],
-  #['',   '', , '2022-01-',           '', '', ''],
+  [ 'Pfizer',    'Pfizer',  938300, '2021-12-30',           '', 'https://www.cna.com.tw/news/firstnews/202112300017.aspx', ''],
+  [     'AZ',        'AZ', 1461500, '2022-01-16',           '', 'https://www.cna.com.tw/news/firstnews/202201130232.aspx', ''],
   #['',   '', , '2022-01-',           '', '', ''],
   #['',   '', , '2022-01-',           '', '', ''],
   #['',   '', , '2022-01-',           '', '', ''],
