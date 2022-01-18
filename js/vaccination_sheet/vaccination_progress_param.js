@@ -2,7 +2,7 @@
     //-------------------------------------//
     //--  vaccination_progress_param.js  --//
     //--  Chieh-An Lin                   --//
-    //--  2021.12.13                     --//
+    //--  2022.01.17                     --//
     //-------------------------------------//
 
 var VP_latest_wrap = {
@@ -14,7 +14,7 @@ var VP_latest_wrap = {
   ],
 
   x_max_factor: 1.22,
-  y_max_factor: 1.45,
+  y_max_factor: 1.6,
   y_max_fixed: 0,
   nb_yticks: 4,
   legend_pos_x: 125,

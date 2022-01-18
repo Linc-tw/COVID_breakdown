@@ -20,16 +20,14 @@ var GP_wrap = {
   r_list_latest: [3, 3, 4, 1, 1, 2, 2],
   xlabel_path_2020: 25,
   r_list_2020: [12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11],
-  // xlabel_path_2021: 25,
-  // r_list_2021: [12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11],
-  xlabel_path_2021: 15,
-  r_list_2021: [7, 7, 8, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6],
+  xlabel_path_2021: 25,
+  r_list_2021: [12, 12, 13, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11],
   
   //-- xlabel overall
   iso_ref: '2020-01-01',
   iso_ref_vacc: '2021-03-01',
   xticklabel_min_space: 16,
-  xticklabel_min_space_vacc: 15,
+  xticklabel_min_space_vacc: 20,
   
   //-- padding
   padding_bar: 0.2,
