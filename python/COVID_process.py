@@ -2,12 +2,12 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.17                ##
+    ##  2022.01.18                ##
     ################################
 
 import os
 import sys
-import warnings
+import warnings as wng
 import datetime as dtt
 
 import numpy as np
@@ -48,8 +48,8 @@ def makeIncidenceRates(case_sheet, border_sheet):
   stock_new = {}
   stock_new['date'] = stock['date']
   
-  with warnings.catch_warnings(): ## Avoid division by zero
-    warnings.simplefilter('ignore')
+  with wng.catch_warnings(): ## Avoid division by zero
+    wng.simplefilter('ignore')
     
     value_arr = stock['new_imported'] / stock['new_entries']
     value_arr = np.around(value_arr, decimals=4)
@@ -115,8 +115,8 @@ def makePositivityAndFatality(case_sheet, status_sheet, test_sheet):
   stock_new = {}
   stock_new['date'] = stock['date']
   
-  with warnings.catch_warnings(): ## Avoid division by zero
-    warnings.simplefilter('ignore')
+  with wng.catch_warnings(): ## Avoid division by zero
+    wng.simplefilter('ignore')
     
     value_arr = stock['new_cases'] / stock['new_tests']
     value_arr = np.around(value_arr, decimals=4)

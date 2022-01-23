@@ -2,12 +2,11 @@
     ################################
     ##  COVID_border.py           ##
     ##  Chieh-An Lin              ##
-    ##  2021.11.22                ##
+    ##  2022.01.18                ##
     ################################
 
 import os
 import sys
-import warnings
 import datetime as dtt
 
 import numpy as np

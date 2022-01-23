@@ -2,12 +2,11 @@
     ###################################
     ##  COVID_vaccination_county.py  ##
     ##  Chieh-An Lin                 ##
-    ##  2021.07.22                   ##
+    ##  2022.01.18                   ##
     ###################################
 
 import os
 import sys
-import warnings
 import datetime as dtt
 
 import numpy as np

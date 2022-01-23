@@ -2,17 +2,16 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.11                ##
+    ##  2022.01.21                ##
     ################################
 
 import os
 import sys
-import warnings
-import collections as clt
-import calendar as cld
-import datetime as dtt
 import copy
 import json
+import warnings as wng
+import calendar as cld
+import datetime as dtt
 
 import numpy as np
 import scipy as sp
@@ -103,6 +102,7 @@ TRAVEL_HISTORY_DICT = {
   ## West & Central Asia
   'Afghanistan': {'zh-tw': '阿富汗', 'fr': 'Afghanistan'},
   'Iran': {'zh-tw': '伊朗', 'fr': 'Iran'},
+  'Israel': {'zh-tw':  '以色列', 'fr': 'Israël'},
   'Kazakhstan': {'zh-tw': '哈薩克', 'fr': 'Kazakhstan'}, 
   'Kyrgyzstan': {'zh-tw': '吉爾吉斯', 'fr': 'Kirghizistan'},
   'Oman': {'zh-tw': '阿曼', 'fr': 'Oman'},
@@ -532,7 +532,7 @@ DELIVERY_LIST = [
   [     'AZ',        'AZ',  738400, '2021-12-21',           '', 'https://www.cna.com.tw/news/firstnews/202112210201.aspx', ''],
   [ 'Pfizer',    'Pfizer',  938300, '2021-12-30',           '', 'https://www.cna.com.tw/news/firstnews/202112300017.aspx', ''],
   [     'AZ',        'AZ', 1461500, '2022-01-16',           '', 'https://www.cna.com.tw/news/firstnews/202201130232.aspx', ''],
-  #['',   '', , '2022-01-',           '', '', ''],
+  [ 'Pfizer',    'Pfizer',  994500, '2022-01-21',           '', 'https://www.cna.com.tw/news/firstnews/202201210026.aspx', ''],
   #['',   '', , '2022-01-',           '', '', ''],
   #['',   '', , '2022-01-',           '', '', ''],
   #['',   '', , '2022-01-',           '', '', ''],
@@ -609,8 +609,8 @@ def normalizeBoolArr(bool_arr):
   bool_arr -= bool_arr.mean()
   norm = np.sqrt(np.sum(bool_arr**2))
   
-  with warnings.catch_warnings(): ## Avoid division by zero
-    warnings.simplefilter("ignore")
+  with wng.catch_warnings(): ## Avoid division by zero
+    wng.simplefilter("ignore")
     bool_arr /= norm
   return bool_arr
 

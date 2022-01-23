@@ -2,12 +2,11 @@
     ################################
     ##  COVID_vaccination.py      ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.04                ##
+    ##  2022.01.18                ##
     ################################
 
 import os
 import sys
-import warnings
 import datetime as dtt
 
 import numpy as np

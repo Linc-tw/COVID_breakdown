@@ -2,12 +2,11 @@
     ################################
     ##  COVID_status.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.08                ##
+    ##  2022.01.18                ##
     ################################
 
 import os
 import sys
-import warnings
 import datetime as dtt
 
 import numpy as np
