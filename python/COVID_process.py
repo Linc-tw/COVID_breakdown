@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.18                ##
+    ##  2022.01.28                ##
     ################################
 
 import os
@@ -161,24 +161,11 @@ def saveCsv_positivityAndFatality(case_sheet, status_sheet, test_sheet):
 def sandbox():
   #ccm.initializeReadme()
   
-  #case_sheet = COVID_case.CaseSheet()
-  #symp_list = case_sheet.getSymptom()
-  #import collections as clt
-  #symp_list_2 = []
-  #for symp in symp_list:
-    #if symp != symp:
-      #continue
-    #for s in symp:
-      #symp_list_2.append(s)
-  #result = clt.Counter(symp_list_2)
-  #print(result)
+  case_sheet = COVID_case.CaseSheet()
+  link_list = case_sheet.getLink()
   
-  status_sheet = COVID_status.StatusSheet()
-  date = status_sheet.getDate()
-  cum_deaths = status_sheet.getCol('新增死亡')
-  for d, cd in zip(date, cum_deaths):
-    print(d, cd)
-  
+  #status_sheet = COVID_status.StatusSheet()
+  #date = status_sheet.getDate()
   
   #test_sheet = COVID_test.TestSheet()
   #test_sheet.saveCsv_testByCriterion()

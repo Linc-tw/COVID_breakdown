@@ -2,7 +2,7 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.21                ##
+    ##  2022.01.28                ##
     ################################
 
 import os
@@ -166,6 +166,7 @@ TRAVEL_HISTORY_DICT = {
   'Senegal': {'zh-tw': '塞內加爾', 'fr': 'Sénégal'},
   'Somaliland': {'zh-tw': '索馬利蘭', 'fr': 'Somaliland'},
   'South Africa': {'zh-tw': '南非', 'fr': 'Afrique du Sud'},
+  'Tanzania': {'zh-tw': '坦尚尼亞', 'fr': 'Tanzanie'},
   'Tunisia': {'zh-tw': '突尼西亞', 'fr': 'Tunisie'},
   'Uganda': {'zh-tw': '烏干達', 'fr': 'Ouganda'},
   
@@ -533,9 +534,14 @@ DELIVERY_LIST = [
   [ 'Pfizer',    'Pfizer',  938300, '2021-12-30',           '', 'https://www.cna.com.tw/news/firstnews/202112300017.aspx', ''],
   [     'AZ',        'AZ', 1461500, '2022-01-16',           '', 'https://www.cna.com.tw/news/firstnews/202201130232.aspx', ''],
   [ 'Pfizer',    'Pfizer',  994500, '2022-01-21',           '', 'https://www.cna.com.tw/news/firstnews/202201210026.aspx', ''],
-  #['',   '', , '2022-01-',           '', '', ''],
-  #['',   '', , '2022-01-',           '', '', ''],
-  #['',   '', , '2022-01-',           '', '', ''],
+  [ 'Pfizer',    'Pfizer',  919000, '2022-01-27',           '', 'https://www.cna.com.tw/news/firstnews/202201270022.aspx', ''],
+  
+  
+  #['',   '', , '2022-02-',           '', '', ''],
+  #['',   '', , '2022-02-',           '', '', ''],
+  #['',   '', , '2022-02-',           '', '', ''],
+  #['',   '', , '2022-02-',           '', '', ''],
+  #['',   '', , '2022-02-',           '', '', ''],
 ]
 
 QC_REF_DICT = {
