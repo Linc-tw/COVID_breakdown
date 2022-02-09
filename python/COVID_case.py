@@ -388,6 +388,10 @@ class CaseSheet(ccm.Template):
       
       ## If no travel history but imported, add nationality (only for i >= 460)
       if i >= 460 and len(stock) == 0:
+        if nat_list[i] != nat_list[i]:
+          stock.append('unknown')
+          continue
+          
         for value in value_list:
           if value in nat_list[i]:
             key = rev_key_dict[value]
