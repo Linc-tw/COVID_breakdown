@@ -11,7 +11,7 @@ var SE_latest_wrap = {
     '../processed_data/latest/status_evolution.csv',
   ],
   
-  y_max_factor: 1.6,
+  y_max_factor: 1.55,
   nb_yticks: 4,
   legend_pos_x: 80,
   legend_pos_x1_: {en: 190, fr: 190, 'zh-tw': 150},

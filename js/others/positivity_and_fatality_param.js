@@ -12,7 +12,7 @@ var PAF_latest_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  y_max_factor: 1.8,
+  y_max_factor: 1.75,
   nb_yticks: 4,
   legend_pos_x: 95,
   r: 3, //-- Dot radius

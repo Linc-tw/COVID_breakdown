@@ -11,7 +11,7 @@ var CBA_latest_wrap = {
     '../processed_data/latest/case_by_age.csv',
   ],
 
-  y_max_factor: 1.6,
+  y_max_factor: 1.55,
   nb_yticks: 4,
   legend_pos_x: 95,
 };
@@ -22,7 +22,7 @@ var CBA_overall_wrap = {
     '../processed_data/overall/case_by_age.csv',
   ],
 
-  y_max_factor: 1.6,
+  y_max_factor: 1.55,
   nb_yticks: 4,
   legend_pos_x: 95,
 };

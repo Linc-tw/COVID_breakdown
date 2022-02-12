@@ -12,7 +12,7 @@ var DC_latest_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  y_max_factor: 1.5, 
+  y_max_factor: 1.55, 
   nb_yticks: 4,
   legend_pos_x: 75,
 };

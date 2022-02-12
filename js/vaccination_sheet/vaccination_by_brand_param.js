@@ -22,7 +22,7 @@ var VBB_latest_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  y_max_factor: 1.6, 
+  y_max_factor: 1.55, 
   nb_yticks: 4,
   legend_pos_x: 115, 
   legend_pos_x1_: {en: 225, fr: 245, 'zh-tw': 210},
@@ -35,7 +35,7 @@ var VBB_overall_wrap = {
     '../processed_data/key_numbers.csv',
   ],
   
-  y_max_factor: 1.2, 
+  y_max_factor: 1.55, 
   nb_yticks: 4,
   legend_pos_x: 125, 
   legend_pos_x1_: {en: 225, fr: 235, 'zh-tw': 200},

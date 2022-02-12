@@ -22,7 +22,7 @@ var CC_latest_wrap = {
     '../processed_data/key_numbers.csv',
   ],
   
-  y_max_factor: 1.6,
+  y_max_factor: 1.55,
   nb_yticks: 5,
   legend_pos_x: 85,
   legend_pos_x1_: {en: 170, fr: 180, 'zh-tw': 170},
@@ -48,7 +48,7 @@ var CC_2021_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  y_max_factor: 1.6,
+  y_max_factor: 1.5,
   nb_yticks: 5,
   legend_pos_x: 80,
   legend_pos_x1_: {en: 190, fr: 270, 'zh-tw': 240},
