@@ -2,7 +2,7 @@
     //----------------------------------//
     //--  positivity_and_fatality.js  --//
     //--  Chieh-An Lin                --//
-    //--  2021.12.13                  --//
+    //--  2022.02.13                  --//
     //----------------------------------//
 
 function PAF_InitFig(wrap) {
@@ -16,17 +16,17 @@ function PAF_InitFig(wrap) {
 
 function PAF_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('positivity_and_fatality_title', '陽性率與致死率');
+    LS_AddStr('positivity_and_fatality_title', '檢驗陽性率與累計致死率');
     
     LS_AddHtml('positivity_and_fatality_description', '\
-      陽性率的定義為確診人數除以檢驗人次。\
+      檢驗陽性率的定義為確診人數除以檢驗人次。\
       陽性率越高代表篩檢族群中的傳播鍊越多，尚未揪出之潛在確診者也可能越多。\
       這裡所呈現之陽性率為7日平均。\
       <br><br>\
-      致死率的定義為死亡人數除以確診人數。\
+      累計致死率的定義為死亡人數除以確診人數。\
       由於死亡往往不會立即在確診後發生，\
       因此通常得用累積一段時間的統計才能計算。\
-      這裡呈現的是整體致死率的變化，每點都是疫情初期到當日的統計結果。\
+      這裡呈現的是累計致死率的變化，每點都是疫情初期到當日的統計結果。\
       <br><br>\
       台灣之所以致死率偏高，是因為大爆發時確診病患以年長者居多。\
     ');
@@ -44,7 +44,7 @@ function PAF_ResetText() {
       Le taux de létalité est défini comme le nombre de décédés sur le nombre de cas confirmés.\
       Comme les décès n'ont souvent pas lieu tout de suite après être diagnostiqués,\
       il est plus commode de calculer la létalité sur une période longue.\
-      Ici, on choisit de montrer l'évolution de la létalité globale,\
+      Ici, on choisit de montrer l'évolution de la létalité cumulée,\
       i.e. calculée à partir du début de la pandémie.\
       <br><br>\
       La létalité est élevée à Taïwan car les patients sont plutôt âgés pendant la vague importante.\
@@ -206,11 +206,11 @@ function PAF_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw')
-    col_label_list = ['陽性率', '致死率'];
+    col_label_list = ['檢驗陽性率', '累計致死率'];
   else if (LS_lang == 'fr')
-    col_label_list = ['Taux de positivité', 'Taux de létalité'];
+    col_label_list = ['Positivité', 'Létalité cumulée'];
   else
-    col_label_list = ['Positive rate', 'Fatality rate'];
+    col_label_list = ['Positive rate', 'Overall fatality'];
   
   //-- Define tooltip texts
   var fct_format = d3.format('.2%');
@@ -296,11 +296,11 @@ function PAF_Replot(wrap) {
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')
-    wrap.legend_label = ['陽性率（過去7日）', '致死率（整體）'];
+    wrap.legend_label = ['檢驗陽性率（過去7日）', '累計致死率'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ['Taux de positivité (7 derniers jours)', 'Taux de létalité (cumulé)'];
+    wrap.legend_label = ['Taux de positivité (7 derniers jours)', 'Taux de létalité cumulé'];
   else
-    wrap.legend_label = ['Positive rate (last 7 days)', 'Fatality rate (overall)'];
+    wrap.legend_label = ['Positive rate (last 7 days)', 'Overall fatality rate'];
     
   //-- Update legend title
   legend_title_dict = {en: 'Latest value', fr: 'Derniers chiffres', 'zh-tw': '最新統計'};

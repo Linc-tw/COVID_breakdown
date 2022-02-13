@@ -9,7 +9,10 @@ Structure by folders
   - `age_symptom_correlations.js`
   - `case_by_detection.js`
   - `difference_by_transmission.js`
+  - `hospitalization_or_isolation.js`
+  - `status_evolution.js`
   - `travel_history_symptom_correlations.js`
+  - `vaccination_by_county.js`
 
 `border_sheet/`
   - `border_statistics.js`
@@ -26,13 +29,12 @@ Structure by folders
   
 `others/`
   - `incidence_rates.js`
+  - `infectiodynamics.js`
   - `positivity_and_fatality.js`
   - `stats_in_mirror.js`
 
 `status_sheet/`
   - `death_counts.js`
-  - `hospitalization_or_isolation.js`
-  - `status_evolution.js`
 
 `test_sheet/`
   - `test_by_criterion.js`
@@ -41,9 +43,6 @@ Structure by folders
   - `criteria_timeline.js`
   - `event_timeline.js`
   
-`vaccination_county_sheet/`
-  - `vaccination_by_county.js`
-
 `vaccination_sheet/`
   - `vaccination_by_brand.js`
   - `vaccination_by_dose.js`
@@ -54,7 +53,7 @@ Structure by page
 -----------------
 
 `index.html`
-  - `status_evolution.js`
+  - `case_by_transmission.js` (repeated)
   - `vaccination_progress.js` (repeated)
 
 `cases.html`
@@ -72,15 +71,14 @@ Structure by page
   - `vaccination_by_brand.js`
   - `vaccination_progress.js`
   - `vaccination_by_dose.js`
-  - `vaccination_by_county.js` (only latest)
 
 `others.html`
   - `test_by_criterion.js`
   - `positivity_and_fatality.js`
   - `death_counts.js`
-  - `hospitalization_or_isolation.js`
   - `border_statistics.js`
   - `stats_in_mirror.js`
+  - `infectiodynamics.js` (no latest)
 
 `timeline.html`
   - `criteria_timeline.js`
@@ -90,12 +88,8 @@ Structure by page
 Structure by axis type
 ----------------------
 
-Multiple bar
-  - `status_evolution.js`
-
 Single bar
   - `case_by_age.js`
-  - `hospitalization_or_isolation.js`
 
 Faint single bar & avg line
   - `border_statistics.js`
@@ -107,6 +101,7 @@ Faint single bar & avg line
 
 Line
   - `incidence_rates.js`
+  - `infectiodynamics.js` 
   - `positivity_and_fatality.js`
   - `vaccination_progress.js`
 

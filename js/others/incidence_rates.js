@@ -28,13 +28,13 @@ function IR_ResetText() {
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('incidence_rates_title', "Taux d'incidence frontalier & local");
+    LS_AddStr('incidence_rates_title', "Taux d'incidences frontalière & locale");
     
     LS_AddHtml('incidence_rates_description', "\
-      Le taux d'incidence frontalier est défini comme le nombre de cas importés sur le nombre de passagers arrivés.\
+      Le taux d'incidence frontalière est défini comme le nombre de cas importés sur le nombre de passagers arrivés.\
       Ceci est mis à jour au début de chaque mois car la statistique frontalière en est ainsi.\
       <br><br>\
-      Le taux d'incidence local est définit comme le nombre de cas locaux sur la population.\
+      Le taux d'incidence locale est définit comme le nombre de cas locaux sur la population.\
       Dans cette figure, on le définit comme la moyenne glissante sur 7 jours multipliée par 1000.\
     ");
   }
@@ -187,11 +187,11 @@ function IR_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw')
-    col_label_list = ['入境盛行率', '本土盛行率/1000'];
+    col_label_list = ['入境盛行率', '本土盛行率*1000'];
   else if (LS_lang == 'fr')
-    col_label_list = ["Taux d'inci. front.", "Taux d'inci. local/1000"];
+    col_label_list = ["Inci. frontalière", "Inci. locale*1000"];
   else
-    col_label_list = ['Arrival incidence', 'Local incidence/1000'];
+    col_label_list = ['Arrival incidence', 'Local incidence*1000'];
   
   //-- Define tooltip texts
   var fct_format = d3.format('.2%');
@@ -279,7 +279,7 @@ function IR_Replot(wrap) {
   if (LS_lang == 'zh-tw')
     wrap.legend_label = ['入境盛行率', '本土盛行率（乘以1000）'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ["Taux d'incidence frontalier", "Taux d'incidence local"];
+    wrap.legend_label = ["Taux d'incidence frontalière", "Taux d'incidence locale"];
   else
     wrap.legend_label = ['Arrival incidence', 'Local incidence'];
     

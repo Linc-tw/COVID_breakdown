@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_by_age.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.01.08                --//
+    //--  2022.02.13                --//
     //--------------------------------//
 
 function CBA_InitFig(wrap) {
@@ -95,7 +95,7 @@ function CBA_ResetText() {
   
   else { //-- En
     LS_AddStr('case_by_age_title', 'Confirmed Cases by Age');
-    LS_AddStr('case_by_age_button_total', 'Total');
+    LS_AddStr('case_by_age_button_total', 'Totaux');
     LS_AddStr('case_by_age_button_w-1', '0-6 days ago');
     LS_AddStr('case_by_age_button_w-2', '7-13 days ago');
     LS_AddStr('case_by_age_button_w-3', '14-20 days ago');

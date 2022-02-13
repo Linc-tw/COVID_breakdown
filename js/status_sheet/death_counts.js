@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_counts.js           --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.02.13                --//
     //--------------------------------//
 
 function DC_InitFig(wrap) {
@@ -28,7 +28,7 @@ function DC_ResetText() {
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('death_counts_title', 'Nombre de décédés');
+    LS_AddStr('death_counts_title', 'Nombre de décès');
     LS_AddStr('death_counts_button_daily', 'Quotidiens');
     LS_AddStr('death_counts_button_cumul', 'Cumulés');
     
@@ -179,7 +179,7 @@ function DC_MouseMove(wrap, d) {
     avg_text = '過去七日平均';
   }
   else if (LS_lang == 'fr') {
-    col_label = 'Nombre de décédés';
+    col_label = 'Nombre de décès';
     avg_text = 'Moyenne sur 7 jours';
   }
   else {
@@ -268,7 +268,7 @@ function DC_Replot(wrap) {
   wrap.legend_value = wrap.legend_value_raw.slice();
   
   //-- Define legend label
-  var legend_label_dict = {en: 'Deaths', fr: 'Décédés', 'zh-tw': '死亡'};
+  var legend_label_dict = {en: 'Deaths', fr: 'Décès', 'zh-tw': '死亡'};
   wrap.legend_label = [legend_label_dict[LS_lang]];
   
   //-- Update legend title

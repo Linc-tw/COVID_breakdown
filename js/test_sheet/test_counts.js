@@ -34,7 +34,7 @@ function TC_ResetText() {
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('test_counts_title', 'Nombre de tests');
+    LS_AddStr('test_counts_title', 'Nombre de dépistage');
     LS_AddStr('test_counts_button_daily', 'Quotidiens');
     LS_AddStr('test_counts_button_cumul', 'Cumulés');
     
@@ -48,8 +48,8 @@ function TC_ResetText() {
       - manque de personnels.\
       <br><br>\
       Même s'il y a clairement un changement de politique entre avant et après la vague de mai 2021,\
-      le nombre de tests reste bas par rapport à la plupart des pays.\
-      Le nombre de tests conduits par jour n'a jamais dépassé 38k.\
+      le nombre de dépistage reste bas par rapport à la plupart des pays.\
+      Le nombre de dépistage conduits par jour n'a jamais dépassé 38k.\
     ");
   }
   

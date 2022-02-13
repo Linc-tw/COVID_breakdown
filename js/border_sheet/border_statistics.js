@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  border_statistics.js      --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.02.13                --//
     //--------------------------------//
 
 function BS_InitFig(wrap) {
@@ -244,7 +244,7 @@ function BS_Replot(wrap) {
   GP_ReplotCountAsY(wrap, 'count');
   
   //-- Update ylabel
-  var ylabel_dict = {en: 'Number of passengers', fr: 'Nombre de voyageurs', 'zh-tw': '人次'};
+  var ylabel_dict = {en: 'Number of travellers', fr: 'Nombre de voyageurs', 'zh-tw': '人次'};
   GP_ReplotYLabel(wrap, ylabel_dict);
   
   //-- Set legend parameters

@@ -18,7 +18,7 @@ Features
 
 The most recent statisitcs can be found in _Last 90 days_.
 The overall statistics can be found in _Overall stats_.
-In these two sections, 21 plots are shown on 4 pages: 
+In these two sections, 18 plots are shown on 4 pages: 
 - _Case breakdown_
 - _Incidence rates_
 - _Vaccination_
@@ -44,7 +44,6 @@ Plots on [_Other stats_](http://covidtaiwan.linc.tw/page/latest_others.html) are
 - Test Counts
 - Positive Rate & Case Fatality Rate
 - Death Counts
-- Hospitalization or Confirmed Cases in Isolation
 - Border Crossing
 - Statistics in Mirror
 - Infection Dynamics (only in _Overall stats_)

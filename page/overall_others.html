@@ -2,7 +2,7 @@
   <!--------------------------------
     --  overall_others.html       --
     --  Chieh-An Lin              --
-    --  2022.01.18                --
+    --  2022.02.13                --
     -------------------------------->
 
 <!DOCTYPE html>
@@ -253,6 +253,7 @@
                             </div>
                             
                             <!-- hospitalization_or_isolation -->
+                            <!-- 
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -278,6 +279,7 @@
                                     <div class="card-body" id="hospitalization_or_isolation_overall"></div>
                                 </div>
                             </div>
+                            -->
                             
                             <!-- border_statistics -->
                             <div class="col-xl-6">
@@ -321,8 +323,10 @@
                                 </div>
                             </div>
                             
+                            <!-- 
                             <div class="col-xl-6">
                             </div>
+                            -->
                             
                             <!-- stats_in_mirror -->
                             <div class="col-xl-6">
@@ -335,16 +339,32 @@
                                         <div class="btn-pos">
                                             <select id="stats_in_mirror_overall_stat_0" class="form-select form-select-sm me-2" aria-label="stats_in_mirror_overall_stat_0">
                                                 <option value="0" id="stats_in_mirror_button_test_0"></option>
-                                                <option value="1" id="stats_in_mirror_button_case_0" selected></option>
-                                                <option value="2" id="stats_in_mirror_button_hospitalization_0"></option>
-                                                <option value="3" id="stats_in_mirror_button_death_0"></option>
+                                                <option value="1" id="stats_in_mirror_button_total_case_0" selected></option>
+                                                <option value="2" id="stats_in_mirror_button_imported_case_0"></option>
+                                                <option value="3" id="stats_in_mirror_button_local_case_0"></option>
+                                                <option value="4" id="stats_in_mirror_button_death_0"></option>
+                                                <option value="5" id="stats_in_mirror_button_border_entry_0"></option>
+                                                <option value="6" id="stats_in_mirror_button_border_exit_0"></option>
+                                                <option value="7" id="stats_in_mirror_button_border_both_0"></option>
+                                                <option value="8" id="stats_in_mirror_button_arrival_incidence_0"></option>
+                                                <option value="9" id="stats_in_mirror_button_local_incidence_0"></option>
+                                                <option value="10" id="stats_in_mirror_button_positivity_0"></option>
+                                                <option value="11" id="stats_in_mirror_button_fatality_0"></option>
                                             </select>
                                             
                                             <select id="stats_in_mirror_overall_stat_1" class="form-select form-select-sm me-2" aria-label="stats_in_mirror_overall_stat_1">
                                                 <option value="0" id="stats_in_mirror_button_test_1"></option>
-                                                <option value="1" id="stats_in_mirror_button_case_1"></option>
-                                                <option value="2" id="stats_in_mirror_button_hospitalization_1"></option>
-                                                <option value="3" id="stats_in_mirror_button_death_1" selected></option>
+                                                <option value="1" id="stats_in_mirror_button_total_case_1"></option>
+                                                <option value="2" id="stats_in_mirror_button_imported_case_1"></option>
+                                                <option value="3" id="stats_in_mirror_button_local_case_1"></option>
+                                                <option value="4" id="stats_in_mirror_button_death_1" selected></option>
+                                                <option value="5" id="stats_in_mirror_button_border_entry_1"></option>
+                                                <option value="6" id="stats_in_mirror_button_border_exit_1"></option>
+                                                <option value="7" id="stats_in_mirror_button_border_both_1"></option>
+                                                <option value="8" id="stats_in_mirror_button_arrival_incidence_1"></option>
+                                                <option value="9" id="stats_in_mirror_button_local_incidence_1"></option>
+                                                <option value="10" id="stats_in_mirror_button_positivity_1"></option>
+                                                <option value="11" id="stats_in_mirror_button_fatality_1"></option>
                                             </select>
                                             
                                             <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#stats_in_mirror_collapse" aria-expanded="false" aria-controls="stats_in_mirror_collapse">
@@ -443,12 +463,14 @@
         <script src="../js/others/positivity_and_fatality_param.js"></script>
         <script src="../js/status_sheet/death_counts.js"></script>        
         <script src="../js/status_sheet/death_counts_param.js"></script>
-        <script src="../js/status_sheet/hospitalization_or_isolation.js"></script>        
-        <script src="../js/status_sheet/hospitalization_or_isolation_param.js"></script>
+<!--        <script src="../js/status_sheet/hospitalization_or_isolation.js"></script>        
+        <script src="../js/status_sheet/hospitalization_or_isolation_param.js"></script>-->
         <script src="../js/border_sheet/border_statistics.js"></script>
         <script src="../js/border_sheet/border_statistics_param.js"></script>
         <script src="../js/case_sheet/case_counts.js"></script>        
         <script src="../js/case_sheet/case_counts_param.js"></script>
+        <script src="../js/others/incidence_rates.js"></script>
+        <script src="../js/others/incidence_rates_param.js"></script>
         <script src="../js/others/stats_in_mirror.js"></script>
         <script src="../js/others/stats_in_mirror_param.js"></script>
         <script src="../js/others/infectiodynamics.js"></script>

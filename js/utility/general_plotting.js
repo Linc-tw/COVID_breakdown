@@ -2,16 +2,14 @@
     //--------------------------------//
     //--  general_plotting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.12                --//
+    //--  2022.02.13                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
 //-- TODO
 
 //Linear/log?
-//population 2022
 //dot for VPD
-//more option for for mirror
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
@@ -28,8 +26,10 @@ var GP_wrap = {
   //-- xlabel overall
   iso_ref: '2020-01-01',
   iso_ref_vacc: '2021-03-01',
-  xticklabel_min_space: 16,
-  xticklabel_min_space_vacc: 20,
+  xticklabel_min_space_month: 16,
+  xticklabel_min_space_month_vacc: 20,
+  xticklabel_min_space_year: 50,
+  xticklabel_min_space_year_vacc: 25,
   
   //-- padding
   padding_bar: 0.2,
@@ -614,9 +614,10 @@ function GP_MakeXLim(wrap, format) {
 }
 
 function GP_MakeOverallXTick(wrap, format) {
-  var xticklabel_min_space, xticklabel_month_list;
+  var xticklabel_min_space_month, xticklabel_min_space_year, xticklabel_month_list;
   if (wrap.tag.includes('vaccination')) {
-    xticklabel_min_space = GP_wrap.xticklabel_min_space_vacc;
+    xticklabel_min_space_month = GP_wrap.xticklabel_min_space_month_vacc;
+    xticklabel_min_space_year = GP_wrap.xticklabel_min_space_year_vacc;
     
     if (LS_lang == 'zh-tw')
       xticklabel_month_list = ['', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
@@ -626,7 +627,8 @@ function GP_MakeOverallXTick(wrap, format) {
       xticklabel_month_list = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   }
   else {
-    xticklabel_min_space = GP_wrap.xticklabel_min_space;
+    xticklabel_min_space_month = GP_wrap.xticklabel_min_space_month;
+    xticklabel_min_space_year = GP_wrap.xticklabel_min_space_year;
     
     if (LS_lang == 'zh-tw')
       xticklabel_month_list = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
@@ -673,7 +675,7 @@ function GP_MakeOverallXTick(wrap, format) {
       xtick_sep_month.push(x);
       
     //-- Compare with previous x, draw xtick_label_month & xticklabel_month only if wide enough
-    if (x-x_prev >= xticklabel_min_space) {
+    if (x-x_prev >= xticklabel_min_space_month) {
       xtick_label_month.push(0.5*(x_prev+x));
       mm = i % 12 + 1; //-- Get current month
       xticklabel_month.push(xticklabel_month_list[mm]);
@@ -717,7 +719,7 @@ function GP_MakeOverallXTick(wrap, format) {
       xtick_sep_year.push(x);
       
     //-- Compare with previous x, draw xtick_label_year & xticklabel_year only if wide enough
-    if (x-x_prev >= xticklabel_min_space) {
+    if (x-x_prev >= xticklabel_min_space_year) {
       xtick_label_year.push(0.5*(x_prev+x));
       xticklabel_year.push(i);
     }
@@ -946,8 +948,8 @@ function GP_ReplotSingleBar(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(wrap.trans_delay)
-      .attr('y', function (d) {return yscale(d[wrap.col_tag]);})
-      .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);});
+      .attr('y', function (d) {if (isNaN(d[wrap.col_tag])) return yscale(0); return yscale(d[wrap.col_tag]);})
+      .attr('height', function (d) {if (isNaN(d[wrap.col_tag])) return 0; return yscale(0)-yscale(d[wrap.col_tag]);});
 }
 
 function GP_PlotFaintSingleBar(wrap) {
@@ -988,8 +990,8 @@ function GP_ReplotFaintSingleBar(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(wrap.trans_delay)
-      .attr('y', function (d) {return yscale(d[wrap.col_tag]);})
-      .attr('height', function (d) {return yscale(0)-yscale(d[wrap.col_tag]);});
+      .attr('y', function (d) {if (isNaN(d[wrap.col_tag])) return yscale(0); return yscale(d[wrap.col_tag]);})
+      .attr('height', function (d) {if (isNaN(d[wrap.col_tag])) return 0; return yscale(0)-yscale(d[wrap.col_tag]);});
 }
 
 function GP_PlotLine(wrap) {
@@ -1002,7 +1004,7 @@ function GP_PlotLine(wrap) {
   //-- Define dummy line
   var draw_line = d3.line()
     .defined(d => !isNaN(d.y))//-- Don't show line if NaN
-    .x(function (d) {return xscale(d.x);})
+    .x(function (d) {return xscale(d.x) + 0.5*xscale.bandwidth();})
     .y(yscale(0));
     
   //-- Add line
@@ -1032,7 +1034,7 @@ function GP_ReplotLine(wrap) {
   //-- Define line
   var draw_line = d3.line()
     .defined(d => !isNaN(d.y))//-- Don't show line if NaN
-    .x(function (d) {return xscale(d.x);})
+    .x(function (d) {return xscale(d.x) + 0.5*xscale.bandwidth();})
     .y(function (d) {return yscale(d.y);});
   
   //-- Update line
@@ -1061,8 +1063,8 @@ function GP_PlotDot(wrap) {
       .data(wrap.formatted_data[i])
       .enter()
       .append('circle')
-      .attr('class', 'content dot')
-        .attr('cx', function (d) {return xscale(d.x);})
+        .attr('class', 'content dot')
+        .attr('cx', function (d) {return xscale(d.x) + 0.5*xscale.bandwidth();})
         .attr('cy', yscale(0))
         .attr('r', 0)
           .on('mouseover', function (d) {GP_MouseOver_Bright(wrap, d);})
@@ -1090,8 +1092,8 @@ function GP_ReplotDot(wrap) {
       .data(wrap.formatted_data[i])
       .transition()
       .duration(wrap.trans_delay)
-        .attr('cy', function (d) {return yscale(d.y);})
-        .attr('r', function (d) {if (!isNaN(d.y)) return wrap.r; return 0;}); //-- Don't show dots if NaN
+        .attr('cy', function (d) {if (isNaN(d.y)) return yscale(0); return yscale(d.y);})
+        .attr('r', function (d) {if (isNaN(d.y)) return 0; return wrap.r;}); //-- Don't show dots if NaN
   }
 }
 

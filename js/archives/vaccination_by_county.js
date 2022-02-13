@@ -8,6 +8,7 @@
 function VBC_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
     GP_InitFig_Mini(wrap);
+  
   //-- No GP_InitFig_Overall because it doesn't change axis
   else {
     wrap.tot_width = 800;

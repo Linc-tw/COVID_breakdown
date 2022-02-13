@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_counts.js            --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.02.13                --//
     //--------------------------------//
 
 function CC_InitFig(wrap) {
@@ -284,7 +284,7 @@ function CC_Replot(wrap) {
   if (LS_lang == 'zh-tw')
     wrap.legend_label = ['境外移入', '本土', '其他', '合計'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ['Importés', 'Locaux', 'Divers', 'Total'];
+    wrap.legend_label = ['Importés', 'Locaux', 'Divers', 'Totaux'];
   else
     wrap.legend_label = ['Imported', 'Local', 'Others', 'Total'];
   
