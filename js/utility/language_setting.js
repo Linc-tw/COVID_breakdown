@@ -245,26 +245,29 @@ function LS_FillText_Source() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('data_source_original_title', '資料來源');
     LS_AddHtml('data_source_original_body', "\
-      <p>目前本站資料是由三種不同管道所取得。</p>\
-      <p>主要來源為一份由PTT網友們所整理的線上\
-      <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'> \
-      Google表單 <i class='fas fa-external-link-alt'></i></a> 。作者們利用網路爬蟲獲取資料，同時也從官方新聞稿及記者會收集瑣碎資訊，整理後彙整至表單內。</p>\
-      <p>在此由衷感謝資料整理團隊，若無如此熱心之舉本站勢必難以完成。</p>\
-      <p>資料來源二是疾管署<a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'> \
-      官方資料平台 <i class='fas fa-external-link-alt'></i></a> 。很可惜平台上的資料多半乏善可陳，因此才以非官方表單作為主要資料來源。</p>\
-      <p>第三來源是國網中心的\
-      <a href='https://covid-19.nchc.org.tw/index.php' target='_blank'>\
-      疫情儀表板 <i class='fas fa-external-link-alt'></i></a> 。國網中心會將部份官方資料整理後開放下載，有些可能也是透過爬蟲取得的。</p>\
+      本站視覺化所使用之資料來源如下：\
+      <ul>\
+          <li>由網友維護的Google表格</li>\
+          <li>衛生福利部疾病管制署（CDC）</li>\
+          <li>國家高速網路與計算中心（NCHC）</li>\
+          <li>衛生福利部食品藥物管理署（FDA）</li>\
+          <li>內政部戶政司</li>\
+      </ul>\
+      <p>其他細節請參考<a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
+      初階資料 <i class='fas fa-external-link-alt'></i></a>\
+      和<a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>\
+      高階資料 <i class='fas fa-external-link-alt'></i></a> \
+      的<tt>README.md</tt>。</p>\
     ");
     LS_AddStr('data_source_raw_title', '初階資料');
     LS_AddHtml('data_source_raw_body', "\
       <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'> \
-      初階資料 <i class='fas fa-external-link-alt'></i></a> 是前面所提資料來源之部份分頁或檔案。目前共有6個csv和1個json檔，最主要者為一記有所有確診者及其相關流行病學資訊之表單。</p>\
+      初階資料 <i class='fas fa-external-link-alt'></i></a> 是前面所提資料來源之部份分頁或檔案，目前共有6個<tt>csv</tt>和1個<tt>json</tt>檔。</p>\
     ");
     LS_AddStr('data_source_processed_title', '高階資料');
     LS_AddHtml('data_source_processed_body', "\
       <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'> \
-      高階資料 <i class='fas fa-external-link-alt'></i></a> 為整理過後直接用來畫圖的檔案。絕大多數為csv檔，由低階資料處理後生成，另有一geojson檔為微調過之台灣地圖。</p>\
+      高階資料 <i class='fas fa-external-link-alt'></i></a> 為整理過後直接用來畫圖的檔案。絕大多數為<tt>csv</tt>檔，由低階資料處理後生成，另有一<tt>geojson</tt>檔為微調過之台灣地圖。</p>\
       <p>除經特殊標示外，所有高階資料編碼皆符合ASCII格式。</p>\
     ");
   }
@@ -272,39 +275,32 @@ function LS_FillText_Source() {
   else if (LS_lang == 'fr') {
     LS_AddStr('data_source_original_title', 'Sources des données');
     LS_AddHtml('data_source_original_body', "\
-      <p>À ce stade, ce site recueille les données à partir de 3 sources.</p>\
-      <p>La source principale est un \
-      <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>\
-      Google Spreadsheet <i class='fas fa-external-link-alt'></i></a> \
-      entretenu par de nombreux internautes anonymes du forum PTT, souvent considéré comme le <i>Reddit</i> taïwanais. \
-      Ils font du crawling pour récolter des données. \
-      Ils rassemblent également des informations fragmentées à partir des communiqués et des conférences de presse. \
-      Ils les trient ensuite avant de les mettre dans un tableau bien taillé.</p>\
-      <p>Bien évidemment, ce site n'aurait pas pu voir le jour sans le travail de ces bénévoles bienveillants. Je leur en suis très reconnaissant.</p>\
-      <p>La source secondaire est le <a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'>\
-      plateform des données officiel <i class='fas fa-external-link-alt'></i></a> du Centre du contrôle des maladies (CDC) taïwanais, \
-      qui fournit malheureusement peu de données intéressantes. \
-      C'est pour cette raison que la source principale n'est pas celle qui est officielle.</p>\
-      <p>La 3e source est le <a href='https://covid-19.nchc.org.tw/index.php' target='_blank'>\
-      tableau de bord <i class='fas fa-external-link-alt'></i></a> du Centre national de calcul de haute performance (NCHC).\
-      Le site redistribue les données officielles qui sont parfois éphémères, peut-être aussi récoltées grâce au crawling.</p>\
-      <p>Les données des 3 sources sont toutes en mandarin.</p>\
+      La visualisation faite sur ce site est basée sur les données recueillies des sources suivantes :\
+      <ul>\
+          <li>un <i>Google Spreadsheet</i> maintenu par la foule,</li>\
+          <li>Centres pour le contrôle et la prévention des maladies (CDC),</li>\
+          <li>Centre national pour le calcul de haute performance</i> (NCHC),</li>\
+          <li>Agence des produits alimentaires et médicamenteux (FDA) et </li>\
+          <li>Ministère de l'Intérieur (MOI).</li>\
+      </ul>\
+      <p>Voir <tt>README.md</tt> des <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>données brutes <i class='fas fa-external-link-alt'></i></a> \
+      et des <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>données traitées <i class='fas fa-external-link-alt'></i></a> \
+      pour les details.</p>\
     ");
     LS_AddStr('data_source_raw_title', 'Données brutes');
     LS_AddHtml('data_source_raw_body', "\
       <p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
       données brutes <i class='fas fa-external-link-alt'></i></a> \
       sont un sous-ensemble des fichiers provenant des 2 sources des données mentionnées auparavant.</p>\
-      <p>À ce stade, 6 fichiers csv et 1 fichier json y figurent. Le fichier principal est une liste de tous cas confirmés avec leurs détails épidémiologiques respectifs.</p>\
-      <p>Ces données contiennent des caractères mandarins en abondance.</p>\
+      <p>À ce stade, 6 fichiers <tt>csv</tt> et 1 fichier <tt>json</tt> y figurent. Ces données contiennent des caractères mandarins en abondance.</p>\
     ");
     LS_AddStr('data_source_processed_title', 'Données traitées');
     LS_AddHtml('data_source_processed_body', "\
       <p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>\
       données traitées <i class='fas fa-external-link-alt'></i></a> \
       comprennent de nombreux fichiers directement utilisés pour afficher les figures.</p>\
-      <p>Tous les fichiers csv sont générés à partir des données brutes par un script. \
-      Une carte de Taïwan retouchée sous format geojson est également ajoutée.</p>\
+      <p>Tous les fichiers <tt>csv</tt> sont générés à partir des données brutes par un script. \
+      Une carte de Taïwan retouchée sous format <tt>geojson</tt> est également ajoutée.</p>\
       <p>Sauf précision, tous les fichiers ici ne contiennent que les caractères ASCII.</p>\
     ");
   }
@@ -312,38 +308,32 @@ function LS_FillText_Source() {
   else { //-- En
     LS_AddStr('data_source_original_title', 'Data Sources');
     LS_AddHtml('data_source_original_body', "\
-      <p>At this stage, this website collects data from 3 sources.</p>\
-      <p>The principle source is a \
-      <a href='https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#' target='_blank'>\
-      Google Spreadsheet <i class='fas fa-external-link-alt'></i></a> \
-      maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit. \
-      They crawl to harvest data from official sites. \
-      They also collect fragmental information from daily press releases and conferences, and sort them into comprehensive worksheets.</p>\
-      <p>Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.</p>\
-      <p>The second source is Taiwan Centers for Disease Control (CDC)'s <a href='https://data.cdc.gov.tw/zh_TW/' target='_blank'>\
-      official data platform <i class='fas fa-external-link-alt'></i></a>, which unfortunately doesn't provide many meaningful datasets. \
-      This is why the principle source is not the official one.</p>\
-      <p>The third source is National Center for High-performance Computing (NCHC)'s \
-      <a href='https://covid-19.nchc.org.tw/index.php' target='_blank'>\
-      dashboard <i class='fas fa-external-link-alt'></i></a>.\
-      The site redistributes ephemeral official data, possibly also by crawling.</p>\
-      <p>All sources provide data in Mandarin.</p>\
+      The visualization of this website is based on data collected from the following sources:\
+      <ul>\
+          <li>a crowdsourced Google Spreadsheet,</li>\
+          <li>Centers for Disease Control (CDC),</li>\
+          <li>National Center for High-performance Computing (NCHC),</li>\
+          <li>Food and Drug Administration (FDA), and </li>\
+          <li>Ministry of the Interior (MOI).</li>\
+      </ul>\
+      <p>See <tt>README.md</tt> of <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>raw data <i class='fas fa-external-link-alt'></i></a> \
+      and <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>processed data <i class='fas fa-external-link-alt'></i></a> \
+      for details.</p>\
     ");
     LS_AddStr("data_source_raw_title", "Raw data");
     LS_AddHtml("data_source_raw_body", "\
       <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
       Raw data <i class='fas fa-external-link-alt'></i></a> \
       are a subset of files or spreadsheets from 2 data sources mentioned earlier that have been used by this website.</p>\
-      <p>There are 6 csv files & 1 json file at this stage. The main one is a list of every single confirmed cases with their epidemiological details.</p>\
-      <p>These files contain abundant Mandarin strings.</p>\
+      <p>There are 6 <tt>csv</tt> files & 1 <tt>json</tt> file at this stage. These files contain abundant Mandarin strings.</p>\
     ");
     LS_AddStr("data_source_processed_title", "Processed data");
     LS_AddHtml("data_source_processed_body", "\
       <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data' target='_blank'>\
       Processed data <i class='fas fa-external-link-alt'></i></a> \
       contain various files that are directly used for plotting.</p>\
-      <p>All csv files were generated from raw data by executing a script. \
-      A geojson file containing a modified version of Taiwan map is also added.</p>\
+      <p>All <tt>csv</tt> files were generated from raw data by executing a script. \
+      A <tt>geojson</tt> file containing a modified version of Taiwan map is also added.</p>\
       <p>All files here only contain ASCII characters unless specified.</p>\
     ");
   }

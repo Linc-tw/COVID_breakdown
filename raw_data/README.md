@@ -5,43 +5,59 @@ raw_data/
 Data sources
 ------------
 
-At this stage, this website collects data from 3 sources. 
+The visualization of this website is based on data collected from the following sources:
+- a crowdsourced Google Spreadsheet,
+- Centers for Disease Control (CDC),
+- National Center for High-performance Computing (NCHC),
+- Food and Drug Administration (FDA), and 
+- Ministry of the Interior (MOI).
 
-The principle source is a [Google Spreadsheet](https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#)
-maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit. 
-They crawl to harvest data from official sites. 
-They also collect fragmental information from daily press releases and conferences, and sort them into comprehensive worksheets.
+### Crowdsourcing
 
-Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.
+This [Google Spreadsheet](https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#) 
+is maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit. 
+They collect fragmental information from offical releases and daily press conferences, and sort them into comprehensive worksheets.
+The data of confirmed cases, border statistics, tests, deaths, & timeline are taken from here.
 
-The second source is Taiwan Centers for Disease Control (CDC)'s [official data platform](https://data.cdc.gov.tw/zh_TW/), which unfortunately doesn't provide many meaningful datasets.
-This is why the principle source is not the offical one.
+### CDC
 
-The third source is National Center for High-performance Computing (NCHC)'s [dashboard](https://covid-19.nchc.org.tw/index.php). The site redistributes ephemeral official data, possibly also by crawling. 
+Taiwan CDC possesses an [official data platform](https://data.cdc.gov.tw/zh_TW/).
+The data of age and geographical information of confirmed cases are taken from here.
 
-All sources provide data in Mandarin.
+### NCHC
+
+NCHC hosts a [dashboard](https://covid-19.nchc.org.tw/index.php) providing sorted data and visualization of pandemic situation.
+The vaccination data are taken from here.
+
+### FDA
+
+Taiwan FDA publishes every month [documents](https://www.fda.gov.tw/TC/download.aspx) 
+about the brands and amounts of vaccines that have passed quality checks.
+The data of vaccine supplies are taken from here.
+
+### MOI
+
+Taiwan MOI publishes [regular statistics](https://www.ris.gov.tw/app/portal/346) on Taiwanese demography.
+The population data are taken from here.
 
 
 Raw data
 --------
 
-Raw data are a subset of files or spreadsheets from 3 data sources mentioned earlier
-that have been used by this website.
+Raw data are a subset of files or spreadsheets downloaded from sources mentioned earlier.
 
-There are 6 `csv` files & 1 `json` file at this stage. 
-The main one is a list of every single confirmed cases with their epidemiological details.
-
-These files contain abundant Mandarin strings.
+There are 6 `csv` files & 1 `json` file. These files contain abundant Mandarin strings.
 
 
 Contents
 --------
 
-### From the Google Spreadsheet
+### Crowdsourcing
 
 `COVID-19_in_Taiwan_raw_data_border_statistics.csv`
 - Daily border entries & exits at all airports & seaports
 - Updated monthly
+- This is just a sorted version of offical datasets that can be found [here](https://data.gov.tw/dataset/12369).
 
 `COVID-19_in_Taiwan_raw_data_case_breakdown.csv`
 - Breakdown table of every single confirmed cases
@@ -58,16 +74,15 @@ Contents
 `COVID-19_in_Taiwan_raw_data_timeline.csv`
 - Timeline of major pandemic events for Taiwan & the world
 
-### From CDC' official data platform
+### CDC
 
 `COVID-19_in_Taiwan_raw_data_county_age.csv`
 - Table of confirmed cases as were reported by local health authorities
 - Contains report date, county/city, village/district, gender, age, whether imported, & number of cases
 - Downloaded from [here](https://data.cdc.gov.tw/zh_TW/dataset/aagsdctable-day-19cov)
 
-### From NCHC's dashboard
+### NCHC
 
 `COVID-19_in_Taiwan_raw_data_vaccination.json`
 - Table of administrated doses of different vaccine brands
 - Downloaded from [here](https://covid-19.nchc.org.tw/dt_002-csse_covid_19_daily_reports_vaccine.php?countryCode=TW/taiwan)
-

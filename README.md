@@ -82,15 +82,15 @@ Manual data regularization may be done from time to time.
 Credits
 -------
 
-The principle data source of this website is 
-maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit. 
-They crawl to harvest data from official sites. 
-They also collect fragmental information from daily press releases and conferences, and sort them into comprehensive worksheets.
+The visualization of this website is based on data collected from the following sources:
+- a crowdsourced Google Spreadsheet,
+- Centers for Disease Control (CDC),
+- National Center for High-performance Computing (NCHC),
+- Food and Drug Administration (FDA), and 
+- Ministry of the Interior (MOI).
 
-Obviously this website cannot be done without the goodwill of these volunteers that I am fully grateful to.
-
-See [_Data Sources_](http://covidtaiwan.linc.tw/page/data_source.html) or 
-`README.md` in [`raw_data/`](https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data)
+See `README.md` in [`raw_data/`](https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data)
+and in [`processed_data/`](https://github.com/Linc-tw/COVID_breakdown/tree/master/processed_data)
 for details.
 
 
