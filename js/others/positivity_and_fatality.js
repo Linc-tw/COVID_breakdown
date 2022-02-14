@@ -192,7 +192,7 @@ function PAF_FormatData2(wrap, data2) {
   wrap.iso_begin = GP_wrap.iso_ref;
   
   //-- Calculate xlim
-  GP_MakeXLim(wrap, 'dot');
+  GP_MakeXLim(wrap);
 }
 
 //-- Tooltip
@@ -272,7 +272,7 @@ function PAF_Replot(wrap) {
   
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap, 'dot');
+    GP_ReplotOverallXTick(wrap);
   else
     GP_ReplotDateAsX(wrap);
   

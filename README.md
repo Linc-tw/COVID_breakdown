@@ -18,11 +18,12 @@ Features
 
 The most recent statisitcs can be found in _Last 90 days_.
 The overall statistics can be found in _Overall stats_.
-In these two sections, 18 plots are shown on 4 pages: 
+Each of these two sections contains 5 pages: 
 - _Case breakdown_
 - _Incidence rates_
 - _Vaccination_
 - _Other stats_
+- _Comparison_
 
 Plots on [_Case breakdown_](http://covidtaiwan.linc.tw/page/latest_cases.html) are:
 - Confirmed Case Counts (also shown in [_Home_](http://covidtaiwan.linc.tw/page/index.html))
@@ -45,8 +46,10 @@ Plots on [_Other stats_](http://covidtaiwan.linc.tw/page/latest_others.html) are
 - Positive Rate & Case Fatality Rate
 - Death Counts
 - Border Crossing
-- Statistics in Mirror
 - Infection Dynamics (only in _Overall stats_)
+
+The plot on [_Comparison_](http://covidtaiwan.linc.tw/page/latest_comparison.html) is:
+- Statistics in Mirror
 
 And 2 other plots on the [_Timeline_](http://covidtaiwan.linc.tw/page/timeline.html) page:
 - Chronology of Systematic Testing
@@ -72,7 +75,8 @@ This is done by executing `upload.sh`. It will:
 - execute `python python/COVID_process.py` to generate processed data, and
 - commit & push the data to the repository.
 
-Manual data regularization will be done from time to time in late evening.
+Automatic updates can be interrupted when processing scripts raise errors (typically when data formats change) or when my computer is down.
+Manual data regularization may be done from time to time.
 
 
 Credits

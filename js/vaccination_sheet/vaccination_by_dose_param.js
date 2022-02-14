@@ -2,7 +2,7 @@
     //------------------------------------//
     //--  vaccination_by_dose_param.js  --//
     //--  Chieh-An Lin                  --//
-    //--  2021.12.13                    --//
+    //--  2022.02.13                    --//
     //------------------------------------//
 
 var VBD_latest_wrap = {
@@ -16,6 +16,7 @@ var VBD_latest_wrap = {
   nb_yticks: 4,
   legend_pos_x: 110,
   legend_pos_x1: 190,
+  r: 3, //-- Dot radius
 };
 
 var VBD_overall_wrap = {
@@ -29,4 +30,5 @@ var VBD_overall_wrap = {
   nb_yticks: 4,
   legend_pos_x: 110,
 //   legend_pos_x1: 190,
+  r: 1.5, //-- Dot radius
 };

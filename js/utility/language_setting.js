@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  language_setting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.02.13                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
@@ -117,6 +117,7 @@ function LS_FillText_Menu() {
   var str_incidence;
   var str_vaccination;
   var str_others;
+  var str_comparison;
   var str_timeline;
   var str_data_source;
   var str_no_right_reserved;
@@ -135,6 +136,7 @@ function LS_FillText_Menu() {
     str_incidence = '感染率比較';
     str_vaccination = '疫苗進度';
     str_others = '其他統計';
+    str_comparison = '統計比較';
     str_timeline = '時間軸';
     str_data_source = '資料來源';
     str_no_right_reserved = '版權沒有';
@@ -155,6 +157,7 @@ function LS_FillText_Menu() {
     str_incidence = "Taux d'incidence";
     str_vaccination = 'Vaccination';
     str_others = 'Stats diverses';
+    str_comparison = 'Comparaison';
     str_timeline = 'Chronologie';
     str_data_source = 'Sources des données';
     str_no_right_reserved = "Sans droit d'auteur";
@@ -175,6 +178,7 @@ function LS_FillText_Menu() {
     str_incidence = 'Incidence rates';
     str_vaccination = 'Vaccination';
     str_others = 'Other stats';
+    str_comparison = 'Comparison';
     str_timeline = 'Timeline';
     str_data_source = 'Data Sources';
     str_no_right_reserved = 'No right reserved';
@@ -193,25 +197,16 @@ function LS_FillText_Menu() {
   LS_AddStr('menu_latest_incidence', str_incidence);
   LS_AddStr('menu_latest_vaccination', str_vaccination);
   LS_AddStr('menu_latest_others', str_others);
+  LS_AddStr('menu_latest_comparison', str_comparison);
   LS_AddStr('menu_overall', str_overall);
   LS_AddStr('menu_overall_cases', str_cases);
   LS_AddStr('menu_overall_incidence', str_incidence);
   LS_AddStr('menu_overall_vaccination', str_vaccination);
   LS_AddStr('menu_overall_others', str_others);
+  LS_AddStr('menu_overall_comparison', str_comparison);
   LS_AddStr('menu_timeline', str_timeline);
   LS_AddStr('menu_source', str_data_source);
   LS_AddStr('menu_copyleft', str_no_right_reserved);
-  
-  LS_AddStr('menu_latest_highlight', str_highlight);
-  LS_AddStr('menu_latest_breakdown', str_cases);
-  LS_AddStr('menu_2021', str_2021);
-  LS_AddStr('menu_2021_breakdown', str_cases);
-  LS_AddStr('menu_2021_incidence', str_incidence);
-  LS_AddStr('menu_2021_others', str_others);
-  LS_AddStr('menu_2020', str_2020);
-  LS_AddStr('menu_2020_breakdown', str_cases);
-  LS_AddStr('menu_2020_incidence', str_incidence);
-  LS_AddStr('menu_2020_others', str_others);
   
   //-- Header + footer
   LS_AddStr('title', str_title);
@@ -220,23 +215,16 @@ function LS_FillText_Menu() {
   LS_AddStr('title_latest_incidence', str_latest + ' - ' + str_incidence);
   LS_AddStr('title_latest_vaccination', str_latest + ' - ' + str_vaccination);
   LS_AddStr('title_latest_others', str_latest + ' - ' + str_others);
+  LS_AddStr('title_latest_comparison', str_latest + ' - ' + str_comparison);
   LS_AddStr('title_overall_cases', str_overall + ' - ' + str_cases);
   LS_AddStr('title_overall_incidence', str_overall + ' - ' + str_incidence);
   LS_AddStr('title_overall_vaccination', str_overall + ' - ' + str_vaccination);
   LS_AddStr('title_overall_others', str_overall + ' - ' + str_others);
+  LS_AddStr('title_overall_comparison', str_overall + ' - ' + str_comparison);
   LS_AddStr('title_timeline', str_timeline);
   LS_AddStr('title_data_source', str_data_source);
   LS_AddStr('title_no_right_reserved', str_no_right_reserved);
   LS_AddStr('footer_last_update', str_update);
-  
-  LS_AddStr('title_latest_highlight', str_latest + ' - ' + str_highlight);
-  LS_AddStr('title_latest_breakdown', str_latest + ' - ' + str_cases);
-  LS_AddStr('title_2021_breakdown', str_2021 + ' - ' + str_cases);
-  LS_AddStr('title_2021_incidence', str_2021 + ' - ' + str_incidence);
-  LS_AddStr('title_2021_others', str_2021 + ' - ' + str_others);
-  LS_AddStr('title_2020_breakdown', str_2020 + ' - ' + str_cases);
-  LS_AddStr('title_2020_incidence', str_2020 + ' - ' + str_incidence);
-  LS_AddStr('title_2020_others', str_2020 + ' - ' + str_others);
   
   //-- Index
   LS_AddStr('vignette_title_cases', str_cases);

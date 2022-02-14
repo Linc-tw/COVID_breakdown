@@ -215,10 +215,10 @@ body,
   margin-bottom: -45px;
 }
 
-#vaccination_by_county_latest .tooltip, 
-#vaccination_by_county_overall .tooltip, 
-#vaccination_by_county_2021 .tooltip, 
-#vaccination_by_county_2020 .tooltip {
+#vaccination_by_dose_latest .tooltip, 
+#vaccination_by_dose_overall .tooltip, 
+#vaccination_by_dose_2021 .tooltip, 
+#vaccination_by_dose_2020 .tooltip {
   margin-left: -60px;
   margin-right: -60px;
   margin-top: -45px;

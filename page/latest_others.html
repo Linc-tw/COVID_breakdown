@@ -85,6 +85,9 @@
                                     <a class="nav-link" href="latest_others.html">
                                         <span id="menu_latest_others"></span>
                                     </a>
+                                    <a class="nav-link" href="latest_comparison.html">
+                                        <span id="menu_latest_comparison"></span>
+                                    </a>
                                 </nav>
                             </div>
                             
@@ -106,6 +109,9 @@
                                     </a>
                                     <a class="nav-link" href="overall_others.html">
                                         <span id="menu_overall_others"></span>
+                                    </a>
+                                    <a class="nav-link" href="overall_comparison.html">
+                                        <span id="menu_overall_comparison"></span>
                                     </a>
                                 </nav>
                             </div>
@@ -252,35 +258,6 @@
                                 </div>
                             </div>
                             
-                            <!-- hospitalization_or_isolation -->
-                            <!-- 
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-hospital me-1"></i> <span id="hospitalization_or_isolation_title"></span>
-                                    </div>
-                                    
-                                    <div class="card-img">
-                                        <div class="btn-pos">
-                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#hospitalization_or_isolation_collapse" aria-expanded="false" aria-controls="hospitalization_or_isolation_collapse">
-                                                <i class="far fa-comment-alt"></i>
-                                            </button>
-                                            
-                                            <button id='hospitalization_or_isolation_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="collapse" id="hospitalization_or_isolation_collapse">
-                                        <div class="card-body">
-                                            <span id="hospitalization_or_isolation_description">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card-body" id="hospitalization_or_isolation_latest"></div>
-                                </div>
-                            </div>
-                            -->
-                            
                             <!-- border_statistics -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
@@ -320,63 +297,6 @@
                                     </div>
                                     
                                     <div class="card-body" id="border_statistics_latest"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- stats_in_mirror -->
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-yin-yang me-1"></i> <span id="stats_in_mirror_title"></span>
-                                    </div>
-                                    
-                                    <div class="card-img">
-                                        <div class="btn-pos">
-                                            <select id="stats_in_mirror_latest_stat_0" class="form-select form-select-sm me-2" aria-label="stats_in_mirror_latest_period">
-                                                <option value="0" id="stats_in_mirror_button_test_0"></option>
-                                                <option value="1" id="stats_in_mirror_button_total_case_0" selected></option>
-                                                <option value="2" id="stats_in_mirror_button_imported_case_0"></option>
-                                                <option value="3" id="stats_in_mirror_button_local_case_0"></option>
-                                                <option value="4" id="stats_in_mirror_button_death_0"></option>
-                                                <option value="5" id="stats_in_mirror_button_border_entry_0"></option>
-                                                <option value="6" id="stats_in_mirror_button_border_exit_0"></option>
-                                                <option value="7" id="stats_in_mirror_button_border_both_0"></option>
-                                                <option value="8" id="stats_in_mirror_button_arrival_incidence_0"></option>
-                                                <option value="9" id="stats_in_mirror_button_local_incidence_0"></option>
-                                                <option value="10" id="stats_in_mirror_button_positivity_0"></option>
-                                                <option value="11" id="stats_in_mirror_button_fatality_0"></option>
-                                            </select>
-                                            
-                                            <select id="stats_in_mirror_latest_stat_1" class="form-select form-select-sm me-2" aria-label="stats_in_mirror_latest_period">
-                                                <option value="0" id="stats_in_mirror_button_test_1"></option>
-                                                <option value="1" id="stats_in_mirror_button_total_case_1"></option>
-                                                <option value="2" id="stats_in_mirror_button_imported_case_1"></option>
-                                                <option value="3" id="stats_in_mirror_button_local_case_1"></option>
-                                                <option value="4" id="stats_in_mirror_button_death_1" selected></option>
-                                                <option value="5" id="stats_in_mirror_button_border_entry_1"></option>
-                                                <option value="6" id="stats_in_mirror_button_border_exit_1"></option>
-                                                <option value="7" id="stats_in_mirror_button_border_both_1"></option>
-                                                <option value="8" id="stats_in_mirror_button_arrival_incidence_1"></option>
-                                                <option value="9" id="stats_in_mirror_button_local_incidence_1"></option>
-                                                <option value="10" id="stats_in_mirror_button_positivity_1"></option>
-                                                <option value="11" id="stats_in_mirror_button_fatality_1"></option>
-                                            </select>
-                                            
-                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#stats_in_mirror_collapse" aria-expanded="false" aria-controls="stats_in_mirror_collapse">
-                                                <i class="far fa-comment-alt"></i>
-                                            </button>
-                                            
-                                            <button id='stats_in_mirror_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="collapse" id="stats_in_mirror_collapse">
-                                        <div class="card-body">
-                                            <span id="stats_in_mirror_description">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card-body" id="stats_in_mirror_latest"></div>
                                 </div>
                             </div>
                             
@@ -422,16 +342,8 @@
         <script src="../js/others/positivity_and_fatality_param.js"></script>
         <script src="../js/status_sheet/death_counts.js"></script>        
         <script src="../js/status_sheet/death_counts_param.js"></script>
-<!--        <script src="../js/status_sheet/hospitalization_or_isolation.js"></script>        
-        <script src="../js/status_sheet/hospitalization_or_isolation_param.js"></script>-->
         <script src="../js/border_sheet/border_statistics.js"></script>
         <script src="../js/border_sheet/border_statistics_param.js"></script>
-        <script src="../js/case_sheet/case_counts.js"></script>        
-        <script src="../js/case_sheet/case_counts_param.js"></script>
-        <script src="../js/others/incidence_rates.js"></script>
-        <script src="../js/others/incidence_rates_param.js"></script>
-        <script src="../js/others/stats_in_mirror.js"></script>
-        <script src="../js/others/stats_in_mirror_param.js"></script>
         
         <!-- Main -->
         <script src="../js/plot/plot_latest_others.js"></script>

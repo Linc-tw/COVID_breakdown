@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  local_case_per_county.js  --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.02.13                --//
     //--------------------------------//
 
 function LCPC_InitFig(wrap) {
@@ -233,7 +233,7 @@ function LCPC_FormatData2(wrap, data2) {
   wrap.iso_begin = GP_wrap.iso_ref;
   
   //-- Calculate xlim
-  GP_MakeXLim(wrap, 'band');
+  GP_MakeXLim(wrap);
 }
 
 //-- Tooltip
@@ -329,7 +329,7 @@ function LCPC_Replot(wrap) {
   
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap, 'band');
+    GP_ReplotOverallXTick(wrap);
   else
     GP_ReplotDateAsX(wrap);
   

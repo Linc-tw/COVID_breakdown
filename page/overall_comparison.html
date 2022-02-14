@@ -1,8 +1,8 @@
 
   <!--------------------------------
-    --  latest_vaccination.html   --
+    --  overall_comparison.html   --
     --  Chieh-An Lin              --
-    --  2022.01.18                --
+    --  2022.02.14                --
     -------------------------------->
 
 <!DOCTYPE html>
@@ -24,9 +24,9 @@
         <link href="../figures/favicon.png" rel="shortcut icon" />
         
         <!-- Metadata - variable part -->
-        <meta property="og:title" content="Latest vaccination | COVID-19 Statistics in Taiwan" />
-        <meta property="og:url" content="http://covidtaiwan.linc.tw/page/latest_vaccination.html" />
-        <title>Latest vaccination | COVID-19 Statistics in Taiwan</title>
+        <meta property="og:title" content="Overall comparison | COVID-19 Statistics in Taiwan" />
+        <meta property="og:url" content="http://covidtaiwan.linc.tw/page/overall_comparison.html" />
+        <title>Overall comparison | COVID-19 Statistics in Taiwan</title>
     </head>
     
     <body class="sb-nav-fixed">
@@ -152,143 +152,65 @@
                 <main>
                     <div class="container-fluid px-4">
                         <h1 id="title" class="mt-4"></h1>
-                        <h4 id="title_latest_vaccination" class="mb-4"></h4>
+                        <h4 id="title_overall_comparison" class="mb-4"></h4>
                         <div class="row">
-                        
-                            <!-- vaccination_by_brand -->
-                            <div class="col-xl-6">
+                            
+                            <!-- stats_in_mirror -->
+                            <div class="col-xl-12">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-tag me-1"></i> <span id="vaccination_by_brand_title"></span>
+                                        <i class="fas fa-yin-yang me-1"></i> <span id="stats_in_mirror_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
                                         <div class="btn-pos">
-                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
-                                                <label class="btn btn-covid active" id="vaccination_by_brand_latest_cumul_0">
-                                                    <input type="radio" class="btn-check" name="vaccination_by_brand_latest_cumul" value=0 checked>
-                                                    <span id="vaccination_by_brand_button_daily"></span>
-                                                </label>
-                                                <label class="btn btn-covid" id="vaccination_by_brand_latest_cumul_1">
-                                                    <input type="radio" class="btn-check" name="vaccination_by_brand_latest_cumul" value=1>
-                                                    <span id="vaccination_by_brand_button_cumul"></span>
-                                                </label>
-                                            </div>
-                                            
-                                            <select id="vaccination_by_brand_latest_brand" class="form-select form-select-sm me-2" aria-label="vaccination_by_brand_latest_brand">
-                                                <option value="0" id="vaccination_by_brand_button_total" selected></option>
-                                                <option value="1" id="vaccination_by_brand_button_AZ"></option>
-                                                <option value="2" id="vaccination_by_brand_button_Moderna"></option>
-                                                <option value="3" id="vaccination_by_brand_button_Medigen"></option>
-                                                <option value="4" id="vaccination_by_brand_button_Pfizer"></option>
+                                            <select id="stats_in_mirror_overall_stat_0" class="form-select form-select-sm me-2" aria-label="stats_in_mirror_overall_stat_0">
+                                                <option value="0" id="stats_in_mirror_button_test_0"></option>
+                                                <option value="1" id="stats_in_mirror_button_total_case_0" selected></option>
+                                                <option value="2" id="stats_in_mirror_button_imported_case_0"></option>
+                                                <option value="3" id="stats_in_mirror_button_local_case_0"></option>
+                                                <option value="4" id="stats_in_mirror_button_death_0"></option>
+                                                <option value="5" id="stats_in_mirror_button_border_entry_0"></option>
+                                                <option value="6" id="stats_in_mirror_button_border_exit_0"></option>
+                                                <option value="7" id="stats_in_mirror_button_border_both_0"></option>
+                                                <option value="8" id="stats_in_mirror_button_arrival_incidence_0"></option>
+                                                <option value="9" id="stats_in_mirror_button_local_incidence_0"></option>
+                                                <option value="10" id="stats_in_mirror_button_positivity_0"></option>
+                                                <option value="11" id="stats_in_mirror_button_fatality_0"></option>
                                             </select>
                                             
-                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#vaccination_by_brand_collapse" aria-expanded="false" aria-controls="vaccination_by_brand_collapse">
-                                                <i class="far fa-comment-alt"></i>
-                                            </button>
-                                            
-                                            <button id='vaccination_by_brand_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="collapse" id="vaccination_by_brand_collapse">
-                                        <div class="card-body">
-                                            <span id="vaccination_by_brand_description">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card-body" id="vaccination_by_brand_latest"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- vaccination_progress -->
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-parachute-box me-1"></i> <span id="vaccination_progress_title"></span>
-                                    </div>
-                                    
-                                    <div class="card-img">
-                                        <div class="btn-pos">
-                                            <select id="vaccination_progress_latest_brand" class="form-select form-select-sm me-2" aria-label="vaccination_progress_latest_brand">
-                                                <option value="0" id="vaccination_progress_button_total" selected></option>
-                                                <option value="1" id="vaccination_progress_button_AZ"></option>
-                                                <option value="2" id="vaccination_progress_button_Moderna"></option>
-                                                <option value="3" id="vaccination_progress_button_Medigen"></option>
-                                                <option value="4" id="vaccination_progress_button_Pfizer"></option>
+                                            <select id="stats_in_mirror_overall_stat_1" class="form-select form-select-sm me-2" aria-label="stats_in_mirror_overall_stat_1">
+                                                <option value="0" id="stats_in_mirror_button_test_1"></option>
+                                                <option value="1" id="stats_in_mirror_button_total_case_1"></option>
+                                                <option value="2" id="stats_in_mirror_button_imported_case_1"></option>
+                                                <option value="3" id="stats_in_mirror_button_local_case_1"></option>
+                                                <option value="4" id="stats_in_mirror_button_death_1" selected></option>
+                                                <option value="5" id="stats_in_mirror_button_border_entry_1"></option>
+                                                <option value="6" id="stats_in_mirror_button_border_exit_1"></option>
+                                                <option value="7" id="stats_in_mirror_button_border_both_1"></option>
+                                                <option value="8" id="stats_in_mirror_button_arrival_incidence_1"></option>
+                                                <option value="9" id="stats_in_mirror_button_local_incidence_1"></option>
+                                                <option value="10" id="stats_in_mirror_button_positivity_1"></option>
+                                                <option value="11" id="stats_in_mirror_button_fatality_1"></option>
                                             </select>
                                             
-                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#vaccination_progress_collapse" aria-expanded="false" aria-controls="vaccination_progress_collapse">
+                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#stats_in_mirror_collapse" aria-expanded="false" aria-controls="stats_in_mirror_collapse">
                                                 <i class="far fa-comment-alt"></i>
                                             </button>
                                             
-                                            <button id='vaccination_progress_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                            <button id='stats_in_mirror_overall_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
                                         </div>
                                     </div>
                                     
-                                    <div class="collapse" id="vaccination_progress_collapse">
+                                    <div class="collapse" id="stats_in_mirror_collapse">
                                         <div class="card-body">
-                                            <span id="vaccination_progress_description">
+                                            <span id="stats_in_mirror_description">
                                         </div>
                                     </div>
                                     
-                                    <div class="card-body" id="vaccination_progress_latest"></div>
+                                    <div class="card-body" id="stats_in_mirror_overall"></div>
                                 </div>
                             </div>
-                            
-                            <!-- vaccination_by_dose -->
-                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-syringe me-1"></i> <span id="vaccination_by_dose_title"></span>
-                                    </div>
-                                    
-                                    <div class="card-img">
-                                        <div class="btn-pos">
-                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#vaccination_by_dose_collapse" aria-expanded="false" aria-controls="vaccination_by_dose_collapse">
-                                                <i class="far fa-comment-alt"></i>
-                                            </button>
-                                            
-                                            <button id='vaccination_by_dose_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="collapse" id="vaccination_by_dose_collapse">
-                                        <div class="card-body">
-                                            <span id="vaccination_by_dose_description">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card-body" id="vaccination_by_dose_latest"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- vaccination_by_county -->
-<!--                            <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-syringe me-1"></i> <span id="vaccination_by_county_title"></span>
-                                    </div>
-                                    
-                                    <div class="card-img">
-                                        <div class="btn-pos">
-                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#vaccination_by_county_collapse" aria-expanded="false" aria-controls="vaccination_by_county_collapse">
-                                                <i class="far fa-comment-alt"></i>
-                                            </button>
-                                            
-                                            <button id='vaccination_by_county_latest_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="collapse" id="vaccination_by_county_collapse">
-                                        <div class="card-body">
-                                            <span id="vaccination_by_county_description">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card-body" id="vaccination_by_county_latest"></div>
-                                </div>
-                            </div>-->
                             
                         </div>
                     </div>
@@ -326,16 +248,22 @@
         <script src="../js/utility/general_plotting.js"></script>
 
         <!-- Plots -->
-        <script src="../js/vaccination_sheet/vaccination_by_brand.js"></script>
-        <script src="../js/vaccination_sheet/vaccination_by_brand_param.js"></script>
-        <script src="../js/vaccination_sheet/vaccination_progress.js"></script>
-        <script src="../js/vaccination_sheet/vaccination_progress_param.js"></script>
-        <script src="../js/vaccination_sheet/vaccination_by_dose.js"></script>
-        <script src="../js/vaccination_sheet/vaccination_by_dose_param.js"></script>
-<!--        <script src="../js/vaccination_county_sheet/vaccination_by_county.js"></script>
-        <script src="../js/vaccination_county_sheet/vaccination_by_county_param.js"></script>-->
+        <script src="../js/test_sheet/test_counts.js"></script>        
+        <script src="../js/test_sheet/test_counts_param.js"></script>
+        <script src="../js/case_sheet/case_counts.js"></script>        
+        <script src="../js/case_sheet/case_counts_param.js"></script>
+        <script src="../js/status_sheet/death_counts.js"></script>        
+        <script src="../js/status_sheet/death_counts_param.js"></script>
+        <script src="../js/border_sheet/border_statistics.js"></script>
+        <script src="../js/border_sheet/border_statistics_param.js"></script>
+        <script src="../js/others/incidence_rates.js"></script>
+        <script src="../js/others/incidence_rates_param.js"></script>
+        <script src="../js/others/positivity_and_fatality.js"></script>        
+        <script src="../js/others/positivity_and_fatality_param.js"></script>
+        <script src="../js/others/stats_in_mirror.js"></script>
+        <script src="../js/others/stats_in_mirror_param.js"></script>
         
         <!-- Main -->
-        <script src="../js/plot/plot_latest_vaccination.js"></script>
+        <script src="../js/plot/plot_overall_comparison.js"></script>
     </body>
 </html>

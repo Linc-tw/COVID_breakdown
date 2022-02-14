@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_progress.js   --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.02.13                --//
     //--------------------------------//
 
 function VP_InitFig(wrap) {
@@ -84,7 +84,7 @@ function VP_FormatData(wrap, data) {
     wrap.iso_begin = GP_wrap.iso_ref_vacc;
   
   //-- Calculate xlim
-  GP_MakeXLim(wrap, 'dot');
+  GP_MakeXLim(wrap);
   
   //-- Calculate x_max
   var iso_today = wrap.iso_end;
@@ -551,7 +551,7 @@ function VP_Replot(wrap) {
       
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap, 'dot');
+    GP_ReplotOverallXTick(wrap);
   else 
     GP_ReplotDateAsX(wrap);
   

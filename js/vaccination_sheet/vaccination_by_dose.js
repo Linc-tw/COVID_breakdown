@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_dose.js    --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.02.13                --//
     //--------------------------------//
 
 function VBD_InitFig(wrap) {
@@ -50,10 +50,9 @@ function VBD_FormatData(wrap, data) {
   var i, j, x, y, row;
   
   //-- Variables for plot
-  var x_key = 'date';
   var formatted_data = [];
   var y_list_list = [];
-  var y_list, block, block2, last_date;
+  var y_list, block, block2;
   
   //-- Variables for yaxis
   var y_max = 0;
@@ -66,7 +65,7 @@ function VBD_FormatData(wrap, data) {
   for (i=0; i<data.length; i++) {
     row = data[i];
     y_list = [];
-    last_date = row['date'];
+    x = row['date'];
     
     //-- Loop over column
     for (j=0; j<nb_col; j++) {
@@ -96,9 +95,9 @@ function VBD_FormatData(wrap, data) {
       
       //-- Make data block; redundant information is for toolpix text
       block = {
-        'x': data[i]['index'],
+        'x': data[i]['date'],
         'y0': y_list[j+1], //-- Lower bound
-        'y1': y_list[j], //-- Uppder bound
+        'y': y_list[j], //-- Upper bound
         'y_list': y_list
       };
       
@@ -137,7 +136,7 @@ function VBD_FormatData(wrap, data) {
   wrap.y_max = y_max;
   wrap.ytick = ytick;
   wrap.legend_value_raw = y_last_list;
-  wrap.last_date = last_date;
+  wrap.last_date = x;
 }
 
 function VBD_FormatData2(wrap, data2) {
@@ -149,37 +148,76 @@ function VBD_FormatData2(wrap, data2) {
       wrap.timestamp = data2[i]['value'];
   }
   
-  //-- Set iso_begin
-  if (wrap.tag.includes('latest'))
-    wrap.iso_begin = GP_ISODateAddition(wrap.timestamp.slice(0, 10), -90+1);
-  else if (wrap.tag.includes('overall'))
+  var r, nb_days;
+  
+  //-- Set time range
+  if (wrap.tag.includes('latest')) {
+    nb_days = 90;
+    wrap.iso_begin = GP_ISODateAddition(wrap.timestamp.slice(0, 10), -nb_days+1);
+    r = GP_GetRForTickPos(wrap, nb_days);
+  }
+  else if (wrap.tag.includes('overall')) {
     wrap.iso_begin = GP_wrap.iso_ref_vacc;
+    ord_begin = Math.floor(GP_DateOrdinal(wrap.iso_begin));
+    ord_today = Math.floor(GP_DateOrdinal(wrap.timestamp.slice(0, 10))) + 1;
+    nb_days = ord_today - ord_begin;
+  }
   
   //-- Calculate xlim
-  GP_MakeXLim(wrap, 'area');
+  GP_MakeXLim(wrap);
   
   //-- Variables for xaxis
   var xticklabel = [];
   var x_list = [];
-  var r, x;
+  var x;
   
-  if (wrap.tag.includes('latest')) {
-    r = GP_GetRForTickPos(wrap, 90);
+  //-- Make x_list & xticklabel
+  for (i=0; i<nb_days; i++) {
+    x = GP_ISODateAddition(wrap.iso_begin, i);
+    x_list.push(x);
     
-    //-- For xtick
-    for (i=0; i<90; i++) {
-      //-- Determine where to have xtick
-      if (i % wrap.xlabel_path == r) {
-        x = GP_ISODateAddition(wrap.iso_begin, i);
-        x_list.push(i+wrap.x_min);
+    //-- Determine where to have xtick
+    if (wrap.tag.includes('latest')) {
+      if (i % wrap.xlabel_path == r)
         xticklabel.push(x);
-      }
     }
   }
   
   //-- Save to wrapper
   wrap.x_list = x_list;
   wrap.xticklabel = xticklabel;
+}
+
+//-- Tooltip
+function VBD_MouseMove(wrap, d) {
+  if (wrap.tag.includes('mini'))
+    return;
+    
+  //-- Get tooltip position
+  var y_alpha = 0.5;
+  var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
+  
+  //-- Get column tags
+  if (LS_lang == 'zh-tw')
+    col_label_list = ['第一劑', '第兩劑', '第三劑'];
+  else if (LS_lang == 'fr')
+    col_label_list = ['1er dose ', '2e dose', '3e dose'];
+  else
+    col_label_list = ['1st dose', '2nd dose', '3rd dose'];
+  
+  //-- Define tooltip texts
+  var fct_format = d3.format('.2%');
+  var tooltip_text = d.x;
+  var i;
+  
+  for (i=0; i<wrap.nb_col; i++)
+    tooltip_text += '<br>' + col_label_list[i] + ' = ' + fct_format(d.y_list[i]);
+  
+  //-- Generate tooltip
+  wrap.tooltip
+    .html(tooltip_text)
+    .style('left', new_pos[0] + 'px')
+    .style('top', new_pos[1] + 'px');
 }
 
 function VBD_Plot(wrap) {
@@ -193,63 +231,32 @@ function VBD_Plot(wrap) {
   //-- Add ylabel
   GP_PlotYLabel(wrap);
   
+  //-- Add tooltip
+  if (!wrap.tag.includes('mini'))
+    GP_MakeTooltip(wrap);
+  
   //-- Define color
   wrap.color_list = [GP_wrap.c_list[3], GP_wrap.c_list[2], GP_wrap.c_list[6]];
   
-  //-- Define opacity & delay
-  wrap.plot_opacity = 0.7;
+  //-- Define mouse-move
+  wrap.mouse_move = VBD_MouseMove;
+  wrap.plot_opacity = GP_wrap.trans_opacity_bright;
   wrap.trans_delay = GP_wrap.trans_delay;
   
-  //-- Define xscale
-  var xscale = GP_MakeLinearX(wrap);
+  //-- Plot line
+  GP_PlotLine(wrap);
   
-  //-- Define yscale
-  var yscale = GP_MakeLinearY(wrap);
-    
-  //-- Define dummy area
-  var draw_area = d3.area()
-    .x(function (d) {return xscale(d.x);})
-    .y0(yscale(0))
-    .y1(yscale(0));
-    
-  //-- Add area
-  var area = wrap.svg.selectAll('.content.area')
-    .data(wrap.formatted_data)
-    .enter();
-    
-  //-- Update area with dummy details
-  area.append('path')
-    .attr('class', 'content area')
-    .attr('d', function (d) {return draw_area(d);})
-    .style('fill', function (d, i) {return wrap.color_list[i];})
-    .style('opacity', wrap.plot_opacity)
-      .on('mouseover', function (d) {GP_MouseOver_Faint(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave_Faint(wrap, d);});
-    
-  //-- Save to wrapper
-  wrap.area = area;
+  //-- Plot dot
+  GP_PlotDot(wrap);
 }
 
 function VBD_Replot(wrap) {
-  //-- Define xscale
-  var xscale = GP_MakeLinearX(wrap);
+  //-- Replot line
+  GP_ReplotLine(wrap);
+    
+  //-- Replot dot
+  GP_ReplotDot(wrap);
   
-  //-- Define yscale
-  var yscale = GP_MakeLinearY(wrap);
-    
-  //-- Define area
-  var draw_area = d3.area()
-    .x(function (d) {return xscale(d.x);})
-    .y0(function (d) {return yscale(d.y0);})
-    .y1(function (d) {return yscale(d.y1);});
-    
-  //-- Update area
-  wrap.area.selectAll('.content.area')
-    .data(wrap.formatted_data)
-    .transition()
-    .duration(wrap.trans_delay)
-      .attr('d', function (d) {return draw_area(d);});
-    
   //-- Frameline for mini
   if (wrap.tag.includes('mini')) {
     GP_PlotTopRight(wrap);
@@ -258,7 +265,7 @@ function VBD_Replot(wrap) {
   
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap, 'area');
+    GP_ReplotOverallXTick(wrap);
   else
     GP_ReplotDateAsX(wrap);
   

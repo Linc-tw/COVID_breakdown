@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_brand.js   --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.02.13                --//
     //--------------------------------//
 
 function VBB_InitFig(wrap) {
@@ -195,7 +195,7 @@ function VBB_FormatData2(wrap, data2) {
   wrap.iso_begin = GP_wrap.iso_ref_vacc;
   
   //-- Calculate xlim
-  GP_MakeXLim(wrap, 'band');
+  GP_MakeXLim(wrap);
 }
 
 //-- Tooltip
@@ -278,7 +278,7 @@ function VBB_Replot(wrap) {
   
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap, 'band');
+    GP_ReplotOverallXTick(wrap);
   else
     GP_ReplotDateAsX(wrap);
   

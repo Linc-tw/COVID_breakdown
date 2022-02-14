@@ -168,7 +168,7 @@ function CC_FormatData2(wrap, data2) {
   wrap.iso_begin = GP_wrap.iso_ref;
   
   //-- Calculate xlim
-  GP_MakeXLim(wrap, 'band');
+  GP_MakeXLim(wrap);
 }
 
 //-- Tooltip
@@ -252,7 +252,7 @@ function CC_Replot(wrap) {
   
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap, 'band');
+    GP_ReplotOverallXTick(wrap);
   else
     GP_ReplotDateAsX(wrap);
   

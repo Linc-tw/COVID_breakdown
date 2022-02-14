@@ -8,8 +8,7 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//Linear/log?
-//dot for VPD
+//add vaccination to SIM
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
@@ -482,7 +481,7 @@ function GP_ReplotDateAsX(wrap) {
   
   //-- Define xaxis
   var xaxis;
-  if (wrap.tag.includes('vaccination_progress') || wrap.tag.includes('vaccination_by_dose')) {
+  if (wrap.tag.includes('vaccination_progress')) {
     xaxis = d3.axisBottom(xscale)
       .tickSize(10)
       .tickSizeOuter(0)
@@ -586,21 +585,15 @@ function GP_ReplotDateAsTileX(wrap) {
       .style('text-anchor', 'end');
 }
 
-function GP_MakeXLim(wrap, format) {
+function GP_MakeXLim(wrap) {
   //-- Calculate x_min
   var x_min = GP_DateOrdinal(wrap.iso_begin);
-  if (format == 'band') //-- Edge correction
-    x_min -= 0.2;
-  else if (format == 'dot')
-    x_min -= 0.5;
+  x_min -= 0.5; //-- Edge correction
   
   //-- Calculate x_max
   var iso_today = wrap.timestamp.slice(0, 10);
   var x_max = GP_DateOrdinal(iso_today);
-  if (format == 'band') //-- Edge correction
-    x_max += 1;
-  else if (format == 'dot')
-    x_max += 0.5;
+  x_max += 0.5; //-- Edge correction
   
   //-- Half day correction
   var hour = wrap.timestamp.slice(11, 13);
@@ -613,7 +606,7 @@ function GP_MakeXLim(wrap, format) {
   wrap.x_max = x_max;
 }
 
-function GP_MakeOverallXTick(wrap, format) {
+function GP_MakeOverallXTick(wrap) {
   var xticklabel_min_space_month, xticklabel_min_space_year, xticklabel_month_list;
   if (wrap.tag.includes('vaccination')) {
     xticklabel_min_space_month = GP_wrap.xticklabel_min_space_month_vacc;
@@ -648,8 +641,6 @@ function GP_MakeOverallXTick(wrap, format) {
   
   //-- Get x_prev
   var x_prev = wrap.x_min;
-  if (format == 'band') //-- For edge
-    x_prev += 0.1;
   
   for (i=yyyymm_begin; i<yyyymm_end+1; i++) {
     //-- Get tick date
@@ -660,17 +651,11 @@ function GP_MakeOverallXTick(wrap, format) {
     //-- Get index
     x = (new Date(iso) - new Date(GP_wrap.iso_ref)); //-- Calculate difference
     x /= 86400000; //-- Convert from ms to day
-    if (format == 'band') //-- For edge
-      x -= 0.1;
-    else
-      x -= 0.5;
+    x -= 0.5; //-- Edge correction
     
     //-- If last month, do not draw xtick_sep_month & use x_max to compare
-    if (i == yyyymm_end) {
+    if (i == yyyymm_end)
       x = wrap.x_max;
-      if (format == 'band') //-- For edge
-        x -= 0.1; 
-    }
     else
       xtick_sep_month.push(x);
       
@@ -694,8 +679,6 @@ function GP_MakeOverallXTick(wrap, format) {
   
   //-- Get x_prev
   x_prev = wrap.x_min;
-  if (format == 'band') //-- For edge
-    x_prev += 0.1;
   
   for (i=yyyy_begin; i<=yyyy_end; i++) {
     //-- Get tick date
@@ -704,17 +687,11 @@ function GP_MakeOverallXTick(wrap, format) {
     //-- Get index
     x = (new Date(iso) - new Date(GP_wrap.iso_ref)); //-- Calculate difference
     x /= 86400000; //-- Convert from ms to day
-    if (format == 'band') //-- For edge
-      x += 0.9;
-    else
-      x += 0.5;
+    x += 0.5; //-- Edge correction
     
     //-- If last year, do not draw xtick_sep_year & use x_max to compare
-    if (i == yyyy_end) {
+    if (i == yyyy_end)
       x = wrap.x_max;
-      if (format == 'band') //-- For edge
-        x -= 0.1;
-    }
     else
       xtick_sep_year.push(x);
       
@@ -737,8 +714,8 @@ function GP_MakeOverallXTick(wrap, format) {
   wrap.xticklabel_year = xticklabel_year;
 }
 
-function GP_ReplotOverallXTick(wrap, format) {
-  GP_MakeOverallXTick(wrap, format);
+function GP_ReplotOverallXTick(wrap) {
+  GP_MakeOverallXTick(wrap);
   
   //-- Define xscale
   var xscale = d3.scaleLinear()

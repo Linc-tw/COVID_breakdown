@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  test_counts.js            --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.02.13                --//
     //--------------------------------//
 
 function TC_InitFig(wrap) {
@@ -184,7 +184,7 @@ function TC_FormatData2(wrap, data2) {
   wrap.iso_begin = GP_wrap.iso_ref;
   
   //-- Calculate xlim
-  GP_MakeXLim(wrap, 'band');
+  GP_MakeXLim(wrap);
 }
 
 //-- Tooltip
@@ -268,7 +268,7 @@ function TC_Replot(wrap) {
   
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap, 'band');
+    GP_ReplotOverallXTick(wrap);
   else
     GP_ReplotDateAsX(wrap);
   

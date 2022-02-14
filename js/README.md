@@ -77,8 +77,10 @@ Structure by page
   - `positivity_and_fatality.js`
   - `death_counts.js`
   - `border_statistics.js`
-  - `stats_in_mirror.js`
   - `infectiodynamics.js` (no latest)
+
+`comparison.html`
+  - `stats_in_mirror.js`
 
 `timeline.html`
   - `criteria_timeline.js`

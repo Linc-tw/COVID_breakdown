@@ -98,7 +98,7 @@ function IR_FormatData(wrap, data) {
       y_list.push(y);
     }
     
-    y_list_list.push(y_list)
+    y_list_list.push(y_list);
   }
   
   //-- Main loop over column
@@ -173,7 +173,7 @@ function IR_FormatData2(wrap, data2) {
   wrap.iso_begin = GP_wrap.iso_ref;
   
   //-- Calculate xlim
-  GP_MakeXLim(wrap, 'dot');
+  GP_MakeXLim(wrap);
 }
 
 //-- Tooltip
@@ -253,7 +253,7 @@ function IR_Replot(wrap) {
   
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap, 'dot');
+    GP_ReplotOverallXTick(wrap);
   else
     GP_ReplotDateAsX(wrap);
   

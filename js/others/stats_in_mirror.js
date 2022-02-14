@@ -2,20 +2,23 @@
     //--------------------------------//
     //--  stats_in_mirror.js        --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.13                --//
+    //--  2022.02.14                --//
     //--------------------------------//
 
 function SIM_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
     GP_InitFig_Mini(wrap);
   else {
-    wrap.tot_width = 800;
     wrap.tot_height = 600;
     
-    if (wrap.tag.includes('overall'))
+    if (wrap.tag.includes('overall')) {
+      wrap.tot_width = 1600;
       wrap.margin = {left: 90, right: 5, bottom: 70, top: 5};
-    else
+    }
+    else {
+      wrap.tot_width = 1200;
       wrap.margin = {left: 90, right: 5, bottom: 90, top: 5};
+    }
       
     wrap.tot_height_ = {};
     wrap.tot_height_['zh-tw'] = wrap.tot_height;
@@ -249,7 +252,7 @@ function SIM_FormatData2(wrap, data2) {
   wrap.iso_begin = GP_wrap.iso_ref;
   
   //-- Calculate xlim
-  GP_MakeXLim(wrap, 'band');
+  GP_MakeXLim(wrap);
 }
 
 function SIM_PlotSingleBar(wrap, index) {
@@ -798,7 +801,7 @@ function SIM_Replot(wrap) {
   
   //-- Replot xaxis
   if (wrap.tag.includes('overall'))
-    GP_ReplotOverallXTick(wrap, 'band');
+    GP_ReplotOverallXTick(wrap);
   else
     GP_ReplotDateAsX(wrap);
 }
