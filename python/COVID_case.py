@@ -2,7 +2,7 @@
     ################################
     ##  COVID_case.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.02.13                ##
+    ##  2022.02.19                ##
     ################################
 
 import os
@@ -274,8 +274,10 @@ class CaseSheet(ccm.Template):
       
       ## Africa
       'Africa': ['非洲'],
+      'Algeria': ['阿爾及利亞'],
       'Burkina Faso': ['布吉納法索'],
       'Cameroon': ['喀麥隆'],
+      'Chad': ['查德'],
       'Eswatini': ['史瓦帝尼'],
       'Egypt': ['埃及'], 
       'Ethiopia': ['衣索比亞'],
@@ -283,7 +285,9 @@ class CaseSheet(ccm.Template):
       'Ghana': ['迦納', '加納'], 
       'Kenya': ['肯亞'],
       'Lesotho': ['賴索托'],
+      'Malawi': ['馬拉威'],
       'Mauritania': ['茅利塔尼亞'],
+      'Mauritius': ['模里西斯'],
       'Morocco': ['摩洛哥'], 
       'Nigeria': ['奈及利亞'], 
       'Senegal': ['塞內加爾'],
@@ -613,7 +617,7 @@ class CaseSheet(ccm.Template):
       'nausea': ['嘔吐感', '嘔吐', '噁心', '想吐', '反胃'],
       'diarrhea': ['腹瀉'], 
       
-      'headache': ['頭暈目眩', '輕度頭痛', '頭骨痛', '偏頭痛', '頭痛', '頭暈', '頭量', '頭脹', '頭昏', '暈眩', '頭重'],
+      'headache': ['頭部不適感', '頭暈目眩', '輕度頭痛', '頭骨痛', '偏頭痛', '頭痛', '頭暈', '頭量', '頭脹', '頭昏', '暈眩', '頭重'],
       'eyes sore': ['結膜充血', '後眼窩痛', '左眼紅痛', '眼睛癢', '眼睛痛', '眼壓高'], 
       'chest pain+backache': ['胸背痛'], 
       'chest pain': ['呼吸時胸痛', '心臟不舒服', '胸部不適', '胸口悶', '胸痛', '胸悶', '心悸'],
@@ -713,10 +717,12 @@ class CaseSheet(ccm.Template):
     link_list = []
     for i, link in enumerate(self.getCol(self.coltag_link)):
       if link in [
-        '未知', '未知\n機場清潔', '未知\n機場', '未知\n物流', '未知\n高雄港', '未知\n新北A', '未知\n新北B', '未知\n新北C', '未知\n日翊物流', 
+        '未知', '未知\n機場清潔', '未知\n機場', '未知\n物流', '未知\n高雄港', '未知\n新北A', '未知\n新北B', '未知\n新北C', '未知\n高雄A', '未知\n高雄B', '未知\n桃園B',
+        '未知\n日翊物流',
         '未知\n錢都涮涮鍋', '未知\n高雄砂石場', '未知\n長榮鳳凰酒店', '未知\n農家樂小吃店', '未知\n嘉聯益電子廠', 
-        '未知\n錢都及加貝爾幼兒園', '未知\r\n錢都及加貝爾幼兒園',
-        '院內尚不明', '調查中',
+        '未知\n錢都及加貝爾幼兒園', '未知\r\n錢都及加貝爾幼兒園', '未知\n高雄A\n高雄煉油廠',
+        '院內尚不明', '調查中', 
+        '未知\n新北C\n設計師/房屋代銷/宗教團體', 
       ]:
         link_list.append('unlinked')
         
@@ -751,7 +757,7 @@ class CaseSheet(ccm.Template):
       elif '長照機構' in link:
         link_list.append('linked')
       elif '美樂地KTV' in link:
-        link_list.append('linked')        
+        link_list.append('linked')
         
       elif link in [
         '家祭', '北農', '遠傳案', '京元電', 

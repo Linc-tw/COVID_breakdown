@@ -2,7 +2,7 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.02.13                ##
+    ##  2022.02.19                ##
     ################################
 
 import os
@@ -151,8 +151,10 @@ TRAVEL_HISTORY_DICT = {
   
   ## Africa
   'Africa': {'zh-tw': '非洲', 'fr': 'Afrique'},
+  'Algeria': {'zh-tw': '阿爾及利亞', 'fr': 'Algérie'}, 
   'Burkina Faso': {'zh-tw': '布吉納法索', 'fr': 'Burkina Faso'},
   'Cameroon': {'zh-tw': '喀麥隆', 'fr': 'Cameroun'},
+  'Chad': {'zh-tw': '查德', 'fr':' Tchad'},
   'Eswatini': {'zh-tw': '史瓦帝尼', 'fr': 'Eswatini'},
   'Egypt': {'zh-tw': '埃及', 'fr': 'Égypte'},
   'Ethiopia': {'zh-tw': '衣索比亞', 'fr': 'Éthiopie'},
@@ -160,7 +162,9 @@ TRAVEL_HISTORY_DICT = {
   'Ghana': {'zh-tw': '迦納', 'fr': 'Ghana'},
   'Kenya': {'zh-tw': '肯亞', 'fr': 'Kenya'},
   'Lesotho': {'zh-tw': '賴索托', 'fr': 'Lesotho'},
+  'Malawi': {'zh-tw': '馬拉威', 'fr': 'Malawi'},
   'Mauritania': {'zh-tw': '茅利塔尼亞', 'fr': 'Mauritanie'},
+  'Mauritius': {'zh-tw': '模里西斯', 'fr': 'Maurice'},
   'Morocco': {'zh-tw': '摩洛哥', 'fr': 'Maroc'},
   'Nigeria': {'zh-tw': '奈及利亞', 'fr': 'Nigéria'}, 
   'Senegal': {'zh-tw': '塞內加爾', 'fr': 'Sénégal'},
@@ -537,10 +541,11 @@ DELIVERY_LIST = [
   [ 'Pfizer',    'Pfizer',  993912, '2022-01-21', '2022-01-28', 'https://www.cna.com.tw/news/firstnews/202201210026.aspx', ''],
   
   ## 2022/02
+  ['Moderna',   'Moderna', 1500000, '2022-01-25',           '', 'https://www.cna.com.tw/news/firstnews/202201250166.aspx', ''],
   [ 'Pfizer',    'Pfizer',  919000, '2022-01-27',           '', 'https://www.cna.com.tw/news/firstnews/202201270022.aspx', ''],
+  ['Moderna',   'Moderna', 1404800, '2022-02-15',           '', 'https://www.cna.com.tw/news/firstnews/202202150139.aspx', ''],
   
   
-  #['',   '', , '2022-02-',           '', '', ''],
   #['',   '', , '2022-02-',           '', '', ''],
   #['',   '', , '2022-02-',           '', '', ''],
   #['',   '', , '2022-02-',           '', '', ''],
