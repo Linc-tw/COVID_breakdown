@@ -2,7 +2,7 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.02.19                ##
+    ##  2022.02.21                ##
     ################################
 
 import os
@@ -96,6 +96,7 @@ TRAVEL_HISTORY_DICT = {
   'Pakistan': {'zh-tw': '巴基斯坦', 'fr': 'Pakistan'},
   'Philippines': {'zh-tw': '菲律賓', 'fr': 'Philippines'},
   'Singapore': {'zh-tw': '新加坡', 'fr': 'Singapour'},
+  'Sri Lanka': {'zh-tw': '斯里蘭卡', 'fr': 'Sri Lanka'},
   'Thailand': {'zh-tw': '泰國', 'fr': 'Thaïlande'},
   'Vietnam': {'zh-tw': '越南', 'fr': 'Vietnam'},
   
@@ -125,6 +126,7 @@ TRAVEL_HISTORY_DICT = {
   'Cyprus': {'zh-tw': '賽普勒斯', 'fr': 'Chypre'},
   'Czechia': {'zh-tw': '捷克', 'fr': 'Tchéquie'},
   'Danmark': {'zh-tw': '丹麥', 'fr': 'Danemark'},
+  'Estonia': {'zh-tw': '愛沙尼亞', 'fr': 'Estonie'}, 
   'Finland': {'zh-tw': '芬蘭', 'fr': 'Finlande'},
   'France': {'zh-tw': '法國', 'fr': 'France'},
   'Germany': {'zh-tw': '德國', 'fr': 'Allemagne'},
@@ -135,6 +137,7 @@ TRAVEL_HISTORY_DICT = {
   'Hungary': {'zh-tw': '匈牙利',  'fr': 'Hongrie'},
   'Lithuania': {'zh-tw': '立陶宛', 'fr': 'Lituanie'},
   'Luxemburg': {'zh-tw': '盧森堡', 'fr': 'Luxembourg'},
+  'Malta': {'zh-tw': '馬爾他', 'fr': 'Malte'},
   'Netherlands': {'zh-tw': '荷蘭', 'fr': 'Pays-Bas'},
   'Norway': {'zh-tw': '挪威', 'fr': 'Norvège'},
   'Poland': {'zh-tw': '波蘭', 'fr': 'Pologne'},
