@@ -2,7 +2,7 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.02.21                ##
+    ##  2022.03.01                ##
     ################################
 
 import os
@@ -94,6 +94,7 @@ TRAVEL_HISTORY_DICT = {
   'Myanmar': {'zh-tw': '緬甸', 'fr': 'Myanmar'},
   'Nepal': {'zh-tw': '尼泊爾', 'fr': 'Népal'},
   'Pakistan': {'zh-tw': '巴基斯坦', 'fr': 'Pakistan'},
+  'Papua New Guinea': {'zh-tw': '巴布亞紐幾內亞', 'fr': 'Papouasie-Nouvelle-Guinée'}, 
   'Philippines': {'zh-tw': '菲律賓', 'fr': 'Philippines'},
   'Singapore': {'zh-tw': '新加坡', 'fr': 'Singapour'},
   'Sri Lanka': {'zh-tw': '斯里蘭卡', 'fr': 'Sri Lanka'},
@@ -135,6 +136,7 @@ TRAVEL_HISTORY_DICT = {
   'Ireland': {'zh-tw': '愛爾蘭', 'fr': 'Irlande'},
   'Italy': {'zh-tw': '義大利', 'fr': 'Italie'},
   'Hungary': {'zh-tw': '匈牙利',  'fr': 'Hongrie'},
+  'Latvia': {'zh-tw': '拉脫維亞', 'fr': 'Lettonie'}, 
   'Lithuania': {'zh-tw': '立陶宛', 'fr': 'Lituanie'},
   'Luxemburg': {'zh-tw': '盧森堡', 'fr': 'Luxembourg'},
   'Malta': {'zh-tw': '馬爾他', 'fr': 'Malte'},
@@ -199,6 +201,7 @@ TRAVEL_HISTORY_DICT = {
   'Peru': {'zh-tw': '秘魯', 'fr': 'Pérou'},
   'Saint Kitts and Nevis': {'zh-tw': '聖克里斯多福及尼維斯', 'fr': 'Saint-Christophe-et-Niévès'},
   'Saint Lucia': {'zh-tw': '聖露西亞', 'fr': 'Sainte-Lucie'},
+  'Salvador': {'zh-tw': '薩爾瓦多', 'fr': 'Salvador'},
   'Trinidad and Tobago': {'zh-tw': '千里達及托巴哥', 'fr': 'Trinité-et-Tobago'},
   'USA': {'zh-tw': '美國', 'fr': 'États-Unis'},
   
@@ -207,6 +210,7 @@ TRAVEL_HISTORY_DICT = {
   'Marshall Islands': {'zh-tw': '馬紹爾', 'fr': 'Îles Marshall'},
   'New Zealand': {'zh-tw': '紐西蘭', 'fr': 'Nouvelle-Zélande'},
   'Palau': {'zh-tw': '帛琉', 'fr': 'Palaos'}, 
+  'Solomon Islands': {'zh-tw': '索羅門群島', 'fr': 'Îles Salomon'}, 
   
   ## Others
   'Antarctica': {'zh-tw': '南極', 'fr': 'Antartique'},
@@ -544,9 +548,14 @@ DELIVERY_LIST = [
   [ 'Pfizer',    'Pfizer',  993912, '2022-01-21', '2022-01-28', 'https://www.cna.com.tw/news/firstnews/202201210026.aspx', ''],
   
   ## 2022/02
-  ['Moderna',   'Moderna', 1500000, '2022-01-25',           '', 'https://www.cna.com.tw/news/firstnews/202201250166.aspx', ''],
-  [ 'Pfizer',    'Pfizer',  919000, '2022-01-27',           '', 'https://www.cna.com.tw/news/firstnews/202201270022.aspx', ''],
-  ['Moderna',   'Moderna', 1404800, '2022-02-15',           '', 'https://www.cna.com.tw/news/firstnews/202202150139.aspx', ''],
+  ['Moderna',   'Moderna', 1511600, '2022-01-25', '2022-02-08', 'https://www.cna.com.tw/news/firstnews/202201250166.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  918156, '2022-01-27', '2022-02-11', 'https://www.cna.com.tw/news/firstnews/202201270022.aspx', ''],
+  ['Medigen',   'Medigen',   75620,           '', '2022-02-18',                                                        '', ''],
+  ['Medigen',   'Medigen',   97066,           '', '2022-02-19',                                                        '', ''],
+  ['Moderna',   'Moderna', 1404200, '2022-02-15', '2022-02-24', 'https://www.cna.com.tw/news/firstnews/202202150139.aspx', ''],
+  
+  ## 2022/03
+  ['Moderna',   'Moderna', 1224600, '2022-02-28',           '', 'https://www.cna.com.tw/news/firstnews/202202280014.aspx', ''], 
   
   
   #['',   '', , '2022-02-',           '', '', ''],
@@ -568,7 +577,7 @@ QC_REF_DICT = {
   '2021-12': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637801673911438363',
   
   '2022-01': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637801671490971778',
-  '2022-02': '',
+  '2022-02': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637818952165220271',
 }
 
 ################################################################################
