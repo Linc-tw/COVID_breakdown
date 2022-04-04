@@ -2,7 +2,7 @@
     ################################
     ##  COVID_case.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.03.01                ##
+    ##  2022.04.04                ##
     ################################
 
 import os
@@ -153,7 +153,7 @@ class CaseSheet(ccm.Template):
       elif age in [
         '<5-2X', '<5-4X', '<5-5X', '<5-6X', '<5-7X', '<5-8X', '<5-9X', '<5-1XX', '3-77', 
         '<10-4X', '<10-6X','<10-8X', '<10-9X', '<1X-6X', '<1X-8X', 
-        '1X-2X', '1X-4X', '1X-5X', '1X-7X', '2X-3X', '2X-4X', '2X-5X', '2X-6X', '2X-7X', '2X-8X', '2X-9X', 
+        '1X-2X', '1X-4X', '1X-5X', '1X-6X', '1X-7X', '2X-3X', '2X-4X', '2X-5X', '2X-6X', '2X-7X', '2X-8X', '2X-9X', 
         '3X-4X', '3X-5X', '3X-6X', '3X-8X', '5X-7X', '5X-8X'
       ]:
         age_list.append(np.nan)
@@ -285,7 +285,7 @@ class CaseSheet(ccm.Template):
       'Chad': ['查德'],
       'Eswatini': ['史瓦帝尼'],
       'Egypt': ['埃及'], 
-      'Ethiopia': ['衣索比亞', '埃塞俄比亞', '埃\r\n塞俄比亞'],
+      'Ethiopia': ['衣索比亞', '埃塞俄比亞'],
       'Gambia': ['甘比亞'],
       'Ghana': ['迦納', '加納'], 
       'Kenya': ['肯亞'],
@@ -322,7 +322,7 @@ class CaseSheet(ccm.Template):
       'Panama': ['巴拿馬'],
       'Paraguay': ['巴拉圭'],
       'Peru': ['秘魯', '祕魯'], 
-      'Saint Kitts and Nevis': ['聖克里斯多福及尼維斯', '聖克里斯多福及尼維\n斯'],
+      'Saint Kitts and Nevis': ['聖克里斯多福及尼維斯'],
       'Saint Lucia': ['聖露西亞'],
       'Salvador': ['薩爾瓦多'],
       'Trinidad and Tobago': ['千里達及托巴哥'],
@@ -361,6 +361,10 @@ class CaseSheet(ccm.Template):
         continue
       
       stock = []
+      
+      ## Remove line break
+      trav_hist = ''.join(trav_hist.split('\n'))
+      trav_hist = ''.join(trav_hist.split('\r'))
       
       ## Mandarin word matching
       for value in value_list:
@@ -574,19 +578,36 @@ class CaseSheet(ccm.Template):
       elif channel in ['自主健康管理', '加強自主管理', '居家隔離期滿\n自主健康管理']:
         channel_list.append('monitoring')
         
-      elif channel in [
-        '入院', '專案', '快篩站', '慢性病', 
-        '自行就醫', '自主就醫', '自費篩檢', '自費採檢', '自費檢驗', '自行快篩', '自行通報', '自行採檢', 
-        '定期篩檢', '定期監測', '定期監控', '常規篩檢', '例行採檢', '工作採檢', 
-        '入院篩檢', '入院採檢', '入院檢查', '院內採檢', '就醫採檢', '陪病採檢', '陪產篩檢', 
-        '社區快篩', '社區專案', '社區篩檢', '社區採檢', '專案篩檢', '登船檢疫', '清零採檢', 
-        '萬華專案', '擴大採檢', '擴大篩檢', '出國前採檢', '預防性快篩', '預防性採檢', '因工作採檢', 
-        '入院陪病檢查', '入院陪病採檢', '鄰家擴大採檢', '醫院例行採檢', 
-        '入住機構前採檢', '入院前預防性採檢', '入機構探視前採檢', '解隔離後自行就醫', '投案進入收容所採檢'
-      ]:
+      elif '入院' in channel:
+        channel_list.append('hospital')
+      elif '工作' in channel:
+        channel_list.append('hospital')
+      elif '定期' in channel:
+        channel_list.append('hospital')
+      elif '社區' in channel:
+        channel_list.append('hospital')
+      elif '自行' in channel:
+        channel_list.append('hospital')
+      elif '自主' in channel:
+        channel_list.append('hospital')
+      elif '自費' in channel:
+        channel_list.append('hospital')
+      elif '例行' in channel:
+        channel_list.append('hospital')
+      elif '專案' in channel:
+        channel_list.append('hospital')
+      elif '擴大' in channel:
+        channel_list.append('hospital')
+      elif '預防' in channel:
+        channel_list.append('hospital')
+      elif '醫院' in channel:
         channel_list.append('hospital')
         
-      elif '定期篩檢' in channel:
+      elif channel in [
+        '入院', '快篩站', '慢性病',
+        '常規篩檢', '院內採檢', '就醫採檢', '陪病採檢', '陪產篩檢', '登船檢疫', '清零採檢', 
+        '出國前採檢', '入住機構前採檢', '入機構探視前採檢', '投案進入收容所採檢'
+      ]:
         channel_list.append('hospital')
         
       elif channel in ['香港檢驗', '外國檢驗', '外國篩檢']:
@@ -599,13 +620,13 @@ class CaseSheet(ccm.Template):
   
   def getSymptom(self):
     key_dict = {
-      'sneezing': ['鼻子症狀像感冒', '伴隨感冒症狀', '類似感冒症狀', '感冒症狀', '鼻涕倒流', '鼻子不適', '打噴嚏', '流鼻水', '流鼻\n水','流鼻涕', '鼻塞', '鼻水', '鼻炎', '感冒'],
+      'sneezing': ['鼻子症狀像感冒', '伴隨感冒症狀', '類似感冒症狀', '感冒症狀', '鼻涕倒流', '鼻子不適', '打噴嚏', '流鼻水', '流鼻涕', '鼻塞', '鼻水', '鼻炎', '感冒'],
       'cough': [
         '乾咳及稍有痰', '輕微咳嗽', '咳嗽症狀', '咳嗽加劇', '咳嗽併痰', '咳嗽有痰', '痰有血絲', '喉嚨有痰', '有點咳嗽', '偶爾咳嗽', 
         '少量痰', '咳嗽', '乾咳', '輕咳', '微咳', '微痰', '有痰', '痰多', '痰'
       ],
       'throatache': [
-        '上呼吸道相關症狀', '上呼吸道症狀', '上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '咽喉不適', '急性咽炎', '聲音沙啞', '口乾舌燥', '吞嚥困難', 
+        '上呼吸道相關症狀', '上呼吸道症狀', '上呼吸道感染', '上呼吸道腫痛', '呼吸道症狀', '上呼吸道', '咽喉不適', '急性咽炎', '聲音沙啞', '口乾舌燥', '吞嚥困難', 
         '異物感', '樓龍痛', '呼吸道', '呼吸痛', '咽喉痛', '鼻子乾', '沙啞', '乾嘔', '口渴', '口乾', 
         '喉嚨有異物感', '喉嚨乾澀想咳', '喉嚨刺激感', '喉嚨不適', '喉嚨痛癢', '喉嚨乾癢', '喉嚨異狀', '喉嚨乾痛', '喉嚨紅腫', '喉嚨痛 癢', '喉嚨痛', '喉嚨癢', '喉嚨腫', 
         '喉嚨乾', '喉嚨卡', '喉嚨', 
@@ -619,8 +640,8 @@ class CaseSheet(ccm.Template):
       'pneumonia': ['X光顯示肺炎', 'X光片顯示肺炎', 'X光顯示肺部輕微浸潤', '雙側肺部有異狀', '肺浸潤', '肺炎'], 
       
       'fever': [
-        '出現中暑的狀態', '身體悶熱不適', '間歇性發燒', '身體微熱', '身體溫熱', '身體發熱', '體溫偏高', '體溫升高', '反覆發燒', '臉紅微熱',
-        '體溫高', '發\n燒', '微燒', '低燒', '高燒', '發燒', '發熱', '盜汗'
+        '出現中暑的狀態', '身體悶熱不適', '間歇性發燒', '身體微熱', '身體溫熱', '身體發熱', '體溫偏高', '體溫升高', '反覆發燒', '臉紅微熱', '睡覺盜汗', '發燒症狀',
+        '體溫高', '微燒', '低燒', '高燒', '發燒', '發熱', '盜汗'
       ], 
       'chills': ['忽冷忽熱症狀', '全身冒冷汗', '全身發冷', '忽冷忽熱', '冒冷汗', '畏寒', '發冷', '寒顫'], 
       
@@ -638,7 +659,7 @@ class CaseSheet(ccm.Template):
       
       'fatigue': [
         '全身倦怠無力', '左側肢體無力', '疑似中暑症狀', '全身倦怠', '全身疲憊', '全身疲倦', '全身虛弱', '全身疲軟', 
-        '身體無力', '全身無力', '走路無力', '四肢無力', '肌肉無力', '精神倦怠', '體力不支', '體力變差', 
+        '身體無力', '全身無力', '全身乏力', '走路無力', '四肢無力', '肌肉無力', '精神倦怠', '體力不支', '體力變差', 
         '疲倦感', '倦怠情', '體力差', '沒精神', '倦怠', '疲憊', '疲倦', '疲勞', '疲累', '無力', '虛弱'
       ],
       'soreness': [
@@ -663,7 +684,7 @@ class CaseSheet(ccm.Template):
       'coma': ['意識不清', '意識改變'],
       
       'symptomatic': ['全身不舒服', '出現症狀', '身體不適', '樓紅不適', '有症狀', '不舒服', '活動差', '調查中', '不適'] + \
-        ['排尿疼痛', '眼球上吊', '肢體變黑', '高血糖', '舌頭痛', '猝死', '抽搐', '手抖', '吐血', '休克', '煩躁'],
+        ['排尿疼痛', '眼球上吊', '肢體變黑', '高血糖', '舌頭痛', '猝死', '抽搐', '手抖', '吐血', '休克', '煩躁', '抽筋'],
       'asymptomatic': ['首例無症狀', '無症狀', 'x', 'X'],
     }
     
@@ -686,8 +707,11 @@ class CaseSheet(ccm.Template):
         continue
       
       stock = []
+      ## Remove line break
       symp = ''.join(symp.split('入境已無症狀'))
       symp = ''.join(symp.split('#68 #69 #70 #73其中一人無症狀'))
+      symp = ''.join(symp.split('\n'))
+      symp = ''.join(symp.split('\r'))
       
       ## Mandarin word matching
       for value in value_list:
@@ -712,7 +736,7 @@ class CaseSheet(ccm.Template):
       symp = ''.join(symp.split('伴隨'))
       symp = ''.join(symp.split('不順'))
       symp = ''.join(symp.split('自覺'))
-      symp = symp.lstrip('  678/\n\r .，、與及有')
+      symp = symp.lstrip('  0123456789/\n\r .，、與及有')
       
       if len(symp) > 0:
         print('Symptom, Case %d, %s' % (i+1, symp))
@@ -727,65 +751,28 @@ class CaseSheet(ccm.Template):
   def getLink(self):
     link_list = []
     for i, link in enumerate(self.getCol(self.coltag_link)):
-      if link in [
-        '未知', '未知\n機場清潔', '未知\n機場', '未知\n物流', '未知\n高雄港', '未知\n桃園C', '未知\n新北A', '未知\n新北B', '未知\n新北C', '未知\n高雄A', '未知\n高雄B', '未知\n桃園B',
-        '未知\n日翊物流', '未知\n嘉義婚宴', '未知\n台北/新北B', '未知\n錢都涮涮鍋', '未知\n板橋涮涮鍋', '未知\n高雄砂石場', '未知\n米迪幼兒園', '未知\n跨縣市家庭', '未知\n機場手推車', 
-        '未知\n長榮鳳凰酒店', '未知\n農家樂小吃店', '未知\n嘉聯益電子廠', '未知\n專責病房病患', '未知\n觀音區幼兒園', 
-        '未知\n桃機清潔/歌友會', '未知\n錢都及加貝爾幼兒園', '未知\r\n錢都及加貝爾幼兒園', '未知\n高雄A\n高雄煉油廠', 
-        '未知\n台北/新北A\n板橋涮涮鍋', '未知\n設計師/房屋代銷/宗教團體', '未知\n新北C\n設計師/房屋代銷/宗教團體', 
-        '不明', '不明\n自助餐/旅遊團', 
-        '院內尚不明', '調查中', 
-      ]:
-        link_list.append('unlinked')
-        
+      if link != link:
+        link_list.append(np.nan)
+      
       elif link == '軍艦':
         link_list.append('fleet')
       
-      elif link != link:
-        link_list.append(np.nan)
-      
+      elif '未知' in link:
+        link_list.append('unlinked')
+      elif '不明' in link:
+        link_list.append('unlinked')
+      elif '調查中' in link:
+        link_list.append('unlinked')
+        
       elif 'O' in link:
         link_list.append('linked')
       elif 'o' in link:
         link_list.append('linked')
       elif '#' in link:
         link_list.append('linked')
-      elif '接觸' in link:
-        link_list.append('linked')
-      elif '群聚' in link:
-        link_list.append('linked')
-      elif '萬華' in link:
-        link_list.append('linked')
-      elif '金樽' in link:
-        link_list.append('linked')
-      elif '市場' in link:
-        link_list.append('linked')
-      elif '高血壓' in link:
-        link_list.append('linked')
-      elif '糖尿病' in link:
-        link_list.append('linked')
-      elif '林家小館' in link:
-        link_list.append('linked')
-      elif '長照機構' in link:
-        link_list.append('linked')
-      elif '美樂地KTV' in link:
-        link_list.append('linked')
-        
-      elif link in [
-        '家祭', '北農', '遠傳案', '京元電', 
-        '養護中心', '照護中心', '護理之家', '朝陽夜唱', '金沙酒店', '泰安附幼', 
-        '洗腎診所', '豐原家庭', '立揚鞋業', 
-        'B醫療機構', '銀河百家樂', '維納斯會館', '羅東遊藝場', '串門子餐廳', '彰化麻將團', 
-        '中國醫K歌團', '小姑娘小吃店', '快樂城小吃店', '桃園觀音工地', '台北農產公司', '三峽家庭羣聚',
-        '東方紅時尚會館', '梧棲區藥局家族', '新莊區家庭聚會', '加強型防疫旅館', '鳳山早餐店家族',
-        '國軍桃園總醫院', '桃園國軍總醫院', '台北家禽批發場', '北部幼兒園羣聚', '南澳雜貨店傳播鏈', 
-        '社中街攤販集中場', '錢都及加貝爾幼兒園', '北部幼兒園及社區羣聚','復興區公所員工家族案關係圖', 
-      ]:
-        link_list.append('linked')
-
+      
       else:
-        print('Link, Case %d, %s' % (i+1, link))
-        link_list.append(np.nan)
+        link_list.append('linked')
     return link_list
   
   def makeReadme_keyNb(self):
