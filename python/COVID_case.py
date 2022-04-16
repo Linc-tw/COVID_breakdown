@@ -2,7 +2,7 @@
     ################################
     ##  COVID_case.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.04                ##
+    ##  2022.04.16                ##
     ################################
 
 import os
@@ -1506,7 +1506,7 @@ class CaseSheet(ccm.Template):
   
   def saveCsv(self):
     self.saveCsv_keyNb()
-    self.saveCsv_caseCounts()
+    #self.saveCsv_caseCounts()
     self.saveCsv_caseByTransmission()
     self.saveCsv_caseByDetection()
     self.saveCsv_travHistSymptomCorr()

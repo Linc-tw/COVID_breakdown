@@ -2,7 +2,7 @@
     ################################
     ##  COVID_status.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.18                ##
+    ##  2022.04.16                ##
     ################################
 
 import os
@@ -39,9 +39,12 @@ class StatusSheet(ccm.Template):
     self.coltag_new_imported = '新增境外'
     self.coltag_cum_imported = '境外總人數'
     self.coltag_imported_frac = '境外率'
-    self.coltag_newLocal = '新增本土'
-    self.coltag_cumLocal = '本土總人數'
+    self.coltag_new_local = '新增本土'
+    self.coltag_cum_local = '本土總人數'
     self.coltag_local_frac = '本土率'
+    self.coltag_new_unclear = '新增不明'
+    self.coltag_cum_unclear = '不明總人數'
+    self.coltag_unclear_frac = '不明率'
     self.coltag_new_deaths = '新增死亡'
     self.coltag_cum_deaths = '死亡總人數'
     self.coltag_death_frac = '死亡率'
@@ -92,6 +95,18 @@ class StatusSheet(ccm.Template):
   def getCumCases(self):
     return self.getCol(self.coltag_cum_cases).astype(int)
     
+  def getNewSoldiers(self):
+    return self.getCol(self.coltag_new_soldiers).astype(int)
+    
+  def getNewImported(self):
+    return self.getCol(self.coltag_new_imported).astype(int)
+    
+  def getNewLocal(self):
+    return self.getCol(self.coltag_new_local).astype(int)
+    
+  def getNewUnclear(self):
+    return self.getCol(self.coltag_new_unclear).astype(int)
+    
   def getCumDeaths(self):
     return self.getCol(self.coltag_cum_deaths).astype(int)
     
@@ -104,6 +119,57 @@ class StatusSheet(ccm.Template):
   def getCumHospitalized(self):
     return self.getCol(self.coltag_cum_hosp).astype(int)
     
+  def makeReadme_caseCounts(self, page):
+    key = 'case_counts_by_report_day'
+    stock = []
+    stock.append('`%s.csv`' % key)
+    stock.append('- Row: report date')
+    stock.append('- Column')
+    stock.append('  - `date`')
+    stock.append('  - `total`: `imported` + `local` + `others`')
+    stock.append('  - `imported`: imported cases')
+    stock.append('  - `local`: local cases')
+    stock.append('  - `others`: on plane, on boat, & unknown')
+    stock.append('  - `total_avg`: 7-day moving average of `total`')
+    stock.append('  - `imported_avg`: 7-day moving average of `imported`')
+    stock.append('  - `local_avg`: 7-day moving average of `local`')
+    stock.append('  - `others_avg`: 7-day moving average of `others`')
+    ccm.README_DICT[page][key] = stock
+    return
+  
+  def saveCsv_caseCounts(self):
+    date_list = self.getDate()
+    new_soldiers_list = self.getNewSoldiers()
+    new_impored_list = self.getNewImported()
+    new_local_list = self.getNewLocal()
+    new_unclear_list = self.getNewUnclear()
+    
+    new_others_list = new_soldiers_list + new_unclear_list
+    new_cases_list = new_impored_list + new_local_list + new_others_list
+    
+    avg_cases_arr = ccm.makeMovingAverage(new_cases_list)
+    avg_impored_arr = ccm.makeMovingAverage(new_impored_list)
+    avg_local_arr = ccm.makeMovingAverage(new_local_list)
+    avg_others_arr = ccm.makeMovingAverage(new_others_list)
+    
+    stock = {
+      'date': date_list, 
+      'total': new_cases_list, 'imported': new_impored_list, 'local': new_local_list, 'others': new_others_list,
+      'total_avg': avg_cases_arr, 'imported_avg': avg_impored_arr, 'local_avg': avg_local_arr, 'others_avg': avg_others_arr,
+    }
+    stock = pd.DataFrame(stock)
+    stock = ccm.adjustDateRange(stock)
+    
+    for page in ccm.PAGE_LIST:
+      data = ccm.truncateStock(stock, page)
+      
+      ## Save
+      name = '%sprocessed_data/%s/case_counts_by_report_day.csv' % (ccm.DATA_PATH, page)
+      ccm.saveCsv(name, data)
+      
+      self.makeReadme_caseCounts(page)
+    return
+  
   def makeReadme_statusEvolution(self, page):
     key = 'status_evolution'
     stock = []
@@ -199,6 +265,26 @@ class StatusSheet(ccm.Template):
       self.makeReadme_hospitalizationOrIsolation(page)
     return
     
+  def updateNewCaseCounts(self, stock):
+    date_list = self.getDate()
+    new_soldiers_list = self.getNewSoldiers()
+    new_impored_list = self.getNewImported()
+    new_local_list = self.getNewLocal()
+    new_unclear_list = self.getNewUnclear()
+    
+    new_others_list = new_soldiers_list + new_unclear_list
+    new_cases_list = new_impored_list + new_local_list + new_others_list
+    
+    stock_tmp = {'date': date_list, 'new_cases': new_cases_list, 'new_imported': new_impored_list, 'new_local': new_local_list}
+    stock_tmp = pd.DataFrame(stock_tmp)
+    stock_tmp = ccm.adjustDateRange(stock_tmp)
+    
+    stock['date'] = stock_tmp['date'].values
+    stock['new_cases'] = stock_tmp['new_cases'].values
+    stock['new_imported'] = stock_tmp['new_imported'].values
+    stock['new_local'] = stock_tmp['new_local'].values
+    return
+    
   def updateCumCounts(self, stock):
     date_list = self.getDate()
     cum_deaths_list = self.getCumDeaths()
@@ -211,8 +297,9 @@ class StatusSheet(ccm.Template):
     stock['cum_cases'] = stock_tmp['cum_cases'].values
     stock['cum_deaths'] = stock_tmp['cum_deaths'].values
     return
-  
+
   def saveCsv(self):
+    self.saveCsv_caseCounts()
     self.saveCsv_statusEvolution()
     self.saveCsv_deathCounts()
     self.saveCsv_hospitalizationOrIsolation()

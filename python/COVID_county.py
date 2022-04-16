@@ -2,7 +2,7 @@
     ################################
     ##  COVID_county.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.18                ##
+    ##  2022.04.16                ##
     ################################
 
 import os
@@ -33,6 +33,7 @@ class CountySheet(ccm.Template):
     
     name = '%sraw_data/COVID-19_in_Taiwan_raw_data_county_age.csv' % ccm.DATA_PATH
     data = ccm.loadCsv(name, verbose=verbose)
+    ## https://od.cdc.gov.tw/eic/Day_Confirmation_Age_County_Gender_19CoV.csv
     
     self.data    = data
     self.n_total = data[self.coltag_nb_cases].astype(int).sum()
@@ -111,6 +112,8 @@ class CountySheet(ccm.Template):
     stock = ccm.initializeStock_dailyCounts(col_tag_list)
     
     ind_max = 0
+    
+    print(len(report_date_list), len(county_list), len(nb_cases_list))
     
     ## Loop over series
     for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):

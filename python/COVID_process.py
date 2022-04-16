@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.28                ##
+    ##  2022.04.16                ##
     ################################
 
 import os
@@ -28,9 +28,9 @@ import COVID_vaccination_county
 ################################################################################
 ## Functions - cross-sheet operations
 
-def makeIncidenceRates(case_sheet, border_sheet):
+def makeIncidenceRates(status_sheet, border_sheet):
   stock = {}
-  case_sheet.updateNewCaseCounts(stock)
+  status_sheet.updateNewCaseCounts(stock)
   border_sheet.updateNewEntryCounts(stock)
   
   ## Index to avoid division by zero
@@ -74,8 +74,8 @@ def makeReadme_incidenceRates(page):
   ccm.README_DICT[page][key] = stock
   return
   
-def saveCsv_incidenceRates(case_sheet, border_sheet):
-  stock = makeIncidenceRates(case_sheet, border_sheet)
+def saveCsv_incidenceRates(status_sheet, border_sheet):
+  stock = makeIncidenceRates(status_sheet, border_sheet)
   stock = pd.DataFrame(stock)
   
   for page in ccm.PAGE_LIST:
@@ -88,9 +88,9 @@ def saveCsv_incidenceRates(case_sheet, border_sheet):
     makeReadme_incidenceRates(page)
   return
   
-def makePositivityAndFatality(case_sheet, status_sheet, test_sheet):
+def makePositivityAndFatality(status_sheet, test_sheet):
   stock = {}
-  case_sheet.updateNewCaseCounts(stock)
+  status_sheet.updateNewCaseCounts(stock)
   status_sheet.updateCumCounts(stock)
   test_sheet.updateNewTestCounts(stock)
   
@@ -141,8 +141,8 @@ def makeReadme_positivityAndFatality(page):
   ccm.README_DICT[page][key] = stock
   return
   
-def saveCsv_positivityAndFatality(case_sheet, status_sheet, test_sheet):
-  stock = makePositivityAndFatality(case_sheet, status_sheet, test_sheet)
+def saveCsv_positivityAndFatality(status_sheet, test_sheet):
+  stock = makePositivityAndFatality(status_sheet, test_sheet)
   stock = pd.DataFrame(stock)
   
   for page in ccm.PAGE_LIST:
@@ -161,8 +161,8 @@ def saveCsv_positivityAndFatality(case_sheet, status_sheet, test_sheet):
 def sandbox():
   #ccm.initializeReadme()
   
-  case_sheet = COVID_case.CaseSheet()
-  link_list = case_sheet.getLink()
+  #case_sheet = COVID_case.CaseSheet()
+  #link_list = case_sheet.getLink()
   
   #status_sheet = COVID_status.StatusSheet()
   #date = status_sheet.getDate()
@@ -176,8 +176,8 @@ def sandbox():
   #timeline_sheet = COVID_timeline.TimelineSheet()
   #timeline_sheet.saveCsv_evtTimeline()
   
-  #county_sheet = COVID_county.CountySheet()
-  #county_sheet.saveCsv_localCasePerCounty()
+  county_sheet = COVID_county.CountySheet()
+  county_sheet.saveCsv_localCasePerCounty()
   
   #vacc_sheet = COVID_vaccination.VaccinationSheet()
   #vacc_sheet.saveCsv_vaccinationByDose()
@@ -189,8 +189,8 @@ def sandbox():
   #status_sheet = COVID_status.StatusSheet()
   #test_sheet = COVID_test.TestSheet()
   #border_sheet = COVID_border.BorderSheet()
-  #saveCsv_incidenceRates(case_sheet, border_sheet)
-  #saveCsv_positivityAndFatality(case_sheet, status_sheet, test_sheet)
+  #saveCsv_incidenceRates(status_sheet, border_sheet)
+  #saveCsv_positivityAndFatality(status_sheet, test_sheet)
   return
 
 ################################################################################
@@ -232,8 +232,8 @@ def saveCsv_all():
   #vacc_county_sheet.saveCsv_vaccinationByCounty()
   
   print()
-  saveCsv_incidenceRates(case_sheet, border_sheet)
-  saveCsv_positivityAndFatality(case_sheet, status_sheet, test_sheet)
+  saveCsv_incidenceRates(status_sheet, border_sheet)
+  saveCsv_positivityAndFatality(status_sheet, test_sheet)
   
   print()
   ccm.saveMarkdown_readme()
