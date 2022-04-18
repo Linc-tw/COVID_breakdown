@@ -555,9 +555,10 @@ DELIVERY_LIST = [
   ['Moderna',   'Moderna', 1404200, '2022-02-15', '2022-02-24', 'https://www.cna.com.tw/news/firstnews/202202150139.aspx', ''],
   
   ## 2022/03
-  ['Moderna',   'Moderna', 1224600, '2022-02-28',           '', 'https://www.cna.com.tw/news/firstnews/202202280014.aspx', ''], 
+  ['Moderna',   'Moderna', 1224000, '2022-02-28', '2022-03-09', 'https://www.cna.com.tw/news/firstnews/202202280014.aspx', ''], 
+  ['Medigen',   'Medigen',   95783,           '', '2022-03-18',                                                        '', ''],
   
-  
+  ## 2022/04
   #['',   '', , '2022-02-',           '', '', ''],
   #['',   '', , '2022-02-',           '', '', ''],
   #['',   '', , '2022-02-',           '', '', ''],
@@ -578,6 +579,9 @@ QC_REF_DICT = {
   
   '2022-01': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637801671490971778',
   '2022-02': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637818952165220271',
+  '2022-03': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637848437072514591',
+  '2022-04': '',
+  '2022-05': '',
 }
 
 ################################################################################
