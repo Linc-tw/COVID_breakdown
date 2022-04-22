@@ -1226,7 +1226,7 @@ function GP_PlotHotMap(wrap) {
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central')
       .style('fill', function (d) {if (d.value<0.5*wrap.value_max) return '#000000'; return '#FFFFFF';})
-      .style('font-size', '0.9rem')
+      .style('font-size', function (d) {if (d.value.toFixed(0)<100) return '0.9rem'; return '0.75rem';})
       .text(function (d) {if (d.value<0.5001) return ''; return d.value.toFixed(0);});
 }
 
