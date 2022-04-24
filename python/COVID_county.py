@@ -113,8 +113,6 @@ class CountySheet(ccm.Template):
     
     ind_max = 0
     
-    print(len(report_date_list), len(county_list), len(nb_cases_list))
-    
     ## Loop over series
     for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):
       if 'unknown' == county:

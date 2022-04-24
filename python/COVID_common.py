@@ -2,7 +2,7 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.16                ##
+    ##  2022.04.23                ##
     ################################
 
 import os
@@ -559,10 +559,13 @@ DELIVERY_LIST = [
   ['Medigen',   'Medigen',   95783,           '', '2022-03-18',                                                        '', ''],
   
   ## 2022/04
-  #['',   '', , '2022-02-',           '', '', ''],
-  #['',   '', , '2022-02-',           '', '', ''],
-  #['',   '', , '2022-02-',           '', '', ''],
-  #['',   '', , '2022-02-',           '', '', ''],
+  ['Moderna',   'Moderna',  204000, '2022-04-23',           '', 'https://www.cna.com.tw/news/firstnews/202204230163.aspx', ''],
+  
+  ## 2022/05
+  ## 2022/06
+  #['',   '', , '2022-05-',           '', '', ''],
+  #['',   '', , '2022-05-',           '', '', ''],
+  #['',   '', , '2022-05-',           '', '', ''],
 ]
 
 QC_REF_DICT = {
@@ -595,13 +598,13 @@ README_DICT = {}
 def loadCsv(name, verbose=True, **kwargs):
   data = pd.read_csv(name, dtype=object, skipinitialspace=True, **kwargs)
   if verbose:
-    print('Loaded \"%s\"' % name)
+    print('Loaded \"{}\"'.format(name))
   return data
 
 def saveCsv(name, data, verbose=True):
   data.to_csv(name, index=False)
   if verbose:
-    print('Saved \"%s\"' % name)
+    print('Saved \"{}\"'.format(name))
   return
 
 def loadJson(name, verbose=True):
@@ -609,7 +612,7 @@ def loadJson(name, verbose=True):
   data = json.load(file_)
   file_.close()
   if verbose:
-    print('Loaded \"%s\"' % name)
+    print('Loaded \"{}\"'.format(name))
   return data
 
 ################################################################################
@@ -690,8 +693,12 @@ def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
 
 def sevenDayMovingAverage(value_arr):
   value_arr = np.array(value_arr, dtype=float)
+  ind = np.isnan(value_arr)
+  value_arr[ind] = 0.0
+  
   kernel = [1/7] * 7 + [0.0] * 6 ## Mean
   value_arr = signal.convolve(value_arr, kernel[::-1], mode='same')
+  value_arr[ind] = np.nan
   return value_arr
 
 def itpFromCumul(begin, end, length):
@@ -865,7 +872,7 @@ def initializeReadme_root():
   
   stock = []
   key = 'adminMap_byCounties_offsetIslands_sphe'
-  stock.append('`%s.geojson`' % key)
+  stock.append('`{}.geojson`'.format(key))
   stock.append('- Map of Taiwan with its islands rearranged')
   stock.append('- Contain non-ASCII characters')
   README_DICT[page][key] = stock
@@ -873,7 +880,7 @@ def initializeReadme_root():
 
 def initializeReadme_page(page):
   stock = []
-  stock.append('processed_data/%s/' % page)
+  stock.append('processed_data/{}/'.format(page))
   stock.append('================' + '='*len(page) + '')
   stock.append('')
   
@@ -883,7 +890,7 @@ def initializeReadme_page(page):
   stock.append('')
   ## new_year_token
   dict_ = {PAGE_LATEST: 'last 90 days', PAGE_OVERALL: 'the entire pandemic', PAGE_2022: PAGE_2022, PAGE_2021: PAGE_2021, PAGE_2020: PAGE_2020}
-  stock.append('This folder hosts data files which summarize COVID statistics in Taiwan during %s.' % dict_[page])
+  stock.append('This folder hosts data files which summarize COVID statistics in Taiwan during {}.'.format(dict_[page]))
   stock.append('')
   
   stock.append('')
@@ -910,20 +917,20 @@ def saveMarkdown_readme(verbose=True):
     if page == 'root':
       page = ''
     
-    name = '%sprocessed_data/%s/README.md' % (DATA_PATH, page)
+    name = '{}processed_data/{}/README.md'.format(DATA_PATH, page)
     f = open(name, 'w')
     
     ## Print header
     str_ = '\n'.join(hdr)
-    f.write('%s' % str_)
+    f.write(str_)
     
     for row_list in sect_dict.values():
       str_ = '\n'.join(row_list)
-      f.write('\n%s\n' % str_)
+      f.write('\n{}\n'.format(str_))
     f.close()
     
     if verbose:
-      print('Saved \"%s\"' % name)
+      print('Saved \"{}\"'.format(name))
   return
 
 ################################################################################

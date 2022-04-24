@@ -2,7 +2,7 @@
     ################################
     ##  COVID_case.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.16                ##
+    ##  2022.04.23                ##
     ################################
 
 import os
@@ -49,12 +49,13 @@ class CaseSheet(ccm.Template):
     ## new_year_token
     self.n_total = 0
     self.n_latest = 0
+    self.n_2023 = 0
     self.n_2022 = 0
     self.n_2021 = 0
     self.n_2020 = 0
     self.n_empty = 0
     
-    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv' % ccm.DATA_PATH
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
     
     case_nb_list = data[self.coltag_case].values
@@ -65,12 +66,13 @@ class CaseSheet(ccm.Template):
     
     if verbose:
       ## new_year_token
-      print('N_total = %d' % self.n_total)
-      print('N_latest = %d' % self.n_latest)
-      print('N_2022 = %d' % self.n_2022)
-      print('N_2021 = %d' % self.n_2021)
-      print('N_2020 = %d' % self.n_2020)
-      print('N_empty = %d' % self.n_empty)
+      print('N_total = {:d}'.format(self.n_total))
+      print('N_latest = {:d}'.format(self.n_latest))
+      print('N_2023 = {:d}'.format(self.n_2023))
+      print('N_2022 = {:d}'.format(self.n_2022))
+      print('N_2021 = {:d}'.format(self.n_2021))
+      print('N_2020 = {:d}'.format(self.n_2020))
+      print('N_empty = {:d}'.format(self.n_empty))
     return 
     
   def setCaseCounts(self):
@@ -113,7 +115,7 @@ class CaseSheet(ccm.Template):
       m = int(mdday_zh[0])
       dday_zh = mdday_zh[1].split('日')
       d = int(dday_zh[0])
-      report_date = '%04d-%02d-%02d' % (y, m, d)
+      report_date = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
       report_date_list.append(report_date)
         
     return report_date_list
@@ -161,7 +163,7 @@ class CaseSheet(ccm.Template):
       elif age != age:
         age_list.append(np.nan)
       else:
-        print('Age, Case %d, %s' % (i+1, age))
+        print('Age, Case {:d}, {}'.format(i+1, age))
         age_list.append(np.nan)
     return age_list
   
@@ -188,7 +190,7 @@ class CaseSheet(ccm.Template):
         trans_list.append('unknown')
       
       else:
-        print('Transmission, Case %d, %s' % (i+1, trans))
+        print('Transmission, Case {:d}, {}'.format(i+1, trans))
         trans_list.append(np.nan)
         
     return trans_list
@@ -400,7 +402,7 @@ class CaseSheet(ccm.Template):
       
       ## Complain if unrecognized texts remain
       if len(trav_hist) > 0:
-        print('Travel history, Case %d, %s' % (i+1, trav_hist))
+        print('Travel history, Case {:d}, {}'.format(i+1, trav_hist))
       
       ## If no travel history but imported, add nationality (only for i >= 460)
       if i >= 460 and len(stock) == 0:
@@ -476,10 +478,10 @@ class CaseSheet(ccm.Template):
           elif '2022/1/7' == entry_date:
             entry_date = '2022-01-07'
           else:
-            entry_date = '%04d-%02d-%02d' % (y, m, d)
+            entry_date = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
           entry_date_list.append(entry_date)
         except:
-          print('Entry date, Case %d, %s' % (i+1, entry_date))
+          print('Entry date, Case {:d}, {}'.format(i+1, entry_date))
           entry_date_list.append(np.nan)
     
     return entry_date_list
@@ -544,12 +546,14 @@ class CaseSheet(ccm.Template):
             y = 2020
           elif i+1 < 14000:
             y = 2021
-          else:
+          elif i+1 < 20000 and m > 6:
             y = 2021
-          onset_date = '%04d-%02d-%02d' % (y, m, d)
+          else:
+            y = 2022
+          onset_date = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
           onset_date_list.append(onset_date)
         except:
-          print('Onset date, Case %d, %s' % (i+1, onset_date))
+          print('Onset date, Case {:d}, {}'.format(i+1, onset_date))
           onset_date_list.append(np.nan)
     
     return onset_date_list
@@ -617,21 +621,24 @@ class CaseSheet(ccm.Template):
         channel_list.append('overseas')
         
       else:
-        print('Channel, Case %d, %s' % (i+1, channel))
+        print('Channel, Case {:d}, {}'.format(i+1, channel))
         channel_list.append(np.nan)
     return channel_list
   
   def getSymptom(self):
     key_dict = {
-      'sneezing': ['鼻子症狀像感冒', '伴隨感冒症狀', '類似感冒症狀', '感冒症狀', '鼻涕倒流', '鼻子不適', '打噴嚏', '流鼻水', '流鼻涕', '鼻塞', '鼻水', '鼻炎', '感冒'],
+      'sneezing': [
+        '鼻子症狀像感冒', '伴隨感冒症狀', '類似感冒症狀', '感冒症狀', '鼻涕倒流', '鼻子不適', '流鼻涕症', 
+        '打噴嚏', '流鼻水', '流鼻涕', '鼻塞', '鼻水', '鼻炎', '感冒',
+      ],
       'cough': [
         '乾咳及稍有痰', '輕微咳嗽', '咳嗽症狀', '咳嗽加劇', '咳嗽併痰', '咳嗽有痰', '痰有血絲', '喉嚨有痰', '有點咳嗽', '偶爾咳嗽', '偶有咳嗽', 
-        '少量痰', '咳嗽', '乾咳', '輕咳', '微咳', '微痰', '有痰', '痰多', '痰'
+        '少量痰', '咳嗽', '乾咳', '輕咳', '微咳', '咳痰', '微痰', '有痰', '痰多', '痰'
       ],
       'throatache': [
         '上呼吸道相關症狀', '上呼吸道症狀', '上呼吸道感染', '上呼吸道腫痛', '喉嚨有異物感', '喉嚨乾澀想咳', 
         '呼吸道症狀', '喉嚨刺激感', '喉嚨有異狀', '上呼吸道', '咽喉不適', '急性咽炎', '聲音沙啞', '口乾舌燥', '吞嚥困難', 
-        '喉嚨不適', '喉嚨痛癢', '喉嚨乾癢', '喉嚨異狀', '喉嚨乾痛', '喉嚨紅腫', '喉嚨癢痛', '喉嚨痛 癢', 
+        '喉嚨不適', '喉嚨痛癢', '喉嚨乾癢', '喉嚨異狀', '喉嚨異常', '喉嚨乾痛', '喉嚨紅腫', '喉嚨癢痛', '喉嚨痛 癢', 
         '異物感', '樓龍痛', '呼吸道', '呼吸痛', '咽喉痛', '鼻子乾', '喉嚨痛', '喉嚨癢', '喉嚨腫', '喉嚨乾', '喉嚨卡', 
         '沙啞', '乾嘔', '口渴', '口乾', '喉嚨', '嚨痛', 
       ],
@@ -658,7 +665,7 @@ class CaseSheet(ccm.Template):
       'chest pain+backache': ['胸背痛'], 
       'chest pain': ['呼吸時胸痛', '心臟不舒服', '胸部不適', '胸口悶', '胸痛', '胸悶', '心悸'],
       'stomachache': ['腸胃不舒服', '腸胃道不適', '腸胃不適', '胃部不適', '腹部不適', '肚子不適', '肚子痛', '腹悶痛', '下腹痛', '胃痛', '腹痛', '胃脹', '腹脹'],
-      'backache': ['腰酸背痛', '腰痠背痛', '背部痠痛', '腰痠', '腰痛', '背痛'], 
+      'backache': ['腰酸背痛', '腰痠背痛', '背部痠痛', '腰痠', '腰酸', '腰痛', '背痛'], 
       'toothache': ['牙痛'], 
       'dermatitis': ['皮膚痛', '過敏', '出疹'],
       
@@ -744,8 +751,8 @@ class CaseSheet(ccm.Template):
       symp = symp.lstrip('  0123456789/\n\r .，、與及有')
       
       if len(symp) > 0:
-        print('Symptom, Case %d, %s' % (i+1, symp))
-        print('Symptom, Case %d, %s' % (i+1, symp_orig))
+        print('Symptom, Case {:d}, {}'.format(i+1, symp))
+        print('Symptom, Case {:d}, {}'.format(i+1, symp_orig))
       
       stock = list(set(stock))
       symp_list.append(stock)
@@ -783,7 +790,7 @@ class CaseSheet(ccm.Template):
   def makeReadme_keyNb(self):
     key = 'key_numbers'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row')
     stock.append('  - `n_total`: total confirmed case counts')
     stock.append('  - `n_latest`: number of confirmed cases during last 90 days')
@@ -814,7 +821,7 @@ class CaseSheet(ccm.Template):
     data = {'key': key, 'value': value}
     data = pd.DataFrame(data)
     
-    name = '%sprocessed_data/key_numbers.csv' % ccm.DATA_PATH
+    name = '{}processed_data/key_numbers.csv'.format(ccm.DATA_PATH)
     ccm.saveCsv(name, data)
     
     self.makeReadme_keyNb()
@@ -855,7 +862,7 @@ class CaseSheet(ccm.Template):
   def makeReadme_caseCounts(self, page):
     key = 'case_counts_by_report_day'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -880,7 +887,7 @@ class CaseSheet(ccm.Template):
       data = ccm.truncateStock(stock, page)
       
       ## Save
-      name = '%sprocessed_data/%s/case_counts_by_report_day.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/case_counts_by_report_day.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_caseCounts(page)
@@ -932,7 +939,7 @@ class CaseSheet(ccm.Template):
   def makeReadme_caseByTransmission(self, page):
     key = 'case_by_transmission_by_report_day'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -946,7 +953,7 @@ class CaseSheet(ccm.Template):
     
     key = 'case_by_transmission_by_onset_day'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: onset date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -974,9 +981,9 @@ class CaseSheet(ccm.Template):
       data_o = ccm.truncateStock(stock_o, page)
       
       ## Save
-      name = '%sprocessed_data/%s/case_by_transmission_by_report_day.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/case_by_transmission_by_report_day.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_r)
-      name = '%sprocessed_data/%s/case_by_transmission_by_onset_day.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/case_by_transmission_by_onset_day.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_o)
       
       self.makeReadme_caseByTransmission(page)
@@ -1025,7 +1032,7 @@ class CaseSheet(ccm.Template):
   def makeReadme_caseByDetection(self, page):
     key = 'case_by_detection_by_report_day'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -1040,7 +1047,7 @@ class CaseSheet(ccm.Template):
     
     key = 'case_by_detection_by_onset_day'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: onset date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -1071,9 +1078,9 @@ class CaseSheet(ccm.Template):
       data_o = ccm.truncateStock(stock_o, page)
       
       ## Save
-      name = '%sprocessed_data/%s/case_by_detection_by_report_day.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/case_by_detection_by_report_day.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_r)
-      name = '%sprocessed_data/%s/case_by_detection_by_onset_day.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/case_by_detection_by_onset_day.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_o)
       
       self.makeReadme_caseByDetection(page)
@@ -1161,7 +1168,7 @@ class CaseSheet(ccm.Template):
   def makeReadme_travHistSymptomCorr(self, page):
     key = 'travel_history_symptom_correlations'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: matrix element')
     stock.append('- Column')
     stock.append('  - `symptom`')
@@ -1172,7 +1179,7 @@ class CaseSheet(ccm.Template):
     
     key = 'travel_history_symptom_correlations_label'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: symptom or travel history')
     stock.append('- Column')
     stock.append('  - `key`')
@@ -1229,9 +1236,9 @@ class CaseSheet(ccm.Template):
       data_l = pd.DataFrame(data_l)
       
       ## Save
-      name = '%sprocessed_data/%s/travel_history_symptom_correlations.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/travel_history_symptom_correlations.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_c)
-      name = '%sprocessed_data/%s/travel_history_symptom_correlations_label.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/travel_history_symptom_correlations_label.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_l)
       
       self.makeReadme_travHistSymptomCorr(page)
@@ -1315,7 +1322,7 @@ class CaseSheet(ccm.Template):
   def makeReadme_ageSymptomCorr(self, page):
     key = 'age_symptom_correlations'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: matrix element')
     stock.append('- Column')
     stock.append('  - `symptom`')
@@ -1326,7 +1333,7 @@ class CaseSheet(ccm.Template):
     
     key = 'age_symptom_correlations_label'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: symptom or age range')
     stock.append('- Column')
     stock.append('  - `key`')
@@ -1383,9 +1390,9 @@ class CaseSheet(ccm.Template):
       data_l = pd.DataFrame(data_l)
       
       ## Save
-      name = '%sprocessed_data/%s/age_symptom_correlations.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/age_symptom_correlations.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_c)
-      name = '%sprocessed_data/%s/age_symptom_correlations_label.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/age_symptom_correlations_label.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_l)
       
       self.makeReadme_ageSymptomCorr(page)
@@ -1427,7 +1434,7 @@ class CaseSheet(ccm.Template):
   def makeReadme_diffByTransmission(self, page):
     key = 'difference_by_transmission' 
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: delay in number of days before identifying a transmission')
     stock.append('  - For local cases, it is defined as the delay between the report date & the onset date.')
     stock.append('  - For imported cases, it is defined as the delay between the report date & the later one of the onset date & the entry date.')
@@ -1469,7 +1476,7 @@ class CaseSheet(ccm.Template):
       data = {'difference': ctr_bins, 'total': n_tot, 'imported': n_imp, 'local': n_local, 'others': n_other}
       data = pd.DataFrame(data)
       
-      name = '%sprocessed_data/%s/difference_by_transmission.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/difference_by_transmission.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_diffByTransmission(page)
@@ -1498,7 +1505,7 @@ class CaseSheet(ccm.Template):
       
       ind = ccm.ISODateToOrd(report_date) - ord_ref
       if ind < 0 or ind >= nb_days:
-        print('Bad ind_r = %d' % ind)
+        print('Bad ind_r = {:d}'.format(ind))
         continue
       
       stock['new_cases'][ind] += 1

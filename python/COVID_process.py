@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.16                ##
+    ##  2022.04.23                ##
     ################################
 
 import os
@@ -110,7 +110,7 @@ def makePositivityAndFatality(status_sheet, test_sheet):
       value_arr = ccm.sevenDayMovingAverage(value_arr)
     
     ## Push back
-    stock[key] = ccm.sevenDayMovingAverage(value_arr) 
+    stock[key] = value_arr
   
   stock_new = {}
   stock_new['date'] = stock['date']
