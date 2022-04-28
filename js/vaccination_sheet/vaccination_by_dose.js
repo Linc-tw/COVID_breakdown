@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_dose.js    --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.13                --//
+    //--  2022.04.28                --//
     //--------------------------------//
 
 function VBD_InitFig(wrap) {
@@ -78,9 +78,8 @@ function VBD_FormatData(wrap, data) {
       
       y_list.push(y);
     }
-    y_list.push(0); //-- Additional 0 as lower bound
     
-    y_list_list.push(y_list) //-- `y_list` contains `nb_col` + 1 values
+    y_list_list.push(y_list) //-- `y_list` contains `nb_col` values
   }
   
   //-- Main loop over column
@@ -96,8 +95,7 @@ function VBD_FormatData(wrap, data) {
       //-- Make data block; redundant information is for toolpix text
       block = {
         'x': data[i]['date'],
-        'y0': y_list[j+1], //-- Lower bound
-        'y': y_list[j], //-- Upper bound
+        'y': y_list[j],
         'y_list': y_list
       };
       
@@ -127,7 +125,7 @@ function VBD_FormatData(wrap, data) {
   //-- Generate yticks
   var ytick = [];
   for (i=0; i<y_max; i+=y_path) 
-    ytick.push(i)
+    ytick.push(i);
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
@@ -140,7 +138,8 @@ function VBD_FormatData(wrap, data) {
 }
 
 function VBD_FormatData2(wrap, data2) {
-  //-- Not optional
+  //-- Do not change these
+  //-- Since there are holes of date in data, we need these twigs.
   
   var i;
   for (i=0; i<data2.length; i++) {
@@ -155,6 +154,19 @@ function VBD_FormatData2(wrap, data2) {
     nb_days = 90;
     wrap.iso_begin = GP_ISODateAddition(wrap.timestamp.slice(0, 10), -nb_days+1);
     r = GP_GetRForTickPos(wrap, nb_days);
+    
+    //-- Add extrapolated point at left
+    if (wrap.iso_begin != wrap.formatted_data[0][0].x) {
+      for (i=0; i<wrap.formatted_data.length; i++) {
+        var block0 = wrap.formatted_data[i][0];
+        var block1 = wrap.formatted_data[i][1];
+        var block = {
+          'x': wrap.iso_begin,
+          'y': 2*block0.y - block1.y,
+        };
+        wrap.formatted_data[i] = [block].concat(wrap.formatted_data[i]);
+      }
+    }
   }
   else if (wrap.tag.includes('overall')) {
     wrap.iso_begin = GP_wrap.iso_ref_vacc;
@@ -245,6 +257,11 @@ function VBD_Plot(wrap) {
   
   //-- Plot line
   GP_PlotLine(wrap);
+  
+  //-- Remove extrapolated point
+  var i;
+  for (i=0; i<wrap.formatted_data.length; i++)
+    wrap.formatted_data[i] = wrap.formatted_data[i].slice(1);
   
   //-- Plot dot
   GP_PlotDot(wrap);
