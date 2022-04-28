@@ -2,7 +2,7 @@
     ################################
     ##  COVID_status.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.16                ##
+    ##  2022.04.25                ##
     ################################
 
 import os
@@ -57,7 +57,7 @@ class StatusSheet(ccm.Template):
     self.coltag_cum_hosp = '未解除隔離數'
     self.coltag_notes = '備註'
     
-    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_status_evolution.csv' % ccm.DATA_PATH
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_status_evolution.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
     
     date_list = data[self.coltag_date].values
@@ -70,7 +70,7 @@ class StatusSheet(ccm.Template):
     self.n_total = ind.sum()
     
     if verbose:
-      print('N_total = %d' % self.n_total)
+      print('N_total = {:d}'.format(self.n_total))
     return 
   
   def getDate(self):
@@ -88,7 +88,7 @@ class StatusSheet(ccm.Template):
       m = int(mmdd_zh[0])
       dd_zh = mmdd_zh[1].split('日')
       d = int(dd_zh[0])
-      date = '%04d-%02d-%02d' % (y, m, d)
+      date = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
       date_list.append(date)
     return date_list
     
@@ -122,7 +122,7 @@ class StatusSheet(ccm.Template):
   def makeReadme_caseCounts(self, page):
     key = 'case_counts_by_report_day'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -164,7 +164,7 @@ class StatusSheet(ccm.Template):
       data = ccm.truncateStock(stock, page)
       
       ## Save
-      name = '%sprocessed_data/%s/case_counts_by_report_day.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/case_counts_by_report_day.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_caseCounts(page)
@@ -173,7 +173,7 @@ class StatusSheet(ccm.Template):
   def makeReadme_statusEvolution(self, page):
     key = 'status_evolution'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -197,7 +197,7 @@ class StatusSheet(ccm.Template):
       data = ccm.truncateStock(stock, page)
       
       ## Save
-      name = '%sprocessed_data/%s/status_evolution.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/status_evolution.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_statusEvolution(page)
@@ -206,7 +206,7 @@ class StatusSheet(ccm.Template):
   def makeReadme_deathCounts(self, page):
     key = 'death_counts'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -230,7 +230,7 @@ class StatusSheet(ccm.Template):
       data = ccm.truncateStock(stock, page)
       
       ## Save
-      name = '%sprocessed_data/%s/death_counts.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_deathCounts(page)
@@ -239,7 +239,7 @@ class StatusSheet(ccm.Template):
   def makeReadme_hospitalizationOrIsolation(self, page):
     key = 'hospitalization_or_isolation'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -259,7 +259,7 @@ class StatusSheet(ccm.Template):
       data = ccm.truncateStock(stock, page)
       
       ## Save
-      name = '%sprocessed_data/%s/hospitalization_or_isolation.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/hospitalization_or_isolation.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_hospitalizationOrIsolation(page)

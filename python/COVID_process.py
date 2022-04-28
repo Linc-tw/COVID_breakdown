@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.23                ##
+    ##  2022.04.25                ##
     ################################
 
 import os
@@ -65,7 +65,7 @@ def makeIncidenceRates(status_sheet, border_sheet):
 def makeReadme_incidenceRates(page):
   key = 'incidence_rates'
   stock = []
-  stock.append('`%s.csv`' % key)
+  stock.append('`{}.csv`'.format(key))
   stock.append('- Row: date')
   stock.append('- Column')
   stock.append('  - `date`')
@@ -82,7 +82,7 @@ def saveCsv_incidenceRates(status_sheet, border_sheet):
     data = ccm.truncateStock(stock, page)
     
     ## Save
-    name = '%sprocessed_data/%s/incidence_rates.csv' % (ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/incidence_rates.csv'.format(ccm.DATA_PATH, page)
     ccm.saveCsv(name, data)
     
     makeReadme_incidenceRates(page)
@@ -132,7 +132,7 @@ def makePositivityAndFatality(status_sheet, test_sheet):
 def makeReadme_positivityAndFatality(page):
   key = 'positivity_and_fatality'
   stock = []
-  stock.append('`%s.csv`' % key)
+  stock.append('`{}.csv`'.format(key))
   stock.append('- Row: date')
   stock.append('- Column')
   stock.append('  - `date`')
@@ -149,7 +149,7 @@ def saveCsv_positivityAndFatality(status_sheet, test_sheet):
     data = ccm.truncateStock(stock, page)
     
     ## Save
-    name = '%sprocessed_data/%s/positivity_and_fatality.csv' % (ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/positivity_and_fatality.csv'.format(ccm.DATA_PATH, page)
     ccm.saveCsv(name, data)
     
     makeReadme_positivityAndFatality(page)
@@ -176,11 +176,11 @@ def sandbox():
   #timeline_sheet = COVID_timeline.TimelineSheet()
   #timeline_sheet.saveCsv_evtTimeline()
   
-  county_sheet = COVID_county.CountySheet()
-  county_sheet.saveCsv_localCasePerCounty()
+  #county_sheet = COVID_county.CountySheet()
+  #county_sheet.saveCsv_localCasePerCounty()
   
-  #vacc_sheet = COVID_vaccination.VaccinationSheet()
-  #vacc_sheet.saveCsv_vaccinationByDose()
+  vacc_sheet = COVID_vaccination.VaccinationSheet()
+  vacc_sheet.saveCsv_vaccinationByDose()
   
   #vacc_county_sheet = COVID_vaccination_county.VaccinationCountySheet()
   #vacc_county_sheet.saveCsv_vaccinationByCounty()

@@ -2,7 +2,7 @@
     ################################
     ##  COVID_vaccination.py      ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.18                ##
+    ##  2022.04.25                ##
     ################################
 
 import os
@@ -22,7 +22,7 @@ import COVID_common as ccm
 class VaccinationSheet(ccm.Template):
   
   def __init__(self, verbose=True):
-    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_vaccination.json' % ccm.DATA_PATH
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination.json'.format(ccm.DATA_PATH)
     data = ccm.loadJson(name, verbose=verbose)
     ## https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_manufacture_v1&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTY0MDgxOTQ1Mg==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=varchar&d[]=NO&c[]=a02&t[]=date&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=NO&c[]=a05&t[]=int&d[]=NO&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=int&d[]=NO
     ## Old: https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_city_can3_c&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYyOTg2Mzk2Ng==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=date&d[]=NO&c[]=a02&t[]=varchar&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=YES&c[]=a05&t[]=int&d[]=YES&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=decimal&d[]=NO
@@ -43,7 +43,7 @@ class VaccinationSheet(ccm.Template):
     self.n_total = len(set(self.getDate()))
     
     if verbose:
-      print('N_total = %d' % self.n_total)
+      print('N_total = {:d}'.format(self.n_total))
     return
   
   def __str__(self):
@@ -63,7 +63,7 @@ class VaccinationSheet(ccm.Template):
       try:
         brand_list.append(ccm.BRAND_DICT[brand])
       except KeyError:
-        print('Brand, %s' % brand)
+        print('Brand, {}'.format(brand))
         brand_list.append('unknown')
     return brand_list
   
@@ -145,7 +145,7 @@ class VaccinationSheet(ccm.Template):
   def makeReadme_vaccinationByBrand(self, page):
     key = 'vaccination_by_brand'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -190,7 +190,7 @@ class VaccinationSheet(ccm.Template):
         data = data[ind:]
         
       ## Save
-      name = '%sprocessed_data/%s/vaccination_by_brand.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/vaccination_by_brand.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_vaccinationByBrand(page)
@@ -274,10 +274,10 @@ class VaccinationSheet(ccm.Template):
   def makeReadme_vaccinationProgress(self, page):
     key = 'vaccination_progress_supplies'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: available date')
     stock.append('- Column')
-    stock.append('  - `index`: day difference from %s' % ccm.ISO_DATE_REF)
+    stock.append('  - `index`: day difference from {}'.format(ccm.ISO_DATE_REF))
     stock.append('  - `date`: available date of the supply')
     stock.append('    - If the available date is not available, the date is estimated as the delivery date plus 8 days')
     stock.append('  - `source`: origin of the supply')
@@ -290,10 +290,10 @@ class VaccinationSheet(ccm.Template):
     
     key = 'vaccination_progress_injections'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row = report date')
     stock.append('- Column')
-    stock.append('  - `index`: day difference from %s' % ccm.ISO_DATE_REF)
+    stock.append('  - `index`: day difference from {}'.format(ccm.ISO_DATE_REF))
     stock.append('  - `date`')
     stock.append('  - `total`: all brands, cumulative number of doses')
     stock.append('  - `AZ`')
@@ -329,9 +329,9 @@ class VaccinationSheet(ccm.Template):
       ind_arr = (stock_i['index'] == -1) | (stock_i['index'] >= ind)
       data_i = stock_i[ind_arr]
       
-      name = '%sprocessed_data/%s/vaccination_progress_supplies.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/vaccination_progress_supplies.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_s)
-      name = '%sprocessed_data/%s/vaccination_progress_injections.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/vaccination_progress_injections.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_i)
       
       self.makeReadme_vaccinationProgress(page)
@@ -361,7 +361,7 @@ class VaccinationSheet(ccm.Template):
   def makeReadme_vaccinationDeliveries(self, page):
     key = 'vaccination_deliveries_list'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: deliveries')
     stock.append('- Column')
     stock.append('  - `brand`')
@@ -378,7 +378,7 @@ class VaccinationSheet(ccm.Template):
     
     key = 'vaccination_deliveries_reference'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row = month')
     stock.append('- Column')
     stock.append('  - `month`')
@@ -396,9 +396,9 @@ class VaccinationSheet(ccm.Template):
       if page != ccm.PAGE_OVERALL:
         continue
       
-      name = '%sprocessed_data/%s/vaccination_deliveries_list.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/vaccination_deliveries_list.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, stock_d)
-      name = '%sprocessed_data/%s/vaccination_deliveries_reference.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/vaccination_deliveries_reference.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, stock_r)
       
       self.makeReadme_vaccinationProgress(page)
@@ -447,10 +447,10 @@ class VaccinationSheet(ccm.Template):
   def makeReadme_vaccinationByDose(self, page):
     key = 'vaccination_by_dose'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
-    stock.append('  - `index`: day difference from %s' % ccm.ISO_DATE_REF)
+    stock.append('  - `index`: day difference from {}'.format(ccm.ISO_DATE_REF))
     stock.append('  - `date`')
     stock.append('  - `ppl_vacc_rate`: proportion of the population vaccinated with their 1st dose')
     stock.append('  - `ppl_fully_vacc_rate`: proportion of the population fully vaccinated')
@@ -468,18 +468,23 @@ class VaccinationSheet(ccm.Template):
       
       ## new_year_token
       if page == ccm.PAGE_LATEST:
-        ind = ccm.getTodayOrdinal() - ord_ref - 90
+        ind_begin = ccm.getTodayOrdinal() - ord_ref - 90
+        ind_end = ccm.ISODateToOrd('2030-01-01') - ord_ref
       elif page == ccm.PAGE_2022:
-        ind = ccm.ISODateToOrd('2022-01-01') - ord_ref
+        ind_begin = ccm.ISODateToOrd('2022-01-01') - ord_ref
+        ind_end = ccm.ISODateToOrd('2023-01-01') - ord_ref
       elif page == ccm.PAGE_2021:
-        ind = ccm.ISODateToOrd('2021-01-01') - ord_ref
+        ind_begin = ccm.ISODateToOrd('2021-01-01') - ord_ref
+        ind_end = ccm.ISODateToOrd('2022-01-01') - ord_ref
       elif page == ccm.PAGE_OVERALL:
-        ind = ccm.ISODateToOrd(ccm.ISO_DATE_REF_VACC) - ord_ref
+        ind_begin = ccm.ISODateToOrd(ccm.ISO_DATE_REF_VACC) - ord_ref
+        ind_end = ccm.ISODateToOrd('2030-01-01') - ord_ref
         
-      ind_arr = stock['index'] >= ind
-      data = stock[ind_arr]
+      ind_arr = stock['index']
+      ind = (ind_begin <= ind_arr) * (ind_arr < ind_end)
+      data = stock[ind]
         
-      name = '%sprocessed_data/%s/vaccination_by_dose.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/vaccination_by_dose.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_vaccinationByDose(page)

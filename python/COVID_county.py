@@ -2,7 +2,7 @@
     ################################
     ##  COVID_county.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.16                ##
+    ##  2022.04.25                ##
     ################################
 
 import os
@@ -31,7 +31,7 @@ class CountySheet(ccm.Template):
     self.coltag_age = '年齡層'
     self.coltag_nb_cases = '確定病例數'
     
-    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_county_age.csv' % ccm.DATA_PATH
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_county_age.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
     ## https://od.cdc.gov.tw/eic/Day_Confirmation_Age_County_Gender_19CoV.csv
     
@@ -50,7 +50,7 @@ class CountySheet(ccm.Template):
     ]
     
     if verbose:
-      print('N_total = %d' % self.n_total)
+      print('N_total = {:d}'.format(self.n_total))
     return
   
   def getReportDate(self):
@@ -60,7 +60,7 @@ class CountySheet(ccm.Template):
       yyyy = report_date[:4]
       mm = report_date[5:7]
       dd = report_date[8:]
-      report_date = '%s-%s-%s' % (yyyy, mm, dd)
+      report_date = '{}-{}-{}'.format(yyyy, mm, dd)
       report_date_list.append(report_date)
     
     return report_date_list
@@ -72,7 +72,7 @@ class CountySheet(ccm.Template):
       try:
         county_list.append(ccm.COUNTY_DICT_2[county])
       except KeyError:
-        print('County, %s' % county)
+        print('County, {}'.format(county))
         county_list.append('unknown')
     
     return county_list
@@ -140,7 +140,7 @@ class CountySheet(ccm.Template):
   def makeReadme_localCasePerCounty(self, page):
     key = 'local_case_per_county'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -163,7 +163,7 @@ class CountySheet(ccm.Template):
       data = ccm.truncateStock(stock, page)
       
       ## Save
-      name = '%sprocessed_data/%s/local_case_per_county.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/local_case_per_county.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_localCasePerCounty(page)
@@ -215,7 +215,7 @@ class CountySheet(ccm.Template):
   def makeReadme_caseByAge(self, page):
     key = 'case_by_age'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: age range')
     stock.append('- Column')
     stock.append('  - `age`')
@@ -227,7 +227,7 @@ class CountySheet(ccm.Template):
       stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
     elif page == ccm.PAGE_2020 or page == ccm.PAGE_2021 or page == ccm.PAGE_2022: ## new_year_token
-      stock.append('  - `total`: all year %s' % page)
+      stock.append('  - `total`: all year {}'.format(page))
       stock.append('  - `MMM`: during month `MMM`')
     ccm.README_DICT[page][key] = stock
     return
@@ -238,12 +238,12 @@ class CountySheet(ccm.Template):
     ## Loop over page
     for page, stock in stock_dict.items():
       if ccm.PAGE_LATEST == page:
-        label_list = ['total'] + ['week_-%d' % (i+1) for i in range(12)]
+        label_list = ['total'] + ['week_-{:d}'.format(i+1) for i in range(12)]
       elif ccm.PAGE_OVERALL == page:
         label_list = ['total'] + \
-          ['2020'] + ['%s_2020' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
-          ['2021'] + ['%s_2021' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
-          ['2022'] + ['%s_2022' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token
+          ['2020'] + ['{}_2020'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
+          ['2021'] + ['{}_2021'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
+          ['2022'] + ['{}_2022'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token
       else:
         label_list = ['total'] + [ccm.numMonthToAbbr(i+1) for i in range(12)]
       
@@ -252,7 +252,7 @@ class CountySheet(ccm.Template):
       data = pd.DataFrame(data)
       
       ## Save
-      name = '%sprocessed_data/%s/case_by_age.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/case_by_age.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_caseByAge(page)
@@ -313,7 +313,7 @@ class CountySheet(ccm.Template):
   def makeReadme_incidenceMap(self, page):
     key = 'incidence_map'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: city or county')
     stock.append('- Column')
     stock.append('  - `county`')
@@ -325,13 +325,13 @@ class CountySheet(ccm.Template):
       stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
     elif page == ccm.PAGE_2020 or page == ccm.PAGE_2021 or page == ccm.PAGE_2022: ## new_year_token
-      stock.append('  - `total`: all year %s' % page)
+      stock.append('  - `total`: all year {}'.format(page))
       stock.append('  - `MMM`: during month `MMM`')
     ccm.README_DICT[page][key] = stock
     
     key = 'incidence_map_label'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: city or county')
     stock.append('- Column')
     stock.append('  - `key`')
@@ -350,12 +350,12 @@ class CountySheet(ccm.Template):
     ## Loop over page
     for page, stock in stock_dict.items():
       if ccm.PAGE_LATEST == page:
-        label_list = ['total'] + ['week_-%d' % (i+1) for i in range(12)]
+        label_list = ['total'] + ['week_-{:d}'.format(i+1) for i in range(12)]
       elif ccm.PAGE_OVERALL == page:
         label_list = ['total'] + \
-          ['2020'] + ['%s_2020' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
-          ['2021'] + ['%s_2021' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
-          ['2022'] + ['%s_2022' % (ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token
+          ['2020'] + ['{}_2020'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
+          ['2021'] + ['{}_2021'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
+          ['2022'] + ['{}_2022'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token
       else:
         label_list = ['total'] + [ccm.numMonthToAbbr(i+1) for i in range(12)]
     
@@ -375,9 +375,9 @@ class CountySheet(ccm.Template):
       data_p = pd.DataFrame(data_p)
       
       ## Save
-      name = '%sprocessed_data/%s/incidence_map.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/incidence_map.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_c)
-      name = '%sprocessed_data/%s/incidence_map_label.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/incidence_map_label.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data_p)
       
       self.makeReadme_incidenceMap(page)
@@ -426,7 +426,7 @@ class CountySheet(ccm.Template):
   def makeReadme_incidenceEvolutionByCounty(self, page):
     key = 'incidence_evolution_by_county'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -440,7 +440,7 @@ class CountySheet(ccm.Template):
     
     key = 'incidence_evolution_by_county_label'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: city or county')
     stock.append('- Column')
     stock.append('  - `key`')
@@ -466,10 +466,10 @@ class CountySheet(ccm.Template):
     
     page = ccm.PAGE_LATEST
     
-    name = '%sprocessed_data/%s/incidence_evolution_by_county.csv' % (ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/incidence_evolution_by_county.csv'.format(ccm.DATA_PATH, page)
     ccm.saveCsv(name, data_r)
     
-    name = '%sprocessed_data/%s/incidence_evolution_by_county_label.csv' % (ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/incidence_evolution_by_county_label.csv'.format(ccm.DATA_PATH, page)
     ccm.saveCsv(name, data_l)
     
     self.makeReadme_incidenceEvolutionByCounty(page)
@@ -529,7 +529,7 @@ class CountySheet(ccm.Template):
   def makeReadme_incidenceEvolutionByAge(self, page):
     key = 'incidence_evolution_by_age'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -539,7 +539,7 @@ class CountySheet(ccm.Template):
     
     key = 'incidence_evolution_by_age_label'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: age range')
     stock.append('- Column')
     stock.append('  - `key`')
@@ -566,10 +566,10 @@ class CountySheet(ccm.Template):
     
     page = ccm.PAGE_LATEST
     
-    name = '%sprocessed_data/%s/incidence_evolution_by_age.csv' % (ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/incidence_evolution_by_age.csv'.format(ccm.DATA_PATH, page)
     ccm.saveCsv(name, data_r)
     
-    name = '%sprocessed_data/%s/incidence_evolution_by_age_label.csv' % (ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/incidence_evolution_by_age_label.csv'.format(ccm.DATA_PATH, page)
     ccm.saveCsv(name, data_l)
     
     self.makeReadme_incidenceEvolutionByAge(page)

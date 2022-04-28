@@ -2,7 +2,7 @@
     ###################################
     ##  COVID_vaccination_county.py  ##
     ##  Chieh-An Lin                 ##
-    ##  2022.01.18                   ##
+    ##  2022.04.25                   ##
     ###################################
 
 import os
@@ -22,7 +22,7 @@ import COVID_common as ccm
 class VaccinationCountySheet(ccm.Template):
   
   def __init__(self, verbose=True):
-    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.json' % ccm.DATA_PATH
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.json'.format(ccm.DATA_PATH)
     data = ccm.loadJson(name, verbose=verbose)
     ## https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_city_can2_c2&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYyNjU1MDY4MQ==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=date&d[]=NO&c[]=a02&t[]=varchar&d[]=NO&c[]=a03&t[]=int&d[]=NO&c[]=a04&t[]=int&d[]=YES&c[]=a05&t[]=int&d[]=YES&c[]=a06&t[]=decimal&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=int&d[]=NO&c[]=a09&t[]=decimal&d[]=NO&c[]=a10&t[]=int&d[]=NO&c[]=a11&t[]=int&d[]=NO&c[]=a12&t[]=decimal&d[]=NO&c[]=a13&t[]=int&d[]=NO&c[]=a14&t[]=int&d[]=NO&c[]=a15&t[]=decimal&d[]=NO&c[]=a16&t[]=int&d[]=NO&c[]=a17&t[]=int&d[]=NO&c[]=a18&t[]=decimal&d[]=NO&c[]=a19&t[]=int&d[]=NO&c[]=a20&t[]=int&d[]=NO&c[]=a21&t[]=int&d[]=NO
   
@@ -65,7 +65,7 @@ class VaccinationCountySheet(ccm.Template):
     ]
     
     if verbose:
-      print('N_total = %d' % len(self.processed_data))
+      print('N_total = {:d}'.format(len(self.processed_data)))
     return
   
   def process(self):
@@ -76,7 +76,7 @@ class VaccinationCountySheet(ccm.Template):
       try:
         county = ccm.COUNTY_DICT_2[county]
       except KeyError:
-        print('County label, %s' % county)
+        print('County label, {}'.format(county))
         county = 'unknown'
       
       try:
@@ -135,7 +135,7 @@ class VaccinationCountySheet(ccm.Template):
   def makeReadme_vaccinationByCounty(self, page):
     key = 'vaccination_by_county'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: date, city, or county')
     stock.append('- Column')
     stock.append('  - `key`: name of key')
@@ -164,14 +164,14 @@ class VaccinationCountySheet(ccm.Template):
     for county in county_key_list:
       cum_vacc = self.getCumVacc(county)[-1]
       value = float(cum_vacc) / float(pop_dict[county])
-      value_list.append('%.4f' % value)
+      value_list.append('{:.4f}'.format(value))
       
     stock = {'key': key_list, 'value': value_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data = pd.DataFrame(stock)
       
     page = ccm.PAGE_LATEST
       
-    name = '%sprocessed_data/%s/vaccination_by_county.csv' % (ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/vaccination_by_county.csv'.format(ccm.DATA_PATH, page)
     ccm.saveCsv(name, data)
     
     self.makeReadme_vaccinationByCounty(page)

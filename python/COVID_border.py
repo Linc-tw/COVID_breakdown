@@ -2,7 +2,7 @@
     ################################
     ##  COVID_border.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.18                ##
+    ##  2022.04.25                ##
     ################################
 
 import os
@@ -141,7 +141,7 @@ class BorderSheet(ccm.Template):
       'Pintung A both': '屏東機場 小計'
     }
     
-    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_border_statistics.csv' % ccm.DATA_PATH
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_border_statistics.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose, header=[0, 1])
     #https://data.gov.tw/dataset/12369
     
@@ -162,11 +162,11 @@ class BorderSheet(ccm.Template):
     self.n_total = ind.sum()
     
     if verbose:
-      print('N_total = %d' % self.n_total)
+      print('N_total = {:d}'.format(self.n_total))
     return 
     
   def getDate(self):
-    date_list = ['%s-%s-%s' % (date[:4], date[4:6], date[6:8]) for date in self.getCol(self.coltag_date)]
+    date_list = ['{}-{}-{}'.format(date[:4], date[4:6], date[6:8]) for date in self.getCol(self.coltag_date)]
     return date_list
     
   def getNumbers(self, tag):
@@ -269,7 +269,7 @@ class BorderSheet(ccm.Template):
   def makeReadme_borderStats(self, page):
     key = 'border_statistics'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -310,7 +310,7 @@ class BorderSheet(ccm.Template):
       data = ccm.truncateStock(stock, page)
       
       ## Save
-      name = '%sprocessed_data/%s/border_statistics.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/border_statistics.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_borderStats(page)
@@ -329,7 +329,7 @@ class BorderSheet(ccm.Template):
     for date, entry in zip(date_list, entry_list):
       ind = ccm.ISODateToOrd(date) - ord_ref
       if ind < 0 or ind >= nb_days:
-        print('Bad ind_r = %d' % ind)
+        print('Bad ind_r = {:d}'.format(ind))
         continue
       
       stock['new_entries'][ind] = entry

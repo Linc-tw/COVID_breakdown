@@ -2,7 +2,7 @@
     ################################
     ##  COVID_test.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.18                ##
+    ##  2022.04.25                ##
     ################################
 
 import os
@@ -38,7 +38,7 @@ class TestSheet(ccm.Template):
     self.coltag_criteria = '擴大之檢驗標準(含擴大監測標準及通報定義)'
     self.coltag_note = '來源：疾管署（每天1am更新）'
     
-    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv' % ccm.DATA_PATH
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
     #https://covid19dashboard.cdc.gov.tw/dash4
     
@@ -53,7 +53,7 @@ class TestSheet(ccm.Template):
     self.n_total = ind.sum()
     
     if verbose:
-      print('N_total = %d' % self.n_total)
+      print('N_total = {:d}'.format(self.n_total))
     return 
     
   def getDate(self):
@@ -71,7 +71,7 @@ class TestSheet(ccm.Template):
       m = int(md_slash[0])
       d = int(md_slash[1])
       
-      date = '%04d-%02d-%02d' % (y, m, d)
+      date = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
       date_list.append(date)
     return date_list
   
@@ -87,7 +87,7 @@ class TestSheet(ccm.Template):
         from_ext = int(''.join(from_ext))
         from_ext_list.append(from_ext)
       except:
-        print('From extended, %s' % from_ext)
+        print('From extended, {}'.format(from_ext))
         from_ext_list.append(0)
     return from_ext_list
 
@@ -103,7 +103,7 @@ class TestSheet(ccm.Template):
         from_qt = int(''.join(from_qt))
         from_qt_list.append(from_qt)
       except:
-        print('From extended, %s' % from_qt)
+        print('From extended, {}'.format(from_qt))
         from_qt_list.append(0)
     return from_qt_list
 
@@ -119,7 +119,7 @@ class TestSheet(ccm.Template):
         from_clin_def = int(''.join(from_clin_def))
         from_clin_def_list.append(from_clin_def)
       except:
-        print('Clinical definition, %s' % from_clin_def)
+        print('Clinical definition, {}'.format(from_clin_def))
         from_clin_def_list.append(0)
     return from_clin_def_list
 
@@ -133,7 +133,7 @@ class TestSheet(ccm.Template):
   def makeReadme_testCounts(self, page):
     key = 'test_counts'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -159,7 +159,7 @@ class TestSheet(ccm.Template):
       data = ccm.truncateStock(stock, page)
       
       ## Save
-      name = '%sprocessed_data/%s/test_counts.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/test_counts.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_testCounts(page)
@@ -168,7 +168,7 @@ class TestSheet(ccm.Template):
   def makeReadme_testByCriterion(self, page):
     key = 'test_by_criterion'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -192,7 +192,7 @@ class TestSheet(ccm.Template):
       data = ccm.truncateStock(stock, page)
       
       ## Save
-      name = '%sprocessed_data/%s/test_by_criterion.csv' % (ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/test_by_criterion.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
       self.makeReadme_testByCriterion(page)
@@ -251,7 +251,7 @@ class TestSheet(ccm.Template):
   def makeReadme_criteriaTimeline(self):
     key = 'criteria_timeline'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: date')
     stock.append('- Column: language')
     stock.append('  - `en`')
@@ -379,7 +379,7 @@ class TestSheet(ccm.Template):
     stock = {'date': date_list, 'en': en_list, 'fr': fr_list, 'zh-tw': zh_tw_list}
     data = pd.DataFrame(stock)
     
-    name = '%sprocessed_data/criteria_timeline.csv' % ccm.DATA_PATH
+    name = '{}processed_data/criteria_timeline.csv'.format(ccm.DATA_PATH)
     ccm.saveCsv(name, data)
     
     self.makeReadme_criteriaTimeline()
@@ -400,7 +400,7 @@ class TestSheet(ccm.Template):
     for date, from_clin_def, from_qt, from_ext in zip(date_list, from_clin_def_list, from_qt_list, from_ext_list):
       ind = ccm.ISODateToOrd(date) - ord_ref
       if ind < 0 or ind >= nb_days:
-        print('Bad date = %s' % date)
+        print('Bad date = {}'.format(date))
         continue
       
       stock['new_tests'][ind] = from_clin_def + from_qt + from_ext

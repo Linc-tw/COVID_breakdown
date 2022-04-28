@@ -2,7 +2,7 @@
     ################################
     ##  COVID_timeline.py         ##
     ##  Chieh-An Lin              ##
-    ##  2022.01.18                ##
+    ##  2022.04.25                ##
     ################################
 
 import os
@@ -28,7 +28,7 @@ class TimelineSheet(ccm.Template):
     self.coltag_global_evt = '全球事件'
     self.coltag_cdc_evt = 'CDC時間軸'
     
-    name = '%sraw_data/COVID-19_in_Taiwan_raw_data_timeline.csv' % ccm.DATA_PATH
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_timeline.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
     
     date_list = data[self.coltag_date].values
@@ -37,7 +37,7 @@ class TimelineSheet(ccm.Template):
     self.n_total = ind.sum()
     
     if verbose:
-      print('N_total = %d' % self.n_total)
+      print('N_total = {:d}'.format(self.n_total))
     return 
     
   def getDate(self):
@@ -50,7 +50,7 @@ class TimelineSheet(ccm.Template):
       m = int(mmddday_zh[0])
       ddday_zh = mmddday_zh[1].split('日')
       d = int(ddday_zh[0])
-      date = '%04d-%02d-%02d' % (y, m, d)
+      date = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
       date_list.append(date)
     return date_list
   
@@ -90,7 +90,7 @@ class TimelineSheet(ccm.Template):
   def makeReadme_evtTimeline(self):
     key = 'event_timeline_zh-tw'
     stock = []
-    stock.append('`%s.csv`' % key)
+    stock.append('`{}.csv`'.format(key))
     stock.append('- Row: date')
     stock.append('- Column')
     stock.append('  - `Taiwan_event`')
@@ -119,7 +119,7 @@ class TimelineSheet(ccm.Template):
     stock = {'date': date_list, 'Taiwan_event': twn_evt_list, 'global_event': global_evt_list, 'CDC_event': cdc_evt_list}
     data = pd.DataFrame(stock)
     
-    name = '%sprocessed_data/event_timeline_zh-tw.csv' % ccm.DATA_PATH
+    name = '{}processed_data/event_timeline_zh-tw.csv'.format(ccm.DATA_PATH)
     ccm.saveCsv(name, data)
     
     self.makeReadme_evtTimeline()
