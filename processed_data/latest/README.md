@@ -199,8 +199,12 @@ Contents
 - Column
   - `index`: day difference from 2020-01-01
   - `date`
+  - `interpolated`
+    - 0 = true value, not interpolated
+    - 1 = interpolated value
   - `ppl_vacc_rate`: proportion of the population vaccinated with their 1st dose
   - `ppl_fully_vacc_rate`: proportion of the population fully vaccinated
+  - `ppl_vacc_3_rate`: proportion of the population vaccinated with their 3rd dose
 
 `vaccination_progress_injections.csv`
 - Row = report date
