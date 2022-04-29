@@ -85,6 +85,7 @@ class CaseSheet(ccm.Template):
       
       ## new_year_token
       ind_latest = ccm.indexForLatest(report_date)
+      ind_2023 = ccm.indexFor2023(report_date)
       ind_2022 = ccm.indexFor2022(report_date)
       ind_2021 = ccm.indexFor2021(report_date)
       ind_2020 = ccm.indexFor2020(report_date)
@@ -93,6 +94,8 @@ class CaseSheet(ccm.Template):
       ## If not NaN
       if ind_latest == ind_latest:
         self.n_latest += 1
+      if ind_2023 == ind_2023:
+        self.n_2023 += 1
       if ind_2022 == ind_2022:
         self.n_2022 += 1
       if ind_2021 == ind_2021:
@@ -461,7 +464,7 @@ class CaseSheet(ccm.Template):
         
       else:
         try:
-          mmdd = entry_date.split('/') ## new_year_token
+          mmdd = entry_date.split('/') ## new_year_token (2023)
           m = int(mmdd[0])
           d = int(mmdd[1])
           if i+1 <= 447 and m > 6: ## 2020/06
@@ -794,7 +797,7 @@ class CaseSheet(ccm.Template):
     stock.append('- Row')
     stock.append('  - `n_total`: total confirmed case counts')
     stock.append('  - `n_latest`: number of confirmed cases during last 90 days')
-    ## new_year_token
+    ## new_year_token (2023)
     stock.append('  - `n_2020`: number of confirmed cases during 2020')
     stock.append('  - `n_2021`: number of confirmed cases during 2021')
     stock.append('  - `n_2022`: number of confirmed cases during 2022')
@@ -813,7 +816,7 @@ class CaseSheet(ccm.Template):
     
     population_twn = ccm.COUNTY_DICT['00000']['population']
     
-    ## new_year_token
+    ## new_year_token (2023)
     key = ['n_overall', 'n_latest', 'n_2020', 'n_2021', 'n_2022', 'n_empty', 'timestamp', 'population_twn']
     value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_2022, self.n_empty, timestamp, population_twn]
     

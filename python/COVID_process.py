@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.25                ##
+    ##  2022.04.29                ##
     ################################
 
 import os
@@ -180,7 +180,7 @@ def sandbox():
   #county_sheet.saveCsv_localCasePerCounty()
   
   vacc_sheet = COVID_vaccination.VaccinationSheet()
-  vacc_sheet.saveCsv_vaccinationByDose()
+  vacc_sheet.saveCsv_vaccinationProgress()
   
   #vacc_county_sheet = COVID_vaccination_county.VaccinationCountySheet()
   #vacc_county_sheet.saveCsv_vaccinationByCounty()

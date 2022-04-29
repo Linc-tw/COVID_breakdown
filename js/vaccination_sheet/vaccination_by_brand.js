@@ -132,7 +132,7 @@ function VBB_FormatData(wrap, data) {
       row[col_tag_avg] = +avg;
     
     //-- Update last date
-    last_date = row['date'];
+    last_date = x;
     
     //-- Update to exclude interpolation
     if ((0 < wrap.cumul && 0 < +row['interpolated']) || (0 == wrap.cumul && 0 != +row['interpolated'])) {

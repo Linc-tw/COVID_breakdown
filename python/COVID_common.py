@@ -28,10 +28,11 @@ NB_LOOKBACK_DAYS = 90
 PAGE_LATEST = 'latest'
 PAGE_OVERALL = 'overall'
 ## new_year_token
+PAGE_2023 = '2023'
 PAGE_2022 = '2022'
 PAGE_2021 = '2021'
 PAGE_2020 = '2020'
-PAGE_LIST = [PAGE_LATEST, PAGE_OVERALL, PAGE_2022, PAGE_2021, PAGE_2020] ## new_year_token
+PAGE_LIST = [PAGE_LATEST, PAGE_OVERALL, PAGE_2022, PAGE_2021, PAGE_2020] ## new_year_token (2023)
 
 SYMPTOM_DICT = {
   'sneezing': {'zh-tw': '鼻腔症狀', 'fr': 'éternuement'},
@@ -254,7 +255,7 @@ AGE_DICT_2 = {
     'total': {'zh-tw': '所有年齡', 'fr': 'Tous âges', 'en': 'All ages'},
   },
   
-  ## new_year_token
+  ## new_year_token (2023)
   '2019': {
     '0-4': 975801, '5-9': 1019322, '10-14': 1015228, '15-19': 1254141, '20-24': 1514105, '25-29': 1609454, 
     '30-34': 1594132, '35-39': 1964945, '40-44': 1974288, '45-49': 1775328, '50-54': 1814146, '55-59': 1827585, 
@@ -701,25 +702,13 @@ def sevenDayMovingAverage(value_arr):
   value_arr[ind] = np.nan
   return value_arr
 
-def itpFromCumul(begin, end, length):
-  if length == 1:
-    return [end-begin]
-  
-  q = (end - begin) // length
-  r = (end - begin) % length
-  list_ = [q] * length
-  
-  for i in range(r):
-    list_[i] += 1
-  
-  return list_
-
 ################################################################################
 ## Functions - utilities specific to this file
 
 def initializeStock_dailyCounts(col_tag_list):
+  ord_ref = ISODateToOrd(ISO_DATE_REF)
   ord_today = getTodayOrdinal()
-  date_list = [ordDateToISO(ord_) for ord_ in range(ISODateToOrd(ISO_DATE_REF), ord_today)]
+  date_list = [ordDateToISO(ord_) for ord_ in range(ord_ref, ord_today)]
   stock = {'date': date_list}
   stock.update({col_tag: np.zeros(len(date_list), dtype=int) for col_tag in col_tag_list})
   return stock
@@ -742,6 +731,13 @@ def indexForOverall(iso):
   return ind
 
 ## new_year_token
+def indexFor2023(iso):
+  ord_begin_2023 = ISODateToOrd('2023-01-01')
+  ind = ISODateToOrd(iso) - ord_begin_2023
+  if ind < 0 or ind >= 365:
+    return np.nan
+  return ind
+
 def indexFor2022(iso):
   ord_begin_2022 = ISODateToOrd('2022-01-01')
   ind = ISODateToOrd(iso) - ord_begin_2022
@@ -766,7 +762,7 @@ def indexFor2020(iso):
 def makeIndexList(iso):
   ind_latest = indexForLatest(iso)
   ind_overall = indexForOverall(iso)
-  ## new_year_token
+  ## new_year_token (2023)
   ind_2022 = indexFor2022(iso)
   ind_2021 = indexFor2021(iso)
   ind_2020 = indexFor2020(iso)
@@ -810,6 +806,9 @@ def truncateStock(stock, page):
   
   ## new_year_token
   
+  if PAGE_2023 == page:
+    return stock.iloc[1096:1461]
+    
   if PAGE_2022 == page:
     return stock.iloc[731:1096]
     
@@ -848,7 +847,7 @@ def initializeReadme_root():
   stock.append('All files here only contain ASCII characters unless specified.')
   stock.append('')
   
-  ## new_year_token
+  ## new_year_token (2023)
   stock.append('')
   stock.append('Contents')
   stock.append('--------')
@@ -888,7 +887,7 @@ def initializeReadme_page(page):
   stock.append('Summary')
   stock.append('-------')
   stock.append('')
-  ## new_year_token
+  ## new_year_token (2023)
   dict_ = {PAGE_LATEST: 'last 90 days', PAGE_OVERALL: 'the entire pandemic', PAGE_2022: PAGE_2022, PAGE_2021: PAGE_2021, PAGE_2020: PAGE_2020}
   stock.append('This folder hosts data files which summarize COVID statistics in Taiwan during {}.'.format(dict_[page]))
   stock.append('')

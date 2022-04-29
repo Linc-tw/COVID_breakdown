@@ -174,7 +174,7 @@ function LCPC_FormatData(wrap, data) {
     }
     
     //-- Update last date
-    last_date = row['date'];
+    last_date = x;
     
     //-- Update y_last
     if (wrap.cumul == 0) {

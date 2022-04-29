@@ -180,7 +180,7 @@ class CountySheet(ccm.Template):
     stock_dict = ccm.initializeStockDict_general(stock)
     
     ## Add 27 empty hist for overall (24 months + 3 all year)
-    for i in range(27): ## new_year_token
+    for i in range(27): ## new_year_token (2023)
       stock_dict[ccm.PAGE_OVERALL].append(case_hist.copy())
     
     ## Loop over series
@@ -226,7 +226,7 @@ class CountySheet(ccm.Template):
       stock.append('  - `total`: overall stats')
       stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
-    elif page == ccm.PAGE_2020 or page == ccm.PAGE_2021 or page == ccm.PAGE_2022: ## new_year_token
+    elif page in [ccm.PAGE_2020, ccm.PAGE_2021, ccm.PAGE_2022, ccm.PAGE_2023]: ## new_year_token
       stock.append('  - `total`: all year {}'.format(page))
       stock.append('  - `MMM`: during month `MMM`')
     ccm.README_DICT[page][key] = stock
@@ -243,7 +243,7 @@ class CountySheet(ccm.Template):
         label_list = ['total'] + \
           ['2020'] + ['{}_2020'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
           ['2021'] + ['{}_2021'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
-          ['2022'] + ['{}_2022'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token
+          ['2022'] + ['{}_2022'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token (2023)
       else:
         label_list = ['total'] + [ccm.numMonthToAbbr(i+1) for i in range(12)]
       
@@ -270,7 +270,7 @@ class CountySheet(ccm.Template):
     stock_dict = ccm.initializeStockDict_general(stock)
     
     ## Add 27 empty hist for overall (24 months + 3 all year)
-    for i in range(27): ## new_year_token
+    for i in range(27): ## new_year_token (2023)
       stock_dict[ccm.PAGE_OVERALL].append(case_hist.copy())
     
     ## Loop over series
@@ -324,7 +324,7 @@ class CountySheet(ccm.Template):
       stock.append('  - `total`: overall stats')
       stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
-    elif page == ccm.PAGE_2020 or page == ccm.PAGE_2021 or page == ccm.PAGE_2022: ## new_year_token
+    elif page in [ccm.PAGE_2020, ccm.PAGE_2021, ccm.PAGE_2022, ccm.PAGE_2023]: ## new_year_token
       stock.append('  - `total`: all year {}'.format(page))
       stock.append('  - `MMM`: during month `MMM`')
     ccm.README_DICT[page][key] = stock
@@ -355,7 +355,7 @@ class CountySheet(ccm.Template):
         label_list = ['total'] + \
           ['2020'] + ['{}_2020'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
           ['2021'] + ['{}_2021'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
-          ['2022'] + ['{}_2022'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token
+          ['2022'] + ['{}_2022'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token (2023)
       else:
         label_list = ['total'] + [ccm.numMonthToAbbr(i+1) for i in range(12)]
     

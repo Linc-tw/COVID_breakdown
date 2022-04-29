@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  stats_in_mirror.js        --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.14                --//
+    //--  2022.04.29                --//
     //--------------------------------//
 
 function SIM_InitFig(wrap) {
@@ -61,6 +61,14 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_local_case_1', '本土案例');
     LS_AddStr('stats_in_mirror_button_death_0', '死亡人數');
     LS_AddStr('stats_in_mirror_button_death_1', '死亡人數');
+    LS_AddStr('stats_in_mirror_button_vaccination_0', '疫苗劑數');
+    LS_AddStr('stats_in_mirror_button_vaccination_1', '疫苗劑數');
+    LS_AddStr('stats_in_mirror_button_1st_dose_0', '第一劑人數');
+    LS_AddStr('stats_in_mirror_button_1st_dose_1', '第一劑人數');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '第二劑人數');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '第二劑人數');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '第三劑人數');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '第三劑人數');
     LS_AddStr('stats_in_mirror_button_border_entry_0', '入境人數');
     LS_AddStr('stats_in_mirror_button_border_entry_1', '入境人數');
     LS_AddStr('stats_in_mirror_button_border_exit_0', '出境人數');
@@ -84,6 +92,10 @@ function SIM_ResetText() {
       - 總確診、境外移入、本土案例數\
       <br>\
       - 死亡人數\
+      <br>\
+      - 疫苗劑數\
+      <br>\
+      - 施打一、二、三劑人數\
       <br>\
       - 入境、出境、入出境總人數\
       <br>\
@@ -110,6 +122,14 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_local_case_1', 'Cas locaux');
     LS_AddStr('stats_in_mirror_button_death_0', 'Décès');
     LS_AddStr('stats_in_mirror_button_death_1', 'Décès');
+    LS_AddStr('stats_in_mirror_button_vaccination_0', 'Vaccination');
+    LS_AddStr('stats_in_mirror_button_vaccination_1', 'Vaccination');
+    LS_AddStr('stats_in_mirror_button_1st_dose_0', '1er dose');
+    LS_AddStr('stats_in_mirror_button_1st_dose_1', '1er dose');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '2e dose');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '2e dose');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '3e dose');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '3e dose');
     LS_AddStr('stats_in_mirror_button_border_entry_0', 'Arrivée aux frontières');
     LS_AddStr('stats_in_mirror_button_border_entry_1', 'Arrivée aux frontières');
     LS_AddStr('stats_in_mirror_button_border_exit_0', 'Départ des frontières');
@@ -133,6 +153,10 @@ function SIM_ResetText() {
       - les nombres de cas confirmés totaux, importés et locaux,\
       <br>\
       - le nombre de décédés,\
+      <br>\
+      - le nombre de vaccins administrés,\
+      <br>\
+      - la part de population avec le 1er, le 2e et le 3e doses,\
       <br>\
       - les nombres de voyageurs entrant, sortant et totaux aux frontières,\
       <br>\
@@ -159,6 +183,14 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_local_case_1', 'Local case counts');
     LS_AddStr('stats_in_mirror_button_death_0', 'Death counts');
     LS_AddStr('stats_in_mirror_button_death_1', 'Death counts');
+    LS_AddStr('stats_in_mirror_button_vaccination_0', 'Vaccination');
+    LS_AddStr('stats_in_mirror_button_vaccination_1', 'Vaccination');
+    LS_AddStr('stats_in_mirror_button_1st_dose_0', '1st dose');
+    LS_AddStr('stats_in_mirror_button_1st_dose_1', '1st dose');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '2nd dose');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '2nd dose');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '3rd dose');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '3rd dose');
     LS_AddStr('stats_in_mirror_button_border_entry_0', 'Border arrival counts');
     LS_AddStr('stats_in_mirror_button_border_entry_1', 'Border arrival counts');
     LS_AddStr('stats_in_mirror_button_border_exit_0', 'Border departure counts');
@@ -182,6 +214,10 @@ function SIM_ResetText() {
       - total, imported, and local confirmed case counts,\
       <br>\
       - death counts,\
+      <br>\
+      - total vaccination,\
+      <br>\
+      - population ratio of 1st, 2nd, and 3rd doses,\
       <br>\
       - border arrival, departure, and total counts,\
       <br>\
@@ -207,7 +243,6 @@ function SIM_FormatData(wrap, data, index) {
     sub_wrap.r = 3;
   
   //-- new_stat_flag
-//     HOI_FormatData(sub_wrap, data);
   if (stat == 0)
     TC_FormatData(sub_wrap, data);
   else if (stat == 1 || stat == 2 || stat == 3) {
@@ -220,19 +255,65 @@ function SIM_FormatData(wrap, data, index) {
     CC_FormatData(sub_wrap, data);
   }
   else if (stat == 4)
-    DC_FormatData(sub_wrap, data);
-  else if (stat == 5 || stat == 6 || stat == 7) {
-    if (stat == 5)
+    DC_FormatData(sub_wrap, data); 
+  else if (stat == 5) {
+    sub_wrap.col_ind = 0;
+    VBB_FormatData(sub_wrap, data);
+    
+    if (wrap.tag.includes('overall')) {
+      var block_zero = {};
+      var i;
+      for (i in sub_wrap.formatted_data[0])
+        block_zero[i] = 0;
+      block_zero['interpolated'] = 1;
+      
+      var formatted_data = [];
+      var x_list = [];
+      for (i=0; i<425; i++) {
+        block = JSON.parse(JSON.stringify(block_zero));
+        block['date'] = GP_ISODateAddition('2020-01-01', i);
+        formatted_data.push(block);
+        x_list.push(block['date']);
+      }
+      
+      sub_wrap.formatted_data = formatted_data.concat(sub_wrap.formatted_data);
+      sub_wrap.x_list = x_list.concat(sub_wrap.x_list);
+    }
+  }
+  else if (stat == 6 || stat == 7 || stat == 8) {
+    VBD_FormatData(sub_wrap, data);
+    
+    if (wrap.tag.includes('overall')) {
+      var block_zero = {};
+      block_zero['y'] = 0;
+      block_zero['y_list'] = [0, 0, 0];
+      
+      var formatted_data = [];
+      var x_list = [];
+      for (i=0; i<425; i++) {
+        block = JSON.parse(JSON.stringify(block_zero));
+        block['x'] = GP_ISODateAddition('2020-01-01', i);
+        formatted_data.push(block);
+        x_list.push(block['x']);
+      }
+      
+      for (i=0; i<sub_wrap.formatted_data.length; i++)
+        sub_wrap.formatted_data[i] = formatted_data.concat(sub_wrap.formatted_data[i]);
+      sub_wrap.x_list = x_list.concat(sub_wrap.x_list);
+    }
+  }
+  else if (stat == 9 || stat == 10 || stat == 11) {
+    if (stat == 7)
       sub_wrap.col_ind = 0;
-    else if (stat == 6)
+    else if (stat == 8)
       sub_wrap.col_ind = 1;
     else
       sub_wrap.col_ind = 2;
     BS_FormatData(sub_wrap, data);
   }
-  else if (stat == 8 || stat == 9) 
+  else if (stat == 12 || stat == 13) 
     IR_FormatData(sub_wrap, data);
-  else if (stat == 10 || stat == 11)
+  else if (stat == 14 || stat == 15)
     PAF_FormatData(sub_wrap, data);
 }
 
@@ -471,7 +552,7 @@ function SIM_ReplotFaintSingleBar(wrap, index) {
   //-- Bar-like, update
   if (dim_0 > dim_1) {
     //-- Update bar
-    wrap.svg.selectAll('.content.bar'+index)
+    var bar = wrap.svg.selectAll('.content.bar'+index)
         .on('mouseover', function (d) {GP_MouseOver_Faint(sub_wrap, d);})
         .on('mousemove', function (d) {sub_wrap.mouse_move(sub_wrap, d);})
         .on('mouseleave', function (d) {GP_MouseLeave_Faint(sub_wrap, d);})
@@ -583,7 +664,7 @@ function SIM_ReplotDot(wrap, index, list_ind) {
       .transition()
       .duration(sub_wrap.trans_delay)
         .attr('cy', function (d) {if (isNaN(d.y)) return yscale(0); return yscale(d.y);})
-        .attr('r', function (d) {if (isNaN(d.y)) return 0; return sub_wrap.r;}); //-- Don't show dots if NaN
+        .attr('r', function (d) {if (isNaN(d.y) || (d.hasOwnProperty('interpolated') && d.interpolated == 1)) return 0; return sub_wrap.r;}); //-- Don't show dots if NaN
   }
 }
 
@@ -671,7 +752,7 @@ function SIM_ReplotCountAsY(wrap, format, index) {
 }
 
 function SIM_Replot(wrap) {
-  var i, stat, sub_wrap, ylabel_dict;
+  var i, stat, sub_wrap, list_ind, ylabel_dict;
   
   for (i=0; i<2; i++) {
     stat = wrap.stat_list[i];
@@ -725,16 +806,52 @@ function SIM_Replot(wrap) {
       SIM_ReplotDot(wrap, i, 0);
       SIM_ReplotCountAsY(wrap, 'count', i);
     }
-    else if (stat == 5 || stat == 6 || stat == 7) {
+    else if (stat == 5) {
+      sub_wrap.color = GP_wrap.c_list[1];
+      sub_wrap.mouse_move = VBB_MouseMove;
+      sub_wrap.plot_opacity = GP_wrap.faint_opacity;
+      sub_wrap.trans_delay = GP_wrap.trans_delay;
+      ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '疫苗劑數'};
+      
+      SIM_ReplotFaintSingleBar(wrap, i);
+      SIM_ReplotAvgLine(wrap, i);
+      SIM_ReplotDot(wrap, i, 0);
+      SIM_ReplotCountAsY(wrap, 'count', i);
+    }
+    else if (stat == 6 || stat == 7 || stat == 8) {
+      sub_wrap.mouse_move = VBD_MouseMove;
+      sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
+      sub_wrap.trans_delay = GP_wrap.trans_delay;
+      ylabel_dict = {en: 'Population ratio', fr: 'Part de la population', 'zh-tw': '人口比'};
+      
+      if (stat == 6) {
+        list_ind = 0;
+        sub_wrap.color = GP_wrap.c_list[3];
+      }
+      else if (stat == 7) {
+        list_ind = 1;
+        sub_wrap.color = GP_wrap.c_list[2];
+      }
+      else {
+        list_ind = 2;
+        sub_wrap.color = GP_wrap.c_list[6];
+      }
+      
+      SIM_ReplotFaintSingleBar(wrap, i);
+      SIM_ReplotLine(wrap, i, list_ind);
+      SIM_ReplotDot(wrap, i, list_ind);
+      SIM_ReplotCountAsY(wrap, 'percentage', i);
+    }
+    else if (stat == 9 || stat == 10 || stat == 11) {
       sub_wrap.mouse_move = BS_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
       
-      if (stat == 5) {
+      if (stat == 9) {
         sub_wrap.color = GP_wrap.c_list[10];
         ylabel_dict = {en: 'Arrival travellers', fr: 'Voyageurs entrant', 'zh-tw': '入境人數'};
       }
-      else if (stat == 6) {
+      else if (stat == 10) {
         sub_wrap.color = GP_wrap.c_list[11];
         ylabel_dict = {en: 'Departure travellers', fr: 'Voyageurs sortant', 'zh-tw': '出境人數'};
       }
@@ -748,46 +865,46 @@ function SIM_Replot(wrap) {
       SIM_ReplotDot(wrap, i, 0);
       SIM_ReplotCountAsY(wrap, 'count', i);
     }
-    else if (stat == 8 || stat == 9) {
+    else if (stat == 12 || stat == 13) {
       sub_wrap.mouse_move = IR_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
       
-      if (stat == 8) {
+      if (stat == 12) {
+        list_ind = 0;
         sub_wrap.color = GP_wrap.c_list[3];
         ylabel_dict = {en: 'Arrival incidence', fr: "Incidence frontalière", 'zh-tw': '入境盛行率'};
-        SIM_ReplotLine(wrap, i, 0);
-        SIM_ReplotDot(wrap, i, 0);
       }
       else {
+        list_ind = 1;
         sub_wrap.color = GP_wrap.c_list[4];
         ylabel_dict = {en: 'Local incidence * 1000', fr: "Incidence locale * 1000", 'zh-tw': '本土盛行率 * 1000'};
-        SIM_ReplotLine(wrap, i, 1);
-        SIM_ReplotDot(wrap, i, 1);
       }
       
       SIM_ReplotFaintSingleBar(wrap, i);
+      SIM_ReplotLine(wrap, i, list_ind);
+      SIM_ReplotDot(wrap, i, list_ind);
       SIM_ReplotCountAsY(wrap, 'percentage', i);
     }
-    else if (stat == 10 || stat == 11) {
+    else if (stat == 14 || stat == 15) {
       sub_wrap.mouse_move = PAF_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
       
-      if (stat == 10) {
+      if (stat == 14) {
+        list_ind = 0;
         sub_wrap.color = GP_wrap.c_list[5];
         ylabel_dict = {en: 'Positive rate', fr: 'Positivité', 'zh-tw': '陽性率'};
-        SIM_ReplotLine(wrap, i, 0);
-        SIM_ReplotDot(wrap, i, 0);
       }
       else {
+        list_ind = 1;
         sub_wrap.color = GP_wrap.c_list[6];
         ylabel_dict = {en: 'Overall fatality', fr: 'Létalité cumulé', 'zh-tw': '累計致死率'};
-        SIM_ReplotLine(wrap, i, 1);
-        SIM_ReplotDot(wrap, i, 1);
       }
       
       SIM_ReplotFaintSingleBar(wrap, i);
+      SIM_ReplotLine(wrap, i, list_ind);
+      SIM_ReplotDot(wrap, i, list_ind);
       SIM_ReplotCountAsY(wrap, 'percentage', i);
     }
     
@@ -811,7 +928,7 @@ function SIM_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.stat_list[0]])
     .defer(d3.csv, wrap.data_path_list[wrap.stat_list[1]])
-    .defer(d3.csv, wrap.data_path_list[12]) //-- new_stat_flag
+    .defer(d3.csv, wrap.data_path_list[16]) //-- new_stat_flag
     .await(function (error, data, data2, data3) {
       if (error)
         return console.warn(error);
@@ -855,58 +972,17 @@ function SIM_ButtonListener(wrap) {
   d3.select(wrap.id + '_save').on('click', function(){
     var stat_0 = wrap.stat_list[0];
     var stat_1 = wrap.stat_list[1];
-    var tag1, tag2;
     
     //-- new_stat_flag
-    if (stat_0 == 0)
-      tag1 = 'tests';
-    else if (stat_0 == 1)
-      tag1 = 'total_cases';
-    else if (stat_0 == 2)
-      tag1 = 'imported_cases';
-    else if (stat_0 == 3)
-      tag1 = 'local_cases';
-    else if (stat_0 == 4)
-      tag1 = 'deaths';
-    else if (stat_0 == 5)
-      tag1 = 'border_entry';
-    else if (stat_0 == 6)
-      tag1 = 'border_exit';
-    else if (stat_0 == 7)
-      tag1 = 'border_both';
-    else if (stat_0 == 8)
-      tag1 = 'arrival_incidence';
-    else if (stat_0 == 9)
-      tag1 = 'local_incidence';
-    else if (stat_0 == 10)
-      tag1 = 'positivity';
-    else if (stat_0 == 11)
-      tag1 = 'fatality';
+    var tag_list = [
+      'tests', 'total_cases', 'imported_cases', 'local_cases', 'deaths', 
+      'vaccination', '1st_dose', '2nd_dose', '3rd_dose', 'border_entry', 
+      'border_exit', 'border_both', 'arrival_incidence', 'local_incidence', 'positivity', 
+      'fatality'
+    ];
     
-    if (stat_1 == 0)
-      tag2 = 'tests';
-    else if (stat_1 == 1)
-      tag2 = 'total_cases';
-    else if (stat_1 == 2)
-      tag2 = 'imported_cases';
-    else if (stat_1 == 3)
-      tag2 = 'local_cases';
-    else if (stat_1 == 4)
-      tag2 = 'deaths';
-    else if (stat_1 == 5)
-      tag2 = 'border_entry';
-    else if (stat_1 == 6)
-      tag2 = 'border_exit';
-    else if (stat_1 == 7)
-      tag2 = 'border_both';
-    else if (stat_1 == 8)
-      tag2 = 'arrival_incidence';
-    else if (stat_1 == 9)
-      tag2 = 'local_incidence';
-    else if (stat_1 == 10)
-      tag2 = 'positivity';
-    else if (stat_1 == 11)
-      tag2 = 'fatality';
+    var tag1 = tag_list[stat_0];
+    var tag2 = tag_list[stat_1];
     
     name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);

@@ -45,14 +45,20 @@ function VBD_ResetText() {
 
 function VBD_FormatData(wrap, data) {
   //-- Variables for data
-  var col_tag_list = data.columns.slice(2); //-- 0 = index, 1 = date
+  var col_tag_list = data.columns.slice(2); //-- 0 = date, 1 = interpolated
   var nb_col = col_tag_list.length;
-  var i, j, x, y, row;
+  var i, j, x, y, row, col_tag;
   
   //-- Variables for plot
   var formatted_data = [];
+  var x_list = []; //-- For date
   var y_list_list = [];
   var y_list, block, block2;
+  var last_date;
+  
+  //-- Variables for xaxis
+  var r = GP_GetRForTickPos(wrap, data.length);
+  var xticklabel = [];
   
   //-- Variables for yaxis
   var y_max = 0;
@@ -64,27 +70,36 @@ function VBD_FormatData(wrap, data) {
   //-- Loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
-    y_list = [];
     x = row['date'];
+    y_list = [];
+    x_list.push(x);
+    
+    //-- Determine whether to have xtick
+    if (i % wrap.xlabel_path == r)
+      xticklabel.push(x);
     
     //-- Loop over column
     for (j=0; j<nb_col; j++) {
-      col = col_tag_list[j];
+      col_tag = col_tag_list[j];
       
-      if ('' == row[col])
+      if ('' == row[col_tag])
         y = NaN;
       else
-        y = +row[col];
+        y = +row[col_tag];
       
       y_list.push(y);
     }
     
-    y_list_list.push(y_list) //-- `y_list` contains `nb_col` values
+    //-- Update last date
+    if (!isNaN(y))
+      last_date = x;
+    
+    y_list_list.push(y_list);
   }
   
   //-- Main loop over column
   for (j=0; j<nb_col; j++) {
-    col = col_tag_list[j];
+    col_tag = col_tag_list[j];
     block2 = [];
     
     //-- Loop over row
@@ -95,8 +110,9 @@ function VBD_FormatData(wrap, data) {
       //-- Make data block; redundant information is for toolpix text
       block = {
         'x': data[i]['date'],
-        'y': y_list[j],
-        'y_list': y_list
+        'y': y,
+        'y_list': y_list,
+        'interpolated': data[i]['interpolated'],
       };
       
       //-- Update y_last & y_max
@@ -131,73 +147,31 @@ function VBD_FormatData(wrap, data) {
   wrap.formatted_data = formatted_data;
   wrap.col_tag_list = col_tag_list;
   wrap.nb_col = nb_col;
+  wrap.x_list = x_list;
+  wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
   wrap.legend_value_raw = y_last_list;
-  wrap.last_date = x;
+  wrap.last_date = last_date;
 }
 
 function VBD_FormatData2(wrap, data2) {
-  //-- Do not change these
-  //-- Since there are holes of date in data, we need these twigs.
+  if (!wrap.tag.includes('overall'))
+    return;
   
+  //-- Loop over row
   var i;
   for (i=0; i<data2.length; i++) {
+    //-- Get value of `n_tot`
     if ('timestamp' == data2[i]['key'])
       wrap.timestamp = data2[i]['value'];
   }
   
-  var r, nb_days;
-  
-  //-- Set time range
-  if (wrap.tag.includes('latest')) {
-    nb_days = 90;
-    wrap.iso_begin = GP_ISODateAddition(wrap.timestamp.slice(0, 10), -nb_days+1);
-    r = GP_GetRForTickPos(wrap, nb_days);
-    
-    //-- Add extrapolated point at left
-    if (wrap.iso_begin != wrap.formatted_data[0][0].x) {
-      for (i=0; i<wrap.formatted_data.length; i++) {
-        var block0 = wrap.formatted_data[i][0];
-        var block1 = wrap.formatted_data[i][1];
-        var block = {
-          'x': wrap.iso_begin,
-          'y': 2*block0.y - block1.y,
-        };
-        wrap.formatted_data[i] = [block].concat(wrap.formatted_data[i]);
-      }
-    }
-  }
-  else if (wrap.tag.includes('overall')) {
-    wrap.iso_begin = GP_wrap.iso_ref_vacc;
-    ord_begin = Math.floor(GP_DateOrdinal(wrap.iso_begin));
-    ord_today = Math.floor(GP_DateOrdinal(wrap.timestamp.slice(0, 10))) + 1;
-    nb_days = ord_today - ord_begin;
-  }
+  //-- Set iso_begin
+  wrap.iso_begin = GP_wrap.iso_ref_vacc;
   
   //-- Calculate xlim
   GP_MakeXLim(wrap);
-  
-  //-- Variables for xaxis
-  var xticklabel = [];
-  var x_list = [];
-  var x;
-  
-  //-- Make x_list & xticklabel
-  for (i=0; i<nb_days; i++) {
-    x = GP_ISODateAddition(wrap.iso_begin, i);
-    x_list.push(x);
-    
-    //-- Determine where to have xtick
-    if (wrap.tag.includes('latest')) {
-      if (i % wrap.xlabel_path == r)
-        xticklabel.push(x);
-    }
-  }
-  
-  //-- Save to wrapper
-  wrap.x_list = x_list;
-  wrap.xticklabel = xticklabel;
 }
 
 //-- Tooltip
@@ -258,11 +232,6 @@ function VBD_Plot(wrap) {
   //-- Plot line
   GP_PlotLine(wrap);
   
-  //-- Remove extrapolated point
-  var i;
-  for (i=0; i<wrap.formatted_data.length; i++)
-    wrap.formatted_data[i] = wrap.formatted_data[i].slice(1);
-  
   //-- Plot dot
   GP_PlotDot(wrap);
 }
@@ -290,7 +259,7 @@ function VBD_Replot(wrap) {
   GP_ReplotCountAsY(wrap, 'percentage');
   
   //-- Update ylabel
-  var ylabel_dict = {en: 'Proportion of the population', fr: 'Part de la population', 'zh-tw': '人口比'};
+  var ylabel_dict = {en: 'Population ratio', fr: 'Part de la population', 'zh-tw': '人口比'};
   GP_ReplotYLabel(wrap, ylabel_dict);
   
   //-- Set legend parameters

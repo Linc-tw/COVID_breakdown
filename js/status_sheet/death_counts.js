@@ -104,7 +104,7 @@ function DC_FormatData(wrap, data) {
       row[col_tag_avg] = +avg;
     
     //-- Update last date
-    last_date = row['date'];
+    last_date = x;
     
     //-- Update y_last
     for (j=0; j<nb_col; j++) {

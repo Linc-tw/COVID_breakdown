@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_progress.js   --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.13                --//
+    //--  2022.04.29                --//
     //--------------------------------//
 
 function VP_InitFig(wrap) {
@@ -109,7 +109,7 @@ function VP_FormatData(wrap, data) {
       //-- Determine where to have xtick
       if (i % wrap.xlabel_path == r) {
         x = GP_ISODateAddition(wrap.iso_begin, i);
-        x_list.push(i+wrap.x_min);
+        x_list.push(i+0.5+wrap.x_min);
         xticklabel.push(x);
       }
     }
@@ -128,7 +128,7 @@ function VP_FormatData(wrap, data) {
 //-- Supply
 function VP_FormatData2(wrap, data) {
   //-- Variables for data
-  var col_tag_list = data.columns.slice(3); //-- 0 = index, 1 = date, 2 = source
+  var col_tag_list = data.columns.slice(2); //-- 0 = date, 1 = source
   var col_tag = col_tag_list[wrap.col_ind];
   var nb_col = col_tag_list.length;
   var i, j, row;
@@ -139,7 +139,6 @@ function VP_FormatData2(wrap, data) {
   var y = 0;
   var y_prev = 0;
   var block = [{x: x, y: y}];
-  var annotation = [];
   var date, x_prev;
   
   //-- Main loop over row
@@ -152,7 +151,7 @@ function VP_FormatData2(wrap, data) {
       break;
     
     //-- Before delivery
-    x = +row['index'] - 0.5;
+    x = GP_DateOrdinal(date) - 0.5;
     
     if (x < wrap.x_min) {
       y = +row[col_tag];
@@ -170,11 +169,6 @@ function VP_FormatData2(wrap, data) {
     
     //-- Stock
     block.push({x: x, y: y});
-    
-    //-- Annotation
-    source = row['source'];
-    if (y > y_prev && source != 'COVAX' && !col_tag_list.includes(source))
-      annotation.push({x: x, y: y, x_prev: x_prev, y_prev: y_prev, source: source});
   }
   
   //-- Stock last point
@@ -206,7 +200,6 @@ function VP_FormatData2(wrap, data) {
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
   wrap.under_qc = under_qc;
-  wrap.annotation = annotation;
   wrap.col_tag_list = col_tag_list;
   wrap.nb_col = nb_col;
   wrap.y_max = y_max;
@@ -216,7 +209,7 @@ function VP_FormatData2(wrap, data) {
 //-- Injection
 function VP_FormatData3(wrap, data) {
   //-- Variables for data
-  var col_tag_list = data.columns.slice(2); //-- 0 = index, 1 = date
+  var col_tag_list = data.columns.slice(2); //-- 0 = date, 1 = interpolated
   var col_tag = col_tag_list[wrap.col_ind];
   var nb_col = col_tag_list.length;
   var i, j, x, y, row;
@@ -225,18 +218,24 @@ function VP_FormatData3(wrap, data) {
   var i_delivery = 0;
   var delivery = wrap.formatted_data[0][i_delivery+1];
   var block2 = [];
-  var block, last_date;
+  var block, last_ind, last_y;
   
   //-- Variables for yaxis
   var y_max = 0;
   
+  var ord_ref = GP_DateOrdinal(GP_wrap.iso_ref);
+  var ord;
+  
   //-- Main loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
-    x = +row['index'];
-    y = +row[col_tag];
-    last_date = row['date'];
+    x = GP_DateOrdinal(row['date']);
     
+    if ('' == row[col_tag])
+      y = NaN;
+    else
+      y = +row[col_tag];
+      
     //-- Get delivery data to stock in block, for tooltip
     if (x >= delivery.x) {
       i_delivery += 2;
@@ -244,14 +243,21 @@ function VP_FormatData3(wrap, data) {
     }
     
     block = {
-      'date': last_date,
+      'date': row['date'],
       'x': x,
       'y': y,
       'y_delivery': delivery.y,
+      'interpolated': row['interpolated'],
     };
     
-    //-- Update y_max
-    y_max = Math.max(y_max, y);
+    //-- Update last date
+    if (!isNaN(y)) {
+      last_ind = i;
+      last_y = y;
+    
+      //-- Update y_max
+      y_max = Math.max(y_max, y);
+    }
       
     //-- Stock
     block2.push(block);
@@ -279,65 +285,22 @@ function VP_FormatData3(wrap, data) {
     ytick.push(i)
   
   //-- Get latest value as legend value
-  wrap.legend_value_raw.push(y);
+  wrap.legend_value_raw.push(last_y);
   
   //-- Save to wrapper
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.last_date = last_date;
+  wrap.last_ind = last_ind;
 }
 
 //-- Post processing
 function VP_FormatData4(wrap) {
   var eps = 10; //-- [px]
-  var i, x, y, x_prev, y_prev;
-  var x_anno, y_anno, xp_anno, yp_anno;
-  var block_line, block_anno;
-  
-  //-- No donation line
-  
-  //-- Donation annotations
   var annotation = [];
-  var alpha = 2.5; //-- Distance factor for annotation
-  var beta = 1.5;
-  var delta = 2.5; //-- [px]
-  for (i=0; i<wrap.annotation.length; i++) {
-    x = wrap.annotation[i].x;
-    y = wrap.annotation[i].y;
-    x_prev = wrap.annotation[i].x_prev;
-    y_prev = wrap.annotation[i].y_prev;
-    x_anno = (x - wrap.x_min) / (wrap.x_max - wrap.x_min) * wrap.width;
-    y_anno = (1 - y / wrap.y_max) * wrap.height;
-    xp_anno = (x_prev - wrap.x_min) / (wrap.x_max - wrap.x_min) * wrap.width;
-    yp_anno = (1 - y_prev / wrap.y_max) * wrap.height;
-    
-    text_dict = {
-      'Japan': {en: 'Donated by Japan', fr: 'Offert par le Japon', 'zh-tw': '日本捐贈'},
-      'USA': {en: 'Donated by USA', fr: 'Offert par les É-U', 'zh-tw': '美國捐贈'},
-      'Lithuania': {en: 'Donated by Lithuania', fr: 'Offert par la Lituanie', 'zh-tw': '立陶宛捐贈'},
-      'Czechia': {en: 'Donated by Czechia', fr: 'Offert par la Tchéquie', 'zh-tw': '捷克捐贈'},
-      'Poland': {en: 'Donated by Poland', fr: 'Offert par la Pologne', 'zh-tw': '波蘭捐贈'},
-      'Slovakia': {en: 'Donated by Slovakia', fr: 'Offert par la Slovaquie', 'zh-tw': '斯洛伐克捐贈'},
-    };
-    
-    //-- Filter & get those only in frame
-    if (x_anno < 180)
-      continue;
-    
-    wrap.annotation[i]['tag'] = '';
-    wrap.annotation[i]['points'] =
-      (x_anno-alpha*eps) + ',' + (y_anno-beta*eps) + ' ' +
-      (x_anno-alpha*eps) + ',' + y_anno + ' ' + 
-      (x_anno-delta) + ',' + y_anno + ' ' + 
-      (x_anno-delta) + ',' + yp_anno;
-    wrap.annotation[i]['text'] = text_dict[wrap.annotation[i].source][LS_lang];
-    wrap.annotation[i]['x_text'] = x_anno - alpha*eps;
-    wrap.annotation[i]['y_text'] = y_anno - (beta+1)*eps;
-    wrap.annotation[i]['text-anchor'] = 'end';
-  }
   
-  //-- Replace
-  wrap.annotation = annotation;
+  var i, x, y;
+  var x_anno, y_anno;
+  var block_line, block_anno;
   
   //-- Under QC line
   wrap.formatted_data.push(wrap.under_qc);
@@ -350,38 +313,41 @@ function VP_FormatData4(wrap) {
   if (wrap.under_qc[1].y != wrap.under_qc[0].y) {
     text_dict = {en: 'Under', fr: 'En contrôle', 'zh-tw': ''};
     block_anno = {tag: 'delivery', points: '', text: text_dict[LS_lang], x_text: x_anno, y_text: y_anno-3*eps, 'text-anchor': 'middle'};
-    wrap.annotation.push(block_anno);
+    annotation.push(block_anno);
     text_dict = {en: 'quality checks', fr: 'de qualité', 'zh-tw': '檢驗中'};
     block_anno = {tag: 'delivery', points: '', text: text_dict[LS_lang], x_text: x_anno, y_text: y_anno-1.3*eps, 'text-anchor': 'middle'};
-    wrap.annotation.push(block_anno);
+    annotation.push(block_anno);
   }
   
   //-- Extrapolation line
   var administrated = wrap.formatted_data[1];
   var length = administrated.length;
-  var last = administrated[length-1];
-  var gradient = (last.y - administrated[length-8].y) / 7;
+  var last_block = administrated[wrap.last_ind];
+  var prev_block = administrated[wrap.last_ind-7];
+  var gradient = (last_block.y - prev_block.y) / 7;
   var extra_days;
   if (wrap.tag.includes('overall'))
     extra_days = 45;
   else
     extra_days = 14;
-  block_line = [last, {x: last.x+extra_days, y: last.y+extra_days*gradient}];
+  block_line = [last_block, {x: last_block.x+extra_days, y: last_block.y+extra_days*gradient}];
   wrap.formatted_data.push(block_line);
   
   //-- Extrapolation annotation
   x = 0.5 * (wrap.under_qc[1].x + wrap.under_qc[2].x)
   x_anno = (x - wrap.x_min) / (wrap.x_max - wrap.x_min) * wrap.width;
-  y_anno = (1 - last.y / wrap.y_max) * wrap.height;
+  y_anno = (1 - last_block.y / wrap.y_max) * wrap.height;
   text_dict = {en: 'Extrapolation', fr: 'Projection', 'zh-tw': '施打趨勢'};
   block_anno = {tag: 'administrated', points: '', text: text_dict[LS_lang], x_text: x_anno, y_text: y_anno+eps, 'text-anchor': 'middle'};
-  wrap.annotation.push(block_anno);
+  annotation.push(block_anno);
   
   //-- Today line
   block_line = [{x: wrap.x_today, y: 0}, {x: wrap.x_today, y: wrap.y_max}];
   wrap.formatted_data.push(block_line);
   
   //-- No today annotation
+  
+  wrap.annotation = annotation;
 }
 
 //-- Tooltip
@@ -426,7 +392,6 @@ function VP_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color & linestyle
-  //-- AZ, Moderna
   var color_list = GP_wrap.c_list.slice(4, 4+2);
   var linewidth_list = ['2.5px', '2.5px'];
   var linestyle_list = ['none', 'none'];
@@ -513,7 +478,7 @@ function VP_Replot(wrap) {
     .transition()
     .duration(wrap.trans_delay)
       .attr('cy', function (d) {return yscale(d.y);})
-      .attr('r', wrap.r);
+      .attr('r', function (d) {if (isNaN(d.y) || (d.hasOwnProperty('interpolated') && d.interpolated == 1)) return 0; return wrap.r;}); //-- Don't show dots if NaN
 
   //-- Frameline for mini
   if (wrap.tag.includes('mini')) {

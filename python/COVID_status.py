@@ -63,6 +63,7 @@ class StatusSheet(ccm.Template):
     date_list = data[self.coltag_date].values
     self.ind_2021 = (date_list == '2021分隔線').argmax() - 1 ## new_year_token
     self.ind_2022 = (date_list == '2022分隔線').argmax() - 2
+    self.ind_2023 = (date_list == '2023分隔線').argmax() - 3
     
     cum_dis_list = data[self.coltag_cum_dis].values
     ind = cum_dis_list == cum_dis_list
@@ -77,9 +78,9 @@ class StatusSheet(ccm.Template):
     date_list = []
     y = 2020
     
-    ## new_year_token
+    ## new_year_token (2023)
     for i, date in enumerate(self.getCol(self.coltag_date)):
-      if i >= self.ind_2022: ## new_year_token
+      if i >= self.ind_2022:
         y = 2022
       elif i >= self.ind_2021:
         y = 2021

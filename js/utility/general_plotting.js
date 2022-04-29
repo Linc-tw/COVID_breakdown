@@ -2,13 +2,11 @@
     //--------------------------------//
     //--  general_plotting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.13                --//
+    //--  2022.04.29                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
 //-- TODO
-
-//add vaccination to SIM
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
@@ -25,8 +23,8 @@ var GP_wrap = {
   //-- xlabel overall
   iso_ref: '2020-01-01',
   iso_ref_vacc: '2021-03-01',
-  xticklabel_min_space_month: 22,
-  xticklabel_min_space_month_vacc: 21,
+  xticklabel_min_space_month: 23,
+  xticklabel_min_space_month_vacc: 17,
   xticklabel_min_space_year: 50,
   xticklabel_min_space_year_vacc: 25,
   
@@ -476,12 +474,12 @@ function GP_GetRForTickPos(wrap, data_length) {
 
 //-- Require xticklabel
 function GP_ReplotDateAsX(wrap) {
-  //-- Define xscale
-  var xscale = GP_MakeBandXForBar(wrap);
+  //-- Define xscale & xaxis
+  var xscale, xaxis;
   
-  //-- Define xaxis
-  var xaxis;
   if (wrap.tag.includes('vaccination_progress')) {
+    xscale = GP_MakeLinearX(wrap);
+  
     xaxis = d3.axisBottom(xscale)
       .tickSize(10)
       .tickSizeOuter(0)
@@ -489,6 +487,8 @@ function GP_ReplotDateAsX(wrap) {
       .tickFormat(function (d, i) {return LS_ISODateToMDDate(wrap.xticklabel[i]);});
   }
   else {
+    xscale = GP_MakeBandXForBar(wrap);
+  
     xaxis = d3.axisBottom(xscale)
       .tickSize(10)
       .tickSizeOuter(0)
@@ -608,6 +608,7 @@ function GP_MakeXLim(wrap) {
 
 function GP_MakeOverallXTick(wrap) {
   var xticklabel_min_space_month, xticklabel_min_space_year, xticklabel_month_list;
+  
   if (wrap.tag.includes('vaccination')) {
     xticklabel_min_space_month = GP_wrap.xticklabel_min_space_month_vacc;
     xticklabel_min_space_year = GP_wrap.xticklabel_min_space_year_vacc;
@@ -622,7 +623,7 @@ function GP_MakeOverallXTick(wrap) {
   else {
     xticklabel_min_space_month = GP_wrap.xticklabel_min_space_month;
     xticklabel_min_space_year = GP_wrap.xticklabel_min_space_year;
-    
+  
     if (LS_lang == 'zh-tw')
       xticklabel_month_list = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
     else if (LS_lang == 'fr')
@@ -759,6 +760,9 @@ function GP_ReplotOverallXTick(wrap) {
     .call(xaxis_label_month)
     .selectAll('text')
       .attr('transform', 'translate(0,8)');
+  wrap.svg.select('.xaxis.label.month')
+    .selectAll('text')
+      .style('font-size', '1.1rem');
       
   //-- Define & update xaxis_label_year
   var xaxis_label_year = d3.axisBottom(xscale)
@@ -1070,7 +1074,7 @@ function GP_ReplotDot(wrap) {
       .transition()
       .duration(wrap.trans_delay)
         .attr('cy', function (d) {if (isNaN(d.y)) return yscale(0); return yscale(d.y);})
-        .attr('r', function (d) {if (isNaN(d.y)) return 0; return wrap.r;}); //-- Don't show dots if NaN
+        .attr('r', function (d) {if (isNaN(d.y) || (d.hasOwnProperty('interpolated') && d.interpolated == 1)) return 0; return wrap.r;}); //-- Don't show dots if NaN
   }
 }
 
