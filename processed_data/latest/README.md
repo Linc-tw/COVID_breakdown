@@ -187,7 +187,7 @@ Contents
     - 0 = true value, not interpolated
     - 1 = interpolated value
     - -1 = interpolated value, but the cumulative count on this day is known
-  - `total`: all brands
+  - `total`: all brands, daily new injections
   - `AZ`
   - `Moderna`
   - `Medigen`
@@ -197,7 +197,6 @@ Contents
 `vaccination_by_dose.csv`
 - Row: report date
 - Column
-  - `index`: day difference from 2020-01-01
   - `date`
   - `interpolated`
     - 0 = true value, not interpolated
@@ -209,8 +208,10 @@ Contents
 `vaccination_progress_injections.csv`
 - Row = report date
 - Column
-  - `index`: day difference from 2020-01-01
   - `date`
+  - `interpolated`
+    - 0 = true value, not interpolated
+    - 1 = interpolated value
   - `total`: all brands, cumulative number of doses
   - `AZ`
   - `Moderna`
@@ -220,7 +221,6 @@ Contents
 `vaccination_progress_supplies.csv`
 - Row: available date
 - Column
-  - `index`: day difference from 2020-01-01
   - `date`: available date of the supply
     - If the available date is not available, the date is estimated as the delivery date plus 8 days
   - `source`: origin of the supply
