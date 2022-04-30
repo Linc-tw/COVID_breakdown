@@ -21,13 +21,13 @@ echo
 wget -O 'raw_data/COVID-19_in_Taiwan_raw_data_status_evolution.csv' 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pub?output=csv&gid=1036676170' &
 sleep 10
 echo
-wget -O 'raw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv' 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pub?output=csv&gid=1173642744' &
-sleep 10
-echo
 wget -O 'raw_data/COVID-19_in_Taiwan_raw_data_border_statistics.csv' 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pub?output=csv&gid=1449990493' &
 sleep 10
 echo
 wget -O 'raw_data/COVID-19_in_Taiwan_raw_data_timeline.csv' 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pub?output=csv&gid=1744708886' &
+sleep 5
+echo
+wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_specimen.csv' 'https://od.cdc.gov.tw/eic/covid19/covid19_tw_specimen.csv' &
 sleep 5
 echo
 wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_county_age.csv' 'https://od.cdc.gov.tw/eic/Day_Confirmation_Age_County_Gender_19CoV.csv' &
@@ -39,7 +39,7 @@ echo
 
 echo "## Process data"
 echo
-/usr/bin/python3.8 python/COVID_process.py & sleep 10
+/usr/bin/python3.8 python/COVID_process.py & sleep 12
 echo
 
 echo "## Push to repo"

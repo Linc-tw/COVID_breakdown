@@ -240,7 +240,7 @@ function SIM_FormatData(wrap, data, index) {
   if (wrap.tag.includes('overall'))
     sub_wrap.r = 1.5;
   else
-    sub_wrap.r = 3;
+    sub_wrap.r = 4;
   
   //-- new_stat_flag
   if (stat == 0)

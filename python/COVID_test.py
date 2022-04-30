@@ -2,7 +2,7 @@
     ################################
     ##  COVID_test.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.25                ##
+    ##  2022.04.29                ##
     ################################
 
 import os
@@ -10,8 +10,6 @@ import sys
 import datetime as dtt
 
 import numpy as np
-import scipy as sp
-import scipy.signal as signal
 import pandas as pd
 
 import COVID_common as ccm
@@ -190,13 +188,15 @@ class TestSheet(ccm.Template):
     stock = ccm.adjustDateRange(stock)
     
     for page in ccm.PAGE_LIST:
+      if page != ccm.PAGE_OVERALL:
+        continue
       data = ccm.truncateStock(stock, page)
       
       ## Save
-      name = '{}processed_data/{}/test_by_criterion.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/test_by_criterion_old.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
-      self.makeReadme_testByCriterion(page)
+      #self.makeReadme_testByCriterion(page)
     return
   
   def printCriteria(self):
@@ -386,30 +386,7 @@ class TestSheet(ccm.Template):
     self.makeReadme_criteriaTimeline()
     return
   
-  def updateNewTestCounts(self, stock):
-    ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
-    ord_today = ccm.getTodayOrdinal()
-    nb_days = ord_today - ord_ref
-    
-    stock['new_tests'] = np.zeros(nb_days, dtype=int)
-    
-    date_list = self.getDate()
-    from_ext_list = self.getFromExtended()
-    from_qt_list = self.getFromQT()
-    from_clin_def_list = self.getFromClinDef()
-    
-    for date, from_clin_def, from_qt, from_ext in zip(date_list, from_clin_def_list, from_qt_list, from_ext_list):
-      ind = ccm.ISODateToOrd(date) - ord_ref
-      if ind < 0 or ind >= nb_days:
-        print('Bad date = {}'.format(date))
-        continue
-      
-      stock['new_tests'][ind] = from_clin_def + from_qt + from_ext
-    return
-  
   def saveCsv(self):
-    self.saveCsv_testCounts()
-    self.saveCsv_testByCriterion()
     self.saveCsv_criteriaTimeline()
     return
 

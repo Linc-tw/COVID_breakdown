@@ -17,7 +17,7 @@ Contents
   - `date`
   - `entry`
   - `exit`
-  - `total`: entry + exit
+  - `total`: `entry` + `exit`
   - `entry_avg`: 7-day moving average of `entry`
   - `exit_avg`: 7-day moving average of `exit`
   - `total_avg`: 7-day moving average of `total`
@@ -37,8 +37,8 @@ Contents
   - `imported`
   - `linked`: local cases linked to known ones
   - `unlinked`: local cases with unknown origin
-  - `fleet`: on boat`
-  - `plane`: on plane`
+  - `fleet`: on boat
+  - `plane`: on plane
   - `unknown`: undetermined`
 - Cases without onset date do not show up in the file
 
@@ -49,8 +49,8 @@ Contents
   - `imported`
   - `linked`: local cases linked to known ones
   - `unlinked`: local cases with unknown origin
-  - `fleet`: on boat`
-  - `plane`: on plane`
+  - `fleet`: on boat
+  - `plane`: on plane
   - `unknown`: undetermined`
 
 `case_counts_by_report_day.csv`

@@ -275,7 +275,7 @@ class BorderSheet(ccm.Template):
     stock.append('  - `date`')
     stock.append('  - `entry`')
     stock.append('  - `exit`')
-    stock.append('  - `total`: entry + exit')
+    stock.append('  - `total`: `entry` + `exit`')
     stock.append('  - `entry_avg`: 7-day moving average of `entry`')
     stock.append('  - `exit_avg`: 7-day moving average of `exit`')
     stock.append('  - `total_avg`: 7-day moving average of `total`')

@@ -17,12 +17,12 @@ The visualization of this website is based on data collected from the following 
 This [Google Spreadsheet](https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pubhtml#) 
 is maintained by various anonymous users of the PTT forum, often considered as Taiwanese Reddit. 
 They collect fragmental information from offical releases and daily press conferences, and sort them into comprehensive worksheets.
-The data of confirmed cases, border statistics, tests, deaths, & timeline are taken from here.
+The data of confirmed cases, border statistics, deaths, & timeline are taken from here.
 
 ### CDC
 
 Taiwan CDC possesses an [official data platform](https://data.cdc.gov.tw/zh_TW/).
-The data of age and geographical information of confirmed cases are taken from here.
+The data of age and geographical information of confirmed cases and the data of tests are taken from here.
 
 ### NCHC
 
@@ -63,11 +63,6 @@ Contents
 - Breakdown table of every single confirmed cases
 - Contains report date, onset date, entry date, gender, age, nationality, transmission type, detection channel, symptoms, travel history, & link to known cases
 
-`COVID-19_in_Taiwan_raw_data_number_of_tests.csv`
-- Daily test statistics
-- Shows date of tests when they were administrated, which is **not** necessary the same date as when they were analyzed
-- This is just a table version of an offical `json` file that can be found [here](https://covid19dashboard.cdc.gov.tw/dash4).
-
 `COVID-19_in_Taiwan_raw_data_status_evolution.csv`
 - Evolution of numbers of confirmed cases, discharged cases, & deaths
 
@@ -80,6 +75,11 @@ Contents
 - Table of confirmed cases as were reported by local health authorities
 - Contains report date, county/city, village/district, gender, age, whether imported, & number of cases
 - Downloaded from [here](https://data.cdc.gov.tw/zh_TW/dataset/aagsdctable-day-19cov)
+
+`COVID-19_in_Taiwan_raw_data_specimen.csv`
+- Daily test statistics
+- Shows date of tests when they were administrated, which is **not** necessary the same date as when they were analyzed
+- Downloaded from [here](https://data.gov.tw/dataset/120451).
 
 ### NCHC
 

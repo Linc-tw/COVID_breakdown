@@ -534,7 +534,7 @@ class CountySheet(ccm.Template):
     stock.append('- Column')
     stock.append('  - `date`')
     stock.append('  - `total`: all ages')
-    stock.append('  - `70+` to `0-4`: age range')
+    stock.append('  - `0-4` to `70+`: age range')
     ccm.README_DICT[page][key] = stock
     
     key = 'incidence_evolution_by_age_label'

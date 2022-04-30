@@ -949,8 +949,8 @@ class CaseSheet(ccm.Template):
     stock.append('  - `imported`')
     stock.append('  - `linked`: local cases linked to known ones')
     stock.append('  - `unlinked`: local cases with unknown origin')
-    stock.append('  - `fleet`: on boat`')
-    stock.append('  - `plane`: on plane`')
+    stock.append('  - `fleet`: on boat')
+    stock.append('  - `plane`: on plane')
     stock.append('  - `unknown`: undetermined`')
     ccm.README_DICT[page][key] = stock
     
@@ -963,8 +963,8 @@ class CaseSheet(ccm.Template):
     stock.append('  - `imported`')
     stock.append('  - `linked`: local cases linked to known ones')
     stock.append('  - `unlinked`: local cases with unknown origin')
-    stock.append('  - `fleet`: on boat`')
-    stock.append('  - `plane`: on plane`')
+    stock.append('  - `fleet`: on boat')
+    stock.append('  - `plane`: on plane')
     stock.append('  - `unknown`: undetermined`')
     stock.append('- Cases without onset date do not show up in the file')
     ccm.README_DICT[page][key] = stock
@@ -1483,40 +1483,6 @@ class CaseSheet(ccm.Template):
       ccm.saveCsv(name, data)
       
       self.makeReadme_diffByTransmission(page)
-    return
-  
-  def updateNewCaseCounts(self, stock):
-    report_date_list = self.getReportDate()
-    trans_list = self.getTransmission()
-    
-    ## Date
-    ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
-    ord_today = ccm.getTodayOrdinal()
-    date_arr = [ccm.ordDateToISO(ord_) for ord_ in range(ord_ref, ord_today)]
-    nb_days = ord_today - ord_ref
-    
-    ## Update stock
-    stock['date'] = date_arr
-    stock['new_imported'] = np.zeros(nb_days, dtype=int)
-    stock['new_local'] = np.zeros(nb_days, dtype=int)
-    stock['new_cases'] = np.zeros(nb_days, dtype=int)
-    
-    ## Loop over case
-    for report_date, trans in zip(report_date_list, trans_list):
-      if trans != trans:
-        continue
-      
-      ind = ccm.ISODateToOrd(report_date) - ord_ref
-      if ind < 0 or ind >= nb_days:
-        print('Bad ind_r = {:d}'.format(ind))
-        continue
-      
-      stock['new_cases'][ind] += 1
-      
-      if trans == 'imported':
-        stock['new_imported'][ind] += 1
-      elif trans == 'local':
-        stock['new_local'][ind] += 1
     return
   
   def saveCsv(self):

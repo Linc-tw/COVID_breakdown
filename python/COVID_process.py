@@ -19,6 +19,7 @@ import COVID_common as ccm
 import COVID_case
 import COVID_status
 import COVID_test
+import COVID_specimen
 import COVID_border
 import COVID_timeline
 import COVID_county
@@ -170,6 +171,9 @@ def sandbox():
   #test_sheet = COVID_test.TestSheet()
   #test_sheet.saveCsv_testByCriterion()
   
+  #spec_sheet = COVID_specimen.SpecimenSheet()
+  #spec_sheet.saveCsv_testCounts()
+  
   #border_sheet = COVID_border.BorderSheet()
   #border_sheet.saveCsv_borderStats()
   
@@ -179,18 +183,15 @@ def sandbox():
   #county_sheet = COVID_county.CountySheet()
   #county_sheet.saveCsv_localCasePerCounty()
   
-  vacc_sheet = COVID_vaccination.VaccinationSheet()
-  vacc_sheet.saveCsv_vaccinationProgress()
-  
-  #vacc_county_sheet = COVID_vaccination_county.VaccinationCountySheet()
-  #vacc_county_sheet.saveCsv_vaccinationByCounty()
+  #vacc_sheet = COVID_vaccination.VaccinationSheet()
+  #vacc_sheet.saveCsv_vaccinationProgress()
   
   #case_sheet = COVID_case.CaseSheet()
   #status_sheet = COVID_status.StatusSheet()
-  #test_sheet = COVID_test.TestSheet()
+  #spec_sheet = COVID_specimen.SpecimenSheet()
   #border_sheet = COVID_border.BorderSheet()
   #saveCsv_incidenceRates(status_sheet, border_sheet)
-  #saveCsv_positivityAndFatality(status_sheet, test_sheet)
+  #saveCsv_positivityAndFatality(status_sheet, spec_sheet)
   return
 
 ################################################################################
@@ -207,9 +208,13 @@ def saveCsv_all():
   status_sheet = COVID_status.StatusSheet()
   status_sheet.saveCsv()
   
+  #print()
+  #test_sheet = COVID_specimen.TestSheet()
+  #test_sheet.saveCsv()
+  
   print()
-  test_sheet = COVID_test.TestSheet()
-  test_sheet.saveCsv()
+  spec_sheet = COVID_specimen.SpecimenSheet()
+  spec_sheet.saveCsv()
   
   print()
   border_sheet = COVID_border.BorderSheet()
@@ -227,13 +232,9 @@ def saveCsv_all():
   vacc_sheet = COVID_vaccination.VaccinationSheet()
   vacc_sheet.saveCsv()
   
-  #print()
-  #vacc_county_sheet = COVID_vaccination_county.VaccinationCountySheet()
-  #vacc_county_sheet.saveCsv_vaccinationByCounty()
-  
   print()
   saveCsv_incidenceRates(status_sheet, border_sheet)
-  saveCsv_positivityAndFatality(status_sheet, test_sheet)
+  saveCsv_positivityAndFatality(status_sheet, spec_sheet)
   
   print()
   ccm.saveMarkdown_readme()
