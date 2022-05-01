@@ -63,12 +63,12 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_death_1', '死亡人數');
     LS_AddStr('stats_in_mirror_button_vaccination_0', '疫苗劑數');
     LS_AddStr('stats_in_mirror_button_vaccination_1', '疫苗劑數');
-    LS_AddStr('stats_in_mirror_button_1st_dose_0', '第一劑人數');
-    LS_AddStr('stats_in_mirror_button_1st_dose_1', '第一劑人數');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '第二劑人數');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '第二劑人數');
-    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '第三劑人數');
-    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '第三劑人數');
+    LS_AddStr('stats_in_mirror_button_1st_dose_0', '至少一劑人數');
+    LS_AddStr('stats_in_mirror_button_1st_dose_1', '至少一劑人數');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '至少兩劑人數');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '至少兩劑人數');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '至少三劑人數');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '至少三劑人數');
     LS_AddStr('stats_in_mirror_button_border_entry_0', '入境人數');
     LS_AddStr('stats_in_mirror_button_border_entry_1', '入境人數');
     LS_AddStr('stats_in_mirror_button_border_exit_0', '出境人數');
@@ -124,12 +124,12 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_death_1', 'Décès');
     LS_AddStr('stats_in_mirror_button_vaccination_0', 'Vaccination');
     LS_AddStr('stats_in_mirror_button_vaccination_1', 'Vaccination');
-    LS_AddStr('stats_in_mirror_button_1st_dose_0', '1er dose');
-    LS_AddStr('stats_in_mirror_button_1st_dose_1', '1er dose');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '2e dose');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '2e dose');
-    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '3e dose');
-    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '3e dose');
+    LS_AddStr('stats_in_mirror_button_1st_dose_0', '1 dose');
+    LS_AddStr('stats_in_mirror_button_1st_dose_1', '1 dose');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '2 doses');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '2 doses');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '3 doses');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '3 doses');
     LS_AddStr('stats_in_mirror_button_border_entry_0', 'Arrivée aux frontières');
     LS_AddStr('stats_in_mirror_button_border_entry_1', 'Arrivée aux frontières');
     LS_AddStr('stats_in_mirror_button_border_exit_0', 'Départ des frontières');
@@ -185,12 +185,12 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_death_1', 'Death counts');
     LS_AddStr('stats_in_mirror_button_vaccination_0', 'Vaccination');
     LS_AddStr('stats_in_mirror_button_vaccination_1', 'Vaccination');
-    LS_AddStr('stats_in_mirror_button_1st_dose_0', '1st dose');
-    LS_AddStr('stats_in_mirror_button_1st_dose_1', '1st dose');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '2nd dose');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '2nd dose');
-    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '3rd dose');
-    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '3rd dose');
+    LS_AddStr('stats_in_mirror_button_1st_dose_0', '1 dose');
+    LS_AddStr('stats_in_mirror_button_1st_dose_1', '1 dose');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '2 doses');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '2 doses');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '3 doses');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '3 doses');
     LS_AddStr('stats_in_mirror_button_border_entry_0', 'Border arrival counts');
     LS_AddStr('stats_in_mirror_button_border_entry_1', 'Border arrival counts');
     LS_AddStr('stats_in_mirror_button_border_exit_0', 'Border departure counts');
@@ -822,19 +822,21 @@ function SIM_Replot(wrap) {
       sub_wrap.mouse_move = VBD_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
-      ylabel_dict = {en: 'Population ratio', fr: 'Part de la population', 'zh-tw': '人口比'};
       
       if (stat == 6) {
         list_ind = 0;
         sub_wrap.color = GP_wrap.c_list[3];
+        ylabel_dict = {en: 'At least 1 dose', fr: 'Au moins 1 dose', 'zh-tw': '至少一劑之人口比'};
       }
       else if (stat == 7) {
         list_ind = 1;
         sub_wrap.color = GP_wrap.c_list[2];
+        ylabel_dict = {en: 'At least 2 doses', fr: 'Au moins 2 doses', 'zh-tw': '至少兩劑之人口比'};
       }
       else {
         list_ind = 2;
         sub_wrap.color = GP_wrap.c_list[6];
+        ylabel_dict = {en: 'At least 3 doses', fr: 'Au moins 3 doses', 'zh-tw': '至少三劑之人口比'};
       }
       
       SIM_ReplotFaintSingleBar(wrap, i);
