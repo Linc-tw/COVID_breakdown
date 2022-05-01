@@ -29,29 +29,6 @@ Contents
   - `total`: all year 2022
   - `MMM`: during month `MMM`
 
-`case_by_transmission_by_onset_day.csv`
-- Row: onset date
-- Column
-  - `date`
-  - `imported`
-  - `linked`: local cases linked to known ones
-  - `unlinked`: local cases with unknown origin
-  - `fleet`: on boat
-  - `plane`: on plane
-  - `unknown`: undetermined`
-- Cases without onset date do not show up in the file
-
-`case_by_transmission_by_report_day.csv`
-- Row: report date
-- Column
-  - `date`
-  - `imported`
-  - `linked`: local cases linked to known ones
-  - `unlinked`: local cases with unknown origin
-  - `fleet`: on boat
-  - `plane`: on plane
-  - `unknown`: undetermined`
-
 `case_counts_by_report_day.csv`
 - Row: report date
 - Column

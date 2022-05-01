@@ -79,7 +79,7 @@ Contents
 `COVID-19_in_Taiwan_raw_data_specimen.csv`
 - Daily test statistics
 - Shows date of tests when they were administrated, which is **not** necessary the same date as when they were analyzed
-- Downloaded from [here](https://data.gov.tw/dataset/120451).
+- Downloaded from [here](https://data.gov.tw/dataset/120451)
 
 ### NCHC
 

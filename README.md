@@ -38,8 +38,8 @@ Plots on [_Incidence rates_](http://covidtaiwan.linc.tw/page/latest_incidence.ht
 
 Plots on [_Vaccination_](http://covidtaiwan.linc.tw/page/latest_vaccination.html) are:
 - Vaccination by Brand
-- Vaccination Progress & Deliveries (also shown in [_Home_](http://covidtaiwan.linc.tw/page/index.html))
-- Vaccination Progress by Dose
+- Vaccination Progress & Deliveries
+- Vaccination Progress by Dose (also shown in [_Home_](http://covidtaiwan.linc.tw/page/index.html))
 
 Plots on [_Other stats_](http://covidtaiwan.linc.tw/page/latest_others.html) are:
 - Test Counts
@@ -69,7 +69,7 @@ Language support
 Current workflow
 ----------------
 
-An automatic update is scheduled at 16:45 everyday.
+An automatic update is scheduled at 15:15 everyday.
 This is done by executing `upload.sh`. It will:
 - download raw data from the sources,
 - execute `python python/COVID_process.py` to generate processed data, and

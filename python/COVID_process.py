@@ -200,9 +200,9 @@ def sandbox():
 def saveCsv_all():
   ccm.initializeReadme()
   
-  print()
-  case_sheet = COVID_case.CaseSheet()
-  case_sheet.saveCsv()
+  #print()
+  #case_sheet = COVID_case.CaseSheet()
+  #case_sheet.saveCsv()
   
   print()
   status_sheet = COVID_status.StatusSheet()
