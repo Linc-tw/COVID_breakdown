@@ -57,21 +57,26 @@ class StatusSheet(ccm.Template):
     self.coltag_cum_hosp = '未解除隔離數'
     self.coltag_notes = '備註'
     
+    ## new_year_token
+    self.n_total = 0
+    self.n_latest = 0
+    self.n_2023 = 0
+    self.n_2022 = 0
+    self.n_2021 = 0
+    self.n_2020 = 0
+    
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_status_evolution.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
-    
-    date_list = data[self.coltag_date].values
-    self.ind_2021 = (date_list == '2021分隔線').argmax() - 1 ## new_year_token
-    self.ind_2022 = (date_list == '2022分隔線').argmax() - 2
-    self.ind_2023 = (date_list == '2023分隔線').argmax() - 3
-    
-    cum_dis_list = data[self.coltag_cum_dis].values
-    ind = cum_dis_list == cum_dis_list
-    self.data    = data[ind]
-    self.n_total = ind.sum()
+    self.setData(data)
     
     if verbose:
+      ## new_year_token
       print('N_total = {:d}'.format(self.n_total))
+      print('N_latest = {:d}'.format(self.n_latest))
+      print('N_2023 = {:d}'.format(self.n_2023))
+      print('N_2022 = {:d}'.format(self.n_2022))
+      print('N_2021 = {:d}'.format(self.n_2021))
+      print('N_2020 = {:d}'.format(self.n_2020))
     return 
   
   def getDate(self):
@@ -119,6 +124,87 @@ class StatusSheet(ccm.Template):
     
   def getCumHospitalized(self):
     return self.getCol(self.coltag_cum_hosp).astype(int)
+    
+  def setData(self, data):
+    date_list = data[self.coltag_date].values
+    
+    ## new_year_token
+    self.ind_2021 = (date_list == '2021分隔線').argmax() - 1
+    self.ind_2022 = (date_list == '2022分隔線').argmax() - 2
+    self.ind_2023 = (date_list == '2023分隔線').argmax() - 3
+    
+    cum_dis_list = data[self.coltag_cum_dis].values
+    ind = cum_dis_list == cum_dis_list
+    self.data = data[ind]
+    
+    date_list = self.getDate()
+    new_soldiers_list = self.getNewSoldiers()
+    new_impored_list = self.getNewImported()
+    new_local_list = self.getNewLocal()
+    new_unclear_list = self.getNewUnclear()
+    
+    new_others_list = new_soldiers_list + new_unclear_list
+    new_cases_list = new_impored_list + new_local_list + new_others_list
+    
+    stock = {'date': date_list[:-1], 'total': new_cases_list[:-1]}
+    stock = pd.DataFrame(stock)
+    stock = ccm.adjustDateRange(stock)
+    
+    cum_cases_dict = {}
+    for page in ccm.PAGE_LIST:
+      data = ccm.truncateStock(stock, page)
+      cum_cases = data['total'].values
+      cum_cases.astype(float)
+      ind = ~np.isnan(cum_cases)
+      cum_cases_dict[page] = cum_cases[ind].sum()
+      
+    ## new_year_token
+    self.n_total = int(cum_cases_dict[ccm.PAGE_OVERALL])
+    self.n_latest = int(cum_cases_dict[ccm.PAGE_LATEST])
+    self.n_2023 = 0
+    self.n_2022 = int(cum_cases_dict[ccm.PAGE_2022])
+    self.n_2021 = int(cum_cases_dict[ccm.PAGE_2021])
+    self.n_2020 = int(cum_cases_dict[ccm.PAGE_2020])
+    return
+    
+  def makeReadme_keyNb(self):
+    key = 'key_numbers'
+    stock = []
+    stock.append('`{}.csv`'.format(key))
+    stock.append('- Row')
+    stock.append('  - `n_total`: total confirmed case counts')
+    stock.append('  - `n_latest`: number of confirmed cases during last 90 days')
+    ## new_year_token (2023)
+    stock.append('  - `n_2020`: number of confirmed cases during 2020')
+    stock.append('  - `n_2021`: number of confirmed cases during 2021')
+    stock.append('  - `n_2022`: number of confirmed cases during 2022')
+    stock.append('  - `n_empty`: number of cases that have been shown later as false positive')
+    stock.append('  - `timestamp`: time of last update')
+    stock.append('- Column')
+    stock.append('  - `key`')
+    stock.append('  - `value`')
+    ccm.README_DICT['root'][key] = stock
+    return
+  
+  def saveCsv_keyNb(self):
+    timestamp = dtt.datetime.now().astimezone()
+    timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
+    
+    population_twn = ccm.COUNTY_DICT['00000']['population']
+    
+    ## new_year_token (2023)
+    key = ['n_overall', 'n_latest', 'n_2020', 'n_2021', 'n_2022', 'timestamp', 'population_twn']
+    value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_2022, timestamp, population_twn]
+    
+    ## Make data frame
+    data = {'key': key, 'value': value}
+    data = pd.DataFrame(data)
+    
+    name = '{}processed_data/key_numbers.csv'.format(ccm.DATA_PATH)
+    ccm.saveCsv(name, data)
+    
+    self.makeReadme_keyNb()
+    return
     
   def makeReadme_caseCounts(self, page):
     key = 'case_counts_by_report_day'
@@ -300,6 +386,7 @@ class StatusSheet(ccm.Template):
     return
 
   def saveCsv(self):
+    self.saveCsv_keyNb()
     self.saveCsv_caseCounts()
     self.saveCsv_statusEvolution()
     self.saveCsv_deathCounts()

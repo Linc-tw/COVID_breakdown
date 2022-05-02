@@ -8,9 +8,9 @@
 function IEBC_InitFig(wrap) {
   wrap.tot_width = 1200;
   wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 600;
-  wrap.tot_height_['fr'] = 600;
-  wrap.tot_height_['en'] = 600;
+  wrap.tot_height_['zh-tw'] = 550;
+  wrap.tot_height_['fr'] = 550;
+  wrap.tot_height_['en'] = 550;
   wrap.margin_ = {};
   wrap.margin_['zh-tw'] = {left: 60, right: 5, bottom: 65, top: 35};
   wrap.margin_['fr'] = {left: 170, right: 5, bottom: 65, top: 35};
@@ -158,7 +158,7 @@ function IEBC_Replot(wrap) {
       .style('font-size', '1.15rem');
   wrap.svg.select('.yaxis')
     .selectAll('text')
-      .style('font-size', '1.15rem');
+      .style('font-size', '1.05rem');
       
   //-- Remove old lines
   wrap.svg.selectAll('.legend.line')
@@ -208,6 +208,7 @@ function IEBC_Replot(wrap) {
       .attr('y', offset.y)
       .attr('text-anchor', 'end')
       .style('fill', '#000000')
+      .style('font-size', '1.2rem')
       .text(function (d) {return d;});
 }
 

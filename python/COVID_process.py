@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.29                ##
+    ##  2022.05.02                ##
     ################################
 
 import os
@@ -165,7 +165,7 @@ def sandbox():
   #case_sheet = COVID_case.CaseSheet()
   #link_list = case_sheet.getLink()
   
-  #status_sheet = COVID_status.StatusSheet()
+  status_sheet = COVID_status.StatusSheet()
   #date = status_sheet.getDate()
   
   #test_sheet = COVID_test.TestSheet()

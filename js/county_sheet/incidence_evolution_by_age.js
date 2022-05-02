@@ -8,9 +8,9 @@
 function IEBA_InitFig(wrap) {
   wrap.tot_width = 1200;
   wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 500;
-  wrap.tot_height_['fr'] = 500;
-  wrap.tot_height_['en'] = 500;
+  wrap.tot_height_['zh-tw'] = 450;
+  wrap.tot_height_['fr'] = 450;
+  wrap.tot_height_['en'] = 450;
   wrap.margin_ = {};
   wrap.margin_['zh-tw'] = {left: 85, right: 5, bottom: 65, top: 35};
   wrap.margin_['fr'] = {left: 100, right: 5, bottom: 65, top: 35};
@@ -161,7 +161,7 @@ function IEBA_Replot(wrap) {
       .style('font-size', '1.15rem');
   wrap.svg.select('.yaxis')
     .selectAll('text')
-      .style('font-size', '1.15rem');
+      .style('font-size', '1.05rem');
       
   //-- Remove old lines
   wrap.svg.selectAll('.legend.line')
@@ -211,6 +211,7 @@ function IEBA_Replot(wrap) {
       .attr('y', offset.y)
       .attr('text-anchor', 'end')
       .style('fill', '#000000')
+      .style('font-size', '1.2rem')
       .text(function (d) {return d;});
 }
 

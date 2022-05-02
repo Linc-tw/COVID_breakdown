@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  test_counts_param.js      --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.05.02                --//
     //--------------------------------//
 
 var TC_mini_wrap = {
@@ -25,7 +25,7 @@ var TC_latest_wrap = {
 
   y_max_factor: 1.55, 
   nb_yticks: 4,
-  legend_pos_x: 115,
+  legend_pos_x: 130,
 };
 
 var TC_overall_wrap = {
@@ -37,7 +37,7 @@ var TC_overall_wrap = {
   
   y_max_factor: 1.1, 
   nb_yticks: 4,
-  legend_pos_x: 110,
+  legend_pos_x: 135,
 };
 
 var TC_2021_wrap = {

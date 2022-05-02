@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_progress.js   --//
     //--  Chieh-An Lin              --//
-    //--  2022.04.29                --//
+    //--  2022.05.02                --//
     //--------------------------------//
 
 function VP_InitFig(wrap) {
@@ -237,7 +237,7 @@ function VP_FormatData3(wrap, data) {
       y = +row[col_tag];
       
     //-- Get delivery data to stock in block, for tooltip
-    if (x >= delivery.x) {
+    if (x >= delivery.x && i_delivery + 2 < wrap.formatted_data[0].length) {
       i_delivery += 2;
       delivery = wrap.formatted_data[0][i_delivery+1];
     }

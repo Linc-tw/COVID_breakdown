@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_brand.js   --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.13                --//
+    //--  2022.05.02                --//
     //--------------------------------//
 
 function VBB_InitFig(wrap) {
@@ -131,23 +131,24 @@ function VBB_FormatData(wrap, data) {
     else
       row[col_tag_avg] = +avg;
     
-    //-- Update last date
-    last_date = x;
-    
     //-- Update to exclude interpolation
     if ((0 < wrap.cumul && 0 < +row['interpolated']) || (0 == wrap.cumul && 0 != +row['interpolated'])) {
       for (j=0; j<nb_col; j++)
         row[col_tag_list[j]] = 0;
     }
+    else {
+      //-- Update last date
+      last_date = x;
     
-    //-- Update y_last
-    for (j=0; j<nb_col; j++) {
-      if (wrap.cumul == 0)
-        y_last[j] = +row[col_tag_list[j]];
-      else 
-        y_last[j] = Math.max(y_last[j], +row[col_tag_list[j]]);
+      //-- Update y_last
+      for (j=0; j<nb_col; j++) {
+        if (wrap.cumul == 0)
+          y_last[j] = +row[col_tag_list[j]];
+        else 
+          y_last[j] = Math.max(y_last[j], +row[col_tag_list[j]]);
+      }
     }
-      
+    
     //-- Update y_max
     y_max = Math.max(y_max, y);
   }

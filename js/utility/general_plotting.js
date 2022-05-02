@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  general_plotting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.04.29                --//
+    //--  2022.05.02                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
@@ -1230,7 +1230,7 @@ function GP_PlotHotMap(wrap) {
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central')
       .style('fill', function (d) {if (d.value<0.5*wrap.value_max) return '#000000'; return '#FFFFFF';})
-      .style('font-size', function (d) {if (d.value.toFixed(0)<100) return '0.9rem'; return '0.75rem';})
+      .style('font-size', function (d) {if (d.value.toFixed(0)<100) return '0.82rem'; if (d.value.toFixed(0)<1000) return '0.7rem'; return '0.58rem';})
       .text(function (d) {if (d.value<0.5001) return ''; return d.value.toFixed(0);});
 }
 

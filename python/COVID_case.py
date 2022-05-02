@@ -1486,7 +1486,7 @@ class CaseSheet(ccm.Template):
     return
   
   def saveCsv(self):
-    self.saveCsv_keyNb()
+    #self.saveCsv_keyNb()
     #self.saveCsv_caseCounts()
     self.saveCsv_caseByTransmission()
     self.saveCsv_caseByDetection()

@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_by_age_param.js      --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.05.02                --//
     //--------------------------------//
 
 var CBA_latest_wrap = {
@@ -13,7 +13,7 @@ var CBA_latest_wrap = {
 
   y_max_factor: 1.55,
   nb_yticks: 4,
-  legend_pos_x: 95,
+  legend_pos_x: 105,
 };
 
 var CBA_overall_wrap = {
@@ -24,7 +24,7 @@ var CBA_overall_wrap = {
 
   y_max_factor: 1.55,
   nb_yticks: 4,
-  legend_pos_x: 95,
+  legend_pos_x: 105,
 };
 
 var CBA_2021_wrap = {

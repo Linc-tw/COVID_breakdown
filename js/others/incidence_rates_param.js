@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  incidence_rates_param.js  --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.05.02                --//
     //--------------------------------//
 
 var IR_mini_wrap = {
@@ -26,7 +26,7 @@ var IR_latest_wrap = {
 
   y_max_factor: 1.75,
   nb_yticks: 4,
-  legend_pos_x: 95,
+  legend_pos_x: 105,
   r: 3, //-- Dot radius
 };
 
@@ -39,7 +39,7 @@ var IR_overall_wrap = {
   
   y_max_factor: 1.2,
   nb_yticks: 4,
-  legend_pos_x: 95,
+  legend_pos_x: 105,
   r: 1.5, //-- Dot radius
 };
 

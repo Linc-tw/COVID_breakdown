@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_counts_param.js      --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.05.02                --//
     //--------------------------------//
 
 var CC_mini_wrap = {
@@ -24,8 +24,8 @@ var CC_latest_wrap = {
   
   y_max_factor: 1.55,
   nb_yticks: 5,
-  legend_pos_x: 85,
-  legend_pos_x1_: {en: 170, fr: 180, 'zh-tw': 170},
+  legend_pos_x: 100,
+  legend_pos_x1_: {en: 185, fr: 195, 'zh-tw': 185},
 };
 
 var CC_overall_wrap = {
@@ -37,8 +37,8 @@ var CC_overall_wrap = {
   
   y_max_factor: 1.2, 
   nb_yticks: 5,
-  legend_pos_x: 85,
-  legend_pos_x1_: {en: 170, fr: 180, 'zh-tw': 170},
+  legend_pos_x: 100,
+  legend_pos_x1_: {en: 185, fr: 195, 'zh-tw': 185},
 };
 
 var CC_2021_wrap = {
