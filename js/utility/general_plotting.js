@@ -609,7 +609,18 @@ function GP_MakeXLim(wrap) {
 function GP_MakeOverallXTick(wrap) {
   var xticklabel_min_space_month, xticklabel_min_space_year, xticklabel_month_list;
   
-  if (wrap.tag.includes('vaccination')) {
+  if (wrap.tag.includes('mirror')) {
+    xticklabel_min_space_month = GP_wrap.xticklabel_min_space_month_vacc;
+    xticklabel_min_space_year = GP_wrap.xticklabel_min_space_year_vacc;
+    
+    if (LS_lang == 'zh-tw')
+      xticklabel_month_list = ['', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+    else if (LS_lang == 'fr')
+      xticklabel_month_list = ['', 'Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'];
+    else
+      xticklabel_month_list = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  }
+  else if (wrap.tag.includes('vaccination')) {
     xticklabel_min_space_month = GP_wrap.xticklabel_min_space_month_vacc;
     xticklabel_min_space_year = GP_wrap.xticklabel_min_space_year_vacc;
     
