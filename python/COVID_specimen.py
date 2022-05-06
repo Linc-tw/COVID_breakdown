@@ -2,7 +2,7 @@
     ################################
     ##  COVID_specimen.py         ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.30                ##
+    ##  2022.05.06                ##
     ################################
 
 import os
@@ -56,19 +56,19 @@ class SpecimenSheet(ccm.Template):
   def getFromClinDef(self):
     from_clin_def_list = []
     for from_clin_def in self.getCol(self.coltag_from_clin_def):
-      from_clin_def_list.append(from_clin_def)
+      from_clin_def_list.append(int(float(from_clin_def)))
     return from_clin_def_list
 
   def getFromQT(self):
     from_qt_list = []
     for from_qt in self.getCol(self.coltag_from_qt):
-      from_qt_list.append(from_qt)
+      from_qt_list.append(int(float(from_qt)))
     return from_qt_list
 
   def getFromExtended(self):
     from_ext_list = []
     for from_ext in self.getCol(self.coltag_from_extended):
-        from_ext_list.append(from_ext)
+        from_ext_list.append(int(float(from_ext)))
     return from_ext_list
 
   def getTotal(self):
@@ -97,6 +97,7 @@ class SpecimenSheet(ccm.Template):
     stock = {'date': date_list, 'total': total_list, 'total_avg': avg_arr}
     
     stock = pd.DataFrame(stock)
+    stock = stock[:-1]
     stock = ccm.adjustDateRange(stock)
     
     for page in ccm.PAGE_LIST:
@@ -124,12 +125,13 @@ class SpecimenSheet(ccm.Template):
   
   def saveCsv_testByCriterion(self):
     date_list = self.getDate()
-    from_ext_list = self.getFromExtended()
-    from_qt_list = self.getFromQT()
     from_clin_def_list = self.getFromClinDef()
+    from_qt_list = self.getFromQT()
+    from_ext_list = self.getFromExtended()
     
     stock = {'date': date_list, 'clinical': from_clin_def_list, 'quarantine': from_qt_list, 'extended': from_ext_list}
     stock = pd.DataFrame(stock)
+    stock = stock[:-1]
     stock = ccm.adjustDateRange(stock)
     
     for page in ccm.PAGE_LIST:

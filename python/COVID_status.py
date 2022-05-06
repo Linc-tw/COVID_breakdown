@@ -2,7 +2,7 @@
     ################################
     ##  COVID_status.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.25                ##
+    ##  2022.05.06                ##
     ################################
 
 import os
@@ -154,8 +154,7 @@ class StatusSheet(ccm.Template):
     for page in ccm.PAGE_LIST:
       data = ccm.truncateStock(stock, page)
       cum_cases = data['total'].values
-      cum_cases.astype(float)
-      ind = ~np.isnan(cum_cases)
+      ind = ~pd.isna(cum_cases)
       cum_cases_dict[page] = cum_cases[ind].sum()
       
     ## new_year_token

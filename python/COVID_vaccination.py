@@ -2,7 +2,7 @@
     ################################
     ##  COVID_vaccination.py      ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.02                ##
+    ##  2022.05.06                ##
     ################################
 
 import os
@@ -195,6 +195,7 @@ class VaccinationSheet(ccm.Template):
   def saveCsv_vaccinationByBrand(self):
     stock = self.makeStock_vaccinationByBrand()
     stock = self.interpolate_vaccinationByBrand(stock)
+    
     stock = pd.DataFrame(stock)
     stock = ccm.adjustDateRange(stock)
     

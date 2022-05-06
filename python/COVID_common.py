@@ -2,7 +2,7 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.02                ##
+    ##  2022.05.05                ##
     ################################
 
 import os
@@ -561,9 +561,16 @@ DELIVERY_LIST = [
   
   ## 2022/04
   ['Moderna',   'Moderna',  204000, '2022-04-23',           '', 'https://www.cna.com.tw/news/firstnews/202204230163.aspx', ''],
+  ['Moderna',   'Moderna', 1371600, '2022-04-27',           '', 'https://www.cna.com.tw/news/firstnews/202204270325.aspx', ''],
   
   ## 2022/05
+  ['Moderna',   'Moderna', 1106100, '2022-05-03',           '', 'https://www.cna.com.tw/news/firstnews/202205030148.aspx', ''],
+  ['Moderna',   'Moderna', 1115500, '2022-05-04',           '', 'https://www.cna.com.tw/news/firstnews/202205040169.aspx', ''],
+  
   ## 2022/06
+  #['',   '', , '2022-05-',           '', '', ''],
+  #['',   '', , '2022-05-',           '', '', ''],
+  #['',   '', , '2022-05-',           '', '', ''],
   #['',   '', , '2022-05-',           '', '', ''],
   #['',   '', , '2022-05-',           '', '', ''],
   #['',   '', , '2022-05-',           '', '', ''],
@@ -693,8 +700,8 @@ def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
   return n_arr, ctr_bins
 
 def sevenDayMovingAverage(value_arr):
-  value_arr = np.array(value_arr, dtype=float)
-  ind = np.isnan(value_arr)
+  ind = pd.isna(value_arr)
+  value_arr = np.array(value_arr).astype(float)
   value_arr[ind] = 0.0
   
   kernel = [1/7] * 7 + [0.0] * 6 ## Mean
@@ -780,7 +787,7 @@ def adjustDateRange(data):
   ord_today = getTodayOrdinal()
   
   zero = [0] * (len(data.columns) - 1)
-  nan = [np.nan] * (len(data.columns) - 1)
+  nan = [pd.NA] * (len(data.columns) - 1)
   stock1 = []
   stock2 = []
   

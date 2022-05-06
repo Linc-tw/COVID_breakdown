@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.02                ##
+    ##  2022.05.06                ##
     ################################
 
 import os
@@ -96,7 +96,12 @@ def makePositivityAndFatality(status_sheet, test_sheet):
   test_sheet.updateNewTestCounts(stock)
   
   ## Index to avoid division by zero
+  ind_new_tests = pd.isna(stock['new_tests'])
+  stock['new_tests'][ind_new_tests] = 0
   ind_new_tests = stock['new_tests'] == 0
+  
+  ind_cum_cases = pd.isna(stock['cum_cases'])
+  stock['cum_cases'][ind_cum_cases] = 0
   ind_cum_cases = stock['cum_cases'] == 0
   
   ## Smooth
@@ -165,14 +170,14 @@ def sandbox():
   #case_sheet = COVID_case.CaseSheet()
   #link_list = case_sheet.getLink()
   
-  status_sheet = COVID_status.StatusSheet()
+  #status_sheet = COVID_status.StatusSheet()
   #date = status_sheet.getDate()
   
   #test_sheet = COVID_test.TestSheet()
-  #test_sheet.saveCsv_testByCriterion()
+  #test_sheet.saveCsv_testCounts()
   
-  #spec_sheet = COVID_specimen.SpecimenSheet()
-  #spec_sheet.saveCsv_testCounts()
+  spec_sheet = COVID_specimen.SpecimenSheet()
+  spec_sheet.saveCsv_testCounts()
   
   #border_sheet = COVID_border.BorderSheet()
   #border_sheet.saveCsv_borderStats()
@@ -183,8 +188,8 @@ def sandbox():
   #county_sheet = COVID_county.CountySheet()
   #county_sheet.saveCsv_localCasePerCounty()
   
-  #vacc_sheet = COVID_vaccination.VaccinationSheet()
-  #vacc_sheet.saveCsv_vaccinationProgress()
+  vacc_sheet = COVID_vaccination.VaccinationSheet()
+  vacc_sheet.saveCsv_vaccinationByBrand()
   
   #case_sheet = COVID_case.CaseSheet()
   #status_sheet = COVID_status.StatusSheet()

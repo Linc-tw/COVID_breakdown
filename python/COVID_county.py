@@ -2,7 +2,7 @@
     ################################
     ##  COVID_county.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.25                ##
+    ##  2022.05.06                ##
     ################################
 
 import os
@@ -420,7 +420,10 @@ class CountySheet(ccm.Template):
       nb_cases_arr = ccm.sevenDayMovingAverage(nb_cases_arr)
       nb_cases_arr = nb_cases_arr[-nb_lookback_days:]
       nb_cases_arr *= 7 / population_dict[county]
-      stock[county] = np.around(nb_cases_arr, decimals=2)
+      nb_cases_arr = np.around(nb_cases_arr, decimals=2)
+      nb_cases_arr[-1] = np.nan ## Force to NaN
+      
+      stock[county] = nb_cases_arr
     return stock
   
   def makeReadme_incidenceEvolutionByCounty(self, page):
@@ -523,7 +526,10 @@ class CountySheet(ccm.Template):
       nb_cases_arr = ccm.sevenDayMovingAverage(nb_cases_arr)
       nb_cases_arr = nb_cases_arr[-nb_lookback_days:]
       nb_cases_arr *= 7 / population_dict[age]
-      stock[age] = np.around(nb_cases_arr, decimals=2)
+      nb_cases_arr = np.around(nb_cases_arr, decimals=2)
+      nb_cases_arr[-1] = np.nan ## Force to NaN
+      
+      stock[age] = nb_cases_arr
     return stock
   
   def makeReadme_incidenceEvolutionByAge(self, page):
