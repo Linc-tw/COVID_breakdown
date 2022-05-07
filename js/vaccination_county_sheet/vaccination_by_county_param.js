@@ -2,7 +2,7 @@
     //--------------------------------------//
     //--  vaccination_by_county_param.js  --//
     //--  Chieh-An Lin                    --//
-    //--  2021.12.13                      --//
+    //--  2022.05.07                      --//
     //--------------------------------------//
 
 var VBC_latest_wrap = {
@@ -12,7 +12,7 @@ var VBC_latest_wrap = {
   ],
 
   nb_yticks: 9,
-  legend_pos_x_: {en: 460, fr: 460, 'zh-tw': 580},
+  legend_pos_x_: {en: 550, fr: 530, 'zh-tw': 620},
 };
 
 var VBC_overall_wrap = {

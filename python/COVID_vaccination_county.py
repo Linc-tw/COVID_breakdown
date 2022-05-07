@@ -2,7 +2,7 @@
     ###################################
     ##  COVID_vaccination_county.py  ##
     ##  Chieh-An Lin                 ##
-    ##  2022.04.25                   ##
+    ##  2022.05.07                   ##
     ###################################
 
 import os
@@ -22,40 +22,21 @@ import COVID_common as ccm
 class VaccinationCountySheet(ccm.Template):
   
   def __init__(self, verbose=True):
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.json'.format(ccm.DATA_PATH)
-    data = ccm.loadJson(name, verbose=verbose)
-    ## https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_city_can2_c2&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYyNjU1MDY4MQ==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=date&d[]=NO&c[]=a02&t[]=varchar&d[]=NO&c[]=a03&t[]=int&d[]=NO&c[]=a04&t[]=int&d[]=YES&c[]=a05&t[]=int&d[]=YES&c[]=a06&t[]=decimal&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=int&d[]=NO&c[]=a09&t[]=decimal&d[]=NO&c[]=a10&t[]=int&d[]=NO&c[]=a11&t[]=int&d[]=NO&c[]=a12&t[]=decimal&d[]=NO&c[]=a13&t[]=int&d[]=NO&c[]=a14&t[]=int&d[]=NO&c[]=a15&t[]=decimal&d[]=NO&c[]=a16&t[]=int&d[]=NO&c[]=a17&t[]=int&d[]=NO&c[]=a18&t[]=decimal&d[]=NO&c[]=a19&t[]=int&d[]=NO&c[]=a20&t[]=int&d[]=NO&c[]=a21&t[]=int&d[]=NO
-  
-    self.key_row_id = 'DT_RowId'
-    self.key_id = 'id'
-    self.key_report_date = 'a01'
-    self.key_county = 'a02'
-    self.key_population = 'a03'
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv'.format(ccm.DATA_PATH)
+    data = ccm.loadCsv(name, verbose=verbose)
+    ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006
     
-    self.key_new_vacc = 'a04'
-    self.key_cum_vacc = 'a05'
-    self.key_vacc_rate = 'a06'
-    self.key_cum_supplies = 'a07'
-    self.key_remaining_doses = 'a08'
-    self.key_remaining_ratio = 'a09'
+    self.colTag_row_id = 'ID'
+    self.colTag_report_date = '發佈統計日期'
+    self.colTag_county = '縣市'
+    self.colTag_age = '群組'
     
-    self.key_new_AZ = 'a10'
-    self.key_cum_AZ = 'a11'
-    self.key_AZ_rate = 'a12'
-    self.key_AZ_supplies = 'a13'
-    self.key_remaining_AZ = 'a14'
-    self.key_AZ_remaining_ratio = 'a15'
-    
-    self.key_new_Moderna = 'a16'
-    self.key_cum_Moderna = 'a17'
-    self.key_Moderna_rate = 'a18'
-    self.key_Moderna_supplies = 'a19'
-    self.key_remaining_Moderna = 'a20'
-    self.key_Moderna_remaining_ratio = 'a21'
+    self.colTag_1st_dose = '第1劑'
+    self.colTag_2nd_dose = '第2劑'
+    self.colTag_3rd_dose_2 = '加強劑'
+    self.colTag_3rd_dose_1 = '追加劑'
     
     self.data = data
-    self.processed_data = {}
-    self.process()
     self.county_key_list = [
       'Keelung', 'Taipei', 'New_Taipei', 'Taoyuan', 'Hsinchu', 'Hsinchu_C', 'Miaoli', 
       'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
@@ -63,75 +44,70 @@ class VaccinationCountySheet(ccm.Template):
       'Yilan', 'Hualien', 'Taitung', 
       'Penghu', 'Kinmen', 'Matsu', 
     ]
+    self.age_key_list = ['6-11', '12-17', '18-29', '30-49', '50-64', '65-74', '75+']
+    self.n_total = len(set(self.getDate()))
     
     if verbose:
-      print('N_total = {:d}'.format(len(self.processed_data)))
+      print('N_total = {:d}'.format(self.n_total))
     return
   
-  def process(self):
-    for row in self.data['data']:
-      report_date = row[self.key_report_date]
-      county = row[self.key_county]
-      
-      try:
-        county = ccm.COUNTY_DICT_2[county]
-      except KeyError:
-        print('County label, {}'.format(county))
-        county = 'unknown'
-      
-      try:
-        self.processed_data[report_date][county] = row
-      except KeyError:
-        self.processed_data[report_date] = {county: row}
-    
-    self.processed_data = dict(sorted(self.processed_data.items()))
-    return
-    
-  def getReportDate(self):
-    return list(self.processed_data.keys())
+  def getDate(self):
+    return self.getCol(self.colTag_report_date)
   
-  def getCumVacc(self, county):
-    cum_vacc_list = []
+  def getCounty(self):
+    county_list = []
     
-    for county_dict in self.processed_data.values():
-      if 'total' == county:
-        value_list = [int(row[self.key_cum_vacc]) for row in county_dict.values()]
-        cum_vacc_list.append(sum(value_list))
-        
-      else:
-        row = county_dict[county]
-        cum_vacc_list.append(int(row[self.key_cum_vacc]))
-        
-    return cum_vacc_list
+    for county in self.getCol(self.colTag_county):
+      try:
+        county_list.append(ccm.COUNTY_DICT_2[county])
+      except KeyError:
+        print('County, {}'.format(county))
+        county_list.append('unknown')
     
-  def getCumAZ(self, county):
-    cum_az_list = []
+    return county_list
+  
+  def getAge(self):
+    age_list = []
     
-    for county_dict in self.processed_data.values():
-      if 'total' == county:
-        value_list = [int(row[self.key_cum_AZ]) for row in county_dict.values()]
-        cum_az_list.append(sum(value_list))
+    for age in self.getCol(self.colTag_age):
+      try:
+        age_list.append(ccm.AGE_DICT_3[age])
+      except KeyError:
+        print('Age, {}'.format(age))
+        age_list.append('unknown')
         
-      else:
-        row = county_dict[county]
-        cum_az_list.append(int(row[self.key_cum_AZ]))
-        
-    return cum_az_list
+    return age_list
+  
+  def get1stDose(self):
+    return [float(value) for value in self.getCol(self.colTag_1st_dose)]
     
-  def getCumModerna(self, county):
-    cum_moderna_list = []
+  def get2ndDose(self):
+    return [float(value) for value in self.getCol(self.colTag_2nd_dose)]
     
-    for county_dict in self.processed_data.values():
-      if 'total' == county:
-        value_list = [int(row[self.key_cum_Moderna]) for row in county_dict.values()]
-        cum_moderna_list.append(sum(value_list))
-        
-      else:
-        row = county_dict[county]
-        cum_moderna_list.append(int(row[self.key_cum_Moderna]))
-        
-    return cum_moderna_list
+  def get3rdDose(self):
+    return [float(value_1)+float(value_2) for value_1, value_2 in zip(self.getCol(self.colTag_3rd_dose_1), self.getCol(self.colTag_3rd_dose_2))]
+  
+  def makeStock_vaccinationByCounty(self):
+    date_list = self.getDate()
+    county_list = self.getCounty()
+    age_list = self.getAge()
+    dose_1st_list = self.get1stDose()
+    dose_2nd_list = self.get2ndDose()
+    dose_3rd_list = self.get3rdDose()
+    
+    ord_list = [ccm.ISODateToOrd(date) for date in set(date_list)]
+    ord_max = max(ord_list)
+    date_max = ccm.ordDateToISO(ord_max)
+    
+    stock = {}
+    
+    for date, county, age, dose_1st, dose_2nd, dose_3rd in zip(date_list, county_list, age_list, dose_1st_list, dose_2nd_list, dose_3rd_list):
+      if date != date_max or age != 'total':
+        continue
       
+      stock[county] = [dose_1st, dose_2nd, dose_3rd]
+    return stock, date_max
+  
   def makeReadme_vaccinationByCounty(self, page):
     key = 'vaccination_by_county'
     stock = []
@@ -139,7 +115,9 @@ class VaccinationCountySheet(ccm.Template):
     stock.append('- Row: date, city, or county')
     stock.append('- Column')
     stock.append('  - `key`: name of key')
-    stock.append('  - `value`: number of doses over population')
+    stock.append('  - `value_1`: proportion of population having their 1st dose')
+    stock.append('  - `value_2`: proportion of population having their 2nd dose')
+    stock.append('  - `value_3`: proportion of population having their 3rd dose')
     stock.append('  - `label`: label in English')
     stock.append('  - `label_fr`: label in French')
     stock.append('  - `label_zh`: label in Mandarin')
@@ -147,38 +125,95 @@ class VaccinationCountySheet(ccm.Template):
     return
   
   def saveCsv_vaccinationByCounty(self):
-    county_key_list = ['total'] + self.county_key_list
-    pop_dict = {value_dict['tag']: value_dict['population'] for value_dict in ccm.COUNTY_DICT.values()}
+    stock, date_max = self.makeStock_vaccinationByCounty()
     
-    ## Data for population & label
-    date = self.getReportDate()[-1]
+    county_key_list = ['total'] + self.county_key_list
     county_dict = {dict_['tag']: dict_ for dict_ in ccm.COUNTY_DICT.values()}
     
     key_list = ['latest_date'] + county_key_list
-    value_list = [date]
+    value_1_list = [date_max] + [np.around(stock[county][0], decimals=2) for county in county_key_list]
+    value_2_list = [np.nan] + [np.around(stock[county][1], decimals=2) for county in county_key_list]
+    value_3_list = [np.nan] + [np.around(stock[county][2], decimals=2) for county in county_key_list]
     label_list_en = [''] + [county_dict[county]['label'][0] for county in county_key_list]
     label_list_fr = [''] + [county_dict[county]['label'][1] for county in county_key_list]
     label_list_zh = [''] + [county_dict[county]['label'][2] for county in county_key_list]
-      
-    ## Make stock
-    for county in county_key_list:
-      cum_vacc = self.getCumVacc(county)[-1]
-      value = float(cum_vacc) / float(pop_dict[county])
-      value_list.append('{:.4f}'.format(value))
-      
-    stock = {'key': key_list, 'value': value_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+    
+    stock = {'key': key_list, 'value_1': value_1_list, 'value_2': value_2_list, 'value_3': value_3_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data = pd.DataFrame(stock)
-      
+    
     page = ccm.PAGE_LATEST
-      
+    
     name = '{}processed_data/{}/vaccination_by_county.csv'.format(ccm.DATA_PATH, page)
     ccm.saveCsv(name, data)
     
     self.makeReadme_vaccinationByCounty(page)
     return
-
+  
+  def makeStock_vaccinationByAge(self):
+    date_list = self.getDate()
+    county_list = self.getCounty()
+    age_list = self.getAge()
+    dose_1st_list = self.get1stDose()
+    dose_2nd_list = self.get2ndDose()
+    dose_3rd_list = self.get3rdDose()
+    
+    ord_list = [ccm.ISODateToOrd(date) for date in set(date_list)]
+    ord_max = max(ord_list)
+    date_max = ccm.ordDateToISO(ord_max)
+    
+    stock = {}
+    
+    for date, county, age, dose_1st, dose_2nd, dose_3rd in zip(date_list, county_list, age_list, dose_1st_list, dose_2nd_list, dose_3rd_list):
+      if date != date_max or county != 'total' or age == '65+':
+        continue
+      
+      stock[age] = [dose_1st, dose_2nd, dose_3rd]
+    return stock, date_max
+  
+  def makeReadme_vaccinationByAge(self, page):
+    key = 'vaccination_by_age'
+    stock = []
+    stock.append('`{}.csv`'.format(key))
+    stock.append('- Row: date or age')
+    stock.append('- Column')
+    stock.append('  - `key`: name of key')
+    stock.append('  - `value_1`: proportion of population having their 1st dose')
+    stock.append('  - `value_2`: proportion of population having their 2nd dose')
+    stock.append('  - `value_3`: proportion of population having their 3rd dose')
+    stock.append('  - `label`: label in English')
+    stock.append('  - `label_fr`: label in French')
+    stock.append('  - `label_zh`: label in Mandarin')
+    ccm.README_DICT[page][key] = stock
+    return
+  
+  def saveCsv_vaccinationByAge(self):
+    stock, date_max = self.makeStock_vaccinationByAge()
+    
+    age_key_list = ['total'] + self.age_key_list
+    county_dict = {dict_['tag']: dict_ for dict_ in ccm.COUNTY_DICT.values()}
+    
+    key_list = ['latest_date'] + age_key_list
+    value_1_list = [date_max] + [np.around(stock[age][0], decimals=2) for age in age_key_list]
+    value_2_list = [np.nan] + [np.around(stock[age][1], decimals=2) for age in age_key_list]
+    value_3_list = [np.nan] + [np.around(stock[age][2], decimals=2) for age in age_key_list]
+    label_list_en = [''] + [ccm.AGE_DICT_2['label'][age]['en'] for age in age_key_list]
+    label_list_fr = [''] + [ccm.AGE_DICT_2['label'][age]['fr'] for age in age_key_list]
+    label_list_zh = [''] + [ccm.AGE_DICT_2['label'][age]['zh-tw'] for age in age_key_list]
+    
+    stock = {'key': key_list, 'value_1': value_1_list, 'value_2': value_2_list, 'value_3': value_3_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+    data = pd.DataFrame(stock)
+    
+    page = ccm.PAGE_LATEST
+    
+    name = '{}processed_data/{}/vaccination_by_age.csv'.format(ccm.DATA_PATH, page)
+    ccm.saveCsv(name, data)
+    
+    self.makeReadme_vaccinationByAge(page)
+    return
+  
   def saveCsv(self):
     self.saveCsv_vaccinationByCounty()
+    self.saveCsv_vaccinationByAge()
     return
   
 ## End of file

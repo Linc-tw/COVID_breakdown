@@ -1,25 +1,25 @@
-key,value,label,label_fr,label_zh
-latest_date,2021-07-26,,,
-total,0.2973,Nationalwide,National,全國
-Keelung,0.2994,Keelung,Keelung,基隆
-Taipei,0.3943,Taipei,Taipei,台北
-New_Taipei,0.2997,New Taipei,Nouveau Taipei,新北
-Taoyuan,0.2926,Taoyuan,Taoyuan,桃園
-Hsinchu,0.2247,Hsinchu County,Comté de Hsinchu,竹縣
-Hsinchu_C,0.2747,Hsinchu City,Ville de Hsinchu,竹市
-Miaoli,0.2373,Miaoli,Miaoli,苗栗
-Taichung,0.2829,Taichung,Taichung,台中
-Changhua,0.2635,Changhua,Changhua,彰化
-Nantou,0.2602,Nantou,Nantou,南投
-Yunlin,0.2796,Yunlin,Yunlin,雲林
-Chiayi,0.2524,Chiayi County,Comté de Chiayi,嘉縣
-Chiayi_C,0.3638,Chiayi City,Ville de Chiayi,嘉市
-Tainan,0.2639,Tainan,Tainan,台南
-Kaohsiung,0.2941,Kaohsiung,Kaohsiung,高雄
-Pingtung,0.3060,Pingtung,Pingtung,屏東
-Yilan,0.2769,Yilan,Yilan,宜蘭
-Hualien,0.3134,Hualien,Hualien,花蓮
-Taitung,0.3064,Taitung,Taitung,台東
-Penghu,0.4226,Penghu,Penghu,澎湖
-Kinmen,0.2594,Kinmen,Kinmen,金門
-Matsu,0.7301,Matsu,Matsu,馬祖
+key,value_1,value_2,value_3,label,label_fr,label_zh
+latest_date,2022-05-02,,,,,
+total,84.9,80.2,60.9,Nationalwide,National,全國
+Keelung,86.9,82.2,65.1,Keelung,Keelung,基隆
+Taipei,83.5,79.8,61.9,Taipei,Taipei,台北
+New_Taipei,84.9,80.7,62.3,New Taipei,Nouveau Taipei,新北
+Taoyuan,86.1,81.5,60.1,Taoyuan,Taoyuan,桃園
+Hsinchu,84.6,79.9,57.7,Hsinchu County,Comté de Hsinchu,竹縣
+Hsinchu_C,83.6,79.3,58.7,Hsinchu City,Ville de Hsinchu,竹市
+Miaoli,85.1,79.6,59.1,Miaoli,Miaoli,苗栗
+Taichung,84.8,80.1,62.5,Taichung,Taichung,台中
+Changhua,86.6,81.7,62.3,Changhua,Changhua,彰化
+Nantou,85.7,80.3,60.4,Nantou,Nantou,南投
+Yunlin,85.3,79.7,57.5,Yunlin,Yunlin,雲林
+Chiayi,86.0,80.1,60.0,Chiayi County,Comté de Chiayi,嘉縣
+Chiayi_C,83.7,78.9,59.8,Chiayi City,Ville de Chiayi,嘉市
+Tainan,84.4,79.1,58.4,Tainan,Tainan,台南
+Kaohsiung,85.2,80.4,61.3,Kaohsiung,Kaohsiung,高雄
+Pingtung,84.6,78.4,59.2,Pingtung,Pingtung,屏東
+Yilan,85.5,80.9,62.3,Yilan,Yilan,宜蘭
+Hualien,81.9,75.8,56.3,Hualien,Hualien,花蓮
+Taitung,80.0,73.2,51.8,Taitung,Taitung,台東
+Penghu,85.9,81.5,65.6,Penghu,Penghu,澎湖
+Kinmen,86.4,82.8,65.2,Kinmen,Kinmen,金門
+Matsu,88.7,86.5,73.0,Matsu,Matsu,馬祖

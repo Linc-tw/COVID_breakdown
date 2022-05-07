@@ -184,6 +184,7 @@ function VBD_MouseMove(wrap, d) {
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags
+  var col_label_list;
   if (LS_lang == 'zh-tw')
     col_label_list = ['第一劑', '第兩劑', '第三劑'];
   else if (LS_lang == 'fr')

@@ -46,7 +46,7 @@ Raw data
 
 Raw data are a subset of files or spreadsheets downloaded from sources mentioned earlier.
 
-There are 6 `csv` files & 1 `json` file. These files contain abundant Mandarin strings.
+There are 7 `csv` files & 1 `json` file. These files contain abundant Mandarin strings.
 
 
 Contents
@@ -86,3 +86,7 @@ Contents
 `COVID-19_in_Taiwan_raw_data_vaccination.json`
 - Table of administrated doses of different vaccine brands
 - Downloaded from [here](https://covid-19.nchc.org.tw/dt_002-csse_covid_19_daily_reports_vaccine.php?countryCode=TW/taiwan)
+
+`COVID-19_in_Taiwan_raw_data_vaccination_county.csv`
+- Table of administrated doses from different regions for different age ranges
+- Downloaded from [here](https://covid-19.nchc.org.tw/api.php?tableID=2006)

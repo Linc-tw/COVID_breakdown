@@ -1,11 +1,11 @@
 
-    //--------------------------------//
-    //--  vaccination_by_county.js  --//
-    //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
-    //--------------------------------//
+    //-----------------------------//
+    //--  vaccination_by_age.js  --//
+    //--  Chieh-An Lin           --//
+    //--  2022.05.07             --//
+    //-----------------------------//
 
-function VBC_InitFig(wrap) {
+function VBA_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
     GP_InitFig_Mini(wrap);
   
@@ -17,79 +17,89 @@ function VBC_InitFig(wrap) {
     wrap.tot_height_['fr'] = 400;
     wrap.tot_height_['en'] = 400;
     wrap.margin_ = {};
-    wrap.margin_['zh-tw'] = {left: 40, right: 5, bottom: 60, top: 5};
-    wrap.margin_['fr'] = {left: 130, right: 5, bottom: 60, top: 5};
-    wrap.margin_['en'] = {left: 110, right: 5, bottom: 60, top: 5};
+    wrap.margin_['zh-tw'] = {left: 90, right: 5, bottom: 60, top: 5};
+    wrap.margin_['fr'] = {left: 100, right: 5, bottom: 60, top: 5};
+    wrap.margin_['en'] = {left: 90, right: 5, bottom: 60, top: 5};
     
     GP_InitFig(wrap);
   }
 }
 
-function VBC_ResetText() {
+function VBA_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('vaccination_by_county_title', '各縣市疫苗接種進度');
+    LS_AddStr('vaccination_by_age_title', '各年齡層疫苗接種進度');
     
-    LS_AddHtml('vaccination_by_county_description', '\
-      各縣市疫苗接種率高的原因：\
-      <br>\
-      - 馬祖、澎湖：因醫療資源不足優先施打\
-      <br>\
-      - 台北：疫情爆發最嚴重\
-      <br><br>\
-      本圖資料似於2021年7月26日起停止更新。\
+    LS_AddHtml('vaccination_by_age_description', '\
     ');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('vaccination_by_county_title', 'Vaccination par ville et comté');
+    LS_AddStr('vaccination_by_age_title', 'Vaccination par âge');
     
-    LS_AddHtml('vaccination_by_county_description', '\
-      Le taux de vaccination est particulièrement élevé à Taipei, Penghu et Matsu pour des raisons différentes :\
-      <br>\
-      - Matsu & Penghu: priorisés à cause du manque de ressources médicales &\
-      <br>\
-      - Taipei: épicentre de la dernière vague.\
-      <br><br>\
-      Les données de cette figure ne sont plus mises à jour depuis à partir du 26 juillet 2021.\
+    LS_AddHtml('vaccination_by_age_description', '\
     ');
   }
   
   else { //-- En
-    LS_AddStr('vaccination_by_county_title', 'Vaccination by City & County');
+    LS_AddStr('vaccination_by_age_title', 'Vaccination by Age');
     
-    LS_AddHtml('vaccination_by_county_description', '\
-      The vaccination rates of Taipei, Penghu, & Matsu are particularly high for various reasons:\
-      <br>\
-      - Matsu & Penghu: prioritized due to lack of medical resources &\
-      <br>\
-      - Taipei: epicenter of the last outbreak.\
-      <br><br>\
-      Since July 26th 2021, the update of data for this plot has been suspended.\
+    LS_AddHtml('vaccination_by_age_description', '\
     ');
   }
 }
 
-function VBC_FormatData(wrap, data) {
+function VBA_FormatData(wrap, data) {
   //-- Variables for data
-  var col_tag_list = data.columns.slice(1); //-- 0 = key, 1 = value
-  var col_tag = col_tag_list[0];
+  var col_tag_list = data.columns.slice(1, 4); //-- 0 = key, 1 = value_1, 2 = value_2, 3 = value_3
+  var nb_col = col_tag_list.length;
   var i, j, x, y, row;
   
   //-- Variables for plot
-  var y_key = 'key';
+  var formatted_data = [];
   var y_list = []; //-- For county
-  var yticklabel_dict = {en: [], fr: [], 'zh-tw': []};
+  var x_list, x_lower, x_upper, block;
   
   //-- Variables for xaxis
-  var x_max = 1.99; //-- For 200%
+  var x_max = 1.09; //-- For 200%
+  
+  //-- Variables for yaxis
+  var yticklabel_dict = {en: [], fr: [], 'zh-tw': []};
   
   //-- Main loop over row
   for (i=0; i<data.length; i++) {
     row = data[i];
-    y = row[y_key];
+    y = row['key'];
     
     if (y == 'latest_date')
       continue;
+    
+    x_list = [];
+    x_lower = 0;
+    
+    //-- Loop over column
+    for (j=0; j<nb_col; j++) {
+      x = row[col_tag_list[j]];
+      x_list.push(+x / 100);
+    }
+    
+    //-- Loop over column again (reversed order)
+    for (j=nb_col-1; j>=0; j--) {
+      //-- Current value
+      x_upper = x_list[j];
+      
+      //-- Make data block; redundant information is for toolpix text
+      block = {
+        'x0': x_lower,
+        'x1': x_upper,
+        'y': y,
+        'x_list': x_list,
+        'col_ind': j,
+      };
+      
+      x_lower = x_upper;
+      formatted_data.push(block);
+    }
+    
     y_list.push(y);
     yticklabel_dict['en'].push(row['label']);
     yticklabel_dict['fr'].push(row['label_fr']);
@@ -108,12 +118,11 @@ function VBC_FormatData(wrap, data) {
     
   //-- Get legend value
   var legend_value_raw = data.splice(0, 1)[0];
-  legend_value_raw = [legend_value_raw[col_tag], data[0][col_tag]];
+  legend_value_raw = [legend_value_raw['value_1'], formatted_data[2]['x1']];
   
   //-- Save to wrapper
-  wrap.formatted_data = data;
-  wrap.col_tag = col_tag;
-  wrap.y_key = y_key;
+  wrap.formatted_data = formatted_data;
+  wrap.nb_col = nb_col;
   wrap.y_list = y_list;
   wrap.yticklabel_dict = yticklabel_dict;
   wrap.x_min = 0.0;
@@ -123,7 +132,7 @@ function VBC_FormatData(wrap, data) {
 }
 
 //-- Tooltip
-function VBC_MouseMove(wrap, d) {
+function VBA_MouseMove(wrap, d) {
   if (wrap.tag.includes('mini'))
     return;
     
@@ -132,17 +141,22 @@ function VBC_MouseMove(wrap, d) {
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags
-  var label_list;
+  var col_label_list;
   if (LS_lang == 'zh-tw')
-    label_list = ['<br>已接種疫苗數<br>= ', '人口'];
+    col_label_list = ['第一劑', '第兩劑', '第三劑'];
   else if (LS_lang == 'fr')
-    label_list = ["<br>Nombre d'injections<br>= ", ' de la population'];
+    col_label_list = ['1er dose ', '2e dose', '3e dose'];
   else
-    label_list = ['<br>Number of injections<br>= ', ' of the population'];
+    col_label_list = ['1st dose', '2nd dose', '3rd dose'];
   
   //-- Define tooltip texts
-  var tooltip_text = wrap.legend_value_raw[0];
-  tooltip_text += label_list[0] + d3.format('.2%')(d.value) + label_list[1];
+  var fct_format = d3.format('.2%');
+  var tooltip_text = d.x;
+  var i;
+  
+  var tooltip_text = wrap.legend_value_raw[0] + ' ' + d.y;
+  for (i=0; i<wrap.nb_col; i++)
+    tooltip_text += '<br>' + col_label_list[i] + ' = ' + fct_format(d.x_list[i]);
   
   //-- Generate tooltip
   wrap.tooltip
@@ -151,7 +165,7 @@ function VBC_MouseMove(wrap, d) {
     .style('top', new_pos[1] + 'px')
 }
 
-function VBC_Plot(wrap) {
+function VBA_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
@@ -163,10 +177,10 @@ function VBC_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color = GP_wrap.c_list[0];
+  wrap.color_list = [GP_wrap.c_list[3], GP_wrap.c_list[2], GP_wrap.c_list[6]];
   
   //-- Define mouse-move
-  wrap.mouse_move = VBC_MouseMove;
+  wrap.mouse_move = VBA_MouseMove;
   wrap.plot_opacity = 0.7;
   wrap.trans_delay = GP_wrap.trans_delay;
   
@@ -185,20 +199,19 @@ function VBC_Plot(wrap) {
   bar.append('rect')
     .attr('class', 'content bar')
     .attr('x', xscale(0))
-    .attr('y', function (d) {return yscale(d[wrap.y_key]);})
+    .attr('y', function (d) {return yscale(d.y);})
     .attr('width', 0)
     .attr('height', yscale.bandwidth())
-    .attr('fill', wrap.color)
-    .style('opacity', wrap.plot_opacity)
-      .on('mouseover', function (d) {GP_MouseOver_Faint(wrap, d);})
+    .attr('fill', function (d) {return wrap.color_list[d.col_ind];})
+      .on('mouseover', function (d) {GP_MouseOver_Bright(wrap, d);})
       .on('mousemove', function (d) {wrap.mouse_move(wrap, d);})
-      .on('mouseleave', function (d) {GP_MouseLeave_Faint(wrap, d);})
+      .on('mouseleave', function (d) {GP_MouseLeave_Bright(wrap, d);})
       
   //-- Save to wrapper
   wrap.bar = bar;
 }
 
-function VBC_Replot(wrap) {
+function VBA_Replot(wrap) {
   //-- Define xscale
   var xscale = GP_MakeLinearX(wrap);
   
@@ -210,8 +223,9 @@ function VBC_Replot(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(wrap.trans_delay)
-      .attr('width', function (d) {return xscale(+d[wrap.col_tag])-xscale(0);});
-      
+      .attr('x', function (d) {return xscale(d.x0);})
+      .attr('width', function (d) {return xscale(d.x1)-xscale(d.x0);});
+  
   //-- Frameline for mini
   if (wrap.tag.includes('mini')) {
     GP_PlotTopRight(wrap);
@@ -234,7 +248,7 @@ function VBC_Replot(wrap) {
       .style('text-anchor', 'end');
   wrap.svg.select('.yaxis')
     .selectAll('text')
-    .style('font-size', '0.9rem');
+    .style('font-size', '1.2rem');
       
   //-- Define xaxis
   var xaxis = d3.axisBottom(xscale)
@@ -251,7 +265,7 @@ function VBC_Replot(wrap) {
       .attr('transform', 'translate(0,3)');
       
   //-- Update xlabel
-  var xlabel_dict = {en: 'Proportion of the population', fr: 'Part de la population', 'zh-tw': '人口比'};
+  var xlabel_dict = {en: 'Population ratio', fr: 'Part de la population', 'zh-tw': '人口比'};
   GP_ReplotXLabel(wrap, xlabel_dict);
   
   //-- Set legend parameters
@@ -261,18 +275,13 @@ function VBC_Replot(wrap) {
   wrap.legend_pos = {x: wrap.legend_pos_x_[LS_lang], y: wrap.legend_pos_y, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy};
   
   //-- Define legend color
-  wrap.legend_color = [wrap.color];
+  wrap.legend_color = [];
   
   //-- Define legend value
-  wrap.legend_value = [wrap.legend_value_raw[1]];
+  wrap.legend_value = [];
   
   //-- Define legend label
-  if (LS_lang == 'zh-tw')
-    wrap.legend_label = ['全國平均'];
-  else if (LS_lang == 'fr')
-    wrap.legend_label = ['Niveau national'];
-  else
-    wrap.legend_label = ['Nationalwide level'];
+  wrap.legend_label = [''];
   
   //-- Update legend title
   GP_UpdateLegendTitle(wrap, wrap.legend_value_raw[0]);
@@ -282,32 +291,32 @@ function VBC_Replot(wrap) {
 }
 
 //-- Load
-function VBC_Load(wrap) {
+function VBA_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      VBC_FormatData(wrap, data);
-      VBC_Plot(wrap);
-      VBC_Replot(wrap);
+      VBA_FormatData(wrap, data);
+      VBA_Plot(wrap);
+      VBA_Replot(wrap);
     });
 }
 
-function VBC_Reload(wrap) {
+function VBA_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .await(function (error, data) {
       if (error)
         return console.warn(error);
       
-      VBC_FormatData(wrap, data);
-      VBC_Replot(wrap);
+      VBA_FormatData(wrap, data);
+      VBA_Replot(wrap);
     });
 }
 
-function VBC_ButtonListener(wrap) {
+function VBA_ButtonListener(wrap) {
   //-- Save
   d3.select(wrap.id + '_save').on('click', function(){
     name = wrap.tag + '_' + LS_lang + '.png'
@@ -323,21 +332,21 @@ function VBC_ButtonListener(wrap) {
     d3.selectAll(wrap.id+' .plot').remove()
     
     //-- Replot
-    VBC_InitFig(wrap);
-    VBC_ResetText();
-    VBC_Load(wrap);
+    VBA_InitFig(wrap);
+    VBA_ResetText();
+    VBA_Load(wrap);
   });
 }
 
 //-- Main
-function VBC_Main(wrap) {
+function VBA_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
   //-- Load
-  VBC_InitFig(wrap);
-  VBC_ResetText();
-  VBC_Load(wrap);
+  VBA_InitFig(wrap);
+  VBA_ResetText();
+  VBA_Load(wrap);
   
   //-- Setup button listeners
-  VBC_ButtonListener(wrap);
+  VBA_ButtonListener(wrap);
 }

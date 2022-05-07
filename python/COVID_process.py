@@ -176,8 +176,8 @@ def sandbox():
   #test_sheet = COVID_test.TestSheet()
   #test_sheet.saveCsv_testCounts()
   
-  spec_sheet = COVID_specimen.SpecimenSheet()
-  spec_sheet.saveCsv_testCounts()
+  #spec_sheet = COVID_specimen.SpecimenSheet()
+  #spec_sheet.saveCsv_testCounts()
   
   #border_sheet = COVID_border.BorderSheet()
   #border_sheet.saveCsv_borderStats()
@@ -188,8 +188,11 @@ def sandbox():
   #county_sheet = COVID_county.CountySheet()
   #county_sheet.saveCsv_localCasePerCounty()
   
-  vacc_sheet = COVID_vaccination.VaccinationSheet()
-  vacc_sheet.saveCsv_vaccinationByBrand()
+  #vacc_sheet = COVID_vaccination.VaccinationSheet()
+  #vacc_sheet.saveCsv_vaccinationByBrand()
+  
+  vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
+  vc_sheet.saveCsv_vaccinationByAge()
   
   #case_sheet = COVID_case.CaseSheet()
   #status_sheet = COVID_status.StatusSheet()
@@ -236,6 +239,10 @@ def saveCsv_all():
   print()
   vacc_sheet = COVID_vaccination.VaccinationSheet()
   vacc_sheet.saveCsv()
+  
+  print()
+  vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
+  vc_sheet.saveCsv()
   
   print()
   saveCsv_incidenceRates(status_sheet, border_sheet)

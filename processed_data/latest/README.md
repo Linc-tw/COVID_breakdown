@@ -155,6 +155,17 @@ Contents
   - `total`: total test counts
   - `total_avg`: 7-day moving average of `total`
 
+`vaccination_by_age.csv`
+- Row: date or age
+- Column
+  - `key`: name of key
+  - `value_1`: proportion of population having their 1st dose
+  - `value_2`: proportion of population having their 2nd dose
+  - `value_3`: proportion of population having their 3rd dose
+  - `label`: label in English
+  - `label_fr`: label in French
+  - `label_zh`: label in Mandarin
+
 `vaccination_by_brand.csv`
 - Row: report date
 - Column
@@ -170,6 +181,17 @@ Contents
   - `Medigen`
   - `Pfizer`
   - `*_avg`: 7-day moving average of `*`
+
+`vaccination_by_county.csv`
+- Row: date, city, or county
+- Column
+  - `key`: name of key
+  - `value_1`: proportion of population having their 1st dose
+  - `value_2`: proportion of population having their 2nd dose
+  - `value_3`: proportion of population having their 3rd dose
+  - `label`: label in English
+  - `label_fr`: label in French
+  - `label_zh`: label in Mandarin
 
 `vaccination_by_dose.csv`
 - Row: report date

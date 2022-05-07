@@ -31,6 +31,9 @@ wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_county_age.
 sleep 5
 echo
 wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination.json' 'https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_manufacture_v1&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTY0MDgxOTQ1Mg==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=varchar&d[]=NO&c[]=a02&t[]=date&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=NO&c[]=a05&t[]=int&d[]=NO&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=int&d[]=NO' &
+sleep 5
+echo
+wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv' 'https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006' &
 sleep 25
 echo
 

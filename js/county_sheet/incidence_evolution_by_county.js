@@ -2,15 +2,15 @@
     //----------------------------------------//
     //--  incidence_evolution_by_county.js  --//
     //--  Chieh-An Lin                      --//
-    //--  2021.12.13                        --//
+    //--  2022.05.06                        --//
     //----------------------------------------//
 
 function IEBC_InitFig(wrap) {
   wrap.tot_width = 1200;
   wrap.tot_height_ = {};
-  wrap.tot_height_['zh-tw'] = 550;
-  wrap.tot_height_['fr'] = 550;
-  wrap.tot_height_['en'] = 550;
+  wrap.tot_height_['zh-tw'] = 580;
+  wrap.tot_height_['fr'] = 580;
+  wrap.tot_height_['en'] = 580;
   wrap.margin_ = {};
   wrap.margin_['zh-tw'] = {left: 60, right: 5, bottom: 65, top: 35};
   wrap.margin_['fr'] = {left: 170, right: 5, bottom: 65, top: 35};

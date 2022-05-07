@@ -40,6 +40,8 @@ Plots on [_Vaccination_](http://covidtaiwan.linc.tw/page/latest_vaccination.html
 - Vaccination by Brand
 - Vaccination Progress & Deliveries
 - Vaccination Progress by Dose (also shown in [_Home_](http://covidtaiwan.linc.tw/page/index.html))
+- Vaccination by Age (only in _Last 90 days_)
+- Vaccination by City & County (only in _Last 90 days_)
 
 Plots on [_Other stats_](http://covidtaiwan.linc.tw/page/latest_others.html) are:
 - Test Counts

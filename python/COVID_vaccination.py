@@ -28,16 +28,16 @@ class VaccinationSheet(ccm.Template):
     ## https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_manufacture_v1&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTY0MDgxOTQ1Mg==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=varchar&d[]=NO&c[]=a02&t[]=date&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=NO&c[]=a05&t[]=int&d[]=NO&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=int&d[]=NO
     ## Old: https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_city_can3_c&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYyOTg2Mzk2Ng==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=date&d[]=NO&c[]=a02&t[]=varchar&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=YES&c[]=a05&t[]=int&d[]=YES&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=decimal&d[]=NO
     
-    self.key_row_id = 'DT_RowId'
-    self.key_id = 'id'
-    self.key_location = 'a01'
-    self.key_date = 'a02'
-    self.key_brand = 'a03'
-    self.key_cum_1st = 'a04'
-    self.key_cum_2nd = 'a05'
-    self.key_cum_3rd_1 = 'a06'
-    self.key_cum_3rd_2 = 'a07'
-    self.key_cum_tot = 'a08'
+    self.colTag_row_id = 'DT_RowId'
+    self.colTag_id = 'id'
+    self.colTag_location = 'a01'
+    self.colTag_date = 'a02'
+    self.colTag_brand = 'a03'
+    self.colTag_cum_1st = 'a04'
+    self.colTag_cum_2nd = 'a05'
+    self.colTag_cum_3rd_1 = 'a06'
+    self.colTag_cum_3rd_2 = 'a07'
+    self.colTag_cum_tot = 'a08'
     
     self.data = data
     self.brand_list = ['AZ', 'Moderna', 'Medigen', 'Pfizer']
@@ -55,13 +55,13 @@ class VaccinationSheet(ccm.Template):
     return [row[key] for row in self.data['data']]
   
   def getDate(self):
-    return [row[self.key_date] for row in self.data['data']]
+    return [row[self.colTag_date] for row in self.data['data']]
   
   def getBrand(self):
     brand_list = []
     
     for row in self.data['data']:
-      brand = row[self.key_brand]
+      brand = row[self.colTag_brand]
       try:
         brand_list.append(ccm.BRAND_DICT[brand])
       except KeyError:
@@ -70,16 +70,16 @@ class VaccinationSheet(ccm.Template):
     return brand_list
   
   def getCum1st(self):
-    return [int(value) for value in self.getColData(self.key_cum_1st)]
+    return [int(value) for value in self.getColData(self.colTag_cum_1st)]
   
   def getCum2nd(self):
-    return [int(value) for value in self.getColData(self.key_cum_2nd)]
+    return [int(value) for value in self.getColData(self.colTag_cum_2nd)]
   
   def getCum3rd(self):
-    return [int(value_1)+int(value_2) for value_1, value_2 in zip(self.getColData(self.key_cum_3rd_1), self.getColData(self.key_cum_3rd_2))]
+    return [int(value_1)+int(value_2) for value_1, value_2 in zip(self.getColData(self.colTag_cum_3rd_1), self.getColData(self.colTag_cum_3rd_2))]
   
   def getCumTot(self):
-    return [int(value) for value in self.getColData(self.key_cum_tot)]
+    return [int(value) for value in self.getColData(self.colTag_cum_tot)]
   
   def interpolate(self, stock, col_tag_list, dtype=int, cumul=True):
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
