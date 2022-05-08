@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  incidence_rates.js        --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function IR_InitFig(wrap) {
@@ -28,15 +28,15 @@ function IR_ResetText() {
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('incidence_rates_title', "Taux d'incidences frontalière & locale");
+    LS_AddStr('incidence_rates_title', 'Taux d\'incidences frontalière & locale');
     
-    LS_AddHtml('incidence_rates_description', "\
-      Le taux d'incidence frontalière est défini comme le nombre de cas importés sur le nombre de passagers arrivés.\
+    LS_AddHtml('incidence_rates_description', '\
+      Le taux d\'incidence frontalière est défini comme le nombre de cas importés sur le nombre de passagers arrivés.\
       Ceci est mis à jour au début de chaque mois car la statistique frontalière en est ainsi.\
       <br><br>\
-      Le taux d'incidence locale est définit comme le nombre de cas locaux sur la population.\
+      Le taux d\'incidence locale est définit comme le nombre de cas locaux sur la population.\
       Dans cette figure, on le définit comme la moyenne glissante sur 7 jours multipliée par 1000.\
-    ");
+    ');
   }
   
   else { //-- En
@@ -47,7 +47,7 @@ function IR_ResetText() {
       This is updated only at the beginning of each month as the border statistics are so.\
       <br><br>\
       The local incidence rate is given by the number of local cases over the population.\
-      In this plot, we define it as 7-day moving average multiplied by 1000.\
+      In this figure, we define it as 7-day moving average multiplied by 1000.\
     ');
   }
 }
@@ -189,7 +189,7 @@ function IR_MouseMove(wrap, d) {
   if (LS_lang == 'zh-tw')
     col_label_list = ['入境盛行率', '本土盛行率*1000'];
   else if (LS_lang == 'fr')
-    col_label_list = ["Inci. frontalière", "Inci. locale*1000"];
+    col_label_list = ['Inci. frontalière', 'Inci. locale*1000'];
   else
     col_label_list = ['Arrival incidence', 'Local incidence*1000'];
   
@@ -279,7 +279,7 @@ function IR_Replot(wrap) {
   if (LS_lang == 'zh-tw')
     wrap.legend_label = ['入境盛行率', '本土盛行率（乘以1000）'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ["Taux d'incidence frontalière", "Taux d'incidence locale"];
+    wrap.legend_label = ['Taux d\'incidence frontalière', 'Taux d\'incidence locale'];
   else
     wrap.legend_label = ['Arrival incidence', 'Local incidence'];
     
@@ -287,7 +287,7 @@ function IR_Replot(wrap) {
     if (LS_lang == 'zh-tw') {}
     else if (LS_lang == 'fr') {
       wrap.legend_color.push(wrap.legend_color[1])
-      wrap.legend_label.push("(multiplié par 1000)");
+      wrap.legend_label.push('(multiplié par 1000)');
     }
     else {
       wrap.legend_color.push(wrap.legend_color[1])
@@ -297,7 +297,7 @@ function IR_Replot(wrap) {
   else {
     if (LS_lang == 'zh-tw') {}
     else if (LS_lang == 'fr')
-      wrap.legend_label[1] += " (multiplié par 1000)";
+      wrap.legend_label[1] += ' (multiplié par 1000)';
     else
       wrap.legend_label[1] += ' (multiplied by 1000)';
   }
@@ -334,9 +334,9 @@ function IR_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Replot
     IR_ResetText();

@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  criteria_timeline.js      --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function CT_InitFig(wrap) {
@@ -52,7 +52,7 @@ function CT_ResetText() {
     LS_AddStr('criteria_timeline_button_axis', 'Frise');
     LS_AddStr('criteria_timeline_button_disk', 'Disques');
     
-    LS_AddHtml('criteria_timeline_description', "\
+    LS_AddHtml('criteria_timeline_description', '\
       Pour diagnostiquer une épidémie, le standard Taïwan recommande à suivre les critères TOCC, à savoir :\
       <br>\
       - T comme antécédents de voyage (<i>travel history</i>),\
@@ -65,9 +65,9 @@ function CT_ResetText() {
       <br><br>\
       Au début de la pandémie, Taïwan était dominé par les cas importés.\
       Les antécédents de voyage étaient donc la seule critère effective pour différencier les risques chez les patients potentiels.\
-      Cette figure illustre comment la liste des pays à hauts risques s'élargissait au fil du temps,\
+      Cette figure illustre comment la liste des pays à hauts risques s\'élargissait au fil du temps,\
       grâce à une surveillance très étroite de la situation dans le monde entier.\
-    ");
+    ');
   }
   
   else { //-- En
@@ -141,8 +141,8 @@ function CT_MouseMove(wrap, d) {
   //-- Generate tooltip
   wrap.tooltip
     .html(tooltip_text)
-    .style("left", new_pos[0] + "px")
-    .style("top", new_pos[1] + "px")
+    .style('left', new_pos[0] + 'px')
+    .style('top', new_pos[1] + 'px')
 }
 
 //-- Click
@@ -155,13 +155,13 @@ function CT_Click_Circle(wrap, d, i) {
   wrap.svg.selectAll(wrap.id+'_circle_text_'+j)
     .transition()
     .duration(trans_delay)
-    .attr("opacity", alpha);
+    .attr('opacity', alpha);
   
   //-- Update line
   wrap.svg.selectAll(wrap.id+'_circle_line_'+j)
     .transition()
     .duration(trans_delay)
-    .attr("opacity", wrap.line_alpha*alpha)
+    .attr('opacity', wrap.line_alpha*alpha)
   
   //-- Save to wrapper
   wrap.full = 2;
@@ -176,13 +176,13 @@ function CT_Click_Timeline(wrap, d, j) {
   wrap.svg.selectAll(wrap.id+'_timeline_text_'+j)
     .transition()
     .duration(trans_delay)
-    .attr("opacity", alpha);
+    .attr('opacity', alpha);
   
   //-- Update line
   wrap.svg.selectAll(wrap.id+'_timeline_line_'+j)
     .transition()
     .duration(trans_delay)
-    .attr("opacity", wrap.line_alpha*alpha)
+    .attr('opacity', wrap.line_alpha*alpha)
   
   //-- Save to wrapper
   wrap.full = 2;
@@ -201,7 +201,7 @@ function CT_Plot(wrap) {
   if (LS_lang == 'zh-tw')
     title = ['台灣針對嚴重特殊傳染性肺炎之', '採檢標準暨其生效日期變化圖'];
   else if (LS_lang == 'fr')
-    title = ['Antécédents de voyage, symptômes et autres', 'conditions avec lesquelles Taïwan dépiste', "systématiquement & leurs dates d'effet"];
+    title = ['Antécédents de voyage, symptômes et autres', 'conditions avec lesquelles Taïwan dépiste', 'systématiquement & leurs dates d\'effet'];
   else
     title = ['Travel history, symptoms, & other conditions', 'with which Taiwan tests systematically &', 'their starting dates'];
   
@@ -664,14 +664,14 @@ function CT_Replot(wrap) {
       .data(wrap.formatted_data)
       .transition()
       .duration(GP_wrap.trans_delay)
-      .attr("r", 0)
+      .attr('r', 0)
       
     //-- Update dot
     wrap.svg.selectAll('.dot')
       .data(wrap.formatted_data)
       .transition()
       .duration(GP_wrap.trans_delay)
-      .attr("r", 5)
+      .attr('r', 5)
     
     //-- Update baseline
     wrap.svg.selectAll(wrap.id+'_timeline_baseline')
@@ -819,14 +819,14 @@ function CT_Load(wrap) {
 
 function CT_ButtonListener(wrap) {
   //-- Selected or full
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_full']", function (event) {
+  $(document).on('change', "input:radio[name='" + wrap.tag + "_full']", function (event) {
     GP_PressRadioButton(wrap, 'full', wrap.full, this.value);
     wrap.full = this.value;
     CT_Replot(wrap);
   });
 
   //-- Timeline or disks
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_timeline']", function (event) {
+  $(document).on('change', "input:radio[name='" + wrap.tag + "_timeline']", function (event) {
     GP_PressRadioButton(wrap, 'timeline', wrap.timeline, this.value);
     wrap.timeline = this.value;
     CT_Replot(wrap);
@@ -853,9 +853,9 @@ function CT_ButtonListener(wrap) {
   });
 
   //-- Language button
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove();

@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  event_timeline.js         --//
     //--  Chieh-An Lin              --//
-    //--  2022.01.08                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function ET_InitFig(wrap) {
@@ -55,14 +55,14 @@ function ET_ResetText() {
     LS_AddStr('event_timeline_2022_button_sun', '1er jour dimanche');
     LS_AddStr('event_timeline_2022_button_mon', '1er jour lundi');
     
-    LS_AddHtml('event_timeline_description', "\
+    LS_AddHtml('event_timeline_description', '\
       Ce calendrier permet de documenter les événements majeurs qui sont liés à la covid\
       au sein de Taïwan, dans le monde et dans la vision du CDC taïwanais.\
       <br><br>\
       Cliquez sur les carrés pour montrer les événements du jour concerné.\
       <br><br>\
       Seuls les textes en mandarin sont disponibles.\
-    ");
+    ');
   }
   
   else { //-- En
@@ -73,13 +73,13 @@ function ET_ResetText() {
     LS_AddStr('event_timeline_2022_button_sun', '1st day Sunday');
     LS_AddStr('event_timeline_2022_button_mon', '1st day Monday');
     
-    LS_AddHtml('event_timeline_description', "\
-      This calendar records major COVID events in Taiwan, the world, and in the scope of Taiwan's CDC.\
+    LS_AddHtml('event_timeline_description', '\
+      This calendar records major COVID events in Taiwan, the world, and in the scope of Taiwan\'s CDC.\
       <br><br>\
       Click on the squares to show events happening on that day.\
       <br><br>\
       Only Mandarin texts are available.\
-    ");
+    ');
   }
 }
 
@@ -641,8 +641,8 @@ function ET_MouseMove(wrap, d) {
   //-- Generate tooltip
   wrap.tooltip
     .html(tooltip_text)
-    .style("left", new_pos[0] + "px")
-    .style("top", new_pos[1] + "px")
+    .style('left', new_pos[0] + 'px')
+    .style('top', new_pos[1] + 'px')
 }
 
 //-- Click
@@ -992,7 +992,7 @@ function ET_Load(wrap) {
 
 function ET_ButtonListener(wrap) {
   //-- Start on Sunday or Monday
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_start']", function (event) {
+  $(document).on('change', "input:radio[name='" + wrap.tag + "_start']", function (event) {
     GP_PressRadioButton(wrap, 'start', wrap.week_start, this.value);
     wrap.week_start = this.value;
     ET_Replot(wrap);
@@ -1012,9 +1012,9 @@ function ET_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove();

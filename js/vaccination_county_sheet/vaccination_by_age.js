@@ -30,6 +30,11 @@ function VBA_ResetText() {
     LS_AddStr('vaccination_by_age_title', '各年齡層疫苗接種進度');
     
     LS_AddHtml('vaccination_by_age_description', '\
+      台灣目前對12到17歲間之青少年，只開放施打兩劑疫苗，\
+      第三劑仍在評估，有機會開放。\
+      政府同時也在評估開放6到11歲兒童施打疫苗的可能性。\
+      <br><br>\
+      此圖每週一更新。\
     ');
   }
   
@@ -37,6 +42,11 @@ function VBA_ResetText() {
     LS_AddStr('vaccination_by_age_title', 'Vaccination par tranche d\'âge');
     
     LS_AddHtml('vaccination_by_age_description', '\
+      À Taïwan, les adolescents entre 12 et 17 ans sont seulement éligibles aux 2 doses de vaccins.\
+      L\'authorisation de la 3e dose pour cette tranche d\'âge est encore en études.\
+      En même temps, la vaccination peut ouvrir aux enfants entre 6 et 11 ans dans un futur proche.\
+      <br><br>\
+      Cette figure est mise à jour tous les lundis.\
     ');
   }
   
@@ -44,6 +54,11 @@ function VBA_ResetText() {
     LS_AddStr('vaccination_by_age_title', 'Vaccination by Age Group');
     
     LS_AddHtml('vaccination_by_age_description', '\
+      In Taiwan, people between 12 and 17 years old are only eligible for 2 doses of vaccines.\
+      Authorization of 3rd dose for this age group is under study.\
+      Meanwhile, vaccination can also open to children between 6 and 11 years old in the near future.\
+      <br><br>\
+      This figure is updated every Monday.\
     ');
   }
 }
@@ -328,9 +343,9 @@ function VBA_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove()

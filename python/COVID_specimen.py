@@ -150,6 +150,7 @@ class SpecimenSheet(ccm.Template):
     
     stock_tmp = {'date': date_list, 'new_tests': total_list}
     stock_tmp = pd.DataFrame(stock_tmp)
+    stock_tmp = stock_tmp[:-1]
     stock_tmp = ccm.adjustDateRange(stock_tmp)
     
     stock['new_tests'] = stock_tmp['new_tests'].values

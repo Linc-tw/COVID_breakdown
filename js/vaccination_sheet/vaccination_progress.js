@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_progress.js   --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.02                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function VP_InitFig(wrap) {
@@ -26,9 +26,7 @@ function VP_ResetText() {
     LS_AddHtml('vaccination_progress_description', '\
       疫苗之實際施打劑數可能大於到貨劑量數，\
       因為抽完常規劑量後的殘餘液往往足以再供人施打，\
-      這些殘劑大約有總到貨量的10%。\
-      <br><br>\
-      台灣疫苗接種已多次發生因延誤到貨導致進度停滯的現象。\
+      這些殘劑大約可佔總到貨量的10%。\
     ');
   }
   
@@ -40,13 +38,11 @@ function VP_ResetText() {
     LS_AddStr('vaccination_progress_button_Medigen', 'Medigen');
     LS_AddStr('vaccination_progress_button_Pfizer', 'Pfizer');
   
-    LS_AddHtml('vaccination_progress_description', "\
+    LS_AddHtml('vaccination_progress_description', '\
       Le nombre de doses administrées peut être supérieur au nombre de doses approvisionnées,\
       car les doses supplémentaires peuvent être extraites de chaque flacon.\
-      Ces bonus prennent jusqu'à 10% de l'approvisionnement total.\
-      <br><br>\
-      L'avancement de la campagne de vaccination a été limité à plusieurs reprises par le retard des livraisons.\
-    ");
+      Ces bonus prennent jusqu\'à 10% de l\'approvisionnement total.\
+    ');
   }
   
   else { //-- En
@@ -61,8 +57,6 @@ function VP_ResetText() {
       The number of injections can be greater than supplies, \
       since additional doses can be extracted. \
       This bonus takes about 10% of the nominal available doses.\
-      <br><br>\
-      The vaccination progress has been limited several times by lack of supplies.\
     ');
   }
 }
@@ -634,9 +628,9 @@ function VP_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Replot
     VP_ResetText();

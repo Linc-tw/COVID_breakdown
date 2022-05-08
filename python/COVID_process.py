@@ -34,16 +34,18 @@ def makeIncidenceRates(status_sheet, border_sheet):
   status_sheet.updateNewCaseCounts(stock)
   border_sheet.updateNewEntryCounts(stock)
   
-  ## Index to avoid division by zero
-  ind_entries = stock['new_entries'] == 0
-  
   ## Smooth
   for key, value_arr in stock.items():
     if 'date' == key:
       continue
     
-    ## Modify
-    stock[key] = ccm.sevenDayMovingAverage(value_arr) 
+    value_arr = ccm.sevenDayMovingAverage(value_arr)
+    if key == 'new_entries':
+      ind = value_arr != value_arr
+      value_arr[ind] = 0
+    
+    ## Push back
+    stock[key] = value_arr
   
   population_twn = ccm.COUNTY_DICT['00000']['population']
   stock_new = {}
@@ -52,9 +54,10 @@ def makeIncidenceRates(status_sheet, border_sheet):
   with wng.catch_warnings(): ## Avoid division by zero
     wng.simplefilter('ignore')
     
+    ind = stock['new_entries'] == 0
     value_arr = stock['new_imported'] / stock['new_entries']
     value_arr = np.around(value_arr, decimals=4)
-    value_arr[ind_entries] = np.nan
+    value_arr[ind] = np.nan
     stock_new['arr_incidence'] = value_arr
     
     value_arr = stock['new_local'] / float(population_twn) * 1000 ## Rate over thousand
@@ -95,15 +98,6 @@ def makePositivityAndFatality(status_sheet, test_sheet):
   status_sheet.updateCumCounts(stock)
   test_sheet.updateNewTestCounts(stock)
   
-  ## Index to avoid division by zero
-  ind_new_tests = pd.isna(stock['new_tests'])
-  stock['new_tests'][ind_new_tests] = 0
-  ind_new_tests = stock['new_tests'] == 0
-  
-  ind_cum_cases = pd.isna(stock['cum_cases'])
-  stock['cum_cases'][ind_cum_cases] = 0
-  ind_cum_cases = stock['cum_cases'] == 0
-  
   ## Smooth
   for key, value_arr in stock.items():
     if 'date' == key:
@@ -111,9 +105,11 @@ def makePositivityAndFatality(status_sheet, test_sheet):
     
     ## No smoothing if cumulative
     if key in ['cum_cases', 'cum_deaths']:
-      value_arr = value_arr.astype(float)
+      value_arr, _ = ccm.pandasNAToZero(value_arr)
     else:
       value_arr = ccm.sevenDayMovingAverage(value_arr)
+      ind = value_arr != value_arr
+      value_arr[ind] = 0
     
     ## Push back
     stock[key] = value_arr
@@ -124,14 +120,16 @@ def makePositivityAndFatality(status_sheet, test_sheet):
   with wng.catch_warnings(): ## Avoid division by zero
     wng.simplefilter('ignore')
     
+    ind = stock['new_tests'] == 0
     value_arr = stock['new_cases'] / stock['new_tests']
     value_arr = np.around(value_arr, decimals=4)
-    value_arr[ind_new_tests] = np.nan
+    value_arr[ind] = np.nan
     stock_new['positivity'] = value_arr
     
+    ind = stock['cum_cases'] == 0
     value_arr = stock['cum_deaths'] / stock['cum_cases']
     value_arr = np.around(value_arr, decimals=4)
-    value_arr[ind_cum_cases] = np.nan
+    value_arr[ind] = np.nan
     stock_new['fatality'] = value_arr
   return stock_new
 

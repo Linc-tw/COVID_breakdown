@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_brand.js   --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.02                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function VBB_InitFig(wrap) {
@@ -33,6 +33,8 @@ function VBB_ResetText() {
       由於原始資料為累計施打人數，\
       因此只有接連兩日資料完整時才能計算每日施打人數，\
       這解釋了為何逐日人數缺資料比累計人數多。\
+      <br><br>\
+      單日施打劑數可能為負（BNT），此乃資料來源之錯誤，原因不詳。\
     ');
   }
   
@@ -46,15 +48,19 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_Medigen', 'Medigen');
     LS_AddStr('vaccination_by_brand_button_Pfizer', 'Pfizer');
     
-    LS_AddHtml('vaccination_by_brand_description', "\
+    LS_AddHtml('vaccination_by_brand_description', '\
       Tous les jours sauf dimanche le résultat de la veille est publié.\
-      C'est pour cela que les données de samedi est toujours manquées.\
-      Parfois les données d'autres jours sont manquées pour une raison inconnue.\
+      C\'est pour cela que les données de samedi est toujours manquées.\
+      Parfois les données d\'autres jours sont manquées pour une raison inconnue.\
       <br><br>\
       Comme les résultats sont publiés en nombres cumulés,\
       il faut que les données de 2 jours consécutifs sont connues pour pouvoir calculer le nombre de doses quotidien.\
       Ceci explique pourquoi il y a plus de données manquantes pour le comptage quotidien que pour le compage cumulé.\
-    ");
+      <br><br>\
+      Le nombre d\'injection par jour peut tomber négatif (pour Pfizer).\
+      Cette erreur provient de la source des données.\
+      La raison est inconnue.\
+    ');
   }
   
   else { //-- En
@@ -67,15 +73,19 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_Medigen', 'Medigen');
     LS_AddStr('vaccination_by_brand_button_Pfizer', 'Pfizer');
     
-    LS_AddHtml('vaccination_by_brand_description', "\
+    LS_AddHtml('vaccination_by_brand_description', '\
       Everyday except for Sunday the result of the previous day is released .\
-      Therefore Saturday's data are always missing.\
-      Some days' data are also missing for unknown reasons.\
+      Therefore Saturday\'s data are always missing.\
+      Some days\' data are also missing for unknown reasons.\
       <br><br>\
       As the data are released under cumulative counts,\
       daily counts are only available when cumulative counts are known for two consecutive days.\
       This explains why there are more missing data in daily counts.\
-    ");
+      <br><br>\
+      The number of injections by day can become negative (for Pfizer).\
+      This error comes from the data source.\
+      The reason is unknown.\
+    ');
   }
 }
 
@@ -352,7 +362,7 @@ function VBB_Reload(wrap) {
 
 function VBB_ButtonListener(wrap) {
   //-- Daily or cumulative
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
+  $(document).on('change', "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
     GP_PressRadioButton(wrap, 'cumul', wrap.cumul, this.value);
     wrap.cumul = this.value;
     VBB_Reload(wrap);
@@ -389,9 +399,9 @@ function VBB_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Replot
     VBB_ResetText();

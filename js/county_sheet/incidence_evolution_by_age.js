@@ -26,6 +26,8 @@ function IEBA_ResetText() {
     LS_AddHtml('incidence_evolution_by_age_description', '\
       此圖中，盛行率之定義為自該日起回推七日內，指定年齡層每十萬人確診個案數之總合（而非平均）。\
       <br><br>\
+      因為今日確診個案的資料明天才會更新，所以最後一欄留空。\
+      <br><br>\
       此統計包含境外移入個案，\
       因此所有年齡之盛行率可能會與「各縣市盛行率變化」的「全國」盛行率不同。\
     ');
@@ -38,6 +40,8 @@ function IEBA_ResetText() {
       Dans cette figure, le taux d\'incidence est défini comme la somme (non pas la moyenne) des cas confirmés pendant 7 derniers jours,\
       pour 100k habitants de la tranche d\'age indiquée.\
       <br><br>\
+      La dernière colonne est vide car les données d\'aujourd\'hui ne sont disponibles que demain.\
+      <br><br>\
       Les cas importés sont inclus.\
       Par conséquent, le taux d\'incidence de tous âges peut ne pas être identique au taux national dans l\'« Évolution du taux d\'incidence par ville et comté »\
     ');
@@ -49,6 +53,8 @@ function IEBA_ResetText() {
     LS_AddHtml('incidence_evolution_by_age_description', '\
       In this figure, the incidence rate is defined as the sum (instead of average) of confirmed cases during 7 lookback days,\
       for every 100k inhabitants of the indicated age range.\
+      <br><br>\
+      The last column is empty since today\'s data are only available tomorrow.\
       <br><br>\
       The imported cases are included.\
       Thus, the incidence rate of "All ages" could be different from the value of "Nationalwide" in "Evolution of Incidence Rate by City & County".\

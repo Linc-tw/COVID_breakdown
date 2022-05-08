@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  test_counts.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.13                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function TC_InitFig(wrap) {
@@ -21,15 +21,9 @@ function TC_ResetText() {
     LS_AddStr('test_counts_button_cumul', '累計');
     
     LS_AddHtml('test_counts_description', '\
-      台灣政府長久以來對於廣篩相對保守，原因有三：\
-      <br>\
-      - 盛行率不高、\
-      <br>\
-      - 避免偽陽性癱瘓疫調系統和消耗隔離量能、\
-      <br>\
-      - 檢驗人力不足。\
-      <br><br>\
-      即便2021年5月的高峰後有明顯政策改變，和多數國家相比台灣的篩檢量依舊算少，每日篩檢量不曾超過38000人次。\
+      昨日的檢驗量必須等到明天才會有資料，\
+      因為發現第N日做的檢驗有可能會在第N+1日或第N+2日回報。\
+      為了避免低估檢驗量，檢驗人次的統計資料會有2天延遲。\
     ');
   }
   
@@ -38,19 +32,12 @@ function TC_ResetText() {
     LS_AddStr('test_counts_button_daily', 'Quotidiens');
     LS_AddStr('test_counts_button_cumul', 'Cumulés');
     
-    LS_AddHtml('test_counts_description', "\
-      Taïwan se restreint à tester massivement pour 3 raisons :\
-      <br>\
-      - le taux d'incidence est plutôt bas,\
-      <br>\
-      - éviter le débordement du système du traçage et d'isolation par les faux-positifs,\
-      <br>\
-      - manque de personnels.\
-      <br><br>\
-      Même s'il y a clairement un changement de politique entre avant et après la vague de mai 2021,\
-      le nombre de dépistage reste bas par rapport à la plupart des pays.\
-      Le nombre de dépistage conduits par jour n'a jamais dépassé 38k.\
-    ");
+    LS_AddHtml('test_counts_description', '\
+      Le nombre de dépistage d\'hier n\'est disponible seulement demain,\
+      car les tests faits au jour J peuvent être mis à jour au jour J+1 ou J+2.\
+      Pour éviter une sous-estimation systématique et la confusion,\
+      le nombre de tests est affiché avec un délai de 2 jours.\
+    ');
   }
   
   else { //-- En
@@ -59,17 +46,10 @@ function TC_ResetText() {
     LS_AddStr('test_counts_button_cumul', 'Cumulative');
     
     LS_AddHtml('test_counts_description', '\
-      Taiwan is rather conservative about testing for 3 reasons:\
-      <br>\
-      - low incidence rate,\
-      <br>\
-      - to avoid false positives overwhelming the trace-and-isolate system, &\
-      <br>\
-      - lack of human resource.\
-      <br><br>\
-      Although there is clearly a policy shift after the outbreak in May 2021,\
-      the number of conducted tests remains low compared to most countries.\
-      The daily number of tests has ever been more than 38k.\
+      The number of tests of yesterday will only be available tomorrow,\
+      because tests made on Day N can be reported on Day N+1 or Day N+2.\
+      To avoid a systematic underestimation and confusion,\
+      the number of tests is shown with a delay of 2 days.\
     ');
   }
 }
@@ -332,7 +312,7 @@ function TC_Reload(wrap) {
 
 function TC_ButtonListener(wrap) {
   //-- Daily or cumulative
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
+  $(document).on('change', "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
     GP_PressRadioButton(wrap, 'cumul', wrap.cumul, this.value);
     wrap.cumul = this.value;
     TC_Reload(wrap);
@@ -352,9 +332,9 @@ function TC_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Replot
     TC_ResetText();

@@ -721,10 +721,15 @@ def makeHist(data, bins, wgt=None, factor=1.0, pdf=False):
   
   return n_arr, ctr_bins
 
-def sevenDayMovingAverage(value_arr):
+def pandasNAToZero(value_arr):
   ind = pd.isna(value_arr)
-  value_arr = np.array(value_arr).astype(float)
-  value_arr[ind] = 0.0
+  value_arr = np.array(value_arr)
+  value_arr[ind] = 0
+  value_arr = value_arr.astype(float)
+  return value_arr, ind
+
+def sevenDayMovingAverage(value_arr):
+  value_arr, ind = pandasNAToZero(value_arr)
   
   kernel = [1/7] * 7 + [0.0] * 6 ## Mean
   value_arr = signal.convolve(value_arr, kernel[::-1], mode='same')

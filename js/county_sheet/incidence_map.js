@@ -142,7 +142,7 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_m12', 'December');
     
     LS_AddHtml('incidence_map_description', '\
-      The incidence rate is defined as the sum (instead of average) of local cases during the chosen period,\
+      The incidence rate here is defined as the sum (instead of average) of local cases during the chosen period,\
       for every 100k inhabitants of the indicated city or county.\
       <br><br>\
       The outbreak of May 2021 was concentrated at Taipei & New Taipei.\

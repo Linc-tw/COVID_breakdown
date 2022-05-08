@@ -30,6 +30,7 @@ function VBC_ResetText() {
     LS_AddStr('vaccination_by_county_title', '各縣市疫苗接種進度');
     
     LS_AddHtml('vaccination_by_county_description', '\
+      此圖每週一更新。\
     ');
   }
   
@@ -37,6 +38,7 @@ function VBC_ResetText() {
     LS_AddStr('vaccination_by_county_title', 'Vaccination par ville et comté');
     
     LS_AddHtml('vaccination_by_county_description', '\
+      Cette figure est mise à jour tous les lundis.\
     ');
   }
   
@@ -44,6 +46,7 @@ function VBC_ResetText() {
     LS_AddStr('vaccination_by_county_title', 'Vaccination by City & County');
     
     LS_AddHtml('vaccination_by_county_description', '\
+      This figure is updated every Monday.\
     ');
   }
 }
@@ -328,9 +331,9 @@ function VBC_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove()

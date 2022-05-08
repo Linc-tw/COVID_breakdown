@@ -26,7 +26,10 @@ function IEBC_ResetText() {
     LS_AddHtml('incidence_evolution_by_county_description', '\
       此圖中，盛行率之定義為自該日起回推七日內，指定縣市每十萬人本土個案數之總合（而非平均）。\
       <br><br>\
-      此統計不包含境外移入個案，因此全國盛行率可能會與「各年齡層盛行率變化」之「所有年齡」盛行率不同。\
+      因為今日確診個案的資料明天才會更新，所以最後一欄留空。\
+      <br><br>\
+      此統計不包含境外移入個案，\
+      因此全國盛行率可能會與「各年齡層盛行率變化」之「所有年齡」盛行率不同。\
     ');
   }
   
@@ -36,6 +39,8 @@ function IEBC_ResetText() {
     LS_AddHtml('incidence_evolution_by_county_description', '\
       Dans cette figure, le taux d\'incidence est défini comme la somme (non pas la moyenne) des cas locaux pendant 7 derniers jours,\
       pour 100k habitants de la ville ou du comté indiqué.\
+      <br><br>\
+      La dernière colonne est vide car les données d\'aujourd\'hui ne sont disponibles que demain.\
       <br><br>\
       Les cas importés sont exclus.\
       Par conséquent, le taux d\'incidence national peut ne pas être identique à celui de « Tous âges » dans l\'« Évolution du taux d\'incidence par tranche d\'âge »\
@@ -48,6 +53,8 @@ function IEBC_ResetText() {
     LS_AddHtml('incidence_evolution_by_county_description', '\
       In this figure, the incidence rate is defined as the sum (instead of average) of local cases during 7 lookback days,\
       for every 100k inhabitants of the indicated city or county.\
+      <br><br>\
+      The last column is empty since today\'s data are only available tomorrow.\
       <br><br>\
       The imported cases are not included.\
       Thus, the incidence rate of "Nationalwide" could be different from the value of "All ages" in "Evolution of Incidence Rate by Age Group".\

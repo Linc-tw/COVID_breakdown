@@ -321,7 +321,7 @@ class BorderSheet(ccm.Template):
     ord_today = ccm.getTodayOrdinal()
     nb_days = ord_today - ord_ref
     
-    stock['new_entries'] = np.zeros(nb_days, dtype=int)
+    stock['new_entries'] = np.zeros(nb_days, dtype=int) + np.nan
     
     date_list = self.getDate()
     entry_list = self.getEntry()

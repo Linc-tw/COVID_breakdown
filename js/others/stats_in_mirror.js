@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  stats_in_mirror.js        --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.02                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function SIM_InitFig(wrap) {
@@ -136,16 +136,16 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_border_exit_1', 'Départ des frontières');
     LS_AddStr('stats_in_mirror_button_border_both_0', 'Passage des frontières');
     LS_AddStr('stats_in_mirror_button_border_both_1', 'Passage des frontières');
-    LS_AddStr('stats_in_mirror_button_arrival_incidence_0', "Taux d'incidence frontalière");
-    LS_AddStr('stats_in_mirror_button_arrival_incidence_1', "Taux d'incidence frontalière");
-    LS_AddStr('stats_in_mirror_button_local_incidence_0', "Taux d'incidence locale");
-    LS_AddStr('stats_in_mirror_button_local_incidence_1', "Taux d'incidence locale");
+    LS_AddStr('stats_in_mirror_button_arrival_incidence_0', 'Taux d\'incidence frontalière');
+    LS_AddStr('stats_in_mirror_button_arrival_incidence_1', 'Taux d\'incidence frontalière');
+    LS_AddStr('stats_in_mirror_button_local_incidence_0', 'Taux d\'incidence locale');
+    LS_AddStr('stats_in_mirror_button_local_incidence_1', 'Taux d\'incidence locale');
     LS_AddStr('stats_in_mirror_button_positivity_0', 'Taux de positivité');
     LS_AddStr('stats_in_mirror_button_positivity_1', 'Taux de positivité');
     LS_AddStr('stats_in_mirror_button_fatality_0', 'Taux de létalité cumulé');
     LS_AddStr('stats_in_mirror_button_fatality_1', 'Taux de létalité cumulé');
     
-    LS_AddHtml('stats_in_mirror_description', "\
+    LS_AddHtml('stats_in_mirror_description', '\
       Ce panneau permet les utilisateurs de choisir parmi :\
       <br>\
       - le nombre de tests,\
@@ -156,19 +156,19 @@ function SIM_ResetText() {
       <br>\
       - le nombre de vaccins administrés,\
       <br>\
-      - la part de population avec le 1er, le 2e et le 3e doses,\
+      - la part de population avec ses 1ère, 2e et 3e doses,\
       <br>\
       - les nombres de voyageurs entrant, sortant et totaux aux frontières,\
       <br>\
-      - les taux d'incidences frontalière et locale,\
+      - les taux d\'incidences frontalière et locale,\
       <br>\
       - le taux de positivité et\
       <br>\
       - le taux de létalité cumulé,\
       <br>\
-      et de présenter n'importe quels 2 de ceux-ci côte-à-côte.\
+      et de présenter n\'importe quels 2 de ceux-ci côte-à-côte.\
       Ceci fournit une meilleure comparaison entre les évolutions des statistiques différentes.\
-    ");
+    ');
   }
   
   else { //-- En
@@ -215,9 +215,9 @@ function SIM_ResetText() {
       <br>\
       - death counts,\
       <br>\
-      - total vaccination,\
+      - vaccination counts,\
       <br>\
-      - population ratio of 1st, 2nd, and 3rd doses,\
+      - the population ratios having its 1st, 2nd, and 3rd doses,\
       <br>\
       - border arrival, departure, and total counts,\
       <br>\
@@ -875,12 +875,12 @@ function SIM_Replot(wrap) {
       if (stat == 12) {
         list_ind = 0;
         sub_wrap.color = GP_wrap.c_list[3];
-        ylabel_dict = {en: 'Arrival incidence', fr: "Incidence frontalière", 'zh-tw': '入境盛行率'};
+        ylabel_dict = {en: 'Arrival incidence', fr: 'Incidence frontalière', 'zh-tw': '入境盛行率'};
       }
       else {
         list_ind = 1;
         sub_wrap.color = GP_wrap.c_list[4];
-        ylabel_dict = {en: 'Local incidence * 1000', fr: "Incidence locale * 1000", 'zh-tw': '本土盛行率 * 1000'};
+        ylabel_dict = {en: 'Local incidence * 1000', fr: 'Incidence locale * 1000', 'zh-tw': '本土盛行率 * 1000'};
       }
       
       SIM_ReplotFaintSingleBar(wrap, i);
@@ -991,9 +991,9 @@ function SIM_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Replot
     SIM_ResetText();

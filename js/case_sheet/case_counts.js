@@ -25,7 +25,7 @@ function CC_ResetText() {
     LS_AddStr('case_counts_button_others', '其他');
     
     LS_AddHtml('case_counts_description', '\
-      「其他」類別包含了「船艦」、「航空器」以及「不明來源」。\
+      「其他」類別包含了「敦睦艦隊」、「航空器」以及「不明來源」。\
     ');
   }
   
@@ -39,7 +39,7 @@ function CC_ResetText() {
     LS_AddStr('case_counts_button_others', 'Divers');
     
     LS_AddHtml('case_counts_description', '\
-      La catégorie « Divers » est consistuée d\'« en bateau », d\'« en avion » et d\'« origin inconnue ».\
+      La catégorie « Divers » inclut les transmissions qualifiées en bateau, en avion et d\'origin inconnue.\
     ');
   }
   
@@ -53,7 +53,7 @@ function CC_ResetText() {
     LS_AddStr('case_counts_button_others', 'Others');
     
     LS_AddHtml('case_counts_description', '\
-      The category \"Others\" includes \"on boat\", \"on plane\", & \"unknown origin\".\
+      The category "Others" includes the transmissions on boat, on plane, and of unknown origin.\
     ');
   }
 }

@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_dose.js    --//
     //--  Chieh-An Lin              --//
-    //--  2022.04.28                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function VBD_InitFig(wrap) {
@@ -19,8 +19,10 @@ function VBD_ResetText() {
     LS_AddStr('vaccination_by_dose_title', '疫苗劑次接種進度');
     
     LS_AddHtml('vaccination_by_dose_description', '\
-      台灣的接種策略為拉長兩劑間距以提升第一劑覆蓋率，\
-      此圖充分反映該措施所致結果。\
+      接種率的定義為注射劑數除以人口數。\
+      此圖所用之注射劑數與人口數兩者皆取自官方，\
+      然而計算結果仍與官方公佈之接種率不同，略低約1%左右。\
+      研判是因為官方計算可能有排除資格不符者，因此分母較小。\
     ');
   }
   
@@ -28,8 +30,10 @@ function VBD_ResetText() {
     LS_AddStr('vaccination_by_dose_title', 'Avancement de vaccination par nombre de doses');
     
     LS_AddHtml('vaccination_by_dose_description', '\
-      Taïwan favorise la couverture vaccinale de la 1ère dose à la couverture totale.\
-      Cette figure montre la conséquence de cette mesure.\
+      Le taux de vaccination est défini par le nombre d\'injections divisé par la population.\
+      Dans cette figure, le nombre d\'injections ainsi que le nombre de population sont obtenus des statistiques officielles.\
+      Pourtant, le calcul d\'ici est toujours environ 1% inférieur à celui annoncé par le gouvernement.\
+      La raison pourrait être que le gouvernement a exclu au préalable ceux qui ne sont pas éligibles aux vaccins dans le calcul.\
     ');
   }
   
@@ -37,8 +41,10 @@ function VBD_ResetText() {
     LS_AddStr('vaccination_by_dose_title', 'Vaccination Progress by Dose');
     
     LS_AddHtml('vaccination_by_dose_description', '\
-      Taiwan prioritizes the 1st-dose coverage over full vaccination.\
-      This plot shows the consequence of this policy.\
+      The vaccination rate is defined as the number of injections divided by population.\
+      In this figure, both injections and population are taken from official statistics.\
+      However, the calculation is still about 1% lower than the annouced rate.\
+      The reason could be that the government has excluded non-eligible people from its calculation.\
     ');
   }
 }
@@ -332,9 +338,9 @@ function VBD_ButtonListener(wrap) {
   });
   
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Replot
     VBD_ResetText();

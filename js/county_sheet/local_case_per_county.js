@@ -44,7 +44,7 @@ function LCPC_ResetText() {
     LS_AddStr('local_case_per_county_button_matsu', '馬祖');
     
     LS_AddHtml('local_case_per_county_description', '\
-      此圖之數字可能會和「各感染源確診人數」之「本土」確診數不同，\
+      此圖之數字可能會和「各感染源確診人數」之本土確診數不同，\
       因為兩者取自不同資料來源，且用作分隔前後日的時間點也未盡相同。\
       <br><br>\
       此外，縣市資料有時會出現延遲更新的現象。\
@@ -80,7 +80,7 @@ function LCPC_ResetText() {
     LS_AddStr('local_case_per_county_button_matsu', 'Matsu');
     
     LS_AddHtml('local_case_per_county_description', '\
-      Le chiffre dans cette figure peut ne pas correspond à celui de "Locaux" du "Nombre de cas confirmés",\
+      Le chiffre dans cette figure peut ne pas correspond à celui de « Locaux » du « Nombre de cas confirmés »,\
       car ils ne viennent pas de la même source des données et que les deux sources ne comptabilisent dans le même intervalle de 24 heures pour un jour.\
       <br><br>\
       De plus, ces informations géographiques peuvent tarder à être à jour.\

@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_counts.js           --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.13                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function DC_InitFig(wrap) {
@@ -32,10 +32,10 @@ function DC_ResetText() {
     LS_AddStr('death_counts_button_daily', 'Quotidiens');
     LS_AddStr('death_counts_button_cumul', 'Cumulés');
     
-    LS_AddHtml('death_counts_description', "\
-      Cette statistique semberait d'être proche de la réalité car même pendant le moment le plus dûr de la pandémie,\
+    LS_AddHtml('death_counts_description', '\
+      Cette statistique semberait d\'être proche de la réalité car même pendant le moment le plus dûr de la pandémie,\
       la situation hospitalière à Taïwan était beaucoup moins dramatique que la plupart des pays.\
-    ");
+    ');
   }
   
   else { //-- En
@@ -308,7 +308,7 @@ function DC_Reload(wrap) {
 
 function DC_ButtonListener(wrap) {
   //-- Daily or cumulative
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
+  $(document).on('change', "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
     GP_PressRadioButton(wrap, 'cumul', wrap.cumul, this.value);
     wrap.cumul = this.value;
     DC_Reload(wrap);
@@ -328,9 +328,9 @@ function DC_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Replot
     DC_ResetText();
