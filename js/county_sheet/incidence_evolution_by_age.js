@@ -2,7 +2,7 @@
     //-------------------------------------//
     //--  incidence_evolution_by_age.js  --//
     //--  Chieh-An Lin                   --//
-    //--  2022.05.06                     --//
+    //--  2022.05.08                     --//
     //-------------------------------------//
 
 function IEBA_InitFig(wrap) {
@@ -25,27 +25,33 @@ function IEBA_ResetText() {
     
     LS_AddHtml('incidence_evolution_by_age_description', '\
       此圖中，盛行率之定義為自該日起回推七日內，指定年齡層每十萬人確診個案數之總合（而非平均）。\
-      此統計包含境外移入個案。\
+      <br><br>\
+      此統計包含境外移入個案，\
+      因此所有年齡之盛行率可能會與「各縣市盛行率變化」的「全國」盛行率不同。\
     ');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('incidence_evolution_by_age_title', "Évolution du taux d'incidence par tranche d'âge");
+    LS_AddStr('incidence_evolution_by_age_title', 'Évolution du taux d\'incidence par tranche d\'âge');
     
-    LS_AddHtml('incidence_evolution_by_age_description', "\
-      Dans cette figure, le taux d'incidence est défini comme la somme (non pas la moyenne) des cas confirmés pendant 7 derniers jours,\
-      pour 100k habitants de la tranche d'age indiquée.\
+    LS_AddHtml('incidence_evolution_by_age_description', '\
+      Dans cette figure, le taux d\'incidence est défini comme la somme (non pas la moyenne) des cas confirmés pendant 7 derniers jours,\
+      pour 100k habitants de la tranche d\'age indiquée.\
+      <br><br>\
       Les cas importés sont inclus.\
-    ");
+      Par conséquent, le taux d\'incidence de tous âges peut ne pas être identique au taux national dans l\'« Évolution du taux d\'incidence par ville et comté »\
+    ');
   }
   
   else { //-- En
     LS_AddStr('incidence_evolution_by_age_title', 'Evolution of Incidence Rate by Age Group');
     
     LS_AddHtml('incidence_evolution_by_age_description', '\
-      In this plot, the incidence rate is defined as the sum (instead of average) of confirmed cases during 7 lookback days,\
+      In this figure, the incidence rate is defined as the sum (instead of average) of confirmed cases during 7 lookback days,\
       for every 100k inhabitants of the indicated age range.\
+      <br><br>\
       The imported cases are included.\
+      Thus, the incidence rate of "All ages" could be different from the value of "Nationalwide" in "Evolution of Incidence Rate by City & County".\
     ');
   }
 }
@@ -239,9 +245,9 @@ function IEBA_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove()

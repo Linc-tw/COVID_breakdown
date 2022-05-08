@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_counts_param.js      --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.02                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 var CC_mini_wrap = {
@@ -39,30 +39,4 @@ var CC_overall_wrap = {
   nb_yticks: 5,
   legend_pos_x: 100,
   legend_pos_x1_: {en: 185, fr: 195, 'zh-tw': 185},
-};
-
-var CC_2021_wrap = {
-  tag: 'case_counts_2021',
-  data_path_list: [
-    '../processed_data/2021/case_counts_by_report_day.csv',
-    '../processed_data/key_numbers.csv',
-  ],
-
-  y_max_factor: 1.5,
-  nb_yticks: 5,
-  legend_pos_x: 80,
-  legend_pos_x1_: {en: 190, fr: 270, 'zh-tw': 240},
-};
-
-var CC_2020_wrap = {
-  tag: 'case_counts_2020',
-  data_path_list: [
-    '../processed_data/2020/case_counts_by_report_day.csv',
-    '../processed_data/key_numbers.csv',
-  ],
-  
-  y_max_factor: 1.5,
-  nb_yticks: 5,
-  legend_pos_x: 80,
-  legend_pos_x1_: {en: 240, fr: 250, 'zh-tw': 210},
 };

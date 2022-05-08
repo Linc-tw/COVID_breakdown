@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_county.js  --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.07                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function VBC_InitFig(wrap) {
@@ -13,13 +13,13 @@ function VBC_InitFig(wrap) {
   else {
     wrap.tot_width = 800;
     wrap.tot_height_ = {};
-    wrap.tot_height_['zh-tw'] = 550;
-    wrap.tot_height_['fr'] = 550;
-    wrap.tot_height_['en'] = 550;
+    wrap.tot_height_['zh-tw'] = 580;
+    wrap.tot_height_['fr'] = 580;
+    wrap.tot_height_['en'] = 580;
     wrap.margin_ = {};
-    wrap.margin_['zh-tw'] = {left: 40, right: 5, bottom: 60, top: 5};
-    wrap.margin_['fr'] = {left: 130, right: 5, bottom: 60, top: 5};
-    wrap.margin_['en'] = {left: 110, right: 5, bottom: 60, top: 5};
+    wrap.margin_['zh-tw'] = {left: 50, right: 5, bottom: 60, top: 5};
+    wrap.margin_['fr'] = {left: 170, right: 5, bottom: 60, top: 5};
+    wrap.margin_['en'] = {left: 140, right: 5, bottom: 60, top: 5};
     
     GP_InitFig(wrap);
   }
@@ -60,10 +60,10 @@ function VBC_FormatData(wrap, data) {
   var x_list, x_lower, x_upper, block;
   
   //-- Variables for xaxis
-  var x_max = 1.09; //-- For 200%
+  var x_max = 1.25; //-- For 125%
   
   //-- Variables for yaxis
-  var yticklabel_dict = {en: [], fr: [], 'zh-tw': []};
+  var yticklabel_dict = {en: {}, fr: {}, 'zh-tw': {}};
   
   //-- Main loop over row
   for (i=0; i<data.length; i++) {
@@ -101,24 +101,23 @@ function VBC_FormatData(wrap, data) {
     }
     
     y_list.push(y);
-    yticklabel_dict['en'].push(row['label']);
-    yticklabel_dict['fr'].push(row['label_fr']);
-    yticklabel_dict['zh-tw'].push(row['label_zh']);
+    yticklabel_dict['en'][y] = row['label'];
+    yticklabel_dict['fr'][y] = row['label_fr'];
+    yticklabel_dict['zh-tw'][y] = row['label_zh'];
   }
   
   //-- Calculate x_path
   if (wrap.tag.includes('mini'))
     wrap.nb_yticks = 1;
-  var x_path = GP_CalculateTickInterval(x_max, wrap.nb_yticks, 'percentage');
+  var x_path = 0.1
   
   //-- Generate yticks
   var xtick = [];
-  for (i=0; i<x_max; i+=x_path)
+  for (i=0; i<1.01; i+=x_path)
     xtick.push(i)
     
   //-- Get legend value
-  var legend_value_raw = data.splice(0, 1)[0];
-  legend_value_raw = [legend_value_raw['value_1'], formatted_data[2]['x1']];
+  var last_date = data.splice(0, 1)[0]['value_1'];
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
@@ -128,7 +127,7 @@ function VBC_FormatData(wrap, data) {
   wrap.x_min = 0.0;
   wrap.x_max = x_max;
   wrap.xtick = xtick;
-  wrap.legend_value_raw = legend_value_raw;
+  wrap.last_date = last_date;
 }
 
 //-- Tooltip
@@ -145,7 +144,7 @@ function VBC_MouseMove(wrap, d) {
   if (LS_lang == 'zh-tw')
     col_label_list = ['第一劑', '第兩劑', '第三劑'];
   else if (LS_lang == 'fr')
-    col_label_list = ['1er dose ', '2e dose', '3e dose'];
+    col_label_list = ['1ère dose ', '2e dose', '3e dose'];
   else
     col_label_list = ['1st dose', '2nd dose', '3rd dose'];
   
@@ -154,7 +153,7 @@ function VBC_MouseMove(wrap, d) {
   var tooltip_text = d.x;
   var i;
   
-  var tooltip_text = wrap.legend_value_raw[0] + ' ' + d.y;
+  var tooltip_text = wrap.last_date + '<br>' + wrap.yticklabel_dict[LS_lang][d.y];
   for (i=0; i<wrap.nb_col; i++)
     tooltip_text += '<br>' + col_label_list[i] + ' = ' + fct_format(d.x_list[i]);
   
@@ -218,7 +217,7 @@ function VBC_Replot(wrap) {
   //-- Define yscale
   var yscale = GP_MakeBandYForBar(wrap);
   
-  //-- Update bar
+  //-- Replot bar
   wrap.bar.selectAll('.content.bar')
     .data(wrap.formatted_data)
     .transition()
@@ -236,9 +235,9 @@ function VBC_Replot(wrap) {
   var yaxis = d3.axisLeft(yscale)
     .tickSize(0)
     .tickValues(wrap.y_list)
-    .tickFormat(function (d, i) {return wrap.yticklabel_dict[LS_lang][i];});
+    .tickFormat(function (d) {return wrap.yticklabel_dict[LS_lang][d];});
   
-  //-- Add yaxis
+  //-- Replot yaxis
   wrap.svg.select('.yaxis')
     .transition()
     .duration(wrap.trans_delay)
@@ -248,7 +247,7 @@ function VBC_Replot(wrap) {
       .style('text-anchor', 'end');
   wrap.svg.select('.yaxis')
     .selectAll('text')
-    .style('font-size', '0.9rem');
+      .style('font-size', '1.05rem');
       
   //-- Define xaxis
   var xaxis = d3.axisBottom(xscale)
@@ -256,7 +255,7 @@ function VBC_Replot(wrap) {
       .tickValues(wrap.xtick)
       .tickFormat(d3.format('.0%'));
   
-  //-- Add xaxis
+  //-- Replot xaxis
   wrap.svg.select('.xaxis')
     .transition()
     .duration(wrap.trans_delay)
@@ -275,16 +274,21 @@ function VBC_Replot(wrap) {
   wrap.legend_pos = {x: wrap.legend_pos_x_[LS_lang], y: wrap.legend_pos_y, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy};
   
   //-- Define legend color
-  wrap.legend_color = [];
+  wrap.legend_color = wrap.color_list;
   
   //-- Define legend value
   wrap.legend_value = [];
   
   //-- Define legend label
-  wrap.legend_label = [''];
+  if (LS_lang == 'zh-tw')
+    wrap.legend_label = ['已施打一劑', '已施打兩劑', '已施打三劑'];
+  else if (LS_lang == 'fr')
+    wrap.legend_label = ['1ère dose ', '2e dose', '3e dose'];
+  else
+    wrap.legend_label = ['1st dose', '2nd dose', '3rd dose'];
   
   //-- Update legend title
-  GP_UpdateLegendTitle(wrap, wrap.legend_value_raw[0]);
+  GP_UpdateLegendTitle(wrap, wrap.last_date);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'percentage', wrap.legend_size);

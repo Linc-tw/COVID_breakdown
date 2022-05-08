@@ -2,7 +2,7 @@
     //----------------------------------------//
     //--  incidence_evolution_by_county.js  --//
     //--  Chieh-An Lin                      --//
-    //--  2022.05.06                        --//
+    //--  2022.05.08                        --//
     //----------------------------------------//
 
 function IEBC_InitFig(wrap) {
@@ -12,9 +12,9 @@ function IEBC_InitFig(wrap) {
   wrap.tot_height_['fr'] = 580;
   wrap.tot_height_['en'] = 580;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 60, right: 5, bottom: 65, top: 35};
+  wrap.margin_['zh-tw'] = {left: 50, right: 5, bottom: 65, top: 35};
   wrap.margin_['fr'] = {left: 170, right: 5, bottom: 65, top: 35};
-  wrap.margin_['en'] = {left: 145, right: 5, bottom: 75, top: 35};
+  wrap.margin_['en'] = {left: 140, right: 5, bottom: 75, top: 35};
   
   GP_InitFig(wrap);
 }
@@ -25,24 +25,32 @@ function IEBC_ResetText() {
     
     LS_AddHtml('incidence_evolution_by_county_description', '\
       此圖中，盛行率之定義為自該日起回推七日內，指定縣市每十萬人本土個案數之總合（而非平均）。\
+      <br><br>\
+      此統計不包含境外移入個案，因此全國盛行率可能會與「各年齡層盛行率變化」之「所有年齡」盛行率不同。\
     ');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('incidence_evolution_by_county_title', "Évolution du taux d'incidence par ville et comté");
+    LS_AddStr('incidence_evolution_by_county_title', 'Évolution du taux d\'incidence par ville et comté');
     
-    LS_AddHtml('incidence_evolution_by_county_description', "\
-      Dans cette figure, le taux d'incidence est défini comme la somme (non pas la moyenne) des cas locaux pendant 7 derniers jours,\
+    LS_AddHtml('incidence_evolution_by_county_description', '\
+      Dans cette figure, le taux d\'incidence est défini comme la somme (non pas la moyenne) des cas locaux pendant 7 derniers jours,\
       pour 100k habitants de la ville ou du comté indiqué.\
-    ");
+      <br><br>\
+      Les cas importés sont exclus.\
+      Par conséquent, le taux d\'incidence national peut ne pas être identique à celui de « Tous âges » dans l\'« Évolution du taux d\'incidence par tranche d\'âge »\
+    ');
   }
   
   else { //-- En
     LS_AddStr('incidence_evolution_by_county_title', 'Evolution of Incidence Rate by City & County');
     
     LS_AddHtml('incidence_evolution_by_county_description', '\
-      In this plot, the incidence rate is defined as the sum (instead of average) of local cases during 7 lookback days,\
+      In this figure, the incidence rate is defined as the sum (instead of average) of local cases during 7 lookback days,\
       for every 100k inhabitants of the indicated city or county.\
+      <br><br>\
+      The imported cases are not included.\
+      Thus, the incidence rate of "Nationalwide" could be different from the value of "All ages" in "Evolution of Incidence Rate by Age Group".\
     ');
   }
 }
@@ -236,9 +244,9 @@ function IEBC_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Remove
     d3.selectAll(wrap.id+' .plot').remove()

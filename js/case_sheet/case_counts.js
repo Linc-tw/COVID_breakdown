@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_counts.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.13                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function CC_InitFig(wrap) {
@@ -38,9 +38,9 @@ function CC_ResetText() {
     LS_AddStr('case_counts_button_local', 'Locaux');
     LS_AddStr('case_counts_button_others', 'Divers');
     
-    LS_AddHtml('case_counts_description', "\
-      La catégorie « Divers » est consistuée d'« En bateau », d'« En avion », & d'« Origin inconnue ».\
-    ");
+    LS_AddHtml('case_counts_description', '\
+      La catégorie « Divers » est consistuée d\'« en bateau », d\'« en avion » et d\'« origin inconnue ».\
+    ');
   }
   
   else { //-- En
@@ -334,7 +334,7 @@ function CC_Reload(wrap) {
 
 function CC_ButtonListener(wrap) {
   //-- Daily or cumulative
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
+  $(document).on('change', "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
     GP_PressRadioButton(wrap, 'cumul', wrap.cumul, this.value);
     wrap.cumul = this.value;
     CC_Reload(wrap);
@@ -369,9 +369,9 @@ function CC_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Replot
     CC_ResetText();
@@ -391,7 +391,7 @@ function CC_Main(wrap) {
   else {
     wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
     GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
-    wrap.col_ind = document.getElementById(wrap.tag + "_trans").value;
+    wrap.col_ind = document.getElementById(wrap.tag + '_trans').value;
   }
   
   //-- Load

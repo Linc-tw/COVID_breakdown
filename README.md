@@ -40,7 +40,7 @@ Plots on [_Vaccination_](http://covidtaiwan.linc.tw/page/latest_vaccination.html
 - Vaccination by Brand
 - Vaccination Progress & Deliveries
 - Vaccination Progress by Dose (also shown in [_Home_](http://covidtaiwan.linc.tw/page/index.html))
-- Vaccination by Age (only in _Last 90 days_)
+- Vaccination by Age Group (only in _Last 90 days_)
 - Vaccination by City & County (only in _Last 90 days_)
 
 Plots on [_Other stats_](http://covidtaiwan.linc.tw/page/latest_others.html) are:
@@ -48,7 +48,6 @@ Plots on [_Other stats_](http://covidtaiwan.linc.tw/page/latest_others.html) are
 - Positive Rate & Case Fatality Rate
 - Death Counts
 - Border Crossing
-- Infection Dynamics (only in _Overall stats_)
 
 The plot on [_Comparison_](http://covidtaiwan.linc.tw/page/latest_comparison.html) is:
 - Statistics in Mirror

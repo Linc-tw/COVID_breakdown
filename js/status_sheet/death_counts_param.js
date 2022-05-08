@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_counts_param.js     --//
     //--  Chieh-An Lin              --//
-    //--  2021.12.13                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 var DC_latest_wrap = {
@@ -25,30 +25,6 @@ var DC_overall_wrap = {
   ],
 
   y_max_factor: 1.1, 
-  nb_yticks: 4,
-  legend_pos_x: 75,
-};
-
-var DC_2021_wrap = {
-  tag: 'death_counts_2021',
-  data_path_list: [
-    '../processed_data/2021/death_counts.csv',
-    '../processed_data/key_numbers.csv',
-  ],
-
-  y_max_factor: 1.2,
-  nb_yticks: 4,
-  legend_pos_x: 75,
-};
-
-var DC_2020_wrap = {
-  tag: 'death_counts_2020',
-  data_path_list: [
-    '../processed_data/2020/death_counts.csv',
-    '../processed_data/key_numbers.csv',
-  ],
-
-  y_max_factor: 1.2,
   nb_yticks: 4,
   legend_pos_x: 75,
 };

@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  border_statistics.js      --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.13                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function BS_InitFig(wrap) {
@@ -34,7 +34,7 @@ function BS_ResetText() {
     LS_AddStr('border_statistics_button_total', 'Totaux');
     
     LS_AddHtml('border_statistics_description', '\
-      Les statistiques frontalières sont mises à jour uniquement au début du mois.\
+      Les statistiques frontalières sont mises à jour uniquement au début de chaque mois.\
     ');
   }
   
@@ -187,8 +187,8 @@ function BS_MouseMove(wrap, d) {
   //-- Generate tooltip
   wrap.tooltip
     .html(tooltip_text)
-    .style("left", new_pos[0] + "px")
-    .style("top", new_pos[1] + "px")
+    .style('left', new_pos[0] + 'px')
+    .style('top', new_pos[1] + 'px')
 }
 
 function BS_Plot(wrap) {
@@ -308,7 +308,7 @@ function BS_Reload(wrap) {
 
 function BS_ButtonListener(wrap) {
   //-- Entry or exit or both
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_exit']", function (event) {
+  $(document).on('change', "input:radio[name='" + wrap.tag + "_exit']", function (event) {
     GP_PressRadioButton(wrap, 'exit', wrap.col_ind, this.value);
     wrap.col_ind = this.value;
     BS_Reload(wrap);
@@ -330,9 +330,9 @@ function BS_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Replot
     BS_ResetText();

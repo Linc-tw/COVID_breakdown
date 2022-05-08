@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  incidence_map.js          --//
     //--  Chieh-An Lin              --//
-    //--  2022.01.08                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function IM_InitFig(wrap) {
@@ -55,15 +55,16 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_m12', '12月');
     
     LS_AddHtml('incidence_map_description', '\
+      此圖中，盛行率之定義為指定期間內，每十萬人本土個案數之總合（而非平均）。\
+      <br><br>\
       2021年5月所爆發的感染多半集中於雙北地區，\
       其確診個案佔全國總數八成以上。\
-      <br><br>\
-      此圖中，盛行率之定義為指定期間內，每十萬人本土個案數之總合（而非平均）。\
+      2022年4月起則是全國遍地開花。\
     ');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('incidence_map_title', "Carte d'incidence");
+    LS_AddStr('incidence_map_title', 'Carte d\'incidence');
     LS_AddStr('incidence_map_button_count', 'Nombre');
     LS_AddStr('incidence_map_button_rate', 'Taux');
     LS_AddStr('incidence_map_button_total', 'Locaux totaux');
@@ -82,7 +83,7 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_2020', '2020');
     LS_AddStr('incidence_map_button_2021', '2021');
     LS_AddStr('incidence_map_button_2022', '2022');
-    LS_AddStr('incidence_map_button_all_year', "Toute l'année");
+    LS_AddStr('incidence_map_button_all_year', 'Toute l\'année');
     LS_AddStr('incidence_map_button_m1', 'Janvier');
     LS_AddStr('incidence_map_button_m2', 'Février');
     LS_AddStr('incidence_map_button_m3', 'Mars');
@@ -96,13 +97,14 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_m11', 'Novembre');
     LS_AddStr('incidence_map_button_m12', 'Décembre');
     
-    LS_AddHtml('incidence_map_description', "\
+    LS_AddHtml('incidence_map_description', '\
+      Le taux d\'incidence est défini comme la somme (non pas la moyenne) des cas locaux pendant la période spécifique,\
+      pour 100k habitants de la ville ou du comté indiqué.\
+      <br><br>\
       La vague de mai 2021 se concentraient à Taipei et à Nouveau Taipei.\
       Plus de 80% des cas ont été observés dans ces 2 régions.\
-      <br><br>\
-      Le taux d'incidence est défini comme la somme (non pas la moyenne) des cas locaux pendant la période spécifique,\
-      pour 100k habitants de la ville ou du comté indiqué.\
-    ");
+      À partir d\'avril 2022 la covid est présente partout dans le pays.\
+    ');
   }
   
   else { //-- En
@@ -140,11 +142,12 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_m12', 'December');
     
     LS_AddHtml('incidence_map_description', '\
-      The outbreak of May 2021 was concentrated at Taipei & New Taipei.\
-      More than 80% of the total cases were observed in these 2 areas.\
-      <br><br>\
       The incidence rate is defined as the sum (instead of average) of local cases during the chosen period,\
       for every 100k inhabitants of the indicated city or county.\
+      <br><br>\
+      The outbreak of May 2021 was concentrated at Taipei & New Taipei.\
+      More than 80% of the total cases were observed in these 2 areas.\
+      Since April 2022 COVID has circulated all over the country.\
     ');
   }
 }
@@ -380,7 +383,7 @@ function IM_Replot(wrap) {
     if (LS_lang == 'zh-tw')
       legend_caption_top = ['每十萬人確診率'];
     else if (LS_lang == 'fr')
-      legend_caption_top = ["Taux d'incidence pour 100k habitants"];
+      legend_caption_top = ['Taux d\'incidence pour 100k habitants'];
     else 
       legend_caption_top = ['Incidence rate per 100k inhabitants'];
   }
@@ -526,7 +529,7 @@ function IM_Reload(wrap) {
 
 function IM_ButtonListener(wrap) {
   //-- Count or rate
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_rate']", function (event) {
+  $(document).on('change', "input:radio[name='" + wrap.tag + "_rate']", function (event) {
     GP_PressRadioButton(wrap, 'rate', wrap.rate, this.value);
     wrap.rate = this.value;
     IM_Reload(wrap);
@@ -537,11 +540,11 @@ function IM_ButtonListener(wrap) {
     d3.select(wrap.id +'_year').on('change', function() {
       wrap.year = +this.value;
       if (wrap.year == 0) {
-        document.getElementById(wrap.tag + "_month").disabled = true;
-        document.getElementById(wrap.tag + "_month").value = 0;
+        document.getElementById(wrap.tag + '_month').disabled = true;
+        document.getElementById(wrap.tag + '_month').value = 0;
       }
       else
-        document.getElementById(wrap.tag + "_month").disabled = false;
+        document.getElementById(wrap.tag + '_month').disabled = false;
       wrap.col_ind = GP_YMToIndex(wrap.year, wrap.month);
       IM_Reload(wrap);
     });
@@ -583,7 +586,7 @@ function IM_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
     Cookies.set('lang', LS_lang);
     
@@ -601,18 +604,18 @@ function IM_Main(wrap) {
   wrap.rate = document.querySelector("input[name='" + wrap.tag + "_rate']:checked").value;
   GP_PressRadioButton(wrap, 'rate', 0, wrap.rate); //-- 0 from .html
   if (wrap.tag.includes('overall')) {
-    wrap.year = +document.getElementById(wrap.tag + "_year").value;
+    wrap.year = +document.getElementById(wrap.tag + '_year').value;
     if (wrap.year == 0) {
-      document.getElementById(wrap.tag + "_month").disabled = true;
-      document.getElementById(wrap.tag + "_month").value = 0;
+      document.getElementById(wrap.tag + '_month').disabled = true;
+      document.getElementById(wrap.tag + '_month').value = 0;
     }
     else
-      document.getElementById(wrap.tag + "_month").disabled = false;
-    wrap.month = +document.getElementById(wrap.tag + "_month").value;
+      document.getElementById(wrap.tag + '_month').disabled = false;
+    wrap.month = +document.getElementById(wrap.tag + '_month').value;
     wrap.col_ind = GP_YMToIndex(wrap.year, wrap.month);
   }
   else
-    wrap.col_ind = document.getElementById(wrap.tag + "_period").value;
+    wrap.col_ind = document.getElementById(wrap.tag + '_period').value;
   
   //-- Load
   IM_InitFig(wrap);

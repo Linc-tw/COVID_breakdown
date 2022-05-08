@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  local_case_per_county.js  --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.13                --//
+    //--  2022.05.08                --//
     //--------------------------------//
 
 function LCPC_InitFig(wrap) {
@@ -44,7 +44,10 @@ function LCPC_ResetText() {
     LS_AddStr('local_case_per_county_button_matsu', '馬祖');
     
     LS_AddHtml('local_case_per_county_description', '\
-      大多數案例集中在雙北地區。\
+      此圖之數字可能會和「各感染源確診人數」之「本土」確診數不同，\
+      因為兩者取自不同資料來源，且用作分隔前後日的時間點也未盡相同。\
+      <br><br>\
+      此外，縣市資料有時會出現延遲更新的現象。\
     ');
   }
   
@@ -77,7 +80,10 @@ function LCPC_ResetText() {
     LS_AddStr('local_case_per_county_button_matsu', 'Matsu');
     
     LS_AddHtml('local_case_per_county_description', '\
-      La plupart des cas se concentraient à Taipei et à Nouveau Taipei.\
+      Le chiffre dans cette figure peut ne pas correspond à celui de "Locaux" du "Nombre de cas confirmés",\
+      car ils ne viennent pas de la même source des données et que les deux sources ne comptabilisent dans le même intervalle de 24 heures pour un jour.\
+      <br><br>\
+      De plus, ces informations géographiques peuvent tarder à être à jour.\
     ');
   }
   
@@ -110,7 +116,10 @@ function LCPC_ResetText() {
     LS_AddStr('local_case_per_county_button_matsu', 'Matsu');
     
     LS_AddHtml('local_case_per_county_description', '\
-      Most cases were concentrated in Taipei & New Taipei.\
+      The value on this figure does not necessarily match to "Local" of "Confirmed Case Counts",\
+      because they come from different data sources and both sources do not count in the same 24-hour range as a day.\
+      <br><br>\
+      In addition, these geographical data could come with delay.\
     ');
   }
 }
@@ -280,8 +289,8 @@ function LCPC_MouseMove(wrap, d) {
   //-- Generate tooltip
   wrap.tooltip
     .html(tooltip_text)
-    .style("left", new_pos[0] + "px")
-    .style("top", new_pos[1] + "px")
+    .style('left', new_pos[0] + 'px')
+    .style('top', new_pos[1] + 'px')
 }
 
 function LCPC_Plot(wrap) {
@@ -414,7 +423,7 @@ function LCPC_Reload(wrap) {
 
 function LCPC_ButtonListener(wrap) {
   //-- Daily or cumulative
-  $(document).on("change", "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
+  $(document).on('change', "input:radio[name='" + wrap.tag + "_cumul']", function (event) {
     GP_PressRadioButton(wrap, 'cumul', wrap.cumul, this.value);
     wrap.cumul = this.value;
     LCPC_Reload(wrap);
@@ -446,9 +455,9 @@ function LCPC_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Replot
     LCPC_ResetText();
@@ -468,7 +477,7 @@ function LCPC_Main(wrap) {
   else {
     wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
     GP_PressRadioButton(wrap, 'cumul', 0, wrap.cumul); //-- 0 from .html
-    wrap.col_ind = document.getElementById(wrap.tag + "_county").value;
+    wrap.col_ind = document.getElementById(wrap.tag + '_county').value;
   }
   
   //-- Load

@@ -188,7 +188,7 @@ function VBD_MouseMove(wrap, d) {
   if (LS_lang == 'zh-tw')
     col_label_list = ['第一劑', '第兩劑', '第三劑'];
   else if (LS_lang == 'fr')
-    col_label_list = ['1er dose ', '2e dose', '3e dose'];
+    col_label_list = ['1ère dose ', '2e dose', '3e dose'];
   else
     col_label_list = ['1st dose', '2nd dose', '3rd dose'];
   
@@ -282,7 +282,7 @@ function VBD_Replot(wrap) {
   if (LS_lang == 'zh-tw')
     wrap.legend_label = ['已施打一劑', '已施打兩劑', '已施打三劑'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ['1er dose ', '2e dose', '3e dose'];
+    wrap.legend_label = ['1ère dose ', '2e dose', '3e dose'];
   else
     wrap.legend_label = ['1st dose', '2nd dose', '3rd dose'];
   

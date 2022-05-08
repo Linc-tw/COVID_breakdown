@@ -2,7 +2,7 @@
     //-------------------------------------//
     //--  vaccination_by_brand_param.js  --//
     //--  Chieh-An Lin                   --//
-    //--  2021.12.13                     --//
+    //--  2022.05.08                     --//
     //-------------------------------------//
 
 var VBB_mini_wrap = {
@@ -36,19 +36,6 @@ var VBB_overall_wrap = {
   ],
   
   y_max_factor: 1.55, 
-  nb_yticks: 4,
-  legend_pos_x: 125, 
-  legend_pos_x1_: {en: 225, fr: 235, 'zh-tw': 200},
-};
-
-var VBB_2021_wrap = {
-  tag: 'vaccination_by_brand_2021',
-  data_path_list: [
-    '../processed_data/2021/vaccination_by_brand.csv',
-    '../processed_data/key_numbers.csv',
-  ],
-
-  y_max_factor: 1.2,
   nb_yticks: 4,
   legend_pos_x: 125, 
   legend_pos_x1_: {en: 225, fr: 235, 'zh-tw': 200},

@@ -48,8 +48,8 @@ function CBA_ResetText() {
     
     LS_AddHtml('case_by_age_description', '\
       在2020疫情剛開始時，確診個案平均年齡偏低，\
-      但2021年5月所爆發的感染則是老人多於年輕人。\
-      這也是台灣致死率偏高的原因。\
+      但2021年5月所爆發的感染則是老人多於年輕人，\
+      2022年後又回到年輕人多於老人的情況。\
     ');
   }
   
@@ -71,7 +71,7 @@ function CBA_ResetText() {
     LS_AddStr('case_by_age_button_2020', '2020');
     LS_AddStr('case_by_age_button_2021', '2021');
     LS_AddStr('case_by_age_button_2022', '2022');
-    LS_AddStr('case_by_age_button_all_year', "Toute l'année");
+    LS_AddStr('case_by_age_button_all_year', 'Toute l\'année');
     LS_AddStr('case_by_age_button_m1', 'Janvier');
     LS_AddStr('case_by_age_button_m2', 'Février');
     LS_AddStr('case_by_age_button_m3', 'Mars');
@@ -85,12 +85,11 @@ function CBA_ResetText() {
     LS_AddStr('case_by_age_button_m11', 'Novembre');
     LS_AddStr('case_by_age_button_m12', 'Décembre');
     
-    LS_AddHtml('case_by_age_description', "\
-      Il y a plus de personnes âges que les jeunes qui ont été infectées par la covid à Taïwan,\
-      surtout pendant la vague de mai 2021.\
-      La moyenne d'âge des patients était plus basse au début de la pandémic en 2020.\
-      Ceci est la raison pour laquelle la mortalité est élevée à Taïwan.\
-    ");
+    LS_AddHtml('case_by_age_description', '\
+      Au début de la pandémie, la plupart des cas étaient les jeunes qui sont retournés à Taïwan.\
+      Pendant la vague de mai 2021, les plus âgés ont été beaucoup plus infectés,\
+      tandis qu\'à partir de 2022 ce sont les jeunes patients qui dominent les infections.\
+    ');
   }
   
   else { //-- En
@@ -125,11 +124,11 @@ function CBA_ResetText() {
     LS_AddStr('case_by_age_button_m11', 'November');
     LS_AddStr('case_by_age_button_m12', 'December');
     
-    LS_AddHtml('case_by_age_description', "\
-      A lot more aged people than younger ones were infected by COVID in Taiwan especially during the outbreak,\
-      while the age of patients was much lower at the beginning of the pandemic in 2020.\
-      This was the reason for Taiwan's high case fatality rate.\
-    ");
+    LS_AddHtml('case_by_age_description', '\
+      At the beginning of the pandemic, most patients were young people returning from overseas.\
+      However, during the May 2021 outbreak, aged people were more infected.\
+      Since 2022, it has switched back to a scenario dominated by young patients.\
+    ');
   }
 }
 
@@ -272,8 +271,8 @@ function CBA_MouseMove(wrap, d) {
   //-- Generate tooltip
   wrap.tooltip
     .html(tooltip_text)
-    .style("left", new_pos[0] + "px")
-    .style("top", new_pos[1] + "px")
+    .style('left', new_pos[0] + 'px')
+    .style('top', new_pos[1] + 'px')
 }
 
 function CBA_Plot(wrap) {
@@ -437,11 +436,11 @@ function CBA_ButtonListener(wrap) {
     d3.select(wrap.id +'_year').on('change', function() {
       wrap.year = +this.value;
       if (wrap.year == 0) {
-        document.getElementById(wrap.tag + "_month").disabled = true;
-        document.getElementById(wrap.tag + "_month").value = 0;
+        document.getElementById(wrap.tag + '_month').disabled = true;
+        document.getElementById(wrap.tag + '_month').value = 0;
       }
       else
-        document.getElementById(wrap.tag + "_month").disabled = false;
+        document.getElementById(wrap.tag + '_month').disabled = false;
       wrap.col_ind = GP_YMToIndex(wrap.year, wrap.month);
       CBA_Reload(wrap);
     });
@@ -478,9 +477,9 @@ function CBA_ButtonListener(wrap) {
   });
 
   //-- Language
-  $(document).on("change", "input:radio[name='language']", function (event) {
+  $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
-    Cookies.set("lang", LS_lang);
+    Cookies.set('lang', LS_lang);
     
     //-- Replot
     CBA_ResetText();
@@ -496,18 +495,18 @@ function CBA_Main(wrap) {
   if (wrap.tag.includes('mini'))
     wrap.col_ind = 0;
   else if (wrap.tag.includes('overall')) {
-    wrap.year = +document.getElementById(wrap.tag + "_year").value;
+    wrap.year = +document.getElementById(wrap.tag + '_year').value;
     if (wrap.year == 0) {
-      document.getElementById(wrap.tag + "_month").disabled = true;
-      document.getElementById(wrap.tag + "_month").value = 0;
+      document.getElementById(wrap.tag + '_month').disabled = true;
+      document.getElementById(wrap.tag + '_month').value = 0;
     }
     else
-      document.getElementById(wrap.tag + "_month").disabled = false;
-    wrap.month = +document.getElementById(wrap.tag + "_month").value;
+      document.getElementById(wrap.tag + '_month').disabled = false;
+    wrap.month = +document.getElementById(wrap.tag + '_month').value;
     wrap.col_ind = GP_YMToIndex(wrap.year, wrap.month);
   }
   else
-    wrap.col_ind = document.getElementById(wrap.tag + "_period").value;
+    wrap.col_ind = document.getElementById(wrap.tag + '_period').value;
   
   //-- Load
   CBA_InitFig(wrap);
