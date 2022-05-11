@@ -1,25 +1,25 @@
 key,value_1,value_2,value_3,label,label_fr,label_zh
-latest_date,2022-05-02,,,,,
-total,84.9,80.2,60.9,Nationalwide,National,全國
-Keelung,86.9,82.2,65.1,Keelung,Keelung,基隆
-Taipei,83.5,79.8,61.9,Taipei,Taipei,台北
-New_Taipei,84.9,80.7,62.3,New Taipei,Nouveau Taipei,新北
-Taoyuan,86.1,81.5,60.1,Taoyuan,Taoyuan,桃園
-Hsinchu,84.6,79.9,57.7,Hsinchu County,Comté de Hsinchu,竹縣
-Hsinchu_C,83.6,79.3,58.7,Hsinchu City,Ville de Hsinchu,竹市
-Miaoli,85.1,79.6,59.1,Miaoli,Miaoli,苗栗
-Taichung,84.8,80.1,62.5,Taichung,Taichung,台中
-Changhua,86.6,81.7,62.3,Changhua,Changhua,彰化
-Nantou,85.7,80.3,60.4,Nantou,Nantou,南投
-Yunlin,85.3,79.7,57.5,Yunlin,Yunlin,雲林
-Chiayi,86.0,80.1,60.0,Chiayi County,Comté de Chiayi,嘉縣
-Chiayi_C,83.7,78.9,59.8,Chiayi City,Ville de Chiayi,嘉市
-Tainan,84.4,79.1,58.4,Tainan,Tainan,台南
-Kaohsiung,85.2,80.4,61.3,Kaohsiung,Kaohsiung,高雄
-Pingtung,84.6,78.4,59.2,Pingtung,Pingtung,屏東
-Yilan,85.5,80.9,62.3,Yilan,Yilan,宜蘭
-Hualien,81.9,75.8,56.3,Hualien,Hualien,花蓮
-Taitung,80.0,73.2,51.8,Taitung,Taitung,台東
-Penghu,85.9,81.5,65.6,Penghu,Penghu,澎湖
-Kinmen,86.4,82.8,65.2,Kinmen,Kinmen,金門
-Matsu,88.7,86.5,73.0,Matsu,Matsu,馬祖
+latest_date,2022-05-09,,,,,
+total,85.4,80.5,62.7,Nationalwide,National,全國
+Keelung,87.2,82.4,66.3,Keelung,Keelung,基隆
+Taipei,83.8,80.0,63.6,Taipei,Taipei,台北
+New_Taipei,85.3,81.0,63.9,New Taipei,Nouveau Taipei,新北
+Taoyuan,86.5,81.9,62.6,Taoyuan,Taoyuan,桃園
+Hsinchu,85.1,80.2,59.7,Hsinchu County,Comté de Hsinchu,竹縣
+Hsinchu_C,84.1,79.6,60.7,Hsinchu City,Ville de Hsinchu,竹市
+Miaoli,85.5,80.0,60.8,Miaoli,Miaoli,苗栗
+Taichung,85.1,80.5,64.1,Taichung,Taichung,台中
+Changhua,87.1,82.0,63.9,Changhua,Changhua,彰化
+Nantou,86.2,80.7,61.9,Nantou,Nantou,南投
+Yunlin,86.2,80.3,60.4,Yunlin,Yunlin,雲林
+Chiayi,86.9,80.6,62.1,Chiayi County,Comté de Chiayi,嘉縣
+Chiayi_C,84.2,79.3,61.5,Chiayi City,Ville de Chiayi,嘉市
+Tainan,85.0,79.5,60.8,Tainan,Tainan,台南
+Kaohsiung,85.7,80.7,62.9,Kaohsiung,Kaohsiung,高雄
+Pingtung,85.4,78.8,60.7,Pingtung,Pingtung,屏東
+Yilan,86.0,81.3,64.0,Yilan,Yilan,宜蘭
+Hualien,83.0,76.2,57.7,Hualien,Hualien,花蓮
+Taitung,80.5,73.7,53.5,Taitung,Taitung,台東
+Penghu,86.4,81.9,67.1,Penghu,Penghu,澎湖
+Kinmen,86.6,83.1,66.8,Kinmen,Kinmen,金門
+Matsu,88.9,86.7,74.3,Matsu,Matsu,馬祖
