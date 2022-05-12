@@ -2,7 +2,7 @@
     ################################
     ##  COVID_specimen.py         ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.06                ##
+    ##  2022.05.09                ##
     ################################
 
 import os
@@ -97,6 +97,7 @@ class SpecimenSheet(ccm.Template):
     stock = {'date': date_list, 'total': total_list, 'total_avg': avg_arr}
     
     stock = pd.DataFrame(stock)
+    print('Latest nb of tests = {:d}'.format(stock.iloc[-1]['total']))
     stock = stock[:-1]
     stock = ccm.adjustDateRange(stock)
     

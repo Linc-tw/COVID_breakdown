@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  incidence_rates.js        --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.08                --//
+    //--  2022.05.09                --//
     //--------------------------------//
 
 function IR_InitFig(wrap) {
@@ -121,7 +121,13 @@ function IR_FormatData(wrap, data) {
       //-- Update y_last & y_max
       if (!isNaN(y)) {
         y_last = y;
-        y_max = Math.max(y_max, y);
+        
+        if (wrap.hasOwnProperty('col_ind')) { //-- For SIM
+          if (j == wrap.col_ind)
+            y_max = Math.max(y_max, y);
+        }
+        else
+          y_max = Math.max(y_max, y);
       }
       
       //-- Stock

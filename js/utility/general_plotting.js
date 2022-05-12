@@ -1241,8 +1241,8 @@ function GP_PlotHotMap(wrap) {
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'central')
       .style('fill', function (d) {if (d.value<0.5*wrap.value_max) return '#000000'; return '#FFFFFF';})
-      .style('font-size', function (d) {if (d.value.toFixed(0)<100) return '0.82rem'; if (d.value.toFixed(0)<1000) return '0.7rem'; return '0.58rem';})
-      .text(function (d) {if (d.value<0.5001) return ''; return d.value.toFixed(0);});
+      .style('font-size', function (d) {if (d.value.toFixed(0)<100) return '0.82rem'; if (d.value.toFixed(0)<1000 || d.value.toFixed(0)>=10000) return '0.7rem'; return '0.58rem';})
+      .text(function (d) {if (d.value<0.5001) return ''; if (d.value.toFixed(0)<10000) return d.value.toFixed(0); return (d.value/1000).toFixed(0)+'k';});
 }
 
 function GP_ReplotHotMap(wrap) {

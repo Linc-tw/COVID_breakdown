@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  stats_in_mirror.js        --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.08                --//
+    //--  2022.05.09                --//
     //--------------------------------//
 
 function SIM_InitFig(wrap) {
@@ -247,7 +247,7 @@ function SIM_FormatData(wrap, data, index) {
     TC_FormatData(sub_wrap, data);
   else if (stat == 1 || stat == 2 || stat == 3) {
     if (stat == 1)
-      sub_wrap.col_ind = 0;
+      sub_wrap.col_ind = 0; //-- For choosing column
     else if (stat == 2)
       sub_wrap.col_ind = 1;
     else
@@ -257,7 +257,7 @@ function SIM_FormatData(wrap, data, index) {
   else if (stat == 4)
     DC_FormatData(sub_wrap, data); 
   else if (stat == 5) {
-    sub_wrap.col_ind = 0;
+    sub_wrap.col_ind = 0; //-- For choosing column
     VBB_FormatData(sub_wrap, data);
     
     if (wrap.tag.includes('overall')) {
@@ -304,17 +304,27 @@ function SIM_FormatData(wrap, data, index) {
   }
   else if (stat == 9 || stat == 10 || stat == 11) {
     if (stat == 7)
-      sub_wrap.col_ind = 0;
+      sub_wrap.col_ind = 0; //-- For choosing column
     else if (stat == 8)
       sub_wrap.col_ind = 1;
     else
       sub_wrap.col_ind = 2;
     BS_FormatData(sub_wrap, data);
   }
-  else if (stat == 12 || stat == 13) 
+  else if (stat == 12 || stat == 13) {
+    if (stat == 12)
+      sub_wrap.col_ind = 0; //-- For y_max
+    else 
+      sub_wrap.col_ind = 1;
     IR_FormatData(sub_wrap, data);
-  else if (stat == 14 || stat == 15)
+  }
+  else if (stat == 14 || stat == 15) {
+    if (stat == 14)
+      sub_wrap.col_ind = 0; //-- For y_max
+    else 
+      sub_wrap.col_ind = 1;
     PAF_FormatData(sub_wrap, data);
+  }
 }
 
 function SIM_FormatData2(wrap, data2) {

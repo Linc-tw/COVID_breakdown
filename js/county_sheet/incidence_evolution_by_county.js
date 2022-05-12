@@ -2,7 +2,7 @@
     //----------------------------------------//
     //--  incidence_evolution_by_county.js  --//
     //--  Chieh-An Lin                      --//
-    //--  2022.05.08                        --//
+    //--  2022.05.09                        --//
     //----------------------------------------//
 
 function IEBC_InitFig(wrap) {
@@ -145,7 +145,7 @@ function IEBC_Plot(wrap) {
   
   //-- Define square color
   wrap.value_max = Math.max(10, wrap.value_max);
-  wrap.value_max = Math.min(500, wrap.value_max);
+  wrap.value_max = Math.min(1500, wrap.value_max);
   wrap.color = d3.scaleSequential()
     .domain([0, wrap.value_max])
     .interpolator(t => d3.interpolatePuRd(t));

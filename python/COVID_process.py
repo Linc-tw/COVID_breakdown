@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.06                ##
+    ##  2022.05.09                ##
     ################################
 
 import os
@@ -174,8 +174,8 @@ def sandbox():
   #test_sheet = COVID_test.TestSheet()
   #test_sheet.saveCsv_testCounts()
   
-  #spec_sheet = COVID_specimen.SpecimenSheet()
-  #spec_sheet.saveCsv_testCounts()
+  spec_sheet = COVID_specimen.SpecimenSheet()
+  spec_sheet.saveCsv_testCounts()
   
   #border_sheet = COVID_border.BorderSheet()
   #border_sheet.saveCsv_borderStats()
@@ -189,8 +189,8 @@ def sandbox():
   #vacc_sheet = COVID_vaccination.VaccinationSheet()
   #vacc_sheet.saveCsv_vaccinationByBrand()
   
-  vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
-  vc_sheet.saveCsv_vaccinationByAge()
+  #vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
+  #vc_sheet.saveCsv_vaccinationByAge()
   
   #case_sheet = COVID_case.CaseSheet()
   #status_sheet = COVID_status.StatusSheet()
