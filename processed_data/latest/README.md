@@ -23,7 +23,7 @@ Contents
   - `total_avg`: 7-day moving average of `total`
 
 `case_by_age.csv`
-- Row: age range
+- Row: age group
 - Column
   - `age`
   - `total`: last 90 days
@@ -60,10 +60,10 @@ Contents
 - Column
   - `date`
   - `total`: all ages
-  - `0-4` to `70+`: age range
+  - `0-4` to `70+`: age group
 
 `incidence_evolution_by_age_label.csv`
-- Row: age range
+- Row: age group
 - Column
   - `key`
   - `label`: label in English

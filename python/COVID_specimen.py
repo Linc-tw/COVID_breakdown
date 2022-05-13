@@ -33,7 +33,7 @@ class SpecimenSheet(ccm.Template):
     tot_list = data[self.coltag_total].values
     ind = tot_list != '0.0'
     ind[:-50] = True
-    self.data    = data[ind]
+    self.data = data[ind]
     self.n_total = ind.sum()
     
     if verbose:

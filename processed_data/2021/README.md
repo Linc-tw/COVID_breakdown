@@ -23,7 +23,7 @@ Contents
   - `total_avg`: 7-day moving average of `total`
 
 `case_by_age.csv`
-- Row: age range
+- Row: age group
 - Column
   - `age`
   - `total`: all year 2021

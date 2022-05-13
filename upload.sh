@@ -34,6 +34,9 @@ wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination
 sleep 5
 echo
 wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv' 'https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006' &
+sleep 5
+echo
+wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_death.csv' 'https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002' & 
 sleep 25
 echo
 

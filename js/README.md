@@ -27,6 +27,9 @@ Structure by folders
   - `incidence_map.js`
   - `local_case_per_county.js`
   
+`death_sheet/`
+  - `death_by_age.js`
+  
 `others/`
   - `incidence_rates.js`
   - `positivity_and_fatality.js`
@@ -81,6 +84,7 @@ Structure by page
   - `test_counts.js`
   - `positivity_and_fatality.js`
   - `death_counts.js`
+  - `death_by_age.js`
   - `border_statistics.js`
 
 `comparison.html`
@@ -96,6 +100,7 @@ Structure by axis type
 
 Single bar
   - `case_by_age.js`
+  - `death_by_age.js`
 
 Multiple bar
   - `vaccination_by_age.js`

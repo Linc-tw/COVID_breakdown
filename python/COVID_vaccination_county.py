@@ -2,7 +2,7 @@
     ###################################
     ##  COVID_vaccination_county.py  ##
     ##  Chieh-An Lin                 ##
-    ##  2022.05.07                   ##
+    ##  2022.05.12                   ##
     ###################################
 
 import os
@@ -137,6 +137,18 @@ class VaccinationCountySheet(ccm.Template):
     label_list_en = [''] + [county_dict[county]['label'][0] for county in county_key_list]
     label_list_fr = [''] + [county_dict[county]['label'][1] for county in county_key_list]
     label_list_zh = [''] + [county_dict[county]['label'][2] for county in county_key_list]
+    
+    value_list = value_1_list[2:]
+    ind = np.argsort(value_list)[::-1] + 2
+    ind = np.insert(np.insert(ind, 0, 0), 1, 1)
+    
+    key_list = np.array(key_list)[ind]
+    value_1_list = np.array(value_1_list)[ind]
+    value_2_list = np.array(value_2_list)[ind]
+    value_3_list = np.array(value_3_list)[ind]
+    label_list_en = np.array(label_list_en)[ind]
+    label_list_fr = np.array(label_list_fr)[ind]
+    label_list_zh = np.array(label_list_zh)[ind]
     
     stock = {'key': key_list, 'value_1': value_1_list, 'value_2': value_2_list, 'value_3': value_3_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data = pd.DataFrame(stock)

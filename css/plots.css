@@ -145,20 +145,8 @@ body,
   padding: 5px;
 }
 
-#status_evolution_latest .tooltip, 
-#status_evolution_overall .tooltip, 
-#status_evolution_2021 .tooltip, 
-#status_evolution_2020 .tooltip {
-  margin-left: -62px;
-  margin-right: -62px;
-  margin-top: -65px;
-  margin-bottom: -65px;
-}
-
 #case_counts_latest .tooltip, 
-#case_counts_overall .tooltip, 
-#case_counts_2021 .tooltip, 
-#case_counts_2020 .tooltip {
+#case_counts_overall .tooltip {
   margin-left: -60px;
   margin-right: -60px;
   margin-top: -50px;
@@ -166,9 +154,7 @@ body,
 }
 
 #local_case_per_county_latest .tooltip, 
-#local_case_per_county_overall .tooltip, 
-#local_case_per_county_2021 .tooltip, 
-#local_case_per_county_2020 .tooltip {
+#local_case_per_county_overall .tooltip {
   margin-left: -75px;
   margin-right: -75px;
   margin-top: -35px;
@@ -176,9 +162,7 @@ body,
 }
 
 #case_by_age_latest .tooltip, 
-#case_by_age_overall .tooltip, 
-#case_by_age_2021 .tooltip, 
-#case_by_age_2020 .tooltip {
+#case_by_age_overall .tooltip {
   margin-left: -75px;
   margin-right: -75px;
   margin-top: -40px;
@@ -186,9 +170,7 @@ body,
 }
 
 #incidence_rates_latest .tooltip, 
-#incidence_rates_overall .tooltip, 
-#incidence_rates_2021 .tooltip, 
-#incidence_rates_2020 .tooltip {
+#incidence_rates_overall .tooltip {
   margin-left: -100px;
   margin-right: -80px;
   margin-top: -50px;
@@ -196,9 +178,7 @@ body,
 }
 
 #vaccination_by_brand_latest .tooltip, 
-#vaccination_by_brand_overall .tooltip, 
-#vaccination_by_brand_2021 .tooltip, 
-#vaccination_by_brand_2020 .tooltip {
+#vaccination_by_brand_overall .tooltip {
   margin-left: -60px;
   margin-right: -60px;
   margin-top: -45px;
@@ -206,9 +186,7 @@ body,
 }
 
 #vaccination_progress_latest .tooltip, 
-#vaccination_progress_overall .tooltip, 
-#vaccination_progress_2021 .tooltip, 
-#vaccination_progress_2020 .tooltip {
+#vaccination_progress_overall .tooltip {
   margin-left: -60px;
   margin-right: -60px;
   margin-top: -45px;
@@ -216,9 +194,23 @@ body,
 }
 
 #vaccination_by_dose_latest .tooltip, 
-#vaccination_by_dose_overall .tooltip, 
-#vaccination_by_dose_2021 .tooltip, 
-#vaccination_by_dose_2020 .tooltip {
+#vaccination_by_dose_overall .tooltip {
+  margin-left: -60px;
+  margin-right: -60px;
+  margin-top: -45px;
+  margin-bottom: -45px;
+}
+
+#vaccination_by_age_latest .tooltip, 
+#vaccination_by_age_overall .tooltip {
+  margin-left: -60px;
+  margin-right: -60px;
+  margin-top: -45px;
+  margin-bottom: -45px;
+}
+
+#vaccination_by_county_latest .tooltip, 
+#vaccination_by_county_overall .tooltip {
   margin-left: -60px;
   margin-right: -60px;
   margin-top: -45px;
@@ -226,9 +218,7 @@ body,
 }
 
 #test_counts_latest .tooltip, 
-#test_counts_overall .tooltip, 
-#test_counts_2021 .tooltip, 
-#test_counts_2020 .tooltip {
+#test_counts_overall .tooltip {
   margin-left: -75px;
   margin-right: -75px;
   margin-top: -55px;
@@ -236,9 +226,7 @@ body,
 }
 
 #positivity_and_fatality_latest .tooltip, 
-#positivity_and_fatality_overall .tooltip, 
-#positivity_and_fatality_2021 .tooltip, 
-#positivity_and_fatality_2020 .tooltip {
+#positivity_and_fatality_overall .tooltip {
   margin-left: -70px;
   margin-right: -70px;
   margin-top: -50px;
@@ -246,29 +234,23 @@ body,
 }
 
 #death_counts_latest .tooltip, 
-#death_counts_overall .tooltip, 
-#death_counts_2021 .tooltip, 
-#death_counts_2020 .tooltip {
+#death_counts_overall .tooltip {
   margin-left: -80px;
   margin-right: -80px;
   margin-top: -45px;
   margin-bottom: -45px;
 }
 
-#hospitalization_or_isolation_latest .tooltip, 
-#hospitalization_or_isolation_overall .tooltip, 
-#hospitalization_or_isolation_2021 .tooltip, 
-#hospitalization_or_isolation_2020 .tooltip {
-  margin-left: -80px;
-  margin-right: -80px;
-  margin-top: -40px;
-  margin-bottom: -40px;
+#death_by_age_latest .tooltip, 
+#death_by_age_overall .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
+  margin-top: -45px;
+  margin-bottom: -45px;
 }
 
 #border_statistics_latest .tooltip, 
-#border_statistics_overall .tooltip, 
-#border_statistics_2021 .tooltip, 
-#border_statistics_2020 .tooltip {
+#border_statistics_overall .tooltip {
   margin-left: -75px;
   margin-right: -75px;
   margin-top: -50px;
@@ -276,19 +258,7 @@ body,
 }
 
 #stats_in_mirror_latest .tooltip, 
-#stats_in_mirror_overall .tooltip, 
-#stats_in_mirror_2021 .tooltip, 
-#stats_in_mirror_2020 .tooltip {
-  margin-left: -75px;
-  margin-right: -75px;
-  margin-top: -50px;
-  margin-bottom: -50px;
-}
-
-#infectiodynamics_latest .tooltip, 
-#infectiodynamics_overall .tooltip, 
-#infectiodynamics_2021 .tooltip, 
-#infectiodynamics_2020 .tooltip {
+#stats_in_mirror_overall .tooltip {
   margin-left: -75px;
   margin-right: -75px;
   margin-top: -50px;

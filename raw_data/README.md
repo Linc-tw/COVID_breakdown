@@ -27,7 +27,7 @@ The data of age and geographical information of confirmed cases and the data of 
 ### NCHC
 
 NCHC hosts a [dashboard](https://covid-19.nchc.org.tw/index.php) providing sorted data and visualization of pandemic situation.
-The vaccination data are taken from here.
+The vaccination & death data are taken from here.
 
 ### FDA
 
@@ -46,7 +46,7 @@ Raw data
 
 Raw data are a subset of files or spreadsheets downloaded from sources mentioned earlier.
 
-There are 7 `csv` files & 1 `json` file. These files contain abundant Mandarin strings.
+There are 8 `csv` files & 1 `json` file. These files contain abundant Mandarin strings.
 
 
 Contents
@@ -90,3 +90,7 @@ Contents
 `COVID-19_in_Taiwan_raw_data_vaccination_county.csv`
 - Table of administrated doses from different regions for different age ranges
 - Downloaded from [here](https://covid-19.nchc.org.tw/api.php?tableID=2006)
+
+`COVID-19_in_Taiwan_raw_data_death.csv`
+- Breakdown table of every single deaths
+- Downloaded from [here](https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002)

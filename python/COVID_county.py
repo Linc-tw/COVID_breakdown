@@ -35,7 +35,7 @@ class CountySheet(ccm.Template):
     data = ccm.loadCsv(name, verbose=verbose)
     ## https://od.cdc.gov.tw/eic/Day_Confirmation_Age_County_Gender_19CoV.csv
     
-    self.data    = data
+    self.data = data
     self.n_total = data[self.coltag_nb_cases].astype(int).sum()
     self.county_key_list = [
       'Keelung', 'Taipei', 'New_Taipei', 'Taoyuan', 'Hsinchu', 'Hsinchu_C', 'Miaoli', 
@@ -216,7 +216,7 @@ class CountySheet(ccm.Template):
     key = 'case_by_age'
     stock = []
     stock.append('`{}.csv`'.format(key))
-    stock.append('- Row: age range')
+    stock.append('- Row: age group')
     stock.append('- Column')
     stock.append('  - `age`')
     if page == ccm.PAGE_LATEST:
@@ -540,13 +540,13 @@ class CountySheet(ccm.Template):
     stock.append('- Column')
     stock.append('  - `date`')
     stock.append('  - `total`: all ages')
-    stock.append('  - `0-4` to `70+`: age range')
+    stock.append('  - `0-4` to `70+`: age group')
     ccm.README_DICT[page][key] = stock
     
     key = 'incidence_evolution_by_age_label'
     stock = []
     stock.append('`{}.csv`'.format(key))
-    stock.append('- Row: age range')
+    stock.append('- Row: age group')
     stock.append('- Column')
     stock.append('  - `key`')
     stock.append('  - `label`: label in English')

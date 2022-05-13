@@ -25,6 +25,7 @@ import COVID_timeline
 import COVID_county
 import COVID_vaccination
 import COVID_vaccination_county
+import COVID_death
 
 ################################################################################
 ## Functions - cross-sheet operations
@@ -169,13 +170,13 @@ def sandbox():
   #link_list = case_sheet.getLink()
   
   #status_sheet = COVID_status.StatusSheet()
-  #date = status_sheet.getDate()
+  #status_sheet.saveCsv_deathCounts()
   
   #test_sheet = COVID_test.TestSheet()
   #test_sheet.saveCsv_testCounts()
   
-  spec_sheet = COVID_specimen.SpecimenSheet()
-  spec_sheet.saveCsv_testCounts()
+  #spec_sheet = COVID_specimen.SpecimenSheet()
+  #spec_sheet.saveCsv_testCounts()
   
   #border_sheet = COVID_border.BorderSheet()
   #border_sheet.saveCsv_borderStats()
@@ -191,6 +192,9 @@ def sandbox():
   
   #vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
   #vc_sheet.saveCsv_vaccinationByAge()
+  
+  death_sheet = COVID_death.DeathSheet()
+  death_sheet.saveCsv_deathByAge()
   
   #case_sheet = COVID_case.CaseSheet()
   #status_sheet = COVID_status.StatusSheet()
@@ -241,6 +245,10 @@ def saveCsv_all():
   print()
   vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
   vc_sheet.saveCsv()
+  
+  print()
+  death_sheet = COVID_death.DeathSheet()
+  death_sheet.saveCsv()
   
   print()
   saveCsv_incidenceRates(status_sheet, border_sheet)

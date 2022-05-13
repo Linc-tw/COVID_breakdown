@@ -23,7 +23,7 @@ Contents
   - `total_avg`: 7-day moving average of `total`
 
 `case_by_age.csv`
-- Row: age range
+- Row: age group
 - Column
   - `age`
   - `total`: overall stats
@@ -42,6 +42,11 @@ Contents
   - `imported_avg`: 7-day moving average of `imported`
   - `local_avg`: 7-day moving average of `local`
   - `others_avg`: 7-day moving average of `others`
+
+`death_by_age.csv`
+- Row: age group
+- Column
+  - `death`
 
 `death_counts.csv`
 - Row: report date

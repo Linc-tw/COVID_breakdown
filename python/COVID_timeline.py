@@ -33,7 +33,7 @@ class TimelineSheet(ccm.Template):
     
     date_list = data[self.coltag_date].values
     ind = (date_list == date_list) * (date_list != '2021分隔線')
-    self.data    = data[ind]
+    self.data = data[ind]
     self.n_total = ind.sum()
     
     if verbose:

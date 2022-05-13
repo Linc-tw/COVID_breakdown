@@ -2,7 +2,7 @@
   <!--------------------------------
     --  overall_others.html       --
     --  Chieh-An Lin              --
-    --  2022.05.08                --
+    --  2022.05.12                --
     -------------------------------->
 
 <!DOCTYPE html>
@@ -258,6 +258,33 @@
                                 </div>
                             </div>
                             
+                            <!-- death_by_age -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-book-dead me-1"></i> <span id="death_by_age_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#death_by_age_collapse" aria-expanded="false" aria-controls="death_by_age_collapse">
+                                                <i class="far fa-comment-alt"></i>
+                                            </button>
+                                            
+                                            <button id='death_by_age_overall_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="collapse" id="death_by_age_collapse">
+                                        <div class="card-body">
+                                            <span id="death_by_age_description">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="death_by_age_overall"></div>
+                                </div>
+                            </div>
+                            
                             <!-- border_statistics -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
@@ -378,6 +405,8 @@
         <script src="../js/others/positivity_and_fatality_param.js"></script>
         <script src="../js/status_sheet/death_counts.js"></script>        
         <script src="../js/status_sheet/death_counts_param.js"></script>
+        <script src="../js/death_sheet/death_by_age.js"></script>        
+        <script src="../js/death_sheet/death_by_age_param.js"></script>
         <script src="../js/border_sheet/border_statistics.js"></script>
         <script src="../js/border_sheet/border_statistics_param.js"></script>
 <!--        <script src="../js/others/infectiodynamics.js"></script>

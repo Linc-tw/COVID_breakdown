@@ -48,7 +48,7 @@ class TestSheet(ccm.Template):
     
     date_list = data[self.coltag_date].values
     ind = date_list == date_list
-    self.data    = data[ind]
+    self.data = data[ind]
     self.n_total = ind.sum()
     
     if verbose:

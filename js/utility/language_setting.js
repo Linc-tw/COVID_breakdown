@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  language_setting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.02.13                --//
+    //--  2022.05.12                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
@@ -121,7 +121,6 @@ function LS_FillText_Menu() {
   var str_timeline;
   var str_data_source;
   var str_no_right_reserved;
-  var str_slow;
   
   var str_2021;
   var str_2020;
@@ -132,15 +131,14 @@ function LS_FillText_Menu() {
     str_index = '首頁';
     str_latest = '近90日統計';
     str_overall = '整體統計';
-    str_cases = '個案分析';
-    str_incidence = '感染率比較';
+    str_cases = '確診分析';
+    str_incidence = '盛行率比較';
     str_vaccination = '疫苗進度';
     str_others = '其他統計';
-    str_comparison = '統計比較';
+    str_comparison = '對比圖表';
     str_timeline = '時間軸';
     str_data_source = '資料來源';
     str_no_right_reserved = '版權沒有';
-    str_slow = '載入費時';
     str_update = '最後更新：' + LS_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3';
     
     str_2021 = '2021統計';
@@ -153,7 +151,7 @@ function LS_FillText_Menu() {
     str_index = 'Accueil';
     str_latest = '90 derniers jours';
     str_overall = 'Stat complète';
-    str_cases = 'Analyse des cas';
+    str_cases = 'Cas confirmés';
     str_incidence = "Taux d'incidence";
     str_vaccination = 'Vaccination';
     str_others = 'Stats diverses';
@@ -161,7 +159,6 @@ function LS_FillText_Menu() {
     str_timeline = 'Chronologie';
     str_data_source = 'Sources des données';
     str_no_right_reserved = "Sans droit d'auteur";
-    str_slow = 'chargement lent';
     str_update = 'Dernière mise à jour : ' + LS_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3';
     
     str_2021 = 'Stat 2021';
@@ -174,7 +171,7 @@ function LS_FillText_Menu() {
     str_index = 'Home';
     str_latest = 'Last 90 days';
     str_overall = 'Overall stats';
-    str_cases = 'Case breakdown';
+    str_cases = 'Confirmed cases';
     str_incidence = 'Incidence rates';
     str_vaccination = 'Vaccination';
     str_others = 'Other stats';
@@ -182,7 +179,6 @@ function LS_FillText_Menu() {
     str_timeline = 'Timeline';
     str_data_source = 'Data Sources';
     str_no_right_reserved = 'No right reserved';
-    str_slow = 'slow loading';
     str_update = 'Last update: ' + LS_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3';
     
     str_2021 = 'Stats 2021';
