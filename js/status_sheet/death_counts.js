@@ -253,7 +253,7 @@ function DC_Replot(wrap) {
   GP_ReplotCountAsY(wrap, 'count');
   
   //-- Replot ylabel
-  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_case);
+  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_death);
   
   //-- Set legend parameters
   GP_SetLegendParam(wrap, 'normal');

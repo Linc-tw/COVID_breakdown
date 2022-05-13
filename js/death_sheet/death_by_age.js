@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_by_age.js           --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.12                --//
+    //--  2022.05.13                --//
     //--------------------------------//
 
 function DBA_InitFig(wrap) {
@@ -16,22 +16,42 @@ function DBA_InitFig(wrap) {
 function DBA_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('death_by_age_title', '死亡個案年齡分布');
+    LS_AddStr('death_by_age_button_total', '合計');
+    LS_AddStr('death_by_age_button_2020', '2020');
+    LS_AddStr('death_by_age_button_2021', '2021');
+    LS_AddStr('death_by_age_button_2022', '2022');
     
     LS_AddHtml('death_by_age_description', '\
+      此圖數字可能會和「死亡人數」的統計不同，\
+      因為兩者取自不同來源，資料更新速度不同。\
     ');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('death_by_age_title', 'Décédés par âge');
+    LS_AddStr('death_by_age_title', 'Décès par âge');
+    LS_AddStr('death_by_age_button_total', 'Totaux');
+    LS_AddStr('death_by_age_button_2020', '2020');
+    LS_AddStr('death_by_age_button_2021', '2021');
+    LS_AddStr('death_by_age_button_2022', '2022');
     
     LS_AddHtml('death_by_age_description', '\
+      Le chiffre dans cette figure peut ne pas correspond à celui du « Nombre de décès »,\
+      car ils viennent des sources différentes\
+      qui ne mettent pas les données à jour en même temps.\
     ');
   }
   
   else { //-- En
     LS_AddStr('death_by_age_title', 'Deaths by Age');
+    LS_AddStr('death_by_age_button_total', 'Total');
+    LS_AddStr('death_by_age_button_2020', '2020');
+    LS_AddStr('death_by_age_button_2021', '2021');
+    LS_AddStr('death_by_age_button_2022', '2022');
     
     LS_AddHtml('death_by_age_description', '\
+      The value on this figure does not necessarily match to the one in "Death Counts",\
+      because they come from different sources\
+      which do not update data at the same time.\
     ');
   }
 }
@@ -39,7 +59,7 @@ function DBA_ResetText() {
 function DBA_FormatData(wrap, data) {
   //-- Variables for data
   var col_tag_list = data.columns.slice(1);
-  var col_tag = col_tag_list[0];
+  var col_tag = col_tag_list[wrap.col_ind];
   var nb_col = col_tag_list.length;
   var i, j, x, y, row;
   
@@ -55,7 +75,7 @@ function DBA_FormatData(wrap, data) {
   var y_max = 4.5;
   
   //-- Variables for legend
-  var y_sum = 0
+  var y_sum = [0, 0]; //-- 0 (total) & year
   
   //-- Main loop over row
   for (i=0; i<data.length; i++) {
@@ -71,7 +91,8 @@ function DBA_FormatData(wrap, data) {
     }
     
     //-- Update y_sum
-    y_sum += y;
+    y_sum[0] += +row[col_tag_list[0]];
+    y_sum[1] += y;
     
     //-- Update y_max
     y_max = Math.max(y_max, y);
@@ -105,7 +126,7 @@ function DBA_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.y_sum = y_sum;
+  wrap.legend_value_raw = y_sum;
 }
 
 //-- Tooltip
@@ -114,20 +135,23 @@ function DBA_MouseMove(wrap, d) {
   var y_alpha = 0.5;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
-  //-- Define legend title
-  legend_title_list = LS_GetLegendTitle_Page(wrap);
-  
   //-- Get column tags
-  var age_label;
-  if (LS_lang == 'zh-tw')
+  var legend_label_list, age_label;
+  if (LS_lang == 'zh-tw') {
+    legend_label_list = ['合計', '2020全年', '2021全年', '2022全年'];
     age_label = '歲';
-  else if (LS_lang == 'fr')
+  }
+  else if (LS_lang == 'fr') {
+    legend_label_list = ['Totaux', 'Année 2020', 'Année 2021', 'Année 2022'];
     age_label = ' ans';
-  else
+  }
+  else {
+    legend_label_list = ['Total', '2020 all year', '2021 all year', '2022 all year'];
     age_label = ' years old';
+  }
   
   //-- Generate tooltip text
-  var tooltip_text = legend_title_list;
+  var tooltip_text = legend_label_list[wrap.col_ind];
   tooltip_text += '<br>' + d['age'] + age_label + ' = ' + GP_ValueStr_Tooltip(+d[wrap.col_tag]);
   
   //-- Generate tooltip
@@ -184,7 +208,7 @@ function DBA_Replot(wrap) {
   GP_ReplotXLabel(wrap, xlabel_dict);
   
   //-- Replot ylabel
-  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_case);
+  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_death);
   
   //-- Set legend parameters
   GP_SetLegendParam(wrap, 'normal');
@@ -193,13 +217,28 @@ function DBA_Replot(wrap) {
   wrap.legend_pos = {x: wrap.legend_pos_x, y: wrap.legend_pos_y, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy};
   
   //-- Define legend color
-  wrap.legend_color = [wrap.color];
+  wrap.legend_color = [wrap.color, GP_wrap.gray];
   
   //-- Define legend value
-  wrap.legend_value = [wrap.y_sum];
+  wrap.legend_value = [wrap.legend_value_raw[1], wrap.legend_value_raw[0]];
   
-  var legend_label_dict = {en: 'Deaths', fr: 'Décès', 'zh-tw': '死亡'};
-  wrap.legend_label = [legend_label_dict[LS_lang]];
+  //-- Define legend label
+  var legend_label_list;
+  if (LS_lang == 'zh-tw')
+    legend_label_list = ['合計', '2020全年', '2021全年', '2022全年'];
+  else if (LS_lang == 'fr')
+    legend_label_list = ['Totaux', 'Année 2020', 'Année 2021', 'Année 2022'];
+  else
+    legend_label_list = ['Total', '2020 all year', '2021 all year', '2022 all year'];
+  
+  wrap.legend_label = [legend_label_list[wrap.col_ind], legend_label_list[0]];
+  
+  //-- Remove redundancy from legend if col_ind = 0
+  if (wrap.col_ind == 0) {
+    wrap.legend_color = wrap.legend_color.slice(0, 1);
+    wrap.legend_value = wrap.legend_value.slice(0, 1);
+    wrap.legend_label = wrap.legend_label.slice(0, 1);
+  }
   
   //-- Update legend title
   GP_UpdateLegendTitle_Standard(wrap);
@@ -235,12 +274,25 @@ function DBA_Reload(wrap) {
 }
 
 function DBA_ButtonListener(wrap) {
+  //-- Period
+  d3.select(wrap.id +'_year').on('change', function() {
+    wrap.col_ind = +this.value;
+    DBA_Reload(wrap);
+  });
+  
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
-    name = wrap.tag + '_' + LS_lang + '.png';
+    var tag1;
+    
+    if (wrap.col_ind == 0)
+      tag1 = 'total';
+    else
+      tag1 = '' + (wrap.year + 2019);
+    
+    name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
-
+  
   //-- Language
   $(document).on('change', "input:radio[name='language']", function (event) {
     LS_lang = this.value;
@@ -255,7 +307,10 @@ function DBA_ButtonListener(wrap) {
 //-- Main
 function DBA_Main(wrap) {
   wrap.id = '#' + wrap.tag;
-
+  
+  //-- Swap active to current value
+  wrap.col_ind = document.getElementById(wrap.tag + '_year').value;
+  
   //-- Load
   DBA_InitFig(wrap);
   DBA_ResetText();

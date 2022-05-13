@@ -45,9 +45,10 @@ function LCPC_ResetText() {
     
     LS_AddHtml('local_case_per_county_description', '\
       此圖之數字可能會和「各感染源確診人數」之本土確診數不同，\
-      因為兩者取自不同資料來源，且用作分隔前後日的時間點也未盡相同。\
+      因為兩者取自不同資料來源。\
       <br><br>\
-      此外，縣市資料有時會出現延遲更新的現象。\
+      不同來源用作分隔前後日的時間點不相同，\
+      更新資料的速度也不同。\
     ');
   }
   
@@ -81,9 +82,10 @@ function LCPC_ResetText() {
     
     LS_AddHtml('local_case_per_county_description', '\
       Le chiffre dans cette figure peut ne pas correspond à celui de « Locaux » du « Nombre de cas confirmés »,\
-      car ils ne viennent pas de la même source des données et que les deux sources ne comptabilisent dans le même intervalle de 24 heures pour un jour.\
+      car ils viennent des sources des données différentes.\
       <br><br>\
-      De plus, ces informations géographiques peuvent tarder à être à jour.\
+      Les deux sources ne comptabilisent pas dans le même intervalle de 24 heures pour un jour\
+      et ne mettent pas les données à jour en même temps.\
     ');
   }
   
@@ -117,9 +119,10 @@ function LCPC_ResetText() {
     
     LS_AddHtml('local_case_per_county_description', '\
       The value on this figure does not necessarily match to "Local" of "Confirmed Case Counts",\
-      because they come from different data sources and both sources do not count in the same 24-hour range as a day.\
+      because they come from different data sources.\
       <br><br>\
-      In addition, these geographical data could come with delay.\
+      The 2 sources do not count in the same 24-hour range as a day\
+      and do not update data at the same time.\
     ');
   }
 }

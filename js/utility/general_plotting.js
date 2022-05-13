@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  general_plotting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.02                --//
+    //--  2022.05.13                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
@@ -52,6 +52,7 @@ var GP_wrap = {
   ylabel_dict_case: {en: 'Number of cases', fr: 'Nombre de cas', 'zh-tw': '案例數'},
   ylabel_dict_rate: {en: 'Percentage', fr: 'Pourcentage', 'zh-tw': '百分比'},
   ylabel_dict_dose: {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '疫苗劑數'},
+  ylabel_dict_death: {en: 'Number of deaths', fr: 'Nombre de décès', 'zh-tw': '死亡人數'},
   
   //-- Transition delay
   trans_delay: 800,
@@ -82,18 +83,24 @@ function GP_ValueStr_Tick(value, ref) {
 }
 
 function GP_ValueStr_Legend(value) {
-  if (+value < 1e+3)
-    return value;
+  var r = (+value) % 1e+3;
+  var k = Math.floor(+value/1e+3);
   
-  var k = Math.floor(value/1e+3);
-  var r = value % 1e+3;
+  if (k < 1)
+    return d3.format('d')(r);
   
-  if (+value < 1e+6)
-    return d3.format('d')(k) + ' ' + d3.format('03d')(r);
-    
   var m = Math.floor(k/1e+3);
   k = k % 1e+3;
-  return d3.format('d')(m) + ' ' + d3.format('03d')(k) + ' ' + d3.format('03d')(r);
+  
+  if (m < 1)
+    return d3.format('d')(k) + ' ' + d3.format('03d')(r);
+    
+  var md = Math.floor(m/1e+3);
+  m = m % 1e+3;
+  
+  if (md < 1)
+    return d3.format('d')(m) + ' ' + d3.format('03d')(k) + ' ' + d3.format('03d')(r);
+  return d3.format('d')(md) + ' ' + d3.format('03d')(m) + ' ' + d3.format('03d')(k) + ' ' + d3.format('03d')(r);
 }
 
 function GP_CumSum(data, col_tag_list) {

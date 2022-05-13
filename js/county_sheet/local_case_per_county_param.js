@@ -2,7 +2,7 @@
     //--------------------------------------//
     //--  local_case_per_county_param.js  --//
     //--  Chieh-An Lin                    --//
-    //--  2022.05.08                      --//
+    //--  2022.05.13                      --//
     //--------------------------------------//
 
 var LCPC_latest_wrap = {
@@ -14,7 +14,7 @@ var LCPC_latest_wrap = {
   
   y_max_factor: 1.55,
   nb_yticks: 4,
-  legend_pos_x: 105,
+  legend_pos_x: 120,
 };
 
 var LCPC_overall_wrap = {
@@ -26,5 +26,5 @@ var LCPC_overall_wrap = {
 
   y_max_factor: 1.2, 
   nb_yticks: 4,
-  legend_pos_x: 105,
+  legend_pos_x: 120,
 };

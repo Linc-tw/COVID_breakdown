@@ -54,6 +54,15 @@ class DeathSheet(ccm.Template):
   def getReportDate(self):
     return self.getCol(self.coltag_report_date)
   
+  def getID(self):
+    id_list = []
+    for id_ in self.getCol(self.coltag_id):
+      if id_ == '--':
+        id_list.append(np.nan)
+      else:
+        id_list.append(int(id_))
+    return id_list
+  
   def getAge(self):
     age_list = []
     for age in self.getCol(self.coltag_age):
@@ -110,15 +119,25 @@ class DeathSheet(ccm.Template):
     return
   
   def increment_deathByAge(self):
+    report_date_list = self.getReportDate()
+    id_list = self.getID()
     age_list = self.getAge()
     
-    ## Initialize stock
-    stock = {age: 0 for age in self.age_key_list}
+    ## Initialize stock dict
+    death_hist = {age: 0 for age in self.age_key_list}
+    year_list = ['total', ccm.PAGE_2020, ccm.PAGE_2021, ccm.PAGE_2022] ## new_year_token (2023)
+    stock_dict = {col_tag: death_hist.copy() for col_tag in year_list}
     
-    for age in age_list:
-      stock[age] += 1
+    for report_date, id_, age in zip(report_date_list, id_list, age_list):
+      if id_ < 300:
+        col_tag = '2020'
+      else:
+        col_tag = report_date[:4]
+        
+      stock_dict[col_tag][age] += 1
+      stock_dict['total'][age] += 1
     
-    return stock
+    return stock_dict
     
   def makeReadme_deathByAge(self, page):
     key = 'death_by_age'
@@ -131,16 +150,11 @@ class DeathSheet(ccm.Template):
     return
   
   def saveCsv_deathByAge(self):
-    age_list = self.getAge()
-    age_hist = clt.Counter(age_list)
-    age_hist_2 = clt.defaultdict(int)
-    age_hist_2.update(age_hist)
+    stock_dict = self.increment_deathByAge()
     
-    age_key_list = self.age_key_list
-    value_list = [age_hist_2[key] for key in age_key_list]
-    
-    stock = {'age': age_key_list, 'death': value_list}
-    data = pd.DataFrame(stock)
+    data = {'age': self.age_key_list}
+    data.update({col_tag: death_hist.values() for col_tag, death_hist in stock_dict.items()})
+    data = pd.DataFrame(data)
     
     page = ccm.PAGE_OVERALL
     

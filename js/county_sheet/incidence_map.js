@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  incidence_map.js          --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.08                --//
+    //--  2022.05.13                --//
     //--------------------------------//
 
 function IM_InitFig(wrap) {
@@ -349,7 +349,7 @@ function IM_Replot(wrap) {
       .attr('text-anchor', function (d, i) {if (anno_pos[i].sign > 0) return 'end'; return 'start';})
       .attr('dominant-baseline', 'middle')
       .style('fill', '#000000')
-      .text(function (d, i) {if (wrap.rate == 1) return d+' '+wrap.value_list[i].toFixed(1); return d+' '+wrap.value_list[i];});
+      .text(function (d, i) {if (wrap.rate == 1) return d+' '+wrap.value_list[i].toFixed(1); return d+' \u00A0'+GP_ValueStr_Legend(wrap.value_list[i]);});
   
   //-- Remove annotation lines
   wrap.svg.selectAll('.annotation.line')
@@ -476,7 +476,7 @@ function IM_Replot(wrap) {
       legend_label = 'Totaux nationaux ';
     else 
       legend_label = 'Nationalwide total ';
-    legend_label += wrap.legend_value;
+    legend_label += GP_ValueStr_Legend(wrap.legend_value);
   }
   legend_caption_bottom = [legend_title_list[wrap.col_ind], legend_label];
   
