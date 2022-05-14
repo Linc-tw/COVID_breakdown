@@ -29,6 +29,14 @@ Contents
   - `total`: all year 2021
   - `MMM`: during month `MMM`
 
+`case_by_age_label.csv`
+- Row: time range
+- Column
+  - `key`
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
+
 `case_counts_by_report_day.csv`
 - Row: report date
 - Column
