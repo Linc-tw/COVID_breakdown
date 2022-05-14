@@ -2,7 +2,7 @@
     ################################
     ##  COVID_vaccination.py      ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.06                ##
+    ##  2022.05.14                ##
     ################################
 
 import os
@@ -23,21 +23,19 @@ import COVID_common as ccm
 class VaccinationSheet(ccm.Template):
   
   def __init__(self, verbose=True):
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination.json'.format(ccm.DATA_PATH)
-    data = ccm.loadJson(name, verbose=verbose)
-    ## https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_manufacture_v1&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTY0MDgxOTQ1Mg==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=varchar&d[]=NO&c[]=a02&t[]=date&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=NO&c[]=a05&t[]=int&d[]=NO&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=int&d[]=NO
-    ## Old: https://covid-19.nchc.org.tw/myDT_staff.php?TB_name=csse_covid_19_daily_reports_vaccine_city_can3_c&limitColumn=id&limitValue=0&equalValue=!=&encodeKey=MTYyOTg2Mzk2Ng==&c[]=id&t[]=int&d[]=NO&c[]=a01&t[]=date&d[]=NO&c[]=a02&t[]=varchar&d[]=NO&c[]=a03&t[]=varchar&d[]=NO&c[]=a04&t[]=int&d[]=YES&c[]=a05&t[]=int&d[]=YES&c[]=a06&t[]=int&d[]=NO&c[]=a07&t[]=int&d[]=NO&c[]=a08&t[]=decimal&d[]=NO
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination.csv'.format(ccm.DATA_PATH)
+    data = ccm.loadCsv(name, encoding='big5', verbose=verbose)
+    ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004
     
-    self.colTag_row_id = 'DT_RowId'
-    self.colTag_id = 'id'
-    self.colTag_location = 'a01'
-    self.colTag_date = 'a02'
-    self.colTag_brand = 'a03'
-    self.colTag_cum_1st = 'a04'
-    self.colTag_cum_2nd = 'a05'
-    self.colTag_cum_3rd_1 = 'a06'
-    self.colTag_cum_3rd_2 = 'a07'
-    self.colTag_cum_tot = 'a08'
+    self.colTag_row_id = 'id'
+    self.colTag_country = '國家'
+    self.colTag_date = '統計日期'
+    self.colTag_brand = '疫苗廠牌'
+    self.colTag_cum_1st = '第一劑累計接種人次'
+    self.colTag_cum_2nd = '第二劑累計接種人次'
+    self.colTag_cum_3rd_1 = '追加劑累計接種人次'
+    self.colTag_cum_3rd_2 = '加強劑累計接種人次'
+    self.colTag_cum_tot = '總共累計接種人次'
     
     self.data = data
     self.brand_list = ['AZ', 'Moderna', 'Medigen', 'Pfizer']
@@ -48,20 +46,13 @@ class VaccinationSheet(ccm.Template):
       print('N_total = {:d}'.format(self.n_total))
     return
   
-  def __str__(self):
-    return str(self.data['data'])
-
-  def getColData(self, key):
-    return [row[key] for row in self.data['data']]
-  
   def getDate(self):
-    return [row[self.colTag_date] for row in self.data['data']]
+    return self.getCol(self.colTag_date)
   
   def getBrand(self):
     brand_list = []
     
-    for row in self.data['data']:
-      brand = row[self.colTag_brand]
+    for brand in self.getCol(self.colTag_brand):
       try:
         brand_list.append(ccm.BRAND_DICT[brand])
       except KeyError:
@@ -70,16 +61,16 @@ class VaccinationSheet(ccm.Template):
     return brand_list
   
   def getCum1st(self):
-    return [int(value) for value in self.getColData(self.colTag_cum_1st)]
+    return [int(value) for value in self.getCol(self.colTag_cum_1st)]
   
   def getCum2nd(self):
-    return [int(value) for value in self.getColData(self.colTag_cum_2nd)]
+    return [int(value) for value in self.getCol(self.colTag_cum_2nd)]
   
   def getCum3rd(self):
-    return [int(value_1)+int(value_2) for value_1, value_2 in zip(self.getColData(self.colTag_cum_3rd_1), self.getColData(self.colTag_cum_3rd_2))]
+    return [int(value_1)+int(value_2) for value_1, value_2 in zip(self.getCol(self.colTag_cum_3rd_1), self.getCol(self.colTag_cum_3rd_2))]
   
   def getCumTot(self):
-    return [int(value) for value in self.getColData(self.colTag_cum_tot)]
+    return [int(value) for value in self.getCol(self.colTag_cum_tot)]
   
   def interpolate(self, stock, col_tag_list, dtype=int, cumul=True):
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)

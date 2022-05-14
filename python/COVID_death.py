@@ -2,7 +2,7 @@
     ################################
     ##  COVID_death.py            ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.12                ##
+    ##  2022.05.14                ##
     ################################
 
 import os
@@ -37,7 +37,7 @@ class DeathSheet(ccm.Template):
     self.coltag_death_date = '死亡日'
     
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_death.csv'.format(ccm.DATA_PATH)
-    data = ccm.loadCsv(name, verbose=verbose)
+    data = ccm.loadCsv(name, encoding='big5', verbose=verbose)
     #https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002
     
     self.data = data
@@ -139,6 +139,25 @@ class DeathSheet(ccm.Template):
     
     return stock_dict
     
+  def makeLabel_deathByAge(self, page):
+    month_name_en = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    month_name_fr = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'] 
+    
+    key_list = ['total']
+    label_list_en = ['Total']
+    label_list_fr = ['Totaux']
+    label_list_zh = ['合計']
+    
+    if page == ccm.PAGE_OVERALL:
+      for year in ccm.YEAR_LIST:
+        key_list.append(year)
+        label_list_en.append('{} all year'.format(year))
+        label_list_fr.append('Année {}'.format(year))
+        label_list_zh.append('{}全年'.format(year))
+        
+    stock = {'key': key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+    return stock
+  
   def makeReadme_deathByAge(self, page):
     key = 'death_by_age'
     stock = []
@@ -147,19 +166,36 @@ class DeathSheet(ccm.Template):
     stock.append('- Column')
     stock.append('  - `death`')
     ccm.README_DICT[page][key] = stock
+    
+    key = 'death_by_age_label'
+    stock = []
+    stock.append('`{}.csv`'.format(key))
+    stock.append('- Row: time range')
+    stock.append('- Column')
+    stock.append('  - `key`')
+    stock.append('  - `label`: label in English')
+    stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
+    stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
+    ccm.README_DICT[page][key] = stock
     return
   
   def saveCsv_deathByAge(self):
     stock_dict = self.increment_deathByAge()
     
-    data = {'age': self.age_key_list}
-    data.update({col_tag: death_hist.values() for col_tag, death_hist in stock_dict.items()})
-    data = pd.DataFrame(data)
+    data_c = {'age': self.age_key_list}
+    data_c.update({col_tag: death_hist.values() for col_tag, death_hist in stock_dict.items()})
+    data_c = pd.DataFrame(data_c)
     
     page = ccm.PAGE_OVERALL
     
+    stock_l = self.makeLabel_deathByAge(page)
+    data_l = pd.DataFrame(stock_l)
+    
     name = '{}processed_data/{}/death_by_age.csv'.format(ccm.DATA_PATH, page)
-    ccm.saveCsv(name, data)
+    ccm.saveCsv(name, data_c)
+    
+    name = '{}processed_data/{}/death_by_age_label.csv'.format(ccm.DATA_PATH, page)
+    ccm.saveCsv(name, data_l)
     
     self.makeReadme_deathByAge(page)
     return

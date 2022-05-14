@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.09                ##
+    ##  2022.05.14                ##
     ################################
 
 import os
@@ -19,7 +19,6 @@ import COVID_common as ccm
 import COVID_case
 import COVID_status
 import COVID_test
-import COVID_specimen
 import COVID_border
 import COVID_timeline
 import COVID_county
@@ -175,9 +174,6 @@ def sandbox():
   #test_sheet = COVID_test.TestSheet()
   #test_sheet.saveCsv_testCounts()
   
-  #spec_sheet = COVID_specimen.SpecimenSheet()
-  #spec_sheet.saveCsv_testCounts()
-  
   #border_sheet = COVID_border.BorderSheet()
   #border_sheet.saveCsv_borderStats()
   
@@ -185,23 +181,23 @@ def sandbox():
   #timeline_sheet.saveCsv_evtTimeline()
   
   #county_sheet = COVID_county.CountySheet()
-  #county_sheet.saveCsv_localCasePerCounty()
+  #county_sheet.saveCsv_caseByAge()
   
-  #vacc_sheet = COVID_vaccination.VaccinationSheet()
-  #vacc_sheet.saveCsv_vaccinationByBrand()
+  vacc_sheet = COVID_vaccination.VaccinationSheet()
+  vacc_sheet.saveCsv_vaccinationByBrand()
   
   #vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
   #vc_sheet.saveCsv_vaccinationByAge()
   
-  death_sheet = COVID_death.DeathSheet()
-  death_sheet.saveCsv_deathByAge()
+  #death_sheet = COVID_death.DeathSheet()
+  #death_sheet.saveCsv_deathByAge()
   
   #case_sheet = COVID_case.CaseSheet()
   #status_sheet = COVID_status.StatusSheet()
-  #spec_sheet = COVID_specimen.SpecimenSheet()
+  #test_sheet = COVID_test.TestSheet()
   #border_sheet = COVID_border.BorderSheet()
   #saveCsv_incidenceRates(status_sheet, border_sheet)
-  #saveCsv_positivityAndFatality(status_sheet, spec_sheet)
+  #saveCsv_positivityAndFatality(status_sheet, test_sheet)
   return
 
 ################################################################################
@@ -218,13 +214,9 @@ def saveCsv_all():
   status_sheet = COVID_status.StatusSheet()
   status_sheet.saveCsv()
   
-  #print()
-  #test_sheet = COVID_specimen.TestSheet()
-  #test_sheet.saveCsv()
-  
   print()
-  spec_sheet = COVID_specimen.SpecimenSheet()
-  spec_sheet.saveCsv()
+  test_sheet = COVID_test.TestSheet()
+  test_sheet.saveCsv()
   
   print()
   border_sheet = COVID_border.BorderSheet()
@@ -252,7 +244,7 @@ def saveCsv_all():
   
   print()
   saveCsv_incidenceRates(status_sheet, border_sheet)
-  saveCsv_positivityAndFatality(status_sheet, spec_sheet)
+  saveCsv_positivityAndFatality(status_sheet, test_sheet)
   
   print()
   ccm.saveMarkdown_readme()

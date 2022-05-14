@@ -2,7 +2,7 @@
     //----------------------------------------//
     //--  incidence_evolution_by_county.js  --//
     //--  Chieh-An Lin                      --//
-    //--  2022.05.09                        --//
+    //--  2022.05.14                        --//
     //----------------------------------------//
 
 function IEBC_InitFig(wrap) {
@@ -120,7 +120,7 @@ function IEBC_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_list = col_tag_list;
   wrap.ytick = ytick;
-  wrap.value_max = value_max * 0.55;
+  wrap.value_max = value_max * wrap.color_map_factor;
 }
 
 function IEBC_FormatData2(wrap, data2) {
@@ -145,7 +145,6 @@ function IEBC_Plot(wrap) {
   
   //-- Define square color
   wrap.value_max = Math.max(10, wrap.value_max);
-//   wrap.value_max = Math.min(1500, wrap.value_max);
   wrap.color = d3.scaleSequential()
     .domain([0, wrap.value_max])
     .interpolator(t => d3.interpolatePuRd(t));

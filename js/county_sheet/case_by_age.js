@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_by_age.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.13                --//
+    //--  2022.05.14                --//
     //--------------------------------//
 
 function CBA_InitFig(wrap) {
@@ -205,63 +205,27 @@ function CBA_FormatData(wrap, data) {
   wrap.legend_value_raw = y_sum;
 }
 
+function CBA_FormatData2(wrap, data2) {
+  var ylabel_dict = {'en': {}, 'fr': {}, 'zh-tw': {}};
+  var i, key, block; 
+  
+  //-- Loop over row
+  for (i=0; i<data2.length; i++) {
+    key = data2[i]['key'];
+    ylabel_dict['en'][key] = data2[i]['label'];
+    ylabel_dict['fr'][key] = data2[i]['label_fr'];
+    ylabel_dict['zh-tw'][key] = data2[i]['label_zh'];
+  }
+  
+  //-- Save to wrapper
+  wrap.ylabel_dict = ylabel_dict;
+}
+
 //-- Tooltip
 function CBA_MouseMove(wrap, d) {
   //-- Get tooltip position
   var y_alpha = 0.5;
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
-  
-  //-- Define legend title
-  var legend_title_list;
-  if (wrap.tag.includes('latest')) {
-    if (LS_lang == 'zh-tw')
-      legend_title_list = [
-        '0-6天前', '7-13天前', '14-20天前', '21-27天前', '28-34天前', '35-41天前', 
-        '42-48天前', '49-55天前', '56-62天前', '63-69天前', '70-76天前', '77-83天前'
-      ];
-    else if (LS_lang == 'fr')
-      legend_title_list = [
-        '0-6 jours plus tôt', '7-13 jours plus tôt', '14-20 jours plus tôt', '21-27 jours plus tôt', '28-34 jours plus tôt', '35-41 jours plus tôt', 
-        '42-48 jours plus tôt', '49-55 jours plus tôt', '56-62 jours plus tôt', '63-69 jours plus tôt', '70-76 jours plus tôt', '77-83 jours plus tôt'
-      ];
-    else
-      legend_title_list = [
-        '0-6 days ago', '7-13 days ago', '14-20 days ago', '21-27 days ago', '28-34 days ago', '35-41 days ago', 
-        '42-48 days ago', '49-55 days ago', '56-62 days ago', '63-69 days ago', '70-76 days ago', '77-83 days ago'
-      ]; 
-  }
-  else if (wrap.tag.includes('overall')) {
-    if (LS_lang == 'zh-tw')
-      legend_title_list = [
-        '合計',
-        '2020全年', '2020年1月', '2020年2月','2020年3月', '2020年4月','2020年5月', '2020年6月',
-                    '2020年7月', '2020年8月','2020年9月', '2020年10月','2020年11月', '2020年12月',
-        '2021全年', '2021年1月', '2021年2月','2021年3月', '2021年4月','2021年5月', '2021年6月',
-                    '2021年7月', '2021年8月','2021年9月', '2021年10月','2021年11月', '2021年12月',
-        '2022全年', '2022年1月', '2022年2月','2022年3月', '2022年4月','2022年5月', '2022年6月',
-                    '2022年7月', '2022年8月','2022年9月', '2022年10月','2022年11月', '2022年12月'
-      ];
-    else if (LS_lang == 'fr')
-      legend_title_list = [
-        'Totaux', 
-        'Année 2020', 'Janvier 2020', 'Février 2020', 'Mars 2020', 'Avril 2020', 'Mai 2020', 'Juin 2020', 
-                      'Juillet 2020', 'Août 2020', 'Septembre 2020', 'Octobre 2020', 'Novembre 2020', 'Décembre 2020', 
-        'Année 2021', 'Janvier 2021', 'Février 2021', 'Mars 2021', 'Avril 2021', 'Mai 2021', 'Juin 2021', 
-                      'Juillet 2021', 'Août 2021', 'Septembre 2021', 'Octobre 2021', 'Novembre 2021', 'Décembre 2021', 
-        'Année 2022', 'Janvier 2022', 'Février 2022', 'Mars 2022', 'Avril 2022', 'Mai 2022', 'Juin 2022', 
-                      'Juillet 2022', 'Août 2022', 'Septembre 2022', 'Octobre 2022', 'Novembre 2022', 'Décembre 2022', 
-      ];
-    else
-      legend_title_list = [
-        'Total', 
-        '2020 all year', 'January 2020', 'February 2020', 'March 2020', 'April 2020', 'May 2020', 'June 2020', 
-                         'July 2020', 'August 2020', 'September 2020', 'October 2020', 'November 2020', 'December 2020', 
-        '2021 all year', 'January 2021', 'February 2021', 'March 2021', 'April 2021', 'May 2021', 'June 2021', 
-                         'July 2021', 'August 2021', 'September 2021', 'October 2021', 'November 2021', 'December 2021', 
-        '2022 all year', 'January 2022', 'February 2022', 'March 2022', 'April 2022', 'May 2022', 'June 2022', 
-                         'July 2022', 'August 2022', 'September 2022', 'October 2022', 'November 2022', 'December 2022', 
-      ]; 
-  }
   
   //-- Get column tags
   var age_label;
@@ -273,7 +237,7 @@ function CBA_MouseMove(wrap, d) {
     age_label = ' years old';
   
   //-- Generate tooltip text
-  var tooltip_text = legend_title_list[wrap.col_ind];
+  var tooltip_text = wrap.ylabel_dict[LS_lang][wrap.col_tag];
   tooltip_text += '<br>' + d['age'] + age_label + ' = ' + GP_ValueStr_Tooltip(+d[wrap.col_tag]);
   
   //-- Generate tooltip
@@ -345,58 +309,7 @@ function CBA_Replot(wrap) {
   wrap.legend_value = [wrap.legend_value_raw[1], wrap.legend_value_raw[0]];
   
   //-- Define legend label
-  var i, j, label_list, label_sum_dict, legend_label_list;
-  if (wrap.tag.includes('latest')) {
-    if (LS_lang == 'zh-tw')
-      label_list = ['', '到', '天前之確診個案'];
-    else if (LS_lang == 'fr')
-      label_list = ['', ' & ', ' jours plus tôt'];
-    else 
-      label_list = ['Between ', ' & ', ' days ago'];
-    
-    legend_label_list = [];
-    for (i=1; i<wrap.nb_col; i++)
-      legend_label_list.push(label_list[0] + (7*(i-1)) + label_list[1] + (7*i-1) + label_list[2]);
-  }
-  else if (wrap.tag.includes('overall')) {
-    year_list = ['2020', '2021', '2022'];
-    legend_label_list = [];
-    
-    if (LS_lang == 'zh-tw') {
-      month_list = ['全年', '年1月', '年2月','年3月', '年4月','年5月', '年6月', '年7月', '年8月','年9月', '年10月','年11月', '年12月'];
-      for (j=0; j<year_list.length; j++)
-        for (i=0; i<month_list.length; i++)
-          legend_label_list.push(year_list[j] + month_list[i]);
-    }
-    else if (LS_lang == 'fr') {
-      month_list = ['Année ', 'Janvier ', 'Février ', 'Mars ', 'Avril ', 'Mai ', 'Juin ', 'Juillet ', 'Août ', 'Septembre ', 'Octobre ', 'Novembre ', 'Décembre '];
-      for (j=0; j<year_list.length; j++)
-        for (i=0; i<month_list.length; i++)
-          legend_label_list.push(month_list[i] + year_list[j]);
-    }
-    else {
-      month_list = [' all year', 'January ', 'February ', 'March ', 'April ', 'May ', 'June ', 'July ', 'August ', 'September ', 'October ', 'November ', 'December '];
-      for (j=0; j<year_list.length; j++)
-        for (i=0; i<month_list.length; i++) {
-          if (i == 0)
-            legend_label_list.push(year_list[j] + month_list[i]);
-          else
-            legend_label_list.push(month_list[i] + year_list[j]);
-        }
-    }
-  }
-  else {
-    if (LS_lang == 'zh-tw')
-      legend_label_list = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-    else if (LS_lang == 'fr')
-      legend_label_list = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-    else
-      legend_label_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  }
-  label_sum_dict = {'en': 'Total', 'fr': 'Totaux', 'zh-tw': '合計'};
-  legend_label_list = [label_sum_dict[LS_lang]].concat(legend_label_list);
-  
-  wrap.legend_label = [legend_label_list[wrap.col_ind], legend_label_list[0]];
+  wrap.legend_label = [wrap.ylabel_dict[LS_lang][wrap.col_tag], wrap.ylabel_dict[LS_lang]['total']];
   
   //-- Remove redundancy from legend if col_ind = 0
   if (wrap.col_ind == 0) {
@@ -416,11 +329,13 @@ function CBA_Replot(wrap) {
 function CBA_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       CBA_FormatData(wrap, data);
+      CBA_FormatData2(wrap, data2);
       CBA_Plot(wrap);
       CBA_Replot(wrap);
     });
@@ -429,11 +344,13 @@ function CBA_Load(wrap) {
 function CBA_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       CBA_FormatData(wrap, data);
+      CBA_FormatData2(wrap, data2);
       CBA_Replot(wrap);
     });
 }

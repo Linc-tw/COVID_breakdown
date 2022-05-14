@@ -833,7 +833,7 @@ function GP_ReplotCountAsY(wrap, format) {
     .transition()
     .duration(wrap.trans_delay)
     .call(yaxis);
-      
+    
   //-- Save to wrapper
   wrap.yscale_tick = yscale;
 }

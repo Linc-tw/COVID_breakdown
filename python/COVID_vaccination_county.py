@@ -2,7 +2,7 @@
     ###################################
     ##  COVID_vaccination_county.py  ##
     ##  Chieh-An Lin                 ##
-    ##  2022.05.12                   ##
+    ##  2022.05.14                   ##
     ###################################
 
 import os
@@ -23,7 +23,7 @@ class VaccinationCountySheet(ccm.Template):
   
   def __init__(self, verbose=True):
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv'.format(ccm.DATA_PATH)
-    data = ccm.loadCsv(name, verbose=verbose)
+    data = ccm.loadCsv(name, encoding='big5', verbose=verbose)
     ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006
     
     self.colTag_row_id = 'ID'

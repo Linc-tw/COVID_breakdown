@@ -46,7 +46,7 @@ Raw data
 
 Raw data are a subset of files or spreadsheets downloaded from sources mentioned earlier.
 
-There are 8 `csv` files & 1 `json` file. These files contain abundant Mandarin strings.
+There are 9 `csv` files. These files contain abundant Mandarin strings.
 
 
 Contents
@@ -76,16 +76,16 @@ Contents
 - Contains report date, county/city, village/district, gender, age, whether imported, & number of cases
 - Downloaded from [here](https://data.cdc.gov.tw/zh_TW/dataset/aagsdctable-day-19cov)
 
-`COVID-19_in_Taiwan_raw_data_specimen.csv`
+`COVID-19_in_Taiwan_raw_data_number_of_tests.csv`
 - Daily test statistics
 - Shows date of tests when they were administrated, which is **not** necessary the same date as when they were analyzed
 - Downloaded from [here](https://data.gov.tw/dataset/120451)
 
 ### NCHC
 
-`COVID-19_in_Taiwan_raw_data_vaccination.json`
+`COVID-19_in_Taiwan_raw_data_vaccination.csv`
 - Table of administrated doses of different vaccine brands
-- Downloaded from [here](https://covid-19.nchc.org.tw/dt_002-csse_covid_19_daily_reports_vaccine.php?countryCode=TW/taiwan)
+- Downloaded from [here](https://covid-19.nchc.org.tw/api.php?tableID=2004)
 
 `COVID-19_in_Taiwan_raw_data_vaccination_county.csv`
 - Table of administrated doses from different regions for different age ranges
@@ -93,4 +93,4 @@ Contents
 
 `COVID-19_in_Taiwan_raw_data_death.csv`
 - Breakdown table of every single deaths
-- Downloaded from [here](https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002)
+- Downloaded from [here](https://covid-19.nchc.org.tw/api.php?tableID=4002)

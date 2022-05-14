@@ -38,6 +38,15 @@ Contents
 - Map of Taiwan with its islands rearranged
 - Contain non-ASCII characters
 
+`criteria_timeline.csv`
+- Row: date
+- Column: language
+  - `en`
+  - `fr`
+  - `zh-tw`
+- Timeline table for evolution of testing criteria in Taiwan
+- Contains non-ASCII characters
+
 `event_timeline_zh-tw.csv`
 - Row: date
 - Column

@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  language_setting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.12                --//
+    //--  2022.05.14                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
@@ -258,7 +258,7 @@ function LS_FillText_Source() {
     LS_AddStr('data_source_raw_title', '初階資料');
     LS_AddHtml('data_source_raw_body', "\
       <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'> \
-      初階資料 <i class='fas fa-external-link-alt'></i></a> 是前面所提資料來源之部份分頁或檔案，目前共有6個<tt>csv</tt>和1個<tt>json</tt>檔。</p>\
+      初階資料 <i class='fas fa-external-link-alt'></i></a> 是前面所提資料來源之部份分頁或檔案，目前共有9個<tt>csv</tt>檔。</p>\
     ");
     LS_AddStr('data_source_processed_title', '高階資料');
     LS_AddHtml('data_source_processed_body', "\
@@ -288,7 +288,7 @@ function LS_FillText_Source() {
       <p>Les <a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
       données brutes <i class='fas fa-external-link-alt'></i></a> \
       sont un sous-ensemble des fichiers provenant des 2 sources des données mentionnées auparavant.</p>\
-      <p>À ce stade, 6 fichiers <tt>csv</tt> et 1 fichier <tt>json</tt> y figurent. Ces données contiennent des caractères mandarins en abondance.</p>\
+      <p>À ce stade, 9 fichiers <tt>csv</tt> y figurent. Ces données contiennent des caractères mandarins en abondance.</p>\
     ");
     LS_AddStr('data_source_processed_title', 'Données traitées');
     LS_AddHtml('data_source_processed_body', "\
@@ -321,7 +321,7 @@ function LS_FillText_Source() {
       <p><a href='https://github.com/Linc-tw/COVID_breakdown/tree/master/raw_data' target='_blank'>\
       Raw data <i class='fas fa-external-link-alt'></i></a> \
       are a subset of files or spreadsheets from 2 data sources mentioned earlier that have been used by this website.</p>\
-      <p>There are 6 <tt>csv</tt> files & 1 <tt>json</tt> file at this stage. These files contain abundant Mandarin strings.</p>\
+      <p>There are 9 <tt>csv</tt> files at this stage. These files contain abundant Mandarin strings.</p>\
     ");
     LS_AddStr("data_source_processed_title", "Processed data");
     LS_AddHtml("data_source_processed_body", "\

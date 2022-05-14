@@ -47,6 +47,7 @@ Plots on [_Other stats_](http://covidtaiwan.linc.tw/page/latest_others.html) are
 - Test Counts
 - Positive Rate & Case Fatality Rate
 - Death Counts
+- Deaths by Age (only in _Overall stats_)
 - Border Crossing
 
 The plot on [_Comparison_](http://covidtaiwan.linc.tw/page/latest_comparison.html) is:

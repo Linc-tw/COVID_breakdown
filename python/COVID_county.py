@@ -212,6 +212,48 @@ class CountySheet(ccm.Template):
             
     return stock_dict
   
+  def makeLabel_caseByAge(self, page):
+    month_name_en = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    month_name_fr = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'] 
+    
+    key_list = ['total']
+    label_list_en = ['Total']
+    label_list_fr = ['Totaux']
+    label_list_zh = ['合計']
+    
+    if page == ccm.PAGE_LATEST:
+      for i in range(12):
+        str_ = '{:d}-{:d}'.format(7*i, 7*i+6)
+        key_list.append('week_-{:d}'.format(i+1))
+        label_list_en.append('{} days ago'.format(str_))
+        label_list_fr.append('{} jours plus tôt'.format(str_))
+        label_list_zh.append('{}天前'.format(str_))
+      
+    elif page == ccm.PAGE_OVERALL:
+      for year in ccm.YEAR_LIST:
+        key_list.append(year)
+        label_list_en.append('{} all year'.format(year))
+        label_list_fr.append('Année {}'.format(year))
+        label_list_zh.append('{}全年'.format(year))
+        
+        for i in range(12):
+          str_ = '{:d}-{:d}'.format(7*i, 7*i+6)
+          key_list.append('{}_{}'.format(ccm.numMonthToAbbr(i+1), year))
+          label_list_en.append('{} {}'.format(month_name_en[i], year))
+          label_list_fr.append('{} {}'.format(month_name_fr[i], year))
+          label_list_zh.append('{}年{:d}月'.format(year, i+1))
+        
+    elif page in ccm.YEAR_LIST:
+      for i in range(12):
+        str_ = '{:d}-{:d}'.format(7*i, 7*i+6)
+        key_list.append('{}'.format(ccm.numMonthToAbbr(i+1)))
+        label_list_en.append('{}'.format(month_name_en[i]))
+        label_list_fr.append('{}'.format(month_name_fr[i]))
+        label_list_zh.append('{:d}月'.format(i+1))
+        
+    stock = {'key': key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+    return stock
+  
   def makeReadme_caseByAge(self, page):
     key = 'case_by_age'
     stock = []
@@ -226,9 +268,20 @@ class CountySheet(ccm.Template):
       stock.append('  - `total`: overall stats')
       stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
-    elif page in [ccm.PAGE_2020, ccm.PAGE_2021, ccm.PAGE_2022, ccm.PAGE_2023]: ## new_year_token
+    elif page in ccm.YEAR_LIST:
       stock.append('  - `total`: all year {}'.format(page))
       stock.append('  - `MMM`: during month `MMM`')
+    ccm.README_DICT[page][key] = stock
+    
+    key = 'case_by_age_label'
+    stock = []
+    stock.append('`{}.csv`'.format(key))
+    stock.append('- Row: time range')
+    stock.append('- Column')
+    stock.append('  - `key`')
+    stock.append('  - `label`: label in English')
+    stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
+    stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
     ccm.README_DICT[page][key] = stock
     return
   
@@ -237,23 +290,20 @@ class CountySheet(ccm.Template):
     
     ## Loop over page
     for page, stock in stock_dict.items():
-      if ccm.PAGE_LATEST == page:
-        label_list = ['total'] + ['week_-{:d}'.format(i+1) for i in range(12)]
-      elif ccm.PAGE_OVERALL == page:
-        label_list = ['total'] + \
-          ['2020'] + ['{}_2020'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
-          ['2021'] + ['{}_2021'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
-          ['2022'] + ['{}_2022'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token (2023)
-      else:
-        label_list = ['total'] + [ccm.numMonthToAbbr(i+1) for i in range(12)]
+      stock_l = self.makeLabel_caseByAge(page)
+      data_l = pd.DataFrame(stock_l)
+      col_tag_list = data_l['key']
       
-      data = {'age': self.age_key_list}
-      data.update({label: case_hist.values() for label, case_hist in zip(label_list, stock)})
-      data = pd.DataFrame(data)
+      data_c = {'age': self.age_key_list}
+      data_c.update({col_tag: case_hist.values() for col_tag, case_hist in zip(col_tag_list, stock)})
+      data_c = pd.DataFrame(data_c)
       
       ## Save
       name = '{}processed_data/{}/case_by_age.csv'.format(ccm.DATA_PATH, page)
-      ccm.saveCsv(name, data)
+      ccm.saveCsv(name, data_c)
+      
+      name = '{}processed_data/{}/case_by_age_label.csv'.format(ccm.DATA_PATH, page)
+      ccm.saveCsv(name, data_l)
       
       self.makeReadme_caseByAge(page)
     return

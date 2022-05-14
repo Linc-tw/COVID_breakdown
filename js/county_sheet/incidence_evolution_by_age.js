@@ -2,7 +2,7 @@
     //-------------------------------------//
     //--  incidence_evolution_by_age.js  --//
     //--  Chieh-An Lin                   --//
-    //--  2022.05.09                     --//
+    //--  2022.05.14                     --//
     //-------------------------------------//
 
 function IEBA_InitFig(wrap) {
@@ -120,7 +120,7 @@ function IEBA_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_list = col_tag_list;
   wrap.ytick = ytick;
-  wrap.value_max = value_max * 0.75;
+  wrap.value_max = value_max * wrap.color_map_factor;
 }
 
 function IEBA_FormatData2(wrap, data2) {

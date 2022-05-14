@@ -32,7 +32,8 @@ PAGE_2023 = '2023'
 PAGE_2022 = '2022'
 PAGE_2021 = '2021'
 PAGE_2020 = '2020'
-PAGE_LIST = [PAGE_LATEST, PAGE_OVERALL, PAGE_2022, PAGE_2021, PAGE_2020] ## new_year_token (2023)
+YEAR_LIST = [PAGE_2020, PAGE_2021, PAGE_2022] ## new_year_token (2023)
+PAGE_LIST = [PAGE_LATEST, PAGE_OVERALL] + YEAR_LIST
 
 SYMPTOM_DICT = {
   'sneezing': {'zh-tw': '鼻腔症狀', 'fr': 'éternuement'},

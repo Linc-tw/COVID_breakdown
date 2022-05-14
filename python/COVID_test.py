@@ -2,7 +2,7 @@
     ################################
     ##  COVID_test.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.29                ##
+    ##  2022.05.14                ##
     ################################
 
 import os
@@ -15,39 +15,24 @@ import pandas as pd
 import COVID_common as ccm
 
 ################################################################################
-## Class - test sheet
+## Class - specimen sheet
 
 class TestSheet(ccm.Template):
   
   def __init__(self, verbose=True):
-    self.coltag_date = '日期'
-    self.coltag_from_extended = '擴大監測'
-    self.coltag_cum_from_extended = '擴大監測累計'
-    self.coltag_from_qt = '居檢送驗'
-    self.coltag_cum_from_qt = '居檢送驗累計'
-    self.coltag_from_clin_def = '武肺通報'
-    self.coltag_cum_from_clin_def = '武肺通報累計'
-    self.coltag_nb_tests = '檢驗人數'
-    self.coltag_cum_nb_tests = '檢驗人數累計'
-    self.coltag_confirmed = '確診人數'
-    self.coltag_cum_confirmed = '確診人數累計'
-    self.coltag_daily_pos_rate = '單日陽性率'
-    self.coltag_tot_pos_rate = '陽性率'
-    self.coltag_criteria = '擴大之檢驗標準(含擴大監測標準及通報定義)'
-    self.coltag_note = '來源：疾管署（每天1am更新）'
+    self.coltag_date = '通報日'
+    self.coltag_clin_def = '法定傳染病通報'
+    self.coltag_qt = '居家檢疫送驗'
+    self.coltag_extended = '擴大監測送驗'
+    self.coltag_total = 'Total'
     
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
-    #https://covid19dashboard.cdc.gov.tw/dash4
+    #https://od.cdc.gov.tw/eic/covid19/covid19_tw_specimen.csv
     
-    from_extended_list = data[self.coltag_from_extended].values
-    
-    self.ind_2021 = (from_extended_list == '2021分隔線').argmax() ## new_year_token
-    self.ind_2022 = (from_extended_list == '2022分隔線').argmax() - 1
-    self.ind_2023 = (from_extended_list == '2023分隔線').argmax() - 2
-    
-    date_list = data[self.coltag_date].values
-    ind = date_list == date_list
+    tot_list = data[self.coltag_total].values
+    ind = tot_list != '0.0'
+    ind[:-50] = True ## Remove trailing 0.0 but ensuring the front
     self.data = data[ind]
     self.n_total = ind.sum()
     
@@ -57,78 +42,41 @@ class TestSheet(ccm.Template):
     
   def getDate(self):
     date_list = []
-    y = 2020
     
-    ## new_year_token (2023)
-    for i, date in enumerate(self.getCol(self.coltag_date)):
-      if i >= self.ind_2022:
-        y = 2022
-      elif i >= self.ind_2021:
-        y = 2021
-      
+    for date in self.getCol(self.coltag_date):
       md_slash = date.split('/')
-      m = int(md_slash[0])
-      d = int(md_slash[1])
+      y = int(md_slash[0])
+      m = int(md_slash[1])
+      d = int(md_slash[2])
       
       date = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
       date_list.append(date)
     return date_list
   
-  def getFromExtended(self):
-    from_ext_list = []
-    for from_ext in self.getCol(self.coltag_from_extended):
-      if from_ext != from_ext: ## Is nan
-        from_ext_list.append(0)
-        continue
-      
-      try:
-        from_ext = from_ext.lstrip('+').split(',')
-        from_ext = int(''.join(from_ext))
-        from_ext_list.append(from_ext)
-      except:
-        print('From extended, {}'.format(from_ext))
-        from_ext_list.append(0)
-    return from_ext_list
-
-  def getFromQT(self):
-    from_qt_list = []
-    for from_qt in self.getCol(self.coltag_from_qt):
-      if from_qt != from_qt: ## Is nan
-        from_qt_list.append(0)
-        continue
-        
-      try:
-        from_qt = from_qt.lstrip('+').split(',')
-        from_qt = int(''.join(from_qt))
-        from_qt_list.append(from_qt)
-      except:
-        print('From extended, {}'.format(from_qt))
-        from_qt_list.append(0)
-    return from_qt_list
-
-  def getFromClinDef(self):
+  def getClinDef(self):
     from_clin_def_list = []
-    for from_clin_def in self.getCol(self.coltag_from_clin_def):
-      if from_clin_def != from_clin_def: ## Is nan
-        from_clin_def_list.append(0)
-        continue
-        
-      try:
-        from_clin_def = from_clin_def.lstrip('+').split(',')
-        from_clin_def = int(''.join(from_clin_def))
-        from_clin_def_list.append(from_clin_def)
-      except:
-        print('Clinical definition, {}'.format(from_clin_def))
-        from_clin_def_list.append(0)
+    for from_clin_def in self.getCol(self.coltag_clin_def):
+      from_clin_def_list.append(int(float(from_clin_def)))
     return from_clin_def_list
 
-  def getCriteria(self):
-    crit_list = []
-    
-    for crit in self.getCol(self.coltag_criteria):
-      crit_list.append(crit)
-    return crit_list
-  
+  def getQT(self):
+    from_qt_list = []
+    for from_qt in self.getCol(self.coltag_qt):
+      from_qt_list.append(int(float(from_qt)))
+    return from_qt_list
+
+  def getExtended(self):
+    from_ext_list = []
+    for from_ext in self.getCol(self.coltag_extended):
+        from_ext_list.append(int(float(from_ext)))
+    return from_ext_list
+
+  def getTotal(self):
+    total_list = []
+    for total in self.getCol(self.coltag_total):
+      total_list.append(int(float(total)))
+    return total_list
+
   def makeReadme_testCounts(self, page):
     key = 'test_counts'
     stock = []
@@ -143,15 +91,14 @@ class TestSheet(ccm.Template):
   
   def saveCsv_testCounts(self):
     date_list = self.getDate()
-    from_ext_list = self.getFromExtended()
-    from_qt_list = self.getFromQT()
-    from_clin_def_list = self.getFromClinDef()
+    total_list = self.getTotal()
     
-    value_arr = np.array(from_clin_def_list, dtype=int) + np.array(from_qt_list, dtype=int) + np.array(from_ext_list, dtype=int)
-    avg_arr = ccm.makeMovingAverage(value_arr)
-    stock = {'date': date_list, 'total': value_arr, 'total_avg': avg_arr}
+    avg_arr = ccm.makeMovingAverage(total_list)
+    stock = {'date': date_list, 'total': total_list, 'total_avg': avg_arr}
     
     stock = pd.DataFrame(stock)
+    print('Latest nb of tests = {:d}'.format(stock.iloc[-1]['total']))
+    stock = stock[:-1]
     stock = ccm.adjustDateRange(stock)
     
     for page in ccm.PAGE_LIST:
@@ -179,31 +126,27 @@ class TestSheet(ccm.Template):
   
   def saveCsv_testByCriterion(self):
     date_list = self.getDate()
-    from_ext_list = self.getFromExtended()
-    from_qt_list = self.getFromQT()
-    from_clin_def_list = self.getFromClinDef()
+    clin_def_list = self.getClinDef()
+    qt_list = self.getQT()
+    ext_list = self.getExtended()
     
-    stock = {'date': date_list, 'clinical': from_clin_def_list, 'quarantine': from_qt_list, 'extended': from_ext_list}
+    stock = {'date': date_list, 'clinical': clin_def_list, 'quarantine': qt_list, 'extended': ext_list}
     stock = pd.DataFrame(stock)
+    stock = stock[:-1]
     stock = ccm.adjustDateRange(stock)
     
     for page in ccm.PAGE_LIST:
-      if page != ccm.PAGE_OVERALL:
-        continue
       data = ccm.truncateStock(stock, page)
       
       ## Save
-      name = '{}processed_data/{}/test_by_criterion_old.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/test_by_criterion.csv'.format(ccm.DATA_PATH, page)
       ccm.saveCsv(name, data)
       
-      #self.makeReadme_testByCriterion(page)
+      self.makeReadme_testByCriterion(page)
     return
   
-  def printCriteria(self):
-    date_list = self.getDate()
-    crit_list = self.getCriteria()
-    
-    url_list = {
+  def getUrlDict(self):
+    url_dict = {
       '2020-01-16': 'http://at.cdc.tw/6Jlc8w', ##   [(F&R)|P & Wuhan] | [(F&R)|P & contact]
       '2020-01-21': 'http://at.cdc.tw/9EM3mV', ##   [(F&R)|P & Wuhan] | [(F&R)|P & contact] | [P & China]
       '2020-01-25': 'http://at.cdc.tw/l99yHG', ##   [F|R|P & (Hubei | contact therein F&R)] | [F|R|P & contact] | [P & China]
@@ -227,7 +170,7 @@ class TestSheet(ccm.Template):
       '2020-03-17': 'http://at.cdc.tw/M24nK2',   ## Europe check-back
       '2020-03-18': 'http://at.cdc.tw/Y3Y592',   ## [F|R|P & (China-HK-MC | Korea | Europe | M East | C Asia | N Africa | US | Canada | Aussie | NZ)] 
                                                  ##                                                                       | [F|R|P & contact] | [P & unknown] + [F|R & other countries] | [F|R & cluster]
-     #'2020-03-19': 'http://at.cdc.tw/W9XhV5',   ## [F|R|P & (Asia | Europe | N Africa | US | Canada | Aussie | NZ)]      | [F|R|P & contact] | [P & unknown] + [F|R & other countries] | [F|R & cluster]
+      '2020-03-19': 'http://at.cdc.tw/W9XhV5',   ## [F|R|P & (Asia | Europe | N Africa | US | Canada | Aussie | NZ)]      | [F|R|P & contact] | [P & unknown] + [F|R & other countries] | [F|R & cluster]
       '2020-03-20': 'http://at.cdc.tw/328jaz',   ## [F|R|P & global]                                                      | [F|R|P & contact] | [P & unknown] + [F|R & cluster]
       '2020-03-25': 'https://youtu.be/bVv-u2bcV_g?t=782', 
                                                  ## [F|R|P & global] | [F|R|P & contact] | [P & unknown] + [F|R & (medic | cluster)]
@@ -240,14 +183,7 @@ class TestSheet(ccm.Template):
       '2020-12-01': 'http://at.cdc.tw/07gjm3', ## Negative COVID tests
       '2021-07-02': 'http://at.cdc.tw/9ZY9Od', ## Entry tests
     }
-    
-    for date, crit in zip(date_list, crit_list):
-      if crit != crit:
-        pass
-      else:
-        print(date, crit, url_list.get(date, np.nan))
-        print()
-    return
+    return url_dict
   
   def makeReadme_criteriaTimeline(self):
     key = 'criteria_timeline'
@@ -386,7 +322,21 @@ class TestSheet(ccm.Template):
     self.makeReadme_criteriaTimeline()
     return
   
+  def updateNewTestCounts(self, stock):
+    date_list = self.getDate()
+    total_list = self.getTotal()
+    
+    stock_tmp = {'date': date_list, 'new_tests': total_list}
+    stock_tmp = pd.DataFrame(stock_tmp)
+    stock_tmp = stock_tmp[:-1]
+    stock_tmp = ccm.adjustDateRange(stock_tmp)
+    
+    stock['new_tests'] = stock_tmp['new_tests'].values
+    return
+  
   def saveCsv(self):
+    self.saveCsv_testCounts()
+    self.saveCsv_testByCriterion()
     self.saveCsv_criteriaTimeline()
     return
 

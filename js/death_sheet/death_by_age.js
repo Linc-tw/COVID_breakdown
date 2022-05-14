@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_by_age.js           --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.13                --//
+    //--  2022.05.14                --//
     //--------------------------------//
 
 function DBA_InitFig(wrap) {
@@ -129,6 +129,22 @@ function DBA_FormatData(wrap, data) {
   wrap.legend_value_raw = y_sum;
 }
 
+function DBA_FormatData2(wrap, data2) {
+  var ylabel_dict = {'en': {}, 'fr': {}, 'zh-tw': {}};
+  var i, key, block; 
+  
+  //-- Loop over row
+  for (i=0; i<data2.length; i++) {
+    key = data2[i]['key'];
+    ylabel_dict['en'][key] = data2[i]['label'];
+    ylabel_dict['fr'][key] = data2[i]['label_fr'];
+    ylabel_dict['zh-tw'][key] = data2[i]['label_zh'];
+  }
+  
+  //-- Save to wrapper
+  wrap.ylabel_dict = ylabel_dict;
+}
+
 //-- Tooltip
 function DBA_MouseMove(wrap, d) {
   //-- Get tooltip position
@@ -136,22 +152,16 @@ function DBA_MouseMove(wrap, d) {
   var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
   //-- Get column tags
-  var legend_label_list, age_label;
-  if (LS_lang == 'zh-tw') {
-    legend_label_list = ['合計', '2020全年', '2021全年', '2022全年'];
+  var age_label;
+  if (LS_lang == 'zh-tw')
     age_label = '歲';
-  }
-  else if (LS_lang == 'fr') {
-    legend_label_list = ['Totaux', 'Année 2020', 'Année 2021', 'Année 2022'];
+  else if (LS_lang == 'fr')
     age_label = ' ans';
-  }
-  else {
-    legend_label_list = ['Total', '2020 all year', '2021 all year', '2022 all year'];
+  else
     age_label = ' years old';
-  }
   
   //-- Generate tooltip text
-  var tooltip_text = legend_label_list[wrap.col_ind];
+  var tooltip_text = wrap.ylabel_dict[LS_lang][wrap.col_tag];
   tooltip_text += '<br>' + d['age'] + age_label + ' = ' + GP_ValueStr_Tooltip(+d[wrap.col_tag]);
   
   //-- Generate tooltip
@@ -223,15 +233,7 @@ function DBA_Replot(wrap) {
   wrap.legend_value = [wrap.legend_value_raw[1], wrap.legend_value_raw[0]];
   
   //-- Define legend label
-  var legend_label_list;
-  if (LS_lang == 'zh-tw')
-    legend_label_list = ['合計', '2020全年', '2021全年', '2022全年'];
-  else if (LS_lang == 'fr')
-    legend_label_list = ['Totaux', 'Année 2020', 'Année 2021', 'Année 2022'];
-  else
-    legend_label_list = ['Total', '2020 all year', '2021 all year', '2022 all year'];
-  
-  wrap.legend_label = [legend_label_list[wrap.col_ind], legend_label_list[0]];
+  wrap.legend_label = [wrap.ylabel_dict[LS_lang][wrap.col_tag], wrap.ylabel_dict[LS_lang]['total']];
   
   //-- Remove redundancy from legend if col_ind = 0
   if (wrap.col_ind == 0) {
@@ -251,11 +253,13 @@ function DBA_Replot(wrap) {
 function DBA_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       DBA_FormatData(wrap, data);
+      DBA_FormatData2(wrap, data2);
       DBA_Plot(wrap);
       DBA_Replot(wrap);
     });
@@ -264,11 +268,13 @@ function DBA_Load(wrap) {
 function DBA_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       DBA_FormatData(wrap, data);
+      DBA_FormatData2(wrap, data2);
       DBA_Replot(wrap);
     });
 }

@@ -84,7 +84,7 @@ Structure by page
   - `test_counts.js`
   - `positivity_and_fatality.js`
   - `death_counts.js`
-  - `death_by_age.js`
+  - `death_by_age.js` (only overall)
   - `border_statistics.js`
 
 `comparison.html`
