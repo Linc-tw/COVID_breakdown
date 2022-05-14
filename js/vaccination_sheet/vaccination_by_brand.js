@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_brand.js   --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.08                --//
+    //--  2022.05.14                --//
     //--------------------------------//
 
 function VBB_InitFig(wrap) {
@@ -26,15 +26,10 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_Pfizer', 'BNT');
     
     LS_AddHtml('vaccination_by_brand_description', '\
-      除週日外，衛服部每日公佈前一日之疫苗接種人數，\
-      因此無星期六資料。\
-      其他日資料則偶有缺陷，原因不詳。\
+      衛服部所公佈之疫苗累計接種人數缺乏星期六的資料。\
+      因要有相連兩日資料才可計算每日施打量，故逐日人數缺資料較多。\
       <br><br>\
-      由於原始資料為累計施打人數，\
-      因此只有接連兩日資料完整時才能計算每日施打人數，\
-      這解釋了為何逐日人數缺資料比累計人數多。\
-      <br><br>\
-      單日施打劑數可能為負（BNT），此乃資料來源之錯誤，原因不詳。\
+      單日施打劑數可能為負（BNT），此錯誤來自衛服部官方，原因不詳。\
     ');
   }
   
@@ -49,17 +44,12 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_Pfizer', 'Pfizer');
     
     LS_AddHtml('vaccination_by_brand_description', '\
-      Tous les jours sauf dimanche le résultat de la veille est publié.\
-      C\'est pour cela que les données de samedi est toujours manquées.\
-      Parfois les données d\'autres jours sont manquées pour une raison inconnue.\
-      <br><br>\
-      Comme les résultats sont publiés en nombres cumulés,\
-      il faut que les données de 2 jours consécutifs sont connues pour pouvoir calculer le nombre de doses quotidien.\
-      Ceci explique pourquoi il y a plus de données manquantes pour le comptage quotidien que pour le compage cumulé.\
+      Les résultats sont publiés en nombres cumulés tous les jours sauf samedi.\
+      Il faut que les données de 2 jours consécutifs soient connues pour pouvoir calculer le nombre de doses quotidien,\
+      donc il y a plus de données manquantes pour le comptage quotidien que pour le compage cumulé.\
       <br><br>\
       Le nombre d\'injection par jour peut tomber négatif (pour Pfizer).\
-      Cette erreur provient de la source des données.\
-      La raison est inconnue.\
+      Cette erreur provient de la source et la raison est inconnue.\
     ');
   }
   
@@ -74,17 +64,12 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_Pfizer', 'Pfizer');
     
     LS_AddHtml('vaccination_by_brand_description', '\
-      Everyday except for Sunday the result of the previous day is released .\
-      Therefore Saturday\'s data are always missing.\
-      Some days\' data are also missing for unknown reasons.\
-      <br><br>\
-      As the data are released under cumulative counts,\
-      daily counts are only available when cumulative counts are known for two consecutive days.\
-      This explains why there are more missing data in daily counts.\
+      The data are released under cumulative counts everyday except for Saturday.\
+      Daily counts are only available when cumulative counts are known for two consecutive days,\
+      so there are a bit more missing data in daily counts.\
       <br><br>\
       The number of injections by day can become negative (for Pfizer).\
-      This error comes from the data source.\
-      The reason is unknown.\
+      This error comes from the source and the reason is unknown.\
     ');
   }
 }

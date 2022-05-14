@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_county.js  --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.08                --//
+    //--  2022.05.14                --//
     //--------------------------------//
 
 function VBC_InitFig(wrap) {
@@ -30,7 +30,7 @@ function VBC_ResetText() {
     LS_AddStr('vaccination_by_county_title', '各縣市疫苗接種進度');
     
     LS_AddHtml('vaccination_by_county_description', '\
-      此圖每週一更新。\
+      此圖每週一或二更新。\
     ');
   }
   
@@ -38,7 +38,7 @@ function VBC_ResetText() {
     LS_AddStr('vaccination_by_county_title', 'Vaccination par ville et comté');
     
     LS_AddHtml('vaccination_by_county_description', '\
-      Cette figure est mise à jour tous les lundis.\
+      Cette figure est mise à jour tous les lundis ou mardis.\
     ');
   }
   
@@ -46,7 +46,7 @@ function VBC_ResetText() {
     LS_AddStr('vaccination_by_county_title', 'Vaccination by City & County');
     
     LS_AddHtml('vaccination_by_county_description', '\
-      This figure is updated every Monday.\
+      This figure is updated every Monday or Tuesday.\
     ');
   }
 }

@@ -2,7 +2,7 @@
     ################################
     ##  COVID_county.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.06                ##
+    ##  2022.05.14                ##
     ################################
 
 import os
@@ -374,7 +374,7 @@ class CountySheet(ccm.Template):
       stock.append('  - `total`: overall stats')
       stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
-    elif page in [ccm.PAGE_2020, ccm.PAGE_2021, ccm.PAGE_2022, ccm.PAGE_2023]: ## new_year_token
+    elif page in ccm.YEAR_LIST:
       stock.append('  - `total`: all year {}'.format(page))
       stock.append('  - `MMM`: during month `MMM`')
     ccm.README_DICT[page][key] = stock
@@ -629,6 +629,9 @@ class CountySheet(ccm.Template):
     ccm.saveCsv(name, data_l)
     
     self.makeReadme_incidenceEvolutionByAge(page)
+    return
+  
+  def updateCaseByAge(self):
     return
   
   def saveCsv(self):

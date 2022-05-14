@@ -200,7 +200,9 @@ class DeathSheet(ccm.Template):
     self.makeReadme_deathByAge(page)
     return
   
-  def saveCsv_fatalityRateByAge(self):
+  def updateDeathByAge(self):
+    #stock_dict = self.increment_deathByAge()
+    #for key, stock in 
     return
   
   def saveCsv(self):

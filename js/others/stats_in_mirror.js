@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  stats_in_mirror.js        --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.09                --//
+    //--  2022.05.14                --//
     //--------------------------------//
 
 function SIM_InitFig(wrap) {
@@ -63,12 +63,12 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_death_1', '死亡人數');
     LS_AddStr('stats_in_mirror_button_vaccination_0', '疫苗劑數');
     LS_AddStr('stats_in_mirror_button_vaccination_1', '疫苗劑數');
-    LS_AddStr('stats_in_mirror_button_1st_dose_0', '至少一劑人數');
-    LS_AddStr('stats_in_mirror_button_1st_dose_1', '至少一劑人數');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '至少兩劑人數');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '至少兩劑人數');
-    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '至少三劑人數');
-    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '至少三劑人數');
+    LS_AddStr('stats_in_mirror_button_1st_dose_0', '第一劑人口比');
+    LS_AddStr('stats_in_mirror_button_1st_dose_1', '第一劑人口比');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '第兩劑人口比');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '第兩劑人口比');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '第三劑人口比');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '第三劑人口比');
     LS_AddStr('stats_in_mirror_button_border_entry_0', '入境人數');
     LS_AddStr('stats_in_mirror_button_border_entry_1', '入境人數');
     LS_AddStr('stats_in_mirror_button_border_exit_0', '出境人數');
@@ -95,7 +95,7 @@ function SIM_ResetText() {
       <br>\
       - 疫苗劑數\
       <br>\
-      - 施打一、二、三劑人數\
+      - 施打一、二、三劑人口比\
       <br>\
       - 入境、出境、入出境總人數\
       <br>\
@@ -124,12 +124,12 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_death_1', 'Décès');
     LS_AddStr('stats_in_mirror_button_vaccination_0', 'Vaccination');
     LS_AddStr('stats_in_mirror_button_vaccination_1', 'Vaccination');
-    LS_AddStr('stats_in_mirror_button_1st_dose_0', '1 dose');
-    LS_AddStr('stats_in_mirror_button_1st_dose_1', '1 dose');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '2 doses');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '2 doses');
-    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '3 doses');
-    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '3 doses');
+    LS_AddStr('stats_in_mirror_button_1st_dose_0', 'Taux de la 1ère dose');
+    LS_AddStr('stats_in_mirror_button_1st_dose_1', 'Taux de la 1ère dose');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_0', 'Taux de la 2e dose');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_1', 'Taux de la 2e dose');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_0', 'Taux de la 3e dose');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_1', 'Taux de la 3e dose');
     LS_AddStr('stats_in_mirror_button_border_entry_0', 'Arrivée aux frontières');
     LS_AddStr('stats_in_mirror_button_border_entry_1', 'Arrivée aux frontières');
     LS_AddStr('stats_in_mirror_button_border_exit_0', 'Départ des frontières');
@@ -156,7 +156,7 @@ function SIM_ResetText() {
       <br>\
       - le nombre de vaccins administrés,\
       <br>\
-      - la part de population avec ses 1ère, 2e et 3e doses,\
+      - les taux de vaccination de la 1ère, de la 2e et de la 3e dose,\
       <br>\
       - les nombres de voyageurs entrant, sortant et totaux aux frontières,\
       <br>\
@@ -185,12 +185,12 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_death_1', 'Death counts');
     LS_AddStr('stats_in_mirror_button_vaccination_0', 'Vaccination');
     LS_AddStr('stats_in_mirror_button_vaccination_1', 'Vaccination');
-    LS_AddStr('stats_in_mirror_button_1st_dose_0', '1 dose');
-    LS_AddStr('stats_in_mirror_button_1st_dose_1', '1 dose');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '2 doses');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '2 doses');
-    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '3 doses');
-    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '3 doses');
+    LS_AddStr('stats_in_mirror_button_1st_dose_0', '1st dose ratio');
+    LS_AddStr('stats_in_mirror_button_1st_dose_1', '1st dose ratio');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '2nd dose ratio');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '2nd dose ratio');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_0', '3rd dose ratio');
+    LS_AddStr('stats_in_mirror_button_3rd_dose_1', '3rd dose ratio');
     LS_AddStr('stats_in_mirror_button_border_entry_0', 'Border arrival counts');
     LS_AddStr('stats_in_mirror_button_border_entry_1', 'Border arrival counts');
     LS_AddStr('stats_in_mirror_button_border_exit_0', 'Border departure counts');
@@ -217,7 +217,7 @@ function SIM_ResetText() {
       <br>\
       - vaccination counts,\
       <br>\
-      - the population ratios having its 1st, 2nd, and 3rd doses,\
+      - vaccination ratios of the 1st, 2nd, and 3rd doses,\
       <br>\
       - border arrival, departure, and total counts,\
       <br>\

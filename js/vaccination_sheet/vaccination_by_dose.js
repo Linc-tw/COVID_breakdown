@@ -20,6 +20,7 @@ function VBD_ResetText() {
     
     LS_AddHtml('vaccination_by_dose_description', '\
       接種率的定義為注射劑數除以人口數。\
+      <br><br>\
       此圖所用之注射劑數與人口數兩者皆取自官方，\
       然而計算結果仍與官方公佈之接種率不同，略低約1%左右。\
       研判是因為官方計算可能有排除資格不符者，因此分母較小。\
@@ -31,6 +32,7 @@ function VBD_ResetText() {
     
     LS_AddHtml('vaccination_by_dose_description', '\
       Le taux de vaccination est défini par le nombre d\'injections divisé par la population.\
+      <br><br>\
       Dans cette figure, le nombre d\'injections ainsi que le nombre de population sont obtenus des statistiques officielles.\
       Pourtant, le calcul d\'ici est toujours environ 1% inférieur à celui annoncé par le gouvernement.\
       La raison pourrait être que le gouvernement a exclu au préalable ceux qui ne sont pas éligibles aux vaccins dans le calcul.\
@@ -42,6 +44,7 @@ function VBD_ResetText() {
     
     LS_AddHtml('vaccination_by_dose_description', '\
       The vaccination rate is defined as the number of injections divided by population.\
+      <br><br>\
       In this figure, both injections and population are taken from official statistics.\
       However, the calculation is still about 1% lower than the annouced rate.\
       The reason could be that the government has excluded non-eligible people from its calculation.\

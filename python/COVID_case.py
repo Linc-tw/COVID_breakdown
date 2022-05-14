@@ -49,10 +49,10 @@ class CaseSheet(ccm.Template):
     ## new_year_token
     self.n_total = 0
     self.n_latest = 0
-    self.n_2023 = 0
-    self.n_2022 = 0
-    self.n_2021 = 0
     self.n_2020 = 0
+    self.n_2021 = 0
+    self.n_2022 = 0
+    self.n_2023 = 0
     self.n_empty = 0
     
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv'.format(ccm.DATA_PATH)
@@ -68,10 +68,10 @@ class CaseSheet(ccm.Template):
       ## new_year_token
       print('N_total = {:d}'.format(self.n_total))
       print('N_latest = {:d}'.format(self.n_latest))
-      print('N_2023 = {:d}'.format(self.n_2023))
-      print('N_2022 = {:d}'.format(self.n_2022))
-      print('N_2021 = {:d}'.format(self.n_2021))
       print('N_2020 = {:d}'.format(self.n_2020))
+      print('N_2021 = {:d}'.format(self.n_2021))
+      print('N_2022 = {:d}'.format(self.n_2022))
+      print('N_2023 = {:d}'.format(self.n_2023))
       print('N_empty = {:d}'.format(self.n_empty))
     return 
     
@@ -94,14 +94,14 @@ class CaseSheet(ccm.Template):
       ## If not NaN
       if ind_latest == ind_latest:
         self.n_latest += 1
-      if ind_2023 == ind_2023:
-        self.n_2023 += 1
-      if ind_2022 == ind_2022:
-        self.n_2022 += 1
-      if ind_2021 == ind_2021:
-        self.n_2021 += 1
       if ind_2020 == ind_2020:
         self.n_2020 += 1
+      if ind_2021 == ind_2021:
+        self.n_2021 += 1
+      if ind_2022 == ind_2022:
+        self.n_2022 += 1
+      if ind_2023 == ind_2023:
+        self.n_2023 += 1
     return
   
   def getReportDate(self):

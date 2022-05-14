@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  incidence_map.js          --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.13                --//
+    //--  2022.05.14                --//
     //--------------------------------//
 
 function IM_InitFig(wrap) {
@@ -349,7 +349,7 @@ function IM_Replot(wrap) {
       .attr('text-anchor', function (d, i) {if (anno_pos[i].sign > 0) return 'end'; return 'start';})
       .attr('dominant-baseline', 'middle')
       .style('fill', '#000000')
-      .text(function (d, i) {if (wrap.rate == 1) return d+' '+wrap.value_list[i].toFixed(1); return d+' \u00A0'+GP_ValueStr_Legend(wrap.value_list[i]);});
+      .text(function (d, i) {if (wrap.rate == 1) return d+' \u00A0'+wrap.value_list[i].toFixed(1); return d+' \u00A0'+GP_ValueStr_Legend(wrap.value_list[i]);});
   
   //-- Remove annotation lines
   wrap.svg.selectAll('.annotation.line')
@@ -462,21 +462,21 @@ function IM_Replot(wrap) {
   var legend_label;
   if (wrap.rate == 1) {
     if (LS_lang == 'zh-tw')
-      legend_label = '全國平均 ';
+      legend_label = '全國平均';
     else if (LS_lang == 'fr')
-      legend_label = 'Niveau national ';
+      legend_label = 'Niveau national';
     else 
-      legend_label = 'Nationalwide level ';
-    legend_label += +wrap.legend_value.toFixed(1);
+      legend_label = 'Nationalwide level';
+    legend_label += ' \u00A0' + wrap.legend_value.toFixed(1);
   }
   else {
     if (LS_lang == 'zh-tw')
-      legend_label = '全國合計 ';
+      legend_label = '全國合計';
     else if (LS_lang == 'fr')
-      legend_label = 'Totaux nationaux ';
+      legend_label = 'Totaux nationaux';
     else 
-      legend_label = 'Nationalwide total ';
-    legend_label += GP_ValueStr_Legend(wrap.legend_value);
+      legend_label = 'Nationalwide total';
+    legend_label += ' \u00A0' + GP_ValueStr_Legend(wrap.legend_value);
   }
   legend_caption_bottom = [legend_title_list[wrap.col_ind], legend_label];
   

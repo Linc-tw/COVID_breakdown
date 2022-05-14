@@ -29,7 +29,7 @@ import COVID_death
 ################################################################################
 ## Functions - cross-sheet operations
 
-def makeIncidenceRates(status_sheet, border_sheet):
+def makeStock_incidenceRates(status_sheet, border_sheet):
   stock = {}
   status_sheet.updateNewCaseCounts(stock)
   border_sheet.updateNewEntryCounts(stock)
@@ -79,7 +79,7 @@ def makeReadme_incidenceRates(page):
   return
   
 def saveCsv_incidenceRates(status_sheet, border_sheet):
-  stock = makeIncidenceRates(status_sheet, border_sheet)
+  stock = makeStock_incidenceRates(status_sheet, border_sheet)
   stock = pd.DataFrame(stock)
   
   for page in ccm.PAGE_LIST:
@@ -92,7 +92,7 @@ def saveCsv_incidenceRates(status_sheet, border_sheet):
     makeReadme_incidenceRates(page)
   return
   
-def makePositivityAndFatality(status_sheet, test_sheet):
+def makeStock_positivityAndFatality(status_sheet, test_sheet):
   stock = {}
   status_sheet.updateNewCaseCounts(stock)
   status_sheet.updateCumCounts(stock)
@@ -146,7 +146,7 @@ def makeReadme_positivityAndFatality(page):
   return
   
 def saveCsv_positivityAndFatality(status_sheet, test_sheet):
-  stock = makePositivityAndFatality(status_sheet, test_sheet)
+  stock = makeStock_positivityAndFatality(status_sheet, test_sheet)
   stock = pd.DataFrame(stock)
   
   for page in ccm.PAGE_LIST:
@@ -157,6 +157,14 @@ def saveCsv_positivityAndFatality(status_sheet, test_sheet):
     ccm.saveCsv(name, data)
     
     makeReadme_positivityAndFatality(page)
+  return
+
+def makeStock_fatalityByAge(county_sheet, death_sheet):
+  stock = {}
+  county_sheet.updateCaseByAge(stock)
+  death_sheet.updateDeathByAge(stock)
+  
+  
   return
 
 ################################################################################
@@ -192,10 +200,11 @@ def sandbox():
   #death_sheet = COVID_death.DeathSheet()
   #death_sheet.saveCsv_deathByAge()
   
-  #case_sheet = COVID_case.CaseSheet()
   #status_sheet = COVID_status.StatusSheet()
   #test_sheet = COVID_test.TestSheet()
   #border_sheet = COVID_border.BorderSheet()
+  #county_sheet = COVID_county.CountySheet()
+  #death_sheet = COVID_death.DeathSheet()
   #saveCsv_incidenceRates(status_sheet, border_sheet)
   #saveCsv_positivityAndFatality(status_sheet, test_sheet)
   return
