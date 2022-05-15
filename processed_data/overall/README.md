@@ -51,28 +51,6 @@ Contents
   - `local_avg`: 7-day moving average of `local`
   - `others_avg`: 7-day moving average of `others`
 
-`death_by_age_count.csv`
-- Row: age group
-- Column
-  - `age`
-  - `total`: overall stats
-  - `YYYY`: during year `YYYY`
-
-`death_by_age_label.csv`
-- Row: time range
-- Column
-  - `key`
-  - `label`: label in English
-  - `label_fr`: label in French (contains non-ASCII characters)
-  - `label_zh`: label in Mandarin (contains non-ASCII characters)
-
-`death_by_age_rate.csv`
-- Row: age group
-- Column
-  - `age`
-  - `total`: overall stats
-  - `YYYY`: during year `YYYY`
-
 `death_counts.csv`
 - Row: report date
 - Column

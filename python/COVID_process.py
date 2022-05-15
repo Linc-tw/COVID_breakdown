@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.14                ##
+    ##  2022.05.15                ##
     ################################
 
 import os
@@ -164,7 +164,7 @@ def makeCountStock_deathByAge(death_sheet):
   death_sheet.updateDeathByAge(stock)
   
   year_list = ['total'] + ccm.YEAR_LIST
-  age_list = death_sheet.age_key_list
+  age_list = ['total'] + death_sheet.age_key_list
   stock_new = {'age': age_list}
   
   ## Loop over year
@@ -189,12 +189,14 @@ def makeRateStock_deathByAge(county_sheet, death_sheet):
   death_sheet.updateDeathByAge(stock)
   
   year_list = ['total'] + ccm.YEAR_LIST
-  age_list = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70+']
+  age_list = ['total', '0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70+']
   stock_new = {'age': age_list}
   
   ## Rearrange age group
   for key, dict_ in stock.items():
     if 'case_by_age' in key:
+      dict_['total'] = sum(dict_.values())
+      
       dict_['0-9'] = dict_.pop('0-4') + dict_.pop('5-9')
       dict_['10-19'] = dict_.pop('10-14') + dict_.pop('15-19')
       dict_['20-29'] = dict_.pop('20-24') + dict_.pop('25-29')
@@ -288,7 +290,7 @@ def saveCsv_deathByAge(county_sheet, death_sheet):
   name = '{}processed_data/{}/death_by_age_label.csv'.format(ccm.DATA_PATH, page)
   ccm.saveCsv(name, data_l)
   
-  makeReadme_deathByAge(page)
+  #makeReadme_deathByAge(page)
   return
 
 ################################################################################

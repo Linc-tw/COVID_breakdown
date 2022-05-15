@@ -67,6 +67,7 @@ function DBA_FormatData(wrap, data) {
   var col_tag_list = data.columns.slice(1);
   var col_tag = col_tag_list[wrap.col_ind];
   var nb_col = col_tag_list.length;
+  var formatted_data = [];
   var i, j, x, y, row;
   
   //-- Variables for plot
@@ -85,31 +86,30 @@ function DBA_FormatData(wrap, data) {
     y_max = 4.5;
   
   //-- Variables for legend
-  var y_sum = [0, 0]; //-- 0 (total) & year
+  var y_sum = [+data[0][col_tag_list[0]], +data[0][col_tag]]; //-- 0 (total) & year
   
   //-- Main loop over row
-  for (i=0; i<data.length; i++) {
+  for (i=1; i<data.length; i++) { //-- Starting from 1 = no total
     row = data[i];
     x = row[x_key];
     y = +row[col_tag];
+    
     x_list.push(x);
     
     //-- Determine whether to have xtick
-    if (!wrap.tag.includes('mini')) {
-      xtick.push(i);
-      xticklabel.push(i*10);
+    if (!wrap.tag.includes('mini')) { //-- No total
+      xtick.push(i-1);
+      xticklabel.push((i-1)*10);
     }
-    
-    //-- Update y_sum
-    y_sum[0] += +row[col_tag_list[0]];
-    y_sum[1] += y;
     
     //-- Update y_max
     y_max = Math.max(y_max, y);
+    
+    formatted_data.push(row);
   }
   
   //-- Last tick
-  xtick.push(i);
+  xtick.push(i-1);
   xticklabel.push('+');
   
   //-- Add dummy data
@@ -119,7 +119,7 @@ function DBA_FormatData(wrap, data) {
       block = {};
       for (j=0; j<col_tag_list.length; j++)
         block[col_tag_list[j]] = NaN;
-      data.push(block);
+      formatted_data.push(block);
     }
   }
   
@@ -141,7 +141,7 @@ function DBA_FormatData(wrap, data) {
     ytick.push(i)
   
   //-- Save to wrapper
-  wrap.formatted_data = data;
+  wrap.formatted_data = formatted_data;
   wrap.col_tag_list = col_tag_list;
   wrap.col_tag = col_tag;
   wrap.nb_col = nb_col;

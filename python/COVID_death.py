@@ -186,9 +186,11 @@ class DeathSheet(ccm.Template):
     report_date_list = self.getReportDate()
     age_list = self.getAge()
     
-    ## Initialize stock dict
-    death_hist = {age: 0 for age in self.age_key_list}
     year_list = ['total'] + ccm.YEAR_LIST
+    age_key_list = ['total'] + self.age_key_list
+    
+    ## Initialize stock dict
+    death_hist = {age: 0 for age in age_key_list}
     for col_tag in year_list:
       stock['death_by_age_'+col_tag] = death_hist.copy()
     
@@ -196,7 +198,9 @@ class DeathSheet(ccm.Template):
       col_tag = report_date[:4]
       
       stock['death_by_age_'+col_tag][age] += 1
+      stock['death_by_age_'+col_tag]['total'] += 1
       stock['death_by_age_total'][age] += 1
+      stock['death_by_age_total']['total'] += 1
     return
     
   def saveCsv(self):
