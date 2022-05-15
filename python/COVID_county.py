@@ -179,8 +179,9 @@ class CountySheet(ccm.Template):
     stock = [case_hist.copy() for i in range(13)] ## Total + 12 weeks or months
     stock_dict = ccm.initializeStockDict_general(stock)
     
-    ## Add 27 empty hist for overall (24 months + 3 all year)
-    for i in range(27): ## new_year_token (2023)
+    ## Add empty hist for overall (all year + 12 months per year)
+    nb_years = len(ccm.YEAR_LIST)
+    for i in range(13*nb_years-12):
       stock_dict[ccm.PAGE_OVERALL].append(case_hist.copy())
     
     ## Loop over series
@@ -319,8 +320,9 @@ class CountySheet(ccm.Template):
     stock = [case_hist.copy() for i in range(13)]
     stock_dict = ccm.initializeStockDict_general(stock)
     
-    ## Add 27 empty hist for overall (24 months + 3 all year)
-    for i in range(27): ## new_year_token (2023)
+    ## Add empty hist for overall (all year + 12 months per year)
+    nb_years = len(ccm.YEAR_LIST)
+    for i in range(13*nb_years-12):
       stock_dict[ccm.PAGE_OVERALL].append(case_hist.copy())
     
     ## Loop over series
@@ -399,16 +401,9 @@ class CountySheet(ccm.Template):
     
     ## Loop over page
     for page, stock in stock_dict.items():
-      if ccm.PAGE_LATEST == page:
-        label_list = ['total'] + ['week_-{:d}'.format(i+1) for i in range(12)]
-      elif ccm.PAGE_OVERALL == page:
-        label_list = ['total'] + \
-          ['2020'] + ['{}_2020'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
-          ['2021'] + ['{}_2021'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] + \
-          ['2022'] + ['{}_2022'.format(ccm.numMonthToAbbr(i+1)) for i in range(12)] ## new_year_token (2023)
-      else:
-        label_list = ['total'] + [ccm.numMonthToAbbr(i+1) for i in range(12)]
-    
+      stock_l = self.makeLabel_caseByAge(page)
+      col_tag_list = stock_l['key']
+      
       ## Data for population & label
       inv_dict = {dict_['tag']: code for code, dict_ in ccm.COUNTY_DICT.items()}
       code_list = [inv_dict[county] for county in county_key_list]
@@ -418,7 +413,7 @@ class CountySheet(ccm.Template):
       label_list_zh = [ccm.COUNTY_DICT[code]['label'][2] for code in code_list]
       
       data_c = {'county': county_key_list}
-      data_c.update({label: case_hist.values() for label, case_hist in zip(label_list, stock)})
+      data_c.update({col_tag: case_hist.values() for col_tag, case_hist in zip(col_tag_list, stock)})
       data_c = pd.DataFrame(data_c)
       
       data_p = {'key': county_key_list, 'code': code_list, 'population': population, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
@@ -631,7 +626,17 @@ class CountySheet(ccm.Template):
     self.makeReadme_incidenceEvolutionByAge(page)
     return
   
-  def updateCaseByAge(self):
+  def updateCaseByAge(self, stock):
+    stock_dict = self.increment_caseByAge()
+    stock_l = self.makeLabel_caseByAge('overall')
+    col_tag_list = list(stock_l['key'])
+    col_tag_list_2 = ['total'] + ccm.YEAR_LIST
+    
+    for i, stock2 in enumerate(stock_dict['overall']):
+      if col_tag_list[i] not in col_tag_list_2:
+        continue
+      key2 = 'case_by_age_' + col_tag_list[i]
+      stock[key2] = stock2
     return
   
   def saveCsv(self):

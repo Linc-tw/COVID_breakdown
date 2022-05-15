@@ -164,7 +164,56 @@ def makeStock_fatalityByAge(county_sheet, death_sheet):
   county_sheet.updateCaseByAge(stock)
   death_sheet.updateDeathByAge(stock)
   
+  ## Rearrange age group
+  for key, dict_ in stock.items():
+    if 'case_by_age' in key:
+      dict_['0-9'] = dict_.pop('0-4') + dict_.pop('5-9')
+      dict_['10-19'] = dict_.pop('10-14') + dict_.pop('15-19')
+      dict_['20-29'] = dict_.pop('20-24') + dict_.pop('25-29')
+      dict_['30-39'] = dict_.pop('30-34') + dict_.pop('35-39')
+      dict_['40-49'] = dict_.pop('40-44') + dict_.pop('45-49')
+      dict_['50-59'] = dict_.pop('50-54') + dict_.pop('55-59')
+      dict_['60-69'] = dict_.pop('60-64') + dict_.pop('65-69')
+    if 'death_by_age' in key:
+      dict_['70+'] = dict_.pop('70-79') + dict_.pop('80-89') + dict_.pop('90-99') + dict_.pop('100+')
+      
+  year_list = ['total'] + ccm.YEAR_LIST
+  age_list = ['0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70+']
+  stock_new = {'age': age_list}
   
+  ## Loop over year
+  for year in year_list:
+    rate_list = []
+    for age in age_list:
+      rate = stock['death_by_age_'+year][age] / stock['case_by_age_'+year][age]
+      rate_list.append('{:.2e}'.format(rate))
+    stock_new[year] = rate_list
+  
+  return stock_new
+
+def makeReadme_fatalityByAge(page):
+  key = 'fatality_by_age'
+  stock = []
+  stock.append('`{}.csv`'.format(key))
+  stock.append('- Row: age group')
+  stock.append('- Column')
+  stock.append('  - `age`')
+  stock.append('  - `total`: overall stats')
+  stock.append('  - `YYYY`: during year `YYYY`')
+  ccm.README_DICT[page][key] = stock
+  return
+  
+def saveCsv_fatalityByAge(county_sheet, death_sheet):
+  stock = makeStock_fatalityByAge(county_sheet, death_sheet)
+  data = pd.DataFrame(stock)
+  
+  page = ccm.PAGE_OVERALL
+  
+  ## Save
+  name = '{}processed_data/{}/fatality_by_age.csv'.format(ccm.DATA_PATH, page)
+  ccm.saveCsv(name, data)
+  
+  makeReadme_fatalityByAge(page)
   return
 
 ################################################################################
@@ -189,10 +238,10 @@ def sandbox():
   #timeline_sheet.saveCsv_evtTimeline()
   
   #county_sheet = COVID_county.CountySheet()
-  #county_sheet.saveCsv_caseByAge()
+  #county_sheet.saveCsv_incidenceMap()
   
-  vacc_sheet = COVID_vaccination.VaccinationSheet()
-  vacc_sheet.saveCsv_vaccinationByBrand()
+  #vacc_sheet = COVID_vaccination.VaccinationSheet()
+  #vacc_sheet.saveCsv_vaccinationByBrand()
   
   #vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
   #vc_sheet.saveCsv_vaccinationByAge()
@@ -203,10 +252,11 @@ def sandbox():
   #status_sheet = COVID_status.StatusSheet()
   #test_sheet = COVID_test.TestSheet()
   #border_sheet = COVID_border.BorderSheet()
-  #county_sheet = COVID_county.CountySheet()
-  #death_sheet = COVID_death.DeathSheet()
+  county_sheet = COVID_county.CountySheet()
+  death_sheet = COVID_death.DeathSheet()
   #saveCsv_incidenceRates(status_sheet, border_sheet)
   #saveCsv_positivityAndFatality(status_sheet, test_sheet)
+  makeStock_fatalityByAge(county_sheet, death_sheet)
   return
 
 ################################################################################
@@ -254,6 +304,7 @@ def saveCsv_all():
   print()
   saveCsv_incidenceRates(status_sheet, border_sheet)
   saveCsv_positivityAndFatality(status_sheet, test_sheet)
+  saveCsv_fatalityByAge(county_sheet, death_sheet)
   
   print()
   ccm.saveMarkdown_readme()

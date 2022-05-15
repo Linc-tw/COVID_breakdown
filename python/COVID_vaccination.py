@@ -24,18 +24,18 @@ class VaccinationSheet(ccm.Template):
   
   def __init__(self, verbose=True):
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination.csv'.format(ccm.DATA_PATH)
-    data = ccm.loadCsv(name, encoding='big5', verbose=verbose)
+    data = ccm.loadCsv(name, verbose=verbose)
     ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004
     
-    self.colTag_row_id = 'id'
-    self.colTag_country = '國家'
-    self.colTag_date = '統計日期'
-    self.colTag_brand = '疫苗廠牌'
-    self.colTag_cum_1st = '第一劑累計接種人次'
-    self.colTag_cum_2nd = '第二劑累計接種人次'
-    self.colTag_cum_3rd_1 = '追加劑累計接種人次'
-    self.colTag_cum_3rd_2 = '加強劑累計接種人次'
-    self.colTag_cum_tot = '總共累計接種人次'
+    self.coltag_row_id = 'id'
+    self.coltag_country = '國家'
+    self.coltag_date = '統計日期'
+    self.coltag_brand = '疫苗廠牌'
+    self.coltag_cum_1st = '第一劑累計接種人次'
+    self.coltag_cum_2nd = '第二劑累計接種人次'
+    self.coltag_cum_3rd_1 = '追加劑累計接種人次'
+    self.coltag_cum_3rd_2 = '加強劑累計接種人次'
+    self.coltag_cum_tot = '總共累計接種人次'
     
     self.data = data
     self.brand_list = ['AZ', 'Moderna', 'Medigen', 'Pfizer']
@@ -47,12 +47,12 @@ class VaccinationSheet(ccm.Template):
     return
   
   def getDate(self):
-    return self.getCol(self.colTag_date)
+    return self.getCol(self.coltag_date)
   
   def getBrand(self):
     brand_list = []
     
-    for brand in self.getCol(self.colTag_brand):
+    for brand in self.getCol(self.coltag_brand):
       try:
         brand_list.append(ccm.BRAND_DICT[brand])
       except KeyError:
@@ -61,16 +61,16 @@ class VaccinationSheet(ccm.Template):
     return brand_list
   
   def getCum1st(self):
-    return [int(value) for value in self.getCol(self.colTag_cum_1st)]
+    return [int(value) for value in self.getCol(self.coltag_cum_1st)]
   
   def getCum2nd(self):
-    return [int(value) for value in self.getCol(self.colTag_cum_2nd)]
+    return [int(value) for value in self.getCol(self.coltag_cum_2nd)]
   
   def getCum3rd(self):
-    return [int(value_1)+int(value_2) for value_1, value_2 in zip(self.getCol(self.colTag_cum_3rd_1), self.getCol(self.colTag_cum_3rd_2))]
+    return [int(value_1)+int(value_2) for value_1, value_2 in zip(self.getCol(self.coltag_cum_3rd_1), self.getCol(self.coltag_cum_3rd_2))]
   
   def getCumTot(self):
-    return [int(value) for value in self.getCol(self.colTag_cum_tot)]
+    return [int(value) for value in self.getCol(self.coltag_cum_tot)]
   
   def interpolate(self, stock, col_tag_list, dtype=int, cumul=True):
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)

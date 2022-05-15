@@ -23,18 +23,18 @@ class VaccinationCountySheet(ccm.Template):
   
   def __init__(self, verbose=True):
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv'.format(ccm.DATA_PATH)
-    data = ccm.loadCsv(name, encoding='big5', verbose=verbose)
+    data = ccm.loadCsv(name, verbose=verbose)
     ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006
     
-    self.colTag_row_id = 'ID'
-    self.colTag_report_date = '發佈統計日期'
-    self.colTag_county = '縣市'
-    self.colTag_age = '群組'
+    self.coltag_row_id = 'ID'
+    self.coltag_report_date = '發佈統計日期'
+    self.coltag_county = '縣市'
+    self.coltag_age = '群組'
     
-    self.colTag_1st_dose = '第1劑'
-    self.colTag_2nd_dose = '第2劑'
-    self.colTag_3rd_dose_2 = '加強劑'
-    self.colTag_3rd_dose_1 = '追加劑'
+    self.coltag_1st_dose = '第1劑'
+    self.coltag_2nd_dose = '第2劑'
+    self.coltag_3rd_dose_2 = '加強劑'
+    self.coltag_3rd_dose_1 = '追加劑'
     
     self.data = data
     self.county_key_list = [
@@ -52,12 +52,12 @@ class VaccinationCountySheet(ccm.Template):
     return
   
   def getDate(self):
-    return self.getCol(self.colTag_report_date)
+    return self.getCol(self.coltag_report_date)
   
   def getCounty(self):
     county_list = []
     
-    for county in self.getCol(self.colTag_county):
+    for county in self.getCol(self.coltag_county):
       try:
         county_list.append(ccm.COUNTY_DICT_2[county])
       except KeyError:
@@ -69,7 +69,7 @@ class VaccinationCountySheet(ccm.Template):
   def getAge(self):
     age_list = []
     
-    for age in self.getCol(self.colTag_age):
+    for age in self.getCol(self.coltag_age):
       try:
         age_list.append(ccm.AGE_DICT_3[age])
       except KeyError:
@@ -79,13 +79,13 @@ class VaccinationCountySheet(ccm.Template):
     return age_list
   
   def get1stDose(self):
-    return [float(value) for value in self.getCol(self.colTag_1st_dose)]
+    return [float(value) for value in self.getCol(self.coltag_1st_dose)]
     
   def get2ndDose(self):
-    return [float(value) for value in self.getCol(self.colTag_2nd_dose)]
+    return [float(value) for value in self.getCol(self.coltag_2nd_dose)]
     
   def get3rdDose(self):
-    return [float(value_1)+float(value_2) for value_1, value_2 in zip(self.getCol(self.colTag_3rd_dose_1), self.getCol(self.colTag_3rd_dose_2))]
+    return [float(value_1)+float(value_2) for value_1, value_2 in zip(self.getCol(self.coltag_3rd_dose_1), self.getCol(self.coltag_3rd_dose_2))]
   
   def makeStock_vaccinationByCounty(self):
     date_list = self.getDate()

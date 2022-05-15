@@ -766,43 +766,23 @@ def indexForOverall(iso):
     return np.nan
   return ind
 
-def indexFor2020(iso):
-  ord_begin_2020 = ISODateToOrd('2020-01-01')
-  ind = ISODateToOrd(iso) - ord_begin_2020
-  if ind < 0 or ind >= 366:
-    return np.nan
-  return ind
-
-def indexFor2021(iso):
-  ord_begin_2021 = ISODateToOrd('2021-01-01')
-  ind = ISODateToOrd(iso) - ord_begin_2021
-  if ind < 0 or ind >= 365:
-    return np.nan
-  return ind
-
-def indexFor2022(iso):
-  ord_begin_2022 = ISODateToOrd('2022-01-01')
-  ind = ISODateToOrd(iso) - ord_begin_2022
-  if ind < 0 or ind >= 365:
-    return np.nan
-  return ind
-
-## new_year_token
-def indexFor2023(iso):
-  ord_begin_2023 = ISODateToOrd('2023-01-01')
-  ind = ISODateToOrd(iso) - ord_begin_2023
-  if ind < 0 or ind >= 365:
+def indexForYear(iso, year):
+  correction = int(year % 4 == 0) - int(year % 100 == 0) + int(year % 400 == 0)
+  ord_begin = ISODateToOrd('{:4d}-01-01'.format(year))
+  ind = ISODateToOrd(iso) - ord_begin
+  if ind < 0 or ind >= 365+correction:
     return np.nan
   return ind
 
 def makeIndexList(iso):
   ind_latest = indexForLatest(iso)
   ind_overall = indexForOverall(iso)
-  ## new_year_token (2023)
-  ind_2020 = indexFor2020(iso)
-  ind_2021 = indexFor2021(iso)
-  ind_2022 = indexFor2022(iso)
-  return [ind_latest, ind_overall, ind_2020, ind_2021, ind_2022] ## Keep order
+  index_list = [ind_latest, ind_overall]
+  
+  for year in YEAR_LIST:
+    ind = indexForYear(iso, int(year))
+    index_list.append(ind)
+  return index_list
 
 def makeMovingAverage(value_arr):
   avg_arr = sevenDayMovingAverage(value_arr)
@@ -883,20 +863,14 @@ def initializeReadme_root():
   stock.append('All files here only contain ASCII characters unless specified.')
   stock.append('')
   
-  ## new_year_token (2023)
   stock.append('')
   stock.append('Contents')
   stock.append('--------')
   stock.append('')
-  stock.append('`2020/`')
-  stock.append('- Contains statistics of 2020')
-  stock.append('')
-  stock.append('`2021/`')
-  stock.append('- Contains statistics of 2021')
-  stock.append('')
-  stock.append('`2022/`')
-  stock.append('- Contains statistics of 2022')
-  stock.append('')
+  for year in YEAR_LIST:
+    stock.append('`{}/`'.format(year))
+    stock.append('- Contains statistics of {}'.format(year))
+    stock.append('')
   stock.append('`latest/`')
   stock.append('- Contains statistics of last 90 days')
   stock.append('')
@@ -914,6 +888,10 @@ def initializeReadme_root():
   return
 
 def initializeReadme_page(page):
+  dict_ = {PAGE_LATEST: 'last 90 days', PAGE_OVERALL: 'the entire pandemic'}
+  for year in YEAR_LIST:
+    dict_[year] = year
+  
   stock = []
   stock.append('processed_data/{}/'.format(page))
   stock.append('================' + '='*len(page) + '')
@@ -923,8 +901,6 @@ def initializeReadme_page(page):
   stock.append('Summary')
   stock.append('-------')
   stock.append('')
-  ## new_year_token (2023)
-  dict_ = {PAGE_LATEST: 'last 90 days', PAGE_OVERALL: 'the entire pandemic', PAGE_2020: PAGE_2020, PAGE_2021: PAGE_2021, PAGE_2022: PAGE_2022}
   stock.append('This folder hosts data files which summarize COVID statistics in Taiwan during {}.'.format(dict_[page]))
   stock.append('')
   

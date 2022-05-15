@@ -71,6 +71,13 @@ Contents
   - `death`
   - `death_avg`: 7-day moving average of `death`
 
+`fatality_by_age.csv`
+- Row: age group
+- Column
+  - `age`
+  - `total`: overall stats
+  - `YYYY`: during year `YYYY`
+
 `hospitalization_or_isolation.csv`
 - Row: report date
 - Column

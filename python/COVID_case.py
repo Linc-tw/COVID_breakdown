@@ -46,13 +46,9 @@ class CaseSheet(ccm.Template):
     self.coltag_conf_press_rel = '疾管署新聞稿'
     self.coltag_dis_press_rel = '出院新聞稿'
     
-    ## new_year_token
     self.n_total = 0
     self.n_latest = 0
-    self.n_2020 = 0
-    self.n_2021 = 0
-    self.n_2022 = 0
-    self.n_2023 = 0
+    self.n_year_dict = {}
     self.n_empty = 0
     
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv'.format(ccm.DATA_PATH)
@@ -65,43 +61,33 @@ class CaseSheet(ccm.Template):
     self.setCaseCounts()
     
     if verbose:
-      ## new_year_token
       print('N_total = {:d}'.format(self.n_total))
       print('N_latest = {:d}'.format(self.n_latest))
-      print('N_2020 = {:d}'.format(self.n_2020))
-      print('N_2021 = {:d}'.format(self.n_2021))
-      print('N_2022 = {:d}'.format(self.n_2022))
-      print('N_2023 = {:d}'.format(self.n_2023))
+      for year in ccm.YEAR_LIST:
+        print('N_{} = {:d}'.format(year, self.n_year_dict[year]))
       print('N_empty = {:d}'.format(self.n_empty))
     return 
     
   def setCaseCounts(self):
+    n_list = [0] * len(ccm.PAGE_LIST)
+    
     for report_date, trans in zip(self.getReportDate(), self.getCol(self.coltag_transmission)):
       if trans != trans: ## NaN
         self.n_empty += 1
         continue
       
-      self.n_total += 1
+      index_list = ccm.makeIndexList(report_date)
       
-      ## new_year_token
-      ind_latest = ccm.indexForLatest(report_date)
-      ind_2023 = ccm.indexFor2023(report_date)
-      ind_2022 = ccm.indexFor2022(report_date)
-      ind_2021 = ccm.indexFor2021(report_date)
-      ind_2020 = ccm.indexFor2020(report_date)
-      
-      ## new_year_token
-      ## If not NaN
-      if ind_latest == ind_latest:
-        self.n_latest += 1
-      if ind_2020 == ind_2020:
-        self.n_2020 += 1
-      if ind_2021 == ind_2021:
-        self.n_2021 += 1
-      if ind_2022 == ind_2022:
-        self.n_2022 += 1
-      if ind_2023 == ind_2023:
-        self.n_2023 += 1
+      for i, ind in enumerate(index_list):
+        if ind != ind: ## If NaN
+          continue
+        
+        n_list[i] += 1
+        
+    self.n_latest = n_list[0]
+    self.n_total = n_list[1]
+    for i, year in enumerate(ccm.YEAR_LIST):
+      self.n_year_dict[year] = n_list[i+2]
     return
   
   def getReportDate(self):
@@ -797,10 +783,8 @@ class CaseSheet(ccm.Template):
     stock.append('- Row')
     stock.append('  - `n_total`: total confirmed case counts')
     stock.append('  - `n_latest`: number of confirmed cases during last 90 days')
-    ## new_year_token (2023)
-    stock.append('  - `n_2020`: number of confirmed cases during 2020')
-    stock.append('  - `n_2021`: number of confirmed cases during 2021')
-    stock.append('  - `n_2022`: number of confirmed cases during 2022')
+    for year in ccm.YEAR_LIST:
+      stock.append('  - `n_{}`: number of confirmed cases during {}'.format(year, year))
     stock.append('  - `n_empty`: number of cases that have been shown later as false positive')
     stock.append('  - `timestamp`: time of last update')
     stock.append('- Column')
@@ -816,9 +800,8 @@ class CaseSheet(ccm.Template):
     
     population_twn = ccm.COUNTY_DICT['00000']['population']
     
-    ## new_year_token (2023)
-    key = ['n_overall', 'n_latest', 'n_2020', 'n_2021', 'n_2022', 'n_empty', 'timestamp', 'population_twn']
-    value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_2022, self.n_empty, timestamp, population_twn]
+    key = ['n_overall', 'n_latest'] + ['n_{}'.format(year) for year in ccm.YEAR_LIST] + ['n_empty', 'timestamp', 'population_twn']
+    value = [self.n_total, self.n_latest] + [self.n_year_dict[year] for year in ccm.YEAR_LIST] + [self.n_empty, timestamp, population_twn]
     
     ## Make data frame
     data = {'key': key, 'value': value}

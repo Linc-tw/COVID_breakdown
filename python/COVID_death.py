@@ -37,7 +37,7 @@ class DeathSheet(ccm.Template):
     self.coltag_death_date = '死亡日'
     
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_death.csv'.format(ccm.DATA_PATH)
-    data = ccm.loadCsv(name, encoding='big5', verbose=verbose)
+    data = ccm.loadCsv(name, verbose=verbose)
     #https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002
     
     self.data = data
@@ -125,7 +125,7 @@ class DeathSheet(ccm.Template):
     
     ## Initialize stock dict
     death_hist = {age: 0 for age in self.age_key_list}
-    year_list = ['total', ccm.PAGE_2020, ccm.PAGE_2021, ccm.PAGE_2022] ## new_year_token (2023)
+    year_list = ['total'] + ccm.YEAR_LIST
     stock_dict = {col_tag: death_hist.copy() for col_tag in year_list}
     
     for report_date, id_, age in zip(report_date_list, id_list, age_list):
@@ -200,9 +200,12 @@ class DeathSheet(ccm.Template):
     self.makeReadme_deathByAge(page)
     return
   
-  def updateDeathByAge(self):
-    #stock_dict = self.increment_deathByAge()
-    #for key, stock in 
+  def updateDeathByAge(self, stock):
+    stock_dict = self.increment_deathByAge()
+    
+    for key, stock2 in stock_dict.items():
+      key2 = 'death_by_age_' + key
+      stock[key2] = stock2
     return
   
   def saveCsv(self):

@@ -57,26 +57,19 @@ class StatusSheet(ccm.Template):
     self.coltag_cum_hosp = '未解除隔離數'
     self.coltag_notes = '備註'
     
-    ## new_year_token
     self.n_total = 0
     self.n_latest = 0
-    self.n_2023 = 0
-    self.n_2022 = 0
-    self.n_2021 = 0
-    self.n_2020 = 0
+    self.n_year_dict = {}
     
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_status_evolution.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
     self.setData(data)
     
     if verbose:
-      ## new_year_token
       print('N_total = {:d}'.format(self.n_total))
       print('N_latest = {:d}'.format(self.n_latest))
-      print('N_2023 = {:d}'.format(self.n_2023))
-      print('N_2022 = {:d}'.format(self.n_2022))
-      print('N_2021 = {:d}'.format(self.n_2021))
-      print('N_2020 = {:d}'.format(self.n_2020))
+      for year in ccm.YEAR_LIST:
+        print('N_{} = {:d}'.format(year, self.n_year_dict[year]))
     return 
   
   def getDate(self):
@@ -157,13 +150,10 @@ class StatusSheet(ccm.Template):
       ind = ~pd.isna(cum_cases)
       cum_cases_dict[page] = cum_cases[ind].sum()
       
-    ## new_year_token
     self.n_total = int(cum_cases_dict[ccm.PAGE_OVERALL])
     self.n_latest = int(cum_cases_dict[ccm.PAGE_LATEST])
-    self.n_2023 = 0
-    self.n_2022 = int(cum_cases_dict[ccm.PAGE_2022])
-    self.n_2021 = int(cum_cases_dict[ccm.PAGE_2021])
-    self.n_2020 = int(cum_cases_dict[ccm.PAGE_2020])
+    for year in ccm.YEAR_LIST:
+      self.n_year_dict[year] = int(cum_cases_dict[year])
     return
     
   def makeReadme_keyNb(self):
@@ -173,11 +163,8 @@ class StatusSheet(ccm.Template):
     stock.append('- Row')
     stock.append('  - `n_total`: total confirmed case counts')
     stock.append('  - `n_latest`: number of confirmed cases during last 90 days')
-    ## new_year_token (2023)
-    stock.append('  - `n_2020`: number of confirmed cases during 2020')
-    stock.append('  - `n_2021`: number of confirmed cases during 2021')
-    stock.append('  - `n_2022`: number of confirmed cases during 2022')
-    stock.append('  - `n_empty`: number of cases that have been shown later as false positive')
+    for year in ccm.YEAR_LIST:
+      stock.append('  - `n_{}`: number of confirmed cases during {}'.format(year, year))
     stock.append('  - `timestamp`: time of last update')
     stock.append('- Column')
     stock.append('  - `key`')
@@ -191,9 +178,8 @@ class StatusSheet(ccm.Template):
     
     population_twn = ccm.COUNTY_DICT['00000']['population']
     
-    ## new_year_token (2023)
-    key = ['n_overall', 'n_latest', 'n_2020', 'n_2021', 'n_2022', 'timestamp', 'population_twn']
-    value = [self.n_total, self.n_latest, self.n_2020, self.n_2021, self.n_2022, timestamp, population_twn]
+    key = ['n_overall', 'n_latest'] + ['n_{}'.format(year) for year in self.n_year_dict.keys()] + ['timestamp', 'population_twn']
+    value = [self.n_total, self.n_latest] + list(self.n_year_dict.values()) + [timestamp, population_twn]
     
     ## Make data frame
     data = {'key': key, 'value': value}
