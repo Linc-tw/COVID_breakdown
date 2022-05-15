@@ -235,7 +235,7 @@ def makeLabel_deathByAge(page):
   return stock
   
 def makeReadme_deathByAge(page):
-  key = 'fatality_by_age'
+  key = 'death_by_age_count'
   stock = []
   stock.append('`{}.csv`'.format(key))
   stock.append('- Row: age group')
@@ -243,6 +243,27 @@ def makeReadme_deathByAge(page):
   stock.append('  - `age`')
   stock.append('  - `total`: overall stats')
   stock.append('  - `YYYY`: during year `YYYY`')
+  ccm.README_DICT[page][key] = stock
+    
+  key = 'death_by_age_rate'
+  stock = []
+  stock.append('`{}.csv`'.format(key))
+  stock.append('- Row: age group')
+  stock.append('- Column')
+  stock.append('  - `age`')
+  stock.append('  - `total`: overall stats')
+  stock.append('  - `YYYY`: during year `YYYY`')
+  ccm.README_DICT[page][key] = stock
+  
+  key = 'death_by_age_label'
+  stock = []
+  stock.append('`{}.csv`'.format(key))
+  stock.append('- Row: time range')
+  stock.append('- Column')
+  stock.append('  - `key`')
+  stock.append('  - `label`: label in English')
+  stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
+  stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
   ccm.README_DICT[page][key] = stock
   return
   
@@ -267,7 +288,7 @@ def saveCsv_deathByAge(county_sheet, death_sheet):
   name = '{}processed_data/{}/death_by_age_label.csv'.format(ccm.DATA_PATH, page)
   ccm.saveCsv(name, data_l)
   
-  #makeReadme_deathByAge(page)
+  makeReadme_deathByAge(page)
   return
 
 ################################################################################

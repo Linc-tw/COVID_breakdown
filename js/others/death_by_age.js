@@ -360,7 +360,7 @@ function DBA_ButtonListener(wrap) {
     if (wrap.col_ind == 0)
       tag2 = 'total';
     else
-      tag2 = '' + (wrap.year + 2019);
+      tag2 = '' + (wrap.col_ind + 2019);
     
     name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + LS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
