@@ -214,9 +214,6 @@ class CountySheet(ccm.Template):
     return stock_dict
   
   def makeLabel_caseByAge(self, page):
-    month_name_en = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    month_name_fr = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'] 
-    
     key_list = ['total']
     label_list_en = ['Total']
     label_list_fr = ['Totaux']
@@ -240,16 +237,16 @@ class CountySheet(ccm.Template):
         for i in range(12):
           str_ = '{:d}-{:d}'.format(7*i, 7*i+6)
           key_list.append('{}_{}'.format(ccm.numMonthToAbbr(i+1), year))
-          label_list_en.append('{} {}'.format(month_name_en[i], year))
-          label_list_fr.append('{} {}'.format(month_name_fr[i], year))
+          label_list_en.append('{} {}'.format(ccm.MONTH_NAME_EN[i], year))
+          label_list_fr.append('{} {}'.format(ccm.MONTH_NAME_FR[i], year))
           label_list_zh.append('{}年{:d}月'.format(year, i+1))
         
     elif page in ccm.YEAR_LIST:
       for i in range(12):
         str_ = '{:d}-{:d}'.format(7*i, 7*i+6)
         key_list.append('{}'.format(ccm.numMonthToAbbr(i+1)))
-        label_list_en.append('{}'.format(month_name_en[i]))
-        label_list_fr.append('{}'.format(month_name_fr[i]))
+        label_list_en.append('{}'.format(ccm.MONTH_NAME_EN[i]))
+        label_list_fr.append('{}'.format(ccm.MONTH_NAME_FR[i]))
         label_list_zh.append('{:d}月'.format(i+1))
         
     stock = {'key': key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}

@@ -2,7 +2,7 @@
   <!--------------------------------
     --  overall_others.html       --
     --  Chieh-An Lin              --
-    --  2022.05.13                --
+    --  2022.05.15                --
     -------------------------------->
 
 <!DOCTYPE html>
@@ -267,6 +267,17 @@
                                     
                                     <div class="card-img">
                                         <div class="btn-pos">
+                                            <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons"> 
+                                                <label class="btn btn-covid active" id="death_by_age_overall_rate_0">
+                                                    <input type="radio" class="btn-check" name="death_by_age_overall_rate" value=0 checked>
+                                                    <span id="death_by_age_button_count"></span>
+                                                </label>
+                                                <label class="btn btn-covid" id="death_by_age_overall_rate_1">
+                                                    <input type="radio" class="btn-check" name="death_by_age_overall_rate" value=1>
+                                                    <span id="death_by_age_button_rate"></span>
+                                                </label>
+                                            </div>
+                                            
                                             <select id="death_by_age_overall_year" class="form-select form-select-sm me-2" aria-label="death_by_age_overall_year">
                                                 <option value="0" id="death_by_age_button_total" selected></option>
                                                 <option value="1" id="death_by_age_button_2020"></option>
@@ -291,6 +302,40 @@
                                     <div class="card-body" id="death_by_age_overall"></div>
                                 </div>
                             </div>
+                            
+                            <!-- fatality_by_age -->
+<!--                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-book-dead me-1"></i> <span id="fatality_by_age_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <select id="fatality_by_age_overall_year" class="form-select form-select-sm me-2" aria-label="fatality_by_age_overall_year">
+                                                <option value="0" id="fatality_by_age_button_total" selected></option>
+                                                <option value="1" id="fatality_by_age_button_2020"></option>
+                                                <option value="2" id="fatality_by_age_button_2021"></option>
+                                                <option value="3" id="fatality_by_age_button_2022"></option>
+                                            </select>
+                                            
+                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#fatality_by_age_collapse" aria-expanded="false" aria-controls="fatality_by_age_collapse">
+                                                <i class="far fa-comment-alt"></i>
+                                            </button>
+                                            
+                                            <button id='fatality_by_age_overall_save' class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="collapse" id="fatality_by_age_collapse">
+                                        <div class="card-body">
+                                            <span id="fatality_by_age_description">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="fatality_by_age_overall"></div>
+                                </div>
+                            </div>-->
                             
                             <!-- border_statistics -->
                             <div class="col-xl-6">
@@ -412,8 +457,10 @@
         <script src="../js/others/positivity_and_fatality_param.js"></script>
         <script src="../js/status_sheet/death_counts.js"></script>        
         <script src="../js/status_sheet/death_counts_param.js"></script>
-        <script src="../js/death_sheet/death_by_age.js"></script>        
-        <script src="../js/death_sheet/death_by_age_param.js"></script>
+        <script src="../js/others/death_by_age.js"></script>        
+        <script src="../js/others/death_by_age_param.js"></script>
+<!--        <script src="../js/death_sheet/fatality_by_age.js"></script>        
+        <script src="../js/death_sheet/fatality_by_age_param.js"></script>-->
         <script src="../js/border_sheet/border_statistics.js"></script>
         <script src="../js/border_sheet/border_statistics_param.js"></script>
 <!--        <script src="../js/others/infectiodynamics.js"></script>

@@ -36,6 +36,9 @@ PAGE_2023 = '2023'
 YEAR_LIST = [PAGE_2020, PAGE_2021, PAGE_2022] ## Keep order
 PAGE_LIST = [PAGE_LATEST, PAGE_OVERALL] + YEAR_LIST
 
+MONTH_NAME_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+MONTH_NAME_FR = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'] 
+
 SYMPTOM_DICT = {
   'sneezing': {'zh-tw': '鼻腔症狀', 'fr': 'éternuement'},
   'cough': {'zh-tw': '咳嗽', 'fr': 'toux'},

@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_by_age.js           --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.14                --//
+    //--  2022.05.15                --//
     //--------------------------------//
 
 function DBA_InitFig(wrap) {
@@ -16,6 +16,8 @@ function DBA_InitFig(wrap) {
 function DBA_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('death_by_age_title', '死亡個案年齡分布');
+    LS_AddStr('death_by_age_button_count', '死亡數');
+    LS_AddStr('death_by_age_button_rate', '致死率');
     LS_AddStr('death_by_age_button_total', '合計');
     LS_AddStr('death_by_age_button_2020', '2020');
     LS_AddStr('death_by_age_button_2021', '2021');
@@ -29,6 +31,8 @@ function DBA_ResetText() {
   
   else if (LS_lang == 'fr') {
     LS_AddStr('death_by_age_title', 'Décès par âge');
+    LS_AddStr('death_by_age_button_count', 'Nombre');
+    LS_AddStr('death_by_age_button_rate', 'Taux');
     LS_AddStr('death_by_age_button_total', 'Totaux');
     LS_AddStr('death_by_age_button_2020', '2020');
     LS_AddStr('death_by_age_button_2021', '2021');
@@ -43,6 +47,8 @@ function DBA_ResetText() {
   
   else { //-- En
     LS_AddStr('death_by_age_title', 'Deaths by Age');
+    LS_AddStr('death_by_age_button_count', 'Counts');
+    LS_AddStr('death_by_age_button_rate', 'Rate');
     LS_AddStr('death_by_age_button_total', 'Total');
     LS_AddStr('death_by_age_button_2020', '2020');
     LS_AddStr('death_by_age_button_2021', '2021');
@@ -72,7 +78,11 @@ function DBA_FormatData(wrap, data) {
   var xticklabel = [];
   
   //-- Variables for yaxis
-  var y_max = 4.5;
+  var y_max;
+  if (wrap.rate > 0)
+    y_max = 0.005;
+  else
+    y_max = 4.5;
   
   //-- Variables for legend
   var y_sum = [0, 0]; //-- 0 (total) & year
@@ -102,13 +112,28 @@ function DBA_FormatData(wrap, data) {
   xtick.push(i);
   xticklabel.push('+');
   
+  //-- Add dummy data
+  var block;
+  if (wrap.rate > 0) {
+    for (i=0; i<3; i++) {
+      block = {};
+      for (j=0; j<col_tag_list.length; j++)
+        block[col_tag_list[j]] = NaN;
+      data.push(block);
+    }
+  }
+  
   //-- Calculate y_max
   y_max *= wrap.y_max_factor;
   
   //-- Calculate y_path
   if (wrap.tag.includes('mini'))
     wrap.nb_yticks = 1;
-  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks, 'count');
+  var y_path;
+  if (wrap.rate > 0)
+    y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks, 'percentage');
+  else
+    y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks, 'count');
   
   //-- Generate yticks
   var ytick = [];
@@ -160,9 +185,14 @@ function DBA_MouseMove(wrap, d) {
   else
     age_label = ' years old';
   
-  //-- Generate tooltip text
+  //-- Define tooltip text
+  var fct_format;
+  if (wrap.rate > 0)
+    fct_format = d3.format('.2%');
+  else
+    fct_format = GP_ValueStr_Tooltip;
   var tooltip_text = wrap.ylabel_dict[LS_lang][wrap.col_tag];
-  tooltip_text += '<br>' + d['age'] + age_label + ' = ' + GP_ValueStr_Tooltip(+d[wrap.col_tag]);
+  tooltip_text += '<br>' + d['age'] + age_label + ' = ' + fct_format(+d[wrap.col_tag]);
   
   //-- Generate tooltip
   wrap.tooltip
@@ -198,8 +228,19 @@ function DBA_Plot(wrap) {
 }
 
 function DBA_Replot(wrap) {
+  //-- Define scales
+  var xscale = GP_MakeBandXForBar(wrap);
+  var yscale = GP_MakeLinearY(wrap);
+  
   //-- Update bar
-  GP_ReplotSingleBar(wrap);
+  wrap.bar.selectAll('.content.bar')
+    .data(wrap.formatted_data)
+    .transition()
+    .duration(wrap.trans_delay)
+      .attr('x', function (d) {if (isNaN(d[wrap.col_tag])) return wrap.width; return xscale(d[wrap.x_key]);})
+      .attr('y', function (d) {if (isNaN(d[wrap.col_tag])) return yscale(0); return yscale(d[wrap.col_tag]);})
+      .attr('width', xscale.bandwidth())
+      .attr('height', function (d) {if (isNaN(d[wrap.col_tag])) return 0; return yscale(0)-yscale(d[wrap.col_tag]);});
   
   //-- Frameline for mini
   if (wrap.tag.includes('mini')) {
@@ -211,14 +252,22 @@ function DBA_Replot(wrap) {
   GP_ReplotBandX(wrap);
   
   //-- Replot yaxis
-  GP_ReplotCountAsY(wrap, 'count');
+  var format;
+  if (wrap.rate > 0)
+    format = 'percentage';
+  else
+    format = 'count';
+  GP_ReplotCountAsY(wrap, format);
   
   //-- Replot xlabel
   var xlabel_dict = {en: 'Age', fr: 'Âge', 'zh-tw': '年齡'};
   GP_ReplotXLabel(wrap, xlabel_dict);
   
   //-- Replot ylabel
-  GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_death);
+  if (wrap.rate > 0)
+    GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_rate);
+  else
+    GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_death);
   
   //-- Set legend parameters
   GP_SetLegendParam(wrap, 'normal');
@@ -233,27 +282,33 @@ function DBA_Replot(wrap) {
   wrap.legend_value = [wrap.legend_value_raw[1], wrap.legend_value_raw[0]];
   
   //-- Define legend label
-  wrap.legend_label = [wrap.ylabel_dict[LS_lang][wrap.col_tag], wrap.ylabel_dict[LS_lang]['total']];
+  wrap.legend_label = [wrap.ylabel_dict[LS_lang][wrap.col_tag], LS_GetLegendTitle_Page(wrap)];
   
   //-- Remove redundancy from legend if col_ind = 0
   if (wrap.col_ind == 0) {
     wrap.legend_color = wrap.legend_color.slice(0, 1);
     wrap.legend_value = wrap.legend_value.slice(0, 1);
-    wrap.legend_label = wrap.legend_label.slice(0, 1);
+    wrap.legend_label = wrap.legend_label.slice(1, 2);
   }
   
-  //-- Update legend title
-  GP_UpdateLegendTitle_Standard(wrap);
+  var legend_title;
+  if (wrap.rate > 0)
+    legend_title = {en: 'Case fatality rate', fr: 'Létalité', 'zh-tw': '致死率'}; //-- No time info for title here
+  else
+    legend_title = {en: 'Deaths', fr: 'Décès', 'zh-tw': '死亡數'}; //-- No time info for title here
   
+  //-- Update legend title
+  GP_UpdateLegendTitle(wrap, legend_title[LS_lang]);
+
   //-- Replot legend
-  GP_ReplotLegend(wrap, 'count', wrap.legend_size);
+  GP_ReplotLegend(wrap, format, wrap.legend_size);
 }
 
 //-- Load
 function DBA_Load(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[0])
-    .defer(d3.csv, wrap.data_path_list[1])
+    .defer(d3.csv, wrap.data_path_list[wrap.rate])
+    .defer(d3.csv, wrap.data_path_list[2])
     .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
@@ -267,8 +322,8 @@ function DBA_Load(wrap) {
 
 function DBA_Reload(wrap) {
   d3.queue()
-    .defer(d3.csv, wrap.data_path_list[0])
-    .defer(d3.csv, wrap.data_path_list[1])
+    .defer(d3.csv, wrap.data_path_list[wrap.rate])
+    .defer(d3.csv, wrap.data_path_list[2])
     .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
@@ -280,6 +335,13 @@ function DBA_Reload(wrap) {
 }
 
 function DBA_ButtonListener(wrap) {
+  //-- Count or rate
+  $(document).on('change', "input:radio[name='" + wrap.tag + "_rate']", function (event) {
+    GP_PressRadioButton(wrap, 'rate', wrap.rate, this.value);
+    wrap.rate = this.value;
+    DBA_Reload(wrap);
+  });
+  
   //-- Period
   d3.select(wrap.id +'_year').on('change', function() {
     wrap.col_ind = +this.value;
@@ -288,14 +350,19 @@ function DBA_ButtonListener(wrap) {
   
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
-    var tag1;
+    var tag1, tag2;
+    
+    if (wrap.rate == 0)
+      tag1 = 'count';
+    else
+      tag1 = 'rate';
     
     if (wrap.col_ind == 0)
-      tag1 = 'total';
+      tag2 = 'total';
     else
-      tag1 = '' + (wrap.year + 2019);
+      tag2 = '' + (wrap.year + 2019);
     
-    name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png';
+    name = wrap.tag + '_' + tag1 + '_' + tag2 + '_' + LS_lang + '.png';
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
   
@@ -315,6 +382,8 @@ function DBA_Main(wrap) {
   wrap.id = '#' + wrap.tag;
   
   //-- Swap active to current value
+  wrap.rate = document.querySelector("input[name='" + wrap.tag + "_rate']:checked").value;
+  GP_PressRadioButton(wrap, 'rate', 0, wrap.rate); //-- 0 from .html
   wrap.col_ind = document.getElementById(wrap.tag + '_year').value;
   
   //-- Load

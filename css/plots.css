@@ -249,6 +249,14 @@ body,
   margin-bottom: -45px;
 }
 
+#fatality_by_age_latest .tooltip, 
+#fatality_by_age_overall .tooltip {
+  margin-left: -75px;
+  margin-right: -75px;
+  margin-top: -45px;
+  margin-bottom: -45px;
+}
+
 #border_statistics_latest .tooltip, 
 #border_statistics_overall .tooltip {
   margin-left: -75px;

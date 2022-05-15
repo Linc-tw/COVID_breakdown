@@ -2,13 +2,14 @@
     //--------------------------------//
     //--  death_by_age_param.js     --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.14                --//
+    //--  2022.05.15                --//
     //--------------------------------//
 
 var DBA_overall_wrap = {
   tag: 'death_by_age_overall',
   data_path_list: [
-    '../processed_data/overall/death_by_age.csv',
+    '../processed_data/overall/death_by_age_count.csv',
+    '../processed_data/overall/death_by_age_rate.csv',
     '../processed_data/overall/death_by_age_label.csv',
   ],
 

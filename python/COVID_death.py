@@ -2,7 +2,7 @@
     ################################
     ##  COVID_death.py            ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.14                ##
+    ##  2022.05.15                ##
     ################################
 
 import os
@@ -21,7 +21,7 @@ import COVID_common as ccm
 class DeathSheet(ccm.Template):
   
   def __init__(self, verbose=True):
-    self.coltag_row_id = 'ID'
+    self.coltag_row_id = 'id'
     self.coltag_report_date = '公布日'
     self.coltag_id = '案號'
     self.coltag_gender = '性別'
@@ -41,6 +41,7 @@ class DeathSheet(ccm.Template):
     #https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002
     
     self.data = data
+    self.correctData()
     self.n_total = self.data.shape[0]
     self.age_key_list = [
       '0-9', '10-19', '20-29', '30-39', '40-49', '50-59', 
@@ -51,8 +52,27 @@ class DeathSheet(ccm.Template):
       print('N_total = {:d}'.format(self.n_total))
     return 
     
+  def correctData(self):
+    report_date_list = self.getReportDate()
+    id_list = self.getID()
+    for i, id_ in enumerate(id_list):
+      if id_ != id_:
+        continue
+      
+      if id_ in [799, 935] or id_ < 300:
+        self.data.loc[i, self.coltag_onset_date] = '2020' + self.data.loc[i, self.coltag_onset_date][4:]
+        self.data.loc[i, self.coltag_confirmed_date] = '2020' + self.data.loc[i, self.coltag_confirmed_date][4:]
+      
+      if id_ < 300:
+        self.data.loc[i, self.coltag_report_date] = '2020' + self.data.loc[i, self.coltag_report_date][4:]
+        self.data.loc[i, self.coltag_death_date] = '2020' + self.data.loc[i, self.coltag_death_date][4:]
+    return
+    
   def getReportDate(self):
     return self.getCol(self.coltag_report_date)
+  
+  def getRowID(self):
+    return self.getCol(self.coltag_row_id)
   
   def getID(self):
     id_list = []
@@ -69,6 +89,26 @@ class DeathSheet(ccm.Template):
       ind = int(age) // 10
       age_list.append(self.age_key_list[ind])
     return age_list
+  
+  def getConfirmedDate(self):
+    confirmed_date_list = []
+    
+    for confirmed_date in self.getCol(self.coltag_confirmed_date):
+      if confirmed_date != confirmed_date:
+        pass
+      elif confirmed_date == 'Dec-21':
+        confirmed_date = '2021-12-21'
+      elif confirmed_date == '5/2o':
+        confirmed_date = '2021-05-20'
+      else:
+        confirmed_date = [int(value) for value in confirmed_date.split('/')]
+        confirmed_date = '{:04d}-{:02d}-{:02d}'.format(*confirmed_date)
+      confirmed_date_list.append(confirmed_date)
+      
+    return confirmed_date_list
+  
+  def getDeathDate(self):
+    return self.getCol(self.coltag_death_date)
   
   def increment_deathCounts(self):
     report_date_list = self.getReportDate()
@@ -103,6 +143,7 @@ class DeathSheet(ccm.Template):
     ccm.README_DICT[page][key] = stock
     return
   
+  ## Not used
   def saveCsv_deathCounts(self):
     stock = self.increment_deathCounts()
     stock = pd.DataFrame(stock)
@@ -118,98 +159,48 @@ class DeathSheet(ccm.Template):
       self.makeReadme_deathCounts(page)
     return
   
-  def increment_deathByAge(self):
+  def makeStock_deathDelay(self):
+    row_id_list = self.getRowID()
+    confirmed_date_list = self.getConfirmedDate()
+    death_date_list = self.getDeathDate()
+    
+    day_diff_list = []
+    for row_id, confirmed_date, death_date in zip(row_id_list, confirmed_date_list, death_date_list):
+      if confirmed_date == confirmed_date and death_date == death_date:
+        day_diff = ccm.ISODateToOrd(death_date) - ccm.ISODateToOrd(confirmed_date)
+        if abs(day_diff) > 90:
+          continue
+        day_diff_list.append(day_diff)
+          #print(row_id, day_diff)
+        
+    hist = clt.Counter(day_diff_list)
+    hist = sorted(hist.items())
+    
+    print(np.mean(day_diff_list))
+    #print(hist)
+    #for key, value in hist:
+      #print(key, value)
+    return
+  
+  def updateDeathByAge(self, stock):
     report_date_list = self.getReportDate()
-    id_list = self.getID()
     age_list = self.getAge()
     
     ## Initialize stock dict
     death_hist = {age: 0 for age in self.age_key_list}
     year_list = ['total'] + ccm.YEAR_LIST
-    stock_dict = {col_tag: death_hist.copy() for col_tag in year_list}
+    for col_tag in year_list:
+      stock['death_by_age_'+col_tag] = death_hist.copy()
     
-    for report_date, id_, age in zip(report_date_list, id_list, age_list):
-      if id_ < 300:
-        col_tag = '2020'
-      else:
-        col_tag = report_date[:4]
-        
-      stock_dict[col_tag][age] += 1
-      stock_dict['total'][age] += 1
-    
-    return stock_dict
-    
-  def makeLabel_deathByAge(self, page):
-    month_name_en = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    month_name_fr = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'] 
-    
-    key_list = ['total']
-    label_list_en = ['Total']
-    label_list_fr = ['Totaux']
-    label_list_zh = ['合計']
-    
-    if page == ccm.PAGE_OVERALL:
-      for year in ccm.YEAR_LIST:
-        key_list.append(year)
-        label_list_en.append('{} all year'.format(year))
-        label_list_fr.append('Année {}'.format(year))
-        label_list_zh.append('{}全年'.format(year))
-        
-    stock = {'key': key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
-    return stock
-  
-  def makeReadme_deathByAge(self, page):
-    key = 'death_by_age'
-    stock = []
-    stock.append('`{}.csv`'.format(key))
-    stock.append('- Row: age group')
-    stock.append('- Column')
-    stock.append('  - `death`')
-    ccm.README_DICT[page][key] = stock
-    
-    key = 'death_by_age_label'
-    stock = []
-    stock.append('`{}.csv`'.format(key))
-    stock.append('- Row: time range')
-    stock.append('- Column')
-    stock.append('  - `key`')
-    stock.append('  - `label`: label in English')
-    stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
-    stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
-    ccm.README_DICT[page][key] = stock
+    for report_date, age in zip(report_date_list, age_list):
+      col_tag = report_date[:4]
+      
+      stock['death_by_age_'+col_tag][age] += 1
+      stock['death_by_age_total'][age] += 1
     return
-  
-  def saveCsv_deathByAge(self):
-    stock_dict = self.increment_deathByAge()
     
-    data_c = {'age': self.age_key_list}
-    data_c.update({col_tag: death_hist.values() for col_tag, death_hist in stock_dict.items()})
-    data_c = pd.DataFrame(data_c)
-    
-    page = ccm.PAGE_OVERALL
-    
-    stock_l = self.makeLabel_deathByAge(page)
-    data_l = pd.DataFrame(stock_l)
-    
-    name = '{}processed_data/{}/death_by_age.csv'.format(ccm.DATA_PATH, page)
-    ccm.saveCsv(name, data_c)
-    
-    name = '{}processed_data/{}/death_by_age_label.csv'.format(ccm.DATA_PATH, page)
-    ccm.saveCsv(name, data_l)
-    
-    self.makeReadme_deathByAge(page)
-    return
-  
-  def updateDeathByAge(self, stock):
-    stock_dict = self.increment_deathByAge()
-    
-    for key, stock2 in stock_dict.items():
-      key2 = 'death_by_age_' + key
-      stock[key2] = stock2
-    return
-  
   def saveCsv(self):
-    self.saveCsv_deathByAge()
+    #self.saveCsv_deathByAge()
     return
 
 ## End of file

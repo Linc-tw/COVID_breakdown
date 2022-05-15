@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_by_age.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.14                --//
+    //--  2022.05.15                --//
     //--------------------------------//
 
 function CBA_InitFig(wrap) {
@@ -236,7 +236,7 @@ function CBA_MouseMove(wrap, d) {
   else
     age_label = ' years old';
   
-  //-- Generate tooltip text
+  //-- Define tooltip text
   var tooltip_text = wrap.ylabel_dict[LS_lang][wrap.col_tag];
   tooltip_text += '<br>' + d['age'] + age_label + ' = ' + GP_ValueStr_Tooltip(+d[wrap.col_tag]);
   
@@ -297,7 +297,7 @@ function CBA_Replot(wrap) {
   GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_case);
   
   //-- Set legend parameters
-  GP_SetLegendParam(wrap, 'normal');
+  GP_SetLegendParam(wrap, 'small');
   
   //-- Define legend position
   wrap.legend_pos = {x: wrap.legend_pos_x, y: wrap.legend_pos_y, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy};
@@ -309,17 +309,18 @@ function CBA_Replot(wrap) {
   wrap.legend_value = [wrap.legend_value_raw[1], wrap.legend_value_raw[0]];
   
   //-- Define legend label
-  wrap.legend_label = [wrap.ylabel_dict[LS_lang][wrap.col_tag], wrap.ylabel_dict[LS_lang]['total']];
+  wrap.legend_label = [wrap.ylabel_dict[LS_lang][wrap.col_tag], LS_GetLegendTitle_Page(wrap)];
   
   //-- Remove redundancy from legend if col_ind = 0
   if (wrap.col_ind == 0) {
     wrap.legend_color = wrap.legend_color.slice(0, 1);
     wrap.legend_value = wrap.legend_value.slice(0, 1);
-    wrap.legend_label = wrap.legend_label.slice(0, 1);
+    wrap.legend_label = wrap.legend_label.slice(1, 2);
   }
   
   //-- Update legend title
-  GP_UpdateLegendTitle_Standard(wrap);
+  var legend_title = {en: 'Confirmed cases', fr: 'Cas confirmés', 'zh-tw': '確診個案'}; //-- No time info for title here
+  GP_UpdateLegendTitle(wrap, legend_title[LS_lang]);
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'count', wrap.legend_size);

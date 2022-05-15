@@ -8,6 +8,12 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
+//add new plot: makeStock_deathDelay
+//add new line delay fatality
+//new page: death
+//front page: 6 panels
+//split positivity & fatality
+
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable
 

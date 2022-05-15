@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_counts_param.js     --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.08                --//
+    //--  2022.05.15                --//
     //--------------------------------//
 
 var DC_latest_wrap = {
@@ -14,7 +14,7 @@ var DC_latest_wrap = {
 
   y_max_factor: 1.55, 
   nb_yticks: 4,
-  legend_pos_x: 75,
+  legend_pos_x: 85,
 };
 
 var DC_overall_wrap = {
@@ -26,5 +26,5 @@ var DC_overall_wrap = {
 
   y_max_factor: 1.1, 
   nb_yticks: 4,
-  legend_pos_x: 75,
+  legend_pos_x: 85,
 };

@@ -36,28 +36,28 @@ function LS_ISODateToMDDate(iso_date) {
 function LS_GetLegendTitle_Page(wrap) {
   var str_latest;
   var str_overall;
-  var str_2021;
   var str_2020;
+  var str_2021;
   
   if (LS_lang == 'zh-tw') {
     str_latest = '近90日統計';
     str_overall = '整體統計';
-    str_2021 = '2021統計';
     str_2020 = '2020統計';
+    str_2021 = '2021統計';
   }
   
   else if (LS_lang == 'fr') {
     str_latest = '90 derniers jours';
     str_overall = 'Stat complète';
-    str_2021 = 'Stat 2021';
     str_2020 = 'Stat 2020';
+    str_2021 = 'Stat 2021';
   }
   
   else { //-- En
     str_latest = 'Last 90 days';
     str_overall = 'Overall stats';
-    str_2021 = 'Stats 2021';
     str_2020 = 'Stats 2020';
+    str_2021 = 'Stats 2021';
   }
   
   if (wrap.tag.includes('latest'))
@@ -66,11 +66,11 @@ function LS_GetLegendTitle_Page(wrap) {
   if (wrap.tag.includes('overall'))
     return str_overall;
   
-  if (wrap.tag.includes('2021'))
-    return str_2021;
-  
   if (wrap.tag.includes('2020'))
     return str_2020;
+  
+  if (wrap.tag.includes('2021'))
+    return str_2021;
   
   return '';
 }

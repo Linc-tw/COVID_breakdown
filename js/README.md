@@ -28,11 +28,11 @@ Structure by folders
   - `local_case_per_county.js`
   
 `death_sheet/`
-  - `death_by_age.js`
   
 `others/`
   - `incidence_rates.js`
   - `positivity_and_fatality.js`
+  - `death_by_age.js`
   - `stats_in_mirror.js`
 
 `status_sheet/`
