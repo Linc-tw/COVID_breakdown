@@ -1,25 +1,25 @@
 key,value_1,value_2,value_3,label,label_fr,label_zh
-latest_date,2022-05-09,,,,,
-total,85.4,80.5,62.7,Nationalwide,National,全國
-Matsu,88.9,86.7,74.3,Matsu,Matsu,馬祖
-Keelung,87.2,82.4,66.3,Keelung,Keelung,基隆
-Changhua,87.1,82.0,63.9,Changhua,Changhua,彰化
-Chiayi,86.9,80.6,62.1,Chiayi County,Comté de Chiayi,嘉縣
-Kinmen,86.6,83.1,66.8,Kinmen,Kinmen,金門
-Taoyuan,86.5,81.9,62.6,Taoyuan,Taoyuan,桃園
-Penghu,86.4,81.9,67.1,Penghu,Penghu,澎湖
-Nantou,86.2,80.7,61.9,Nantou,Nantou,南投
-Yunlin,86.2,80.3,60.4,Yunlin,Yunlin,雲林
-Yilan,86.0,81.3,64.0,Yilan,Yilan,宜蘭
-Kaohsiung,85.7,80.7,62.9,Kaohsiung,Kaohsiung,高雄
-Miaoli,85.5,80.0,60.8,Miaoli,Miaoli,苗栗
-Pingtung,85.4,78.8,60.7,Pingtung,Pingtung,屏東
-New_Taipei,85.3,81.0,63.9,New Taipei,Nouveau Taipei,新北
-Taichung,85.1,80.5,64.1,Taichung,Taichung,台中
-Hsinchu,85.1,80.2,59.7,Hsinchu County,Comté de Hsinchu,竹縣
-Tainan,85.0,79.5,60.8,Tainan,Tainan,台南
-Chiayi_C,84.2,79.3,61.5,Chiayi City,Ville de Chiayi,嘉市
-Hsinchu_C,84.1,79.6,60.7,Hsinchu City,Ville de Hsinchu,竹市
-Taipei,83.8,80.0,63.6,Taipei,Taipei,台北
-Hualien,83.0,76.2,57.7,Hualien,Hualien,花蓮
-Taitung,80.5,73.7,53.5,Taitung,Taitung,台東
+latest_date,2022-05-16,,,,,
+total,86.2,81.1,64.1,Nationalwide,National,全國
+Matsu,89.7,86.7,74.9,Matsu,Matsu,馬祖
+Changhua,88.1,82.5,65.1,Changhua,Changhua,彰化
+Chiayi,88.0,81.2,63.6,Chiayi County,Comté de Chiayi,嘉縣
+Keelung,87.6,82.8,67.2,Keelung,Keelung,基隆
+Penghu,87.2,82.2,68.1,Penghu,Penghu,澎湖
+Kinmen,87.2,83.4,68.0,Kinmen,Kinmen,金門
+Yunlin,87.2,80.9,62.2,Yunlin,Yunlin,雲林
+Nantou,87.1,81.2,63.0,Nantou,Nantou,南投
+Taoyuan,87.1,82.4,64.6,Taoyuan,Taoyuan,桃園
+Pingtung,86.9,79.4,61.9,Pingtung,Pingtung,屏東
+Yilan,86.8,81.7,65.4,Yilan,Yilan,宜蘭
+Kaohsiung,86.7,81.3,64.4,Kaohsiung,Kaohsiung,高雄
+Miaoli,86.3,80.5,62.1,Miaoli,Miaoli,苗栗
+Tainan,86.1,80.2,62.8,Tainan,Tainan,台南
+Taichung,86.0,81.0,65.5,Taichung,Taichung,台中
+New_Taipei,86.0,81.5,65.1,New Taipei,Nouveau Taipei,新北
+Hsinchu,85.8,80.6,60.9,Hsinchu County,Comté de Hsinchu,竹縣
+Hsinchu_C,85.3,80.1,62.1,Hsinchu City,Ville de Hsinchu,竹市
+Chiayi_C,85.2,79.8,62.9,Chiayi City,Ville de Chiayi,嘉市
+Taipei,84.5,80.6,64.8,Taipei,Taipei,台北
+Hualien,83.8,76.8,58.9,Hualien,Hualien,花蓮
+Taitung,81.1,74.2,54.8,Taitung,Taitung,台東

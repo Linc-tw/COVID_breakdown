@@ -2,7 +2,7 @@
     ###################################
     ##  COVID_vaccination_county.py  ##
     ##  Chieh-An Lin                 ##
-    ##  2022.05.15                   ##
+    ##  2022.05.16                   ##
     ###################################
 
 import os
@@ -84,8 +84,11 @@ class VaccinationCountySheet(ccm.Template):
   def get2ndDose(self):
     return [float(value) for value in self.getCol(self.coltag_2nd_dose)]
     
-  def get3rdDose(self):
-    return [float(value_1)+float(value_2) for value_1, value_2 in zip(self.getCol(self.coltag_3rd_dose_1), self.getCol(self.coltag_3rd_dose_2))]
+  def get3rdDose1(self):
+    return [float(value) for value in self.getCol(self.coltag_3rd_dose_1)]
+  
+  def get3rdDose2(self):
+    return [float(value) for value in self.getCol(self.coltag_3rd_dose_2)]
   
   def makeStock_vaccinationByCounty(self):
     date_list = self.getDate()
@@ -93,7 +96,8 @@ class VaccinationCountySheet(ccm.Template):
     age_list = self.getAge()
     dose_1st_list = self.get1stDose()
     dose_2nd_list = self.get2ndDose()
-    dose_3rd_list = self.get3rdDose()
+    dose_3rd_1_list = self.get3rdDose1()
+    dose_3rd_2_list = self.get3rdDose2()
     
     ord_list = [ccm.ISODateToOrd(date) for date in set(date_list)]
     ord_max = max(ord_list)
@@ -101,11 +105,11 @@ class VaccinationCountySheet(ccm.Template):
     
     stock = {}
     
-    for date, county, age, dose_1st, dose_2nd, dose_3rd in zip(date_list, county_list, age_list, dose_1st_list, dose_2nd_list, dose_3rd_list):
+    for date, county, age, dose_1st, dose_2nd, dose_3rd_1, dose_3rd_2 in zip(date_list, county_list, age_list, dose_1st_list, dose_2nd_list, dose_3rd_1_list, dose_3rd_2_list):
       if date != date_max or age != 'total':
         continue
       
-      stock[county] = [dose_1st, dose_2nd, dose_3rd]
+      stock[county] = [dose_1st, dose_2nd, dose_3rd_1+dose_3rd_2]
     return stock, date_max
   
   def makeReadme_vaccinationByCounty(self, page):
@@ -167,7 +171,8 @@ class VaccinationCountySheet(ccm.Template):
     age_list = self.getAge()
     dose_1st_list = self.get1stDose()
     dose_2nd_list = self.get2ndDose()
-    dose_3rd_list = self.get3rdDose()
+    dose_3rd_1_list = self.get3rdDose1()
+    dose_3rd_2_list = self.get3rdDose2()
     
     ord_list = [ccm.ISODateToOrd(date) for date in set(date_list)]
     ord_max = max(ord_list)
@@ -175,11 +180,11 @@ class VaccinationCountySheet(ccm.Template):
     
     stock = {}
     
-    for date, county, age, dose_1st, dose_2nd, dose_3rd in zip(date_list, county_list, age_list, dose_1st_list, dose_2nd_list, dose_3rd_list):
+    for date, county, age, dose_1st, dose_2nd, dose_3rd_1, dose_3rd_2 in zip(date_list, county_list, age_list, dose_1st_list, dose_2nd_list, dose_3rd_1_list, dose_3rd_2_list):
       if date != date_max or county != 'total' or age == '65+':
         continue
       
-      stock[age] = [dose_1st, dose_2nd, dose_3rd]
+      stock[age] = [dose_1st, dose_2nd, dose_3rd_1+dose_3rd_2]
     return stock, date_max
   
   def makeReadme_vaccinationByAge(self, page):
