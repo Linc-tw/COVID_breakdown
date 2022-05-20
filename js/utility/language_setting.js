@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  language_setting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.14                --//
+    //--  2022.05.20                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
@@ -38,12 +38,14 @@ function LS_GetLegendTitle_Page(wrap) {
   var str_overall;
   var str_2020;
   var str_2021;
+  var str_2022;
   
   if (LS_lang == 'zh-tw') {
     str_latest = '近90日統計';
     str_overall = '整體統計';
     str_2020 = '2020統計';
     str_2021 = '2021統計';
+    str_2022 = '2022統計';
   }
   
   else if (LS_lang == 'fr') {
@@ -51,6 +53,7 @@ function LS_GetLegendTitle_Page(wrap) {
     str_overall = 'Stat complète';
     str_2020 = 'Stat 2020';
     str_2021 = 'Stat 2021';
+    str_2022 = 'Stat 2022';
   }
   
   else { //-- En
@@ -58,6 +61,7 @@ function LS_GetLegendTitle_Page(wrap) {
     str_overall = 'Overall stats';
     str_2020 = 'Stats 2020';
     str_2021 = 'Stats 2021';
+    str_2022 = 'Stats 2022';
   }
   
   if (wrap.tag.includes('latest'))
@@ -72,6 +76,9 @@ function LS_GetLegendTitle_Page(wrap) {
   if (wrap.tag.includes('2021'))
     return str_2021;
   
+  if (wrap.tag.includes('2022'))
+    return str_2022;
+  
   return '';
 }
 
@@ -79,7 +86,7 @@ function LS_GetLegendTitle_Last(wrap) {
   var legend_title_dict = {
     'en': 'Latest value',
     'fr': 'Dernières données',
-    'zh-tw': '最新數據',
+    'zh-tw': '最新資料',
   };
   return legend_title_dict[LS_lang];
 }
@@ -111,39 +118,46 @@ function LS_AddHtml(id, string) {
 function LS_FillText_Menu() {
   var str_title;
   var str_index;
+  
   var str_latest;
   var str_overall;
+  var str_2020;
+  var str_2021;
+  var str_2022;
+  
   var str_cases;
   var str_incidence;
   var str_vaccination;
+  var str_deaths;
   var str_others;
   var str_comparison;
+  
   var str_timeline;
   var str_data_source;
   var str_no_right_reserved;
-  
-  var str_2021;
-  var str_2020;
-  var str_highlight;
+  var str_update;
   
   if (LS_lang == 'zh-tw') {
     str_title = '嚴重特殊傳染性肺炎 台灣疫情';
     str_index = '首頁';
     str_latest = '近90日統計';
     str_overall = '整體統計';
+    str_2020 = '2020統計';
+    str_2021 = '2021統計';
+    str_2022 = '2022統計';
+    
     str_cases = '確診分析';
     str_incidence = '盛行率比較';
     str_vaccination = '疫苗進度';
+    str_deaths = '病故分析';
     str_others = '其他統計';
     str_comparison = '對比圖表';
+    
     str_timeline = '時間軸';
     str_data_source = '資料來源';
     str_no_right_reserved = '版權沒有';
     str_update = '最後更新：' + LS_wrap.timestamp + ' \u00A0 - \u00A0 模板：Start Bootstrap \u00A0 - \u00A0 視覺化：D3';
     
-    str_2021 = '2021統計';
-    str_2020 = '2020統計';
-    str_highlight = '儀表板';
   }
   
   else if (LS_lang == 'fr') {
@@ -151,19 +165,21 @@ function LS_FillText_Menu() {
     str_index = 'Accueil';
     str_latest = '90 derniers jours';
     str_overall = 'Stat complète';
+    str_2020 = 'Stat 2020';
+    str_2021 = 'Stat 2021';
+    str_2022 = 'Stat 2022';
+    
     str_cases = 'Cas confirmés';
     str_incidence = "Taux d'incidence";
     str_vaccination = 'Vaccination';
+    str_deaths = 'Décès';
     str_others = 'Stats diverses';
     str_comparison = 'Comparaison';
+    
     str_timeline = 'Chronologie';
     str_data_source = 'Sources des données';
     str_no_right_reserved = "Sans droit d'auteur";
     str_update = 'Dernière mise à jour : ' + LS_wrap.timestamp + ' \u00A0 - \u00A0 Modèle : Start Bootstrap \u00A0 - \u00A0 Visualisation : D3';
-    
-    str_2021 = 'Stat 2021';
-    str_2020 = 'Stat 2020';
-    str_highlight = 'Mise au point';
   }
   
   else { //-- En
@@ -171,19 +187,21 @@ function LS_FillText_Menu() {
     str_index = 'Home';
     str_latest = 'Last 90 days';
     str_overall = 'Overall stats';
+    str_2020 = 'Stats 2020';
+    str_2021 = 'Stats 2021';
+    str_2022 = 'Stats 2022';
+    
     str_cases = 'Confirmed cases';
     str_incidence = 'Incidence rates';
     str_vaccination = 'Vaccination';
+    str_deaths = 'Deaths';
     str_others = 'Other stats';
     str_comparison = 'Comparison';
+    
     str_timeline = 'Timeline';
     str_data_source = 'Data Sources';
     str_no_right_reserved = 'No right reserved';
     str_update = 'Last update: ' + LS_wrap.timestamp + ' \u00A0 - \u00A0 Template by Start Bootstrap \u00A0 - \u00A0 Visualization by D3';
-    
-    str_2021 = 'Stats 2021';
-    str_2020 = 'Stats 2020';
-    str_highlight = 'Highlight';
   }
   
   //-- Menu
@@ -192,12 +210,14 @@ function LS_FillText_Menu() {
   LS_AddStr('menu_latest_cases', str_cases);
   LS_AddStr('menu_latest_incidence', str_incidence);
   LS_AddStr('menu_latest_vaccination', str_vaccination);
+  LS_AddStr('menu_latest_deaths', str_deaths);
   LS_AddStr('menu_latest_others', str_others);
   LS_AddStr('menu_latest_comparison', str_comparison);
   LS_AddStr('menu_overall', str_overall);
   LS_AddStr('menu_overall_cases', str_cases);
   LS_AddStr('menu_overall_incidence', str_incidence);
   LS_AddStr('menu_overall_vaccination', str_vaccination);
+  LS_AddStr('menu_overall_deaths', str_deaths);
   LS_AddStr('menu_overall_others', str_others);
   LS_AddStr('menu_overall_comparison', str_comparison);
   LS_AddStr('menu_timeline', str_timeline);
@@ -210,11 +230,13 @@ function LS_FillText_Menu() {
   LS_AddStr('title_latest_cases', str_latest + ' - ' + str_cases);
   LS_AddStr('title_latest_incidence', str_latest + ' - ' + str_incidence);
   LS_AddStr('title_latest_vaccination', str_latest + ' - ' + str_vaccination);
+  LS_AddStr('title_latest_deaths', str_latest + ' - ' + str_deaths);
   LS_AddStr('title_latest_others', str_latest + ' - ' + str_others);
   LS_AddStr('title_latest_comparison', str_latest + ' - ' + str_comparison);
   LS_AddStr('title_overall_cases', str_overall + ' - ' + str_cases);
   LS_AddStr('title_overall_incidence', str_overall + ' - ' + str_incidence);
   LS_AddStr('title_overall_vaccination', str_overall + ' - ' + str_vaccination);
+  LS_AddStr('title_overall_deaths', str_overall + ' - ' + str_deaths);
   LS_AddStr('title_overall_others', str_overall + ' - ' + str_others);
   LS_AddStr('title_overall_comparison', str_overall + ' - ' + str_comparison);
   LS_AddStr('title_timeline', str_timeline);
@@ -226,15 +248,21 @@ function LS_FillText_Menu() {
   LS_AddStr('vignette_title_cases', str_cases);
   LS_AddStr('vignette_title_incidence', str_incidence);
   LS_AddStr('vignette_title_vaccination', str_vaccination);
+  LS_AddStr('vignette_title_deaths', str_deaths);
   LS_AddStr('vignette_title_others', str_others);
+  LS_AddStr('vignette_title_comparison', str_comparison);
   LS_AddStr('vignette_latest_cases', str_latest);
   LS_AddStr('vignette_latest_incidence', str_latest);
   LS_AddStr('vignette_latest_vaccination', str_latest);
+  LS_AddStr('vignette_latest_deaths', str_latest);
   LS_AddStr('vignette_latest_others', str_latest);
+  LS_AddStr('vignette_latest_comparison', str_latest);
   LS_AddStr('vignette_overall_cases', str_overall);
   LS_AddStr('vignette_overall_incidence', str_overall);
   LS_AddStr('vignette_overall_vaccination', str_overall);
+  LS_AddStr('vignette_overall_deaths', str_overall);
   LS_AddStr('vignette_overall_others', str_overall);
+  LS_AddStr('vignette_overall_comparison', str_overall);
 }
 
 function LS_FillText_Source() {

@@ -14,7 +14,7 @@ var CBA_latest_wrap = {
 
   y_max_factor: 1.55,
   nb_yticks: 4,
-  legend_pos_x: 120,
+  legend_pos_x: 115,
 };
 
 var CBA_overall_wrap = {
@@ -26,5 +26,5 @@ var CBA_overall_wrap = {
 
   y_max_factor: 1.55,
   nb_yticks: 4,
-  legend_pos_x: 120,
+  legend_pos_x: 115,
 };

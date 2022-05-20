@@ -2,7 +2,7 @@
     //-------------------------------------//
     //--  incidence_evolution_by_age.js  --//
     //--  Chieh-An Lin                   --//
-    //--  2022.05.14                     --//
+    //--  2022.05.20                     --//
     //-------------------------------------//
 
 function IEBA_InitFig(wrap) {
@@ -12,9 +12,9 @@ function IEBA_InitFig(wrap) {
   wrap.tot_height_['fr'] = 450;
   wrap.tot_height_['en'] = 450;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 85, right: 5, bottom: 65, top: 35};
-  wrap.margin_['fr'] = {left: 100, right: 5, bottom: 65, top: 35};
-  wrap.margin_['en'] = {left: 95, right: 5, bottom: 75, top: 35};
+  wrap.margin_['zh-tw'] = {left: 5, right: 85, bottom: 65, top: 35};
+  wrap.margin_['fr'] = {left: 5, right: 100, bottom: 65, top: 35};
+  wrap.margin_['en'] = {left: 5, right: 95, bottom: 75, top: 35};
   
   GP_InitFig(wrap);
 }
@@ -140,12 +140,11 @@ function IEBA_FormatData2(wrap, data2) {
 }
 
 function IEBA_Plot(wrap) {
-  //-- x = bottom, y = left
-  GP_PlotBottomLeft(wrap);
+  //-- x = bottom, y = right
+  GP_PlotBottomRight(wrap);
   
   //-- Define square color
   wrap.value_max = Math.max(10, wrap.value_max);
-//   wrap.value_max = Math.min(1500, wrap.value_max);
   wrap.color = d3.scaleSequential()
     .domain([0, wrap.value_max])
     .interpolator(t => d3.interpolatePuRd(t));
@@ -166,7 +165,7 @@ function IEBA_Replot(wrap) {
   GP_ReplotDateAsTileX(wrap);
   
   //-- Replot yaxis
-  GP_ReplotTileY(wrap);
+  GP_ReplotTileY_right(wrap);
       
   //-- Adjust font size
   wrap.svg.select('.xaxis')

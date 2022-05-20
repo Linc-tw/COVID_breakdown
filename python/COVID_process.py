@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.19                ##
+    ##  2022.05.20                ##
     ################################
 
 import os
@@ -323,17 +323,17 @@ def sandbox():
   #vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
   #vc_sheet.saveCsv_vaccinationByAge()
   
-  #death_sheet = COVID_death.DeathSheet()
-  #death_sheet.deathDelay()
+  death_sheet = COVID_death.DeathSheet()
+  death_sheet.saveCsv_deathDelay()
   
   #status_sheet = COVID_status.StatusSheet()
   #test_sheet = COVID_test.TestSheet()
   #border_sheet = COVID_border.BorderSheet()
-  county_sheet = COVID_county.CountySheet()
-  death_sheet = COVID_death.DeathSheet()
+  #county_sheet = COVID_county.CountySheet()
+  #death_sheet = COVID_death.DeathSheet()
   #saveCsv_incidenceRates(status_sheet, border_sheet)
   #saveCsv_positivityAndFatality(status_sheet, test_sheet)
-  saveCsv_deathByAge(county_sheet, death_sheet)
+  #saveCsv_deathByAge(county_sheet, death_sheet)
   return
 
 ################################################################################

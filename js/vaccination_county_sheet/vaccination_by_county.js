@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_county.js  --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.14                --//
+    //--  2022.05.20                --//
     //--------------------------------//
 
 function VBC_InitFig(wrap) {
@@ -63,7 +63,7 @@ function VBC_FormatData(wrap, data) {
   var x_list, x_lower, x_upper, block;
   
   //-- Variables for xaxis
-  var x_max = 1.25; //-- For 125%
+  var x_max = 1.27; //-- For 125%
   
   //-- Variables for yaxis
   var yticklabel_dict = {en: {}, fr: {}, 'zh-tw': {}};

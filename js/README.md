@@ -17,9 +17,6 @@ Structure by folders
 `border_sheet/`
   - `border_statistics.js`
   
-`case_sheet/`
-  - `case_counts.js`
-  
 `county_sheet/`
   - `case_by_age.js`
   - `incidence_evolution_by_age.js`
@@ -36,6 +33,7 @@ Structure by folders
   - `stats_in_mirror.js`
 
 `status_sheet/`
+  - `case_counts.js`
   - `death_counts.js`
 
 `test_sheet/`

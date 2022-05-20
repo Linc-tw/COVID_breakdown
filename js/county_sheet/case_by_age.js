@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_by_age.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.15                --//
+    //--  2022.05.20                --//
     //--------------------------------//
 
 function CBA_InitFig(wrap) {
@@ -314,12 +314,12 @@ function CBA_Replot(wrap) {
   //-- Remove redundancy from legend if col_ind = 0
   if (wrap.col_ind == 0) {
     wrap.legend_color = wrap.legend_color.slice(0, 1);
-    wrap.legend_value = wrap.legend_value.slice(0, 1);
+    wrap.legend_value = wrap.legend_value.slice(1, 2);
     wrap.legend_label = wrap.legend_label.slice(1, 2);
   }
   
   //-- Update legend title
-  var legend_title = {en: 'Confirmed cases', fr: 'Cas confirmés', 'zh-tw': '確診個案'}; //-- No time info for title here
+  var legend_title = {en: 'Confirmed cases', fr: 'Cas confirmés', 'zh-tw': '確診人數'}; //-- No time info for title here
   GP_UpdateLegendTitle(wrap, legend_title[LS_lang]);
   
   //-- Replot legend

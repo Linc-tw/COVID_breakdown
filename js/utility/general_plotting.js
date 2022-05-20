@@ -2,13 +2,13 @@
     //--------------------------------//
     //--  general_plotting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.13                --//
+    //--  2022.05.20                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
 //-- TODO
 
-//add new plot: makeStock_deathDelay
+//add new plot: death_delay
 //split positivity & fatality
 //add new line delay fatality
 //new page: death
@@ -424,6 +424,13 @@ function GP_PlotBottomLeft(wrap) {
   GP_PlotBottomEmptyAxis(wrap);
   GP_PlotLeftEmptyAxis(wrap);
   GP_PlotRightFrameline(wrap);
+}
+
+function GP_PlotBottomRight(wrap) {
+  GP_PlotTopFrameline(wrap);
+  GP_PlotBottomEmptyAxis(wrap);
+  GP_PlotLeftFrameline(wrap);
+  GP_PlotRightEmptyAxis(wrap);
 }
 
 function GP_PlotTopLeft(wrap) {
@@ -861,6 +868,27 @@ function GP_ReplotTileY(wrap) {
     .call(yaxis)
     .selectAll('text')
       .attr('transform', 'translate(-3,0)');
+      
+  //-- Save to wrapper
+  wrap.yscale_tick = yscale;
+}
+
+function GP_ReplotTileY_right(wrap) {
+  //-- Define yscale
+  var yscale = GP_MakeBandYForTile(wrap);
+  
+  //-- Define yaxis
+  var yaxis = d3.axisRight(yscale)
+    .tickSize(0)
+    .tickFormat(function (d, i) {return wrap.yticklabel_dict[LS_lang][i];});
+  
+  //-- Add yaxis
+  wrap.svg.select('.yaxis')
+    .transition()
+    .duration(wrap.trans_delay)
+    .call(yaxis)
+    .selectAll('text')
+      .attr('transform', 'translate(3,0)');
       
   //-- Save to wrapper
   wrap.yscale_tick = yscale;

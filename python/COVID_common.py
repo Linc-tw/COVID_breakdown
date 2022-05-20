@@ -2,7 +2,7 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.19                ##
+    ##  2022.05.20                ##
     ################################
 
 import os
@@ -587,8 +587,8 @@ DELIVERY_LIST = [
   ['Medigen',   'Medigen',   95783,           '', '2022-03-18',                                                        '', ''],
   
   ## 2022/04
-  ['Moderna',   'Moderna',  204000, '2022-04-23',           '', 'https://www.cna.com.tw/news/firstnews/202204230163.aspx', ''],
-  ['Moderna',   'Moderna', 1371600, '2022-04-27',           '', 'https://www.cna.com.tw/news/firstnews/202204270325.aspx', ''],
+  ['Moderna',   'Moderna',  199800, '2022-04-23', '2022-04-25', 'https://www.cna.com.tw/news/firstnews/202204230163.aspx', ''],
+  ['Moderna',   'Moderna', 1371000, '2022-04-27', '2022-04-29', 'https://www.cna.com.tw/news/firstnews/202204270325.aspx', ''],
   
   ## 2022/05
   ['Moderna',   'Moderna', 1106100, '2022-05-03',           '', 'https://www.cna.com.tw/news/firstnews/202205030131.aspx', ''],

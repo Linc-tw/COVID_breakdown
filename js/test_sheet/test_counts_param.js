@@ -25,7 +25,7 @@ var TC_latest_wrap = {
 
   y_max_factor: 1.55, 
   nb_yticks: 4,
-  legend_pos_x: 130,
+  legend_pos_x: 125,
 };
 
 var TC_overall_wrap = {

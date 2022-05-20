@@ -2,7 +2,7 @@
     //-----------------------------//
     //--  vaccination_by_age.js  --//
     //--  Chieh-An Lin           --//
-    //--  2022.05.14             --//
+    //--  2022.05.20             --//
     //-----------------------------//
 
 function VBA_InitFig(wrap) {
@@ -75,7 +75,7 @@ function VBA_FormatData(wrap, data) {
   var x_list, x_lower, x_upper, block;
   
   //-- Variables for xaxis
-  var x_max = 1.30; //-- For 130%
+  var x_max = 1.33; //-- For 133%
   
   //-- Variables for yaxis
   var yticklabel_dict = {en: {}, fr: {}, 'zh-tw': {}};

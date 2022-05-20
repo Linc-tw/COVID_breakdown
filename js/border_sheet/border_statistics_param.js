@@ -2,7 +2,7 @@
     //----------------------------------//
     //--  border_statistics_param.js  --//
     //--  Chieh-An Lin                --//
-    //--  2022.05.08                  --//
+    //--  2022.05.20                  --//
     //----------------------------------//
 
 var BS_latest_wrap = {
@@ -14,7 +14,7 @@ var BS_latest_wrap = {
 
   y_max_factor: 2.0, 
   nb_yticks: 4,
-  legend_pos_x: 480,
+  legend_pos_x: 550,
 };
 
 var BS_overall_wrap = {
@@ -26,5 +26,5 @@ var BS_overall_wrap = {
 
   y_max_factor: 1.15, 
   nb_yticks: 4,
-  legend_pos_x: 480, 
+  legend_pos_x: 550, 
 };

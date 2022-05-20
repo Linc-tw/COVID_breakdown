@@ -8,11 +8,11 @@
 var DBT_latest_wrap = {
   tag: 'difference_by_transmission_latest',
   data_path_list: [
-    'processed_data/latest/difference_by_transmission.csv',
-    'processed_data/key_numbers.csv',
+    '../processed_data/2020/difference_by_transmission.csv',
+    '../processed_data/key_numbers.csv',
   ],
 
-  n_tot_key: 'n_latest',
+  n_tot_key: 'n_2020',
   y_max_factor: 1.2,
   y_path_0: '4', //-- 4 ticks
   y_path_1: '4',

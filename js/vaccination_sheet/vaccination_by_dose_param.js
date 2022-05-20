@@ -14,7 +14,7 @@ var VBD_latest_wrap = {
 
   y_max_factor: 1.55,
   nb_yticks: 4,
-  legend_pos_x: 110,
+  legend_pos_x: 95,
   legend_pos_x1: 190,
   r: 3, //-- Dot radius
 };
@@ -28,7 +28,7 @@ var VBD_overall_wrap = {
 
   y_max_factor: 1.3,
   nb_yticks: 4,
-  legend_pos_x: 110,
+  legend_pos_x: 105,
 //   legend_pos_x1: 190,
   r: 1.5, //-- Dot radius
 };

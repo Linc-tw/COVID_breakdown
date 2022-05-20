@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_by_age.js           --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.15                --//
+    //--  2022.05.20                --//
     //--------------------------------//
 
 function DBA_InitFig(wrap) {
@@ -287,7 +287,7 @@ function DBA_Replot(wrap) {
   //-- Remove redundancy from legend if col_ind = 0
   if (wrap.col_ind == 0) {
     wrap.legend_color = wrap.legend_color.slice(0, 1);
-    wrap.legend_value = wrap.legend_value.slice(0, 1);
+    wrap.legend_value = wrap.legend_value.slice(1, 2);
     wrap.legend_label = wrap.legend_label.slice(1, 2);
   }
   
@@ -295,7 +295,7 @@ function DBA_Replot(wrap) {
   if (wrap.rate > 0)
     legend_title = {en: 'Case fatality rate', fr: 'Létalité', 'zh-tw': '致死率'}; //-- No time info for title here
   else
-    legend_title = {en: 'Deaths', fr: 'Décès', 'zh-tw': '死亡數'}; //-- No time info for title here
+    legend_title = {en: 'Deaths', fr: 'Décès', 'zh-tw': '死亡人數'}; //-- No time info for title here
   
   //-- Update legend title
   GP_UpdateLegendTitle(wrap, legend_title[LS_lang]);

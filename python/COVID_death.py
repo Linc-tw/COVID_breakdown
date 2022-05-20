@@ -2,7 +2,7 @@
     ################################
     ##  COVID_death.py            ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.19                ##
+    ##  2022.05.20                ##
     ################################
 
 import os
@@ -95,7 +95,9 @@ class DeathSheet(ccm.Template):
     
     for confirmed_date in self.getCol(self.coltag_confirmed_date):
       if confirmed_date != confirmed_date:
-        pass
+        confirmed_date = np.nan
+      elif confirmed_date == '--':
+        confirmed_date = np.nan
       elif confirmed_date == 'Dec-21':
         confirmed_date = '2021-12-21'
       elif confirmed_date == '5/2o':
@@ -159,27 +161,81 @@ class DeathSheet(ccm.Template):
       self.makeReadme_deathCounts(gr)
     return
   
-  def makeStock_deathDelay(self):
-    row_id_list = self.getRowID()
+  def increment_deathDelay(self):
+    report_date_list = self.getReportDate()
     confirmed_date_list = self.getConfirmedDate()
-    death_date_list = self.getDeathDate()
     
-    day_diff_list = []
-    for row_id, confirmed_date, death_date in zip(row_id_list, confirmed_date_list, death_date_list):
-      if confirmed_date == confirmed_date and death_date == death_date:
-        day_diff = ccm.ISODateToOrd(death_date) - ccm.ISODateToOrd(confirmed_date)
-        if abs(day_diff) > 90:
+    stock = {'list': []}
+    stock_dict = ccm.initializeStockDict_general(stock)
+    
+    for report_date, confirmed_date in zip(report_date_list, confirmed_date_list):
+      if confirmed_date != confirmed_date:
+        continue
+      
+      ord_rep = ccm.ISODateToOrd(report_date)
+      ord_cf = ccm.ISODateToOrd(confirmed_date)
+      diff = ord_rep - ord_cf
+      
+      index_list = ccm.makeIndexList(report_date)
+      
+      for ind, stock in zip(index_list, stock_dict.values()):
+        if ind != ind: ## If NaN
           continue
-        day_diff_list.append(day_diff)
-          #print(row_id, day_diff)
         
-    hist = clt.Counter(day_diff_list)
-    hist = sorted(hist.items())
+        stock['list'].append(diff)
     
-    print(np.mean(day_diff_list))
-    #print(hist)
-    #for key, value in hist:
-      #print(key, value)
+    return stock_dict
+  
+  def makeHist_deathDelay(self, stock_dict):
+    upper = 80
+    width = 1
+    bins = np.arange(-0.5, upper+width, width) ## Histogram bins
+    bins[-1] = 999
+    
+    for gr, stock in stock_dict.items():
+      n_arr, ctr_bins = ccm.makeHist(stock['list'], bins)
+      
+      n_arr = n_arr.round(0).astype(int)
+      ctr_bins = ctr_bins.round(0).astype(int)
+      ctr_bins[-1] = upper
+      
+      stock['bins'] = ctr_bins
+      stock['count'] = n_arr
+    return stock_dict
+  
+  def makeReadme_deathDelay(self, gr):
+    key = 'death_delay' 
+    stock = []
+    stock.append('`{}.csv`'.format(key))
+    stock.append('- Row: delay in days between case and death report')
+    stock.append('- Column: transmission type')
+    stock.append('  - `difference`: see row')
+    if gr == ccm.GROUP_LATEST:
+      stock.append('  - `total`: last 90 days')
+    elif gr == ccm.GROUP_OVERALL:
+      stock.append('  - `total`: overall stats')
+      stock.append('  - `YYYY`: during year `YYYY`')
+    elif gr in ccm.GROUP_YEAR_LIST:
+      stock.append('  - `total`: all year {}'.format(gr))
+
+    ccm.README_DICT[gr][key] = stock
+    return
+  
+  def saveCsv_deathDelay(self):
+    stock_dict = self.increment_deathDelay()
+    stock_dict = self.makeHist_deathDelay(stock_dict)
+    
+    for gr, stock in stock_dict.items():
+      data = {'difference': stock['bins'], 'total': stock['count']}
+      if gr == ccm.GROUP_OVERALL:
+        for year in ccm.GROUP_YEAR_LIST:
+          data[year] = stock_dict[year]['count']
+      data = pd.DataFrame(data)
+      
+      name = '{}processed_data/{}/death_delay.csv'.format(ccm.DATA_PATH, gr)
+      ccm.saveCsv(name, data)
+      
+      self.makeReadme_deathDelay(gr)
     return
   
   def updateDeathByAge(self, stock):
@@ -204,7 +260,7 @@ class DeathSheet(ccm.Template):
     return
     
   def saveCsv(self):
-    #self.saveCsv_deathByAge()
+    self.saveCsv_deathDelay()
     return
 
 ## End of file

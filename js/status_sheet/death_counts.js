@@ -216,7 +216,7 @@ function DC_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color = GP_wrap.c_list[7];
+  wrap.color = GP_wrap.c_list[5];
   
   //-- Define mouse-move
   wrap.mouse_move = DC_MouseMove;

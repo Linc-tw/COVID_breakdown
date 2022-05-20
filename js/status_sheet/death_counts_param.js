@@ -14,7 +14,7 @@ var DC_latest_wrap = {
 
   y_max_factor: 1.55, 
   nb_yticks: 4,
-  legend_pos_x: 85,
+  legend_pos_x: 90,
 };
 
 var DC_overall_wrap = {
@@ -26,5 +26,5 @@ var DC_overall_wrap = {
 
   y_max_factor: 1.1, 
   nb_yticks: 4,
-  legend_pos_x: 85,
+  legend_pos_x: 90,
 };

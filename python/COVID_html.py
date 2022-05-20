@@ -2,7 +2,7 @@
     ################################
     ##  COVID_html.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.19                ##
+    ##  2022.05.20                ##
     ################################
 
 import os
@@ -10,9 +10,9 @@ import sys
 import datetime as dtt
 
 import numpy as np
-import pandas as pd
+#import pandas as pd
 
-import COVID_common as ccm
+#import COVID_common as ccm
 
 ################################################################################
 ## Parameters
@@ -35,9 +35,16 @@ PAGE_DICT = {
     name = 'Latest vaccination',
     plot_list = ['VBB', 'VP', 'VBD', 'VBA', 'VBC'],
   ),
+  'latest_deaths': dict(
+    name = 'Latest deaths',
+    plot_list = ['DC', 'DD'],
+    #plot_list = ['DC', 'CFR', 'DD'],
+  ),
   'latest_others': dict(
     name = 'Latest others',
-    plot_list = ['TC', 'PAF', 'DC', 'BS'],
+    plot_list = ['TC', 'PAF', 'BS'],
+    #name = 'Latest tests & border',
+    #plot_list = ['TC', 'TPT', 'BS'],
   ),
   'latest_comparison': dict(
     name = 'Latest comparison',
@@ -56,9 +63,16 @@ PAGE_DICT = {
     name = 'Overall vaccination',
     plot_list = ['VBB', 'VP', 'VBD'],
   ),
+  'overall_deaths': dict(
+    name = 'Overall deaths',
+    plot_list = ['DC', 'DD', 'DBA'],
+    #plot_list = ['DC', 'CFR', 'DD', 'DBA'],
+  ),
   'overall_others': dict(
     name = 'Overall others',
-    plot_list = ['TC', 'PAF', 'DC', 'DBA', 'BS'],
+    plot_list = ['TC', 'PAF', 'BS'],
+    #name = 'Overall tests & border',
+    #plot_list = ['TC', 'TPT', 'BS'],
   ),
   'overall_comparison': dict(
     name = 'Overall comparison',
@@ -84,7 +98,7 @@ PLOT_DICT = {
   ## Cases
   'CC': dict(
     plot_tag = 'case_counts',
-    js_path = 'case_sheet/',
+    js_path = 'status_sheet/',
     wdt_str = None,
     fontawe_str = 'fa-head-side-cough',
   ),
@@ -159,6 +173,32 @@ PLOT_DICT = {
     fontawe_str = 'fa-city',
   ),
   
+  ## Deaths
+  'DC': dict(
+    plot_tag = 'death_counts',
+    js_path = 'status_sheet/',
+    wdt_str = None,
+    fontawe_str = 'fa-skull-crossbones',
+  ),
+  #'CFR': dict(
+    #plot_tag = 'case_fatality_rates',
+    #js_path = 'others/',
+    #wdt_str = None,
+    #fontawe_str = 'fa-vial',
+  #),
+  'DD': dict(
+    plot_tag = 'death_delay',
+    js_path = 'death_sheet/',
+    wdt_str = None,
+    fontawe_str = 'fa-vial', #TODO
+  ),
+  'DBA': dict(
+    plot_tag = 'death_by_age',
+    js_path = 'others/',
+    wdt_str = None,
+    fontawe_str = 'fa-book-dead',
+  ),
+  
   ## Others
   'TC': dict(
     plot_tag = 'test_counts',
@@ -172,18 +212,12 @@ PLOT_DICT = {
     wdt_str = None,
     fontawe_str = 'fa-chart-line',
   ),
-  'DC': dict(
-    plot_tag = 'death_counts',
-    js_path = 'status_sheet/',
-    wdt_str = None,
-    fontawe_str = 'fa-skull-crossbones',
-  ),
-  'DBA': dict(
-    plot_tag = 'death_by_age',
-    js_path = 'others/',
-    wdt_str = None,
-    fontawe_str = 'fa-book-dead',
-  ),
+  #'TPT': dict(
+    #plot_tag = 'test_positivity',
+    #js_path = 'others/',
+    #wdt_str = None,
+    #fontawe_str = 'fa-chart-line',
+  #),
   'BS': dict(
     plot_tag = 'border_statistics',
     js_path = 'border_sheet/',
@@ -323,6 +357,9 @@ def makeStr_sideBar():
                                     <a class="nav-link" href="latest_vaccination.html">\n\
                                         <span id="menu_latest_vaccination"></span>\n\
                                     </a>\n\
+                                    <a class="nav-link" href="latest_deaths.html">\n\
+                                        <span id="menu_latest_deaths"></span>\n\
+                                    </a>\n\
                                     <a class="nav-link" href="latest_others.html">\n\
                                         <span id="menu_latest_others"></span>\n\
                                     </a>\n\
@@ -347,6 +384,9 @@ def makeStr_sideBar():
                                     </a>\n\
                                     <a class="nav-link" href="overall_vaccination.html">\n\
                                         <span id="menu_overall_vaccination"></span>\n\
+                                    </a>\n\
+                                    <a class="nav-link" href="overall_deaths.html">\n\
+                                        <span id="menu_overall_deaths"></span>\n\
                                     </a>\n\
                                     <a class="nav-link" href="overall_others.html">\n\
                                         <span id="menu_overall_others"></span>\n\
@@ -518,7 +558,7 @@ def makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str):
                             </div>\n'.format(plot_tag=plot_tag, gr_tag=gr_tag, fontawe_str=fontawe_str, btn_str=btn_str, wdt_str=wdt_str)
   return str_
 
-def makeStr_noBtn(plot_abrv, gr_tag):
+def makeStr_noOtherBtn(plot_abrv, gr_tag):
   plot_tag = PLOT_DICT[plot_abrv]['plot_tag']
   wdt_str = PLOT_DICT[plot_abrv]['wdt_str']
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
@@ -639,6 +679,7 @@ def makeStr_CBA(gr_tag):
                                             </select>\n\
                                             \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
   
+  ## new_year_token
   elif gr_tag == 'overall':
     btn_str = '\
                                             <select id="{plot_tag}_{gr_tag}_year" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_year">\n\
@@ -669,7 +710,7 @@ def makeStr_CBA(gr_tag):
   return str_
 
 def makeStr_IR(gr_tag):
-  return makeStr_noBtn('IR', gr_tag)
+  return makeStr_noOtherBtn('IR', gr_tag)
 
 def makeStr_IM(gr_tag):
   plot_abrv = 'IM'
@@ -708,6 +749,7 @@ def makeStr_IM(gr_tag):
                                             </select>\n\
                                             \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
   
+  ## new_year_token
   elif gr_tag == 'overall':
     btn_str = '\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
@@ -749,10 +791,10 @@ def makeStr_IM(gr_tag):
   return str_
 
 def makeStr_IEBC(gr_tag):
-  return makeStr_noBtn('IEBC', gr_tag)
+  return makeStr_noOtherBtn('IEBC', gr_tag)
 
 def makeStr_IEBA(gr_tag):
-  return makeStr_noBtn('IEBA', gr_tag)
+  return makeStr_noOtherBtn('IEBA', gr_tag)
 
 def makeStr_VBB(gr_tag):
   plot_abrv = 'VBB'
@@ -806,13 +848,13 @@ def makeStr_VP(gr_tag):
   return str_
 
 def makeStr_VBD(gr_tag):
-  return makeStr_noBtn('VBD', gr_tag)
+  return makeStr_noOtherBtn('VBD', gr_tag)
 
 def makeStr_VBA(gr_tag):
-  return makeStr_noBtn('VBA', gr_tag)
+  return makeStr_noOtherBtn('VBA', gr_tag)
 
 def makeStr_VBC(gr_tag):
-  return makeStr_noBtn('VBC', gr_tag)
+  return makeStr_noOtherBtn('VBC', gr_tag)
 
 def makeStr_TC(gr_tag):
   plot_abrv = 'TC'
@@ -838,7 +880,7 @@ def makeStr_TC(gr_tag):
   return str_
 
 def makeStr_PAF(gr_tag):
-  return makeStr_noBtn('PAF', gr_tag)
+  return makeStr_noOtherBtn('PAF', gr_tag)
 
 def makeStr_DC(gr_tag):
   plot_abrv = 'DC'
@@ -863,6 +905,30 @@ def makeStr_DC(gr_tag):
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
 
+def makeStr_DD(gr_tag):
+  plot_abrv = 'DD'
+  plot_tag = PLOT_DICT[plot_abrv]['plot_tag']
+  wdt_str = PLOT_DICT[plot_abrv]['wdt_str']
+  fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
+  cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
+  
+  if gr_tag == 'latest':
+    btn_str = cmt_save_btn
+  
+  ## new_year_token
+  elif gr_tag == 'overall':
+    btn_str = '\
+                                            <select id="{plot_tag}_{gr_tag}_year" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_year">\n\
+                                                <option value="0" id="{plot_tag}_button_total" selected></option>\n\
+                                                <option value="1" id="{plot_tag}_button_2020"></option>\n\
+                                                <option value="2" id="{plot_tag}_button_2021"></option>\n\
+                                                <option value="3" id="{plot_tag}_button_2022"></option>\n\
+                                            </select>\n\
+                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+  
+  str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
+  return str_
+
 def makeStr_DBA(gr_tag):
   plot_abrv = 'DBA'
   plot_tag = PLOT_DICT[plot_abrv]['plot_tag']
@@ -870,6 +936,7 @@ def makeStr_DBA(gr_tag):
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
+  ## new_year_token
   btn_str = '\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_{gr_tag}_rate_0">\n\
@@ -1154,6 +1221,7 @@ def saveHtml_page(page_tag, verbose=True):
     f.write(makeStr_CT())
     f.write(makeStr_ET('2020'))
     f.write(makeStr_ET('2022'))
+    ## new_year_token
   
   elif page_tag == 'data_source':
     f.write(makeStr_DS())
@@ -1184,12 +1252,15 @@ def saveHtml_page(page_tag, verbose=True):
         f.write(makeStr_VBA(gr_tag))
         f.write(makeStr_VBC(gr_tag))
         
+    elif cate_tag == 'deaths':
+      f.write(makeStr_DC(gr_tag))
+      f.write(makeStr_DD(gr_tag))
+      if gr_tag == 'overall':
+        f.write(makeStr_DBA(gr_tag))
+    
     elif cate_tag == 'others':
       f.write(makeStr_TC(gr_tag))
       f.write(makeStr_PAF(gr_tag))
-      f.write(makeStr_DC(gr_tag))
-      if gr_tag == 'overall':
-        f.write(makeStr_DBA(gr_tag))
       f.write(makeStr_BS(gr_tag))
     
     elif cate_tag == 'comparison':

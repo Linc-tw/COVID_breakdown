@@ -2,7 +2,7 @@
     //----------------------------------------//
     //--  incidence_evolution_by_county.js  --//
     //--  Chieh-An Lin                      --//
-    //--  2022.05.14                        --//
+    //--  2022.05.20                        --//
     //----------------------------------------//
 
 function IEBC_InitFig(wrap) {
@@ -12,9 +12,9 @@ function IEBC_InitFig(wrap) {
   wrap.tot_height_['fr'] = 580;
   wrap.tot_height_['en'] = 580;
   wrap.margin_ = {};
-  wrap.margin_['zh-tw'] = {left: 50, right: 5, bottom: 65, top: 35};
-  wrap.margin_['fr'] = {left: 170, right: 5, bottom: 65, top: 35};
-  wrap.margin_['en'] = {left: 140, right: 5, bottom: 75, top: 35};
+  wrap.margin_['zh-tw'] = {left: 5, right: 50, bottom: 65, top: 35};
+  wrap.margin_['fr'] = {left: 5, right: 170, bottom: 65, top: 35};
+  wrap.margin_['en'] = {left: 5, right: 140, bottom: 75, top: 35};
   
   GP_InitFig(wrap);
 }
@@ -140,8 +140,8 @@ function IEBC_FormatData2(wrap, data2) {
 }
 
 function IEBC_Plot(wrap) {
-  //-- x = bottom, y = left
-  GP_PlotBottomLeft(wrap);
+  //-- x = bottom, y = right
+  GP_PlotBottomRight(wrap);
   
   //-- Define square color
   wrap.value_max = Math.max(10, wrap.value_max);
@@ -165,7 +165,7 @@ function IEBC_Replot(wrap) {
   GP_ReplotDateAsTileX(wrap);
   
   //-- Replot yaxis
-  GP_ReplotTileY(wrap);
+  GP_ReplotTileY_right(wrap);
       
   //-- Adjust font size
   wrap.svg.select('.xaxis')

@@ -267,7 +267,7 @@ class CountySheet(ccm.Template):
       stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
     elif gr in ccm.GROUP_YEAR_LIST:
-      stock.append('  - `total`: all year {}'.format(gr))
+      stock.append('  - `total`: {} all year'.format(gr))
       stock.append('  - `MMM`: during month `MMM`')
     ccm.README_DICT[gr][key] = stock
     
@@ -374,7 +374,7 @@ class CountySheet(ccm.Template):
       stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
     elif gr in ccm.GROUP_YEAR_LIST:
-      stock.append('  - `total`: all year {}'.format(gr))
+      stock.append('  - `total`: {} all year'.format(gr))
       stock.append('  - `MMM`: during month `MMM`')
     ccm.README_DICT[gr][key] = stock
     
