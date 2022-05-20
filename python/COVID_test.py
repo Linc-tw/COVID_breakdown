@@ -2,7 +2,7 @@
     ################################
     ##  COVID_test.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.14                ##
+    ##  2022.05.19                ##
     ################################
 
 import os
@@ -77,7 +77,7 @@ class TestSheet(ccm.Template):
       total_list.append(int(float(total)))
     return total_list
 
-  def makeReadme_testCounts(self, page):
+  def makeReadme_testCounts(self, gr):
     key = 'test_counts'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -86,7 +86,7 @@ class TestSheet(ccm.Template):
     stock.append('  - `date`')
     stock.append('  - `total`: total test counts')
     stock.append('  - `total_avg`: 7-day moving average of `total`')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_testCounts(self):
@@ -101,17 +101,17 @@ class TestSheet(ccm.Template):
     stock = stock[:-1]
     stock = ccm.adjustDateRange(stock)
     
-    for page in ccm.PAGE_LIST:
-      data = ccm.truncateStock(stock, page)
+    for gr in ccm.GROUP_LIST:
+      data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/test_counts.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/test_counts.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
       
-      self.makeReadme_testCounts(page)
+      self.makeReadme_testCounts(gr)
     return
   
-  def makeReadme_testByCriterion(self, page):
+  def makeReadme_testByCriterion(self, gr):
     key = 'test_by_criterion'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -121,7 +121,7 @@ class TestSheet(ccm.Template):
     stock.append('  - `clinical`: based on clinical criteria')
     stock.append('  - `quarantine`: on people in quarantine (obsolete)')
     stock.append('  - `extended`: extended community search')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_testByCriterion(self):
@@ -135,14 +135,14 @@ class TestSheet(ccm.Template):
     stock = stock[:-1]
     stock = ccm.adjustDateRange(stock)
     
-    for page in ccm.PAGE_LIST:
-      data = ccm.truncateStock(stock, page)
+    for gr in ccm.GROUP_LIST:
+      data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/test_by_criterion.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/test_by_criterion.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
       
-      self.makeReadme_testByCriterion(page)
+      self.makeReadme_testByCriterion(gr)
     return
   
   def getUrlDict(self):

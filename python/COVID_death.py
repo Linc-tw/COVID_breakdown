@@ -2,7 +2,7 @@
     ################################
     ##  COVID_death.py            ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.15                ##
+    ##  2022.05.19                ##
     ################################
 
 import os
@@ -131,7 +131,7 @@ class DeathSheet(ccm.Template):
       stock[key] = ccm.makeMovingAverage(stock[col_tag])
     return stock
     
-  def makeReadme_deathCounts(self, page):
+  def makeReadme_deathCounts(self, gr):
     key = 'death_counts'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -140,7 +140,7 @@ class DeathSheet(ccm.Template):
     stock.append('  - `date`')
     stock.append('  - `death`')
     stock.append('  - `death_avg`: 7-day moving average of `death`')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   ## Not used
@@ -149,14 +149,14 @@ class DeathSheet(ccm.Template):
     stock = pd.DataFrame(stock)
     stock = ccm.adjustDateRange(stock)
     
-    for page in ccm.PAGE_LIST:
-      data = ccm.truncateStock(stock, page)
+    for gr in ccm.GROUP_LIST:
+      data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
       
-      self.makeReadme_deathCounts(page)
+      self.makeReadme_deathCounts(gr)
     return
   
   def makeStock_deathDelay(self):
@@ -186,7 +186,7 @@ class DeathSheet(ccm.Template):
     report_date_list = self.getReportDate()
     age_list = self.getAge()
     
-    year_list = ['total'] + ccm.YEAR_LIST
+    year_list = ['total'] + ccm.GROUP_YEAR_LIST
     age_key_list = ['total'] + self.age_key_list
     
     ## Initialize stock dict

@@ -2,7 +2,7 @@
     ################################
     ##  COVID_status.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.06                ##
+    ##  2022.05.19                ##
     ################################
 
 import os
@@ -68,7 +68,7 @@ class StatusSheet(ccm.Template):
     if verbose:
       print('N_total = {:d}'.format(self.n_total))
       print('N_latest = {:d}'.format(self.n_latest))
-      for year in ccm.YEAR_LIST:
+      for year in ccm.GROUP_YEAR_LIST:
         print('N_{} = {:d}'.format(year, self.n_year_dict[year]))
     return 
   
@@ -144,15 +144,15 @@ class StatusSheet(ccm.Template):
     stock = ccm.adjustDateRange(stock)
     
     cum_cases_dict = {}
-    for page in ccm.PAGE_LIST:
-      data = ccm.truncateStock(stock, page)
+    for gr in ccm.GROUP_LIST:
+      data = ccm.truncateStock(stock, gr)
       cum_cases = data['total'].values
       ind = ~pd.isna(cum_cases)
-      cum_cases_dict[page] = cum_cases[ind].sum()
+      cum_cases_dict[gr] = cum_cases[ind].sum()
       
-    self.n_total = int(cum_cases_dict[ccm.PAGE_OVERALL])
-    self.n_latest = int(cum_cases_dict[ccm.PAGE_LATEST])
-    for year in ccm.YEAR_LIST:
+    self.n_total = int(cum_cases_dict[ccm.GROUP_OVERALL])
+    self.n_latest = int(cum_cases_dict[ccm.GROUP_LATEST])
+    for year in ccm.GROUP_YEAR_LIST:
       self.n_year_dict[year] = int(cum_cases_dict[year])
     return
     
@@ -163,7 +163,7 @@ class StatusSheet(ccm.Template):
     stock.append('- Row')
     stock.append('  - `n_total`: total confirmed case counts')
     stock.append('  - `n_latest`: number of confirmed cases during last 90 days')
-    for year in ccm.YEAR_LIST:
+    for year in ccm.GROUP_YEAR_LIST:
       stock.append('  - `n_{}`: number of confirmed cases during {}'.format(year, year))
     stock.append('  - `timestamp`: time of last update')
     stock.append('- Column')
@@ -191,7 +191,7 @@ class StatusSheet(ccm.Template):
     self.makeReadme_keyNb()
     return
     
-  def makeReadme_caseCounts(self, page):
+  def makeReadme_caseCounts(self, gr):
     key = 'case_counts_by_report_day'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -206,7 +206,7 @@ class StatusSheet(ccm.Template):
     stock.append('  - `imported_avg`: 7-day moving average of `imported`')
     stock.append('  - `local_avg`: 7-day moving average of `local`')
     stock.append('  - `others_avg`: 7-day moving average of `others`')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_caseCounts(self):
@@ -232,17 +232,17 @@ class StatusSheet(ccm.Template):
     stock = pd.DataFrame(stock)
     stock = ccm.adjustDateRange(stock)
     
-    for page in ccm.PAGE_LIST:
-      data = ccm.truncateStock(stock, page)
+    for gr in ccm.GROUP_LIST:
+      data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/case_counts_by_report_day.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/case_counts_by_report_day.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
       
-      self.makeReadme_caseCounts(page)
+      self.makeReadme_caseCounts(gr)
     return
   
-  def makeReadme_statusEvolution(self, page):
+  def makeReadme_statusEvolution(self, gr):
     key = 'status_evolution'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -252,7 +252,7 @@ class StatusSheet(ccm.Template):
     stock.append('  - `discharged`')
     stock.append('  - `hospitalized`: number of cases that are confirmed & not closed, either in hospitalization or isolation')
     stock.append('  - `death`')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_statusEvolution(self):
@@ -265,17 +265,17 @@ class StatusSheet(ccm.Template):
     stock = pd.DataFrame(stock)
     stock = ccm.adjustDateRange(stock)
     
-    for page in ccm.PAGE_LIST:
-      data = ccm.truncateStock(stock, page)
+    for gr in ccm.GROUP_LIST:
+      data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/status_evolution.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/status_evolution.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
       
-      self.makeReadme_statusEvolution(page)
+      self.makeReadme_statusEvolution(gr)
     return
     
-  def makeReadme_deathCounts(self, page):
+  def makeReadme_deathCounts(self, gr):
     key = 'death_counts'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -284,7 +284,7 @@ class StatusSheet(ccm.Template):
     stock.append('  - `date`')
     stock.append('  - `death`')
     stock.append('  - `death_avg`: 7-day moving average of `death`')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_deathCounts(self):
@@ -298,17 +298,17 @@ class StatusSheet(ccm.Template):
     stock = pd.DataFrame(stock)
     stock = ccm.adjustDateRange(stock)
     
-    for page in ccm.PAGE_LIST:
-      data = ccm.truncateStock(stock, page)
+    for gr in ccm.GROUP_LIST:
+      data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
       
-      self.makeReadme_deathCounts(page)
+      self.makeReadme_deathCounts(gr)
     return
     
-  def makeReadme_hospitalizationOrIsolation(self, page):
+  def makeReadme_hospitalizationOrIsolation(self, gr):
     key = 'hospitalization_or_isolation'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -316,7 +316,7 @@ class StatusSheet(ccm.Template):
     stock.append('- Column')
     stock.append('  - `date`')
     stock.append('  - `hospitalized`: number of cases that are confirmed & not closed, either in hospitalization or isolation')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_hospitalizationOrIsolation(self):
@@ -327,14 +327,14 @@ class StatusSheet(ccm.Template):
     stock = pd.DataFrame(stock)
     stock = ccm.adjustDateRange(stock)
     
-    for page in ccm.PAGE_LIST:
-      data = ccm.truncateStock(stock, page)
+    for gr in ccm.GROUP_LIST:
+      data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/hospitalization_or_isolation.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/hospitalization_or_isolation.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
       
-      self.makeReadme_hospitalizationOrIsolation(page)
+      self.makeReadme_hospitalizationOrIsolation(gr)
     return
     
   def updateNewCaseCounts(self, stock):

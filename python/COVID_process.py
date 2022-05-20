@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.15                ##
+    ##  2022.05.19                ##
     ################################
 
 import os
@@ -66,7 +66,7 @@ def makeStock_incidenceRates(status_sheet, border_sheet):
   
   return stock_new
 
-def makeReadme_incidenceRates(page):
+def makeReadme_incidenceRates(gr):
   key = 'incidence_rates'
   stock = []
   stock.append('`{}.csv`'.format(key))
@@ -75,21 +75,21 @@ def makeReadme_incidenceRates(page):
   stock.append('  - `date`')
   stock.append('  - `arr_incidence`: number of imported confirmed cases over number of arrival passengers')
   stock.append('  - `local_incidence`: number of local confirmed cases over population')
-  ccm.README_DICT[page][key] = stock
+  ccm.README_DICT[gr][key] = stock
   return
   
 def saveCsv_incidenceRates(status_sheet, border_sheet):
   stock = makeStock_incidenceRates(status_sheet, border_sheet)
   stock = pd.DataFrame(stock)
   
-  for page in ccm.PAGE_LIST:
-    data = ccm.truncateStock(stock, page)
+  for gr in ccm.GROUP_LIST:
+    data = ccm.truncateStock(stock, gr)
     
     ## Save
-    name = '{}processed_data/{}/incidence_rates.csv'.format(ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/incidence_rates.csv'.format(ccm.DATA_PATH, gr)
     ccm.saveCsv(name, data)
     
-    makeReadme_incidenceRates(page)
+    makeReadme_incidenceRates(gr)
   return
   
 def makeStock_positivityAndFatality(status_sheet, test_sheet):
@@ -133,7 +133,7 @@ def makeStock_positivityAndFatality(status_sheet, test_sheet):
     stock_new['fatality'] = value_arr
   return stock_new
 
-def makeReadme_positivityAndFatality(page):
+def makeReadme_positivityAndFatality(gr):
   key = 'positivity_and_fatality'
   stock = []
   stock.append('`{}.csv`'.format(key))
@@ -142,28 +142,28 @@ def makeReadme_positivityAndFatality(page):
   stock.append('  - `date`')
   stock.append('  - `positivity`: number of confirmed cases over number of tests')
   stock.append('  - `fatality`: number of deaths over number of confirmed cases')
-  ccm.README_DICT[page][key] = stock
+  ccm.README_DICT[gr][key] = stock
   return
   
 def saveCsv_positivityAndFatality(status_sheet, test_sheet):
   stock = makeStock_positivityAndFatality(status_sheet, test_sheet)
   stock = pd.DataFrame(stock)
   
-  for page in ccm.PAGE_LIST:
-    data = ccm.truncateStock(stock, page)
+  for gr in ccm.GROUP_LIST:
+    data = ccm.truncateStock(stock, gr)
     
     ## Save
-    name = '{}processed_data/{}/positivity_and_fatality.csv'.format(ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/positivity_and_fatality.csv'.format(ccm.DATA_PATH, gr)
     ccm.saveCsv(name, data)
     
-    makeReadme_positivityAndFatality(page)
+    makeReadme_positivityAndFatality(gr)
   return
 
 def makeCountStock_deathByAge(death_sheet):
   stock = {}
   death_sheet.updateDeathByAge(stock)
   
-  year_list = ['total'] + ccm.YEAR_LIST
+  year_list = ['total'] + ccm.GROUP_YEAR_LIST
   age_list = ['total'] + death_sheet.age_key_list
   stock_new = {'age': age_list}
   
@@ -188,7 +188,7 @@ def makeRateStock_deathByAge(county_sheet, death_sheet):
   county_sheet.updateCaseByAge(stock)
   death_sheet.updateDeathByAge(stock)
   
-  year_list = ['total'] + ccm.YEAR_LIST
+  year_list = ['total'] + ccm.GROUP_YEAR_LIST
   age_list = ['total', '0-9', '10-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70+']
   stock_new = {'age': age_list}
   
@@ -220,14 +220,14 @@ def makeRateStock_deathByAge(county_sheet, death_sheet):
     stock_new[year] = rate_list
   return stock_new
 
-def makeLabel_deathByAge(page):
+def makeLabel_deathByAge(gr):
   key_list = ['total']
   label_list_en = ['Total']
   label_list_fr = ['Totaux']
   label_list_zh = ['合計']
   
-  if page == ccm.PAGE_OVERALL:
-    for year in ccm.YEAR_LIST:
+  if gr == ccm.GROUP_OVERALL:
+    for year in ccm.GROUP_YEAR_LIST:
       key_list.append(year)
       label_list_en.append('{} all year'.format(year))
       label_list_fr.append('Année {}'.format(year))
@@ -236,7 +236,7 @@ def makeLabel_deathByAge(page):
   stock = {'key': key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
   return stock
   
-def makeReadme_deathByAge(page):
+def makeReadme_deathByAge(gr):
   key = 'death_by_age_count'
   stock = []
   stock.append('`{}.csv`'.format(key))
@@ -245,7 +245,7 @@ def makeReadme_deathByAge(page):
   stock.append('  - `age`')
   stock.append('  - `total`: overall stats')
   stock.append('  - `YYYY`: during year `YYYY`')
-  ccm.README_DICT[page][key] = stock
+  ccm.README_DICT[gr][key] = stock
     
   key = 'death_by_age_rate'
   stock = []
@@ -255,7 +255,7 @@ def makeReadme_deathByAge(page):
   stock.append('  - `age`')
   stock.append('  - `total`: overall stats')
   stock.append('  - `YYYY`: during year `YYYY`')
-  ccm.README_DICT[page][key] = stock
+  ccm.README_DICT[gr][key] = stock
   
   key = 'death_by_age_label'
   stock = []
@@ -266,7 +266,7 @@ def makeReadme_deathByAge(page):
   stock.append('  - `label`: label in English')
   stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
   stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
-  ccm.README_DICT[page][key] = stock
+  ccm.README_DICT[gr][key] = stock
   return
   
 def saveCsv_deathByAge(county_sheet, death_sheet):
@@ -275,22 +275,22 @@ def saveCsv_deathByAge(county_sheet, death_sheet):
   data_c = pd.DataFrame(stock_c)
   data_r = pd.DataFrame(stock_r)
   
-  page = ccm.PAGE_OVERALL
+  gr = ccm.GROUP_OVERALL
   
-  stock_l = makeLabel_deathByAge(page)
+  stock_l = makeLabel_deathByAge(gr)
   data_l = pd.DataFrame(stock_l)
   
   ## Save
-  name = '{}processed_data/{}/death_by_age_count.csv'.format(ccm.DATA_PATH, page)
+  name = '{}processed_data/{}/death_by_age_count.csv'.format(ccm.DATA_PATH, gr)
   ccm.saveCsv(name, data_c)
   
-  name = '{}processed_data/{}/death_by_age_rate.csv'.format(ccm.DATA_PATH, page)
+  name = '{}processed_data/{}/death_by_age_rate.csv'.format(ccm.DATA_PATH, gr)
   ccm.saveCsv(name, data_r)
   
-  name = '{}processed_data/{}/death_by_age_label.csv'.format(ccm.DATA_PATH, page)
+  name = '{}processed_data/{}/death_by_age_label.csv'.format(ccm.DATA_PATH, gr)
   ccm.saveCsv(name, data_l)
   
-  #makeReadme_deathByAge(page)
+  #makeReadme_deathByAge(gr)
   return
 
 ################################################################################

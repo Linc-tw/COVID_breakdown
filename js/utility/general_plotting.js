@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//page auto gen
 //add new plot: makeStock_deathDelay
 //split positivity & fatality
 //add new line delay fatality

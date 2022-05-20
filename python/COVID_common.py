@@ -2,7 +2,7 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.16                ##
+    ##  2022.05.19                ##
     ################################
 
 import os
@@ -25,16 +25,16 @@ DATA_PATH = '/home/linc/21_Codes/COVID_breakdown/'
 ISO_DATE_REF = '2020-01-01'
 ISO_DATE_REF_VACC = '2021-03-01'
 NB_LOOKBACK_DAYS = 90
-PAGE_LATEST = 'latest'
-PAGE_OVERALL = 'overall'
+GROUP_LATEST = 'latest'
+GROUP_OVERALL = 'overall'
 ## new_year_token
-PAGE_2020 = '2020'
-PAGE_2021 = '2021'
-PAGE_2022 = '2022'
-PAGE_2023 = '2023'
+GROUP_2020 = '2020'
+GROUP_2021 = '2021'
+GROUP_2022 = '2022'
+GROUP_2023 = '2023'
 ## new_year_token (2023)
-YEAR_LIST = [PAGE_2020, PAGE_2021, PAGE_2022] ## Keep order
-PAGE_LIST = [PAGE_LATEST, PAGE_OVERALL] + YEAR_LIST
+GROUP_YEAR_LIST = [GROUP_2020, GROUP_2021, GROUP_2022] ## Keep order
+GROUP_LIST = [GROUP_LATEST, GROUP_OVERALL] + GROUP_YEAR_LIST
 
 MONTH_NAME_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 MONTH_NAME_FR = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'] 
@@ -754,7 +754,7 @@ def initializeStock_dailyCounts(col_tag_list):
   return stock
 
 def initializeStockDict_general(stock):
-  return {page: copy.deepcopy(stock) for page in PAGE_LIST}
+  return {gr: copy.deepcopy(stock) for gr in GROUP_LIST}
 
 def indexForLatest(iso):
   ord_today = getTodayOrdinal()
@@ -783,7 +783,7 @@ def makeIndexList(iso):
   ind_overall = indexForOverall(iso)
   index_list = [ind_latest, ind_overall]
   
-  for year in YEAR_LIST:
+  for year in GROUP_YEAR_LIST:
     ind = indexForYear(iso, int(year))
     index_list.append(ind)
   return index_list
@@ -820,22 +820,22 @@ def adjustDateRange(data):
   data = pd.concat([data1, data, data2])
   return data
 
-def truncateStock(stock, page):
-  if PAGE_LATEST == page:
+def truncateStock(stock, gr):
+  if GROUP_LATEST == gr:
     return stock.iloc[-NB_LOOKBACK_DAYS:]
   
   ## new_year_token
   
-  if PAGE_2020 == page:
+  if GROUP_2020 == gr:
     return stock.iloc[0:366]
     
-  if PAGE_2021 == page:
+  if GROUP_2021 == gr:
     return stock.iloc[366:731]
     
-  if PAGE_2022 == page:
+  if GROUP_2022 == gr:
     return stock.iloc[731:1096]
     
-  if PAGE_2023 == page:
+  if GROUP_2023 == gr:
     return stock.iloc[1096:1461]
     
   ## If overall
@@ -845,7 +845,7 @@ def truncateStock(stock, page):
 ## Functions - README
 
 def initializeReadme_root():
-  page = 'root'
+  gr = 'root'
   stock = []
   
   stock.append('processed_data/')
@@ -871,7 +871,7 @@ def initializeReadme_root():
   stock.append('Contents')
   stock.append('--------')
   stock.append('')
-  for year in YEAR_LIST:
+  for year in GROUP_YEAR_LIST:
     stock.append('`{}/`'.format(year))
     stock.append('- Contains statistics of {}'.format(year))
     stock.append('')
@@ -881,31 +881,31 @@ def initializeReadme_root():
   stock.append('`overall/`')
   stock.append('- Contains statistics of the entire pandemic')
   stock.append('')
-  README_DICT[page] = {'header': stock}
+  README_DICT[gr] = {'header': stock}
   
   stock = []
   key = 'adminMap_byCounties_offsetIslands_sphe'
   stock.append('`{}.geojson`'.format(key))
   stock.append('- Map of Taiwan with its islands rearranged')
   stock.append('- Contain non-ASCII characters')
-  README_DICT[page][key] = stock
+  README_DICT[gr][key] = stock
   return
 
-def initializeReadme_page(page):
-  dict_ = {PAGE_LATEST: 'last 90 days', PAGE_OVERALL: 'the entire pandemic'}
-  for year in YEAR_LIST:
+def initializeReadme_page(gr):
+  dict_ = {GROUP_LATEST: 'last 90 days', GROUP_OVERALL: 'the entire pandemic'}
+  for year in GROUP_YEAR_LIST:
     dict_[year] = year
   
   stock = []
-  stock.append('processed_data/{}/'.format(page))
-  stock.append('================' + '='*len(page) + '')
+  stock.append('processed_data/{}/'.format(gr))
+  stock.append('================' + '='*len(gr) + '')
   stock.append('')
   
   stock.append('')
   stock.append('Summary')
   stock.append('-------')
   stock.append('')
-  stock.append('This folder hosts data files which summarize COVID statistics in Taiwan during {}.'.format(dict_[page]))
+  stock.append('This folder hosts data files which summarize COVID statistics in Taiwan during {}.'.format(dict_[gr]))
   stock.append('')
   
   stock.append('')
@@ -913,26 +913,26 @@ def initializeReadme_page(page):
   stock.append('--------')
   stock.append('')
   
-  README_DICT[page] = {'header': stock}
+  README_DICT[gr] = {'header': stock}
   return
 
 def initializeReadme():
   initializeReadme_root()
-  for page in PAGE_LIST:
-    initializeReadme_page(page)
+  for gr in GROUP_LIST:
+    initializeReadme_page(gr)
   return
 
 def saveMarkdown_readme(verbose=True):
-  for page in ['root']+PAGE_LIST:
-    hdr = README_DICT[page].pop('header')
+  for gr in ['root']+GROUP_LIST:
+    hdr = README_DICT[gr].pop('header')
     
     ## Sort
-    sect_dict = {key: value for key, value in sorted(README_DICT[page].items(), key=lambda item: item[0])}
+    sect_dict = {key: value for key, value in sorted(README_DICT[gr].items(), key=lambda item: item[0])}
     
-    if page == 'root':
-      page = ''
+    if gr == 'root':
+      gr = ''
     
-    name = '{}processed_data/{}/README.md'.format(DATA_PATH, page)
+    name = '{}processed_data/{}/README.md'.format(DATA_PATH, gr)
     f = open(name, 'w')
     
     ## Print header

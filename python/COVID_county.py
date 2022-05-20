@@ -2,7 +2,7 @@
     ################################
     ##  COVID_county.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.14                ##
+    ##  2022.05.19                ##
     ################################
 
 import os
@@ -137,7 +137,7 @@ class CountySheet(ccm.Template):
       stock[key] = ccm.makeMovingAverage(stock[col_tag])
     return stock
   
-  def makeReadme_localCasePerCounty(self, page):
+  def makeReadme_localCasePerCounty(self, gr):
     key = 'local_case_per_county'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -151,7 +151,7 @@ class CountySheet(ccm.Template):
     stock.append('  - `Chiayi`: Chiayi county')
     stock.append('  - `Chiayi_C`: Chiayi city')
     stock.append('  - `*_avg`: 7-day moving average of `*`')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_localCasePerCounty(self):
@@ -159,14 +159,14 @@ class CountySheet(ccm.Template):
     stock = pd.DataFrame(stock)
     stock = ccm.adjustDateRange(stock)
     
-    for page in ccm.PAGE_LIST:
-      data = ccm.truncateStock(stock, page)
+    for gr in ccm.GROUP_LIST:
+      data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/local_case_per_county.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/local_case_per_county.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
       
-      self.makeReadme_localCasePerCounty(page)
+      self.makeReadme_localCasePerCounty(gr)
     return
 
   def increment_caseByAge(self):
@@ -180,26 +180,26 @@ class CountySheet(ccm.Template):
     stock_dict = ccm.initializeStockDict_general(stock)
     
     ## Add empty hist for overall (all year + 12 months per year)
-    nb_years = len(ccm.YEAR_LIST)
+    nb_years = len(ccm.GROUP_YEAR_LIST)
     for i in range(13*nb_years-12):
-      stock_dict[ccm.PAGE_OVERALL].append(case_hist.copy())
+      stock_dict[ccm.GROUP_OVERALL].append(case_hist.copy())
     
     ## Loop over series
     for report_date, age, nb_cases in zip(report_date_list, age_list, nb_cases_list):
       index_list = ccm.makeIndexList(report_date)
       
-      for ind, page, stock in zip(index_list, stock_dict.keys(), stock_dict.values()):
+      for ind, gr, stock in zip(index_list, stock_dict.keys(), stock_dict.values()):
         if ind != ind: ## If NaN
           continue
         
         stock[0][age] += nb_cases
       
-        if ccm.PAGE_LATEST == page:
+        if ccm.GROUP_LATEST == gr:
           lookback_week = (ind - ccm.NB_LOOKBACK_DAYS) // 7 ## ind - ccm.NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
           if lookback_week >= -12:
             stock[-lookback_week][age] += nb_cases
             
-        elif ccm.PAGE_OVERALL == page:
+        elif ccm.GROUP_OVERALL == gr:
           y_ind = int(report_date[:4]) - 2020
           m_ind = int(report_date[5:7])
           yy_ind = 1 + 13 * y_ind
@@ -213,13 +213,13 @@ class CountySheet(ccm.Template):
             
     return stock_dict
   
-  def makeLabel_caseByAge(self, page):
+  def makeLabel_caseByAge(self, gr):
     key_list = ['total']
     label_list_en = ['Total']
     label_list_fr = ['Totaux']
     label_list_zh = ['合計']
     
-    if page == ccm.PAGE_LATEST:
+    if gr == ccm.GROUP_LATEST:
       for i in range(12):
         str_ = '{:d}-{:d}'.format(7*i, 7*i+6)
         key_list.append('week_-{:d}'.format(i+1))
@@ -227,8 +227,8 @@ class CountySheet(ccm.Template):
         label_list_fr.append('{} jours plus tôt'.format(str_))
         label_list_zh.append('{}天前'.format(str_))
       
-    elif page == ccm.PAGE_OVERALL:
-      for year in ccm.YEAR_LIST:
+    elif gr == ccm.GROUP_OVERALL:
+      for year in ccm.GROUP_YEAR_LIST:
         key_list.append(year)
         label_list_en.append('{} all year'.format(year))
         label_list_fr.append('Année {}'.format(year))
@@ -241,7 +241,7 @@ class CountySheet(ccm.Template):
           label_list_fr.append('{} {}'.format(ccm.MONTH_NAME_FR[i], year))
           label_list_zh.append('{}年{:d}月'.format(year, i+1))
         
-    elif page in ccm.YEAR_LIST:
+    elif gr in ccm.GROUP_YEAR_LIST:
       for i in range(12):
         str_ = '{:d}-{:d}'.format(7*i, 7*i+6)
         key_list.append('{}'.format(ccm.numMonthToAbbr(i+1)))
@@ -252,24 +252,24 @@ class CountySheet(ccm.Template):
     stock = {'key': key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     return stock
   
-  def makeReadme_caseByAge(self, page):
+  def makeReadme_caseByAge(self, gr):
     key = 'case_by_age'
     stock = []
     stock.append('`{}.csv`'.format(key))
     stock.append('- Row: age group')
     stock.append('- Column')
     stock.append('  - `age`')
-    if page == ccm.PAGE_LATEST:
+    if gr == ccm.GROUP_LATEST:
       stock.append('  - `total`: last 90 days')
       stock.append('  - `week_-N`: between 7*`N`-7 & 7*`N`-1 days ago')
-    elif page == ccm.PAGE_OVERALL:
+    elif gr == ccm.GROUP_OVERALL:
       stock.append('  - `total`: overall stats')
       stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
-    elif page in ccm.YEAR_LIST:
-      stock.append('  - `total`: all year {}'.format(page))
+    elif gr in ccm.GROUP_YEAR_LIST:
+      stock.append('  - `total`: all year {}'.format(gr))
       stock.append('  - `MMM`: during month `MMM`')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     
     key = 'case_by_age_label'
     stock = []
@@ -280,15 +280,15 @@ class CountySheet(ccm.Template):
     stock.append('  - `label`: label in English')
     stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
     stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_caseByAge(self):
     stock_dict = self.increment_caseByAge()
     
-    ## Loop over page
-    for page, stock in stock_dict.items():
-      stock_l = self.makeLabel_caseByAge(page)
+    ## Loop over group
+    for gr, stock in stock_dict.items():
+      stock_l = self.makeLabel_caseByAge(gr)
       data_l = pd.DataFrame(stock_l)
       col_tag_list = data_l['key']
       
@@ -297,13 +297,13 @@ class CountySheet(ccm.Template):
       data_c = pd.DataFrame(data_c)
       
       ## Save
-      name = '{}processed_data/{}/case_by_age.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/case_by_age.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data_c)
       
-      name = '{}processed_data/{}/case_by_age_label.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/case_by_age_label.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data_l)
       
-      self.makeReadme_caseByAge(page)
+      self.makeReadme_caseByAge(gr)
     return
 
   def increment_incidenceMap(self):
@@ -318,9 +318,9 @@ class CountySheet(ccm.Template):
     stock_dict = ccm.initializeStockDict_general(stock)
     
     ## Add empty hist for overall (all year + 12 months per year)
-    nb_years = len(ccm.YEAR_LIST)
+    nb_years = len(ccm.GROUP_YEAR_LIST)
     for i in range(13*nb_years-12):
-      stock_dict[ccm.PAGE_OVERALL].append(case_hist.copy())
+      stock_dict[ccm.GROUP_OVERALL].append(case_hist.copy())
     
     ## Loop over series
     for report_date, county, nb_cases in zip(report_date_list, county_list, nb_cases_list):
@@ -329,20 +329,20 @@ class CountySheet(ccm.Template):
       
       index_list = ccm.makeIndexList(report_date)
       
-      for ind, page, stock in zip(index_list, stock_dict.keys(), stock_dict.values()):
+      for ind, gr, stock in zip(index_list, stock_dict.keys(), stock_dict.values()):
         if ind != ind:
           continue
         
         stock[0]['total'] += nb_cases
         stock[0][county] += nb_cases
       
-        if ccm.PAGE_LATEST == page:
+        if ccm.GROUP_LATEST == gr:
           lookback_week = (ind - ccm.NB_LOOKBACK_DAYS) // 7 ## ind - ccm.NB_LOOKBACK_DAYS in [-90, -1]; this will be in [-13, -1]
           if lookback_week >= -12:
             stock[-lookback_week]['total'] += nb_cases
             stock[-lookback_week][county] += nb_cases
             
-        elif ccm.PAGE_OVERALL == page:
+        elif ccm.GROUP_OVERALL == gr:
           y_ind = int(report_date[:4]) - 2020
           m_ind = int(report_date[5:7])
           yy_ind = 1 + 13 * y_ind
@@ -359,24 +359,24 @@ class CountySheet(ccm.Template):
     
     return stock_dict
   
-  def makeReadme_incidenceMap(self, page):
+  def makeReadme_incidenceMap(self, gr):
     key = 'incidence_map'
     stock = []
     stock.append('`{}.csv`'.format(key))
     stock.append('- Row: city or county')
     stock.append('- Column')
     stock.append('  - `county`')
-    if page == ccm.PAGE_LATEST:
+    if gr == ccm.GROUP_LATEST:
       stock.append('  - `total`: last 90 days')
       stock.append('  - `week_-N`: between 7*`N`-7 & 7*`N`-1 days ago')
-    elif page == ccm.PAGE_OVERALL:
+    elif gr == ccm.GROUP_OVERALL:
       stock.append('  - `total`: overall stats')
       stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
-    elif page in ccm.YEAR_LIST:
-      stock.append('  - `total`: all year {}'.format(page))
+    elif gr in ccm.GROUP_YEAR_LIST:
+      stock.append('  - `total`: all year {}'.format(gr))
       stock.append('  - `MMM`: during month `MMM`')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     
     key = 'incidence_map_label'
     stock = []
@@ -389,16 +389,16 @@ class CountySheet(ccm.Template):
     stock.append('  - `label`: label in English')
     stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
     stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_incidenceMap(self):
     stock_dict = self.increment_incidenceMap()
     county_key_list = ['total'] + self.county_key_list
     
-    ## Loop over page
-    for page, stock in stock_dict.items():
-      stock_l = self.makeLabel_caseByAge(page)
+    ## Loop over group
+    for gr, stock in stock_dict.items():
+      stock_l = self.makeLabel_caseByAge(gr)
       col_tag_list = stock_l['key']
       
       ## Data for population & label
@@ -417,12 +417,12 @@ class CountySheet(ccm.Template):
       data_p = pd.DataFrame(data_p)
       
       ## Save
-      name = '{}processed_data/{}/incidence_map.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/incidence_map.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data_c)
-      name = '{}processed_data/{}/incidence_map_label.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/incidence_map_label.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data_p)
       
-      self.makeReadme_incidenceMap(page)
+      self.makeReadme_incidenceMap(gr)
     return
 
   def increment_incidenceEvolutionByCounty(self):
@@ -468,7 +468,7 @@ class CountySheet(ccm.Template):
       stock[county] = nb_cases_arr
     return stock
   
-  def makeReadme_incidenceEvolutionByCounty(self, page):
+  def makeReadme_incidenceEvolutionByCounty(self, gr):
     key = 'incidence_evolution_by_county'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -481,7 +481,7 @@ class CountySheet(ccm.Template):
     stock.append('  - `Hsinchu_C`: Hsinchu city')
     stock.append('  - `Chiayi`: Chiayi county')
     stock.append('  - `Chiayi_C`: Chiayi city')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     
     key = 'incidence_evolution_by_county_label'
     stock = []
@@ -492,7 +492,7 @@ class CountySheet(ccm.Template):
     stock.append('  - `label`: label in English')
     stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
     stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_incidenceEvolutionByCounty(self):
@@ -509,15 +509,15 @@ class CountySheet(ccm.Template):
     data_l = {'key': county_key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data_l = pd.DataFrame(data_l)
     
-    page = ccm.PAGE_LATEST
+    gr = ccm.GROUP_LATEST
     
-    name = '{}processed_data/{}/incidence_evolution_by_county.csv'.format(ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/incidence_evolution_by_county.csv'.format(ccm.DATA_PATH, gr)
     ccm.saveCsv(name, data_r)
     
-    name = '{}processed_data/{}/incidence_evolution_by_county_label.csv'.format(ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/incidence_evolution_by_county_label.csv'.format(ccm.DATA_PATH, gr)
     ccm.saveCsv(name, data_l)
     
-    self.makeReadme_incidenceEvolutionByCounty(page)
+    self.makeReadme_incidenceEvolutionByCounty(gr)
     return
   
   def increment_incidenceEvolutionByAge(self):
@@ -574,7 +574,7 @@ class CountySheet(ccm.Template):
       stock[age] = nb_cases_arr
     return stock
   
-  def makeReadme_incidenceEvolutionByAge(self, page):
+  def makeReadme_incidenceEvolutionByAge(self, gr):
     key = 'incidence_evolution_by_age'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -583,7 +583,7 @@ class CountySheet(ccm.Template):
     stock.append('  - `date`')
     stock.append('  - `total`: all ages')
     stock.append('  - `0-4` to `70+`: age group')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     
     key = 'incidence_evolution_by_age_label'
     stock = []
@@ -594,7 +594,7 @@ class CountySheet(ccm.Template):
     stock.append('  - `label`: label in English')
     stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
     stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_incidenceEvolutionByAge(self):
@@ -612,22 +612,22 @@ class CountySheet(ccm.Template):
     data_l = {'key': age_key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data_l = pd.DataFrame(data_l)
     
-    page = ccm.PAGE_LATEST
+    gr = ccm.GROUP_LATEST
     
-    name = '{}processed_data/{}/incidence_evolution_by_age.csv'.format(ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/incidence_evolution_by_age.csv'.format(ccm.DATA_PATH, gr)
     ccm.saveCsv(name, data_r)
     
-    name = '{}processed_data/{}/incidence_evolution_by_age_label.csv'.format(ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/incidence_evolution_by_age_label.csv'.format(ccm.DATA_PATH, gr)
     ccm.saveCsv(name, data_l)
     
-    self.makeReadme_incidenceEvolutionByAge(page)
+    self.makeReadme_incidenceEvolutionByAge(gr)
     return
   
   def updateCaseByAge(self, stock):
     stock_dict = self.increment_caseByAge()
     stock_l = self.makeLabel_caseByAge('overall')
     col_tag_list = list(stock_l['key'])
-    col_tag_list_2 = ['total'] + ccm.YEAR_LIST
+    col_tag_list_2 = ['total'] + ccm.GROUP_YEAR_LIST
     
     for i, stock2 in enumerate(stock_dict['overall']):
       if col_tag_list[i] not in col_tag_list_2:

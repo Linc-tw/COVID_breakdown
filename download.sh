@@ -26,13 +26,13 @@ wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_county_age.
 sleep 2
 echo
 wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_big5.csv' 'https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004' &
-sleep 2
+sleep 3
 echo
 wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county_big5.csv' 'https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006' &
-sleep 2
+sleep 3
 echo
 wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_death_big5.csv' 'https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002' & 
-sleep 20
+sleep 25
 echo
 
 echo "## Convert data encoding"

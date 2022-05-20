@@ -2,7 +2,7 @@
     ###################################
     ##  COVID_vaccination_county.py  ##
     ##  Chieh-An Lin                 ##
-    ##  2022.05.16                   ##
+    ##  2022.05.19                   ##
     ###################################
 
 import os
@@ -112,7 +112,7 @@ class VaccinationCountySheet(ccm.Template):
       stock[county] = [dose_1st, dose_2nd, dose_3rd_1+dose_3rd_2]
     return stock, date_max
   
-  def makeReadme_vaccinationByCounty(self, page):
+  def makeReadme_vaccinationByCounty(self, gr):
     key = 'vaccination_by_county'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -125,7 +125,7 @@ class VaccinationCountySheet(ccm.Template):
     stock.append('  - `label`: label in English')
     stock.append('  - `label_fr`: label in French')
     stock.append('  - `label_zh`: label in Mandarin')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_vaccinationByCounty(self):
@@ -157,12 +157,12 @@ class VaccinationCountySheet(ccm.Template):
     stock = {'key': key_list, 'value_1': value_1_list, 'value_2': value_2_list, 'value_3': value_3_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data = pd.DataFrame(stock)
     
-    page = ccm.PAGE_LATEST
+    gr = ccm.GROUP_LATEST
     
-    name = '{}processed_data/{}/vaccination_by_county.csv'.format(ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/vaccination_by_county.csv'.format(ccm.DATA_PATH, gr)
     ccm.saveCsv(name, data)
     
-    self.makeReadme_vaccinationByCounty(page)
+    self.makeReadme_vaccinationByCounty(gr)
     return
   
   def makeStock_vaccinationByAge(self):
@@ -187,7 +187,7 @@ class VaccinationCountySheet(ccm.Template):
       stock[age] = [dose_1st, dose_2nd, dose_3rd_1+dose_3rd_2]
     return stock, date_max
   
-  def makeReadme_vaccinationByAge(self, page):
+  def makeReadme_vaccinationByAge(self, gr):
     key = 'vaccination_by_age'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -200,7 +200,7 @@ class VaccinationCountySheet(ccm.Template):
     stock.append('  - `label`: label in English')
     stock.append('  - `label_fr`: label in French')
     stock.append('  - `label_zh`: label in Mandarin')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_vaccinationByAge(self):
@@ -220,12 +220,12 @@ class VaccinationCountySheet(ccm.Template):
     stock = {'key': key_list, 'value_1': value_1_list, 'value_2': value_2_list, 'value_3': value_3_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     data = pd.DataFrame(stock)
     
-    page = ccm.PAGE_LATEST
+    gr = ccm.GROUP_LATEST
     
-    name = '{}processed_data/{}/vaccination_by_age.csv'.format(ccm.DATA_PATH, page)
+    name = '{}processed_data/{}/vaccination_by_age.csv'.format(ccm.DATA_PATH, gr)
     ccm.saveCsv(name, data)
     
-    self.makeReadme_vaccinationByAge(page)
+    self.makeReadme_vaccinationByAge(gr)
     return
   
   def saveCsv(self):

@@ -2,7 +2,7 @@
     ################################
     ##  COVID_border.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.25                ##
+    ##  2022.05.19                ##
     ################################
 
 import os
@@ -266,7 +266,7 @@ class BorderSheet(ccm.Template):
     not_spec_list = np.array(not_spec_list_break).sum(axis=0)
     return not_spec_list
   
-  def makeReadme_borderStats(self, page):
+  def makeReadme_borderStats(self, gr):
     key = 'border_statistics'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -279,7 +279,7 @@ class BorderSheet(ccm.Template):
     stock.append('  - `entry_avg`: 7-day moving average of `entry`')
     stock.append('  - `exit_avg`: 7-day moving average of `exit`')
     stock.append('  - `total_avg`: 7-day moving average of `total`')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_borderStats(self):
@@ -306,14 +306,14 @@ class BorderSheet(ccm.Template):
     stock = pd.DataFrame(stock)
     stock = ccm.adjustDateRange(stock)
     
-    for page in ccm.PAGE_LIST:
-      data = ccm.truncateStock(stock, page)
+    for gr in ccm.GROUP_LIST:
+      data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/border_statistics.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/border_statistics.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
       
-      self.makeReadme_borderStats(page)
+      self.makeReadme_borderStats(gr)
     return
       
   def updateNewEntryCounts(self, stock):

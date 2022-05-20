@@ -2,7 +2,7 @@
     ################################
     ##  COVID_vaccination.py      ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.15                ##
+    ##  2022.05.19                ##
     ################################
 
 import os
@@ -162,7 +162,7 @@ class VaccinationSheet(ccm.Template):
       stock[key] = ccm.makeMovingAverage(stock[col_tag])
     return stock
   
-  def makeReadme_vaccinationByBrand(self, page):
+  def makeReadme_vaccinationByBrand(self, gr):
     key = 'vaccination_by_brand'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -180,7 +180,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('  - `Medigen`')
     stock.append('  - `Pfizer`')
     stock.append('  - `*_avg`: 7-day moving average of `*`')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_vaccinationByBrand(self):
@@ -190,22 +190,22 @@ class VaccinationSheet(ccm.Template):
     stock = pd.DataFrame(stock)
     stock = ccm.adjustDateRange(stock)
     
-    for page in ccm.PAGE_LIST:
-      if page == ccm.PAGE_2020:
+    for gr in ccm.GROUP_LIST:
+      if gr == ccm.GROUP_2020:
         continue
       
-      data = ccm.truncateStock(stock, page)
+      data = ccm.truncateStock(stock, gr)
       
       ## Vaccination trunk
-      if page == ccm.PAGE_OVERALL:
+      if gr == ccm.GROUP_OVERALL:
         ind = ccm.ISODateToOrd(ccm.ISO_DATE_REF_VACC) - ccm.ISODateToOrd(ccm.ISO_DATE_REF)
         data = data[ind:]
         
       ## Save
-      name = '{}processed_data/{}/vaccination_by_brand.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/vaccination_by_brand.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
       
-      self.makeReadme_vaccinationByBrand(page)
+      self.makeReadme_vaccinationByBrand(gr)
     return
   
   def makeSupplies_vaccinationProgress(self):
@@ -251,7 +251,7 @@ class VaccinationSheet(ccm.Template):
     stock = self.interpolate(stock, key_brand_list, dtype=int, cumul=True)
     return stock
   
-  def makeReadme_vaccinationProgress(self, page):
+  def makeReadme_vaccinationProgress(self, gr):
     key = 'vaccination_progress_supplies'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -265,7 +265,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('  - `Moderna`')
     stock.append('  - `Medigen`')
     stock.append('  - `Pfizer`')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     
     key = 'vaccination_progress_injections'
     stock = []
@@ -281,7 +281,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('  - `Moderna`')
     stock.append('  - `Medigen`')
     stock.append('  - `Pfizer`')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_vaccinationProgress(self):
@@ -291,25 +291,25 @@ class VaccinationSheet(ccm.Template):
     stock_i = pd.DataFrame(stock_i)
     stock_i = ccm.adjustDateRange(stock_i)
     
-    for page in ccm.PAGE_LIST:
-      if page == ccm.PAGE_2020:
+    for gr in ccm.GROUP_LIST:
+      if gr == ccm.GROUP_2020:
         continue
       
       ## No cut on supplies
       data_s = stock_s
-      data_i = ccm.truncateStock(stock_i, page)
+      data_i = ccm.truncateStock(stock_i, gr)
       
       ## Vaccination trunk
-      if page == ccm.PAGE_OVERALL:
+      if gr == ccm.GROUP_OVERALL:
         ind = ccm.ISODateToOrd(ccm.ISO_DATE_REF_VACC) - ccm.ISODateToOrd(ccm.ISO_DATE_REF)
         data_i = data_i[ind:]
         
-      name = '{}processed_data/{}/vaccination_progress_supplies.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/vaccination_progress_supplies.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data_s)
-      name = '{}processed_data/{}/vaccination_progress_injections.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/vaccination_progress_injections.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data_i)
       
-      self.makeReadme_vaccinationProgress(page)
+      self.makeReadme_vaccinationProgress(gr)
     return
   
   def makeDeliveries_vaccinationDeliveries(self):
@@ -333,7 +333,7 @@ class VaccinationSheet(ccm.Template):
     stock = {'month': month_list, 'link': link_list}
     return stock
   
-  def makeReadme_vaccinationDeliveries(self, page):
+  def makeReadme_vaccinationDeliveries(self, gr):
     key = 'vaccination_deliveries_list'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -349,7 +349,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('  - `available_date`: date after quality checks fulfilled')
     stock.append('  - `delivery_news`: CNA news on the delivery')
     stock.append('  - `available_news`: CNA news or FDA press release on quality checks')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     
     key = 'vaccination_deliveries_reference'
     stock = []
@@ -358,7 +358,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('- Column')
     stock.append('  - `month`')
     stock.append('  - `link`: link to the reference pdf file published by FDA')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_vaccinationDeliveries(self):
@@ -367,16 +367,16 @@ class VaccinationSheet(ccm.Template):
     stock_r = self.makeRef_vaccinationDeliveries()
     stock_r = pd.DataFrame(stock_r)
     
-    for page in ccm.PAGE_LIST:
-      if page != ccm.PAGE_OVERALL:
+    for gr in ccm.GROUP_LIST:
+      if gr != ccm.GROUP_OVERALL:
         continue
       
-      name = '{}processed_data/{}/vaccination_deliveries_list.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/vaccination_deliveries_list.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, stock_d)
-      name = '{}processed_data/{}/vaccination_deliveries_reference.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/vaccination_deliveries_reference.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, stock_r)
       
-      self.makeReadme_vaccinationProgress(page)
+      self.makeReadme_vaccinationProgress(gr)
     return
   
   def makeStock_vaccinationByDose(self):
@@ -416,7 +416,7 @@ class VaccinationSheet(ccm.Template):
       stock[col_tag] = np.around(stock[col_tag] / population_twn, decimals=4)
     return stock
     
-  def makeReadme_vaccinationByDose(self, page):
+  def makeReadme_vaccinationByDose(self, gr):
     key = 'vaccination_by_dose'
     stock = []
     stock.append('`{}.csv`'.format(key))
@@ -429,7 +429,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('  - `ppl_vacc_rate`: proportion of the population vaccinated with their 1st dose')
     stock.append('  - `ppl_fully_vacc_rate`: proportion of the population fully vaccinated')
     stock.append('  - `ppl_vacc_3_rate`: proportion of the population vaccinated with their 3rd dose')
-    ccm.README_DICT[page][key] = stock
+    ccm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_vaccinationByDose(self):
@@ -438,22 +438,22 @@ class VaccinationSheet(ccm.Template):
     stock = pd.DataFrame(stock)
     stock = ccm.adjustDateRange(stock)
     
-    for page in ccm.PAGE_LIST:
-      if page == ccm.PAGE_2020:
+    for gr in ccm.GROUP_LIST:
+      if gr == ccm.GROUP_2020:
         continue
       
-      data = ccm.truncateStock(stock, page)
+      data = ccm.truncateStock(stock, gr)
       
       ## Vaccination trunk
-      if page == ccm.PAGE_OVERALL:
+      if gr == ccm.GROUP_OVERALL:
         ind = ccm.ISODateToOrd(ccm.ISO_DATE_REF_VACC) - ccm.ISODateToOrd(ccm.ISO_DATE_REF)
         data = data[ind:]
         
       ## Save
-      name = '{}processed_data/{}/vaccination_by_dose.csv'.format(ccm.DATA_PATH, page)
+      name = '{}processed_data/{}/vaccination_by_dose.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
       
-      self.makeReadme_vaccinationByDose(page)
+      self.makeReadme_vaccinationByDose(gr)
     return
   
   def saveCsv(self):
