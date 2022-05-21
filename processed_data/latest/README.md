@@ -57,6 +57,12 @@ Contents
   - `death`
   - `death_avg`: 7-day moving average of `death`
 
+`death_delay.csv`
+- Row: delay in days between case and death report
+- Column: transmission type
+  - `difference`: see row
+  - `total`: last 90 days
+
 `hospitalization_or_isolation.csv`
 - Row: report date
 - Column

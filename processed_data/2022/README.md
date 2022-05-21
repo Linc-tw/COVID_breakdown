@@ -26,7 +26,7 @@ Contents
 - Row: age group
 - Column
   - `age`
-  - `total`: all year 2022
+  - `total`: 2022 all year
   - `MMM`: during month `MMM`
 
 `case_by_age_label.csv`
@@ -57,6 +57,12 @@ Contents
   - `death`
   - `death_avg`: 7-day moving average of `death`
 
+`death_delay.csv`
+- Row: delay in days between case and death report
+- Column: transmission type
+  - `difference`: see row
+  - `total`: all year 2022
+
 `hospitalization_or_isolation.csv`
 - Row: report date
 - Column
@@ -67,7 +73,7 @@ Contents
 - Row: city or county
 - Column
   - `county`
-  - `total`: all year 2022
+  - `total`: 2022 all year
   - `MMM`: during month `MMM`
 
 `incidence_map_label.csv`
