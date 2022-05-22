@@ -37,6 +37,29 @@ Contents
   - `label_fr`: label in French (contains non-ASCII characters)
   - `label_zh`: label in Mandarin (contains non-ASCII characters)
 
+`case_by_transmission_by_onset_day.csv`
+- Row: onset date
+- Column
+  - `date`
+  - `imported`
+  - `linked`: local cases linked to known ones
+  - `unlinked`: local cases with unknown origin
+  - `fleet`: on boat
+  - `plane`: on plane
+  - `unknown`: undetermined`
+- Cases without onset date do not show up in the file
+
+`case_by_transmission_by_report_day.csv`
+- Row: report date
+- Column
+  - `date`
+  - `imported`
+  - `linked`: local cases linked to known ones
+  - `unlinked`: local cases with unknown origin
+  - `fleet`: on boat
+  - `plane`: on plane
+  - `unknown`: undetermined`
+
 `case_counts_by_report_day.csv`
 - Row: report date
 - Column

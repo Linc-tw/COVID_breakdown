@@ -11,6 +11,23 @@ This folder hosts data files which summarize COVID statistics in Taiwan during 2
 Contents
 --------
 
+`age_symptom_correlations.csv`
+- Row: matrix element
+- Column
+  - `symptom`
+  - `age`: age range
+  - `corr`: correlation coefficient between `symptom` & `age`
+  - `count`: number of confirmed cases from `age` having `symptom`
+
+`age_symptom_correlations_label.csv`
+- Row: symptom or age range
+- Column
+  - `key`
+  - `count`: number of confirmed cases of `key`
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
+
 `border_statistics.csv`
 - Row: report date
 - Column
@@ -37,6 +54,53 @@ Contents
   - `label_fr`: label in French (contains non-ASCII characters)
   - `label_zh`: label in Mandarin (contains non-ASCII characters)
 
+`case_by_detection_by_onset_day.csv`
+- Row: onset date
+- Column
+  - `date`
+  - `airport`
+  - `quarantine`: during isolation because of having high-risk travel history
+  - `isolation`: during isolation because of being close contact of confirmed cases
+  - `monitoring`: during 7 days after quarantine or isolation`
+  - `hospital`: detected in community`
+  - `overseas`: diagnosed overseas`
+  - `no_data`: no detection channel data`
+
+`case_by_detection_by_report_day.csv`
+- Row: report date
+- Column
+  - `date`
+  - `airport`
+  - `quarantine`: during isolation because of having high-risk travel history
+  - `isolation`: during isolation because of being close contact of confirmed cases
+  - `monitoring`: during 7 days after quarantine or isolation`
+  - `hospital`: detected in community`
+  - `overseas`: diagnosed overseas`
+  - `no_data`: no detection channel data`
+
+`case_by_transmission_by_onset_day.csv`
+- Row: onset date
+- Column
+  - `date`
+  - `imported`
+  - `linked`: local cases linked to known ones
+  - `unlinked`: local cases with unknown origin
+  - `fleet`: on boat
+  - `plane`: on plane
+  - `unknown`: undetermined`
+- Cases without onset date do not show up in the file
+
+`case_by_transmission_by_report_day.csv`
+- Row: report date
+- Column
+  - `date`
+  - `imported`
+  - `linked`: local cases linked to known ones
+  - `unlinked`: local cases with unknown origin
+  - `fleet`: on boat
+  - `plane`: on plane
+  - `unknown`: undetermined`
+
 `case_counts_by_report_day.csv`
 - Row: report date
 - Column
@@ -62,6 +126,19 @@ Contents
 - Column: transmission type
   - `difference`: see row
   - `total`: all year 2020
+
+`difference_by_transmission.csv`
+- Row: delay in number of days before identifying a transmission
+  - For local cases, it is defined as the delay between the report date & the onset date.
+  - For imported cases, it is defined as the delay between the report date & the later one of the onset date & the entry date.
+- Column: transmission type
+  - `difference`: see row
+  - `total`: `imported` + `local` + `others`
+  - `imported`: imported cases
+  - `local`: local cases
+  - `others`: on plane, on boat, & unknown
+- Value: number of case counts
+- This information is not available for all cases.
 
 `hospitalization_or_isolation.csv`
 - Row: report date
@@ -134,3 +211,20 @@ Contents
   - `date`
   - `total`: total test counts
   - `total_avg`: 7-day moving average of `total`
+
+`travel_history_symptom_correlations.csv`
+- Row: matrix element
+- Column
+  - `symptom`
+  - `trav_hist`: country as travel history
+  - `corr`: correlation coefficient between `symptom` & `trav_hist`
+  - `count`: number of confirmed cases having `symptom` & `trav_hist` simultaneously
+
+`travel_history_symptom_correlations_label.csv`
+- Row: symptom or travel history
+- Column
+  - `key`
+  - `count`: number of confirmed cases of `key`
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
