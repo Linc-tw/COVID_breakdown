@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_county.js  --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.20                --//
+    //--  2022.05.22                --//
     //--------------------------------//
 
 function VBC_InitFig(wrap) {
@@ -72,10 +72,6 @@ function VBC_FormatData(wrap, data) {
   for (i=0; i<data.length; i++) {
     row = data[i];
     y = row['key'];
-    
-    if (y == 'latest_date')
-      continue;
-    
     x_list = [];
     x_lower = 0;
     
@@ -118,9 +114,6 @@ function VBC_FormatData(wrap, data) {
   var xtick = [];
   for (i=0; i<1.01; i+=x_path)
     xtick.push(i)
-    
-  //-- Get legend value
-  var last_date = data.splice(0, 1)[0]['value_1'];
   
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
@@ -130,7 +123,16 @@ function VBC_FormatData(wrap, data) {
   wrap.x_min = 0.0;
   wrap.x_max = x_max;
   wrap.xtick = xtick;
-  wrap.last_date = last_date;
+}
+
+function VBC_FormatData2(wrap, data2) {
+  //-- Loop over row
+  var i;
+  for (i=0; i<data2.length; i++) {
+    //-- Get value of `latest_date`
+    if ('latest_date' == data2[i]['key'])
+      wrap.last_date = data2[i]['value'];
+  }
 }
 
 //-- Tooltip
@@ -301,11 +303,13 @@ function VBC_Replot(wrap) {
 function VBC_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       VBC_FormatData(wrap, data);
+      VBC_FormatData2(wrap, data2);
       VBC_Plot(wrap);
       VBC_Replot(wrap);
     });

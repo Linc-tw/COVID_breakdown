@@ -230,6 +230,13 @@ Contents
   - `label_fr`: label in French
   - `label_zh`: label in Mandarin
 
+`vaccination_by_county_label.csv`
+- Row
+  - `latest_date`: date of last available data
+- Column
+  - `key`
+  - `value`
+
 `vaccination_by_dose.csv`
 - Row: report date
 - Column

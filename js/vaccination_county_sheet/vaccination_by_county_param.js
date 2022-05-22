@@ -2,13 +2,14 @@
     //--------------------------------------//
     //--  vaccination_by_county_param.js  --//
     //--  Chieh-An Lin                    --//
-    //--  2022.05.08                      --//
+    //--  2022.05.22                      --//
     //--------------------------------------//
 
 var VBC_latest_wrap = {
   tag: 'vaccination_by_county_latest', 
   data_path_list: [
     '../processed_data/latest/vaccination_by_county.csv', 
+    '../processed_data/latest/vaccination_by_county_label.csv', 
   ],
 
   nb_yticks: 9,

@@ -31,10 +31,8 @@ class TimelineSheet(ccm.Template):
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_timeline.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
     
-    date_list = data[self.coltag_date].values
-    ind = (date_list == date_list) * (date_list != '2021分隔線')
-    self.data = data[ind]
-    self.n_total = ind.sum()
+    self.data = data
+    self.n_total = self.getNbRows()
     
     if verbose:
       print('N_total = {:d}'.format(self.n_total))
@@ -87,6 +85,25 @@ class TimelineSheet(ccm.Template):
         key_evt_list.append(key_evt)
     return key_evt_list
   
+  def makeStock_evtTimeline(self):
+    date_list = self.getDate()
+    twn_evt_list = self.getTWNEvt()
+    global_evt_list = self.getGlobalEvt()
+    cdc_evt_list = self.getCDCEvt()
+    
+    col_tag_list = ['date', 'Taiwan_event', 'global_event', 'CDC_event']
+    stock = {col_tag: [] for col_tag in col_tag_list}
+    
+    for date, twn_evt, global_evt, cdc_evt in zip(date_list, twn_evt_list, global_evt_list, cdc_evt_list):
+      if twn_evt != twn_evt and global_evt != global_evt and cdc_evt != cdc_evt:
+        continue
+      
+      stock['date'].append(date)
+      stock['Taiwan_event'].append(twn_evt)
+      stock['global_event'].append(global_evt)
+      stock['CDC_event'].append(cdc_evt)
+    return stock
+      
   def makeReadme_evtTimeline(self):
     key = 'event_timeline_zh-tw'
     stock = []
@@ -101,33 +118,20 @@ class TimelineSheet(ccm.Template):
     ccm.README_DICT['root'][key] = stock
     return
   
-  def saveCsv_evtTimeline(self, save=True):
-    date_list = []
-    twn_evt_list = []
-    global_evt_list = []
-    cdc_evt_list = []
-    
-    for date, twn_evt, global_evt, cdc_evt in zip(self.getDate(), self.getTWNEvt(), self.getGlobalEvt(), self.getCDCEvt()):
-      if twn_evt != twn_evt and global_evt != global_evt and cdc_evt != cdc_evt:
-        continue
-      else:
-        date_list.append(date)
-        twn_evt_list.append(twn_evt)
-        global_evt_list.append(global_evt)
-        cdc_evt_list.append(cdc_evt)
-    
-    stock = {'date': date_list, 'Taiwan_event': twn_evt_list, 'global_event': global_evt_list, 'CDC_event': cdc_evt_list}
-    data = pd.DataFrame(stock)
-    
-    if save:
+  def saveCsv_evtTimeline(self, mode='both'):
+    if mode in ['data', 'both']:
+      data = self.makeStock_evtTimeline()
+      data = pd.DataFrame(data)
+      
       name = '{}processed_data/event_timeline_zh-tw.csv'.format(ccm.DATA_PATH)
       ccm.saveCsv(name, data)
     
-    self.makeReadme_evtTimeline()
+    if mode in ['readme', 'both']:
+      self.makeReadme_evtTimeline()
     return
   
-  def saveCsv(self):
-    self.saveCsv_evtTimeline()
+  def saveCsv(self, mode='both'):
+    self.saveCsv_evtTimeline(mode=mode)
     return
   
 ## End of file

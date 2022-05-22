@@ -93,8 +93,8 @@ class TestSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_testCounts(self, save=True):
-    if save:
+  def saveCsv_testCounts(self, mode='both'):
+    if mode in ['data', 'both']:
       date_list = self.getDate()
       total_list = self.getTotal()
       avg_arr = ccm.makeMovingAverage(total_list)
@@ -106,14 +106,15 @@ class TestSheet(ccm.Template):
       stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
-      if save:
+      if mode in ['data', 'both']:
         data = ccm.truncateStock(stock, gr)
         
         ## Save
         name = '{}processed_data/{}/test_counts.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data)
       
-      self.makeReadme_testCounts(gr)
+      if mode in ['readme', 'both']:
+        self.makeReadme_testCounts(gr)
     return
   
   def makeReadme_testByCriterion(self, gr):
@@ -129,8 +130,8 @@ class TestSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_testByCriterion(self, save=True):
-    if save:
+  def saveCsv_testByCriterion(self, mode='both'):
+    if mode in ['data', 'both']:
       date_list = self.getDate()
       clin_def_list = self.getClinDef()
       qt_list = self.getQT()
@@ -142,14 +143,15 @@ class TestSheet(ccm.Template):
       stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
-      if save:
+      if mode in ['data', 'both']:
         data = ccm.truncateStock(stock, gr)
         
         ## Save
         name = '{}processed_data/{}/test_by_criterion.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data)
       
-      self.makeReadme_testByCriterion(gr)
+      if mode in ['readme', 'both']:
+        self.makeReadme_testByCriterion(gr)
     return
   
   def getUrlDict(self):
@@ -206,8 +208,8 @@ class TestSheet(ccm.Template):
     ccm.README_DICT['root'][key] = stock
     return
   
-  def saveCsv_criteriaTimeline(self, save=True):
-    if save:
+  def saveCsv_criteriaTimeline(self, mode='both'):
+    if mode in ['data', 'both']:
       crit_dict = {
         '2020-01-16': {
           'en': 'Wuhan w/ fever or resp. symp. or pneumonia\nClose contact of confirmed cases', ## Close contact of confirmed cases or ppl satisfying prev. cond.
@@ -327,7 +329,8 @@ class TestSheet(ccm.Template):
       name = '{}processed_data/criteria_timeline.csv'.format(ccm.DATA_PATH)
       ccm.saveCsv(name, data)
     
-    self.makeReadme_criteriaTimeline()
+    if mode in ['readme', 'both']:
+      self.makeReadme_criteriaTimeline()
     return
   
   def updateNewTestCounts(self, stock):
@@ -342,10 +345,10 @@ class TestSheet(ccm.Template):
     stock['new_tests'] = stock_tmp['new_tests'].values
     return
   
-  def saveCsv(self):
-    self.saveCsv_testCounts()
-    self.saveCsv_testByCriterion()
-    self.saveCsv_criteriaTimeline(False)
+  def saveCsv(self, mode='both'):
+    self.saveCsv_testCounts(mode=mode)
+    self.saveCsv_testByCriterion(mode=mode)
+    self.saveCsv_criteriaTimeline(mode='readme')
     return
 
 ## End of file

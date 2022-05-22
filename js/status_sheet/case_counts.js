@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_counts.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.08                --//
+    //--  2022.05.22                --//
     //--------------------------------//
 
 function CC_InitFig(wrap) {
@@ -159,7 +159,7 @@ function CC_FormatData2(wrap, data2) {
   //-- Loop over row
   var i;
   for (i=0; i<data2.length; i++) {
-    //-- Get value of `n_tot`
+    //-- Get value of `timestamp`
     if ('timestamp' == data2[i]['key'])
       wrap.timestamp = data2[i]['value'];
   }

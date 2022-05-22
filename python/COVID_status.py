@@ -60,6 +60,10 @@ class StatusSheet(ccm.Template):
     self.n_total = 0
     self.n_latest = 0
     self.n_year_dict = {}
+    self.ind_2021 = None
+    self.ind_2022 = None
+    self.ind_2023 = None
+    ## new_year_token
     
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_status_evolution.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
@@ -79,10 +83,10 @@ class StatusSheet(ccm.Template):
   def setData(self, data):
     date_list = data[self.coltag_date].values
     
-    ## new_year_token
     self.ind_2021 = (date_list == '2021分隔線').argmax() - 1
     self.ind_2022 = (date_list == '2022分隔線').argmax() - 2
     self.ind_2023 = (date_list == '2023分隔線').argmax() - 3
+    ## new_year_token
     
     cum_dis_list = data[self.coltag_cum_dis].values
     ind = cum_dis_list == cum_dis_list
@@ -178,8 +182,8 @@ class StatusSheet(ccm.Template):
     ccm.README_DICT['root'][key] = stock
     return
   
-  def saveCsv_keyNb(self, save=True):
-    if save:
+  def saveCsv_keyNb(self, mode='both'):
+    if mode in ['data', 'both']:
       timestamp = dtt.datetime.now().astimezone()
       timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
       
@@ -196,7 +200,8 @@ class StatusSheet(ccm.Template):
       name = '{}processed_data/key_numbers.csv'.format(ccm.DATA_PATH)
       ccm.saveCsv(name, data)
     
-    self.makeReadme_keyNb()
+    if mode in ['readme', 'both']:
+      self.makeReadme_keyNb()
     return
     
   def makeStock_caseCounts(self):
@@ -234,21 +239,22 @@ class StatusSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_caseCounts(self, save=True):
-    if save:
+  def saveCsv_caseCounts(self, mode='both'):
+    if mode in ['data', 'both']:
       stock = self.makeStock_caseCounts()
       stock = pd.DataFrame(stock)
       stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
-      if save:
+      if mode in ['data', 'both']:
         data = ccm.truncateStock(stock, gr)
         
         ## Save
         name = '{}processed_data/{}/case_counts_by_report_day.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data)
       
-      self.makeReadme_caseCounts(gr)
+      if mode in ['readme', 'both']:
+        self.makeReadme_caseCounts(gr)
     return
   
   def makeReadme_statusEvolution(self, gr):
@@ -264,8 +270,8 @@ class StatusSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_statusEvolution(self, save=True):
-    if save:
+  def saveCsv_statusEvolution(self, mode='both'):
+    if mode in ['data', 'both']:
       date_list = self.getDate()
       cum_deaths_list = self.getCumDeaths()
       cum_dis_list = self.getCumDischarged()
@@ -276,14 +282,15 @@ class StatusSheet(ccm.Template):
       stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
-      if save:
+      if mode in ['data', 'both']:
         data = ccm.truncateStock(stock, gr)
         
         ## Save
         name = '{}processed_data/{}/status_evolution.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data)
       
-      self.makeReadme_statusEvolution(gr)
+      if mode in ['readme', 'both']:
+        self.makeReadme_statusEvolution(gr)
     return
     
   def makeStock_deathCounts(self):
@@ -309,21 +316,22 @@ class StatusSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_deathCounts(self, save=True):
-    if save:
+  def saveCsv_deathCounts(self, mode='both'):
+    if mode in ['data', 'both']:
       stock = self.makeStock_deathCounts()
       stock = pd.DataFrame(stock)
       stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
-      if save:
+      if mode in ['data', 'both']:
         data = ccm.truncateStock(stock, gr)
         
         ## Save
         name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data)
       
-      self.makeReadme_deathCounts(gr)
+      if mode in ['readme', 'both']:
+        self.makeReadme_deathCounts(gr)
     return
     
   def makeReadme_hospitalizationOrIsolation(self, gr):
@@ -337,8 +345,8 @@ class StatusSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_hospitalizationOrIsolation(self, save=True):
-    if save:
+  def saveCsv_hospitalizationOrIsolation(self, mode='both'):
+    if mode in ['data', 'both']:
       date_list = self.getDate()
       cum_hosp_list = self.getCumHospitalized()
       
@@ -347,14 +355,15 @@ class StatusSheet(ccm.Template):
       stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
-      if save:
+      if mode in ['data', 'both']:
         data = ccm.truncateStock(stock, gr)
         
         ## Save
         name = '{}processed_data/{}/hospitalization_or_isolation.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data)
       
-      self.makeReadme_hospitalizationOrIsolation(gr)
+      if mode in ['readme', 'both']:
+        self.makeReadme_hospitalizationOrIsolation(gr)
     return
     
   def updateNewCaseCounts(self, stock):
@@ -390,12 +399,12 @@ class StatusSheet(ccm.Template):
     stock['cum_deaths'] = stock_tmp['cum_deaths'].values
     return
 
-  def saveCsv(self):
-    self.saveCsv_keyNb()
-    self.saveCsv_caseCounts()
-    self.saveCsv_statusEvolution()
-    self.saveCsv_deathCounts()
-    self.saveCsv_hospitalizationOrIsolation()
+  def saveCsv(self, mode='both'):
+    self.saveCsv_keyNb(mode=mode)
+    self.saveCsv_caseCounts(mode=mode)
+    self.saveCsv_statusEvolution(mode=mode)
+    self.saveCsv_deathCounts(mode=mode)
+    self.saveCsv_hospitalizationOrIsolation(mode=mode)
     return
 
 ## End of file

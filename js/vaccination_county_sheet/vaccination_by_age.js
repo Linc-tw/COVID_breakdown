@@ -2,7 +2,7 @@
     //-----------------------------//
     //--  vaccination_by_age.js  --//
     //--  Chieh-An Lin           --//
-    //--  2022.05.20             --//
+    //--  2022.05.22             --//
     //-----------------------------//
 
 function VBA_InitFig(wrap) {
@@ -143,6 +143,16 @@ function VBA_FormatData(wrap, data) {
   wrap.x_max = x_max;
   wrap.xtick = xtick;
   wrap.last_date = last_date;
+}
+
+function VBA_FormatData2(wrap, data2) {
+  //-- Loop over row
+  var i;
+  for (i=0; i<data2.length; i++) {
+    //-- Get value of `latest_date`
+    if ('latest_date' == data2[i]['key'])
+      wrap.last_date = data2[i]['value'];
+  }
 }
 
 //-- Tooltip
@@ -313,11 +323,13 @@ function VBA_Replot(wrap) {
 function VBA_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       VBA_FormatData(wrap, data);
+      VBA_FormatData2(wrap, data2);
       VBA_Plot(wrap);
       VBA_Replot(wrap);
     });

@@ -140,8 +140,8 @@ class VaccinationSheet(ccm.Template):
     ## Initialize stock
     stock = ccm.initializeStock_dailyCounts(['interpolated']+brand_key_list)
     stock['interpolated'] += 1
-    for col_tag in brand_key_list:
-      stock[col_tag] = stock[col_tag].astype(float) + np.nan
+    for key in brand_key_list:
+      stock[key] = stock[key].astype(float) + np.nan
     
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
     
@@ -158,9 +158,8 @@ class VaccinationSheet(ccm.Template):
     stock = self.interpolate(stock, brand_key_list, dtype=int, cumul=False)
     
     ## Loop over column
-    for col_tag in brand_key_list:
-      key = col_tag + '_avg'
-      stock[key] = ccm.makeMovingAverage(stock[col_tag])
+    for key in brand_key_list:
+      stock[key+'_avg'] = ccm.makeMovingAverage(stock[key])
     return stock
   
   def makeReadme_vaccinationByBrand(self, gr):
@@ -184,30 +183,31 @@ class VaccinationSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_vaccinationByBrand(self, save=True):
-    stock = self.makeStock_vaccinationByBrand()
-    stock = self.interpolate_vaccinationByBrand(stock)
-    
-    stock = pd.DataFrame(stock)
-    stock = ccm.adjustDateRange(stock)
-    
+  def saveCsv_vaccinationByBrand(self, mode='both'):
+    if mode in ['data', 'both']:
+      stock = self.makeStock_vaccinationByBrand()
+      stock = self.interpolate_vaccinationByBrand(stock)
+      stock = pd.DataFrame(stock)
+      stock = ccm.adjustDateRange(stock)
+      
     for gr in ccm.GROUP_LIST:
       if gr == ccm.GROUP_2020:
         continue
       
-      data = ccm.truncateStock(stock, gr)
-      
-      ## Vaccination trunk
-      if gr == ccm.GROUP_OVERALL:
-        ind = ccm.ISODateToOrd(ccm.ISO_DATE_REF_VACC) - ccm.ISODateToOrd(ccm.ISO_DATE_REF)
-        data = data[ind:]
+      if mode in ['data', 'both']:
+        data = ccm.truncateStock(stock, gr)
         
-      ## Save
-      if save:
+        ## Vaccination trunk
+        if gr == ccm.GROUP_OVERALL:
+          ind = ccm.ISODateToOrd(ccm.ISO_DATE_REF_VACC) - ccm.ISODateToOrd(ccm.ISO_DATE_REF)
+          data = data[ind:]
+          
+        ## Save
         name = '{}processed_data/{}/vaccination_by_brand.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data)
-      
-      self.makeReadme_vaccinationByBrand(gr)
+        
+      if mode in ['readme', 'both']:
+        self.makeReadme_vaccinationByBrand(gr)
     return
   
   def makeSupplies_vaccinationProgress(self):
@@ -215,21 +215,17 @@ class VaccinationSheet(ccm.Template):
     nb_rows = len(ccm.DELIVERY_LIST)
     brand_key_list = ['total'] + self.brand_key_list
     
-    cum_dict = {brand: 0 for brand in brand_key_list}
+    cum_dict = {key: 0 for key in brand_key_list}
     stock = {key: [] for key in ['date', 'source']+brand_key_list}
     today_ord = ccm.getTodayOrdinal()
     
     ## brand, source, quantity, delivery_date, available_date, delivery_news, available_news
-    for i, row in enumerate(ccm.DELIVERY_LIST):
-      brand = row[0]
-      source = row[1]
-      quantity = row[2]
-      delivery_date = row[3]
-      available_date = row[4]
+    for row in ccm.DELIVERY_LIST:
+      brand, source, quantity, delivery_date, available_date, _, _ = row
       
       if available_date is None or available_date == '':
         estimated_avail = ccm.ISODateToOrd(delivery_date) + 8
-        if estimated_avail > today_ord: 
+        if estimated_avail > today_ord:
           ind = -1
         else:
           available_date = ccm.ordDateToISO(estimated_avail)
@@ -242,8 +238,8 @@ class VaccinationSheet(ccm.Template):
       
       stock['date'].append(available_date)
       stock['source'].append(source)
-      for brand in brand_key_list:
-        stock[brand].append(cum_dict[brand])
+      for key in brand_key_list:
+        stock[key].append(cum_dict[key])
         
     return stock
     
@@ -285,53 +281,50 @@ class VaccinationSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_vaccinationProgress(self, save=True):
-    stock_s = self.makeSupplies_vaccinationProgress()
-    stock_s = pd.DataFrame(stock_s)
-    stock_i = self.makeInjections_vaccinationProgress()
-    stock_i = pd.DataFrame(stock_i)
-    stock_i = ccm.adjustDateRange(stock_i)
+  def saveCsv_vaccinationProgress(self, mode='both'):
+    if mode in ['data', 'both']:
+      data_s = self.makeSupplies_vaccinationProgress()
+      data_s = pd.DataFrame(data_s) ## No cut on supplies
+      
+      stock_i = self.makeInjections_vaccinationProgress()
+      stock_i = pd.DataFrame(stock_i)
+      stock_i = ccm.adjustDateRange(stock_i)
     
     for gr in ccm.GROUP_LIST:
       if gr == ccm.GROUP_2020:
         continue
       
-      ## No cut on supplies
-      data_s = stock_s
-      data_i = ccm.truncateStock(stock_i, gr)
-      
-      ## Vaccination trunk
-      if gr == ccm.GROUP_OVERALL:
-        ind = ccm.ISODateToOrd(ccm.ISO_DATE_REF_VACC) - ccm.ISODateToOrd(ccm.ISO_DATE_REF)
-        data_i = data_i[ind:]
+      if mode in ['data', 'both']:
+        data_i = ccm.truncateStock(stock_i, gr)
         
-      if save:
+        ## Vaccination trunk
+        if gr == ccm.GROUP_OVERALL:
+          ind = ccm.ISODateToOrd(ccm.ISO_DATE_REF_VACC) - ccm.ISODateToOrd(ccm.ISO_DATE_REF)
+          data_i = data_i[ind:]
+        
         name = '{}processed_data/{}/vaccination_progress_supplies.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data_s)
         name = '{}processed_data/{}/vaccination_progress_injections.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data_i)
       
-      self.makeReadme_vaccinationProgress(gr)
+      if mode in ['readme', 'both']:
+        self.makeReadme_vaccinationProgress(gr)
     return
   
   def makeDeliveries_vaccinationDeliveries(self):
-    brand_list          = [delivery[0] for delivery in ccm.DELIVERY_LIST]
-    source_list         = [delivery[1] for delivery in ccm.DELIVERY_LIST]
-    quantity_list       = [delivery[2] for delivery in ccm.DELIVERY_LIST]
-    delivery_date_list  = [delivery[3] for delivery in ccm.DELIVERY_LIST]
-    available_date_list = [delivery[4] for delivery in ccm.DELIVERY_LIST]
-    delivery_news_list  = [delivery[5] for delivery in ccm.DELIVERY_LIST]
-    available_news_list = [delivery[6] for delivery in ccm.DELIVERY_LIST]
-    stock = {
-      'brand': brand_list, 'source': source_list, 'quantity': quantity_list, 
-      'delivery_date': delivery_date_list, 'available_date': available_date_list, 
-      'delivery_news': delivery_news_list, 'available_news': available_news_list,
-    }
+    col_tag_list = ['brand', 'source', 'quantity', 'delivery_date', 'available_date', 'delivery_news', 'available_news']
+    stock = [[] for _ in col_tag_list]
+    
+    for delivery in ccm.DELIVERY_LIST:
+      for i, value in enumerate(delivery):
+        stock[i].append(value)
+    
+    stock = {col_tag: list_ for col_tag, list_ in zip(col_tag_list, stock)}
     return stock
   
   def makeRef_vaccinationDeliveries(self):
     month_list = list(ccm.QC_REF_DICT.keys())
-    link_list  = list(ccm.QC_REF_DICT.values())
+    link_list = list(ccm.QC_REF_DICT.values())
     stock = {'month': month_list, 'link': link_list}
     return stock
   
@@ -363,24 +356,27 @@ class VaccinationSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_vaccinationDeliveries(self, save=True):
-    stock_d = self.makeDeliveries_vaccinationDeliveries()
-    stock_d = pd.DataFrame(stock_d)
-    stock_r = self.makeRef_vaccinationDeliveries()
-    stock_r = pd.DataFrame(stock_r)
+  def saveCsv_vaccinationDeliveries(self, mode='both'):
+    if mode in ['data', 'both']:
+      data_d = self.makeDeliveries_vaccinationDeliveries()
+      data_d = pd.DataFrame(data_d)
+      
+      data_r = self.makeRef_vaccinationDeliveries()
+      data_r = pd.DataFrame(data_r)
     
     for gr in ccm.GROUP_LIST:
       if gr != ccm.GROUP_OVERALL:
         continue
       
       ## Save
-      if save:
+      if mode in ['data', 'both']:
         name = '{}processed_data/{}/vaccination_deliveries_list.csv'.format(ccm.DATA_PATH, gr)
-        ccm.saveCsv(name, stock_d)
+        ccm.saveCsv(name, data_d)
         name = '{}processed_data/{}/vaccination_deliveries_reference.csv'.format(ccm.DATA_PATH, gr)
-        ccm.saveCsv(name, stock_r)
+        ccm.saveCsv(name, data_r)
       
-      self.makeReadme_vaccinationProgress(gr)
+      if mode in ['readme', 'both']:
+        self.makeReadme_vaccinationProgress(gr)
     return
   
   def makeStock_vaccinationByDose(self):
@@ -396,8 +392,8 @@ class VaccinationSheet(ccm.Template):
     ## Make stock
     stock = ccm.initializeStock_dailyCounts(['interpolated']+self.dose_key_list)
     stock['interpolated'] += 1
-    for col_tag in self.dose_key_list:
-      stock[col_tag] = stock[col_tag].astype(float) + np.nan
+    for key in self.dose_key_list:
+      stock[key] = stock[key].astype(float) + np.nan
     
     ## Fill from raw data
     for date, brand, cum_1st, cum_2nd, cum_3rd in zip(date_list, brand_list, cum_1st_list, cum_2nd_list, cum_3rd_list):
@@ -416,8 +412,8 @@ class VaccinationSheet(ccm.Template):
     
     ## Normalize & format
     population_twn = ccm.COUNTY_DICT['00000']['population']
-    for col_tag in self.dose_key_list:
-      stock[col_tag] = np.around(stock[col_tag] / population_twn, decimals=4)
+    for key in self.dose_key_list:
+      stock[key] = np.around(stock[key] / population_twn, decimals=4)
     return stock
     
   def makeReadme_vaccinationByDose(self, gr):
@@ -436,36 +432,38 @@ class VaccinationSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_vaccinationByDose(self, save=True):
-    stock = self.makeStock_vaccinationByDose()
-    stock = self.interpolate_vaccinationByDose(stock)
-    stock = pd.DataFrame(stock)
-    stock = ccm.adjustDateRange(stock)
+  def saveCsv_vaccinationByDose(self, mode='both'):
+    if mode in ['data', 'both']:
+      stock = self.makeStock_vaccinationByDose()
+      stock = self.interpolate_vaccinationByDose(stock)
+      stock = pd.DataFrame(stock)
+      stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
       if gr == ccm.GROUP_2020:
         continue
       
-      data = ccm.truncateStock(stock, gr)
-      
-      ## Vaccination trunk
-      if gr == ccm.GROUP_OVERALL:
-        ind = ccm.ISODateToOrd(ccm.ISO_DATE_REF_VACC) - ccm.ISODateToOrd(ccm.ISO_DATE_REF)
-        data = data[ind:]
+      if mode in ['data', 'both']:
+        data = ccm.truncateStock(stock, gr)
         
-      ## Save
-      if save:
+        ## Vaccination trunk
+        if gr == ccm.GROUP_OVERALL:
+          ind = ccm.ISODateToOrd(ccm.ISO_DATE_REF_VACC) - ccm.ISODateToOrd(ccm.ISO_DATE_REF)
+          data = data[ind:]
+          
+        ## Save
         name = '{}processed_data/{}/vaccination_by_dose.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data)
       
-      self.makeReadme_vaccinationByDose(gr)
+      if mode in ['readme', 'both']:
+        self.makeReadme_vaccinationByDose(gr)
     return
   
-  def saveCsv(self):
-    self.saveCsv_vaccinationByBrand()
-    self.saveCsv_vaccinationProgress()
-    self.saveCsv_vaccinationDeliveries()
-    self.saveCsv_vaccinationByDose()
+  def saveCsv(self, mode='both'):
+    self.saveCsv_vaccinationByBrand(mode=mode)
+    self.saveCsv_vaccinationProgress(mode=mode)
+    self.saveCsv_vaccinationDeliveries(mode=mode)
+    self.saveCsv_vaccinationByDose(mode=mode)
     return
   
 ## End of file

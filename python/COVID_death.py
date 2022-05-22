@@ -42,7 +42,8 @@ class DeathSheet(ccm.Template):
     
     self.data = data
     self.correctData()
-    self.n_total = self.data.shape[0]
+    self.n_total = self.getNbRows()
+    
     self.age_key_list = [
       '0-9', '10-19', '20-29', '30-39', '40-49', '50-59', 
       '60-69', '70-79', '80-89', '90-99', '100+'
@@ -145,22 +146,22 @@ class DeathSheet(ccm.Template):
     return
   
   ## Not used
-  def saveCsv_deathCounts(self, save=True):
-    if save:
+  def saveCsv_deathCounts(self, mode='both'):
+    if mode in ['data', 'both']:
       stock = self.increment_deathCounts()
-      
       stock = pd.DataFrame(stock)
       stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
-      if save:
+      if mode in ['data', 'both']:
         data = ccm.truncateStock(stock, gr)
         
         ## Save
         name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data)
       
-      self.makeReadme_deathCounts(gr)
+      if mode in ['readme', 'both']:
+        self.makeReadme_deathCounts(gr)
     return
   
   def increment_deathDelay(self):
@@ -228,13 +229,13 @@ class DeathSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_deathDelay(self, save=True):
-    if save:
+  def saveCsv_deathDelay(self, mode='both'):
+    if mode in ['data', 'both']:
       stock_dict = self.increment_deathDelay()
       stock_dict = self.makeHist_deathDelay(stock_dict)
     
     for gr in ccm.GROUP_LIST:
-      if save:
+      if mode in ['data', 'both']:
         stock = stock_dict[gr]
         data_c = {'difference': stock['bins'], 'total': stock['n_arr']}
         
@@ -248,14 +249,15 @@ class DeathSheet(ccm.Template):
         value_list = [stock[key] for key in key_list]
         data_l = {'key': key_list, 'value': value_list}
         data_l = pd.DataFrame(data_l)
-      
+        
+        ## Save
         name = '{}processed_data/{}/death_delay.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data_c)
-        
         name = '{}processed_data/{}/death_delay_label.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data_l)
       
-      self.makeReadme_deathDelay(gr)
+      if mode in ['readme', 'both']:
+        self.makeReadme_deathDelay(gr)
     return
   
   def updateDeathByAge(self, stock):
@@ -279,8 +281,8 @@ class DeathSheet(ccm.Template):
       stock['death_by_age_'+year]['total'] += 1
     return
     
-  def saveCsv(self):
-    self.saveCsv_deathDelay()
+  def saveCsv(self, mode='both'):
+    self.saveCsv_deathDelay(mode=mode)
     return
 
 ## End of file

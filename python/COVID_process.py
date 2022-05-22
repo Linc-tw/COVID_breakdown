@@ -79,20 +79,21 @@ def makeReadme_incidenceRates(gr):
   ccm.README_DICT[gr][key] = stock
   return
   
-def saveCsv_incidenceRates(status_sheet, border_sheet, save=True):
-  if save:
+def saveCsv_incidenceRates(status_sheet, border_sheet, mode='both'):
+  if mode in ['data', 'both']:
     stock = makeStock_incidenceRates(status_sheet, border_sheet)
     stock = pd.DataFrame(stock)
   
   for gr in ccm.GROUP_LIST:
-    if save:
+    if mode in ['data', 'both']:
       data = ccm.truncateStock(stock, gr)
       
       ## Save
       name = '{}processed_data/{}/incidence_rates.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
     
-    makeReadme_incidenceRates(gr)
+    if mode in ['readme', 'both']:
+      makeReadme_incidenceRates(gr)
   return
   
 def makeStock_positivityAndFatality(status_sheet, test_sheet):
@@ -148,20 +149,21 @@ def makeReadme_positivityAndFatality(gr):
   ccm.README_DICT[gr][key] = stock
   return
   
-def saveCsv_positivityAndFatality(status_sheet, test_sheet, save=True):
-  if save:
+def saveCsv_positivityAndFatality(status_sheet, test_sheet, mode='both'):
+  if mode in ['data', 'both']:
     stock = makeStock_positivityAndFatality(status_sheet, test_sheet)
     stock = pd.DataFrame(stock)
   
   for gr in ccm.GROUP_LIST:
-    if save:
+    if mode in ['data', 'both']:
       data = ccm.truncateStock(stock, gr)
       
       ## Save
       name = '{}processed_data/{}/positivity_and_fatality.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
     
-    makeReadme_positivityAndFatality(gr)
+    if mode in ['readme', 'both']:
+      makeReadme_positivityAndFatality(gr)
   return
 
 def makeCountStock_deathByAge(death_sheet):
@@ -274,10 +276,10 @@ def makeReadme_deathByAge(gr):
   ccm.README_DICT[gr][key] = stock
   return
   
-def saveCsv_deathByAge(county_sheet, death_sheet, save=True):
+def saveCsv_deathByAge(county_sheet, death_sheet, mode='both'):
   gr = ccm.GROUP_OVERALL
   
-  if save:
+  if mode in ['data', 'both']:
     data_c = makeCountStock_deathByAge(death_sheet)
     data_c = pd.DataFrame(data_c)
     
@@ -295,98 +297,105 @@ def saveCsv_deathByAge(county_sheet, death_sheet, save=True):
     name = '{}processed_data/{}/death_by_age_label.csv'.format(ccm.DATA_PATH, gr)
     ccm.saveCsv(name, data_l)
   
-  makeReadme_deathByAge(gr)
+  if mode in ['readme', 'both']:
+    makeReadme_deathByAge(gr)
+  return
+
+def saveCsv_others(status_sheet, test_sheet, border_sheet, county_sheet, death_sheet, mode='both'):
+  saveCsv_incidenceRates(status_sheet, border_sheet, mode=mode)
+  saveCsv_positivityAndFatality(status_sheet, test_sheet, mode=mode)
+  saveCsv_deathByAge(county_sheet, death_sheet, mode=mode)
   return
 
 ################################################################################
 ## Functions - sandbox
 
 def sandbox():
+  mode = 'data'
   #ccm.initializeReadme()
   
   #case_sheet = COVID_case.CaseSheet()
   #link_list = case_sheet.getLink()
   
   #status_sheet = COVID_status.StatusSheet()
-  #status_sheet.saveCsv_deathCounts()
+  #status_sheet.saveCsv_deathCounts(mode=mode)
   
   #test_sheet = COVID_test.TestSheet()
-  #test_sheet.saveCsv_testCounts()
+  #test_sheet.saveCsv_testCounts(mode=mode)
   
   #border_sheet = COVID_border.BorderSheet()
-  #border_sheet.saveCsv_borderStats()
+  #border_sheet.saveCsv_borderStats(mode=mode)
   
-  #timeline_sheet = COVID_timeline.TimelineSheet()
-  #timeline_sheet.saveCsv_evtTimeline()
+  timeline_sheet = COVID_timeline.TimelineSheet()
+  timeline_sheet.saveCsv_evtTimeline(mode=mode)
   
   #county_sheet = COVID_county.CountySheet()
-  #county_sheet.saveCsv_incidenceMap()
+  #county_sheet.saveCsv_incidenceMap(mode=mode)
   
   #vacc_sheet = COVID_vaccination.VaccinationSheet()
-  #vacc_sheet.saveCsv_vaccinationByBrand()
+  #vacc_sheet.saveCsv_vaccinationByBrand(mode=mode)
   
   #vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
-  #vc_sheet.saveCsv_vaccinationByAge()
+  #vc_sheet.saveCsv_vaccinationByAge(mode=mode)
   
-  death_sheet = COVID_death.DeathSheet()
-  death_sheet.saveCsv_deathDelay()
+  #death_sheet = COVID_death.DeathSheet()
+  #death_sheet.saveCsv_deathDelay(mode=mode)
   
   #status_sheet = COVID_status.StatusSheet()
   #test_sheet = COVID_test.TestSheet()
   #border_sheet = COVID_border.BorderSheet()
   #county_sheet = COVID_county.CountySheet()
   #death_sheet = COVID_death.DeathSheet()
-  #saveCsv_incidenceRates(status_sheet, border_sheet)
-  #saveCsv_positivityAndFatality(status_sheet, test_sheet)
-  #saveCsv_deathByAge(county_sheet, death_sheet)
+  #saveCsv_incidenceRates(status_sheet, border_sheet, mode=mode)
+  #saveCsv_positivityAndFatality(status_sheet, test_sheet, mode=mode)
+  #saveCsv_deathByAge(county_sheet, death_sheet, mode=mode)
   return
 
 ################################################################################
 ## Functions - save
 
 def saveCsv_all():
+  mode = 'both'
   ccm.initializeReadme()
   
   print()
   case_sheet = COVID_case.CaseSheet()
-  case_sheet.saveCsv()
+  case_sheet.saveCsv(mode=mode)
   
   print()
   status_sheet = COVID_status.StatusSheet()
-  status_sheet.saveCsv()
+  status_sheet.saveCsv(mode=mode)
   
   print()
   test_sheet = COVID_test.TestSheet()
-  test_sheet.saveCsv()
+  test_sheet.saveCsv(mode=mode)
   
   print()
   border_sheet = COVID_border.BorderSheet()
-  border_sheet.saveCsv()
+  border_sheet.saveCsv(mode=mode)
   
   print()
   timeline_sheet = COVID_timeline.TimelineSheet()
-  timeline_sheet.saveCsv()
+  timeline_sheet.saveCsv(mode=mode)
   
   print()
   county_sheet = COVID_county.CountySheet()
-  county_sheet.saveCsv()
+  county_sheet.saveCsv(mode=mode)
   
   print()
   vacc_sheet = COVID_vaccination.VaccinationSheet()
-  vacc_sheet.saveCsv()
+  vacc_sheet.saveCsv(mode=mode)
   
   print()
   vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
-  vc_sheet.saveCsv()
+  vc_sheet.saveCsv(mode=mode)
   
   print()
   death_sheet = COVID_death.DeathSheet()
-  death_sheet.saveCsv()
+  death_sheet.saveCsv(mode=mode)
   
   print()
-  saveCsv_incidenceRates(status_sheet, border_sheet)
-  saveCsv_positivityAndFatality(status_sheet, test_sheet)
-  saveCsv_deathByAge(county_sheet, death_sheet)
+  saveCsv_others(status_sheet, test_sheet, border_sheet, county_sheet, death_sheet, mode=mode)
   
   print()
   ccm.saveMarkdown_readme()

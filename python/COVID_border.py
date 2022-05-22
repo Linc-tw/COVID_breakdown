@@ -310,21 +310,22 @@ class BorderSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_borderStats(self, save=True):
-    if save:
+  def saveCsv_borderStats(self, mode='both'):
+    if mode in ['data', 'both']:
       stock = self.makeStock_borderStats()
       stock = pd.DataFrame(stock)
       stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
-      if save:
+      if mode in ['data', 'both']:
         data = ccm.truncateStock(stock, gr)
         
         ## Save
         name = '{}processed_data/{}/border_statistics.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data)
       
-      self.makeReadme_borderStats(gr)
+      if mode in ['readme', 'both']:
+        self.makeReadme_borderStats(gr)
     return
       
   def updateNewEntryCounts(self, stock):
@@ -346,8 +347,8 @@ class BorderSheet(ccm.Template):
       stock['new_entries'][ind] = entry
     return
   
-  def saveCsv(self):
-    self.saveCsv_borderStats()
+  def saveCsv(self, mode='both'):
+    self.saveCsv_borderStats(mode=mode)
     return
 
 ## End of file
