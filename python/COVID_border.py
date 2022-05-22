@@ -145,8 +145,17 @@ class BorderSheet(ccm.Template):
     data = ccm.loadCsv(name, verbose=verbose, header=[0, 1])
     #https://data.gov.tw/dataset/12369
     
-    ## Change header
+    self.setData(data)
+    self.n_total = self.getNbRows()
+    
+    if verbose:
+      print('N_total = {:d}'.format(self.n_total))
+    return 
+    
+  def setData(self, data):
     hdr = []
+    
+    ## Change header
     for pair in data.columns:
       if 'Unnamed:' in pair[0]:
         hdr.append((hdr[-1][0], pair[1]))
@@ -154,17 +163,14 @@ class BorderSheet(ccm.Template):
         hdr.append((pair[0], ''))
       else:
         hdr.append(pair)
+    
     data.columns = [pair[0]+' '+pair[1] for pair in hdr]
     
     date_list = data[self.coltag_date].values
     ind = date_list == date_list
     self.data = data[ind]
-    self.n_total = ind.sum()
-    
-    if verbose:
-      print('N_total = {:d}'.format(self.n_total))
-    return 
-    
+    return
+  
   def getDate(self):
     date_list = ['{}-{}-{}'.format(date[:4], date[4:6], date[6:8]) for date in self.getCol(self.coltag_date)]
     return date_list
@@ -307,7 +313,6 @@ class BorderSheet(ccm.Template):
   def saveCsv_borderStats(self, save=True):
     if save:
       stock = self.makeStock_borderStats()
-      
       stock = pd.DataFrame(stock)
       stock = ccm.adjustDateRange(stock)
     

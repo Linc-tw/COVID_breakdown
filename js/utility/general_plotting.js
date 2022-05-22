@@ -2,16 +2,16 @@
     //--------------------------------//
     //--  general_plotting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.20                --//
+    //--  2022.05.22                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
 //-- TODO
 
-//add new plot: death_delay
-//split positivity & fatality
-//add new line delay fatality
-//new page: death
+//DD: mean on legend
+//SIM: color index
+//PAF: split positivity & fatality
+//CFR: new line delay fatality
 //front page: 6 panels
 
 //------------------------------------------------------------------------------

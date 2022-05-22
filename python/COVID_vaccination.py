@@ -23,10 +23,6 @@ import COVID_common as ccm
 class VaccinationSheet(ccm.Template):
   
   def __init__(self, verbose=True):
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination.csv'.format(ccm.DATA_PATH)
-    data = ccm.loadCsv(name, verbose=verbose)
-    ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004
-    
     self.coltag_row_id = 'id'
     self.coltag_country = '國家'
     self.coltag_date = '統計日期'
@@ -37,10 +33,15 @@ class VaccinationSheet(ccm.Template):
     self.coltag_cum_3rd_2 = '加強劑累計接種人次'
     self.coltag_cum_tot = '總共累計接種人次'
     
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination.csv'.format(ccm.DATA_PATH)
+    data = ccm.loadCsv(name, verbose=verbose)
+    ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004
+    
     self.data = data
+    self.n_total = len(set(self.getDate()))
+    
     self.brand_key_list = ['AZ', 'Moderna', 'Medigen', 'Pfizer']
     self.dose_key_list = ['ppl_vacc_rate', 'ppl_fully_vacc_rate', 'ppl_vacc_3_rate']
-    self.n_total = len(set(self.getDate()))
     
     if verbose:
       print('N_total = {:d}'.format(self.n_total))

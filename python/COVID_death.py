@@ -2,7 +2,7 @@
     ################################
     ##  COVID_death.py            ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.20                ##
+    ##  2022.05.22                ##
     ################################
 
 import os
@@ -127,10 +127,9 @@ class DeathSheet(ccm.Template):
       except IndexError: ## If NaN
         pass
         
-    ## Loop over column
-    for col_tag in col_tag_list:
-      key = col_tag + '_avg'
-      stock[key] = ccm.makeMovingAverage(stock[col_tag])
+    ## Make avg
+    for key in col_tag_list:
+      stock[key+'_avg'] = ccm.makeMovingAverage(stock[key])
     return stock
     
   def makeReadme_deathCounts(self, gr):
@@ -147,15 +146,17 @@ class DeathSheet(ccm.Template):
   
   ## Not used
   def saveCsv_deathCounts(self, save=True):
-    stock = self.increment_deathCounts()
-    stock = pd.DataFrame(stock)
-    stock = ccm.adjustDateRange(stock)
+    if save:
+      stock = self.increment_deathCounts()
+      
+      stock = pd.DataFrame(stock)
+      stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
-      data = ccm.truncateStock(stock, gr)
-      
-      ## Save
       if save:
+        data = ccm.truncateStock(stock, gr)
+        
+        ## Save
         name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data)
       
@@ -195,7 +196,6 @@ class DeathSheet(ccm.Template):
     
     for gr, stock in stock_dict.items():
       n_arr, ctr_bins = ccm.makeHist(stock['list'], bins)
-      
       n_arr = n_arr.round(0).astype(int)
       ctr_bins = ctr_bins.round(0).astype(int)
       ctr_bins[-1] = upper
@@ -229,24 +229,26 @@ class DeathSheet(ccm.Template):
     return
   
   def saveCsv_deathDelay(self, save=True):
-    stock_dict = self.increment_deathDelay()
-    stock_dict = self.makeHist_deathDelay(stock_dict)
+    if save:
+      stock_dict = self.increment_deathDelay()
+      stock_dict = self.makeHist_deathDelay(stock_dict)
     
-    for gr, stock in stock_dict.items():
-      data_c = {'difference': stock['bins'], 'total': stock['n_arr']}
-      
-      if gr == ccm.GROUP_OVERALL:
-        for year in ccm.GROUP_YEAR_LIST:
-          data_c[year] = stock_dict[year]['n_arr']
-      
-      data_c = pd.DataFrame(data_c)
-      
-      key_list = ['counts', 'missing', 'mean']
-      value_list = [stock[key] for key in key_list]
-      data_l = {'key': key_list, 'value': value_list}
-      data_l = pd.DataFrame(data_l)
-      
+    for gr in ccm.GROUP_LIST:
       if save:
+        stock = stock_dict[gr]
+        data_c = {'difference': stock['bins'], 'total': stock['n_arr']}
+        
+        if gr == ccm.GROUP_OVERALL:
+          for year in ccm.GROUP_YEAR_LIST:
+            data_c[year] = stock_dict[year]['n_arr']
+        
+        data_c = pd.DataFrame(data_c)
+        
+        key_list = ['counts', 'missing', 'mean']
+        value_list = [stock[key] for key in key_list]
+        data_l = {'key': key_list, 'value': value_list}
+        data_l = pd.DataFrame(data_l)
+      
         name = '{}processed_data/{}/death_delay.csv'.format(ccm.DATA_PATH, gr)
         ccm.saveCsv(name, data_c)
         
@@ -264,17 +266,17 @@ class DeathSheet(ccm.Template):
     age_key_list = ['total'] + self.age_key_list
     
     ## Initialize stock dict
-    death_hist = {age: 0 for age in age_key_list}
-    for col_tag in year_list:
-      stock['death_by_age_'+col_tag] = death_hist.copy()
+    death_hist = {key: 0 for key in age_key_list}
+    for year in year_list:
+      stock['death_by_age_'+year] = death_hist.copy()
     
     for report_date, age in zip(report_date_list, age_list):
-      col_tag = report_date[:4]
+      year = report_date[:4]
       
-      stock['death_by_age_'+col_tag][age] += 1
-      stock['death_by_age_'+col_tag]['total'] += 1
       stock['death_by_age_total'][age] += 1
       stock['death_by_age_total']['total'] += 1
+      stock['death_by_age_'+year][age] += 1
+      stock['death_by_age_'+year]['total'] += 1
     return
     
   def saveCsv(self):

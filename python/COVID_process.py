@@ -80,14 +80,15 @@ def makeReadme_incidenceRates(gr):
   return
   
 def saveCsv_incidenceRates(status_sheet, border_sheet, save=True):
-  stock = makeStock_incidenceRates(status_sheet, border_sheet)
-  stock = pd.DataFrame(stock)
+  if save:
+    stock = makeStock_incidenceRates(status_sheet, border_sheet)
+    stock = pd.DataFrame(stock)
   
   for gr in ccm.GROUP_LIST:
-    data = ccm.truncateStock(stock, gr)
-    
-    ## Save
     if save:
+      data = ccm.truncateStock(stock, gr)
+      
+      ## Save
       name = '{}processed_data/{}/incidence_rates.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
     
@@ -148,14 +149,15 @@ def makeReadme_positivityAndFatality(gr):
   return
   
 def saveCsv_positivityAndFatality(status_sheet, test_sheet, save=True):
-  stock = makeStock_positivityAndFatality(status_sheet, test_sheet)
-  stock = pd.DataFrame(stock)
+  if save:
+    stock = makeStock_positivityAndFatality(status_sheet, test_sheet)
+    stock = pd.DataFrame(stock)
   
   for gr in ccm.GROUP_LIST:
-    data = ccm.truncateStock(stock, gr)
-    
-    ## Save
     if save:
+      data = ccm.truncateStock(stock, gr)
+      
+      ## Save
       name = '{}processed_data/{}/positivity_and_fatality.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
     
@@ -273,18 +275,19 @@ def makeReadme_deathByAge(gr):
   return
   
 def saveCsv_deathByAge(county_sheet, death_sheet, save=True):
-  stock_c = makeCountStock_deathByAge(death_sheet)
-  stock_r = makeRateStock_deathByAge(county_sheet, death_sheet)
-  data_c = pd.DataFrame(stock_c)
-  data_r = pd.DataFrame(stock_r)
-  
   gr = ccm.GROUP_OVERALL
   
-  stock_l = makeLabel_deathByAge(gr)
-  data_l = pd.DataFrame(stock_l)
-  
-  ## Save
   if save:
+    data_c = makeCountStock_deathByAge(death_sheet)
+    data_c = pd.DataFrame(data_c)
+    
+    data_r = makeRateStock_deathByAge(county_sheet, death_sheet)
+    data_r = pd.DataFrame(data_r)
+    
+    data_l = makeLabel_deathByAge(gr)
+    data_l = pd.DataFrame(data_l)
+    
+    ## Save
     name = '{}processed_data/{}/death_by_age_count.csv'.format(ccm.DATA_PATH, gr)
     ccm.saveCsv(name, data_c)
     name = '{}processed_data/{}/death_by_age_rate.csv'.format(ccm.DATA_PATH, gr)

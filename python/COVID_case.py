@@ -54,12 +54,10 @@ class CaseSheet(ccm.Template):
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
     
-    case_nb_list = data[self.coltag_case].values
-    ind = case_nb_list == case_nb_list
-    self.data = data[ind]
-    self.trans_key_list = ['imported', 'local', 'others']
-    
+    self.setData(data)
     self.setCaseCounts()
+    
+    self.trans_key_list = ['imported', 'local', 'others']
     
     if verbose:
       print('N_total = {:d}'.format(self.n_total))
@@ -69,6 +67,12 @@ class CaseSheet(ccm.Template):
       print('N_empty = {:d}'.format(self.n_empty))
     return 
     
+  def setData(self, data):
+    case_nb_list = data[self.coltag_case].values
+    ind = case_nb_list == case_nb_list
+    self.data = data[ind]
+    return
+  
   def setCaseCounts(self):
     n_list = [0] * len(ccm.GROUP_LIST)
     
@@ -868,7 +872,6 @@ class CaseSheet(ccm.Template):
   def saveCsv_caseCounts(self, save=True):
     if save:
       stock = self.increment_caseCounts()
-      
       stock = pd.DataFrame(stock)
       stock = ccm.adjustDateRange(stock)
     
