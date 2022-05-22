@@ -146,7 +146,7 @@ class DeathSheet(ccm.Template):
     return
   
   ## Not used
-  def saveCsv_deathCounts(self):
+  def saveCsv_deathCounts(self, save=True):
     stock = self.increment_deathCounts()
     stock = pd.DataFrame(stock)
     stock = ccm.adjustDateRange(stock)
@@ -155,8 +155,9 @@ class DeathSheet(ccm.Template):
       data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      if save:
+        name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
       
       self.makeReadme_deathCounts(gr)
     return
@@ -200,7 +201,13 @@ class DeathSheet(ccm.Template):
       ctr_bins[-1] = upper
       
       stock['bins'] = ctr_bins
-      stock['count'] = n_arr
+      stock['n_arr'] = n_arr
+      
+      ## Calculate counts, missing, & mean
+      stock['counts'] = len(stock['list'])
+      stock['missing'] = sum(np.isnan(stock['list']))
+      stock['mean'] = np.nanmean(stock['list'])
+      
     return stock_dict
   
   def makeReadme_deathDelay(self, gr):
@@ -221,19 +228,30 @@ class DeathSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_deathDelay(self):
+  def saveCsv_deathDelay(self, save=True):
     stock_dict = self.increment_deathDelay()
     stock_dict = self.makeHist_deathDelay(stock_dict)
     
     for gr, stock in stock_dict.items():
-      data = {'difference': stock['bins'], 'total': stock['count']}
+      data_c = {'difference': stock['bins'], 'total': stock['n_arr']}
+      
       if gr == ccm.GROUP_OVERALL:
         for year in ccm.GROUP_YEAR_LIST:
-          data[year] = stock_dict[year]['count']
-      data = pd.DataFrame(data)
+          data_c[year] = stock_dict[year]['n_arr']
       
-      name = '{}processed_data/{}/death_delay.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      data_c = pd.DataFrame(data_c)
+      
+      key_list = ['counts', 'missing', 'mean']
+      value_list = [stock[key] for key in key_list]
+      data_l = {'key': key_list, 'value': value_list}
+      data_l = pd.DataFrame(data_l)
+      
+      if save:
+        name = '{}processed_data/{}/death_delay.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data_c)
+        
+        name = '{}processed_data/{}/death_delay_label.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data_l)
       
       self.makeReadme_deathDelay(gr)
     return

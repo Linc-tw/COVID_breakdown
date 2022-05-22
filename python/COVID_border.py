@@ -2,7 +2,7 @@
     ################################
     ##  COVID_border.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.19                ##
+    ##  2022.05.22                ##
     ################################
 
 import os
@@ -266,6 +266,28 @@ class BorderSheet(ccm.Template):
     not_spec_list = np.array(not_spec_list_break).sum(axis=0)
     return not_spec_list
   
+  def makeStock_borderStats(self):
+    date_list = self.getDate()
+    stock = {'date': date_list}
+    border_key_list = ['entry', 'exit', 'total']
+    
+    ## Loop over column
+    for key in border_key_list:
+      if key == 'total':
+        tag = 'both'
+      else:
+        tag = key
+        
+      air_list = self.getAirport(tag=tag)
+      sea_list = self.getSeaport(tag=tag)
+      not_spec_list = self.getNotSpecified(tag=tag)
+      stock[key] = np.array(air_list, dtype=int) + np.array(sea_list, dtype=int) + np.array(not_spec_list, dtype=int)
+      
+    ## Make avg
+    for key in border_key_list:
+      stock[key+'_avg'] = ccm.makeMovingAverage(stock[key])
+    return stock
+  
   def makeReadme_borderStats(self, gr):
     key = 'border_statistics'
     stock = []
@@ -282,36 +304,20 @@ class BorderSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_borderStats(self):
-    date_list = self.getDate()
-    stock = {'date': date_list}
-    col_tag_list = ['entry', 'exit', 'total']
-    
-    for col_tag in col_tag_list:
-      if col_tag == 'total':
-        tag = 'both'
-      else:
-        tag = col_tag
-        
-      air_list = self.getAirport(tag=tag)
-      sea_list = self.getSeaport(tag=tag)
-      not_spec_list = self.getNotSpecified(tag=tag)
-      stock[col_tag] = np.array(air_list, dtype=int) + np.array(sea_list, dtype=int) + np.array(not_spec_list, dtype=int)
+  def saveCsv_borderStats(self, save=True):
+    if save:
+      stock = self.makeStock_borderStats()
       
-    ## Loop over column
-    for col_tag in col_tag_list:
-      key = col_tag + '_avg'
-      stock[key] = ccm.makeMovingAverage(stock[col_tag])
-      
-    stock = pd.DataFrame(stock)
-    stock = ccm.adjustDateRange(stock)
+      stock = pd.DataFrame(stock)
+      stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
-      data = ccm.truncateStock(stock, gr)
-      
-      ## Save
-      name = '{}processed_data/{}/border_statistics.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      if save:
+        data = ccm.truncateStock(stock, gr)
+        
+        ## Save
+        name = '{}processed_data/{}/border_statistics.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
       
       self.makeReadme_borderStats(gr)
     return

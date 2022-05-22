@@ -2,7 +2,7 @@
     ################################
     ##  COVID_county.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.19                ##
+    ##  2022.05.22                ##
     ################################
 
 import os
@@ -108,8 +108,8 @@ class CountySheet(ccm.Template):
     nb_cases_list = self.getNbCases()
     
     ## Initialize stock
-    col_tag_list = ['total'] + self.county_key_list
-    stock = ccm.initializeStock_dailyCounts(col_tag_list)
+    county_key_list = ['total'] + self.county_key_list
+    stock = ccm.initializeStock_dailyCounts(county_key_list)
     
     ind_max = 0
     
@@ -132,9 +132,8 @@ class CountySheet(ccm.Template):
     stock = {k: v[:ind] for k, v in stock.items()}
       
     ## Moving average
-    for col_tag in col_tag_list:
-      key = col_tag + '_avg'
-      stock[key] = ccm.makeMovingAverage(stock[col_tag])
+    for key in county_key_list:
+      stock[key+'_avg'] = ccm.makeMovingAverage(stock[key])
     return stock
   
   def makeReadme_localCasePerCounty(self, gr):
@@ -154,17 +153,20 @@ class CountySheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_localCasePerCounty(self):
-    stock = self.increment_localCasePerCounty()
-    stock = pd.DataFrame(stock)
-    stock = ccm.adjustDateRange(stock)
+  def saveCsv_localCasePerCounty(self, save=True):
+    if save:
+      stock = self.increment_localCasePerCounty()
+      
+      stock = pd.DataFrame(stock)
+      stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
-      data = ccm.truncateStock(stock, gr)
+      if save:
+        data = ccm.truncateStock(stock, gr)
       
-      ## Save
-      name = '{}processed_data/{}/local_case_per_county.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+        ## Save
+        name = '{}processed_data/{}/local_case_per_county.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
       
       self.makeReadme_localCasePerCounty(gr)
     return
@@ -175,7 +177,7 @@ class CountySheet(ccm.Template):
     nb_cases_list = self.getNbCases()
     
     ## Initialize stock dict
-    case_hist = {age: 0 for age in self.age_key_list}
+    case_hist = {key: 0 for key in self.age_key_list}
     stock = [case_hist.copy() for i in range(13)] ## Total + 12 weeks or months
     stock_dict = ccm.initializeStockDict_general(stock)
     
@@ -283,25 +285,27 @@ class CountySheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_caseByAge(self):
-    stock_dict = self.increment_caseByAge()
+  def saveCsv_caseByAge(self, save=True):
+    if save:
+      stock_dict = self.increment_caseByAge()
     
     ## Loop over group
-    for gr, stock in stock_dict.items():
-      stock_l = self.makeLabel_caseByAge(gr)
-      data_l = pd.DataFrame(stock_l)
-      col_tag_list = data_l['key']
-      
-      data_c = {'age': self.age_key_list}
-      data_c.update({col_tag: case_hist.values() for col_tag, case_hist in zip(col_tag_list, stock)})
-      data_c = pd.DataFrame(data_c)
-      
-      ## Save
-      name = '{}processed_data/{}/case_by_age.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_c)
-      
-      name = '{}processed_data/{}/case_by_age_label.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_l)
+    for gr in ccm.GROUP_LIST:
+      if save:
+        data_l = self.makeLabel_caseByAge(gr)
+        data_l = pd.DataFrame(data_l)
+        col_tag_list = data_l['key']
+        
+        stock = stock_dict[gr]
+        data_c = {'age': self.age_key_list}
+        data_c.update({col_tag: case_hist.values() for col_tag, case_hist in zip(col_tag_list, stock)})
+        data_c = pd.DataFrame(data_c)
+        
+        ## Save
+        name = '{}processed_data/{}/case_by_age.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data_c)
+        name = '{}processed_data/{}/case_by_age_label.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data_l)
       
       self.makeReadme_caseByAge(gr)
     return
@@ -313,7 +317,7 @@ class CountySheet(ccm.Template):
     
     ## Initialize stock dict
     county_key_list = ['total'] + self.county_key_list
-    case_hist = {county: 0 for county in county_key_list}
+    case_hist = {key: 0 for key in county_key_list}
     stock = [case_hist.copy() for i in range(13)]
     stock_dict = ccm.initializeStockDict_general(stock)
     
@@ -359,6 +363,20 @@ class CountySheet(ccm.Template):
     
     return stock_dict
   
+  def makeLabel_incidenceMap(self):
+    inv_dict = {dict_['tag']: code for code, dict_ in ccm.COUNTY_DICT.items()}
+    
+    county_key_list = ['total'] + self.county_key_list
+    code_list = [inv_dict[county] for county in county_key_list]
+    
+    population = [ccm.COUNTY_DICT[code]['population'] for code in code_list]
+    label_list_en = [ccm.COUNTY_DICT[code]['label'][0] for code in code_list]
+    label_list_fr = [ccm.COUNTY_DICT[code]['label'][1] for code in code_list]
+    label_list_zh = [ccm.COUNTY_DICT[code]['label'][2] for code in code_list]
+        
+    stock = {'key': county_key_list, 'code': code_list, 'population': population, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
+    return stock
+  
   def makeReadme_incidenceMap(self, gr):
     key = 'incidence_map'
     stock = []
@@ -392,35 +410,29 @@ class CountySheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_incidenceMap(self):
-    stock_dict = self.increment_incidenceMap()
-    county_key_list = ['total'] + self.county_key_list
+  def saveCsv_incidenceMap(self, save=True):
+    if save:
+      stock_dict = self.increment_incidenceMap()
+      
+      data_l = self.makeLabel_incidenceMap()
+      data_l = pd.DataFrame(data_l)
     
     ## Loop over group
-    for gr, stock in stock_dict.items():
-      stock_l = self.makeLabel_caseByAge(gr)
-      col_tag_list = stock_l['key']
-      
-      ## Data for population & label
-      inv_dict = {dict_['tag']: code for code, dict_ in ccm.COUNTY_DICT.items()}
-      code_list = [inv_dict[county] for county in county_key_list]
-      population = [ccm.COUNTY_DICT[code]['population'] for code in code_list]
-      label_list_en = [ccm.COUNTY_DICT[code]['label'][0] for code in code_list]
-      label_list_fr = [ccm.COUNTY_DICT[code]['label'][1] for code in code_list]
-      label_list_zh = [ccm.COUNTY_DICT[code]['label'][2] for code in code_list]
-      
-      data_c = {'county': county_key_list}
-      data_c.update({col_tag: case_hist.values() for col_tag, case_hist in zip(col_tag_list, stock)})
-      data_c = pd.DataFrame(data_c)
-      
-      data_p = {'key': county_key_list, 'code': code_list, 'population': population, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
-      data_p = pd.DataFrame(data_p)
-      
-      ## Save
-      name = '{}processed_data/{}/incidence_map.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_c)
-      name = '{}processed_data/{}/incidence_map_label.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_p)
+    for gr in ccm.GROUP_LIST:
+      if save:
+        stock_col = self.makeLabel_caseByAge(gr)
+        col_tag_list = stock_col['key']
+        
+        stock = stock_dict[gr]
+        data_c = {'county': ['total']+self.county_key_list}
+        data_c.update({col_tag: case_hist.values() for col_tag, case_hist in zip(col_tag_list, stock)})
+        data_c = pd.DataFrame(data_c)
+        
+        ## Save
+        name = '{}processed_data/{}/incidence_map.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data_c)
+        name = '{}processed_data/{}/incidence_map_label.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data_l)
       
       self.makeReadme_incidenceMap(gr)
     return
@@ -495,7 +507,7 @@ class CountySheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_incidenceEvolutionByCounty(self):
+  def saveCsv_incidenceEvolutionByCounty(self, save=True):
     stock = self.smooth_incidenceEvolutionByCounty()
     data_r = pd.DataFrame(stock)
     
@@ -511,11 +523,11 @@ class CountySheet(ccm.Template):
     
     gr = ccm.GROUP_LATEST
     
-    name = '{}processed_data/{}/incidence_evolution_by_county.csv'.format(ccm.DATA_PATH, gr)
-    ccm.saveCsv(name, data_r)
-    
-    name = '{}processed_data/{}/incidence_evolution_by_county_label.csv'.format(ccm.DATA_PATH, gr)
-    ccm.saveCsv(name, data_l)
+    if save:
+      name = '{}processed_data/{}/incidence_evolution_by_county.csv'.format(ccm.DATA_PATH, gr)
+      ccm.saveCsv(name, data_r)
+      name = '{}processed_data/{}/incidence_evolution_by_county_label.csv'.format(ccm.DATA_PATH, gr)
+      ccm.saveCsv(name, data_l)
     
     self.makeReadme_incidenceEvolutionByCounty(gr)
     return
@@ -597,7 +609,7 @@ class CountySheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_incidenceEvolutionByAge(self):
+  def saveCsv_incidenceEvolutionByAge(self, save=True):
     stock = self.smooth_incidenceEvolutionByAge()
     data_r = pd.DataFrame(stock)
     
@@ -614,11 +626,12 @@ class CountySheet(ccm.Template):
     
     gr = ccm.GROUP_LATEST
     
-    name = '{}processed_data/{}/incidence_evolution_by_age.csv'.format(ccm.DATA_PATH, gr)
-    ccm.saveCsv(name, data_r)
-    
-    name = '{}processed_data/{}/incidence_evolution_by_age_label.csv'.format(ccm.DATA_PATH, gr)
-    ccm.saveCsv(name, data_l)
+    ## Save
+    if save:
+      name = '{}processed_data/{}/incidence_evolution_by_age.csv'.format(ccm.DATA_PATH, gr)
+      ccm.saveCsv(name, data_r)
+      name = '{}processed_data/{}/incidence_evolution_by_age_label.csv'.format(ccm.DATA_PATH, gr)
+      ccm.saveCsv(name, data_l)
     
     self.makeReadme_incidenceEvolutionByAge(gr)
     return

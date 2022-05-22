@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_delay.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.20                --//
+    //--  2022.05.21                --//
     //--------------------------------//
 
 function DD_InitFig(wrap) {
@@ -15,27 +15,55 @@ function DD_InitFig(wrap) {
 
 function DD_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('death_delay_title', '確診到死亡延遲時間分布');
+    LS_AddStr('death_delay_title', '確診至死亡所需時間分布');
     LS_AddStr('death_delay_button_total', '合計');
     LS_AddStr('death_delay_button_2020', '2020');
     LS_AddStr('death_delay_button_2021', '2021');
     LS_AddStr('death_delay_button_2022', '2022');
+    
+    LS_AddHtml('death_delay_description', '\
+      當個案死亡時，其「確診到死亡所需時間」為確診通報日與死亡通報日間相隔天數。\
+      <br><br>\
+      確診通報日未必等同於採檢日或發病日，同理死亡通報日也未必等同於死亡日。\
+      <br><br>\
+      此分佈圖有助於估計確診高峰與死亡高峰間之時間差。\
+    ');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('death_delay_title', 'Délai entre infection et décès');
+    LS_AddStr('death_delay_title', 'Délai entre l\'infection et le décès');
     LS_AddStr('death_delay_button_total', 'Totaux');
     LS_AddStr('death_delay_button_2020', '2020');
     LS_AddStr('death_delay_button_2021', '2021');
     LS_AddStr('death_delay_button_2022', '2022');
+    
+    LS_AddHtml('death_delay_description', '\
+      Le « Délai entre l\'infection et le décès » est, lorsque un patient est mort,\
+      le nombre de jours entre la date du signalement de son diagnosis et celle du signalement de son décès.\
+      <br><br>\
+      La date du signalement de diagnosis n\'est pas nécessairement celle de dépistage, ni nécessairement celle d\'apparision des symptômes.\
+      De même, la date du signalement de décès n\'est pas nécessairement celle de décès.\
+      <br><br>\
+      Cette distribution aide à caractériser le délai entre les pics d\'une vague des cas et celle des décès.\
+    ');
   }
   
   else { //-- En
-    LS_AddStr('death_delay_title', 'Delay between Case and Death Counts');
+    LS_AddStr('death_delay_title', 'Delay between Case and Death Reports');
     LS_AddStr('death_delay_button_total', 'Total');
     LS_AddStr('death_delay_button_2020', '2020');
     LS_AddStr('death_delay_button_2021', '2021');
     LS_AddStr('death_delay_button_2022', '2022');
+    
+    LS_AddHtml('death_delay_description', '\
+      The "Delay between Case and Death Reports" is, when a patient dies,\
+      the number of days between the report date of diagnosis and that of death.\
+      <br><br>\
+      The report date of diagnosis is not necessarily the testing date, nor necessarily the onset date.\
+      Similarily, the death report date is not necessarily the date of death.\
+      <br><br>\
+      This distribution helps characterizing the delay between the peaks of a case wave and a death wave.\
+    ');
   }
 }
 
@@ -53,7 +81,7 @@ function DD_FormatData(wrap, data) {
   //-- Variables for xaxis
   var xtick = [];
   var xticklabel = [];
-  var xlabel_path = 5; //-- Hard-coded
+  var xlabel_path = 10; //-- Hard-coded
   var r = 0;
   
   //-- Variables for yaxis
@@ -84,8 +112,9 @@ function DD_FormatData(wrap, data) {
   }
   
   //-- Last tick
-  xtick.push(i+1);
-  xticklabel.push('+');
+  x_list.push('dummy');
+  x = xticklabel.pop();
+  xticklabel.push(x+'+');
   
   //-- Calculate y_max
   y_max *= wrap.y_max_factor;
@@ -213,7 +242,7 @@ function DD_Replot(wrap) {
   GP_ReplotYLabel(wrap, GP_wrap.ylabel_dict_death);
   
   //-- Set legend parameters
-  GP_SetLegendParam(wrap, 'small');
+  GP_SetLegendParam(wrap, 'normal');
   
   //-- Define legend position
   wrap.legend_pos = {x: wrap.legend_pos_x, y: wrap.legend_pos_y, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy};

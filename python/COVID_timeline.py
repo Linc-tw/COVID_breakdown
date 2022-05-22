@@ -2,7 +2,7 @@
     ################################
     ##  COVID_timeline.py         ##
     ##  Chieh-An Lin              ##
-    ##  2022.04.25                ##
+    ##  2022.05.22                ##
     ################################
 
 import os
@@ -101,7 +101,7 @@ class TimelineSheet(ccm.Template):
     ccm.README_DICT['root'][key] = stock
     return
   
-  def saveCsv_evtTimeline(self):
+  def saveCsv_evtTimeline(self, save=True):
     date_list = []
     twn_evt_list = []
     global_evt_list = []
@@ -119,8 +119,9 @@ class TimelineSheet(ccm.Template):
     stock = {'date': date_list, 'Taiwan_event': twn_evt_list, 'global_event': global_evt_list, 'CDC_event': cdc_evt_list}
     data = pd.DataFrame(stock)
     
-    name = '{}processed_data/event_timeline_zh-tw.csv'.format(ccm.DATA_PATH)
-    ccm.saveCsv(name, data)
+    if save:
+      name = '{}processed_data/event_timeline_zh-tw.csv'.format(ccm.DATA_PATH)
+      ccm.saveCsv(name, data)
     
     self.makeReadme_evtTimeline()
     return

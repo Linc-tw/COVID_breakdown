@@ -2,7 +2,7 @@
     ################################
     ##  COVID_vaccination.py      ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.19                ##
+    ##  2022.05.22                ##
     ################################
 
 import os
@@ -38,8 +38,8 @@ class VaccinationSheet(ccm.Template):
     self.coltag_cum_tot = '總共累計接種人次'
     
     self.data = data
-    self.brand_list = ['AZ', 'Moderna', 'Medigen', 'Pfizer']
-    self.dose_list = ['ppl_vacc_rate', 'ppl_fully_vacc_rate', 'ppl_vacc_3_rate']
+    self.brand_key_list = ['AZ', 'Moderna', 'Medigen', 'Pfizer']
+    self.dose_key_list = ['ppl_vacc_rate', 'ppl_fully_vacc_rate', 'ppl_vacc_3_rate']
     self.n_total = len(set(self.getDate()))
     
     if verbose:
@@ -134,12 +134,12 @@ class VaccinationSheet(ccm.Template):
     for date, brand, cum_tot in zip(date_list, brand_list, cum_tot_list):
       cum_doses_dict[date][brand] = cum_tot
     
-    key_brand_list = ['total'] + self.brand_list
+    brand_key_list = ['total'] + self.brand_key_list
     
     ## Initialize stock
-    stock = ccm.initializeStock_dailyCounts(['interpolated']+key_brand_list)
+    stock = ccm.initializeStock_dailyCounts(['interpolated']+brand_key_list)
     stock['interpolated'] += 1
-    for col_tag in key_brand_list:
+    for col_tag in brand_key_list:
       stock[col_tag] = stock[col_tag].astype(float) + np.nan
     
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
@@ -153,11 +153,11 @@ class VaccinationSheet(ccm.Template):
     return stock
    
   def interpolate_vaccinationByBrand(self, stock):
-    key_brand_list = ['total'] + self.brand_list
-    stock = self.interpolate(stock, key_brand_list, dtype=int, cumul=False)
+    brand_key_list = ['total'] + self.brand_key_list
+    stock = self.interpolate(stock, brand_key_list, dtype=int, cumul=False)
     
     ## Loop over column
-    for col_tag in key_brand_list:
+    for col_tag in brand_key_list:
       key = col_tag + '_avg'
       stock[key] = ccm.makeMovingAverage(stock[col_tag])
     return stock
@@ -183,7 +183,7 @@ class VaccinationSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_vaccinationByBrand(self):
+  def saveCsv_vaccinationByBrand(self, save=True):
     stock = self.makeStock_vaccinationByBrand()
     stock = self.interpolate_vaccinationByBrand(stock)
     
@@ -202,8 +202,9 @@ class VaccinationSheet(ccm.Template):
         data = data[ind:]
         
       ## Save
-      name = '{}processed_data/{}/vaccination_by_brand.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      if save:
+        name = '{}processed_data/{}/vaccination_by_brand.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
       
       self.makeReadme_vaccinationByBrand(gr)
     return
@@ -211,10 +212,10 @@ class VaccinationSheet(ccm.Template):
   def makeSupplies_vaccinationProgress(self):
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
     nb_rows = len(ccm.DELIVERY_LIST)
-    brand_list = ['total'] + self.brand_list
+    brand_key_list = ['total'] + self.brand_key_list
     
-    cum_dict = {brand: 0 for brand in brand_list}
-    stock = {col_tag: [] for col_tag in ['date', 'source'] + brand_list}
+    cum_dict = {brand: 0 for brand in brand_key_list}
+    stock = {key: [] for key in ['date', 'source']+brand_key_list}
     today_ord = ccm.getTodayOrdinal()
     
     ## brand, source, quantity, delivery_date, available_date, delivery_news, available_news
@@ -240,15 +241,14 @@ class VaccinationSheet(ccm.Template):
       
       stock['date'].append(available_date)
       stock['source'].append(source)
-      for brand in brand_list:
+      for brand in brand_key_list:
         stock[brand].append(cum_dict[brand])
         
     return stock
     
   def makeInjections_vaccinationProgress(self):
     stock = self.makeStock_vaccinationByBrand()
-    key_brand_list = ['total'] + self.brand_list
-    stock = self.interpolate(stock, key_brand_list, dtype=int, cumul=True)
+    stock = self.interpolate(stock, ['total']+self.brand_key_list, dtype=int, cumul=True)
     return stock
   
   def makeReadme_vaccinationProgress(self, gr):
@@ -284,7 +284,7 @@ class VaccinationSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_vaccinationProgress(self):
+  def saveCsv_vaccinationProgress(self, save=True):
     stock_s = self.makeSupplies_vaccinationProgress()
     stock_s = pd.DataFrame(stock_s)
     stock_i = self.makeInjections_vaccinationProgress()
@@ -304,10 +304,11 @@ class VaccinationSheet(ccm.Template):
         ind = ccm.ISODateToOrd(ccm.ISO_DATE_REF_VACC) - ccm.ISODateToOrd(ccm.ISO_DATE_REF)
         data_i = data_i[ind:]
         
-      name = '{}processed_data/{}/vaccination_progress_supplies.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_s)
-      name = '{}processed_data/{}/vaccination_progress_injections.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_i)
+      if save:
+        name = '{}processed_data/{}/vaccination_progress_supplies.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data_s)
+        name = '{}processed_data/{}/vaccination_progress_injections.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data_i)
       
       self.makeReadme_vaccinationProgress(gr)
     return
@@ -361,7 +362,7 @@ class VaccinationSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_vaccinationDeliveries(self):
+  def saveCsv_vaccinationDeliveries(self, save=True):
     stock_d = self.makeDeliveries_vaccinationDeliveries()
     stock_d = pd.DataFrame(stock_d)
     stock_r = self.makeRef_vaccinationDeliveries()
@@ -371,10 +372,12 @@ class VaccinationSheet(ccm.Template):
       if gr != ccm.GROUP_OVERALL:
         continue
       
-      name = '{}processed_data/{}/vaccination_deliveries_list.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, stock_d)
-      name = '{}processed_data/{}/vaccination_deliveries_reference.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, stock_r)
+      ## Save
+      if save:
+        name = '{}processed_data/{}/vaccination_deliveries_list.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, stock_d)
+        name = '{}processed_data/{}/vaccination_deliveries_reference.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, stock_r)
       
       self.makeReadme_vaccinationProgress(gr)
     return
@@ -390,9 +393,9 @@ class VaccinationSheet(ccm.Template):
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
     
     ## Make stock
-    stock = ccm.initializeStock_dailyCounts(['interpolated']+self.dose_list)
+    stock = ccm.initializeStock_dailyCounts(['interpolated']+self.dose_key_list)
     stock['interpolated'] += 1
-    for col_tag in self.dose_list:
+    for col_tag in self.dose_key_list:
       stock[col_tag] = stock[col_tag].astype(float) + np.nan
     
     ## Fill from raw data
@@ -408,11 +411,11 @@ class VaccinationSheet(ccm.Template):
     return stock
     
   def interpolate_vaccinationByDose(self, stock):
-    stock = self.interpolate(stock, self.dose_list, dtype=float, cumul=True)
+    stock = self.interpolate(stock, self.dose_key_list, dtype=float, cumul=True)
     
     ## Normalize & format
     population_twn = ccm.COUNTY_DICT['00000']['population']
-    for col_tag in self.dose_list:
+    for col_tag in self.dose_key_list:
       stock[col_tag] = np.around(stock[col_tag] / population_twn, decimals=4)
     return stock
     
@@ -432,7 +435,7 @@ class VaccinationSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_vaccinationByDose(self):
+  def saveCsv_vaccinationByDose(self, save=True):
     stock = self.makeStock_vaccinationByDose()
     stock = self.interpolate_vaccinationByDose(stock)
     stock = pd.DataFrame(stock)
@@ -450,8 +453,9 @@ class VaccinationSheet(ccm.Template):
         data = data[ind:]
         
       ## Save
-      name = '{}processed_data/{}/vaccination_by_dose.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      if save:
+        name = '{}processed_data/{}/vaccination_by_dose.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
       
       self.makeReadme_vaccinationByDose(gr)
     return

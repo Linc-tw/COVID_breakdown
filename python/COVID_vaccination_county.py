@@ -2,7 +2,7 @@
     ###################################
     ##  COVID_vaccination_county.py  ##
     ##  Chieh-An Lin                 ##
-    ##  2022.05.19                   ##
+    ##  2022.05.22                   ##
     ###################################
 
 import os
@@ -128,7 +128,7 @@ class VaccinationCountySheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_vaccinationByCounty(self):
+  def saveCsv_vaccinationByCounty(self, save=True):
     stock, date_max = self.makeStock_vaccinationByCounty()
     
     county_key_list = ['total'] + self.county_key_list
@@ -159,8 +159,9 @@ class VaccinationCountySheet(ccm.Template):
     
     gr = ccm.GROUP_LATEST
     
-    name = '{}processed_data/{}/vaccination_by_county.csv'.format(ccm.DATA_PATH, gr)
-    ccm.saveCsv(name, data)
+    if save:
+      name = '{}processed_data/{}/vaccination_by_county.csv'.format(ccm.DATA_PATH, gr)
+      ccm.saveCsv(name, data)
     
     self.makeReadme_vaccinationByCounty(gr)
     return
@@ -203,7 +204,7 @@ class VaccinationCountySheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_vaccinationByAge(self):
+  def saveCsv_vaccinationByAge(self, save=True):
     stock, date_max = self.makeStock_vaccinationByAge()
     
     age_key_list = ['total'] + self.age_key_list
@@ -222,8 +223,9 @@ class VaccinationCountySheet(ccm.Template):
     
     gr = ccm.GROUP_LATEST
     
-    name = '{}processed_data/{}/vaccination_by_age.csv'.format(ccm.DATA_PATH, gr)
-    ccm.saveCsv(name, data)
+    if save:
+      name = '{}processed_data/{}/vaccination_by_age.csv'.format(ccm.DATA_PATH, gr)
+      ccm.saveCsv(name, data)
     
     self.makeReadme_vaccinationByAge(gr)
     return

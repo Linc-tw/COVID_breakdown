@@ -2,7 +2,7 @@
     ################################
     ##  COVID_html.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.20                ##
+    ##  2022.05.21                ##
     ################################
 
 import os
@@ -100,13 +100,13 @@ PLOT_DICT = {
     plot_tag = 'case_counts',
     js_path = 'status_sheet/',
     wdt_str = None,
-    fontawe_str = 'fa-head-side-cough',
+    fontawe_str = 'fa-stethoscope',
   ),
   'LCPC': dict(
     plot_tag = 'local_case_per_county',
     js_path = 'county_sheet/',
     wdt_str = None,
-    fontawe_str = 'fa-flag',
+    fontawe_str = 'fa-compass',
   ),
   'CBA': dict(
     plot_tag = 'case_by_age',
@@ -190,13 +190,13 @@ PLOT_DICT = {
     plot_tag = 'death_delay',
     js_path = 'death_sheet/',
     wdt_str = None,
-    fontawe_str = 'fa-vial', #TODO
+    fontawe_str = 'fa-arrows-alt-h',
   ),
   'DBA': dict(
     plot_tag = 'death_by_age',
     js_path = 'others/',
     wdt_str = None,
-    fontawe_str = 'fa-book-dead',
+    fontawe_str = 'fa-virus',
   ),
   
   ## Others
@@ -210,7 +210,7 @@ PLOT_DICT = {
     plot_tag = 'positivity_and_fatality',
     js_path = 'others/',
     wdt_str = None,
-    fontawe_str = 'fa-chart-line',
+    fontawe_str = 'fa-plus-circle',
   ),
   #'TPT': dict(
     #plot_tag = 'test_positivity',
@@ -238,13 +238,13 @@ PLOT_DICT = {
     plot_tag = 'criteria_timeline',
     js_path = 'timeline_sheet/',
     wdt_str = 'col-xl-8',
-    fontawe_str = 'fa-history',
+    fontawe_str = 'fa-clock',
   ),
   'ET': dict(
     plot_tag = 'event_timeline',
     js_path = 'timeline_sheet/',
     wdt_str = 'col-xl-12',
-    fontawe_str = 'fa-calendar-alt',
+    fontawe_str = {'2020': 'fa-calendar-alt', '2022': 'fa-calendar-check'},
   ),
   
   ## Other pages
@@ -252,7 +252,7 @@ PLOT_DICT = {
     plot_tag = 'data_source',
     js_path = '',
     wdt_str = 'col-lg-6 col-xl-4',
-    fontawe_str = ['fa-server', 'fa-box', 'fa-archive'],
+    fontawe_str = ['fa-server', 'fa-box-open', 'fa-archive'],
   ),
   'NRR': dict(
     plot_tag = 'no_right_reserved',
@@ -342,7 +342,7 @@ def makeStr_sideBar():
                             </a>\n\
                             \n\
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_latest" aria-expanded="false" aria-controls="collapse_latest">\n\
-                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-times"></i></div>\n\
+                                <div class="sb-nav-link-icon"><i class="fas fa-fast-forward"></i></div>\n\
                                 <span id="menu_latest"></span>\n\
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>\n\
                             </a>\n\
@@ -370,7 +370,7 @@ def makeStr_sideBar():
                             </div>\n\
                             \n\
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_overall" aria-expanded="false" aria-controls="collapse_overall">\n\
-                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-times"></i></div>\n\
+                                <div class="sb-nav-link-icon"><i class="fas fa-calculator"></i></div>\n\
                                 <span id="menu_overall"></span>\n\
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>\n\
                             </a>\n\
@@ -483,7 +483,7 @@ def makeStr_footer(page_tag):
         <!-- External -->\n\
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>\n\
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>\n\
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>\n\
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" crossorigin="anonymous"></script>\n\
         <script src="https://d3js.org/d3.v4.js"></script>\n\
         <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>\n\
         <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.19.0/js/canvas-to-blob.min.js"></script>\n\
@@ -518,7 +518,7 @@ def makeStr_cmtAndSaveBtn(plot_tag, gr_tag):
     
   str_ = '\
                                             <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#{plot_tag}_collapse" aria-expanded="false" aria-controls="{plot_tag}_collapse">\n\
-                                                <i class="far fa-comment-alt"></i>\n\
+                                                <i class="fas fa-comment-alt"></i>\n\
                                             </button>\n\
                                             \n\
                                             <button id="{plot_tag}{gr_tag}_save" class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>\n'.format(plot_tag=plot_tag, gr_tag=gr_tag)
@@ -1075,9 +1075,9 @@ def makeStr_CT():
 def makeStr_ET(gr_tag):
   plot_abrv = 'ET'
   plot_tag = PLOT_DICT[plot_abrv]['plot_tag'] + '_' + gr_tag
-  gr_tag = ''
   wdt_str = PLOT_DICT[plot_abrv]['wdt_str']
-  fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
+  fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str'][gr_tag]
+  gr_tag = ''
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
   btn_str = '\

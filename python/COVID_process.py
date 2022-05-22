@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.20                ##
+    ##  2022.05.22                ##
     ################################
 
 import os
@@ -25,6 +25,7 @@ import COVID_county
 import COVID_vaccination
 import COVID_vaccination_county
 import COVID_death
+import COVID_html
 
 ################################################################################
 ## Functions - cross-sheet operations
@@ -78,7 +79,7 @@ def makeReadme_incidenceRates(gr):
   ccm.README_DICT[gr][key] = stock
   return
   
-def saveCsv_incidenceRates(status_sheet, border_sheet):
+def saveCsv_incidenceRates(status_sheet, border_sheet, save=True):
   stock = makeStock_incidenceRates(status_sheet, border_sheet)
   stock = pd.DataFrame(stock)
   
@@ -86,8 +87,9 @@ def saveCsv_incidenceRates(status_sheet, border_sheet):
     data = ccm.truncateStock(stock, gr)
     
     ## Save
-    name = '{}processed_data/{}/incidence_rates.csv'.format(ccm.DATA_PATH, gr)
-    ccm.saveCsv(name, data)
+    if save:
+      name = '{}processed_data/{}/incidence_rates.csv'.format(ccm.DATA_PATH, gr)
+      ccm.saveCsv(name, data)
     
     makeReadme_incidenceRates(gr)
   return
@@ -145,7 +147,7 @@ def makeReadme_positivityAndFatality(gr):
   ccm.README_DICT[gr][key] = stock
   return
   
-def saveCsv_positivityAndFatality(status_sheet, test_sheet):
+def saveCsv_positivityAndFatality(status_sheet, test_sheet, save=True):
   stock = makeStock_positivityAndFatality(status_sheet, test_sheet)
   stock = pd.DataFrame(stock)
   
@@ -153,8 +155,9 @@ def saveCsv_positivityAndFatality(status_sheet, test_sheet):
     data = ccm.truncateStock(stock, gr)
     
     ## Save
-    name = '{}processed_data/{}/positivity_and_fatality.csv'.format(ccm.DATA_PATH, gr)
-    ccm.saveCsv(name, data)
+    if save:
+      name = '{}processed_data/{}/positivity_and_fatality.csv'.format(ccm.DATA_PATH, gr)
+      ccm.saveCsv(name, data)
     
     makeReadme_positivityAndFatality(gr)
   return
@@ -269,7 +272,7 @@ def makeReadme_deathByAge(gr):
   ccm.README_DICT[gr][key] = stock
   return
   
-def saveCsv_deathByAge(county_sheet, death_sheet):
+def saveCsv_deathByAge(county_sheet, death_sheet, save=True):
   stock_c = makeCountStock_deathByAge(death_sheet)
   stock_r = makeRateStock_deathByAge(county_sheet, death_sheet)
   data_c = pd.DataFrame(stock_c)
@@ -281,16 +284,15 @@ def saveCsv_deathByAge(county_sheet, death_sheet):
   data_l = pd.DataFrame(stock_l)
   
   ## Save
-  name = '{}processed_data/{}/death_by_age_count.csv'.format(ccm.DATA_PATH, gr)
-  ccm.saveCsv(name, data_c)
+  if save:
+    name = '{}processed_data/{}/death_by_age_count.csv'.format(ccm.DATA_PATH, gr)
+    ccm.saveCsv(name, data_c)
+    name = '{}processed_data/{}/death_by_age_rate.csv'.format(ccm.DATA_PATH, gr)
+    ccm.saveCsv(name, data_r)
+    name = '{}processed_data/{}/death_by_age_label.csv'.format(ccm.DATA_PATH, gr)
+    ccm.saveCsv(name, data_l)
   
-  name = '{}processed_data/{}/death_by_age_rate.csv'.format(ccm.DATA_PATH, gr)
-  ccm.saveCsv(name, data_r)
-  
-  name = '{}processed_data/{}/death_by_age_label.csv'.format(ccm.DATA_PATH, gr)
-  ccm.saveCsv(name, data_l)
-  
-  #makeReadme_deathByAge(gr)
+  makeReadme_deathByAge(gr)
   return
 
 ################################################################################
@@ -342,9 +344,9 @@ def sandbox():
 def saveCsv_all():
   ccm.initializeReadme()
   
-  #print()
-  #case_sheet = COVID_case.CaseSheet()
-  #case_sheet.saveCsv()
+  print()
+  case_sheet = COVID_case.CaseSheet()
+  case_sheet.saveCsv()
   
   print()
   status_sheet = COVID_status.StatusSheet()
@@ -393,7 +395,10 @@ def saveCsv_all():
 ## Main
 
 if __name__ == '__main__':
-  saveCsv_all()
+  if len(sys.argv) > 1 and sys.argv[1] == 'html':
+    COVID_html.saveHtml_all()
+  else:
+    saveCsv_all()
 
 ## End of file
 ################################################################################

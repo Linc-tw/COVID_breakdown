@@ -2,7 +2,7 @@
     ################################
     ##  COVID_status.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.19                ##
+    ##  2022.05.22                ##
     ################################
 
 import os
@@ -172,7 +172,7 @@ class StatusSheet(ccm.Template):
     ccm.README_DICT['root'][key] = stock
     return
   
-  def saveCsv_keyNb(self):
+  def saveCsv_keyNb(self, save=True):
     timestamp = dtt.datetime.now().astimezone()
     timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
     
@@ -185,8 +185,10 @@ class StatusSheet(ccm.Template):
     data = {'key': key, 'value': value}
     data = pd.DataFrame(data)
     
-    name = '{}processed_data/key_numbers.csv'.format(ccm.DATA_PATH)
-    ccm.saveCsv(name, data)
+    ## Save
+    if save:
+      name = '{}processed_data/key_numbers.csv'.format(ccm.DATA_PATH)
+      ccm.saveCsv(name, data)
     
     self.makeReadme_keyNb()
     return
@@ -209,7 +211,7 @@ class StatusSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_caseCounts(self):
+  def saveCsv_caseCounts(self, save=True):
     date_list = self.getDate()
     new_soldiers_list = self.getNewSoldiers()
     new_impored_list = self.getNewImported()
@@ -236,8 +238,9 @@ class StatusSheet(ccm.Template):
       data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/case_counts_by_report_day.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      if save:
+        name = '{}processed_data/{}/case_counts_by_report_day.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
       
       self.makeReadme_caseCounts(gr)
     return
@@ -255,7 +258,7 @@ class StatusSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_statusEvolution(self):
+  def saveCsv_statusEvolution(self, save=True):
     date_list = self.getDate()
     cum_deaths_list = self.getCumDeaths()
     cum_dis_list = self.getCumDischarged()
@@ -269,8 +272,9 @@ class StatusSheet(ccm.Template):
       data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/status_evolution.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      if save:
+        name = '{}processed_data/{}/status_evolution.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
       
       self.makeReadme_statusEvolution(gr)
     return
@@ -287,7 +291,7 @@ class StatusSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_deathCounts(self):
+  def saveCsv_deathCounts(self, save=True):
     date_list = self.getDate()
     cum_deaths_list = self.getCumDeaths()
     cum_deaths_list_offset = np.insert(cum_deaths_list[:-1], 0, 0)
@@ -302,8 +306,9 @@ class StatusSheet(ccm.Template):
       data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      if save:
+        name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
       
       self.makeReadme_deathCounts(gr)
     return
@@ -319,7 +324,7 @@ class StatusSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_hospitalizationOrIsolation(self):
+  def saveCsv_hospitalizationOrIsolation(self, save=True):
     date_list = self.getDate()
     cum_hosp_list = self.getCumHospitalized()
     
@@ -331,8 +336,9 @@ class StatusSheet(ccm.Template):
       data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/hospitalization_or_isolation.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      if save:
+        name = '{}processed_data/{}/hospitalization_or_isolation.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
       
       self.makeReadme_hospitalizationOrIsolation(gr)
     return

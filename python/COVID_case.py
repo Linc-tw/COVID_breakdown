@@ -2,7 +2,7 @@
     ################################
     ##  COVID_case.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.19                ##
+    ##  2022.05.22                ##
     ################################
 
 import os
@@ -57,6 +57,7 @@ class CaseSheet(ccm.Template):
     case_nb_list = data[self.coltag_case].values
     ind = case_nb_list == case_nb_list
     self.data = data[ind]
+    self.trans_key_list = ['imported', 'local', 'others']
     
     self.setCaseCounts()
     
@@ -793,22 +794,24 @@ class CaseSheet(ccm.Template):
     ccm.README_DICT['root'][key] = stock
     return
   
-  def saveCsv_keyNb(self):
-    self.getReportDate()
-    timestamp = dtt.datetime.now().astimezone()
-    timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
-    
-    population_twn = ccm.COUNTY_DICT['00000']['population']
-    
-    key = ['n_overall', 'n_latest'] + ['n_{}'.format(year) for year in ccm.GROUP_YEAR_LIST] + ['n_empty', 'timestamp', 'population_twn']
-    value = [self.n_total, self.n_latest] + [self.n_year_dict[year] for year in ccm.GROUP_YEAR_LIST] + [self.n_empty, timestamp, population_twn]
-    
-    ## Make data frame
-    data = {'key': key, 'value': value}
-    data = pd.DataFrame(data)
-    
-    name = '{}processed_data/key_numbers.csv'.format(ccm.DATA_PATH)
-    ccm.saveCsv(name, data)
+  def saveCsv_keyNb(self, save=True):
+    if save:
+      self.getReportDate()
+      timestamp = dtt.datetime.now().astimezone()
+      timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S UTC%z')
+      
+      population_twn = ccm.COUNTY_DICT['00000']['population']
+      
+      key = ['n_overall', 'n_latest'] + ['n_{}'.format(year) for year in ccm.GROUP_YEAR_LIST] + ['n_empty', 'timestamp', 'population_twn']
+      value = [self.n_total, self.n_latest] + [self.n_year_dict[year] for year in ccm.GROUP_YEAR_LIST] + [self.n_empty, timestamp, population_twn]
+      
+      ## Make data frame
+      data = {'key': key, 'value': value}
+      data = pd.DataFrame(data)
+      
+      ## Save
+      name = '{}processed_data/key_numbers.csv'.format(ccm.DATA_PATH)
+      ccm.saveCsv(name, data)
     
     self.makeReadme_keyNb()
     return
@@ -818,8 +821,8 @@ class CaseSheet(ccm.Template):
     trans_list = self.getTransmission()
     
     ## Initialize stocks
-    col_tag_list = ['total', 'imported', 'local', 'others']
-    stock = ccm.initializeStock_dailyCounts(col_tag_list)
+    trans_key_list = ['total'] + self.trans_key_list
+    stock = ccm.initializeStock_dailyCounts(trans_key_list)
     
     ## Loop over cases
     for report_date, trans in zip(report_date_list, trans_list):
@@ -828,21 +831,20 @@ class CaseSheet(ccm.Template):
       
       ## Determine column tag
       if trans in ['imported', 'local']:
-        col_tag = trans
+        key = trans
       else:
-        col_tag = 'others'
+        key = 'others'
         
       try:
         ind = ccm.indexForOverall(report_date)
-        stock[col_tag][ind] += 1
         stock['total'][ind] += 1
+        stock[key][ind] += 1
       except IndexError: ## If NaN
         pass
         
-    ## Loop over column
-    for col_tag in col_tag_list:
-      key = col_tag + '_avg'
-      stock[key] = ccm.makeMovingAverage(stock[col_tag])
+    ## Make avg
+    for key in trans_key_list:
+      stock[key+'_avg'] = ccm.makeMovingAverage(stock[key])
     return stock
     
   def makeReadme_caseCounts(self, gr):
@@ -863,18 +865,20 @@ class CaseSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_caseCounts(self):
-    stock = self.increment_caseCounts()
-    
-    stock = pd.DataFrame(stock)
-    stock = ccm.adjustDateRange(stock)
+  def saveCsv_caseCounts(self, save=True):
+    if save:
+      stock = self.increment_caseCounts()
+      
+      stock = pd.DataFrame(stock)
+      stock = ccm.adjustDateRange(stock)
     
     for gr in ccm.GROUP_LIST:
-      data = ccm.truncateStock(stock, gr)
-      
-      ## Save
-      name = '{}processed_data/{}/case_counts_by_report_day.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      if save:
+        data = ccm.truncateStock(stock, gr)
+        
+        ## Save
+        name = '{}processed_data/{}/case_counts_by_report_day.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
       
       self.makeReadme_caseCounts(gr)
     return
@@ -886,9 +890,9 @@ class CaseSheet(ccm.Template):
     link_list = self.getLink()
     
     ## Initialize stocks
-    col_tag_list = ['imported', 'linked', 'unlinked', 'fleet', 'plane', 'unknown']
-    stock_r = ccm.initializeStock_dailyCounts(col_tag_list)
-    stock_o = ccm.initializeStock_dailyCounts(col_tag_list)
+    trans_key_list = ['imported', 'linked', 'unlinked', 'fleet', 'plane', 'unknown']
+    stock_r = ccm.initializeStock_dailyCounts(trans_key_list)
+    stock_o = ccm.initializeStock_dailyCounts(trans_key_list)
     
     ## Loop over cases
     for report_date, onset_date, trans, link in zip(report_date_list, onset_date_list, trans_list, link_list):
@@ -898,15 +902,15 @@ class CaseSheet(ccm.Template):
       ## Determine column tag
       if trans == 'local':
         if link == 'unlinked':
-          col_tag = link
+          key = link
         else:
-          col_tag = 'linked'
+          key = 'linked'
       else:
-        col_tag = trans
+        key = trans
         
       try:
         ind = ccm.indexForOverall(report_date)
-        stock_r[col_tag][ind] += 1
+        stock_r[key][ind] += 1
       except IndexError: ## If NaN
         pass
         
@@ -916,7 +920,7 @@ class CaseSheet(ccm.Template):
       
       try:
         ind = ccm.indexForOverall(onset_date)
-        stock_o[col_tag][ind] += 1
+        stock_o[key][ind] += 1
       except IndexError: ## If NaN
         pass
       
@@ -953,24 +957,26 @@ class CaseSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_caseByTransmission(self):
-    stock_r, stock_o = self.increment_caseByTransmission()
-    
-    stock_r = pd.DataFrame(stock_r)
-    stock_r = ccm.adjustDateRange(stock_r)
-    
-    stock_o = pd.DataFrame(stock_o)
-    stock_o = ccm.adjustDateRange(stock_o)
+  def saveCsv_caseByTransmission(self, save=True):
+    if save:
+      stock_r, stock_o = self.increment_caseByTransmission()
+      
+      stock_r = pd.DataFrame(stock_r)
+      stock_r = ccm.adjustDateRange(stock_r)
+      
+      stock_o = pd.DataFrame(stock_o)
+      stock_o = ccm.adjustDateRange(stock_o)
     
     for gr in ccm.GROUP_LIST:
-      data_r = ccm.truncateStock(stock_r, gr)
-      data_o = ccm.truncateStock(stock_o, gr)
-      
-      ## Save
-      name = '{}processed_data/{}/case_by_transmission_by_report_day.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_r)
-      name = '{}processed_data/{}/case_by_transmission_by_onset_day.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_o)
+      if save:
+        data_r = ccm.truncateStock(stock_r, gr)
+        data_o = ccm.truncateStock(stock_o, gr)
+        
+        ## Save
+        name = '{}processed_data/{}/case_by_transmission_by_report_day.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data_r)
+        name = '{}processed_data/{}/case_by_transmission_by_onset_day.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data_o)
       
       self.makeReadme_caseByTransmission(gr)
     return
@@ -982,9 +988,9 @@ class CaseSheet(ccm.Template):
     channel_list = self.getChannel()
     
     ## Initialize data dict
-    col_tag_list = ['airport', 'quarantine', 'isolation', 'monitoring', 'hospital', 'overseas', 'no_data']
-    stock_r = ccm.initializeStock_dailyCounts(col_tag_list)
-    stock_o = ccm.initializeStock_dailyCounts(col_tag_list)
+    det_key_list = ['airport', 'quarantine', 'isolation', 'monitoring', 'hospital', 'overseas', 'no_data']
+    stock_r = ccm.initializeStock_dailyCounts(det_key_list)
+    stock_o = ccm.initializeStock_dailyCounts(det_key_list)
     
     ## Loop over cases
     for report_date, onset_date, trans, channel in zip(report_date_list, onset_date_list, trans_list, channel_list):
@@ -993,13 +999,13 @@ class CaseSheet(ccm.Template):
       
       ## Determine column tag
       if channel != channel:
-        col_tag = 'no_data'
+        key = 'no_data'
       else:
-        col_tag = channel
+        key = channel
       
       try:
         ind = ccm.indexForOverall(report_date)
-        stock_r[col_tag][ind] += 1
+        stock_r[key][ind] += 1
       except IndexError: ## If NaN
         pass
         
@@ -1009,7 +1015,7 @@ class CaseSheet(ccm.Template):
       
       try:
         ind = ccm.indexForOverall(onset_date)
-        stock_o[col_tag][ind] += 1
+        stock_o[key][ind] += 1
       except IndexError: ## If NaN
         pass
       
@@ -1047,27 +1053,29 @@ class CaseSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_caseByDetection(self):
-    stock_r, stock_o = self.increment_caseByDetection()
-    
-    stock_r = pd.DataFrame(stock_r)
-    stock_r = ccm.adjustDateRange(stock_r)
-    
-    stock_o = pd.DataFrame(stock_o)
-    stock_o = ccm.adjustDateRange(stock_o)
+  def saveCsv_caseByDetection(self, save=True):
+    if save:
+      stock_r, stock_o = self.increment_caseByDetection()
+      
+      stock_r = pd.DataFrame(stock_r)
+      stock_r = ccm.adjustDateRange(stock_r)
+      
+      stock_o = pd.DataFrame(stock_o)
+      stock_o = ccm.adjustDateRange(stock_o)
     
     for gr in ccm.GROUP_LIST:
       if gr != ccm.GROUP_2020:
         continue
       
-      data_r = ccm.truncateStock(stock_r, gr)
-      data_o = ccm.truncateStock(stock_o, gr)
-      
-      ## Save
-      name = '{}processed_data/{}/case_by_detection_by_report_day.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_r)
-      name = '{}processed_data/{}/case_by_detection_by_onset_day.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_o)
+      if save:
+        data_r = ccm.truncateStock(stock_r, gr)
+        data_o = ccm.truncateStock(stock_o, gr)
+        
+        ## Save
+        name = '{}processed_data/{}/case_by_detection_by_report_day.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data_r)
+        name = '{}processed_data/{}/case_by_detection_by_onset_day.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data_o)
       
       self.makeReadme_caseByDetection(gr)
     return
@@ -1110,10 +1118,7 @@ class CaseSheet(ccm.Template):
               
     return stock_dict
   
-  def calculateCorr_travHistSymptomCorr(self):
-    stock_dict = self.increment_travHistSymptomCorr()
-    
-    ## Loop over group
+  def calculateCorr_travHistSymptomCorr(self, stock_dict):
     for stock in stock_dict.values():
       assert len(stock['x_list_list']) == len(stock['y_list_list'])
       
@@ -1151,6 +1156,44 @@ class CaseSheet(ccm.Template):
       stock['count_mat'] = y_bool_mat.dot(x_bool_mat.T);
     return stock_dict
   
+  def makeStock_travHistSymptomCorr(self, stock):
+    n_trav = 10 ## For y
+    n_symp = 10 ## For x
+    
+    ## Truncate
+    corr_mat = stock['corr_mat'][:n_trav, :n_symp]
+    count_mat = stock['count_mat'][:n_trav, :n_symp]
+    x_dict = dict(stock['x_hist'][:n_symp])
+    y_dict = dict(stock['y_hist'][:n_trav])
+    
+    ## Make matrix grid
+    x_list = list(x_dict.keys())
+    y_list = list(y_dict.keys())
+    grid = np.meshgrid(x_list, y_list)
+    
+    ## Data for coefficient
+    symp_arr = grid[0].flatten()
+    trav_hist_arr = grid[1].flatten()
+    corr_arr = corr_mat.flatten()
+    corr_arr = np.around(corr_arr, decimals=4)
+    count_arr = count_mat.flatten()
+    
+    ## Data for label
+    tot_dict = stock['nb_dict'].copy()
+    tot_dict.update(y_dict)
+    tot_dict.update(x_dict)
+    key_arr = list(tot_dict.keys())
+    x_list_fr = [ccm.SYMPTOM_DICT[x]['fr'] for x in x_list]
+    value_arr = list(tot_dict.values())
+    label_arr_en = ['', '', ''] + y_list + [x[0].upper() + x[1:] for x in x_list]
+    label_arr_fr = ['', '', ''] + [ccm.TRAVEL_HISTORY_DICT[y]['fr'] for y in y_list] + [x[0].upper() + x[1:] for x in x_list_fr]
+    label_arr_zh = ['', '', ''] + [ccm.TRAVEL_HISTORY_DICT[y]['zh-tw'] for y in y_list] + [ccm.SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
+    
+    ## Make new stocks
+    stock_c = {'symptom': symp_arr, 'trav_hist': trav_hist_arr, 'corr': corr_arr, 'count': count_arr}
+    stock_l = {'key': key_arr, 'count': value_arr, 'label': label_arr_en, 'label_fr': label_arr_fr, 'label_zh': label_arr_zh}
+    return stock_c, stock_l
+  
   def makeReadme_travHistSymptomCorr(self, gr):
     key = 'travel_history_symptom_correlations'
     stock = []
@@ -1176,49 +1219,17 @@ class CaseSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_travHistSymptomCorr(self):
-    stock_dict = self.calculateCorr_travHistSymptomCorr()
+  def saveCsv_travHistSymptomCorr(self, save=True):
+    gr = ccm.GROUP_2020
     
-    n_trav = 10 ## For y
-    n_symp = 10 ## For x
+    if save:
+      stock_dict = self.increment_travHistSymptomCorr()
+      stock_dict = self.calculateCorr_travHistSymptomCorr(stock_dict)
     
-    for gr, stock in stock_dict.items():
-      if gr != ccm.GROUP_2020:
-        continue
-      
-      ## Truncate
-      corr_mat = stock['corr_mat'][:n_trav, :n_symp]
-      count_mat = stock['count_mat'][:n_trav, :n_symp]
-      x_dict = dict(stock['x_hist'][:n_symp])
-      y_dict = dict(stock['y_hist'][:n_trav])
-      
-      ## Make matrix grid
-      x_list = list(x_dict.keys())
-      y_list = list(y_dict.keys())
-      grid = np.meshgrid(x_list, y_list)
-      
-      ## Data for coefficient
-      symp_arr = grid[0].flatten()
-      trav_hist_arr = grid[1].flatten()
-      corr_arr = corr_mat.flatten()
-      corr_arr = np.around(corr_arr, decimals=4)
-      count_arr = count_mat.flatten()
-      
-      ## Data for label
-      tot_dict = stock['nb_dict'].copy()
-      tot_dict.update(y_dict)
-      tot_dict.update(x_dict)
-      key_arr = list(tot_dict.keys())
-      x_list_fr = [ccm.SYMPTOM_DICT[x]['fr'] for x in x_list]
-      value_arr = list(tot_dict.values())
-      label_arr_en = ['', '', ''] + y_list + [x[0].upper() + x[1:] for x in x_list]
-      label_arr_fr = ['', '', ''] + [ccm.TRAVEL_HISTORY_DICT[y]['fr'] for y in y_list] + [x[0].upper() + x[1:] for x in x_list_fr]
-      label_arr_zh = ['', '', ''] + [ccm.TRAVEL_HISTORY_DICT[y]['zh-tw'] for y in y_list] + [ccm.SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
-      
       ## Make data frame
-      data_c = {'symptom': symp_arr, 'trav_hist': trav_hist_arr, 'corr': corr_arr, 'count': count_arr}
+      stock = stock_dict[gr]
+      data_c, data_l = self.makeStock_travHistSymptomCorr(stock)
       data_c = pd.DataFrame(data_c)
-      data_l = {'key': key_arr, 'count': value_arr, 'label': label_arr_en, 'label_fr': label_arr_fr, 'label_zh': label_arr_zh}
       data_l = pd.DataFrame(data_l)
       
       ## Save
@@ -1226,8 +1237,8 @@ class CaseSheet(ccm.Template):
       ccm.saveCsv(name, data_c)
       name = '{}processed_data/{}/travel_history_symptom_correlations_label.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data_l)
-      
-      self.makeReadme_travHistSymptomCorr(gr)
+    
+    self.makeReadme_travHistSymptomCorr(gr)
     return
   
   def increment_ageSymptomCorr(self):
@@ -1262,10 +1273,7 @@ class CaseSheet(ccm.Template):
             
     return stock_dict
   
-  def calculateCorr_ageSymptomCorr(self):
-    stock_dict = self.increment_ageSymptomCorr()
-    
-    ## Loop over group
+  def calculateCorr_ageSymptomCorr(self, stock_dict):
     for stock in stock_dict.values():
       assert len(stock['x_list_list']) == len(stock['y_list_list'])
       
@@ -1278,8 +1286,8 @@ class CaseSheet(ccm.Template):
       
       ## Make histogram
       y_hist = clt.Counter(stock['y_list_list'])
-      for age in ccm.AGE_DICT:
-        y_hist[age] = y_hist.get(age, 0)
+      for key in ccm.AGE_DICT:
+        y_hist[key] = y_hist.get(key, 0)
       y_hist = sorted(y_hist.items(), key=lambda t: str(len(t[0]))+t[0], reverse=True)
     
       ## Make boolean matrix
@@ -1304,6 +1312,44 @@ class CaseSheet(ccm.Template):
       stock['corr_mat'] = y_norm_mat.dot(x_norm_mat.T);
       stock['count_mat'] = y_bool_mat.dot(x_bool_mat.T);
     return stock_dict
+  
+  def makeStock_ageSymptomCorr(self, stock):
+    n_age = stock['corr_mat'].shape[0] ## For y
+    n_symp = 10 ## For x
+  
+    ## Truncate
+    corr_mat = stock['corr_mat'][:n_age, :n_symp]
+    count_mat = stock['count_mat'][:n_age, :n_symp]
+    x_dict = dict(stock['x_hist'][:n_symp])
+    y_dict = dict(stock['y_hist'][:n_age])
+    
+    ## Make matrix grid
+    x_list = list(x_dict.keys())
+    y_list = list(y_dict.keys())
+    grid = np.meshgrid(x_list, y_list)
+    
+    ## Data for coefficient
+    symp_arr = grid[0].flatten()
+    age_arr = grid[1].flatten()
+    corr_arr = corr_mat.flatten()
+    corr_arr = np.around(corr_arr, decimals=4)
+    count_arr = count_mat.flatten()
+    
+    ## Data for total
+    tot_dict = stock['nb_dict'].copy()
+    tot_dict.update(y_dict)
+    tot_dict.update(x_dict)
+    key_arr = list(tot_dict.keys())
+    x_list_fr = [ccm.SYMPTOM_DICT[x]['fr'] for x in x_list]
+    value_arr = list(tot_dict.values())
+    label_arr_en = ['', ''] + y_list + [x[0].upper() + x[1:] for x in x_list]
+    label_arr_fr = ['', ''] + [ccm.AGE_DICT[y]['fr'] for y in y_list] + [x[0].upper() + x[1:] for x in x_list_fr]
+    label_arr_zh = ['', ''] + [ccm.AGE_DICT[y]['zh-tw'] for y in y_list] + [ccm.SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
+    
+    ## Make new stocks
+    stock_c = {'symptom': symp_arr, 'age': age_arr, 'corr': corr_arr, 'count': count_arr}
+    stock_l = {'key': key_arr, 'count': value_arr, 'label': label_arr_en, 'label_fr': label_arr_fr, 'label_zh': label_arr_zh}
+    return stock_c, stock_l
   
   def makeReadme_ageSymptomCorr(self, gr):
     key = 'age_symptom_correlations'
@@ -1330,49 +1376,17 @@ class CaseSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_ageSymptomCorr(self):
-    stock_dict = self.calculateCorr_ageSymptomCorr()
+  def saveCsv_ageSymptomCorr(self, save=True):
+    gr = ccm.GROUP_2020
     
-    for gr, stock in stock_dict.items():
-      if gr != ccm.GROUP_2020:
-        continue
-      
-      n_age = stock['corr_mat'].shape[0] ## For y
-      n_symp = 10 ## For x
+    if save:
+      stock_dict = self.increment_ageSymptomCorr()
+      stock_dict = self.calculateCorr_ageSymptomCorr(stock_dict)
     
-      ## Truncate
-      corr_mat = stock['corr_mat'][:n_age, :n_symp]
-      count_mat = stock['count_mat'][:n_age, :n_symp]
-      x_dict = dict(stock['x_hist'][:n_symp])
-      y_dict = dict(stock['y_hist'][:n_age])
-      
-      ## Make matrix grid
-      x_list = list(x_dict.keys())
-      y_list = list(y_dict.keys())
-      grid = np.meshgrid(x_list, y_list)
-      
-      ## Data for coefficient
-      symp_arr = grid[0].flatten()
-      age_arr = grid[1].flatten()
-      corr_arr = corr_mat.flatten()
-      corr_arr = np.around(corr_arr, decimals=4)
-      count_arr = count_mat.flatten()
-      
-      ## Data for total
-      tot_dict = stock['nb_dict'].copy()
-      tot_dict.update(y_dict)
-      tot_dict.update(x_dict)
-      key_arr = list(tot_dict.keys())
-      x_list_fr = [ccm.SYMPTOM_DICT[x]['fr'] for x in x_list]
-      value_arr = list(tot_dict.values())
-      label_arr_en = ['', ''] + y_list + [x[0].upper() + x[1:] for x in x_list]
-      label_arr_fr = ['', ''] + [ccm.AGE_DICT[y]['fr'] for y in y_list] + [x[0].upper() + x[1:] for x in x_list_fr]
-      label_arr_zh = ['', ''] + [ccm.AGE_DICT[y]['zh-tw'] for y in y_list] + [ccm.SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
-      
       ## Make data frame
-      data_c = {'symptom': symp_arr, 'age': age_arr, 'corr': corr_arr, 'count': count_arr}
+      stock = stock_dict[gr]
+      data_c, data_l = self.makeStock_ageSymptomCorr(stock)
       data_c = pd.DataFrame(data_c)
-      data_l = {'key': key_arr, 'count': value_arr, 'label': label_arr_en, 'label_fr': label_arr_fr, 'label_zh': label_arr_zh}
       data_l = pd.DataFrame(data_l)
       
       ## Save
@@ -1381,7 +1395,7 @@ class CaseSheet(ccm.Template):
       name = '{}processed_data/{}/age_symptom_correlations_label.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data_l)
       
-      self.makeReadme_ageSymptomCorr(gr)
+    self.makeReadme_ageSymptomCorr(gr)
     return
   
   def increment_diffByTransmission(self):
@@ -1390,7 +1404,8 @@ class CaseSheet(ccm.Template):
     onset_date_list = self.getOnsetDate()
     trans_list = self.getTransmission()
     
-    stock = {'imported': [], 'local': [], 'others': []}
+    trans_key_list = ['total'] + self.trans_key_list
+    stock = {key: [] for key in trans_key_list}
     stock_dict = ccm.initializeStockDict_general(stock)
 
     for report_date, entry_date, onset_date, trans in zip(report_date_list, entry_date_list, onset_date_list, trans_list):
@@ -1398,9 +1413,9 @@ class CaseSheet(ccm.Template):
         continue
       
       if trans in ['imported', 'local']:
-        col_tag = trans
+        key = trans
       else:
-        col_tag = 'others'
+        key = 'others'
         
       ord_rep = ccm.ISODateToOrd(report_date)
       ord_entry = ccm.ISODateToOrd(entry_date) if entry_date == entry_date else 0
@@ -1413,8 +1428,30 @@ class CaseSheet(ccm.Template):
         if ind != ind: ## If NaN
           continue
         
-        stock[col_tag].append(diff)
+        stock['total'].append(diff)
+        stock[key].append(diff)
           
+    return stock_dict
+  
+  def makeHist_diffByTransmission(self, stock_dict):
+    upper = 30
+    width = 1
+    bins = np.arange(-0.5, upper+width, width) ## Histogram bins
+    bins[-1] = 999
+    
+    trans_key_list = ['total'] + self.trans_key_list
+    
+    for gr, stock in stock_dict.items():
+      for key in trans_key_list:
+        n_arr, ctr_bins = ccm.makeHist(stock[key], bins)
+        n_arr = n_arr.round(0).astype(int)
+        stock[key] = n_arr
+      
+      ctr_bins = ctr_bins.round(0).astype(int)
+      ctr_bins[-1] = upper
+      
+      stock['difference'] = ctr_bins
+      
     return stock_dict
   
   def makeReadme_diffByTransmission(self, gr):
@@ -1436,46 +1473,33 @@ class CaseSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_diffByTransmission(self):
-    stock_dict = self.increment_diffByTransmission()
+  def saveCsv_diffByTransmission(self, save=True):
+    gr = ccm.GROUP_2020
     
-    ## Histogram bins
-    bins = np.arange(-0.5, 31, 1)
-    bins[-1] = 999
-    
-    for gr, stock in stock_dict.items():
-      if gr != ccm.GROUP_2020:
-        continue
+    if save:
+      stock_dict = self.increment_diffByTransmission()
+      stock_dict = self.makeHist_diffByTransmission(stock_dict)
       
-      n_imp, ctr_bins = ccm.makeHist(stock['imported'], bins)
-      n_local, ctr_bins = ccm.makeHist(stock['local'], bins)
-      n_other, ctr_bins = ccm.makeHist(stock['others'], bins)
-      n_tot = n_imp + n_local + n_other
+      col_tag_list = ['difference', 'total'] + self.trans_key_list
       
-      n_imp = n_imp.round(0).astype(int)
-      n_local = n_local.round(0).astype(int)
-      n_other = n_other.round(0).astype(int)
-      n_tot = n_tot.round(0).astype(int)
-      ctr_bins = ctr_bins.round(0).astype(int)
-      ctr_bins[-1] = 30
-      
-      data = {'difference': ctr_bins, 'total': n_tot, 'imported': n_imp, 'local': n_local, 'others': n_other}
+      stock = stock_dict[gr]
+      data = {key: stock[key] for key in col_tag_list}
       data = pd.DataFrame(data)
       
       name = '{}processed_data/{}/difference_by_transmission.csv'.format(ccm.DATA_PATH, gr)
       ccm.saveCsv(name, data)
-      
-      self.makeReadme_diffByTransmission(gr)
+    
+    self.makeReadme_diffByTransmission(gr)
     return
   
   def saveCsv(self):
     #self.saveCsv_keyNb()
     #self.saveCsv_caseCounts()
-    self.saveCsv_caseByTransmission()
-    self.saveCsv_caseByDetection()
-    self.saveCsv_travHistSymptomCorr()
-    self.saveCsv_ageSymptomCorr()
-    self.saveCsv_diffByTransmission()
+    self.saveCsv_caseByTransmission(False)
+    self.saveCsv_caseByDetection(False)
+    self.saveCsv_travHistSymptomCorr(False)
+    self.saveCsv_ageSymptomCorr(False)
+    self.saveCsv_diffByTransmission(False)
     return
 
 ## End of file

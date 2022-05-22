@@ -89,7 +89,7 @@ class TestSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_testCounts(self):
+  def saveCsv_testCounts(self, save=True):
     date_list = self.getDate()
     total_list = self.getTotal()
     
@@ -105,8 +105,9 @@ class TestSheet(ccm.Template):
       data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/test_counts.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      if save:
+        name = '{}processed_data/{}/test_counts.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
       
       self.makeReadme_testCounts(gr)
     return
@@ -124,7 +125,7 @@ class TestSheet(ccm.Template):
     ccm.README_DICT[gr][key] = stock
     return
   
-  def saveCsv_testByCriterion(self):
+  def saveCsv_testByCriterion(self, save=True):
     date_list = self.getDate()
     clin_def_list = self.getClinDef()
     qt_list = self.getQT()
@@ -139,8 +140,9 @@ class TestSheet(ccm.Template):
       data = ccm.truncateStock(stock, gr)
       
       ## Save
-      name = '{}processed_data/{}/test_by_criterion.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      if save:
+        name = '{}processed_data/{}/test_by_criterion.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
       
       self.makeReadme_testByCriterion(gr)
     return
@@ -199,7 +201,7 @@ class TestSheet(ccm.Template):
     ccm.README_DICT['root'][key] = stock
     return
   
-  def saveCsv_criteriaTimeline(self):
+  def saveCsv_criteriaTimeline(self, save=True):
     crit_dict = {
       '2020-01-16': {
         'en': 'Wuhan w/ fever or resp. symp. or pneumonia\nClose contact of confirmed cases', ## Close contact of confirmed cases or ppl satisfying prev. cond.
@@ -316,8 +318,9 @@ class TestSheet(ccm.Template):
     stock = {'date': date_list, 'en': en_list, 'fr': fr_list, 'zh-tw': zh_tw_list}
     data = pd.DataFrame(stock)
     
-    name = '{}processed_data/criteria_timeline.csv'.format(ccm.DATA_PATH)
-    ccm.saveCsv(name, data)
+    if save:
+      name = '{}processed_data/criteria_timeline.csv'.format(ccm.DATA_PATH)
+      ccm.saveCsv(name, data)
     
     self.makeReadme_criteriaTimeline()
     return
@@ -337,7 +340,7 @@ class TestSheet(ccm.Template):
   def saveCsv(self):
     self.saveCsv_testCounts()
     self.saveCsv_testByCriterion()
-    self.saveCsv_criteriaTimeline()
+    self.saveCsv_criteriaTimeline(False)
     return
 
 ## End of file
