@@ -142,7 +142,7 @@ class VaccinationCountySheet(ccm.Template):
     key = 'vaccination_by_county'
     stock = []
     stock.append('`{}.csv`'.format(key))
-    stock.append('- Row: date, city, or county')
+    stock.append('- Row: city or county')
     stock.append('- Column')
     stock.append('  - `key`: name of key')
     stock.append('  - `value_1`: proportion of population having their 1st dose')
@@ -229,7 +229,7 @@ class VaccinationCountySheet(ccm.Template):
     key = 'vaccination_by_age'
     stock = []
     stock.append('`{}.csv`'.format(key))
-    stock.append('- Row: date or age')
+    stock.append('- Row: age group')
     stock.append('- Column')
     stock.append('  - `key`: name of key')
     stock.append('  - `value_1`: proportion of population having their 1st dose')
@@ -238,6 +238,16 @@ class VaccinationCountySheet(ccm.Template):
     stock.append('  - `label`: label in English')
     stock.append('  - `label_fr`: label in French')
     stock.append('  - `label_zh`: label in Mandarin')
+    ccm.README_DICT[gr][key] = stock
+    
+    key = 'vaccination_by_age_label'
+    stock = []
+    stock.append('`{}.csv`'.format(key))
+    stock.append('- Row')
+    stock.append('  - `latest_date`: date of last available data')
+    stock.append('- Column')
+    stock.append('  - `key`')
+    stock.append('  - `value`')
     ccm.README_DICT[gr][key] = stock
     return
   

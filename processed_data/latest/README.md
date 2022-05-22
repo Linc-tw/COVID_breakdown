@@ -193,7 +193,7 @@ Contents
   - `total_avg`: 7-day moving average of `total`
 
 `vaccination_by_age.csv`
-- Row: date or age
+- Row: age group
 - Column
   - `key`: name of key
   - `value_1`: proportion of population having their 1st dose
@@ -202,6 +202,13 @@ Contents
   - `label`: label in English
   - `label_fr`: label in French
   - `label_zh`: label in Mandarin
+
+`vaccination_by_age_label.csv`
+- Row
+  - `latest_date`: date of last available data
+- Column
+  - `key`
+  - `value`
 
 `vaccination_by_brand.csv`
 - Row: report date
@@ -220,7 +227,7 @@ Contents
   - `*_avg`: 7-day moving average of `*`
 
 `vaccination_by_county.csv`
-- Row: date, city, or county
+- Row: city or county
 - Column
   - `key`: name of key
   - `value_1`: proportion of population having their 1st dose
