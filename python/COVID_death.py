@@ -204,15 +204,38 @@ class DeathSheet(ccm.Template):
       stock['bins'] = ctr_bins
       stock['n_arr'] = n_arr
       
-      ## Calculate counts, missing, & mean
+      ## Calculate counts, missing, & avg
       stock['counts'] = len(stock['list'])
       stock['missing'] = sum(np.isnan(stock['list']))
-      stock['mean'] = np.nanmean(stock['list'])
+      stock['avg'] = np.around(np.nanmean(stock['list']), decimals=2)
       
     return stock_dict
   
+  def makeStock_deathDelay(self, stock_dict):
+    key_list = ['counts', 'missing', 'avg']
+    stock_dict_c = {}
+    stock_dict_l = {}
+    
+    for gr, stock in stock_dict.items():
+      stock_c = {'difference': stock['bins']}
+      stock_l = {'key': key_list}
+      
+      if gr == ccm.GROUP_OVERALL:
+        stock_c['total'] = stock['n_arr']
+        stock_l['total'] = [stock[key] for key in key_list]
+        for year in ccm.GROUP_YEAR_LIST:
+          stock_c[year] = stock_dict[year]['n_arr']
+          stock_l[year] = [stock_dict[year][key] for key in key_list]
+      else:
+        stock_c['total'] = stock['n_arr']
+        stock_l['value'] = [stock[key] for key in key_list]
+        
+      stock_dict_c[gr] = stock_c
+      stock_dict_l[gr] = stock_l
+    return stock_dict_c, stock_dict_l
+  
   def makeReadme_deathDelay(self, gr):
-    key = 'death_delay' 
+    key = 'death_delay'
     stock = []
     stock.append('`{}.csv`'.format(key))
     stock.append('- Row: delay in days between case and death report')
@@ -225,7 +248,22 @@ class DeathSheet(ccm.Template):
       stock.append('  - `YYYY`: during year `YYYY`')
     elif gr in ccm.GROUP_YEAR_LIST:
       stock.append('  - `total`: all year {}'.format(gr))
-
+    ccm.README_DICT[gr][key] = stock
+    
+    key = 'death_delay_label'
+    stock = []
+    stock.append('`{}.csv`'.format(key))
+    stock.append('- Row')
+    stock.append('  - `counts`: total number of deaths')
+    stock.append('  - `missing`: number of deaths without the report date of diagnosis')
+    stock.append('  - `avg`: average delay')
+    stock.append('- Column')
+    stock.append('  - `key`')
+    if gr == ccm.GROUP_OVERALL:
+      stock.append('  - `total`: overall stats')
+      stock.append('  - `YYYY`: during year `YYYY`')
+    else:
+      stock.append('  - `value`')
     ccm.README_DICT[gr][key] = stock
     return
   
@@ -233,21 +271,14 @@ class DeathSheet(ccm.Template):
     if mode in ['data', 'both']:
       stock_dict = self.increment_deathDelay()
       stock_dict = self.makeHist_deathDelay(stock_dict)
+      stock_dict_c, stock_dict_l = self.makeStock_deathDelay(stock_dict)
     
     for gr in ccm.GROUP_LIST:
       if mode in ['data', 'both']:
-        stock = stock_dict[gr]
-        data_c = {'difference': stock['bins'], 'total': stock['n_arr']}
-        
-        if gr == ccm.GROUP_OVERALL:
-          for year in ccm.GROUP_YEAR_LIST:
-            data_c[year] = stock_dict[year]['n_arr']
-        
+        data_c = stock_dict_c[gr]
         data_c = pd.DataFrame(data_c)
         
-        key_list = ['counts', 'missing', 'mean']
-        value_list = [stock[key] for key in key_list]
-        data_l = {'key': key_list, 'value': value_list}
+        data_l = stock_dict_l[gr]
         data_l = pd.DataFrame(data_l)
         
         ## Save

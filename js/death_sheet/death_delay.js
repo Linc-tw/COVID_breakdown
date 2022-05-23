@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_delay.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.21                --//
+    //--  2022.05.23                --//
     //--------------------------------//
 
 function DD_InitFig(wrap) {
@@ -143,44 +143,61 @@ function DD_FormatData(wrap, data) {
   wrap.legend_value_raw = y_sum;
 }
 
+function DD_FormatData2(wrap, data2) {
+  var col_tag_list = data2.columns.slice(1);
+  var col_tag = col_tag_list[wrap.col_ind];
+  
+  //-- Loop over row
+  var i;
+  for (i=0; i<data2.length; i++) {
+    //-- Get value of `avg`
+    if ('avg' == data2[i]['key'])
+      wrap.avg = data2[i][col_tag];
+  }
+}
+
 //-- Tooltip
 function DD_MouseMove(wrap, d) {
   //-- Get tooltip position
   var y_alpha = 0.5;
-  var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target)); //TODO
+  var new_pos = GP_GetTooltipPos(wrap, y_alpha, d3.mouse(d3.event.target));
   
-//   //-- Get column tags
-//   var age_label;
-//   if (LS_lang == 'zh-tw')
-//     age_label = '歲';
-//   else if (LS_lang == 'fr')
-//     age_label = ' ans';
-//   else
-//     age_label = ' years old';
-//   
-//   //-- Define tooltip text
-//   var tooltip_text = wrap.ylabel_dict[LS_lang][wrap.col_tag];
-//   tooltip_text += '<br>' + d['age'] + age_label + ' = ' + GP_ValueStr_Tooltip(+d[wrap.col_tag]);
+  //-- Get column tags
+  var col_label;
+  if (LS_lang == 'zh-tw') {
+    if (wrap.tag.includes('latest'))
+      col_label = '近90日';
+    else if (wrap.col_ind == 0)
+      col_label = '所有';
+    else
+      col_label = wrap.col_tag + '年';
+  }
+  else if (LS_lang == 'fr') {
+    if (wrap.tag.includes('latest'))
+      col_label = 'des décès des<br>90 derniers jours sont signalés<br>';
+    else if (wrap.col_ind == 0)
+      col_label = 'des décès sont signalés<br>';
+    else
+      col_label = 'des décès en '+wrap.col_tag + ' sont signalés<br>';
+  }
+  else {
+    if (wrap.tag.includes('latest'))
+      col_label = 'all deaths from<br>last 90 days are reported<br>';
+    else if (wrap.col_ind == 0)
+      col_label = 'all deaths are reported<br>';
+    else
+      col_label = 'deaths in '+wrap.col_tag + ' are reported<br>';
+  }
   
+  //-- Generate tooltip text
+  var tooltip_text;
+  if (LS_lang == 'zh-tw')
+    tooltip_text = col_label + '死亡通報中有' + d[wrap.col_tag] + '位<br>發生在確診後' + d['difference'] + '天';
+  else if (LS_lang == 'fr')
+    tooltip_text = d[wrap.col_tag] + ' ' + col_label + d['difference'] + ' jour(s) après leur diagnosis';
+  else
+    tooltip_text = d[wrap.col_tag] + ' of ' + col_label + d['difference'] + ' day(s) after being diagnosed';
   
-//   //-- Get column tags
-//   if (LS_lang == 'zh-tw')
-//     col_label_list = ['全部', '境外移入', '本土', '其他']
-//   else if (LS_lang == 'fr')
-//     col_label_list = ["de l'ensemble des cas", 'des cas importés', 'des cas locaux', 'des autres cas']
-//   else
-//     col_label_list = ["all", 'imported', 'local', 'fleet']
-//   
-//   //-- Generate tooltip text
-//   var tooltip_text;
-//   if (LS_lang == 'zh-tw')
-//     tooltip_text = col_label_list[wrap.col_ind] + '案例中有' + d[wrap.col_tag] + '位<br>發病或入境後' + d['difference'] + '日確診';
-//   else if (LS_lang == 'fr')
-//     tooltip_text = d[wrap.col_tag] + ' ' + col_label_list[wrap.col_ind] + ' attend(ent)<br>' + d['difference'] + " jour(s) avant d'être identifié(s)";
-//   else
-//     tooltip_text = d[wrap.col_tag] + ' of ' + col_label_list[wrap.col_ind] + ' cases required<br>' + d['difference'] + ' day(s) to be identified';
-  
-  var tooltip_text = '';
   //-- Generate tooltip
   wrap.tooltip
     .html(tooltip_text)
@@ -203,7 +220,7 @@ function DD_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color = GP_wrap.c_list[8];
+  wrap.color = GP_wrap.c_list[0];
   
   //-- Define mouse-move
   wrap.mouse_move = DD_MouseMove;
@@ -269,17 +286,42 @@ function DD_Replot(wrap) {
   
   //-- Replot legend
   GP_ReplotLegend(wrap, 'count', wrap.legend_size);
+  
+  var n_dy;
+  if (wrap.tag.includes('overall') && wrap.col_ind > 0)
+    n_dy = 4;
+  else
+    n_dy = 3;
+  
+  //-- Update annotation text
+  var mean_label = {en: 'Average', fr: 'Moyenne', 'zh-tw': '平均'}; 
+  var mean_unit = {en: 'days', fr: 'jours', 'zh-tw': '日'}; 
+  wrap.svg.selectAll('.content.text')
+    .remove()
+    .exit()
+    .data([1])
+    .enter()
+    .append('text')
+      .attr('class', 'content text')
+      .attr('x', wrap.legend_pos.x-1.5*wrap.legend_pos.dx)
+      .attr('y', wrap.legend_pos.y+n_dy*wrap.legend_pos.dy)
+      .attr('text-anchor', 'start')
+      .style('fill', wrap.color)
+      .style('font-size', '1.3rem')
+      .text(mean_label[LS_lang]+' '+wrap.avg+' '+mean_unit[LS_lang]);
 }
 
 //-- Load
 function DD_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       DD_FormatData(wrap, data);
+      DD_FormatData2(wrap, data2);
       DD_Plot(wrap);
       DD_Replot(wrap);
     });
@@ -288,11 +330,13 @@ function DD_Load(wrap) {
 function DD_Reload(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
-    .await(function (error, data) {
+    .defer(d3.csv, wrap.data_path_list[1])
+    .await(function (error, data, data2) {
       if (error)
         return console.warn(error);
       
       DD_FormatData(wrap, data);
+      DD_FormatData2(wrap, data2);
       DD_Replot(wrap);
     });
 }

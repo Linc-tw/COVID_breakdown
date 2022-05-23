@@ -127,6 +127,15 @@ Contents
   - `difference`: see row
   - `total`: all year 2020
 
+`death_delay_label.csv`
+- Row
+  - `counts`: total number of deaths
+  - `missing`: number of deaths without the report date of diagnosis
+  - `avg`: average delay
+- Column
+  - `key`
+  - `value`
+
 `difference_by_transmission.csv`
 - Row: delay in number of days before identifying a transmission
   - For local cases, it is defined as the delay between the report date & the onset date.

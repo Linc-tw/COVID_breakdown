@@ -2,14 +2,12 @@
     //--------------------------------//
     //--  general_plotting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.22                --//
+    //--  2022.05.23                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
 //-- TODO
 
-//DD: mean on legend
-//SIM: color index
 //PAF: split positivity & fatality
 //CFR: new line delay fatality
 //front page: 6 panels
@@ -1356,7 +1354,7 @@ function GP_ReplotLegend(wrap, format, legend_size) {
       .attr('y', function (d, i) {if (format.includes('fold')) return GP_GetLegendYPos(wrap.legend_pos, wrap.legend_color.length, i); return wrap.legend_pos.y+i*wrap.legend_pos.dy;})
       .attr('text-anchor', 'end')
       .style('fill', function (d, i) {return wrap.legend_color[i];})
-      .text(function (d, i) {if (0 == i) return ''; if (format.includes('count')) return GP_ValueStr_Legend(d); return d3.format('.2%')(d);});
+      .text(function (d, i) {if (0 == i) return ''; if (format.includes('count')) return GP_ValueStr_Legend(d); if (format.includes('percentage')) return d3.format('.2%')(d); return d;});
       
   //-- Update legend label
   wrap.svg.selectAll('.legend.label')

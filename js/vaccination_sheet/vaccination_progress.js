@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_progress.js   --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.08                --//
+    //--  2022.05.23                --//
     //--------------------------------//
 
 function VP_InitFig(wrap) {
@@ -386,7 +386,7 @@ function VP_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color & linestyle
-  var color_list = GP_wrap.c_list.slice(4, 4+2);
+  var color_list = [GP_wrap.c_list[4], GP_wrap.c_list[11]];
   var linewidth_list = ['2.5px', '2.5px'];
   var linestyle_list = ['none', 'none'];
   

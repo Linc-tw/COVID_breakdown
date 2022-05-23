@@ -326,8 +326,8 @@ def sandbox():
   #border_sheet = COVID_border.BorderSheet()
   #border_sheet.saveCsv_borderStats(mode=mode)
   
-  timeline_sheet = COVID_timeline.TimelineSheet()
-  timeline_sheet.saveCsv_evtTimeline(mode=mode)
+  #timeline_sheet = COVID_timeline.TimelineSheet()
+  #timeline_sheet.saveCsv_evtTimeline(mode=mode)
   
   #county_sheet = COVID_county.CountySheet()
   #county_sheet.saveCsv_incidenceMap(mode=mode)
@@ -338,8 +338,8 @@ def sandbox():
   #vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
   #vc_sheet.saveCsv_vaccinationByAge(mode=mode)
   
-  #death_sheet = COVID_death.DeathSheet()
-  #death_sheet.saveCsv_deathDelay(mode=mode)
+  death_sheet = COVID_death.DeathSheet()
+  death_sheet.saveCsv_deathDelay(mode=mode)
   
   #status_sheet = COVID_status.StatusSheet()
   #test_sheet = COVID_test.TestSheet()

@@ -2,7 +2,7 @@
     //----------------------------------//
     //--  positivity_and_fatality.js  --//
     //--  Chieh-An Lin                --//
-    //--  2022.05.09                  --//
+    //--  2022.05.23                  --//
     //----------------------------------//
 
 function PAF_InitFig(wrap) {
@@ -243,7 +243,7 @@ function PAF_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color_list = GP_wrap.c_list.slice(5, 5+wrap.nb_col);
+  wrap.color_list = [GP_wrap.c_list[11], GP_wrap.c_list[7]];
   
   //-- Define mouse-move
   wrap.mouse_move = PAF_MouseMove;

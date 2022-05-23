@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  local_case_per_county.js  --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.08                --//
+    //--  2022.05.23                --//
     //--------------------------------//
 
 function LCPC_InitFig(wrap) {
@@ -312,7 +312,7 @@ function LCPC_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color = GP_wrap.c_list[1];
+  wrap.color = GP_wrap.c_list[7];
   
   //-- Define mouse-move
   wrap.mouse_move = LCPC_MouseMove;

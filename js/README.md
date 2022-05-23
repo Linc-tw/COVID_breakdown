@@ -25,6 +25,7 @@ Structure by folders
   - `local_case_per_county.js`
   
 `death_sheet/`
+  - `death_delay.js`
   
 `others/`
   - `incidence_rates.js`
@@ -78,11 +79,14 @@ Structure by page
   - `vaccination_by_age.js` (only latest)
   - `vaccination_by_county.js` (only latest)
 
+`deaths.html`
+  - `death_counts.js`
+  - `death_delay.js`
+  - `death_by_age.js` (only overall)
+
 `others.html`
   - `test_counts.js`
   - `positivity_and_fatality.js`
-  - `death_counts.js`
-  - `death_by_age.js` (only overall)
   - `border_statistics.js`
 
 `comparison.html`
@@ -98,6 +102,7 @@ Structure by axis type
 
 Single bar
   - `case_by_age.js`
+  - `death_delay.js`
   - `death_by_age.js`
 
 Multiple bar

@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  stats_in_mirror.js        --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.14                --//
+    //--  2022.05.23                --//
     //--------------------------------//
 
 function SIM_InitFig(wrap) {
@@ -334,7 +334,7 @@ function SIM_FormatData2(wrap, data2) {
   //-- Loop over row
   var i;
   for (i=0; i<data2.length; i++) {
-    //-- Get value of `n_tot`
+    //-- Get value of `timestamp`
     if ('timestamp' == data2[i]['key'])
       wrap.timestamp = data2[i]['value'];
   }
@@ -764,13 +764,41 @@ function SIM_ReplotCountAsY(wrap, format, index) {
 function SIM_Replot(wrap) {
   var i, stat, sub_wrap, list_ind, ylabel_dict;
   
+  //-- Cases
+  //--   CC    - SIM(3) - 0, (3, 10)
+  //--   LCPC  - COL    - 7
+  //--   CBA   - COL    - 2
+  //-- 
+  //-- Incidence
+  //--   IR(2) - SIM(2) - 9, 4
+  //--   IM    - NON
+  //--   IEBC  - NON
+  //--   IEBA  - NON
+  //-- 
+  //-- Vaccination
+  //--   VBB   - SIM    - 1
+  //--   VP(2) - COL    - 4, 11
+  //--   VBD(3)- SIM(3) - 3, 2, 6
+  //--   VBA(3)-  -     - 
+  //--   VBC(3)-  -     - 
+  //-- 
+  //-- Deaths
+  //--   DC    - SIM    - 5
+  //--   DD    - COL    - 0
+  //--   DBA   - COL    - 1
+  //-- 
+  //-- Others
+  //--   TC    - SIM    - 8
+  //--   PAF(2)- SIM(2) - 11, 7
+  //--   BS    - SIM(3) - 10, (6, 9)
+  
   for (i=0; i<2; i++) {
     stat = wrap.stat_list[i];
     sub_wrap = wrap.sub_wrap_list[i];
     
     //-- new_stat_flag
     if (stat == 0) {
-      sub_wrap.color = GP_wrap.c_list[2];
+      sub_wrap.color = GP_wrap.c_list[8];
       sub_wrap.mouse_move = TC_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
@@ -791,11 +819,11 @@ function SIM_Replot(wrap) {
         ylabel_dict = {en: 'Total confirmed cases', fr: 'Cas confirmés totaux', 'zh-tw': '總確診案例'};
       }
       else if (stat == 2) {
-        sub_wrap.color = GP_wrap.c_list[1];
+        sub_wrap.color = GP_wrap.c_list[3];
         ylabel_dict = {en: 'Imported cases', fr: 'Cas importés', 'zh-tw': '境外移入案例'};
       }
       else {
-        sub_wrap.color = GP_wrap.c_list[8];
+        sub_wrap.color = GP_wrap.c_list[10];
         ylabel_dict = {en: 'Local cases', fr: 'Cas locaux', 'zh-tw': '本土案例'};
       }
       
@@ -805,7 +833,7 @@ function SIM_Replot(wrap) {
       SIM_ReplotCountAsY(wrap, 'count', i);
     }
     else if (stat == 4) {
-      sub_wrap.color = GP_wrap.c_list[7];
+      sub_wrap.color = GP_wrap.c_list[5];
       sub_wrap.mouse_move = DC_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
@@ -864,7 +892,7 @@ function SIM_Replot(wrap) {
         ylabel_dict = {en: 'Arrival travellers', fr: 'Voyageurs entrant', 'zh-tw': '入境人數'};
       }
       else if (stat == 10) {
-        sub_wrap.color = GP_wrap.c_list[11];
+        sub_wrap.color = GP_wrap.c_list[6];
         ylabel_dict = {en: 'Departure travellers', fr: 'Voyageurs sortant', 'zh-tw': '出境人數'};
       }
       else {
@@ -884,7 +912,7 @@ function SIM_Replot(wrap) {
       
       if (stat == 12) {
         list_ind = 0;
-        sub_wrap.color = GP_wrap.c_list[3];
+        sub_wrap.color = GP_wrap.c_list[9];
         ylabel_dict = {en: 'Arrival incidence', fr: 'Incidence frontalière', 'zh-tw': '入境盛行率'};
       }
       else {
@@ -905,12 +933,12 @@ function SIM_Replot(wrap) {
       
       if (stat == 14) {
         list_ind = 0;
-        sub_wrap.color = GP_wrap.c_list[5];
+        sub_wrap.color = GP_wrap.c_list[11];
         ylabel_dict = {en: 'Positive rate', fr: 'Positivité', 'zh-tw': '陽性率'};
       }
       else {
         list_ind = 1;
-        sub_wrap.color = GP_wrap.c_list[6];
+        sub_wrap.color = GP_wrap.c_list[7];
         ylabel_dict = {en: 'Overall fatality', fr: 'Létalité cumulé', 'zh-tw': '累計致死率'};
       }
       

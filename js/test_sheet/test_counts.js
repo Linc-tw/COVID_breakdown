@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  test_counts.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.08                --//
+    //--  2022.05.23                --//
     //--------------------------------//
 
 function TC_InitFig(wrap) {
@@ -219,7 +219,7 @@ function TC_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color = GP_wrap.c_list[2];
+  wrap.color = GP_wrap.c_list[8];
   
   //-- Define mouse-move
   wrap.mouse_move = TC_MouseMove;

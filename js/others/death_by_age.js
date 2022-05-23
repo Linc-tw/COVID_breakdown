@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_by_age.js           --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.20                --//
+    //--  2022.05.23                --//
     //--------------------------------//
 
 function DBA_InitFig(wrap) {
@@ -216,7 +216,7 @@ function DBA_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color = GP_wrap.c_list[9];
+  wrap.color = GP_wrap.c_list[1];
   
   //-- Define mouse-move
   wrap.mouse_move = DBA_MouseMove;

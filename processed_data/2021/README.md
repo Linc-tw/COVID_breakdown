@@ -86,6 +86,15 @@ Contents
   - `difference`: see row
   - `total`: all year 2021
 
+`death_delay_label.csv`
+- Row
+  - `counts`: total number of deaths
+  - `missing`: number of deaths without the report date of diagnosis
+  - `avg`: average delay
+- Column
+  - `key`
+  - `value`
+
 `hospitalization_or_isolation.csv`
 - Row: report date
 - Column

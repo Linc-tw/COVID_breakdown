@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  incidence_rates.js        --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.09                --//
+    //--  2022.05.23                --//
     //--------------------------------//
 
 function IR_InitFig(wrap) {
@@ -230,7 +230,7 @@ function IR_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color_list = GP_wrap.c_list.slice(3, 3+wrap.nb_col);
+  wrap.color_list = [GP_wrap.c_list[9], GP_wrap.c_list[4]];
   
   //-- Define mouse-move
   wrap.mouse_move = IR_MouseMove;
