@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_delay.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.23                --//
+    //--  2022.05.24                --//
     //--------------------------------//
 
 function DD_InitFig(wrap) {
@@ -140,7 +140,7 @@ function DD_FormatData(wrap, data) {
   wrap.xticklabel = xticklabel;
   wrap.y_max = y_max;
   wrap.ytick = ytick;
-  wrap.legend_value_raw = y_sum;
+  wrap.y_sum = y_sum;
 }
 
 function DD_FormatData2(wrap, data2) {
@@ -148,11 +148,14 @@ function DD_FormatData2(wrap, data2) {
   var col_tag = col_tag_list[wrap.col_ind];
   
   //-- Loop over row
-  var i;
+  var i, value, value_0;
   for (i=0; i<data2.length; i++) {
     //-- Get value of `avg`
-    if ('avg' == data2[i]['key'])
-      wrap.avg = data2[i][col_tag];
+    if ('avg' == data2[i]['key']) {
+      value_0 = data2[i][col_tag_list[0]];
+      value = data2[i][col_tag];
+      wrap.legend_value_raw = [d3.format('.2f')(value_0), d3.format('.2f')(value)];
+    }
   }
 }
 
@@ -271,7 +274,10 @@ function DD_Replot(wrap) {
   wrap.legend_value = [wrap.legend_value_raw[1], wrap.legend_value_raw[0]];
   
   //-- Define legend label
-  wrap.legend_label = ['Total', LS_GetLegendTitle_Page(wrap)];
+  var col_tag;
+  if (wrap.tag.includes('overall'))
+    col_tag = wrap.col_tag + ' all year';
+  wrap.legend_label = [col_tag, LS_GetLegendTitle_Page(wrap)];
   
   //-- Remove redundancy from legend if col_ind = 0
   if (wrap.col_ind == 0) {
@@ -281,34 +287,64 @@ function DD_Replot(wrap) {
   }
   
   //-- Update legend title
-  var legend_title = {en: 'Deaths', fr: 'Décès', 'zh-tw': '死亡人數'}; //-- No time info for title here
+  var legend_title = {en: 'Average delay in days', fr: 'Délai moyen en jours', 'zh-tw': '平均延遲天數'}; //-- No time info for title here
   GP_UpdateLegendTitle(wrap, legend_title[LS_lang]);
   
   //-- Replot legend
-  GP_ReplotLegend(wrap, 'count', wrap.legend_size);
+  GP_ReplotLegend(wrap, 'string', wrap.legend_size);
   
-  var n_dy;
-  if (wrap.tag.includes('overall') && wrap.col_ind > 0)
-    n_dy = 4;
-  else
-    n_dy = 3;
-  
-  //-- Update annotation text
-  var mean_label = {en: 'Average', fr: 'Moyenne', 'zh-tw': '平均'}; 
-  var mean_unit = {en: 'days', fr: 'jours', 'zh-tw': '日'}; 
-  wrap.svg.selectAll('.content.text')
-    .remove()
-    .exit()
-    .data([1])
-    .enter()
-    .append('text')
-      .attr('class', 'content text')
-      .attr('x', wrap.legend_pos.x-1.5*wrap.legend_pos.dx)
-      .attr('y', wrap.legend_pos.y+n_dy*wrap.legend_pos.dy)
-      .attr('text-anchor', 'start')
-      .style('fill', wrap.color)
-      .style('font-size', '1.3rem')
-      .text(mean_label[LS_lang]+' '+wrap.avg+' '+mean_unit[LS_lang]);
+//   var n_dy;
+//   if (wrap.tag.includes('overall') && wrap.col_ind > 0)
+//     n_dy = 3.5;
+//   else
+//     n_dy = 2.5;
+//   
+//   var legend_value_2 = [wrap.y_sum[1], wrap.y_sum[0]];
+//   var legend_label_2 = ['Total', LS_GetLegendTitle_Page(wrap)];
+//   if (wrap.col_ind == 0) {
+//     legend_value_2 = legend_value_2.slice(1, 2);
+//     legend_label_2 = legend_label_2.slice(1, 2);
+//   }
+//   var mean_title = {en: 'Deaths', fr: 'Décès', 'zh-tw': '死亡人數'};
+//   legend_value_2.splice(0, 0, '');
+//   legend_label_2.splice(0, 0, mean_title[LS_lang]);
+//   
+//   //-- Update legend value 2
+//   wrap.svg.selectAll('.legend.value2')
+//     .remove()
+//     .exit()
+//     .data(legend_value_2)
+//     .enter()
+//     .append('text')
+//       .attr('class', 'legend value2')
+//       .attr('x', wrap.legend_pos.x)
+//       .attr('y', function (d, i) {return wrap.legend_pos.y+(n_dy+i)*wrap.legend_pos.dy;})
+//       .attr('text-anchor', 'end')
+//       .style('fill', function (d, i) {return wrap.legend_color[i];})
+//       .text(function (d, i) {if (0 == i) return ''; return d;});
+//       
+//   //-- Update legend label 2
+//   wrap.svg.selectAll('.legend.label2')
+//     .remove()
+//     .exit()
+//     .data(legend_label_2)
+//     .enter()
+//     .append('text')
+//       .attr('class', 'legend label')
+//       .attr('x', wrap.legend_pos.x+wrap.legend_pos.dx)
+//       .attr('y', function (d, i) {return wrap.legend_pos.y+(n_dy+i)*wrap.legend_pos.dy;})
+//       .attr('text-anchor', 'start')
+//       .attr('text-decoration', function (d, i) {if (0 == i) return 'underline'; return '';})
+//       .style('fill', function (d, i) {return wrap.legend_color[i];})
+//       .text(function (d) {return d;});
+//       
+//   if (wrap.legend_size != 'normal') {
+//     wrap.svg.selectAll('.legend.value2')
+//         .style('font-size', wrap.legend_size);
+//     
+//     wrap.svg.selectAll('.legend.label2')
+//         .style('font-size', wrap.legend_size);
+//   }
 }
 
 //-- Load

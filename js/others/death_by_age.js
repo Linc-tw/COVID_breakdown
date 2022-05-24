@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_by_age.js           --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.23                --//
+    //--  2022.05.24                --//
     //--------------------------------//
 
 function DBA_InitFig(wrap) {
@@ -26,6 +26,9 @@ function DBA_ResetText() {
     LS_AddHtml('death_by_age_description', '\
       此圖數字可能會和「死亡人數」的統計不同，\
       因為兩者取自不同來源，資料更新速度不同。\
+      <br><br>\
+      由於確診資料中年齡70歲以上只有一個級距，\
+      因此致死率與死亡數級距不同。\
     ');
   }
   
@@ -42,6 +45,9 @@ function DBA_ResetText() {
       Le chiffre dans cette figure peut ne pas correspond à celui du « Nombre de décès »,\
       car ils viennent des sources différentes\
       qui ne mettent pas les données à jour en même temps.\
+      <br><br>\
+      Pour la létalité, les cas supérieur à 70 ans sont combinés dans un seul groupe,\
+      car les données des cas confirmés le sont ainsi.\
     ');
   }
   
@@ -58,6 +64,9 @@ function DBA_ResetText() {
       The value on this figure does not necessarily match to the one in "Death Counts",\
       because they come from different sources\
       which do not update data at the same time.\
+      <br><br>\
+      For the case fatality rate, cases above 70 years old are combined into a single group\
+      since the data of case counts are so.\
     ');
   }
 }
