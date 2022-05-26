@@ -8,8 +8,6 @@
 //------------------------------------------------------------------------------
 //-- TODO
 
-//TPR: web page
-//TPR: test positive rate
 //Home: DC vignette
 //Home: SIM vignette
 

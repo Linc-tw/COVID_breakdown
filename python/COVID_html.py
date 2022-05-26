@@ -2,7 +2,7 @@
     ################################
     ##  COVID_html.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.25                ##
+    ##  2022.05.26                ##
     ################################
 
 import os
@@ -40,14 +40,12 @@ PAGE_DICT = {
     plot_list = ['DC', 'CFR', 'DD'],
   ),
   'latest_others': dict(
-    name = 'Latest others',
-    plot_list = ['TC', 'PAF', 'BS'],
-    #name = 'Latest tests & border',
-    #plot_list = ['TC', 'TPR', 'BS'],
+    name = 'Latest tests & border',
+    plot_list = ['TC', 'TPR', 'BS'],
   ),
   'latest_comparison': dict(
     name = 'Latest comparison',
-    plot_list = ['CC', 'IR', 'VBB', 'VBD', 'DC', 'CFR', 'TC', 'PAF', 'BS', 'SIM'],
+    plot_list = ['CC', 'IR', 'VBB', 'VBD', 'DC', 'CFR', 'TC', 'TPR', 'BS', 'SIM'],
   ),
   
   'overall_cases': dict(
@@ -67,14 +65,12 @@ PAGE_DICT = {
     plot_list = ['DC', 'CFR', 'DD', 'DBA'],
   ),
   'overall_others': dict(
-    name = 'Overall others',
-    plot_list = ['TC', 'PAF', 'BS'],
-    #name = 'Overall tests & border',
-    #plot_list = ['TC', 'TPR', 'BS'],
+    name = 'Overall tests & border',
+    plot_list = ['TC', 'TPR', 'BS'],
   ),
   'overall_comparison': dict(
     name = 'Overall comparison',
-    plot_list = ['CC', 'IR', 'VBB', 'VBD', 'DC', 'CFR', 'TC', 'PAF', 'BS', 'SIM'],
+    plot_list = ['CC', 'IR', 'VBB', 'VBD', 'DC', 'CFR', 'TC', 'TPR', 'BS', 'SIM'],
   ),
   
   'timeline': dict(
@@ -204,18 +200,12 @@ PLOT_DICT = {
     wdt_str = None,
     fontawe_str = 'fa-vial',
   ),
-  'PAF': dict(
-    plot_tag = 'positivity_and_fatality',
+  'TPR': dict(
+    plot_tag = 'test_positive_rate',
     js_path = 'others/',
     wdt_str = None,
     fontawe_str = 'fa-plus-circle',
   ),
-  #'TPR': dict(
-    #plot_tag = 'test_positivite_rate',
-    #js_path = 'others/',
-    #wdt_str = None,
-    #fontawe_str = 'fa-chart-line',
-  #),
   'BS': dict(
     plot_tag = 'border_statistics',
     js_path = 'border_sheet/',
@@ -877,8 +867,8 @@ def makeStr_TC(gr_tag):
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
 
-def makeStr_PAF(gr_tag):
-  return makeStr_noOtherBtn('PAF', gr_tag)
+def makeStr_TPR(gr_tag):
+  return makeStr_noOtherBtn('TPR', gr_tag)
 
 def makeStr_DC(gr_tag):
   plot_abrv = 'DC'
@@ -1266,7 +1256,7 @@ def saveHtml_page(page_tag, verbose=True):
     
     elif cate_tag == 'others':
       f.write(makeStr_TC(gr_tag))
-      f.write(makeStr_PAF(gr_tag))
+      f.write(makeStr_TPR(gr_tag))
       f.write(makeStr_BS(gr_tag))
     
     elif cate_tag == 'comparison':

@@ -2,7 +2,7 @@
     //-------------------------------------//
     //--  incidence_evolution_by_age.js  --//
     //--  Chieh-An Lin                   --//
-    //--  2022.05.20                     --//
+    //--  2022.05.26                     --//
     //-------------------------------------//
 
 function IEBA_InitFig(wrap) {
@@ -24,7 +24,7 @@ function IEBA_ResetText() {
     LS_AddStr('incidence_evolution_by_age_title', '各年齡層盛行率變化');
     
     LS_AddHtml('incidence_evolution_by_age_description', '\
-      此圖中，盛行率之定義為自該日起回推七日內，指定年齡層每十萬人確診個案數之總合（而非平均）。\
+      此圖中，盛行率之定義為自該日起回推7日內，指定年齡層每10萬人確診個案數之總合（而非平均）。\
       <br><br>\
       因為今日確診個案的資料明天才會更新，所以最後一欄留空。\
       <br><br>\
@@ -202,7 +202,7 @@ function IEBA_Replot(wrap) {
   //-- Define legend caption
   var legend_caption
   if (LS_lang == 'zh-tw')
-    legend_caption = ['近45日統計', '每十萬人過去七日確診數總合'];
+    legend_caption = ['近45日統計', '每10萬人過去7日確診數總合'];
   else if (LS_lang == 'fr')
     legend_caption = ['45 derniers jours', 'Nombre de cas confirmés sur 7 jours pour 100k habitants'];
   else 

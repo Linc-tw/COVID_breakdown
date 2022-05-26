@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  incidence_map.js          --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.14                --//
+    //--  2022.05.26                --//
     //--------------------------------//
 
 function IM_InitFig(wrap) {
@@ -55,7 +55,7 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_m12', '12月');
     
     LS_AddHtml('incidence_map_description', '\
-      此圖中，盛行率之定義為指定期間內，每十萬人本土個案數之總合（而非平均）。\
+      此圖中，盛行率之定義為指定期間內，每10萬人本土個案數之總合（而非平均）。\
       <br><br>\
       2021年5月所爆發的感染多半集中於雙北地區，\
       其確診個案佔全國總數八成以上。\
@@ -381,7 +381,7 @@ function IM_Replot(wrap) {
   var legend_caption_top;
   if (wrap.rate == 1) {
     if (LS_lang == 'zh-tw')
-      legend_caption_top = ['每十萬人確診率'];
+      legend_caption_top = ['每10萬人確診率'];
     else if (LS_lang == 'fr')
       legend_caption_top = ['Taux d\'incidence pour 100k habitants'];
     else 

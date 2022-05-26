@@ -77,8 +77,8 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_cumulative_fatality_1', '累計致死率');
     LS_AddStr('stats_in_mirror_button_test_0', '檢驗人次');
     LS_AddStr('stats_in_mirror_button_test_1', '檢驗人次');
-    LS_AddStr('stats_in_mirror_button_positivity_0', '陽性率');
-    LS_AddStr('stats_in_mirror_button_positivity_1', '陽性率');
+    LS_AddStr('stats_in_mirror_button_positivity_0', '檢驗陽性率');
+    LS_AddStr('stats_in_mirror_button_positivity_1', '檢驗陽性率');
     LS_AddStr('stats_in_mirror_button_border_entry_0', '入境人數');
     LS_AddStr('stats_in_mirror_button_border_entry_1', '入境人數');
     LS_AddStr('stats_in_mirror_button_border_exit_0', '出境人數');
@@ -203,8 +203,8 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_cumulative_fatality_1', 'Overall fatality rate');
     LS_AddStr('stats_in_mirror_button_test_0', 'Test counts');
     LS_AddStr('stats_in_mirror_button_test_1', 'Test counts');
-    LS_AddStr('stats_in_mirror_button_positivity_0', 'Positive rate');
-    LS_AddStr('stats_in_mirror_button_positivity_1', 'Positive rate');
+    LS_AddStr('stats_in_mirror_button_positivity_0', 'Test positive rate');
+    LS_AddStr('stats_in_mirror_button_positivity_1', 'Test positive rate');
     LS_AddStr('stats_in_mirror_button_border_entry_0', 'Border arrival counts');
     LS_AddStr('stats_in_mirror_button_border_entry_1', 'Border arrival counts');
     LS_AddStr('stats_in_mirror_button_border_exit_0', 'Border departure counts');

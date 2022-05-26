@@ -2,12 +2,12 @@
     //--------------------------------//
     //--  plot_overall_others.js    --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.20                --//
+    //--  2022.05.26                --//
     //--------------------------------//
 
 var POO_plot_list = [
   [TC_Main, TC_overall_wrap, 1000],
-  [PAF_Main, PAF_overall_wrap, 1000],
+  [TPR_Main, TPR_overall_wrap, 1000],
   [BS_Main, BS_overall_wrap, 1000],
 ];
 

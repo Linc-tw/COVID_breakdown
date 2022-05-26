@@ -30,7 +30,7 @@ Structure by folders
 `others/`
   - `death_by_age.js`
   - `incidence_rates.js`
-  - `positivity_and_fatality.js`
+  - `test_positive_rate.js`
   - `stats_in_mirror.js`
 
 `status_sheet/`
@@ -88,7 +88,7 @@ Structure by page
 
 `others.html`
   - `test_counts.js`
-  - `positivity_and_fatality.js`
+  - `test_positive_rate.js`
   - `border_statistics.js`
 
 `comparison.html`
@@ -122,7 +122,7 @@ Faint single bar & avg line
 Line
   - `case_fatality_rates.js`
   - `incidence_rates.js`
-  - `positivity_and_fatality.js`
+  - `test_positive_rate.js`
   - `vaccination_by_dose.js`
   - `vaccination_progress.js`
 

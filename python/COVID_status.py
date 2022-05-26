@@ -2,7 +2,7 @@
     ################################
     ##  COVID_status.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.25                ##
+    ##  2022.05.26                ##
     ################################
 
 import os
@@ -462,21 +462,7 @@ class StatusSheet(ccm.Template):
     stock['new_imported'] = stock_tmp['new_imported'].values
     stock['new_local'] = stock_tmp['new_local'].values
     return
-    
-  ## Obsolete
-  def updateCumCounts(self, stock):
-    date_list = self.getDate()
-    cum_deaths_list = self.getCumDeaths()
-    cum_cases_list = self.getCumCases()
-    
-    stock_tmp = {'date': date_list, 'cum_cases': cum_cases_list, 'cum_deaths': cum_deaths_list}
-    stock_tmp = pd.DataFrame(stock_tmp)
-    stock_tmp = ccm.adjustDateRange(stock_tmp)
-    
-    stock['cum_cases'] = stock_tmp['cum_cases'].values
-    stock['cum_deaths'] = stock_tmp['cum_deaths'].values
-    return
-
+  
   def saveCsv(self, mode='both'):
     self.saveCsv_keyNb(mode=mode)
     self.saveCsv_caseCounts(mode=mode)

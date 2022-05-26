@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.22                ##
+    ##  2022.05.26                ##
     ################################
 
 import os
@@ -96,76 +96,6 @@ def saveCsv_incidenceRates(status_sheet, border_sheet, mode='both'):
       makeReadme_incidenceRates(gr)
   return
   
-def makeStock_positivityAndFatality(status_sheet, test_sheet):
-  stock = {}
-  status_sheet.updateNewCaseCounts(stock)
-  status_sheet.updateCumCounts(stock)
-  test_sheet.updateNewTestCounts(stock)
-  
-  ## Smooth
-  for key, value_arr in stock.items():
-    if 'date' == key:
-      continue
-    
-    ## No smoothing if cumulative
-    if key in ['cum_cases', 'cum_deaths']:
-      value_arr, _ = ccm.pandasNAToZero(value_arr)
-    else:
-      value_arr = ccm.sevenDayMovingAverage(value_arr)
-      ind = value_arr != value_arr
-      value_arr[ind] = 0
-    
-    ## Push back
-    stock[key] = value_arr
-  
-  stock_new = {}
-  stock_new['date'] = stock['date']
-  
-  with wng.catch_warnings(): ## Avoid division by zero
-    wng.simplefilter('ignore')
-    
-    ind = stock['new_tests'] == 0
-    value_arr = stock['new_cases'] / stock['new_tests']
-    value_arr = np.around(value_arr, decimals=4)
-    value_arr[ind] = np.nan
-    stock_new['positivity'] = value_arr
-    
-    ind = stock['cum_cases'] == 0
-    value_arr = stock['cum_deaths'] / stock['cum_cases']
-    value_arr = np.around(value_arr, decimals=4)
-    value_arr[ind] = np.nan
-    stock_new['fatality'] = value_arr
-  return stock_new
-
-def makeReadme_positivityAndFatality(gr):
-  key = 'positivity_and_fatality'
-  stock = []
-  stock.append('`{}.csv`'.format(key))
-  stock.append('- Row: date')
-  stock.append('- Column')
-  stock.append('  - `date`')
-  stock.append('  - `positivity`: number of confirmed cases over number of tests')
-  stock.append('  - `fatality`: number of deaths over number of confirmed cases')
-  ccm.README_DICT[gr][key] = stock
-  return
-  
-def saveCsv_positivityAndFatality(status_sheet, test_sheet, mode='both'):
-  if mode in ['data', 'both']:
-    stock = makeStock_positivityAndFatality(status_sheet, test_sheet)
-    stock = pd.DataFrame(stock)
-  
-  for gr in ccm.GROUP_LIST:
-    if mode in ['data', 'both']:
-      data = ccm.truncateStock(stock, gr)
-      
-      ## Save
-      name = '{}processed_data/{}/positivity_and_fatality.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
-    
-    if mode in ['readme', 'both']:
-      makeReadme_positivityAndFatality(gr)
-  return
-
 def makeCountStock_deathByAge(death_sheet):
   stock = {}
   death_sheet.updateDeathByAge(stock)
@@ -301,10 +231,68 @@ def saveCsv_deathByAge(county_sheet, death_sheet, mode='both'):
     makeReadme_deathByAge(gr)
   return
 
+def makeStock_testPositiveRate(status_sheet, test_sheet):
+  stock = {}
+  status_sheet.updateNewCaseCounts(stock)
+  test_sheet.updateNewTestCounts(stock)
+  
+  ## Smooth
+  for key, value_arr in stock.items():
+    if 'date' == key:
+      continue
+    
+    value_arr = ccm.sevenDayMovingAverage(value_arr)
+    ind = value_arr != value_arr
+    value_arr[ind] = 0
+    
+    ## Push back
+    stock[key] = value_arr
+  
+  stock_new = {}
+  stock_new['date'] = stock['date']
+  
+  with wng.catch_warnings(): ## Avoid division by zero
+    wng.simplefilter('ignore')
+    
+    ind = stock['new_tests'] == 0
+    value_arr = stock['new_cases'] / stock['new_tests']
+    value_arr = np.around(value_arr, decimals=4)
+    value_arr[ind] = np.nan
+    stock_new['positivity'] = value_arr
+  return stock_new
+
+def makeReadme_testPositiveRate(gr):
+  key = 'test_positive_rate'
+  stock = []
+  stock.append('`{}.csv`'.format(key))
+  stock.append('- Row: date')
+  stock.append('- Column')
+  stock.append('  - `date`')
+  stock.append('  - `positivity`: number of confirmed cases over number of tests')
+  ccm.README_DICT[gr][key] = stock
+  return
+  
+def saveCsv_testPositiveRate(status_sheet, test_sheet, mode='both'):
+  if mode in ['data', 'both']:
+    stock = makeStock_testPositiveRate(status_sheet, test_sheet)
+    stock = pd.DataFrame(stock)
+  
+  for gr in ccm.GROUP_LIST:
+    if mode in ['data', 'both']:
+      data = ccm.truncateStock(stock, gr)
+      
+      ## Save
+      name = '{}processed_data/{}/test_positive_rate.csv'.format(ccm.DATA_PATH, gr)
+      ccm.saveCsv(name, data)
+    
+    if mode in ['readme', 'both']:
+      makeReadme_testPositiveRate(gr)
+  return
+
 def saveCsv_others(status_sheet, test_sheet, border_sheet, county_sheet, death_sheet, mode='both'):
   saveCsv_incidenceRates(status_sheet, border_sheet, mode=mode)
-  saveCsv_positivityAndFatality(status_sheet, test_sheet, mode=mode)
   saveCsv_deathByAge(county_sheet, death_sheet, mode=mode)
+  saveCsv_testPositiveRate(status_sheet, test_sheet, mode=mode)
   return
 
 ################################################################################

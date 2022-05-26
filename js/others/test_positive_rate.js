@@ -1,11 +1,11 @@
 
-    //----------------------------------//
-    //--  positivity_and_fatality.js  --//
-    //--  Chieh-An Lin                --//
-    //--  2022.05.23                  --//
-    //----------------------------------//
+    //-----------------------------//
+    //--  test_positive_rate.js  --//
+    //--  Chieh-An Lin           --//
+    //--  2022.05.26             --//
+    //-----------------------------//
 
-function PAF_InitFig(wrap) {
+function TPR_InitFig(wrap) {
   if (wrap.tag.includes('mini'))
     GP_InitFig_Mini(wrap);
   else if (wrap.tag.includes('overall'))
@@ -14,58 +14,47 @@ function PAF_InitFig(wrap) {
     GP_InitFig_Standard(wrap);
 }
 
-function PAF_ResetText() {
+function TPR_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('positivity_and_fatality_title', '檢驗陽性率與累計致死率');
+    LS_AddStr('test_positive_rate_title', '檢驗陽性率');
     
-    LS_AddHtml('positivity_and_fatality_description', '\
+    LS_AddHtml('test_positive_rate_description', '\
       檢驗陽性率的定義為確診人數除以檢驗人次。\
-      陽性率越高代表篩檢族群中的傳播鍊越多，尚未揪出之潛在確診者也可能越多。\
-      這裡所呈現之陽性率為7日平均。\
       <br><br>\
-      累計致死率的定義為死亡人數除以確診人數。\
-      由於死亡往往不會立即在確診後發生，\
-      因此通常得用累積一段時間的統計才能計算。\
-      這裡呈現的是累計致死率的變化，每點都是疫情初期到當日的統計結果。\
+      陽性率越高代表篩檢族群中的傳播鍊越多，尚未揪出之潛在確診者也可能越多。\
+      <br><br>\
+      這裡所呈現之陽性率為7日平均。\
     ');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('positivity_and_fatality_title', 'Taux de positivité et de létalité');
+    LS_AddStr('test_positive_rate_title', 'Taux de positivité');
     
-    LS_AddHtml('positivity_and_fatality_description', '\
+    LS_AddHtml('test_positive_rate_description', '\
       Le taux de positivité ou la positivité est défini comme le nombre de cas confirmés sur le nombre de tests conduits.\
+      <br><br>\
       Plus la positivité est élevée, plus il y a des transmissions au sein de la population examinée\
       et plus il est possible qu\'il y a des patients non identifiés.\
-      Ici pour la positivité, la moyenne glissante sur 7 jours est présentée.\
       <br><br>\
-      Le taux de létalité est défini comme le nombre de décédés sur le nombre de cas confirmés.\
-      Comme les décès n\'ont souvent pas lieu tout de suite après être diagnostiqués,\
-      il est plus commode de calculer la létalité sur une période longue.\
-      Ici, on choisit de montrer l\'évolution de la létalité cumulée,\
-      i.e. calculée à partir du début de la pandémie.\
+      Ici, la moyenne glissante sur 7 jours est présentée.\
     ');
   }
   
   else { //-- En
-    LS_AddStr('positivity_and_fatality_title', 'Positive Rate & Case Fatality Rate');
+    LS_AddStr('test_positive_rate_title', 'Test Positive Rate');
     
-    LS_AddHtml('positivity_and_fatality_description', '\
-      The positive rate or positivity is defined as the number of confirmed cases over the number of tests.\
+    LS_AddHtml('test_positive_rate_description', '\
+      The test positive rate or positivity is defined as the number of confirmed cases over the number of tests.\
+      <br><br>\
       The higher the positivity, the more there are transmissions among the targeted population,\
       and the more likely there are unidentified patients.\
-      Here for positivity, the 7-day moving average is shown.\
       <br><br>\
-      The case fatality rate (CFR) is defined as the number of deaths over the confirmed case counts.\
-      Since the death usually happens a while after being diagnosed,\
-      CFR can only be calculated on a long period.\
-      Here we choose to show the evolution of the overall CFR,\
-      i.e. since the beginning of the pandemic.\
+      Here, the 7-day moving average is shown.\
     ');
   }
 }
 
-function PAF_FormatData(wrap, data) {
+function TPR_FormatData(wrap, data) {
   //-- Variables for data
   var col_tag_list = data.columns.slice(1); //-- 0 = date
   var nb_col = col_tag_list.length;
@@ -176,7 +165,7 @@ function PAF_FormatData(wrap, data) {
   wrap.legend_value_raw = y_last_list;
 }
 
-function PAF_FormatData2(wrap, data2) {
+function TPR_FormatData2(wrap, data2) {
   if (!wrap.tag.includes('overall'))
     return;
   
@@ -196,7 +185,7 @@ function PAF_FormatData2(wrap, data2) {
 }
 
 //-- Tooltip
-function PAF_MouseMove(wrap, d) {
+function TPR_MouseMove(wrap, d) {
   if (wrap.tag.includes('mini'))
     return;
     
@@ -206,11 +195,11 @@ function PAF_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw')
-    col_label_list = ['檢驗陽性率', '累計致死率'];
+    col_label_list = ['檢驗陽性率'];
   else if (LS_lang == 'fr')
-    col_label_list = ['Positivité', 'Létalité cumulée'];
+    col_label_list = ['Positivité'];
   else
-    col_label_list = ['Positive rate', 'Overall fatality'];
+    col_label_list = ['Positivity'];
   
   //-- Define tooltip texts
   var fct_format = d3.format('.2%');
@@ -227,7 +216,7 @@ function PAF_MouseMove(wrap, d) {
     .style('top', new_pos[1] + 'px');
 }
 
-function PAF_Plot(wrap) {
+function TPR_Plot(wrap) {
   //-- x = bottom, y = left
   GP_PlotBottomLeft(wrap);
   
@@ -246,7 +235,7 @@ function PAF_Plot(wrap) {
   wrap.color_list = [GP_wrap.c_list[11], GP_wrap.c_list[7]];
   
   //-- Define mouse-move
-  wrap.mouse_move = PAF_MouseMove;
+  wrap.mouse_move = TPR_MouseMove;
   wrap.plot_opacity = GP_wrap.trans_opacity_bright;
   wrap.trans_delay = GP_wrap.trans_delay;
   
@@ -257,7 +246,7 @@ function PAF_Plot(wrap) {
   GP_PlotDot(wrap);
 }
 
-function PAF_Replot(wrap) {
+function TPR_Replot(wrap) {
   //-- Replot line
   GP_ReplotLine(wrap);
     
@@ -296,11 +285,11 @@ function PAF_Replot(wrap) {
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')
-    wrap.legend_label = ['檢驗陽性率（過去7日）', '累計致死率'];
+    wrap.legend_label = ['檢驗陽性率'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ['Taux de positivité (7 derniers jours)', 'Taux de létalité cumulé'];
+    wrap.legend_label = ['Taux de positivité'];
   else
-    wrap.legend_label = ['Positive rate (last 7 days)', 'Overall fatality rate'];
+    wrap.legend_label = ['Test positive rate'];
     
   //-- Update legend title
   legend_title_dict = {en: 'Latest value', fr: 'Derniers chiffres', 'zh-tw': '最新統計'};
@@ -311,7 +300,7 @@ function PAF_Replot(wrap) {
 }
 
 //-- Load
-function PAF_Load(wrap) {
+function TPR_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[0])
     .defer(d3.csv, wrap.data_path_list[1])
@@ -319,14 +308,14 @@ function PAF_Load(wrap) {
       if (error)
         return console.warn(error);
       
-      PAF_FormatData(wrap, data);
-      PAF_FormatData2(wrap, data2);
-      PAF_Plot(wrap);
-      PAF_Replot(wrap);
+      TPR_FormatData(wrap, data);
+      TPR_FormatData2(wrap, data2);
+      TPR_Plot(wrap);
+      TPR_Replot(wrap);
     });
 }
 
-function PAF_ButtonListener(wrap) {
+function TPR_ButtonListener(wrap) {
   //-- Save
   d3.select(wrap.id + '_save').on('click', function () {
     name = wrap.tag + '_' + LS_lang + '.png'
@@ -339,20 +328,20 @@ function PAF_ButtonListener(wrap) {
     Cookies.set('lang', LS_lang);
     
     //-- Replot
-    PAF_ResetText();
-    PAF_Replot(wrap);
+    TPR_ResetText();
+    TPR_Replot(wrap);
   });
 }
 
 //-- Main
-function PAF_Main(wrap) {
+function TPR_Main(wrap) {
   wrap.id = '#' + wrap.tag
   
   //-- Load
-  PAF_InitFig(wrap);
-  PAF_ResetText();
-  PAF_Load(wrap);
+  TPR_InitFig(wrap);
+  TPR_ResetText();
+  TPR_Load(wrap);
   
   //-- Setup button listeners
-  PAF_ButtonListener(wrap);
+  TPR_ButtonListener(wrap);
 }

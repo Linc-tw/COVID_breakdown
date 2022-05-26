@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  test_counts.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.23                --//
+    //--  2022.05.26                --//
     //--------------------------------//
 
 function TC_InitFig(wrap) {
@@ -23,6 +23,7 @@ function TC_ResetText() {
     LS_AddHtml('test_counts_description', '\
       昨日的檢驗量必須等到明天才會有資料，\
       因為發現第N日做的檢驗有可能會在第N+1日或第N+2日回報。\
+      <br><br>\
       為了避免低估檢驗量，檢驗人次的統計資料會有2天延遲。\
     ');
   }
@@ -35,6 +36,7 @@ function TC_ResetText() {
     LS_AddHtml('test_counts_description', '\
       Le nombre de dépistage d\'hier n\'est disponible seulement demain,\
       car les tests faits au jour J peuvent être mis à jour au jour J+1 ou J+2.\
+      <br><br>\
       Pour éviter une sous-estimation systématique et la confusion,\
       le nombre de tests est affiché avec un délai de 2 jours.\
     ');
@@ -48,6 +50,7 @@ function TC_ResetText() {
     LS_AddHtml('test_counts_description', '\
       The number of tests of yesterday will only be available tomorrow,\
       because tests made on Day N can be reported on Day N+1 or Day N+2.\
+      <br><br>\
       To avoid a systematic underestimation and confusion,\
       the number of tests is shown with a delay of 2 days.\
     ');
