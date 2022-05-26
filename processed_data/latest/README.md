@@ -73,6 +73,13 @@ Contents
   - `local_avg`: 7-day moving average of `local`
   - `others_avg`: 7-day moving average of `others`
 
+`case_fatality_rate.csv`
+- Row: date
+- Column
+  - `date`
+  - `weekly_CFR`: 7-day-averaged case fatality rate
+  - `cumul_CFR`: cumulative case fatality rate
+
 `death_counts.csv`
 - Row: report date
 - Column
@@ -171,13 +178,6 @@ Contents
   - `Chiayi_C`: Chiayi city
   - `*_avg`: 7-day moving average of `*`
 
-`positivity_and_fatality.csv`
-- Row: date
-- Column
-  - `date`
-  - `positivity`: number of confirmed cases over number of tests
-  - `fatality`: number of deaths over number of confirmed cases
-
 `status_evolution.csv`
 - Row: report date
 - Column
@@ -200,6 +200,12 @@ Contents
   - `date`
   - `total`: total test counts
   - `total_avg`: 7-day moving average of `total`
+
+`test_positive_rate.csv`
+- Row: date
+- Column
+  - `date`
+  - `positivity`: number of confirmed cases over number of tests
 
 `vaccination_by_age.csv`
 - Row: age group

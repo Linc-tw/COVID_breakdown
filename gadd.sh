@@ -21,6 +21,7 @@ else
   git add css/plots.css
   git add gadd.sh
   git add download.sh
+  git add index.html
   git add README.md
 fi
 
