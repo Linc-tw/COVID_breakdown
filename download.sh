@@ -20,10 +20,10 @@ wget -O 'raw_data/COVID-19_in_Taiwan_raw_data_timeline.csv' 'https://docs.google
 sleep 7
 echo
 wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv' 'https://od.cdc.gov.tw/eic/covid19/covid19_tw_specimen.csv' &
-sleep 2
+sleep 1
 echo
 wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_county_age.csv' 'https://od.cdc.gov.tw/eic/Day_Confirmation_Age_County_Gender_19CoV.csv' &
-sleep 2
+sleep 1
 echo
 wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_big5.csv' 'https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004' &
 sleep 3
@@ -51,7 +51,7 @@ if [ "${MODE}" = "a" ] || [ "${MODE}" = "m" ]; then
   echo "## Push to repo"
   echo
   git add raw_data/**
-  git add processed_data/** & sleep 2
+  git add processed_data/** & sleep 1
   
   if [ "${MODE}" = "a" ]; then
     git commit -m "Automatic data update" & sleep 1

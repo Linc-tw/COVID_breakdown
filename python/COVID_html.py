@@ -94,13 +94,13 @@ PLOT_DICT = {
     plot_tag = 'case_counts',
     js_path = 'status_sheet/',
     wdt_str = None,
-    fontawe_str = 'fa-stethoscope',
+    fontawe_str = 'fa-briefcase-medical',
   ),
   'LCPC': dict(
     plot_tag = 'local_case_per_county',
     js_path = 'county_sheet/',
     wdt_str = None,
-    fontawe_str = 'fa-compass',
+    fontawe_str = 'fa-street-view',
   ),
   'CBA': dict(
     plot_tag = 'case_by_age',
@@ -120,7 +120,7 @@ PLOT_DICT = {
     plot_tag = 'incidence_map',
     js_path = 'county_sheet/',
     wdt_str = None,
-    fontawe_str = 'fa-map',
+    fontawe_str = 'fa-map-marked-alt',
   ),
   'IEBC': dict(
     plot_tag = 'incidence_evolution_by_county',
