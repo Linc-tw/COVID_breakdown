@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  plot_index.js             --//
     //--  Chieh-An Lin              --//
-    //--  2022.04.17                --//
+    //--  2022.05.26                --//
     //--------------------------------//
 
 var PI_plot_list = [
@@ -11,7 +11,9 @@ var PI_plot_list = [
   [CC_Main, CC_mini_wrap, 0],
   [IR_Main, IR_mini_wrap, 0],
   [VBB_Main, VBB_mini_wrap, 0],
+  [DC_Main, DC_mini_wrap, 0],
   [TC_Main, TC_mini_wrap, 0],
+  [SIM_Main, SIM_mini_wrap, 0],
 ];
 
 GP_Cascade(PI_plot_list);

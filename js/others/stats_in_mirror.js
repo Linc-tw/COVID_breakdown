@@ -312,7 +312,7 @@ function SIM_FormatData(wrap, data, index) {
     }
   }
   else if (stat == 9)
-    DC_FormatData(sub_wrap, data); 
+    DC_FormatData(sub_wrap, data);
   else if (stat == 10 || stat == 11) {
     if (stat == 10)
       sub_wrap.col_ind = 0; //-- For y_max
@@ -775,7 +775,8 @@ function SIM_ReplotCountAsY(wrap, format, index) {
 }
 
 function SIM_Replot(wrap) {
-  var i, stat, sub_wrap, list_ind, ylabel_dict;
+  var i, stat, sub_wrap;
+  var list_ind, format, ylabel_dict;
   
   //-- Cases
   //--   CC    - SIM(3) - 0, (3, 10)
@@ -815,6 +816,7 @@ function SIM_Replot(wrap) {
       sub_wrap.mouse_move = CC_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
+      format = 'count';
       
       if (stat == 0) {
         sub_wrap.color = GP_wrap.c_list[0];
@@ -832,12 +834,12 @@ function SIM_Replot(wrap) {
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotAvgLine(wrap, i);
       SIM_ReplotDot(wrap, i, 0);
-      SIM_ReplotCountAsY(wrap, 'count', i);
     }
     else if (stat == 3 || stat == 4) {
       sub_wrap.mouse_move = IR_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
+      format = 'percentage';
       
       if (stat == 3) {
         list_ind = 0;
@@ -853,24 +855,24 @@ function SIM_Replot(wrap) {
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotLine(wrap, i, list_ind);
       SIM_ReplotDot(wrap, i, list_ind);
-      SIM_ReplotCountAsY(wrap, 'percentage', i);
     }
     else if (stat == 5) {
       sub_wrap.color = GP_wrap.c_list[1];
       sub_wrap.mouse_move = VBB_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
+      format = 'count';
       ylabel_dict = {en: 'Number of doses', fr: 'Nombre de doses', 'zh-tw': '疫苗劑數'};
       
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotAvgLine(wrap, i);
       SIM_ReplotDot(wrap, i, 0);
-      SIM_ReplotCountAsY(wrap, 'count', i);
     }
     else if (stat == 6 || stat == 7 || stat == 8) {
       sub_wrap.mouse_move = VBD_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
+      format = 'percentage';
       
       if (stat == 6) {
         list_ind = 0;
@@ -891,24 +893,24 @@ function SIM_Replot(wrap) {
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotLine(wrap, i, list_ind);
       SIM_ReplotDot(wrap, i, list_ind);
-      SIM_ReplotCountAsY(wrap, 'percentage', i);
     }
     else if (stat == 9) {
       sub_wrap.color = GP_wrap.c_list[5];
       sub_wrap.mouse_move = DC_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
+      format = 'count';
       ylabel_dict = {en: 'Number of deaths', fr: 'Nombre de décès', 'zh-tw': '死亡人數'};
       
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotAvgLine(wrap, i);
       SIM_ReplotDot(wrap, i, 0);
-      SIM_ReplotCountAsY(wrap, 'count', i);
     }
     else if (stat == 10 || stat == 11) {
       sub_wrap.mouse_move = CFR_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
+      format = 'percentage';
       
       if (stat == 10) {
         list_ind = 0;
@@ -924,24 +926,24 @@ function SIM_Replot(wrap) {
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotLine(wrap, i, list_ind);
       SIM_ReplotDot(wrap, i, list_ind);
-      SIM_ReplotCountAsY(wrap, 'percentage', i);
     }
     else if (stat == 12) {
       sub_wrap.color = GP_wrap.c_list[8];
       sub_wrap.mouse_move = TC_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
+      format = 'count';
       ylabel_dict = {en: 'Number of tests', fr: 'Nombre de tests', 'zh-tw': '檢驗人次'};
       
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotAvgLine(wrap, i);
       SIM_ReplotDot(wrap, i, 0);
-      SIM_ReplotCountAsY(wrap, 'count', i);
     }
     else if (stat == 13) {
       sub_wrap.mouse_move = PAF_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
+      format = 'percentage';
       
       if (stat == 13) {
         list_ind = 0;
@@ -957,12 +959,12 @@ function SIM_Replot(wrap) {
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotLine(wrap, i, list_ind);
       SIM_ReplotDot(wrap, i, list_ind);
-      SIM_ReplotCountAsY(wrap, 'percentage', i);
     }
     else if (stat == 14 || stat == 15 || stat == 16) {
       sub_wrap.mouse_move = BS_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
+      format = 'count';
       
       if (stat == 14) {
         sub_wrap.color = GP_wrap.c_list[7];
@@ -980,19 +982,24 @@ function SIM_Replot(wrap) {
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotAvgLine(wrap, i);
       SIM_ReplotDot(wrap, i, 0);
-      SIM_ReplotCountAsY(wrap, 'count', i);
     }
     
-    //-- Update ylabel
-    wrap.svg.select('.ylabel.ind'+i)
-      .text(ylabel_dict[LS_lang]);
+    if (!wrap.tag.includes('mini')) {
+      SIM_ReplotCountAsY(wrap, format, i);
+      
+      //-- Update ylabel
+      wrap.svg.select('.ylabel.ind'+i)
+        .text(ylabel_dict[LS_lang]);
+    }
   }
   
   wrap.x_list = wrap.sub_wrap_list[0].x_list;
   wrap.xticklabel = wrap.sub_wrap_list[0].xticklabel;
   
   //-- Replot xaxis
-  if (wrap.tag.includes('overall'))
+  if (wrap.tag.includes('mini'))
+    GP_PlotTopRight(wrap);
+  else if (wrap.tag.includes('overall'))
     GP_ReplotOverallXTick(wrap);
   else
     GP_ReplotDateAsX(wrap);

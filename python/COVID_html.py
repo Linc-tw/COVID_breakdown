@@ -20,7 +20,7 @@ import numpy as np
 PAGE_DICT = {
   'index': dict(
     name = 'Index',
-    plot_list = ['VBD', 'CC', 'IR', 'VBB', 'TC'],
+    plot_list = ['VBD', 'CC', 'IR', 'VBB', 'DC', 'TC', 'SIM'],
   ),
   
   'latest_cases': dict(
@@ -1208,9 +1208,9 @@ def saveHtml_page(page_tag, verbose=True):
     f.write(makeStr_vignette('CC', 'cases'))
     f.write(makeStr_vignette('IR', 'incidence'))
     f.write(makeStr_vignette('VBB', 'vaccination'))
-    #f.write(makeStr_vignette('DC', 'deaths'))
+    f.write(makeStr_vignette('DC', 'deaths'))
     f.write(makeStr_vignette('TC', 'others'))
-    #f.write(makeStr_vignette('SIM', 'comparison'))
+    f.write(makeStr_vignette('SIM', 'comparison'))
   
   elif page_tag == 'timeline':
     f.write(makeStr_CT())

@@ -30,8 +30,8 @@ Structure by folders
 `others/`
   - `death_by_age.js`
   - `incidence_rates.js`
-  - `test_positive_rate.js`
   - `stats_in_mirror.js`
+  - `test_positive_rate.js`
 
 `status_sheet/`
   - `case_counts.js`

@@ -299,6 +299,28 @@
                                 </div>
                             </div>
                             
+                            <!-- Vignettes - death_counts -->
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-skull-crossbones me-1"></i> <span id="vignette_title_deaths"></span>
+                                    </div>
+                                    
+                                    <div class="card-body" id="death_counts_mini"></div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-vignette d-grid gap-2 col-6 mx-auto">
+                                            <a href="latest_deaths.html" class="btn btn-covid">
+                                                <span id="vignette_latest_deaths"></span>
+                                            </a>
+                                            <a href="overall_deaths.html" class="btn btn-covid">
+                                                <span id="vignette_overall_deaths"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <!-- Vignettes - test_counts -->
                             <div class="col-xl-3 col-sm-6">
                                 <div class="card mb-4">
@@ -315,6 +337,28 @@
                                             </a>
                                             <a href="overall_others.html" class="btn btn-covid">
                                                 <span id="vignette_overall_others"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Vignettes - stats_in_mirror -->
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-yin-yang me-1"></i> <span id="vignette_title_comparison"></span>
+                                    </div>
+                                    
+                                    <div class="card-body" id="stats_in_mirror_mini"></div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-vignette d-grid gap-2 col-6 mx-auto">
+                                            <a href="latest_comparison.html" class="btn btn-covid">
+                                                <span id="vignette_latest_comparison"></span>
+                                            </a>
+                                            <a href="overall_comparison.html" class="btn btn-covid">
+                                                <span id="vignette_overall_comparison"></span>
                                             </a>
                                         </div>
                                     </div>
@@ -365,8 +409,12 @@
         <script src="../js/others/incidence_rates_param.js"></script>
         <script src="../js/vaccination_sheet/vaccination_by_brand.js"></script>
         <script src="../js/vaccination_sheet/vaccination_by_brand_param.js"></script>
+        <script src="../js/status_sheet/death_counts.js"></script>
+        <script src="../js/status_sheet/death_counts_param.js"></script>
         <script src="../js/test_sheet/test_counts.js"></script>
         <script src="../js/test_sheet/test_counts_param.js"></script>
+        <script src="../js/others/stats_in_mirror.js"></script>
+        <script src="../js/others/stats_in_mirror_param.js"></script>
         
         <!-- Main -->
         <script src="../js/plot/plot_index.js"></script>
