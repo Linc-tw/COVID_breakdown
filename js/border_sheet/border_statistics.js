@@ -207,7 +207,7 @@ function BS_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color = GP_wrap.c_list[10];
+  wrap.color = GP_wrap.c_list[7];
   
   //-- Define mouse-move
   wrap.mouse_move = BS_MouseMove;

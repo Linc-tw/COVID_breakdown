@@ -2,12 +2,13 @@
     ################################
     ##  COVID_status.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.22                ##
+    ##  2022.05.25                ##
     ################################
 
 import os
 import sys
 import datetime as dtt
+import warnings as wng
 
 import numpy as np
 import scipy as sp
@@ -24,7 +25,7 @@ class StatusSheet(ccm.Template):
   def __init__(self, verbose=True):
     self.coltag_date = '日期'
     self.coltag_week_nb = '週次'
-    self.coltag_new_nb_cases = '新增確診'
+    self.coltag_new_cases = '新增確診'
     self.coltag_new_cases_per_week = '每週新增確診'
     self.coltag_cum_cases = '確診總人數'
     self.coltag_new_males = '新增男性'
@@ -153,6 +154,9 @@ class StatusSheet(ccm.Template):
     
   def getNewUnclear(self):
     return self.getCol(self.coltag_new_unclear).astype(int)
+    
+  def getNewDeaths(self):
+    return self.getCol(self.coltag_new_deaths).astype(int)
     
   def getCumDeaths(self):
     return self.getCol(self.coltag_cum_deaths).astype(int)
@@ -295,10 +299,7 @@ class StatusSheet(ccm.Template):
     
   def makeStock_deathCounts(self):
     date_list = self.getDate()
-    cum_deaths_list = self.getCumDeaths()
-    
-    cum_deaths_list_offset = np.insert(cum_deaths_list[:-1], 0, 0)
-    new_deaths_list = cum_deaths_list - cum_deaths_list_offset
+    new_deaths_list = self.getNewDeaths()
     avg_arr = ccm.makeMovingAverage(new_deaths_list)
     
     stock = {'date': date_list, 'death': new_deaths_list, 'death_avg': avg_arr}
@@ -332,6 +333,82 @@ class StatusSheet(ccm.Template):
       
       if mode in ['readme', 'both']:
         self.makeReadme_deathCounts(gr)
+    return
+    
+  def makeStock_caseFatalityRates(self):
+    date_list = self.getDate()
+    new_soldiers_list = self.getNewSoldiers()
+    new_imported_list = self.getNewImported()
+    new_local_list = self.getNewLocal()
+    new_unclear_list = self.getNewUnclear()
+    new_deaths_list = self.getNewDeaths()
+    cum_deaths_list = self.getCumDeaths()
+    
+    new_case_list = new_imported_list + new_local_list + new_soldiers_list + new_unclear_list
+    cum_case_list = np.cumsum(new_case_list)
+    
+    offset_days = 15
+    offset_case_list = np.concatenate([[0]*offset_days, new_case_list[:-offset_days]])
+    
+    offset_case_list = ccm.sevenDayMovingAverage(offset_case_list)
+    new_deaths_list = ccm.sevenDayMovingAverage(new_deaths_list)
+    cum_case_list, _ = ccm.pandasNAToZero(cum_case_list)
+    cum_deaths_list, _ = ccm.pandasNAToZero(cum_deaths_list)
+    
+    with wng.catch_warnings(): ## Avoid division by zero
+      wng.simplefilter('ignore')
+      
+      front = (offset_case_list != offset_case_list) + (offset_case_list == 0)
+      back = front.copy()
+      front[-7:] = False ## Front blank forced to 0
+      back[:7] = False ## Back blank forced to NaN
+      
+      inst_cfr_list = new_deaths_list / offset_case_list
+      inst_cfr_list = np.around(inst_cfr_list, decimals=6)
+      inst_cfr_list[front] = 0
+      inst_cfr_list[back] = np.nan
+    
+      front = (cum_case_list != cum_case_list) + (cum_case_list == 0)
+      back = front.copy()
+      front[-7:] = False ## Front blank forced to 0
+      back[:7] = False ## Back blank forced to NaN
+      
+      cum_cfr_list = cum_deaths_list / cum_case_list
+      cum_cfr_list = np.around(cum_cfr_list, decimals=6)
+      cum_cfr_list[front] = 0
+      cum_cfr_list[back] = np.nan
+      
+    stock = {'date': date_list, 'inst_CFR': inst_cfr_list, 'cumul_CFR': cum_cfr_list}
+    return stock
+
+  def makeReadme_caseFatalityRates(self, gr):
+    key = 'case_fatality_rate'
+    stock = []
+    stock.append('`{}.csv`'.format(key))
+    stock.append('- Row: date')
+    stock.append('- Column')
+    stock.append('  - `date`')
+    stock.append('  - `weekly_CFR`: 7-day-averaged case fatality rate')
+    stock.append('  - `cumul_CFR`: cumulative case fatality rate')
+    ccm.README_DICT[gr][key] = stock
+    return
+  
+  def saveCsv_caseFatalityRates(self, mode='both'):
+    if mode in ['data', 'both']:
+      stock = self.makeStock_caseFatalityRates()
+      stock = pd.DataFrame(stock)
+      stock = ccm.adjustDateRange(stock)
+    
+    for gr in ccm.GROUP_LIST:
+      if mode in ['data', 'both']:
+        data = ccm.truncateStock(stock, gr)
+        
+        ## Save
+        name = '{}processed_data/{}/case_fatality_rates.csv'.format(ccm.DATA_PATH, gr)
+        ccm.saveCsv(name, data)
+      
+      if mode in ['readme', 'both']:
+        self.makeReadme_caseFatalityRates(gr)
     return
     
   def makeReadme_hospitalizationOrIsolation(self, gr):
@@ -386,6 +463,7 @@ class StatusSheet(ccm.Template):
     stock['new_local'] = stock_tmp['new_local'].values
     return
     
+  ## Obsolete
   def updateCumCounts(self, stock):
     date_list = self.getDate()
     cum_deaths_list = self.getCumDeaths()
@@ -404,6 +482,7 @@ class StatusSheet(ccm.Template):
     self.saveCsv_caseCounts(mode=mode)
     self.saveCsv_statusEvolution(mode=mode)
     self.saveCsv_deathCounts(mode=mode)
+    self.saveCsv_caseFatalityRates(mode=mode)
     self.saveCsv_hospitalizationOrIsolation(mode=mode)
     return
 

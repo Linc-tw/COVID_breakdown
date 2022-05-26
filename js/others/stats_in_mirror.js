@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  stats_in_mirror.js        --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.23                --//
+    //--  2022.05.26                --//
     //--------------------------------//
 
 function SIM_InitFig(wrap) {
@@ -51,16 +51,16 @@ function SIM_ResetText() {
   //-- new_stat_flag
   if (LS_lang == 'zh-tw') {
     LS_AddStr('stats_in_mirror_title', '統計比較');
-    LS_AddStr('stats_in_mirror_button_test_0', '檢驗人次');
-    LS_AddStr('stats_in_mirror_button_test_1', '檢驗人次');
     LS_AddStr('stats_in_mirror_button_total_case_0', '總確診案例');
     LS_AddStr('stats_in_mirror_button_total_case_1', '總確診案例');
     LS_AddStr('stats_in_mirror_button_imported_case_0', '境外移入案例');
     LS_AddStr('stats_in_mirror_button_imported_case_1', '境外移入案例');
     LS_AddStr('stats_in_mirror_button_local_case_0', '本土案例');
     LS_AddStr('stats_in_mirror_button_local_case_1', '本土案例');
-    LS_AddStr('stats_in_mirror_button_death_0', '死亡人數');
-    LS_AddStr('stats_in_mirror_button_death_1', '死亡人數');
+    LS_AddStr('stats_in_mirror_button_arrival_incidence_0', '入境盛行率');
+    LS_AddStr('stats_in_mirror_button_arrival_incidence_1', '入境盛行率');
+    LS_AddStr('stats_in_mirror_button_local_incidence_0', '本土盛行率');
+    LS_AddStr('stats_in_mirror_button_local_incidence_1', '本土盛行率');
     LS_AddStr('stats_in_mirror_button_vaccination_0', '疫苗劑數');
     LS_AddStr('stats_in_mirror_button_vaccination_1', '疫苗劑數');
     LS_AddStr('stats_in_mirror_button_1st_dose_0', '第一劑人口比');
@@ -69,41 +69,43 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_2nd_dose_1', '第兩劑人口比');
     LS_AddStr('stats_in_mirror_button_3rd_dose_0', '第三劑人口比');
     LS_AddStr('stats_in_mirror_button_3rd_dose_1', '第三劑人口比');
+    LS_AddStr('stats_in_mirror_button_death_0', '死亡人數');
+    LS_AddStr('stats_in_mirror_button_death_1', '死亡人數');
+    LS_AddStr('stats_in_mirror_button_weekly_fatality_0', '週平均致死率');
+    LS_AddStr('stats_in_mirror_button_weekly_fatality_1', '週平均致死率');
+    LS_AddStr('stats_in_mirror_button_cumulative_fatality_0', '累計致死率');
+    LS_AddStr('stats_in_mirror_button_cumulative_fatality_1', '累計致死率');
+    LS_AddStr('stats_in_mirror_button_test_0', '檢驗人次');
+    LS_AddStr('stats_in_mirror_button_test_1', '檢驗人次');
+    LS_AddStr('stats_in_mirror_button_positivity_0', '陽性率');
+    LS_AddStr('stats_in_mirror_button_positivity_1', '陽性率');
     LS_AddStr('stats_in_mirror_button_border_entry_0', '入境人數');
     LS_AddStr('stats_in_mirror_button_border_entry_1', '入境人數');
     LS_AddStr('stats_in_mirror_button_border_exit_0', '出境人數');
     LS_AddStr('stats_in_mirror_button_border_exit_1', '出境人數');
     LS_AddStr('stats_in_mirror_button_border_both_0', '入出境總人數');
     LS_AddStr('stats_in_mirror_button_border_both_1', '入出境總人數');
-    LS_AddStr('stats_in_mirror_button_arrival_incidence_0', '入境盛行率');
-    LS_AddStr('stats_in_mirror_button_arrival_incidence_1', '入境盛行率');
-    LS_AddStr('stats_in_mirror_button_local_incidence_0', '本土盛行率');
-    LS_AddStr('stats_in_mirror_button_local_incidence_1', '本土盛行率');
-    LS_AddStr('stats_in_mirror_button_positivity_0', '陽性率');
-    LS_AddStr('stats_in_mirror_button_positivity_1', '陽性率');
-    LS_AddStr('stats_in_mirror_button_fatality_0', '累計致死率');
-    LS_AddStr('stats_in_mirror_button_fatality_1', '累計致死率');
     
     LS_AddHtml('stats_in_mirror_description', '\
       使用者可於此圖挑選：\
       <br>\
-      - 檢驗人次\
-      <br>\
       - 總確診、境外移入、本土案例數\
       <br>\
-      - 死亡人數\
+      - 入境、本土盛行率\
       <br>\
       - 疫苗劑數\
       <br>\
       - 施打一、二、三劑人口比\
       <br>\
-      - 入境、出境、入出境總人數\
+      - 死亡人數\
       <br>\
-      - 入境、本土盛行率\
+      - 單週、累計致死率\
+      <br>\
+      - 檢驗人次\
       <br>\
       - 陽性率\
       <br>\
-      - 累計致死率\
+      - 入境、出境、入出境總人數\
       <br>\
       當中之任兩者並列比較。\
       此設計將有助於突顯比較不同統計隨時間之變化。\
@@ -112,16 +114,16 @@ function SIM_ResetText() {
   
   else if (LS_lang == 'fr') {
     LS_AddStr('stats_in_mirror_title', 'Statistiques en miroir');
-    LS_AddStr('stats_in_mirror_button_test_0', 'Dépistage');
-    LS_AddStr('stats_in_mirror_button_test_1', 'Dépistage');
     LS_AddStr('stats_in_mirror_button_total_case_0', 'Cas confirmés totaux');
     LS_AddStr('stats_in_mirror_button_total_case_1', 'Cas confirmés totaux');
     LS_AddStr('stats_in_mirror_button_imported_case_0', 'Cas importés');
     LS_AddStr('stats_in_mirror_button_imported_case_1', 'Cas importés');
     LS_AddStr('stats_in_mirror_button_local_case_0', 'Cas locaux');
     LS_AddStr('stats_in_mirror_button_local_case_1', 'Cas locaux');
-    LS_AddStr('stats_in_mirror_button_death_0', 'Décès');
-    LS_AddStr('stats_in_mirror_button_death_1', 'Décès');
+    LS_AddStr('stats_in_mirror_button_arrival_incidence_0', 'Taux d\'incidence frontalière');
+    LS_AddStr('stats_in_mirror_button_arrival_incidence_1', 'Taux d\'incidence frontalière');
+    LS_AddStr('stats_in_mirror_button_local_incidence_0', 'Taux d\'incidence locale');
+    LS_AddStr('stats_in_mirror_button_local_incidence_1', 'Taux d\'incidence locale');
     LS_AddStr('stats_in_mirror_button_vaccination_0', 'Vaccination');
     LS_AddStr('stats_in_mirror_button_vaccination_1', 'Vaccination');
     LS_AddStr('stats_in_mirror_button_1st_dose_0', 'Taux de la 1ère dose');
@@ -130,41 +132,43 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_2nd_dose_1', 'Taux de la 2e dose');
     LS_AddStr('stats_in_mirror_button_3rd_dose_0', 'Taux de la 3e dose');
     LS_AddStr('stats_in_mirror_button_3rd_dose_1', 'Taux de la 3e dose');
+    LS_AddStr('stats_in_mirror_button_death_0', 'Décès');
+    LS_AddStr('stats_in_mirror_button_death_1', 'Décès');
+    LS_AddStr('stats_in_mirror_button_weekly_fatality_0', 'Taux de létalité hebdomadaire');
+    LS_AddStr('stats_in_mirror_button_weekly_fatality_1', 'Taux de létalité hebdomadaire');
+    LS_AddStr('stats_in_mirror_button_cumulative_fatality_0', 'Taux de létalité cumulé');
+    LS_AddStr('stats_in_mirror_button_cumulative_fatality_1', 'Taux de létalité cumulé');
+    LS_AddStr('stats_in_mirror_button_test_0', 'Dépistage');
+    LS_AddStr('stats_in_mirror_button_test_1', 'Dépistage');
+    LS_AddStr('stats_in_mirror_button_positivity_0', 'Taux de positivité');
+    LS_AddStr('stats_in_mirror_button_positivity_1', 'Taux de positivité');
     LS_AddStr('stats_in_mirror_button_border_entry_0', 'Arrivée aux frontières');
     LS_AddStr('stats_in_mirror_button_border_entry_1', 'Arrivée aux frontières');
     LS_AddStr('stats_in_mirror_button_border_exit_0', 'Départ des frontières');
     LS_AddStr('stats_in_mirror_button_border_exit_1', 'Départ des frontières');
     LS_AddStr('stats_in_mirror_button_border_both_0', 'Passage des frontières');
     LS_AddStr('stats_in_mirror_button_border_both_1', 'Passage des frontières');
-    LS_AddStr('stats_in_mirror_button_arrival_incidence_0', 'Taux d\'incidence frontalière');
-    LS_AddStr('stats_in_mirror_button_arrival_incidence_1', 'Taux d\'incidence frontalière');
-    LS_AddStr('stats_in_mirror_button_local_incidence_0', 'Taux d\'incidence locale');
-    LS_AddStr('stats_in_mirror_button_local_incidence_1', 'Taux d\'incidence locale');
-    LS_AddStr('stats_in_mirror_button_positivity_0', 'Taux de positivité');
-    LS_AddStr('stats_in_mirror_button_positivity_1', 'Taux de positivité');
-    LS_AddStr('stats_in_mirror_button_fatality_0', 'Taux de létalité cumulé');
-    LS_AddStr('stats_in_mirror_button_fatality_1', 'Taux de létalité cumulé');
     
     LS_AddHtml('stats_in_mirror_description', '\
       Ce panneau permet les utilisateurs de choisir parmi :\
       <br>\
-      - le nombre de tests,\
-      <br>\
       - les nombres de cas confirmés totaux, importés et locaux,\
       <br>\
-      - le nombre de décédés,\
+      - les taux d\'incidences frontalière et locale,\
       <br>\
       - le nombre de vaccins administrés,\
       <br>\
       - les taux de vaccination de la 1ère, de la 2e et de la 3e dose,\
       <br>\
-      - les nombres de voyageurs entrant, sortant et totaux aux frontières,\
+      - le nombre de décédés,\
       <br>\
-      - les taux d\'incidences frontalière et locale,\
+      - les taux de létalité hebdomadaire et cumulé,\
+      <br>\
+      - le nombre de tests,\
       <br>\
       - le taux de positivité et\
       <br>\
-      - le taux de létalité cumulé,\
+      - les nombres de voyageurs entrant, sortant et totaux aux frontières,\
       <br>\
       et de présenter n\'importe quels 2 de ceux-ci côte-à-côte.\
       Ceci fournit une meilleure comparaison entre les évolutions des statistiques différentes.\
@@ -173,16 +177,16 @@ function SIM_ResetText() {
   
   else { //-- En
     LS_AddStr('stats_in_mirror_title', 'Statistics in Mirror');
-    LS_AddStr('stats_in_mirror_button_test_0', 'Test counts');
-    LS_AddStr('stats_in_mirror_button_test_1', 'Test counts');
     LS_AddStr('stats_in_mirror_button_total_case_0', 'Total case counts');
     LS_AddStr('stats_in_mirror_button_total_case_1', 'Total case counts');
     LS_AddStr('stats_in_mirror_button_imported_case_0', 'Imported case counts');
     LS_AddStr('stats_in_mirror_button_imported_case_1', 'Imported case counts');
     LS_AddStr('stats_in_mirror_button_local_case_0', 'Local case counts');
     LS_AddStr('stats_in_mirror_button_local_case_1', 'Local case counts');
-    LS_AddStr('stats_in_mirror_button_death_0', 'Death counts');
-    LS_AddStr('stats_in_mirror_button_death_1', 'Death counts');
+    LS_AddStr('stats_in_mirror_button_arrival_incidence_0', 'Arrival incidence rate');
+    LS_AddStr('stats_in_mirror_button_arrival_incidence_1', 'Arrival incidence rate');
+    LS_AddStr('stats_in_mirror_button_local_incidence_0', 'Local incidence rate');
+    LS_AddStr('stats_in_mirror_button_local_incidence_1', 'Local incidence rate');
     LS_AddStr('stats_in_mirror_button_vaccination_0', 'Vaccination');
     LS_AddStr('stats_in_mirror_button_vaccination_1', 'Vaccination');
     LS_AddStr('stats_in_mirror_button_1st_dose_0', '1st dose ratio');
@@ -191,41 +195,43 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_2nd_dose_1', '2nd dose ratio');
     LS_AddStr('stats_in_mirror_button_3rd_dose_0', '3rd dose ratio');
     LS_AddStr('stats_in_mirror_button_3rd_dose_1', '3rd dose ratio');
+    LS_AddStr('stats_in_mirror_button_death_0', 'Death counts');
+    LS_AddStr('stats_in_mirror_button_death_1', 'Death counts');
+    LS_AddStr('stats_in_mirror_button_weekly_fatality_0', 'Weekly fatality rate');
+    LS_AddStr('stats_in_mirror_button_weekly_fatality_1', 'Weekly fatality rate');
+    LS_AddStr('stats_in_mirror_button_cumulative_fatality_0', 'Overall fatality rate');
+    LS_AddStr('stats_in_mirror_button_cumulative_fatality_1', 'Overall fatality rate');
+    LS_AddStr('stats_in_mirror_button_test_0', 'Test counts');
+    LS_AddStr('stats_in_mirror_button_test_1', 'Test counts');
+    LS_AddStr('stats_in_mirror_button_positivity_0', 'Positive rate');
+    LS_AddStr('stats_in_mirror_button_positivity_1', 'Positive rate');
     LS_AddStr('stats_in_mirror_button_border_entry_0', 'Border arrival counts');
     LS_AddStr('stats_in_mirror_button_border_entry_1', 'Border arrival counts');
     LS_AddStr('stats_in_mirror_button_border_exit_0', 'Border departure counts');
     LS_AddStr('stats_in_mirror_button_border_exit_1', 'Border departure counts');
     LS_AddStr('stats_in_mirror_button_border_both_0', 'Border total counts');
     LS_AddStr('stats_in_mirror_button_border_both_1', 'Border total counts');
-    LS_AddStr('stats_in_mirror_button_arrival_incidence_0', 'Arrival incidence rate');
-    LS_AddStr('stats_in_mirror_button_arrival_incidence_1', 'Arrival incidence rate');
-    LS_AddStr('stats_in_mirror_button_local_incidence_0', 'Local incidence rate');
-    LS_AddStr('stats_in_mirror_button_local_incidence_1', 'Local incidence rate');
-    LS_AddStr('stats_in_mirror_button_positivity_0', 'Positive rate');
-    LS_AddStr('stats_in_mirror_button_positivity_1', 'Positive rate');
-    LS_AddStr('stats_in_mirror_button_fatality_0', 'Overall fatality rate');
-    LS_AddStr('stats_in_mirror_button_fatality_1', 'Overall fatality rate');
     
     LS_AddHtml('stats_in_mirror_description', '\
       This panel allows users to choose between:\
       <br>\
-      - test counts,\
-      <br>\
       - total, imported, and local confirmed case counts,\
       <br>\
-      - death counts,\
+      - the arrival and local incidence rates,\
       <br>\
       - vaccination counts,\
       <br>\
       - vaccination ratios of the 1st, 2nd, and 3rd doses,\
       <br>\
-      - border arrival, departure, and total counts,\
+      - death counts,\
       <br>\
-      - the arrival and local incidence rates,\
+      - the weekly and overall fatality rate,\
+      <br>\
+      - test counts,\
       <br>\
       - the positive rate, and\
       <br>\
-      - the overall fatality rate,\
+      - border arrival, departure, and total counts,\
       <br>\
       and display any 2 of them side-by-side.\
       This may provide a better comparison between the evolutions of different statistics.\
@@ -243,19 +249,22 @@ function SIM_FormatData(wrap, data, index) {
     sub_wrap.r = 4;
   
   //-- new_stat_flag
-  if (stat == 0)
-    TC_FormatData(sub_wrap, data);
-  else if (stat == 1 || stat == 2 || stat == 3) {
-    if (stat == 1)
+  if (stat == 0 || stat == 1 || stat == 2) {
+    if (stat == 0)
       sub_wrap.col_ind = 0; //-- For choosing column
-    else if (stat == 2)
+    else if (stat == 1)
       sub_wrap.col_ind = 1;
     else
       sub_wrap.col_ind = 2;
     CC_FormatData(sub_wrap, data);
   }
-  else if (stat == 4)
-    DC_FormatData(sub_wrap, data); 
+  else if (stat == 3 || stat == 4) {
+    if (stat == 3)
+      sub_wrap.col_ind = 0; //-- For y_max
+    else 
+      sub_wrap.col_ind = 1;
+    IR_FormatData(sub_wrap, data);
+  }
   else if (stat == 5) {
     sub_wrap.col_ind = 0; //-- For choosing column
     VBB_FormatData(sub_wrap, data);
@@ -302,28 +311,32 @@ function SIM_FormatData(wrap, data, index) {
       sub_wrap.x_list = x_list.concat(sub_wrap.x_list);
     }
   }
-  else if (stat == 9 || stat == 10 || stat == 11) {
-    if (stat == 7)
-      sub_wrap.col_ind = 0; //-- For choosing column
-    else if (stat == 8)
-      sub_wrap.col_ind = 1;
-    else
-      sub_wrap.col_ind = 2;
-    BS_FormatData(sub_wrap, data);
-  }
-  else if (stat == 12 || stat == 13) {
-    if (stat == 12)
+  else if (stat == 9)
+    DC_FormatData(sub_wrap, data); 
+  else if (stat == 10 || stat == 11) {
+    if (stat == 10)
       sub_wrap.col_ind = 0; //-- For y_max
     else 
       sub_wrap.col_ind = 1;
-    IR_FormatData(sub_wrap, data);
+    CFR_FormatData(sub_wrap, data);
   }
-  else if (stat == 14 || stat == 15) {
-    if (stat == 14)
+  else if (stat == 12)
+    TC_FormatData(sub_wrap, data);
+  else if (stat == 13) {
+    if (stat == 13)
       sub_wrap.col_ind = 0; //-- For y_max
     else 
       sub_wrap.col_ind = 1;
     PAF_FormatData(sub_wrap, data);
+  }
+  else if (stat == 14 || stat == 15 || stat == 16) {
+    if (stat == 14)
+      sub_wrap.col_ind = 0; //-- For choosing column
+    else if (stat == 15)
+      sub_wrap.col_ind = 1;
+    else
+      sub_wrap.col_ind = 2;
+    BS_FormatData(sub_wrap, data);
   }
 }
 
@@ -784,41 +797,30 @@ function SIM_Replot(wrap) {
   //-- 
   //-- Deaths
   //--   DC    - SIM    - 5
+  //--   CFR(2)- SIM(2) - 8, 10
   //--   DD    - COL    - 0
   //--   DBA   - COL    - 1
   //-- 
   //-- Others
   //--   TC    - SIM    - 8
-  //--   PAF(2)- SIM(2) - 11, 7
-  //--   BS    - SIM(3) - 10, (6, 9)
+  //--   PAF(2)- SIM(2) - 11, //7
+  //--   BS    - SIM(3) - 7, (6, 9)
   
   for (i=0; i<2; i++) {
     stat = wrap.stat_list[i];
     sub_wrap = wrap.sub_wrap_list[i];
     
     //-- new_stat_flag
-    if (stat == 0) {
-      sub_wrap.color = GP_wrap.c_list[8];
-      sub_wrap.mouse_move = TC_MouseMove;
-      sub_wrap.plot_opacity = GP_wrap.faint_opacity;
-      sub_wrap.trans_delay = GP_wrap.trans_delay;
-      ylabel_dict = {en: 'Number of tests', fr: 'Nombre de tests', 'zh-tw': '檢驗人次'};
-      
-      SIM_ReplotFaintSingleBar(wrap, i);
-      SIM_ReplotAvgLine(wrap, i);
-      SIM_ReplotDot(wrap, i, 0);
-      SIM_ReplotCountAsY(wrap, 'count', i);
-    }
-    else if (stat == 1 || stat == 2 || stat == 3) {
+    if (stat == 0 || stat == 1 || stat == 2) {
       sub_wrap.mouse_move = CC_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
       
-      if (stat == 1) {
+      if (stat == 0) {
         sub_wrap.color = GP_wrap.c_list[0];
         ylabel_dict = {en: 'Total confirmed cases', fr: 'Cas confirmés totaux', 'zh-tw': '總確診案例'};
       }
-      else if (stat == 2) {
+      else if (stat == 1) {
         sub_wrap.color = GP_wrap.c_list[3];
         ylabel_dict = {en: 'Imported cases', fr: 'Cas importés', 'zh-tw': '境外移入案例'};
       }
@@ -832,17 +834,26 @@ function SIM_Replot(wrap) {
       SIM_ReplotDot(wrap, i, 0);
       SIM_ReplotCountAsY(wrap, 'count', i);
     }
-    else if (stat == 4) {
-      sub_wrap.color = GP_wrap.c_list[5];
-      sub_wrap.mouse_move = DC_MouseMove;
-      sub_wrap.plot_opacity = GP_wrap.faint_opacity;
+    else if (stat == 3 || stat == 4) {
+      sub_wrap.mouse_move = IR_MouseMove;
+      sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
-      ylabel_dict = {en: 'Number of deaths', fr: 'Nombre de décès', 'zh-tw': '死亡人數'};
+      
+      if (stat == 3) {
+        list_ind = 0;
+        sub_wrap.color = GP_wrap.c_list[9];
+        ylabel_dict = {en: 'Arrival incidence', fr: 'Incidence frontalière', 'zh-tw': '入境盛行率'};
+      }
+      else {
+        list_ind = 1;
+        sub_wrap.color = GP_wrap.c_list[4];
+        ylabel_dict = {en: 'Local incidence * 1000', fr: 'Incidence locale * 1000', 'zh-tw': '本土盛行率 * 1000'};
+      }
       
       SIM_ReplotFaintSingleBar(wrap, i);
-      SIM_ReplotAvgLine(wrap, i);
-      SIM_ReplotDot(wrap, i, 0);
-      SIM_ReplotCountAsY(wrap, 'count', i);
+      SIM_ReplotLine(wrap, i, list_ind);
+      SIM_ReplotDot(wrap, i, list_ind);
+      SIM_ReplotCountAsY(wrap, 'percentage', i);
     }
     else if (stat == 5) {
       sub_wrap.color = GP_wrap.c_list[1];
@@ -882,43 +893,32 @@ function SIM_Replot(wrap) {
       SIM_ReplotDot(wrap, i, list_ind);
       SIM_ReplotCountAsY(wrap, 'percentage', i);
     }
-    else if (stat == 9 || stat == 10 || stat == 11) {
-      sub_wrap.mouse_move = BS_MouseMove;
+    else if (stat == 9) {
+      sub_wrap.color = GP_wrap.c_list[5];
+      sub_wrap.mouse_move = DC_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
-      
-      if (stat == 9) {
-        sub_wrap.color = GP_wrap.c_list[10];
-        ylabel_dict = {en: 'Arrival travellers', fr: 'Voyageurs entrant', 'zh-tw': '入境人數'};
-      }
-      else if (stat == 10) {
-        sub_wrap.color = GP_wrap.c_list[6];
-        ylabel_dict = {en: 'Departure travellers', fr: 'Voyageurs sortant', 'zh-tw': '出境人數'};
-      }
-      else {
-        sub_wrap.color = GP_wrap.c_list[9];
-        ylabel_dict = {en: 'Total travellers', fr: 'Voyageurs totaux', 'zh-tw': '入出境總人數'};
-      }
+      ylabel_dict = {en: 'Number of deaths', fr: 'Nombre de décès', 'zh-tw': '死亡人數'};
       
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotAvgLine(wrap, i);
       SIM_ReplotDot(wrap, i, 0);
       SIM_ReplotCountAsY(wrap, 'count', i);
     }
-    else if (stat == 12 || stat == 13) {
-      sub_wrap.mouse_move = IR_MouseMove;
+    else if (stat == 10 || stat == 11) {
+      sub_wrap.mouse_move = CFR_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
       
-      if (stat == 12) {
+      if (stat == 10) {
         list_ind = 0;
-        sub_wrap.color = GP_wrap.c_list[9];
-        ylabel_dict = {en: 'Arrival incidence', fr: 'Incidence frontalière', 'zh-tw': '入境盛行率'};
+        sub_wrap.color = GP_wrap.c_list[8];
+        ylabel_dict = {en: 'Weekly fatality rate', fr: 'Taux de létalité hebdomadaire', 'zh-tw': '週平均致死率'};
       }
       else {
         list_ind = 1;
-        sub_wrap.color = GP_wrap.c_list[4];
-        ylabel_dict = {en: 'Local incidence * 1000', fr: 'Incidence locale * 1000', 'zh-tw': '本土盛行率 * 1000'};
+        sub_wrap.color = GP_wrap.c_list[10];
+        ylabel_dict = {en: 'Overall fatality rate', fr: 'Taux de létalité cumulé', 'zh-tw': '累計致死率'};
       }
       
       SIM_ReplotFaintSingleBar(wrap, i);
@@ -926,12 +926,24 @@ function SIM_Replot(wrap) {
       SIM_ReplotDot(wrap, i, list_ind);
       SIM_ReplotCountAsY(wrap, 'percentage', i);
     }
-    else if (stat == 14 || stat == 15) {
+    else if (stat == 12) {
+      sub_wrap.color = GP_wrap.c_list[8];
+      sub_wrap.mouse_move = TC_MouseMove;
+      sub_wrap.plot_opacity = GP_wrap.faint_opacity;
+      sub_wrap.trans_delay = GP_wrap.trans_delay;
+      ylabel_dict = {en: 'Number of tests', fr: 'Nombre de tests', 'zh-tw': '檢驗人次'};
+      
+      SIM_ReplotFaintSingleBar(wrap, i);
+      SIM_ReplotAvgLine(wrap, i);
+      SIM_ReplotDot(wrap, i, 0);
+      SIM_ReplotCountAsY(wrap, 'count', i);
+    }
+    else if (stat == 13) {
       sub_wrap.mouse_move = PAF_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
       
-      if (stat == 14) {
+      if (stat == 13) {
         list_ind = 0;
         sub_wrap.color = GP_wrap.c_list[11];
         ylabel_dict = {en: 'Positive rate', fr: 'Positivité', 'zh-tw': '陽性率'};
@@ -946,6 +958,29 @@ function SIM_Replot(wrap) {
       SIM_ReplotLine(wrap, i, list_ind);
       SIM_ReplotDot(wrap, i, list_ind);
       SIM_ReplotCountAsY(wrap, 'percentage', i);
+    }
+    else if (stat == 14 || stat == 15 || stat == 16) {
+      sub_wrap.mouse_move = BS_MouseMove;
+      sub_wrap.plot_opacity = GP_wrap.faint_opacity;
+      sub_wrap.trans_delay = GP_wrap.trans_delay;
+      
+      if (stat == 14) {
+        sub_wrap.color = GP_wrap.c_list[7];
+        ylabel_dict = {en: 'Arrival travellers', fr: 'Voyageurs entrant', 'zh-tw': '入境人數'};
+      }
+      else if (stat == 15) {
+        sub_wrap.color = GP_wrap.c_list[6];
+        ylabel_dict = {en: 'Departure travellers', fr: 'Voyageurs sortant', 'zh-tw': '出境人數'};
+      }
+      else {
+        sub_wrap.color = GP_wrap.c_list[9];
+        ylabel_dict = {en: 'Total travellers', fr: 'Voyageurs totaux', 'zh-tw': '入出境總人數'};
+      }
+      
+      SIM_ReplotFaintSingleBar(wrap, i);
+      SIM_ReplotAvgLine(wrap, i);
+      SIM_ReplotDot(wrap, i, 0);
+      SIM_ReplotCountAsY(wrap, 'count', i);
     }
     
     //-- Update ylabel
@@ -968,7 +1003,7 @@ function SIM_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.stat_list[0]])
     .defer(d3.csv, wrap.data_path_list[wrap.stat_list[1]])
-    .defer(d3.csv, wrap.data_path_list[16]) //-- new_stat_flag
+    .defer(d3.csv, wrap.data_path_list[17]) //-- new_stat_flag
     .await(function (error, data, data2, data3) {
       if (error)
         return console.warn(error);
@@ -1015,10 +1050,12 @@ function SIM_ButtonListener(wrap) {
     
     //-- new_stat_flag
     var tag_list = [
-      'tests', 'total_cases', 'imported_cases', 'local_cases', 'deaths', 
-      'vaccination', '1st_dose', '2nd_dose', '3rd_dose', 'border_entry', 
-      'border_exit', 'border_both', 'arrival_incidence', 'local_incidence', 'positivity', 
-      'fatality'
+      'total_cases', 'imported_cases', 'local_cases', 
+      'arrival_incidence', 'local_incidence', 
+      'vaccination', '1st_dose', '2nd_dose', '3rd_dose', 
+      'deaths', 'weekly_fatality', 'cumulative_fatality', 
+      'border_entry', 'border_exit', 'border_both', 
+      'tests', 'positivity', 
     ];
     
     var tag1 = tag_list[stat_0];
@@ -1045,7 +1082,7 @@ function SIM_Main(wrap) {
   
   //-- Swap active to current value
   if (wrap.tag.includes('mini'))
-    wrap.stat_list = [1, 4]; //-- new_stat_flag
+    wrap.stat_list = [0, 9]; //-- new_stat_flag
   else
     wrap.stat_list = [
       document.getElementById(wrap.tag + '_stat_0').value,

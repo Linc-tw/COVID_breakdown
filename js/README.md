@@ -28,13 +28,14 @@ Structure by folders
   - `death_delay.js`
   
 `others/`
+  - `death_by_age.js`
   - `incidence_rates.js`
   - `positivity_and_fatality.js`
-  - `death_by_age.js`
   - `stats_in_mirror.js`
 
 `status_sheet/`
   - `case_counts.js`
+  - `case_fatality_rates.js`
   - `death_counts.js`
 
 `test_sheet/`
@@ -81,6 +82,7 @@ Structure by page
 
 `deaths.html`
   - `death_counts.js`
+  - `case_fatality_rates.js`
   - `death_delay.js`
   - `death_by_age.js` (only overall)
 
@@ -118,6 +120,7 @@ Faint single bar & avg line
   - `vaccination_by_brand.js`
 
 Line
+  - `case_fatality_rates.js`
   - `incidence_rates.js`
   - `positivity_and_fatality.js`
   - `vaccination_by_dose.js`

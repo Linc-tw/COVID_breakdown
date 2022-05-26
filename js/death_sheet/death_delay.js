@@ -60,7 +60,7 @@ function DD_ResetText() {
       the number of days between the report date of diagnosis and that of death.\
       <br><br>\
       The report date of diagnosis is not necessarily the testing date, nor necessarily the onset date.\
-      Similarily, the death report date is not necessarily the date of death.\
+      Similarly, the death report date is not necessarily the date of death.\
       <br><br>\
       This distribution helps characterizing the delay between the peaks of a case wave and a death wave.\
     ');

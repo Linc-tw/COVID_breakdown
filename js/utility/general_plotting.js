@@ -2,15 +2,16 @@
     //--------------------------------//
     //--  general_plotting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.23                --//
+    //--  2022.05.26                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
 //-- TODO
 
-//PAF: split positivity & fatality
-//CFR: new line delay fatality
-//front page: 6 panels
+//TPR: web page
+//TPR: test positive rate
+//Home: DC vignette
+//Home: SIM vignette
 
 //------------------------------------------------------------------------------
 //-- Variable declarations - global variable

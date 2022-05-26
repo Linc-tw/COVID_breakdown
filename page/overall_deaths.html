@@ -199,6 +199,33 @@
                                 </div>
                             </div>
                             
+                            <!-- case_fatality_rates -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-virus me-1"></i> <span id="case_fatality_rates_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#case_fatality_rates_collapse" aria-expanded="false" aria-controls="case_fatality_rates_collapse">
+                                                <i class="fas fa-comment-alt"></i>
+                                            </button>
+                                            
+                                            <button id="case_fatality_rates_overall_save" class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="collapse" id="case_fatality_rates_collapse">
+                                        <div class="card-body">
+                                            <span id="case_fatality_rates_description">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="case_fatality_rates_overall"></div>
+                                </div>
+                            </div>
+                            
                             <!-- death_delay -->
                             <div class="col-xl-6">
                                 <div class="card mb-4">
@@ -237,7 +264,7 @@
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-virus me-1"></i> <span id="death_by_age_title"></span>
+                                        <i class="fas fa-tired me-1"></i> <span id="death_by_age_title"></span>
                                     </div>
                                     
                                     <div class="card-img">
@@ -316,6 +343,8 @@
         <!-- Plots -->
         <script src="../js/status_sheet/death_counts.js"></script>
         <script src="../js/status_sheet/death_counts_param.js"></script>
+        <script src="../js/status_sheet/case_fatality_rates.js"></script>
+        <script src="../js/status_sheet/case_fatality_rates_param.js"></script>
         <script src="../js/death_sheet/death_delay.js"></script>
         <script src="../js/death_sheet/death_delay_param.js"></script>
         <script src="../js/others/death_by_age.js"></script>

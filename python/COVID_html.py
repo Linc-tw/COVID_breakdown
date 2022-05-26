@@ -2,7 +2,7 @@
     ################################
     ##  COVID_html.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.21                ##
+    ##  2022.05.25                ##
     ################################
 
 import os
@@ -37,18 +37,17 @@ PAGE_DICT = {
   ),
   'latest_deaths': dict(
     name = 'Latest deaths',
-    plot_list = ['DC', 'DD'],
-    #plot_list = ['DC', 'CFR', 'DD'],
+    plot_list = ['DC', 'CFR', 'DD'],
   ),
   'latest_others': dict(
     name = 'Latest others',
     plot_list = ['TC', 'PAF', 'BS'],
     #name = 'Latest tests & border',
-    #plot_list = ['TC', 'TPT', 'BS'],
+    #plot_list = ['TC', 'TPR', 'BS'],
   ),
   'latest_comparison': dict(
     name = 'Latest comparison',
-    plot_list = ['TC', 'CC', 'DC', 'VBB', 'VBD', 'BS', 'IR', 'PAF', 'SIM'],
+    plot_list = ['CC', 'IR', 'VBB', 'VBD', 'DC', 'CFR', 'TC', 'PAF', 'BS', 'SIM'],
   ),
   
   'overall_cases': dict(
@@ -65,18 +64,17 @@ PAGE_DICT = {
   ),
   'overall_deaths': dict(
     name = 'Overall deaths',
-    plot_list = ['DC', 'DD', 'DBA'],
-    #plot_list = ['DC', 'CFR', 'DD', 'DBA'],
+    plot_list = ['DC', 'CFR', 'DD', 'DBA'],
   ),
   'overall_others': dict(
     name = 'Overall others',
     plot_list = ['TC', 'PAF', 'BS'],
     #name = 'Overall tests & border',
-    #plot_list = ['TC', 'TPT', 'BS'],
+    #plot_list = ['TC', 'TPR', 'BS'],
   ),
   'overall_comparison': dict(
     name = 'Overall comparison',
-    plot_list = ['TC', 'CC', 'DC', 'VBB', 'VBD', 'BS', 'IR', 'PAF', 'SIM'],
+    plot_list = ['CC', 'IR', 'VBB', 'VBD', 'DC', 'CFR', 'TC', 'PAF', 'BS', 'SIM'],
   ),
   
   'timeline': dict(
@@ -180,12 +178,12 @@ PLOT_DICT = {
     wdt_str = None,
     fontawe_str = 'fa-skull-crossbones',
   ),
-  #'CFR': dict(
-    #plot_tag = 'case_fatality_rates',
-    #js_path = 'others/',
-    #wdt_str = None,
-    #fontawe_str = 'fa-vial',
-  #),
+  'CFR': dict(
+    plot_tag = 'case_fatality_rates',
+    js_path = 'status_sheet/',
+    wdt_str = None,
+    fontawe_str = 'fa-virus',
+  ),
   'DD': dict(
     plot_tag = 'death_delay',
     js_path = 'death_sheet/',
@@ -196,7 +194,7 @@ PLOT_DICT = {
     plot_tag = 'death_by_age',
     js_path = 'others/',
     wdt_str = None,
-    fontawe_str = 'fa-virus',
+    fontawe_str = 'fa-tired',
   ),
   
   ## Others
@@ -212,8 +210,8 @@ PLOT_DICT = {
     wdt_str = None,
     fontawe_str = 'fa-plus-circle',
   ),
-  #'TPT': dict(
-    #plot_tag = 'test_positivity',
+  #'TPR': dict(
+    #plot_tag = 'test_positivite_rate',
     #js_path = 'others/',
     #wdt_str = None,
     #fontawe_str = 'fa-chart-line',
@@ -905,6 +903,9 @@ def makeStr_DC(gr_tag):
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
 
+def makeStr_CFR(gr_tag):
+  return makeStr_noOtherBtn('CFR', gr_tag)
+
 def makeStr_DD(gr_tag):
   plot_abrv = 'DD'
   plot_tag = PLOT_DICT[plot_abrv]['plot_tag']
@@ -996,41 +997,43 @@ def makeStr_SIM(gr_tag):
   
   btn_str = '\
                                             <select id="{plot_tag}_{gr_tag}_stat_0" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_stat_0">\n\
-                                                <option value="0" id="{plot_tag}_button_test_0"></option>\n\
-                                                <option value="1" id="{plot_tag}_button_total_case_0" selected></option>\n\
-                                                <option value="2" id="{plot_tag}_button_imported_case_0"></option>\n\
-                                                <option value="3" id="{plot_tag}_button_local_case_0"></option>\n\
-                                                <option value="4" id="{plot_tag}_button_death_0"></option>\n\
+                                                <option value="0" id="{plot_tag}_button_total_case_0" selected></option>\n\
+                                                <option value="1" id="{plot_tag}_button_imported_case_0"></option>\n\
+                                                <option value="2" id="{plot_tag}_button_local_case_0"></option>\n\
+                                                <option value="3" id="{plot_tag}_button_arrival_incidence_0"></option>\n\
+                                                <option value="4" id="{plot_tag}_button_local_incidence_0"></option>\n\
                                                 <option value="5" id="{plot_tag}_button_vaccination_0"></option>\n\
                                                 <option value="6" id="{plot_tag}_button_1st_dose_0"></option>\n\
                                                 <option value="7" id="{plot_tag}_button_2nd_dose_0"></option>\n\
                                                 <option value="8" id="{plot_tag}_button_3rd_dose_0"></option>\n\
-                                                <option value="9" id="{plot_tag}_button_border_entry_0"></option>\n\
-                                                <option value="10" id="{plot_tag}_button_border_exit_0"></option>\n\
-                                                <option value="11" id="{plot_tag}_button_border_both_0"></option>\n\
-                                                <option value="12" id="{plot_tag}_button_arrival_incidence_0"></option>\n\
-                                                <option value="13" id="{plot_tag}_button_local_incidence_0"></option>\n\
-                                                <option value="14" id="{plot_tag}_button_positivity_0"></option>\n\
-                                                <option value="15" id="{plot_tag}_button_fatality_0"></option>\n\
+                                                <option value="9" id="{plot_tag}_button_death_0"></option>\n\
+                                                <option value="10" id="{plot_tag}_button_weekly_fatality_0"></option>\n\
+                                                <option value="11" id="{plot_tag}_button_cumulative_fatality_0"></option>\n\
+                                                <option value="12" id="{plot_tag}_button_test_0"></option>\n\
+                                                <option value="13" id="{plot_tag}_button_positivity_0"></option>\n\
+                                                <option value="14" id="{plot_tag}_button_border_entry_0"></option>\n\
+                                                <option value="15" id="{plot_tag}_button_border_exit_0"></option>\n\
+                                                <option value="16" id="{plot_tag}_button_border_both_0"></option>\n\
                                             </select>\n\
                                             \n\
                                             <select id="{plot_tag}_{gr_tag}_stat_1" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_stat_1">\n\
-                                                <option value="0" id="{plot_tag}_button_test_1"></option>\n\
-                                                <option value="1" id="{plot_tag}_button_total_case_1"></option>\n\
-                                                <option value="2" id="{plot_tag}_button_imported_case_1"></option>\n\
-                                                <option value="3" id="{plot_tag}_button_local_case_1"></option>\n\
-                                                <option value="4" id="{plot_tag}_button_death_1" selected></option>\n\
+                                                <option value="0" id="{plot_tag}_button_total_case_1"></option>\n\
+                                                <option value="1" id="{plot_tag}_button_imported_case_1"></option>\n\
+                                                <option value="2" id="{plot_tag}_button_local_case_1"></option>\n\
+                                                <option value="3" id="{plot_tag}_button_arrival_incidence_1"></option>\n\
+                                                <option value="4" id="{plot_tag}_button_local_incidence_1"></option>\n\
                                                 <option value="5" id="{plot_tag}_button_vaccination_1"></option>\n\
                                                 <option value="6" id="{plot_tag}_button_1st_dose_1"></option>\n\
                                                 <option value="7" id="{plot_tag}_button_2nd_dose_1"></option>\n\
                                                 <option value="8" id="{plot_tag}_button_3rd_dose_1"></option>\n\
-                                                <option value="9" id="{plot_tag}_button_border_entry_1"></option>\n\
-                                                <option value="10" id="{plot_tag}_button_border_exit_1"></option>\n\
-                                                <option value="11" id="{plot_tag}_button_border_both_1"></option>\n\
-                                                <option value="12" id="{plot_tag}_button_arrival_incidence_1"></option>\n\
-                                                <option value="13" id="{plot_tag}_button_local_incidence_1"></option>\n\
-                                                <option value="14" id="{plot_tag}_button_positivity_1"></option>\n\
-                                                <option value="15" id="{plot_tag}_button_fatality_1"></option>\n\
+                                                <option value="9" id="{plot_tag}_button_death_1" selected></option>\n\
+                                                <option value="10" id="{plot_tag}_button_weekly_fatality_1"></option>\n\
+                                                <option value="11" id="{plot_tag}_button_cumulative_fatality_1"></option>\n\
+                                                <option value="12" id="{plot_tag}_button_test_1"></option>\n\
+                                                <option value="13" id="{plot_tag}_button_positivity_1"></option>\n\
+                                                <option value="14" id="{plot_tag}_button_border_entry_1"></option>\n\
+                                                <option value="15" id="{plot_tag}_button_border_exit_1"></option>\n\
+                                                <option value="16" id="{plot_tag}_button_border_both_1"></option>\n\
                                             </select>\n\
                                             \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
   
@@ -1215,7 +1218,9 @@ def saveHtml_page(page_tag, verbose=True):
     f.write(makeStr_vignette('CC', 'cases'))
     f.write(makeStr_vignette('IR', 'incidence'))
     f.write(makeStr_vignette('VBB', 'vaccination'))
+    #f.write(makeStr_vignette('DC', 'deaths'))
     f.write(makeStr_vignette('TC', 'others'))
+    #f.write(makeStr_vignette('SIM', 'comparison'))
   
   elif page_tag == 'timeline':
     f.write(makeStr_CT())
@@ -1254,6 +1259,7 @@ def saveHtml_page(page_tag, verbose=True):
         
     elif cate_tag == 'deaths':
       f.write(makeStr_DC(gr_tag))
+      f.write(makeStr_CFR(gr_tag))
       f.write(makeStr_DD(gr_tag))
       if gr_tag == 'overall':
         f.write(makeStr_DBA(gr_tag))
