@@ -1507,7 +1507,6 @@ async function GP_Cascade(plot_list) {
 
 //-- Execution
 d3.csv('../processed_data/key_numbers.csv', function (error, data) {
-// d3.csv('processed_data/key_numbers.csv', function (error, data) {
   if (error)
     return console.warn(error);
   
@@ -1525,10 +1524,10 @@ d3.csv('../processed_data/key_numbers.csv', function (error, data) {
 //-- Language button
 $(document).on('change', "input:radio[name='language']", function (event) {
   var wrap = {tag: 'menu'};
-  GP_PressRadioButton(wrap, 'lang', LS_lang, this.value)
+  GP_PressRadioButton(wrap, 'lang', LS_lang, this.value);
   LS_lang = this.value;
-  Cookies.set("lang", LS_lang, {sameSite: 'lax'});
-
+  Cookies.set("lang", LS_lang, {SameSite: 'lax'});
+  
   LS_FillText_Main();
 });
 

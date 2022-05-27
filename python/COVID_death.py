@@ -2,7 +2,7 @@
     ################################
     ##  COVID_death.py            ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.22                ##
+    ##  2022.05.27                ##
     ################################
 
 import os
@@ -94,18 +94,26 @@ class DeathSheet(ccm.Template):
   def getConfirmedDate(self):
     confirmed_date_list = []
     
-    for confirmed_date in self.getCol(self.coltag_confirmed_date):
+    for i, confirmed_date in enumerate(self.getCol(self.coltag_confirmed_date)):
       if confirmed_date != confirmed_date:
         confirmed_date = np.nan
-      elif confirmed_date == '--':
+      elif confirmed_date in ['--', '調查中']:
         confirmed_date = np.nan
       elif confirmed_date == 'Dec-21':
         confirmed_date = '2021-12-21'
       elif confirmed_date == '5/2o':
         confirmed_date = '2021-05-20'
+      elif confirmed_date == '4/27':
+        confirmed_date = '2022-04-27'
+      elif confirmed_date == '4/28':
+        confirmed_date = '2022-04-28'
       else:
-        confirmed_date = [int(value) for value in confirmed_date.split('/')]
-        confirmed_date = '{:04d}-{:02d}-{:02d}'.format(*confirmed_date)
+        try:
+          confirmed_date = [int(value) for value in confirmed_date.split('/')]
+          confirmed_date = '{:04d}-{:02d}-{:02d}'.format(*confirmed_date)
+        except:
+          print('ID = {}, confirmed_date = {}'.format(i+1, confirmed_date))
+          confirmed_date = np.nan
       confirmed_date_list.append(confirmed_date)
       
     return confirmed_date_list

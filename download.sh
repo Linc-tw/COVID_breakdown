@@ -32,7 +32,7 @@ wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination
 sleep 3
 echo
 wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_death_big5.csv' 'https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002' & 
-sleep 25
+sleep 27
 echo
 
 echo "## Convert data encoding"
@@ -45,7 +45,7 @@ echo
 if [ "${MODE}" = "a" ] || [ "${MODE}" = "m" ]; then
   echo "## Process data"
   echo
-  /usr/bin/python3.8 python/COVID_process.py & sleep 12
+  /usr/bin/python3.8 python/COVID_process.py & sleep 18
   echo
 
   echo "## Push to repo"

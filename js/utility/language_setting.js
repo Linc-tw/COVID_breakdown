@@ -10,15 +10,24 @@
 
 var LS_wrap = {}; //-- For timestamp
 
-var LS_lang = Cookies.get('lang'); // 'en', 'fr', 'zh-tw'
+var LS_lang = Cookies.get('lang'); //-- 'en', 'fr', 'zh-tw'
 
 if (!LS_lang) {
-  LS_lang = 'en';
-  Cookies.set('lang', LS_lang, {sameSite: 'lax'});
+  LS_lang = navigator.language || navigator.userLanguage;
+  console.log(LS_lang);
+  
+  if (LS_lang.includes('zh'))
+    LS_lang = 'zh-tw';
+  else if (LS_lang.includes('fr'))
+    LS_lang = 'fr';
+  else
+    LS_lang = 'en';
+  
+  Cookies.set('lang', LS_lang, {SameSite: 'lax'});
 }
 
-var LS_lang_btn = document.getElementById('menu_lang_'+LS_lang);
-LS_lang_btn.classList.add('active');
+document.getElementById('menu_lang_en').classList.remove('active');
+document.getElementById('menu_lang_'+LS_lang).classList.add('active');
 
 //------------------------------------------------------------------------------
 //-- Function declarations - label
