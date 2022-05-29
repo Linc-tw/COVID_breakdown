@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_by_age_param.js     --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.15                --//
+    //--  2022.05.28                --//
     //--------------------------------//
 
 var DBA_overall_wrap = {
@@ -15,5 +15,5 @@ var DBA_overall_wrap = {
 
   y_max_factor: 1.55,
   nb_yticks: 4,
-  legend_pos_x: 90,
+  legend_pos_x: 105,
 };

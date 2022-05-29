@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_by_age.js           --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.24                --//
+    //--  2022.05.28                --//
     //--------------------------------//
 
 function DBA_InitFig(wrap) {
@@ -197,7 +197,7 @@ function DBA_MouseMove(wrap, d) {
   //-- Define tooltip text
   var fct_format;
   if (wrap.rate > 0)
-    fct_format = d3.format('.2%');
+    fct_format = d3.format('.4%');
   else
     fct_format = GP_ValueStr_Tooltip;
   var tooltip_text = wrap.ylabel_dict[LS_lang][wrap.col_tag];
@@ -310,6 +310,10 @@ function DBA_Replot(wrap) {
   GP_UpdateLegendTitle(wrap, legend_title[LS_lang]);
 
   //-- Replot legend
+  if (wrap.rate > 0)
+    format = 'per3';
+  else
+    format = 'count';
   GP_ReplotLegend(wrap, format, wrap.legend_size);
 }
 

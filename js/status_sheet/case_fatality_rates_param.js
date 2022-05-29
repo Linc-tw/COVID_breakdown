@@ -2,7 +2,7 @@
     //------------------------------------//
     //--  case_fatality_rates_param.js  --//
     //--  Chieh-An Lin                  --//
-    //--  2022.05.26                    --//
+    //--  2022.05.28                    --//
     //------------------------------------//
 
 var CFR_latest_wrap = {
@@ -14,7 +14,7 @@ var CFR_latest_wrap = {
 
   y_max_factor: 1.75,
   nb_yticks: 4,
-  legend_pos_x: 90,
+  legend_pos_x: 105,
   r: 3, //-- Dot radius
 };
 
@@ -27,6 +27,6 @@ var CFR_overall_wrap = {
 
   y_max_factor: 1.75,
   nb_yticks: 4,
-  legend_pos_x: 90,
+  legend_pos_x: 105,
   r: 1.5, //-- Dot radius
 };

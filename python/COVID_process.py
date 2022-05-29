@@ -305,8 +305,8 @@ def sandbox():
   #case_sheet = COVID_case.CaseSheet()
   #link_list = case_sheet.getLink()
   
-  status_sheet = COVID_status.StatusSheet()
-  status_sheet.saveCsv_caseFatalityRate(mode=mode)
+  #status_sheet = COVID_status.StatusSheet()
+  #status_sheet.saveCsv_caseFatalityRate(mode=mode)
   
   #test_sheet = COVID_test.TestSheet()
   #test_sheet.saveCsv_testCounts(mode=mode)
@@ -326,8 +326,8 @@ def sandbox():
   #vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
   #vc_sheet.saveCsv_vaccinationByAge(mode=mode)
   
-  #death_sheet = COVID_death.DeathSheet()
-  #death_sheet.saveCsv_deathDelay(mode=mode)
+  death_sheet = COVID_death.DeathSheet()
+  death_sheet.saveCsv_deathDelay(mode=mode)
   
   #status_sheet = COVID_status.StatusSheet()
   #test_sheet = COVID_test.TestSheet()

@@ -78,7 +78,9 @@ class DeathSheet(ccm.Template):
   def getID(self):
     id_list = []
     for id_ in self.getCol(self.coltag_id):
-      if id_ == '--':
+      if id_ != id_:
+        id_list.append(np.nan)
+      elif id_ == '--':
         id_list.append(np.nan)
       else:
         id_list.append(int(id_))

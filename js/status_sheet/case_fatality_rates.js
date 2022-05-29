@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_fatality_rates.js    --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.26                --//
+    //--  2022.05.28                --//
     //--------------------------------//
 
 function CFR_InitFig(wrap) {
@@ -200,7 +200,7 @@ function CFR_MouseMove(wrap, d) {
     col_label_list = ['Weekly fatality', 'Cumulative fatality'];
   
   //-- Define tooltip texts
-  var fct_format = d3.format('.2%');
+  var fct_format = d3.format('.3%');
   var tooltip_text = d.x;
   var i;
   
@@ -293,7 +293,7 @@ function CFR_Replot(wrap) {
   GP_UpdateLegendTitle_Standard(wrap);
   
   //-- Replot legend
-  GP_ReplotLegend(wrap, 'percentage', wrap.legend_size);
+  GP_ReplotLegend(wrap, 'per3', wrap.legend_size);
 }
 
 //-- Load
