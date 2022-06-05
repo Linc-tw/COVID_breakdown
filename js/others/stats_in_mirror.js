@@ -322,13 +322,8 @@ function SIM_FormatData(wrap, data, index) {
   }
   else if (stat == 12)
     TC_FormatData(sub_wrap, data);
-  else if (stat == 13) {
-    if (stat == 13)
-      sub_wrap.col_ind = 0; //-- For y_max
-    else 
-      sub_wrap.col_ind = 1;
-    PAF_FormatData(sub_wrap, data);
-  }
+  else if (stat == 13)
+    TPR_FormatData(sub_wrap, data);
   else if (stat == 14 || stat == 15 || stat == 16) {
     if (stat == 14)
       sub_wrap.col_ind = 0; //-- For choosing column
@@ -940,25 +935,16 @@ function SIM_Replot(wrap) {
       SIM_ReplotDot(wrap, i, 0);
     }
     else if (stat == 13) {
-      sub_wrap.mouse_move = PAF_MouseMove;
+      sub_wrap.color = GP_wrap.c_list[11];
+      sub_wrap.mouse_move = TPR_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
       format = 'percentage';
-      
-      if (stat == 13) {
-        list_ind = 0;
-        sub_wrap.color = GP_wrap.c_list[11];
-        ylabel_dict = {en: 'Positive rate', fr: 'Positivité', 'zh-tw': '陽性率'};
-      }
-      else {
-        list_ind = 1;
-        sub_wrap.color = GP_wrap.c_list[7];
-        ylabel_dict = {en: 'Overall fatality', fr: 'Létalité cumulé', 'zh-tw': '累計致死率'};
-      }
+      ylabel_dict = {en: 'Positive rate', fr: 'Positivité', 'zh-tw': '陽性率'};
       
       SIM_ReplotFaintSingleBar(wrap, i);
-      SIM_ReplotLine(wrap, i, list_ind);
-      SIM_ReplotDot(wrap, i, list_ind);
+      SIM_ReplotLine(wrap, i, 0);
+      SIM_ReplotDot(wrap, i, 0);
     }
     else if (stat == 14 || stat == 15 || stat == 16) {
       sub_wrap.mouse_move = BS_MouseMove;
