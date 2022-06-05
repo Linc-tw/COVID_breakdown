@@ -2,7 +2,7 @@
     //-----------------------------//
     //--  test_positive_rate.js  --//
     //--  Chieh-An Lin           --//
-    //--  2022.05.26             --//
+    //--  2022.06.05             --//
     //-----------------------------//
 
 function TPR_InitFig(wrap) {
@@ -232,7 +232,7 @@ function TPR_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color_list = [GP_wrap.c_list[11], GP_wrap.c_list[7]];
+  wrap.color_list = [GP_wrap.c_list[11]];
   
   //-- Define mouse-move
   wrap.mouse_move = TPR_MouseMove;

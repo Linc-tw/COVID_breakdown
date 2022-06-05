@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  stats_in_mirror.js        --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.26                --//
+    //--  2022.06.05                --//
     //--------------------------------//
 
 function SIM_InitFig(wrap) {
@@ -322,8 +322,10 @@ function SIM_FormatData(wrap, data, index) {
   }
   else if (stat == 12)
     TC_FormatData(sub_wrap, data);
-  else if (stat == 13)
+  else if (stat == 13) {
+    sub_wrap.col_ind = 0; //-- For choosing column (necessary)
     TPR_FormatData(sub_wrap, data);
+  }
   else if (stat == 14 || stat == 15 || stat == 16) {
     if (stat == 14)
       sub_wrap.col_ind = 0; //-- For choosing column
@@ -799,7 +801,7 @@ function SIM_Replot(wrap) {
   //-- 
   //-- Others
   //--   TC    - SIM    - 8
-  //--   PAF(2)- SIM(2) - 11, //7
+  //--   TPR   - SIM    - 11
   //--   BS    - SIM(3) - 7, (6, 9)
   
   for (i=0; i<2; i++) {
