@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_fatality_rates.js    --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.28                --//
+    //--  2022.06.08                --//
     //--------------------------------//
 
 function CFR_InitFig(wrap) {
@@ -21,8 +21,10 @@ function CFR_ResetText() {
     LS_AddHtml('case_fatality_rates_description', '\
       致死率的定義為死亡人數除以確診人數。\
       <br><br>\
-      週平均致死率計算的是該日往回推一週的平均，\
-      累計致死率算的是從疫情開始到該日的整體比率。\
+      週平均致死率是由7日平均所計算出，\
+      為平均死亡人數除以15日前的平均確診人數。\
+      <br><br>\
+      累計致死率則是從疫情開始到該日的整體比率。\
     ');
   }
   
@@ -32,8 +34,10 @@ function CFR_ResetText() {
     LS_AddHtml('case_fatality_rates_description', '\
       Le taux de létalité est défini comme le nombre de décédés sur le nombre de cas confirmés.\
       <br><br>\
-      Le taux hebdomadaire est calculé sur la semaine qui précède le jour concerné,\
-      tandis que le taux cumulé est calculé à partir du début de la pandémie jusqu\'au jour concerné.\
+      Le taux hebdomadaire est basé sur la moyenne glissante sur 7 jours.\
+      C\'est le ratio entre le décès moyen et le nombre moyen des cas d\'il y a 15 jours.\
+      <br><br>\
+      Le taux cumulé est le ratio global à partir du début de la pandémie jusqu\'au jour concerné.\
     ');
   }
   
@@ -43,8 +47,10 @@ function CFR_ResetText() {
     LS_AddHtml('case_fatality_rates_description', '\
       The case fatality rate (CFR) is defined as the number of deaths over the confirmed case counts.\
       <br><br>\
-      The weekly fatality is calculated over the lookback week of a given day,\
-      while the cumulative fatality is calculated from the beginning of the pandemic to a given day.\
+      The weekly fatality is based on the 7-day lookback average.\
+      It is the average death counts over the average confirmed cases of 15 days ago.\
+      <br><br>\
+      The cumulative fatality is the cumulative result calculated from the beginning of the pandemic to a given day.\
     ');
   }
 }
