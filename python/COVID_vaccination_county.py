@@ -2,7 +2,7 @@
     ###################################
     ##  COVID_vaccination_county.py  ##
     ##  Chieh-An Lin                 ##
-    ##  2022.05.22                   ##
+    ##  2022.06.08                   ##
     ###################################
 
 import os
@@ -129,13 +129,6 @@ class VaccinationCountySheet(ccm.Template):
       stock_new['label'].append(label_dict[0])
       stock_new['label_fr'].append(label_dict[1])
       stock_new['label_zh'].append(label_dict[2])
-    
-    value_list = stock_new['value_1'][1:]
-    ind = np.argsort(value_list)[::-1] + 1
-    ind = np.insert(ind, 0, 0)
-    
-    for key, value_list in stock_new.items():
-      stock_new[key] = np.array(value_list)[ind]
     return stock_new
   
   def makeReadme_vaccinationByCounty(self, gr):

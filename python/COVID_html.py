@@ -2,7 +2,7 @@
     ################################
     ##  COVID_html.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.26                ##
+    ##  2022.06.08                ##
     ################################
 
 import os
@@ -886,7 +886,23 @@ def makeStr_VBA(gr_tag):
   return makeStr_noOtherBtn('VBA', gr_tag)
 
 def makeStr_VBC(gr_tag):
-  return makeStr_noOtherBtn('VBC', gr_tag)
+  plot_abrv = 'VBC'
+  plot_tag = PLOT_DICT[plot_abrv]['plot_tag']
+  wdt_str = PLOT_DICT[plot_abrv]['wdt_str']
+  fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
+  cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
+  
+  btn_str = '\
+                                            <select id="{plot_tag}_{gr_tag}_sort" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_sort">\n\
+                                                <option value="0" id="{plot_tag}_button_geo"></option>\n\
+                                                <option value="1" id="{plot_tag}_button_1st" selected></option>\n\
+                                                <option value="2" id="{plot_tag}_button_2nd"></option>\n\
+                                                <option value="3" id="{plot_tag}_button_3rd"></option>\n\
+                                            </select>\n\
+                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+  
+  str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
+  return str_
 
 def makeStr_TC(gr_tag):
   plot_abrv = 'TC'

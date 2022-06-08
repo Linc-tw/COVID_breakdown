@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_county.js  --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.22                --//
+    //--  2022.06.08                --//
     //--------------------------------//
 
 function VBC_InitFig(wrap) {
@@ -18,8 +18,8 @@ function VBC_InitFig(wrap) {
     wrap.tot_height_['en'] = 580;
     wrap.margin_ = {};
     wrap.margin_['zh-tw'] = {left: 50, right: 5, bottom: 60, top: 5};
-    wrap.margin_['fr'] = {left: 170, right: 5, bottom: 60, top: 5};
-    wrap.margin_['en'] = {left: 140, right: 5, bottom: 60, top: 5};
+    wrap.margin_['fr'] = {left: 150, right: 5, bottom: 60, top: 5};
+    wrap.margin_['en'] = {left: 130, right: 5, bottom: 60, top: 5};
     
     GP_InitFig(wrap);
   }
@@ -28,6 +28,10 @@ function VBC_InitFig(wrap) {
 function VBC_ResetText() {
   if (LS_lang == 'zh-tw') {
     LS_AddStr('vaccination_by_county_title', '各縣市疫苗接種進度');
+    LS_AddStr('vaccination_by_county_button_geo', '依地理位置排序');
+    LS_AddStr('vaccination_by_county_button_1st', '依第一劑排序');
+    LS_AddStr('vaccination_by_county_button_2nd', '依第二劑排序');
+    LS_AddStr('vaccination_by_county_button_3rd', '依第三劑排序');
     
     LS_AddHtml('vaccination_by_county_description', '\
       此圖每週一或二更新。\
@@ -36,6 +40,10 @@ function VBC_ResetText() {
   
   else if (LS_lang == 'fr') {
     LS_AddStr('vaccination_by_county_title', 'Vaccination par ville et comté');
+    LS_AddStr('vaccination_by_county_button_geo', 'Trier par géographie');
+    LS_AddStr('vaccination_by_county_button_1st', 'Trier par 1ère dose');
+    LS_AddStr('vaccination_by_county_button_2nd', 'Trier par 2e dose');
+    LS_AddStr('vaccination_by_county_button_3rd', 'Trier par 3e dose');
     
     LS_AddHtml('vaccination_by_county_description', '\
       Cette figure est mise à jour tous les lundis ou mardis.\
@@ -44,6 +52,10 @@ function VBC_ResetText() {
   
   else { //-- En
     LS_AddStr('vaccination_by_county_title', 'Vaccination by City & County');
+    LS_AddStr('vaccination_by_county_button_geo', 'Sort by geography');
+    LS_AddStr('vaccination_by_county_button_1st', 'Sort by 1st dose');
+    LS_AddStr('vaccination_by_county_button_2nd', 'Sort by 2nd dose');
+    LS_AddStr('vaccination_by_county_button_3rd', 'Sort by 3rd dose');
     
     LS_AddHtml('vaccination_by_county_description', '\
       This figure is updated every Monday or Tuesday.\
@@ -67,6 +79,13 @@ function VBC_FormatData(wrap, data) {
   
   //-- Variables for yaxis
   var yticklabel_dict = {en: {}, fr: {}, 'zh-tw': {}};
+  
+  if (wrap.sort_ind == 1)
+    data.sort(function (a, b) {return b['value_1']-a['value_1'];});
+  else if (wrap.sort_ind == 2)
+    data.sort(function (a, b) {return b['value_2']-a['value_2'];});
+  else if (wrap.sort_ind == 3)
+    data.sort(function (a, b) {return b['value_3']-a['value_3'];});
   
   //-- Main loop over row
   for (i=0; i<data.length; i++) {
@@ -114,7 +133,7 @@ function VBC_FormatData(wrap, data) {
   var xtick = [];
   for (i=0; i<1.01; i+=x_path)
     xtick.push(i)
-  
+    
   //-- Save to wrapper
   wrap.formatted_data = formatted_data;
   wrap.nb_col = nb_col;
@@ -279,7 +298,7 @@ function VBC_Replot(wrap) {
   wrap.legend_pos = {x: wrap.legend_pos_x_[LS_lang], y: wrap.legend_pos_y, dx: wrap.legend_pos_dx, dy: wrap.legend_pos_dy};
   
   //-- Define legend color
-  wrap.legend_color = wrap.color_list;
+  wrap.legend_color = wrap.color_list.slice();
   
   //-- Define legend value
   wrap.legend_value = [];
@@ -328,9 +347,28 @@ function VBC_Reload(wrap) {
 }
 
 function VBC_ButtonListener(wrap) {
+  //-- Sort
+  d3.select(wrap.id +'_sort').on('change', function() {
+    wrap.sort_ind = this.value;
+    
+    //-- Replot
+    VBC_Reload(wrap);
+  });
+  
   //-- Save
   d3.select(wrap.id + '_save').on('click', function(){
-    name = wrap.tag + '_' + LS_lang + '.png'
+    var tag1;
+    
+    if (wrap.sort_ind == 1)
+      tag1 = '1st';
+    else if (wrap.sort_ind == 2)
+      tag1 = '2nd';
+    else if (wrap.sort_ind == 3)
+      tag1 = '3rd';
+    else
+      tag1 = 'geo';
+    
+    name = wrap.tag + '_' + tag1 + '_' + LS_lang + '.png'
     saveSvgAsPng(d3.select(wrap.id).select('svg').node(), name);
   });
 
@@ -352,7 +390,13 @@ function VBC_ButtonListener(wrap) {
 //-- Main
 function VBC_Main(wrap) {
   wrap.id = '#' + wrap.tag
-  
+
+  //-- Swap active to current value
+  if (wrap.tag.includes('mini'))
+    wrap.sort_ind = 1;
+  else
+    wrap.sort_ind = document.getElementById(wrap.tag + '_sort').value;
+      
   //-- Load
   VBC_InitFig(wrap);
   VBC_ResetText();

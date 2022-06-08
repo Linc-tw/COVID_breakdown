@@ -1,24 +1,24 @@
 key,value_1,value_2,value_3,label,label_fr,label_zh
 total,90.3,82.1,67.6,Nationalwide,National,全國
-Matsu,92.9,87.2,76.9,Matsu,Matsu,馬祖
-Changhua,92.1,83.7,68.3,Changhua,Changhua,彰化
+Keelung,89.8,83.5,69.5,Keelung,Keelung,基隆
+Taipei,88.3,81.1,68.5,Taipei,Taipei,台北
+New_Taipei,89.1,82.2,68.5,New Taipei,Nouveau Taipei,新北
 Taoyuan,91.7,83.2,68.1,Taoyuan,Taoyuan,桃園
+Hsinchu,90.9,81.5,64.4,Hsinchu County,Comté de Hsinchu,竹縣
+Hsinchu_C,90.6,80.8,65.0,Hsinchu City,Ville de Hsinchu,竹市
+Miaoli,90.4,81.7,65.4,Miaoli,Miaoli,苗栗
+Taichung,90.7,82.1,68.6,Taichung,Taichung,台中
+Changhua,92.1,83.7,68.3,Changhua,Changhua,彰化
+Nantou,90.8,82.5,66.9,Nantou,Nantou,南投
 Yunlin,91.7,82.4,66.1,Yunlin,Yunlin,雲林
 Chiayi,91.3,82.8,67.0,Chiayi County,Comté de Chiayi,嘉縣
-Tainan,91.0,81.7,67.0,Tainan,Tainan,台南
-Hsinchu,90.9,81.5,64.4,Hsinchu County,Comté de Hsinchu,竹縣
-Kaohsiung,90.8,82.5,67.8,Kaohsiung,Kaohsiung,高雄
-Nantou,90.8,82.5,66.9,Nantou,Nantou,南投
-Taichung,90.7,82.1,68.6,Taichung,Taichung,台中
-Yilan,90.6,82.8,68.0,Yilan,Yilan,宜蘭
-Hsinchu_C,90.6,80.8,65.0,Hsinchu City,Ville de Hsinchu,竹市
 Chiayi_C,90.5,81.0,65.8,Chiayi City,Ville de Chiayi,嘉市
+Tainan,91.0,81.7,67.0,Tainan,Tainan,台南
+Kaohsiung,90.8,82.5,67.8,Kaohsiung,Kaohsiung,高雄
 Pingtung,90.4,81.0,65.0,Pingtung,Pingtung,屏東
-Miaoli,90.4,81.7,65.4,Miaoli,Miaoli,苗栗
-Kinmen,90.2,84.0,70.6,Kinmen,Kinmen,金門
-Penghu,90.1,83.4,70.6,Penghu,Penghu,澎湖
-Keelung,89.8,83.5,69.5,Keelung,Keelung,基隆
-New_Taipei,89.1,82.2,68.5,New Taipei,Nouveau Taipei,新北
-Taipei,88.3,81.1,68.5,Taipei,Taipei,台北
+Yilan,90.6,82.8,68.0,Yilan,Yilan,宜蘭
 Hualien,86.8,78.0,63.1,Hualien,Hualien,花蓮
 Taitung,85.2,75.8,58.2,Taitung,Taitung,台東
+Penghu,90.1,83.4,70.6,Penghu,Penghu,澎湖
+Kinmen,90.2,84.0,70.6,Kinmen,Kinmen,金門
+Matsu,92.9,87.2,76.9,Matsu,Matsu,馬祖
