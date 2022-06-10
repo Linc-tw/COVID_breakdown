@@ -2,7 +2,7 @@
     ################################
     ##  COVID_common.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.20                ##
+    ##  2022.06.10                ##
     ################################
 
 import os
@@ -591,17 +591,26 @@ DELIVERY_LIST = [
   ['Moderna',   'Moderna', 1371000, '2022-04-27', '2022-04-29', 'https://www.cna.com.tw/news/firstnews/202204270325.aspx', ''],
   
   ## 2022/05
-  ['Moderna',   'Moderna', 1106100, '2022-05-03',           '', 'https://www.cna.com.tw/news/firstnews/202205030131.aspx', ''],
-  ['Moderna',   'Moderna', 1115500, '2022-05-04',           '', 'https://www.cna.com.tw/news/firstnews/202205040169.aspx', ''],
-  ['Moderna',   'Moderna', 1253300, '2022-05-07',           '', 'https://www.cna.com.tw/news/firstnews/202205070110.aspx', ''],
-  [ 'Pfizer',    'Pfizer',  777600, '2022-05-16',           '', 'https://www.cna.com.tw/news/firstnews/202205160008.aspx', ''],
+  ['Moderna',   'Moderna', 1105500, '2022-05-03', '2022-05-12', 'https://www.cna.com.tw/news/firstnews/202205030131.aspx', ''],
+  ['Moderna',   'Moderna', 1114900, '2022-05-04', '2022-05-12', 'https://www.cna.com.tw/news/firstnews/202205040169.aspx', ''],
+  ['Moderna',   'Moderna', 1250300, '2022-05-07', '2022-05-17', 'https://www.cna.com.tw/news/firstnews/202205070110.aspx', ''],
+  [ 'Pfizer',    'Pfizer', 1857372, '2022-05-09', '2022-05-17', 'https://www.cna.com.tw/news/firstnews/202205090008.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  777000, '2022-05-16', '2022-05-24', 'https://www.cna.com.tw/news/firstnews/202205160008.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  330900, '2022-05-30', '2022-05-31', 'https://www.cna.com.tw/news/firstnews/202205300133.aspx', ''],
   
   ## 2022/06
-  #['',   '', , '2022-05-',           '', '', ''],
-  #['',   '', , '2022-05-',           '', '', ''],
-  #['',   '', , '2022-05-',           '', '', ''],
-  #['',   '', , '2022-05-',           '', '', ''],
-  #['',   '', , '2022-05-',           '', '', ''],
+  #['',   '', , '2022-06-',           '', '', ''],
+  #['',   '', , '2022-06-',           '', '', ''],
+  #['',   '', , '2022-06-',           '', '', ''],
+  #['',   '', , '2022-06-',           '', '', ''],
+  #['',   '', , '2022-06-',           '', '', ''],
+  
+  ## 2022/07
+  ## 2022/08
+  ## 2022/09
+  ## 2022/10
+  ## 2022/11
+  ## 2022/12
 ]
 
 QC_REF_DICT = {
@@ -616,11 +625,18 @@ QC_REF_DICT = {
   '2021-11': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637741191377186898',
   '2021-12': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637801673911438363',
   
-  '2022-01': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637801671490971778',
+  '2022-01': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637882938044257290',
   '2022-02': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637818952165220271',
   '2022-03': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637848437072514591',
-  '2022-04': '',
-  '2022-05': '',
+  '2022-04': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637879431405750889',
+  '2022-05': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637902751497987817',
+  '2022-06': '',
+  '2022-07': '',
+  '2022-08': '',
+  '2022-09': '',
+  '2022-10': '',
+  '2022-11': '',
+  '2022-12': '',
 }
 
 ################################################################################

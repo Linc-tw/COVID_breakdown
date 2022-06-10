@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_counts.js           --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.08                --//
+    //--  2022.06.10                --//
     //--------------------------------//
 
 function DC_InitFig(wrap) {
@@ -21,9 +21,9 @@ function DC_ResetText() {
     LS_AddStr('death_counts_button_cumul', '累計');
     
     LS_AddHtml('death_counts_description', '\
-      台灣死亡統計應不會偏離實際死亡人數太多，\
-      因為即便是疫情最緊張的時期，\
-      醫院情況都比多數國家好上許多。\
+      2020和2021年之統計採全死因認定， 只要死者曾檢驗為陽性即被納入。\
+      <br><br>\
+      自2022年起，主要死因為意外、自殺、他殺者將不再採計。\
     ');
   }
   
@@ -33,8 +33,9 @@ function DC_ResetText() {
     LS_AddStr('death_counts_button_cumul', 'Cumulés');
     
     LS_AddHtml('death_counts_description', '\
-      Cette statistique semberait d\'être proche de la réalité car même pendant le moment le plus dûr de la pandémie,\
-      la situation hospitalière à Taïwan était beaucoup moins dramatique que la plupart des pays.\
+      En 2020 & 2021, le nombre de décès inclut tous les décès qui ont été testés positifs indépendamment de leurs causes du décès.\
+      <br><br>\
+      À partir de 2022, les décès causés par les accidents, les suicides et les homicides sont exclus.\
     ');
   }
   
@@ -44,9 +45,9 @@ function DC_ResetText() {
     LS_AddStr('death_counts_button_cumul', 'Cumulative');
     
     LS_AddHtml('death_counts_description', '\
-      This statistic would likely be close to the real death counts.\
-      Since even during the toughest moment of the outbreak,\
-      the situation of hospitals in Taiwan was far less dramatic than most countries.\
+      In 2020 & 2021, death counts include all deaths that were tested positive independent from their causes of death.\
+      <br><br>\
+      Since 2022, accidents, suicides, & homicides have been excluded.\
     ');
   }
 }
