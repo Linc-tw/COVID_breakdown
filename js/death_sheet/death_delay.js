@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_delay.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.24                --//
+    //--  2022.06.10                --//
     //--------------------------------//
 
 function DD_InitFig(wrap) {
@@ -252,7 +252,7 @@ function DD_Replot(wrap) {
   
   //-- Replot xlabel
   var xlabel_dict = {
-    en: 'Delay in days between case and death counts', 
+    en: 'Delay in days between case and death reports', 
     fr: 'Délai en jours entre infection et décès',
     'zh-tw': '確診到死亡所需天數'
   };

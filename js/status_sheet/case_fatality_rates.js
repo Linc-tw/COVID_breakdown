@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_fatality_rates.js    --//
     //--  Chieh-An Lin              --//
-    //--  2022.06.08                --//
+    //--  2022.06.10                --//
     //--------------------------------//
 
 function CFR_InitFig(wrap) {
@@ -22,7 +22,7 @@ function CFR_ResetText() {
       致死率的定義為死亡人數除以確診人數。\
       <br><br>\
       週平均致死率是由7日平均所計算出，\
-      為平均死亡人數除以15日前的平均確診人數。\
+      為平均死亡人數除以12日前的平均確診人數。\
       <br><br>\
       累計致死率則是從疫情開始到該日的整體比率。\
     ');
@@ -35,7 +35,7 @@ function CFR_ResetText() {
       Le taux de létalité est défini comme le nombre de décédés sur le nombre de cas confirmés.\
       <br><br>\
       Le taux hebdomadaire est basé sur la moyenne glissante sur 7 jours.\
-      C\'est le ratio entre le décès moyen et le nombre moyen des cas d\'il y a 15 jours.\
+      C\'est le ratio entre le décès moyen et le nombre moyen des cas d\'il y a 12 jours.\
       <br><br>\
       Le taux cumulé est le ratio global à partir du début de la pandémie jusqu\'au jour concerné.\
     ');
@@ -48,7 +48,7 @@ function CFR_ResetText() {
       The case fatality rate (CFR) is defined as the number of deaths over the confirmed case counts.\
       <br><br>\
       The weekly fatality is based on the 7-day lookback average.\
-      It is the average death counts over the average confirmed cases of 15 days ago.\
+      It is the average death counts over the average confirmed cases of 12 days ago.\
       <br><br>\
       The cumulative fatality is the cumulative result calculated from the beginning of the pandemic to a given day.\
     ');

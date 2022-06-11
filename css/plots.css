@@ -217,24 +217,24 @@ body,
   margin-bottom: -45px;
 }
 
-#test_counts_latest .tooltip, 
-#test_counts_overall .tooltip {
-  margin-left: -75px;
-  margin-right: -75px;
-  margin-top: -55px;
-  margin-bottom: -55px;
-}
-
-#positivity_and_fatality_latest .tooltip, 
-#positivity_and_fatality_overall .tooltip {
-  margin-left: -70px;
-  margin-right: -70px;
-  margin-top: -50px;
-  margin-bottom: -50px;
-}
-
 #death_counts_latest .tooltip, 
 #death_counts_overall .tooltip {
+  margin-left: -80px;
+  margin-right: -80px;
+  margin-top: -45px;
+  margin-bottom: -45px;
+}
+
+#case_fatality_rates_latest .tooltip, 
+#case_fatality_rates_overall .tooltip {
+  margin-left: -85px;
+  margin-right: -85px;
+  margin-top: -45px;
+  margin-bottom: -45px;
+}
+
+#death_delay_latest .tooltip, 
+#death_delay_overall .tooltip {
   margin-left: -80px;
   margin-right: -80px;
   margin-top: -45px;
@@ -249,12 +249,20 @@ body,
   margin-bottom: -45px;
 }
 
-#fatality_by_age_latest .tooltip, 
-#fatality_by_age_overall .tooltip {
+#test_counts_latest .tooltip, 
+#test_counts_overall .tooltip {
   margin-left: -75px;
   margin-right: -75px;
-  margin-top: -45px;
-  margin-bottom: -45px;
+  margin-top: -55px;
+  margin-bottom: -55px;
+}
+
+#positivity_and_fatality_latest .tooltip, 
+#positivity_and_fatality_overall .tooltip {
+  margin-left: -70px;
+  margin-right: -70px;
+  margin-top: -50px;
+  margin-bottom: -50px;
 }
 
 #border_statistics_latest .tooltip, 

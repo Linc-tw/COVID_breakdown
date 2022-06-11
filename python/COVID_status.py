@@ -2,7 +2,7 @@
     ################################
     ##  COVID_status.py           ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.26                ##
+    ##  2022.06.10                ##
     ################################
 
 import os
@@ -347,7 +347,7 @@ class StatusSheet(ccm.Template):
     new_case_list = new_imported_list + new_local_list + new_soldiers_list + new_unclear_list
     cum_case_list = np.cumsum(new_case_list)
     
-    offset_days = 15
+    offset_days = 12
     offset_case_list = np.concatenate([[0]*offset_days, new_case_list[:-offset_days]])
     
     offset_case_list = ccm.sevenDayMovingAverage(offset_case_list)
