@@ -2,7 +2,7 @@
     //----------------------------------------------//
     //--  incidence_evolution_by_county_param.js  --//
     //--  Chieh-An Lin                            --//
-    //--  2022.05.20                              --//
+    //--  2022.06.11                              --//
     //----------------------------------------------//
 
 var IEBC_latest_wrap = {
@@ -14,5 +14,5 @@ var IEBC_latest_wrap = {
 
   xlabel_path: 3,
   r_list: [1, 0, 1],
-  color_map_factor: 0.70,
+  color_map_factor: 1,
 };

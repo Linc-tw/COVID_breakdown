@@ -2,7 +2,7 @@
     //----------------------------------------//
     //--  incidence_evolution_by_county.js  --//
     //--  Chieh-An Lin                      --//
-    //--  2022.05.26                        --//
+    //--  2022.06.11                        --//
     //----------------------------------------//
 
 function IEBC_InitFig(wrap) {
@@ -143,11 +143,28 @@ function IEBC_Plot(wrap) {
   //-- x = bottom, y = right
   GP_PlotBottomRight(wrap);
   
+  itp = function (t) {
+    mid1 = '#BBEEAA';
+    pivot1 = 0.1
+    mid2 = '#AA1144';
+    pivot2 = 0.8
+    if (t < pivot1)
+      return d3.interpolateCubehelix('#FFFFFF', mid1)(t/pivot1);
+    if (t >= pivot2)
+      return d3.interpolateCubehelix(mid2, '#000000')((t-pivot2)/(1-pivot2));
+    return d3.interpolateCubehelix(mid1, mid2)((t-pivot1)/(pivot2-pivot1));
+  };
+  
   //-- Define square color
   wrap.value_max = Math.max(10, wrap.value_max);
   wrap.color = d3.scaleSequential()
     .domain([0, wrap.value_max])
-    .interpolator(t => d3.interpolatePuRd(t));
+//     .interpolator(t => d3.interpolatePuRd(t));
+    .interpolator(itp);
+    
+//   wrap.color = d3.scaleLinear()
+//     .domain([0, wrap.value_max])
+//     .range(['white', 'blue', 'red']);
   
   //-- Define opacity & delay
   wrap.plot_opacity = GP_wrap.trans_opacity_bright;

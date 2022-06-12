@@ -284,10 +284,23 @@ function IM_Plot(wrap) {
 }
 
 function IM_Replot(wrap) {
+  itp = function (t) {
+    mid1 = '#BBEEAA';
+    pivot1 = 0.1
+    mid2 = '#AA1144';
+    pivot2 = 0.8
+    if (t < pivot1)
+      return d3.interpolateCubehelix('#FFFFFF', mid1)(t/pivot1);
+    if (t >= pivot2)
+      return d3.interpolateCubehelix(mid2, '#000000')((t-pivot2)/(1-pivot2));
+    return d3.interpolateCubehelix(mid1, mid2)((t-pivot1)/(pivot2-pivot1));
+  };
+  
   //-- Redefine color everytime, because value_max changes
   var color = d3.scaleSequential()
     .domain([0, Math.max(Math.log10(1+wrap.value_max), 0.3)])
     .interpolator(t => d3.interpolatePuRd(t));
+//     .interpolator(itp);
   
   //-- Update map
   wrap.map.selectAll('.content.map')
