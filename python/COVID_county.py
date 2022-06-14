@@ -93,7 +93,9 @@ class CountySheet(ccm.Template):
     age_list = []
     
     for age in self.getCol(self.coltag_age):
-      if age in ['0', '1', '2', '3', '4']:
+      if age == 'None':
+        age_list.append(np.nan)
+      elif age in ['0', '1', '2', '3', '4']:
         age_list.append('0-4')
       else:
         age_list.append(age)
@@ -189,6 +191,9 @@ class CountySheet(ccm.Template):
     
     ## Loop over series
     for report_date, age, nb_cases in zip(report_date_list, age_list, nb_cases_list):
+      if age != age:
+        continue
+      
       index_list = ccm.makeIndexList(report_date)
       
       for ind, gr, stock in zip(index_list, stock_dict.keys(), stock_dict.values()):
@@ -554,11 +559,15 @@ class CountySheet(ccm.Template):
       ind = ccm.indexForOverall(report_date)
       
       try:
-        stock[age][ind] += nb_cases
         stock['total'][ind] += nb_cases
       except IndexError:
         pass
-      
+      else:
+        try:
+          stock[age][ind] += nb_cases
+        except KeyError:
+          pass
+    
     return stock
   
   def smooth_incidenceEvolutionByAge(self):
