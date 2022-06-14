@@ -218,6 +218,7 @@ class DeathSheet(ccm.Template):
       stock['counts'] = len(stock['list'])
       stock['missing'] = sum(np.isnan(stock['list']))
       stock['avg'] = np.around(np.nanmean(stock['list']), decimals=2)
+      print(len(stock['list']), stock['avg'])
       
     return stock_dict
   
