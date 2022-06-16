@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  incidence_map.js          --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.26                --//
+    //--  2022.06.16                --//
     //--------------------------------//
 
 function IM_InitFig(wrap) {
@@ -299,8 +299,8 @@ function IM_Replot(wrap) {
   //-- Redefine color everytime, because value_max changes
   var color = d3.scaleSequential()
     .domain([0, Math.max(Math.log10(1+wrap.value_max), 0.3)])
-    .interpolator(t => d3.interpolatePuRd(t));
-//     .interpolator(itp);
+//     .interpolator(t => d3.interpolatePuRd(t));
+    .interpolator(itp);
   
   //-- Update map
   wrap.map.selectAll('.content.map')
@@ -362,7 +362,13 @@ function IM_Replot(wrap) {
       .attr('text-anchor', function (d, i) {if (anno_pos[i].sign > 0) return 'end'; return 'start';})
       .attr('dominant-baseline', 'middle')
       .style('fill', '#000000')
-      .text(function (d, i) {if (wrap.rate == 1) return d+' \u00A0'+wrap.value_list[i].toFixed(1); return d+' \u00A0'+GP_ValueStr_Legend(wrap.value_list[i]);});
+      .text(function (d, i) {
+        if (wrap.rate == 0)
+          return d+' \u00A0'+GP_ValueStr_Legend(wrap.value_list[i]);
+        if (wrap.legend_value >= 1000)
+          return d+' \u00A0'+wrap.value_list[i].toFixed(0);
+        return d+' \u00A0'+wrap.value_list[i].toFixed(1);
+      });
   
   //-- Remove annotation lines
   wrap.svg.selectAll('.annotation.line')
@@ -480,7 +486,11 @@ function IM_Replot(wrap) {
       legend_label = 'Niveau national';
     else 
       legend_label = 'Nationalwide level';
-    legend_label += ' \u00A0' + wrap.legend_value.toFixed(1);
+    
+    if (wrap.legend_value >= 1000)
+      legend_label += ' \u00A0' + wrap.legend_value.toFixed(0);
+    else
+      legend_label += ' \u00A0' + wrap.legend_value.toFixed(1);
   }
   else {
     if (LS_lang == 'zh-tw')
