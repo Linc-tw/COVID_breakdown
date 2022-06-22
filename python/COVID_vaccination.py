@@ -2,7 +2,7 @@
     ################################
     ##  COVID_vaccination.py      ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.22                ##
+    ##  2022.06.22                ##
     ################################
 
 import os
@@ -31,11 +31,14 @@ class VaccinationSheet(ccm.Template):
     self.coltag_cum_2nd = '第二劑累計接種人次'
     self.coltag_cum_3rd_1 = '追加劑累計接種人次'
     self.coltag_cum_3rd_2 = '加強劑累計接種人次'
+    self.coltag_cum_4rd_1 = '第2次追加劑'
+    self.coltag_cum_4rd_2 = '第2次加強劑'
     self.coltag_cum_tot = '總共累計接種人次'
     
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
     ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004
+    ## https://covid-19.nchc.org.tw/api/download/csse_covid_19_daily_reports_vaccine_manufacture_v1_2022-06-22.csv
     
     self.data = data
     self.n_total = len(set(self.getDate()))

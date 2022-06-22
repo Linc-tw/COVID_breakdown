@@ -38,7 +38,8 @@ class DeathSheet(ccm.Template):
     
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_death.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
-    #https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002
+    ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002
+    ## https://covid-19.nchc.org.tw/api/download/covidtable_taiwan_cdc_death_2022-06-22.csv
     
     self.data = data
     self.correctData()

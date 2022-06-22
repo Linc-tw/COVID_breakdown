@@ -34,6 +34,7 @@ class VaccinationCountySheet(ccm.Template):
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv'.format(ccm.DATA_PATH)
     data = ccm.loadCsv(name, verbose=verbose)
     ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006
+    ## https://covid-19.nchc.org.tw/api/download/vaccineCityLevel_2022-06-22.csv
     
     self.data = data
     self.n_total = len(set(self.getDate()))
