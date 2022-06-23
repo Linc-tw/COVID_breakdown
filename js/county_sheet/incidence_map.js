@@ -298,8 +298,9 @@ function IM_Replot(wrap) {
   
   //-- Redefine color everytime, because value_max changes
   var color = d3.scaleSequential()
-    .domain([0, Math.max(Math.log10(1+wrap.value_max), 0.3)])
+//     .domain([0, Math.max(Math.log10(1+wrap.value_max), 0.3)])
 //     .interpolator(t => d3.interpolatePuRd(t));
+    .domain([0, wrap.value_max])
     .interpolator(itp);
   
   //-- Update map
@@ -307,7 +308,8 @@ function IM_Replot(wrap) {
     .data(wrap.formatted_data)
     .transition()
     .duration(wrap.trans_delay)
-      .attr('fill', function (d) {return color(Math.log10(1+d.properties.value));})
+//       .attr('fill', function (d) {return color(Math.log10(1+d.properties.value));})
+      .attr('fill', function (d) {return color(d.properties.value);})
     
   //-- Define annotation position
   var anno_dy = 27;
