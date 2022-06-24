@@ -100,7 +100,7 @@ class DeathSheet(ccm.Template):
     for i, confirmed_date in enumerate(self.getCol(self.coltag_confirmed_date)):
       if confirmed_date != confirmed_date:
         confirmed_date = np.nan
-      elif confirmed_date in ['--', '調查中']:
+      elif confirmed_date in ['--', '調查中', '2022/倦怠']:
         confirmed_date = np.nan
       elif confirmed_date == 'Dec-21':
         confirmed_date = '2021-12-21'
