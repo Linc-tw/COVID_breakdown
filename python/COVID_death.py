@@ -2,7 +2,7 @@
     ################################
     ##  COVID_death.py            ##
     ##  Chieh-An Lin              ##
-    ##  2022.06.22                ##
+    ##  2022.06.24                ##
     ################################
 
 import os
@@ -219,11 +219,12 @@ class DeathSheet(ccm.Template):
       stock['counts'] = len(stock['list'])
       stock['missing'] = sum(np.isnan(stock['list']))
       stock['avg'] = np.around(np.nanmean(stock['list']), decimals=2)
+      stock['median'] = np.around(np.nanmedian(stock['list']), decimals=2)
       
     return stock_dict
   
   def makeStock_deathDelay(self, stock_dict):
-    key_list = ['counts', 'missing', 'avg']
+    key_list = ['counts', 'missing', 'avg', 'median']
     stock_dict_c = {}
     stock_dict_l = {}
     
