@@ -363,8 +363,8 @@ def saveCsv_all():
   border_sheet.saveCsv(mode=mode)
   
   print()
-  timeline_sheet = COVID_timeline.TimelineSheet()
-  timeline_sheet.saveCsv(mode=mode)
+  #timeline_sheet = COVID_timeline.TimelineSheet()
+  #timeline_sheet.saveCsv(mode=mode)
   
   print()
   county_sheet = COVID_county.CountySheet()
