@@ -39,21 +39,6 @@ Contents
   - `exit_avg`: 7-day moving average of `exit`
   - `total_avg`: 7-day moving average of `total`
 
-`case_by_age.csv`
-- Row: age group
-- Column
-  - `age`
-  - `total`: 2020 all year
-  - `MMM`: during month `MMM`
-
-`case_by_age_label.csv`
-- Row: time range
-- Column
-  - `key`
-  - `label`: label in English
-  - `label_fr`: label in French (contains non-ASCII characters)
-  - `label_zh`: label in Mandarin (contains non-ASCII characters)
-
 `case_by_detection_by_onset_day.csv`
 - Row: onset date
 - Column
@@ -162,41 +147,12 @@ Contents
   - `date`
   - `hospitalized`: number of cases that are confirmed & not closed, either in hospitalization or isolation
 
-`incidence_map.csv`
-- Row: city or county
-- Column
-  - `county`
-  - `total`: 2020 all year
-  - `MMM`: during month `MMM`
-
-`incidence_map_label.csv`
-- Row: city or county
-- Column
-  - `key`
-  - `code`: unique code attributed to city or county by Ministry of Interior
-  - `population`
-  - `label`: label in English
-  - `label_fr`: label in French (contains non-ASCII characters)
-  - `label_zh`: label in Mandarin (contains non-ASCII characters)
-
 `incidence_rates.csv`
 - Row: date
 - Column
   - `date`
   - `arr_incidence`: number of imported confirmed cases over number of arrival passengers
   - `local_incidence`: number of local confirmed cases over population
-
-`local_case_per_county.csv`
-- Row: report date
-- Column
-  - `date`
-  - `total`: nationalwide
-  - `Keelung` to `Matsu`: individual city or county
-  - `Hsinchu`: Hsinchu county
-  - `Hsinchu_C`: Hsinchu city
-  - `Chiayi`: Chiayi county
-  - `Chiayi_C`: Chiayi city
-  - `*_avg`: 7-day moving average of `*`
 
 `status_evolution.csv`
 - Row: report date

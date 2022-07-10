@@ -469,6 +469,7 @@ BRAND_DICT = {
   '高端': 'Medigen',
   '\u9ad8\u7aef': 'Medigen',
   'BNT': 'Pfizer', 
+  'Novavax': 'Novavax', 
 }
 
 DELIVERY_LIST = [

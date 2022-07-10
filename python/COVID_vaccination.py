@@ -43,7 +43,7 @@ class VaccinationSheet(ccm.Template):
     self.data = data
     self.n_total = len(set(self.getDate()))
     
-    self.brand_key_list = ['AZ', 'Moderna', 'Medigen', 'Pfizer']
+    self.brand_key_list = ['AZ', 'Moderna', 'Medigen', 'Pfizer', 'Novavax']
     self.dose_key_list = ['ppl_vacc_rate', 'ppl_fully_vacc_rate', 'ppl_vacc_3_rate']
     
     if verbose:
@@ -182,6 +182,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('  - `Moderna`')
     stock.append('  - `Medigen`')
     stock.append('  - `Pfizer`')
+    stock.append('  - `Novavax`')
     stock.append('  - `*_avg`: 7-day moving average of `*`')
     ccm.README_DICT[gr][key] = stock
     return

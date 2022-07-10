@@ -47,6 +47,15 @@ Contents
 - Timeline table for evolution of testing criteria in Taiwan
 - Contains non-ASCII characters
 
+`event_timeline_zh-tw.csv`
+- Row: date
+- Column
+  - `Taiwan_event`
+  - `global_event`
+  - `key_event`
+- Timeline table for major pandemic events
+- Contains non-ASCII characters
+
 `key_numbers.csv`
 - Row
   - `n_total`: total confirmed case counts

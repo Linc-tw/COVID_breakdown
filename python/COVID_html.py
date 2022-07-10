@@ -853,6 +853,7 @@ def makeStr_VBB(gr_tag):
                                                 <option value="2" id="{plot_tag}_button_Moderna"></option>\n\
                                                 <option value="3" id="{plot_tag}_button_Medigen"></option>\n\
                                                 <option value="4" id="{plot_tag}_button_Pfizer"></option>\n\
+                                                <option value="5" id="{plot_tag}_button_Novavax"></option>\n\
                                             </select>\n\
                                             \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
   
@@ -873,6 +874,7 @@ def makeStr_VP(gr_tag):
                                                 <option value="2" id="{plot_tag}_button_Moderna"></option>\n\
                                                 <option value="3" id="{plot_tag}_button_Medigen"></option>\n\
                                                 <option value="4" id="{plot_tag}_button_Pfizer"></option>\n\
+                                                <option value="5" id="{plot_tag}_button_Novavax"></option>\n\
                                             </select>\n\
                                             \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
   
