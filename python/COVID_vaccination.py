@@ -266,6 +266,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('  - `Moderna`')
     stock.append('  - `Medigen`')
     stock.append('  - `Pfizer`')
+    stock.append('  - `Novavax`')
     ccm.README_DICT[gr][key] = stock
     
     key = 'vaccination_progress_injections'
@@ -282,6 +283,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('  - `Moderna`')
     stock.append('  - `Medigen`')
     stock.append('  - `Pfizer`')
+    stock.append('  - `Novavax`')
     ccm.README_DICT[gr][key] = stock
     return
   

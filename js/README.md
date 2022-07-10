@@ -89,7 +89,7 @@ Structure by page
 `others.html`
   - `test_counts.js`
   - `test_positive_rate.js`
-  - `border_statistics.js`
+  - `border_statistics.js` (only overall)
 
 `comparison.html`
   - `stats_in_mirror.js`
