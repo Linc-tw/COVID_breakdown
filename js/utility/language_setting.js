@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  language_setting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.26                --//
+    //--  2022.07.10                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
@@ -159,7 +159,7 @@ function LS_FillText_Menu() {
     str_incidence = '盛行率比較';
     str_vaccination = '疫苗進度';
     str_deaths = '病故分析';
-    str_others = '檢驗與邊境';
+    str_others = '檢驗資料';
     str_comparison = '對比圖表';
     
     str_timeline = '時間軸';
@@ -182,7 +182,7 @@ function LS_FillText_Menu() {
     str_incidence = "Taux d'incidence";
     str_vaccination = 'Vaccination';
     str_deaths = 'Décès';
-    str_others = 'Tests & frontière';
+    str_others = 'Tests';
     str_comparison = 'Comparaison';
     
     str_timeline = 'Chronologie';
@@ -204,7 +204,7 @@ function LS_FillText_Menu() {
     str_incidence = 'Incidence rates';
     str_vaccination = 'Vaccination';
     str_deaths = 'Deaths';
-    str_others = 'Tests & border';
+    str_others = 'Tests';
     str_comparison = 'Comparison';
     
     str_timeline = 'Timeline';

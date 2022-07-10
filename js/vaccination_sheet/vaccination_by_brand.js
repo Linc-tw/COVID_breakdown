@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_brand.js   --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.26                --//
+    //--  2022.07.10                --//
     //--------------------------------//
 
 function VBB_InitFig(wrap) {
@@ -24,6 +24,7 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_Moderna', '莫德納');
     LS_AddStr('vaccination_by_brand_button_Medigen', '高端');
     LS_AddStr('vaccination_by_brand_button_Pfizer', 'BNT');
+    LS_AddStr('vaccination_by_brand_button_Novavax', 'Novavax');
     
     LS_AddHtml('vaccination_by_brand_description', '\
       衛服部所公佈之疫苗累計接種人數缺乏星期六的資料。\
@@ -42,6 +43,7 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
     LS_AddStr('vaccination_by_brand_button_Medigen', 'Medigen');
     LS_AddStr('vaccination_by_brand_button_Pfizer', 'Pfizer');
+    LS_AddStr('vaccination_by_brand_button_Novavax', 'Novavax');
     
     LS_AddHtml('vaccination_by_brand_description', '\
       Les résultats sont publiés en nombres cumulés tous les jours sauf samedi.\
@@ -62,6 +64,7 @@ function VBB_ResetText() {
     LS_AddStr('vaccination_by_brand_button_Moderna', 'Moderna');
     LS_AddStr('vaccination_by_brand_button_Medigen', 'Medigen');
     LS_AddStr('vaccination_by_brand_button_Pfizer', 'Pfizer');
+    LS_AddStr('vaccination_by_brand_button_Novavax', 'Novavax');
     
     LS_AddHtml('vaccination_by_brand_description', '\
       The data are released under cumulative counts everyday except for Saturday.\
@@ -76,7 +79,7 @@ function VBB_ResetText() {
 
 function VBB_FormatData(wrap, data) {
   //-- Variables for data
-  var col_tag_list = data.columns.slice(2, 7); //-- 0 = date, 1 = interpolated
+  var col_tag_list = data.columns.slice(2, 8); //-- 0 = date, 1 = interpolated
   var col_tag = col_tag_list[wrap.col_ind];
   var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
@@ -205,15 +208,15 @@ function VBB_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw') {
-    col_label_list = ['合計', 'AZ', '莫德納', '高端', 'BNT'];
+    col_label_list = ['合計', 'AZ', '莫德納', '高端', 'BNT', 'Novavax'];
     avg_text = '過去七日平均';
   }
   else if (LS_lang == 'fr') {
-    col_label_list = ['Totaux', 'AZ', 'Moderna', 'Medigen', 'Pfizer'];
+    col_label_list = ['Totaux', 'AZ', 'Moderna', 'Medigen', 'Pfizer', 'Novavax'];
     avg_text = 'Moyenne sur 7 jours';
   }
   else {
-    col_label_list = ['Total', 'AZ', 'Moderna', 'Medigen', 'Pfizer'];
+    col_label_list = ['Total', 'AZ', 'Moderna', 'Medigen', 'Pfizer', 'Novavax'];
     avg_text = '7-day average';
   }
   
@@ -304,11 +307,11 @@ function VBB_Replot(wrap) {
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')
-    wrap.legend_label = ['AZ', '莫德納', '高端', 'BNT', '合計'];
+    wrap.legend_label = ['AZ', '莫德納', '高端', 'BNT', 'Novavax', '合計'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ['AZ', 'Moderna', 'Medigen', 'Pfizer', 'Totaux'];
+    wrap.legend_label = ['AZ', 'Moderna', 'Medigen', 'Pfizer', 'Novavax', 'Totaux'];
   else
-    wrap.legend_label = ['AZ', 'Moderna', 'Medigen', 'Pfizer', 'Total'];
+    wrap.legend_label = ['AZ', 'Moderna', 'Medigen', 'Pfizer', 'Novavax', 'Total'];
   
   //-- Update legend title
   GP_UpdateLegendTitle_Standard(wrap);
@@ -371,6 +374,8 @@ function VBB_ButtonListener(wrap) {
       tag1 = 'Medigen';
     else if (wrap.col_ind == 4)
       tag1 = 'Pfizer';
+    else if (wrap.col_ind == 5)
+      tag1 = 'Novavax';
     else
       tag1 = 'total';
     

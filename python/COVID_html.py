@@ -2,7 +2,7 @@
     ################################
     ##  COVID_html.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.06.08                ##
+    ##  2022.07.10                ##
     ################################
 
 import os
@@ -40,7 +40,7 @@ PAGE_DICT = {
     plot_list = ['DC', 'CFR', 'DD'],
   ),
   'latest_others': dict(
-    name = 'Latest tests & border',
+    name = 'Latest tests',
     plot_list = ['TC', 'TPR', 'BS'],
   ),
   'latest_comparison': dict(
@@ -65,7 +65,7 @@ PAGE_DICT = {
     plot_list = ['DC', 'CFR', 'DD', 'DBA'],
   ),
   'overall_others': dict(
-    name = 'Overall tests & border',
+    name = 'Overall tests',
     plot_list = ['TC', 'TPR', 'BS'],
   ),
   'overall_comparison': dict(
@@ -1328,7 +1328,8 @@ def saveHtml_page(page_tag, verbose=True):
       elif cate_tag == 'others':
         f.write(makeStr_TC(gr_tag))
         f.write(makeStr_TPR(gr_tag))
-        f.write(makeStr_BS(gr_tag))
+        if gr_tag == 'overall':
+          f.write(makeStr_BS(gr_tag))
       
       elif cate_tag == 'comparison':
         f.write(makeStr_SIM(gr_tag))
