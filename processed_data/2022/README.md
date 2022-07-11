@@ -213,6 +213,7 @@ Contents
   - `Moderna`
   - `Medigen`
   - `Pfizer`
+  - `Novavax`
 
 `vaccination_progress_supplies.csv`
 - Row: available date
@@ -225,3 +226,4 @@ Contents
   - `Moderna`
   - `Medigen`
   - `Pfizer`
+  - `Novavax`
