@@ -1063,9 +1063,6 @@ def makeStr_SIM(gr_tag):
                                                 <option value="11" id="{plot_tag}_button_cumulative_fatality_0"></option>\n\
                                                 <option value="12" id="{plot_tag}_button_test_0"></option>\n\
                                                 <option value="13" id="{plot_tag}_button_positivity_0"></option>\n\
-                                                <option value="14" id="{plot_tag}_button_border_entry_0"></option>\n\
-                                                <option value="15" id="{plot_tag}_button_border_exit_0"></option>\n\
-                                                <option value="16" id="{plot_tag}_button_border_both_0"></option>\n\
                                             </select>\n\
                                             \n\
                                             <select id="{plot_tag}_{gr_tag}_stat_1" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_stat_1">\n\
@@ -1083,9 +1080,6 @@ def makeStr_SIM(gr_tag):
                                                 <option value="11" id="{plot_tag}_button_cumulative_fatality_1"></option>\n\
                                                 <option value="12" id="{plot_tag}_button_test_1"></option>\n\
                                                 <option value="13" id="{plot_tag}_button_positivity_1"></option>\n\
-                                                <option value="14" id="{plot_tag}_button_border_entry_1"></option>\n\
-                                                <option value="15" id="{plot_tag}_button_border_exit_1"></option>\n\
-                                                <option value="16" id="{plot_tag}_button_border_both_1"></option>\n\
                                             </select>\n\
                                             \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
   

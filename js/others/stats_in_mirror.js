@@ -79,12 +79,12 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_test_1', '檢驗人次');
     LS_AddStr('stats_in_mirror_button_positivity_0', '檢驗陽性率');
     LS_AddStr('stats_in_mirror_button_positivity_1', '檢驗陽性率');
-    LS_AddStr('stats_in_mirror_button_border_entry_0', '入境人數');
-    LS_AddStr('stats_in_mirror_button_border_entry_1', '入境人數');
-    LS_AddStr('stats_in_mirror_button_border_exit_0', '出境人數');
-    LS_AddStr('stats_in_mirror_button_border_exit_1', '出境人數');
-    LS_AddStr('stats_in_mirror_button_border_both_0', '入出境總人數');
-    LS_AddStr('stats_in_mirror_button_border_both_1', '入出境總人數');
+//     LS_AddStr('stats_in_mirror_button_border_entry_0', '入境人數');
+//     LS_AddStr('stats_in_mirror_button_border_entry_1', '入境人數');
+//     LS_AddStr('stats_in_mirror_button_border_exit_0', '出境人數');
+//     LS_AddStr('stats_in_mirror_button_border_exit_1', '出境人數');
+//     LS_AddStr('stats_in_mirror_button_border_both_0', '入出境總人數');
+//     LS_AddStr('stats_in_mirror_button_border_both_1', '入出境總人數');
     
     LS_AddHtml('stats_in_mirror_description', '\
       使用者可於此圖挑選：\
@@ -104,8 +104,6 @@ function SIM_ResetText() {
       - 檢驗人次\
       <br>\
       - 陽性率\
-      <br>\
-      - 入境、出境、入出境總人數\
       <br>\
       當中之任兩者並列比較。\
       此設計將有助於突顯比較不同統計隨時間之變化。\
@@ -142,12 +140,12 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_test_1', 'Dépistage');
     LS_AddStr('stats_in_mirror_button_positivity_0', 'Taux de positivité');
     LS_AddStr('stats_in_mirror_button_positivity_1', 'Taux de positivité');
-    LS_AddStr('stats_in_mirror_button_border_entry_0', 'Arrivée aux frontières');
-    LS_AddStr('stats_in_mirror_button_border_entry_1', 'Arrivée aux frontières');
-    LS_AddStr('stats_in_mirror_button_border_exit_0', 'Départ des frontières');
-    LS_AddStr('stats_in_mirror_button_border_exit_1', 'Départ des frontières');
-    LS_AddStr('stats_in_mirror_button_border_both_0', 'Passage des frontières');
-    LS_AddStr('stats_in_mirror_button_border_both_1', 'Passage des frontières');
+//     LS_AddStr('stats_in_mirror_button_border_entry_0', 'Arrivée aux frontières');
+//     LS_AddStr('stats_in_mirror_button_border_entry_1', 'Arrivée aux frontières');
+//     LS_AddStr('stats_in_mirror_button_border_exit_0', 'Départ des frontières');
+//     LS_AddStr('stats_in_mirror_button_border_exit_1', 'Départ des frontières');
+//     LS_AddStr('stats_in_mirror_button_border_both_0', 'Passage des frontières');
+//     LS_AddStr('stats_in_mirror_button_border_both_1', 'Passage des frontières');
     
     LS_AddHtml('stats_in_mirror_description', '\
       Ce panneau permet les utilisateurs de choisir parmi :\
@@ -164,11 +162,9 @@ function SIM_ResetText() {
       <br>\
       - les taux de létalité hebdomadaire et cumulé,\
       <br>\
-      - le nombre de tests,\
+      - le nombre de tests et\
       <br>\
-      - le taux de positivité et\
-      <br>\
-      - les nombres de voyageurs entrant, sortant et totaux aux frontières,\
+      - le taux de positivité\
       <br>\
       et de présenter n\'importe quels 2 de ceux-ci côte-à-côte.\
       Ceci fournit une meilleure comparaison entre les évolutions des statistiques différentes.\
@@ -205,12 +201,12 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_test_1', 'Test counts');
     LS_AddStr('stats_in_mirror_button_positivity_0', 'Test positive rate');
     LS_AddStr('stats_in_mirror_button_positivity_1', 'Test positive rate');
-    LS_AddStr('stats_in_mirror_button_border_entry_0', 'Border arrival counts');
-    LS_AddStr('stats_in_mirror_button_border_entry_1', 'Border arrival counts');
-    LS_AddStr('stats_in_mirror_button_border_exit_0', 'Border departure counts');
-    LS_AddStr('stats_in_mirror_button_border_exit_1', 'Border departure counts');
-    LS_AddStr('stats_in_mirror_button_border_both_0', 'Border total counts');
-    LS_AddStr('stats_in_mirror_button_border_both_1', 'Border total counts');
+//     LS_AddStr('stats_in_mirror_button_border_entry_0', 'Border arrival counts');
+//     LS_AddStr('stats_in_mirror_button_border_entry_1', 'Border arrival counts');
+//     LS_AddStr('stats_in_mirror_button_border_exit_0', 'Border departure counts');
+//     LS_AddStr('stats_in_mirror_button_border_exit_1', 'Border departure counts');
+//     LS_AddStr('stats_in_mirror_button_border_both_0', 'Border total counts');
+//     LS_AddStr('stats_in_mirror_button_border_both_1', 'Border total counts');
     
     LS_AddHtml('stats_in_mirror_description', '\
       This panel allows users to choose between:\
@@ -227,11 +223,9 @@ function SIM_ResetText() {
       <br>\
       - the weekly and overall fatality rate,\
       <br>\
-      - test counts,\
+      - test counts, and\
       <br>\
-      - the positive rate, and\
-      <br>\
-      - border arrival, departure, and total counts,\
+      - the positive rate\
       <br>\
       and display any 2 of them side-by-side.\
       This may provide a better comparison between the evolutions of different statistics.\
@@ -326,15 +320,15 @@ function SIM_FormatData(wrap, data, index) {
     sub_wrap.col_ind = 0; //-- For choosing column (necessary)
     TPR_FormatData(sub_wrap, data);
   }
-  else if (stat == 14 || stat == 15 || stat == 16) {
-    if (stat == 14)
-      sub_wrap.col_ind = 0; //-- For choosing column
-    else if (stat == 15)
-      sub_wrap.col_ind = 1;
-    else
-      sub_wrap.col_ind = 2;
-    BS_FormatData(sub_wrap, data);
-  }
+//   else if (stat == 14 || stat == 15 || stat == 16) {
+//     if (stat == 14)
+//       sub_wrap.col_ind = 0; //-- For choosing column
+//     else if (stat == 15)
+//       sub_wrap.col_ind = 1;
+//     else
+//       sub_wrap.col_ind = 2;
+//     BS_FormatData(sub_wrap, data);
+//   }
 }
 
 function SIM_FormatData2(wrap, data2) {
@@ -948,29 +942,29 @@ function SIM_Replot(wrap) {
       SIM_ReplotLine(wrap, i, 0);
       SIM_ReplotDot(wrap, i, 0);
     }
-    else if (stat == 14 || stat == 15 || stat == 16) {
-      sub_wrap.mouse_move = BS_MouseMove;
-      sub_wrap.plot_opacity = GP_wrap.faint_opacity;
-      sub_wrap.trans_delay = GP_wrap.trans_delay;
-      format = 'count';
-      
-      if (stat == 14) {
-        sub_wrap.color = GP_wrap.c_list[7];
-        ylabel_dict = {en: 'Arrival travellers', fr: 'Voyageurs entrant', 'zh-tw': '入境人數'};
-      }
-      else if (stat == 15) {
-        sub_wrap.color = GP_wrap.c_list[6];
-        ylabel_dict = {en: 'Departure travellers', fr: 'Voyageurs sortant', 'zh-tw': '出境人數'};
-      }
-      else {
-        sub_wrap.color = GP_wrap.c_list[9];
-        ylabel_dict = {en: 'Total travellers', fr: 'Voyageurs totaux', 'zh-tw': '入出境總人數'};
-      }
-      
-      SIM_ReplotFaintSingleBar(wrap, i);
-      SIM_ReplotAvgLine(wrap, i);
-      SIM_ReplotDot(wrap, i, 0);
-    }
+//     else if (stat == 14 || stat == 15 || stat == 16) {
+//       sub_wrap.mouse_move = BS_MouseMove;
+//       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
+//       sub_wrap.trans_delay = GP_wrap.trans_delay;
+//       format = 'count';
+//       
+//       if (stat == 14) {
+//         sub_wrap.color = GP_wrap.c_list[7];
+//         ylabel_dict = {en: 'Arrival travellers', fr: 'Voyageurs entrant', 'zh-tw': '入境人數'};
+//       }
+//       else if (stat == 15) {
+//         sub_wrap.color = GP_wrap.c_list[6];
+//         ylabel_dict = {en: 'Departure travellers', fr: 'Voyageurs sortant', 'zh-tw': '出境人數'};
+//       }
+//       else {
+//         sub_wrap.color = GP_wrap.c_list[9];
+//         ylabel_dict = {en: 'Total travellers', fr: 'Voyageurs totaux', 'zh-tw': '入出境總人數'};
+//       }
+//       
+//       SIM_ReplotFaintSingleBar(wrap, i);
+//       SIM_ReplotAvgLine(wrap, i);
+//       SIM_ReplotDot(wrap, i, 0);
+//     }
     
     if (!wrap.tag.includes('mini')) {
       SIM_ReplotCountAsY(wrap, format, i);
@@ -998,7 +992,7 @@ function SIM_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.stat_list[0]])
     .defer(d3.csv, wrap.data_path_list[wrap.stat_list[1]])
-    .defer(d3.csv, wrap.data_path_list[17]) //-- new_stat_flag
+    .defer(d3.csv, wrap.data_path_list[14]) //-- new_stat_flag
     .await(function (error, data, data2, data3) {
       if (error)
         return console.warn(error);
@@ -1049,8 +1043,8 @@ function SIM_ButtonListener(wrap) {
       'arrival_incidence', 'local_incidence', 
       'vaccination', '1st_dose', '2nd_dose', '3rd_dose', 
       'deaths', 'weekly_fatality', 'cumulative_fatality', 
-      'border_entry', 'border_exit', 'border_both', 
       'tests', 'positivity', 
+//       'border_entry', 'border_exit', 'border_both', 
     ];
     
     var tag1 = tag_list[stat_0];

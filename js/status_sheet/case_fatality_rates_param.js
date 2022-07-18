@@ -12,7 +12,7 @@ var CFR_latest_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  y_max_factor: 0.2,//1.75,
+  y_max_factor: 0.4,//1.75,
   nb_yticks: 4,
   legend_pos_x: 105,
   r: 3, //-- Dot radius

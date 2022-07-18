@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  stats_in_mirror_param.js  --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.26                --//
+    //--  2022.07.15                --//
     //--------------------------------//
 
 var SIM_mini_wrap = {
@@ -22,9 +22,9 @@ var SIM_mini_wrap = {
     '../processed_data/latest/case_fatality_rates.csv',
     '../processed_data/latest/test_counts.csv', 
     '../processed_data/latest/test_positive_rate.csv',
-    '../processed_data/latest/border_statistics.csv',
-    '../processed_data/latest/border_statistics.csv',
-    '../processed_data/latest/border_statistics.csv',
+//     '../processed_data/latest/border_statistics.csv',
+//     '../processed_data/latest/border_statistics.csv',
+//     '../processed_data/latest/border_statistics.csv',
     '../processed_data/key_numbers.csv',
   ],
 
@@ -49,9 +49,9 @@ var SIM_latest_wrap = {
     '../processed_data/latest/case_fatality_rates.csv',
     '../processed_data/latest/test_counts.csv', 
     '../processed_data/latest/test_positive_rate.csv',
-    '../processed_data/latest/border_statistics.csv',
-    '../processed_data/latest/border_statistics.csv',
-    '../processed_data/latest/border_statistics.csv',
+//     '../processed_data/latest/border_statistics.csv',
+//     '../processed_data/latest/border_statistics.csv',
+//     '../processed_data/latest/border_statistics.csv',
     '../processed_data/key_numbers.csv',
   ],
 
@@ -76,9 +76,9 @@ var SIM_overall_wrap = {
     '../processed_data/overall/case_fatality_rates.csv',
     '../processed_data/overall/test_counts.csv', 
     '../processed_data/overall/test_positive_rate.csv',
-    '../processed_data/overall/border_statistics.csv',
-    '../processed_data/overall/border_statistics.csv',
-    '../processed_data/overall/border_statistics.csv',
+//     '../processed_data/overall/border_statistics.csv',
+//     '../processed_data/overall/border_statistics.csv',
+//     '../processed_data/overall/border_statistics.csv',
     '../processed_data/key_numbers.csv',
   ],
   
