@@ -363,10 +363,6 @@ def saveCsv_all():
   border_sheet.saveCsv(mode=mode)
   
   print()
-  timeline_sheet = COVID_timeline.TimelineSheet()
-  timeline_sheet.saveCsv(mode=mode)
-  
-  print()
   county_sheet = COVID_county.CountySheet()
   county_sheet.saveCsv(mode=mode)
   
@@ -384,6 +380,10 @@ def saveCsv_all():
   
   print()
   saveCsv_others(status_sheet, test_sheet, border_sheet, county_sheet, death_sheet, mode=mode)
+  
+  print()
+  timeline_sheet = COVID_timeline.TimelineSheet()
+  timeline_sheet.saveCsv(mode=mode)
   
   print()
   ccm.saveMarkdown_readme()
