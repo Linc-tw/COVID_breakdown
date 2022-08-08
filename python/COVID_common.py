@@ -603,15 +603,17 @@ DELIVERY_LIST = [
   [ 'Pfizer',    'Pfizer',  503700, '2022-06-20', '2022-06-21', 'https://www.cna.com.tw/news/ahel/202206200149.aspx', ''],
   
   ## 2022/07
-  ['Novavax',     'COVAX',  504000, '2022-06-30',           '', 'https://www.cna.com.tw/news/ahel/202206300017.aspx', ''],
-  ['Moderna',   'Moderna',  450000, '2022-07-06',           '', 'https://www.cna.com.tw/news/ahel/202207060022.aspx', ''],
+  ['Novavax',     'COVAX',  503400, '2022-06-30', '2022-07-08', 'https://www.cna.com.tw/news/ahel/202206300017.aspx', ''],
+  [ 'Pfizer',    'Pfizer',  590100, '2022-07-04', '2022-07-09', 'https://www.cna.com.tw/news/ahel/202207040132.aspx', ''],
+  ['Moderna',   'Moderna',  449400, '2022-07-06', '2022-07-21', 'https://www.cna.com.tw/news/ahel/202207060022.aspx', ''],
+  
+  ## 2022/08
   #['',   '', , '2022-08-',           '', '', ''],
   #['',   '', , '2022-08-',           '', '', ''],
   #['',   '', , '2022-08-',           '', '', ''],
   #['',   '', , '2022-08-',           '', '', ''],
   #['',   '', , '2022-08-',           '', '', ''],
   
-  ## 2022/08
   ## 2022/09
   ## 2022/10
   ## 2022/11
@@ -636,7 +638,7 @@ QC_REF_DICT = {
   '2022-04': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637879431405750889',
   '2022-05': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637902751497987817',
   '2022-06': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637932151801494496',
-  '2022-07': '',
+  '2022-07': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637951347967034141',
   '2022-08': '',
   '2022-09': '',
   '2022-10': '',
