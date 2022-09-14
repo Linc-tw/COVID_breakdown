@@ -367,10 +367,6 @@ def saveCsv_all():
   county_sheet.saveCsv(mode=mode)
   
   print()
-  vacc_sheet = COVID_vaccination.VaccinationSheet()
-  vacc_sheet.saveCsv(mode=mode)
-  
-  print()
   death_sheet = COVID_death.DeathSheet()
   death_sheet.saveCsv(mode=mode)
   
@@ -384,6 +380,10 @@ def saveCsv_all():
   print()
   vc_sheet = COVID_vaccination_county.VaccinationCountySheet()
   vc_sheet.saveCsv(mode=mode)
+  
+  print()
+  vacc_sheet = COVID_vaccination.VaccinationSheet()
+  vacc_sheet.saveCsv(mode=mode)
   
   print()
   ccm.saveMarkdown_readme()
