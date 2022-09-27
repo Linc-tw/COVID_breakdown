@@ -24,20 +24,23 @@ sleep 4
 echo
 wget -O 'raw_data/COVID-19_in_Taiwan_raw_data_timeline.csv' 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pub?output=csv&gid=1744708886' &
 sleep 4
-echo
-wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_url_vaccination.html' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004"
-DATE=`awk -F '2004_|.csv' '{print $2}' 'raw_data/COVID-19_in_Taiwan_url_vaccination.html'`
-wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_big5.csv' "https://covid-19.nchc.org.tw/api/download/2004_${DATE}.csv" &
-sleep 4
-echo
-wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_url_vaccination_county.html' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006"
-DATE=`awk -F '2006_|.csv' '{print $2}' 'raw_data/COVID-19_in_Taiwan_url_vaccination_county.html'`
-wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county_big5.csv' "https://covid-19.nchc.org.tw/api/download/2006_${DATE}.csv" &
-sleep 4
-echo
-wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_url_death.html' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002"
-DATE=`awk -F '4002_|.csv' '{print $2}' 'raw_data/COVID-19_in_Taiwan_url_death.html'`
-wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_death_big5.csv' "https://covid-19.nchc.org.tw/api/download/4002_${DATE}.csv" & 
+#echo
+#wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_url_vaccination.html' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004"
+#DATE=`awk -F '2004_|.csv' '{print $2}' 'raw_data/COVID-19_in_Taiwan_url_vaccination.html'`
+#wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_big5.csv' "https://covid-19.nchc.org.tw/api/download/2004_${DATE}.csv" &
+#sleep 4
+#echo
+#wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_url_vaccination_county.html' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006"
+#DATE=`awk -F '2006_|.csv' '{print $2}' 'raw_data/COVID-19_in_Taiwan_url_vaccination_county.html'`
+#wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county_big5.csv' "https://covid-19.nchc.org.tw/api/download/2006_${DATE}.csv" &
+#sleep 4
+#echo
+#wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_url_death.html' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002"
+#DATE=`awk -F '4002_|.csv' '{print $2}' 'raw_data/COVID-19_in_Taiwan_url_death.html'`
+#wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_death_big5.csv' "https://covid-19.nchc.org.tw/api/download/4002_${DATE}.csv" & 
+wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_big5.csv' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004"
+wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county_big5.csv' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006"
+wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_death_big5.csv' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002"
 sleep 30
 echo
 
