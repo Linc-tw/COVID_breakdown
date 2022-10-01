@@ -46,7 +46,7 @@ class VaccinationCountySheet(ccm.Template):
       'Yilan', 'Hualien', 'Taitung', 
       'Penghu', 'Kinmen', 'Matsu', 
     ]
-    self.age_key_list = ['6-11', '12-17', '18-29', '30-49', '50-64', '65-74', '75+']
+    self.age_key_list = ['0-4', '5-11', '12-17', '18-29', '30-49', '50-64', '65-74', '75+']
     
     if verbose:
       print('N_total = {:d}'.format(self.n_total))
