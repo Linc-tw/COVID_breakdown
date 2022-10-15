@@ -1,0 +1,9 @@
+python/COVID_plot.py 
+
+.kdev4/
+COVID_breakdown.kdev4
+archives/
+data
+images
+log/
+python/__pycache__/
