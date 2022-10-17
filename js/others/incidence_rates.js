@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  incidence_rates.js        --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.26                --//
+    //--  2022.10.17                --//
     //--------------------------------//
 
 function IR_InitFig(wrap) {
@@ -16,36 +16,27 @@ function IR_InitFig(wrap) {
 
 function IR_ResetText() {
   if (LS_lang == 'zh-tw') {
-    LS_AddStr('incidence_rates_title', '境外移入與本土盛行率');
+    LS_AddStr('incidence_rates_title', '本土盛行率');
     
     LS_AddHtml('incidence_rates_description', '\
-      入境盛行率之定義為境外移入個案數除以入境旅客數。\
-      此統計受入出境資料影響，只在每月初更新。\
-      <br><br>\
       本土盛行率之定義為本土個案數除以總人口。\
       此圖所呈現之本土盛行率，為自該日起回推7日內之平均（而非總合），再乘以1000。\
     ');
   }
   
   else if (LS_lang == 'fr') {
-    LS_AddStr('incidence_rates_title', 'Taux d\'incidences frontalière & locale');
+    LS_AddStr('incidence_rates_title', 'Taux d\'incidences locale');
     
     LS_AddHtml('incidence_rates_description', '\
-      Le taux d\'incidence frontalière est défini comme le nombre de cas importés sur le nombre de passagers arrivés.\
-      Ceci est mis à jour au début de chaque mois car la statistique frontalière en est ainsi.\
-      <br><br>\
       Le taux d\'incidence locale est définit comme le nombre de cas locaux sur la population.\
       Dans cette figure, on le définit comme la moyenne glissante sur 7 jours multipliée par 1000.\
     ');
   }
   
   else { //-- En
-    LS_AddStr('incidence_rates_title', 'Arrival & Local Incidence Rates');
+    LS_AddStr('incidence_rates_title', 'Local Incidence Rates');
     
     LS_AddHtml('incidence_rates_description', '\
-      The arrival incidence rate is defined as the number of imported cases over arrival passenger counts.\
-      This is updated only at the beginning of each month as the border statistics are so.\
-      <br><br>\
       The local incidence rate is given by the number of local cases over the population.\
       In this figure, we define it as 7-day moving average multiplied by 1000.\
     ');
@@ -54,7 +45,7 @@ function IR_ResetText() {
 
 function IR_FormatData(wrap, data) {
   //-- Variables for data
-  var col_tag_list = data.columns.slice(1); //-- 0 = date
+  var col_tag_list = data.columns.slice(2); //-- 0 = date
   var nb_col = col_tag_list.length;
   var i, j, x, y, row;
   
@@ -193,11 +184,11 @@ function IR_MouseMove(wrap, d) {
   
   //-- Get column tags
   if (LS_lang == 'zh-tw')
-    col_label_list = ['入境盛行率', '本土盛行率*1000'];
+    col_label_list = ['本土盛行率*1000'];
   else if (LS_lang == 'fr')
-    col_label_list = ['Inci. frontalière', 'Inci. locale*1000'];
+    col_label_list = ['Inci. locale*1000'];
   else
-    col_label_list = ['Arrival incidence', 'Local incidence*1000'];
+    col_label_list = ['Local incidence*1000'];
   
   //-- Define tooltip texts
   var fct_format = d3.format('.2%');
@@ -230,7 +221,7 @@ function IR_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color_list = [GP_wrap.c_list[9], GP_wrap.c_list[4]];
+  wrap.color_list = [GP_wrap.c_list[4]];
   
   //-- Define mouse-move
   wrap.mouse_move = IR_MouseMove;
@@ -283,29 +274,29 @@ function IR_Replot(wrap) {
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')
-    wrap.legend_label = ['入境盛行率', '本土盛行率（乘以1000）'];
+    wrap.legend_label = ['本土盛行率（乘以1000）'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ['Taux d\'incidence frontalière', 'Taux d\'incidence locale'];
+    wrap.legend_label = ['Taux d\'incidence locale'];
   else
-    wrap.legend_label = ['Arrival incidence', 'Local incidence'];
+    wrap.legend_label = ['Local incidence'];
     
   if (wrap.tag.includes('overall')) {
     if (LS_lang == 'zh-tw') {}
     else if (LS_lang == 'fr') {
-      wrap.legend_color.push(wrap.legend_color[1])
+      wrap.legend_color.push(wrap.legend_color[0])
       wrap.legend_label.push('(multiplié par 1000)');
     }
     else {
-      wrap.legend_color.push(wrap.legend_color[1])
+      wrap.legend_color.push(wrap.legend_color[0])
       wrap.legend_label.push('(multiplied by 1000)');
     }
   }
   else {
     if (LS_lang == 'zh-tw') {}
     else if (LS_lang == 'fr')
-      wrap.legend_label[1] += ' (multiplié par 1000)';
+      wrap.legend_label[0] += ' (multiplié par 1000)';
     else
-      wrap.legend_label[1] += ' (multiplied by 1000)';
+      wrap.legend_label[0] += ' (multiplied by 1000)';
   }
   
   //-- Update legend title

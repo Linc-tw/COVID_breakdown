@@ -2,17 +2,8 @@
     ################################
     ##  COVID_html.py             ##
     ##  Chieh-An Lin              ##
-    ##  2022.07.10                ##
+    ##  2022.10.17                ##
     ################################
-
-import os
-import sys
-import datetime as dtt
-
-import numpy as np
-#import pandas as pd
-
-#import COVID_common as ccm
 
 ################################################################################
 ## Parameters
@@ -1052,34 +1043,32 @@ def makeStr_SIM(gr_tag):
                                                 <option value="0" id="{plot_tag}_button_total_case_0" selected></option>\n\
                                                 <option value="1" id="{plot_tag}_button_imported_case_0"></option>\n\
                                                 <option value="2" id="{plot_tag}_button_local_case_0"></option>\n\
-                                                <option value="3" id="{plot_tag}_button_arrival_incidence_0"></option>\n\
-                                                <option value="4" id="{plot_tag}_button_local_incidence_0"></option>\n\
-                                                <option value="5" id="{plot_tag}_button_vaccination_0"></option>\n\
-                                                <option value="6" id="{plot_tag}_button_1st_dose_0"></option>\n\
-                                                <option value="7" id="{plot_tag}_button_2nd_dose_0"></option>\n\
-                                                <option value="8" id="{plot_tag}_button_3rd_dose_0"></option>\n\
-                                                <option value="9" id="{plot_tag}_button_death_0"></option>\n\
-                                                <option value="10" id="{plot_tag}_button_weekly_fatality_0"></option>\n\
-                                                <option value="11" id="{plot_tag}_button_cumulative_fatality_0"></option>\n\
-                                                <option value="12" id="{plot_tag}_button_test_0"></option>\n\
-                                                <option value="13" id="{plot_tag}_button_positivity_0"></option>\n\
+                                                <option value="3" id="{plot_tag}_button_local_incidence_0"></option>\n\
+                                                <option value="4" id="{plot_tag}_button_vaccination_0"></option>\n\
+                                                <option value="5" id="{plot_tag}_button_1st_dose_0"></option>\n\
+                                                <option value="6" id="{plot_tag}_button_2nd_dose_0"></option>\n\
+                                                <option value="7" id="{plot_tag}_button_3rd_dose_0"></option>\n\
+                                                <option value="8" id="{plot_tag}_button_death_0"></option>\n\
+                                                <option value="9" id="{plot_tag}_button_weekly_fatality_0"></option>\n\
+                                                <option value="10" id="{plot_tag}_button_cumulative_fatality_0"></option>\n\
+                                                <option value="11" id="{plot_tag}_button_test_0"></option>\n\
+                                                <option value="12" id="{plot_tag}_button_positivity_0"></option>\n\
                                             </select>\n\
                                             \n\
                                             <select id="{plot_tag}_{gr_tag}_stat_1" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_stat_1">\n\
                                                 <option value="0" id="{plot_tag}_button_total_case_1"></option>\n\
                                                 <option value="1" id="{plot_tag}_button_imported_case_1"></option>\n\
                                                 <option value="2" id="{plot_tag}_button_local_case_1"></option>\n\
-                                                <option value="3" id="{plot_tag}_button_arrival_incidence_1"></option>\n\
-                                                <option value="4" id="{plot_tag}_button_local_incidence_1"></option>\n\
-                                                <option value="5" id="{plot_tag}_button_vaccination_1"></option>\n\
-                                                <option value="6" id="{plot_tag}_button_1st_dose_1"></option>\n\
-                                                <option value="7" id="{plot_tag}_button_2nd_dose_1"></option>\n\
-                                                <option value="8" id="{plot_tag}_button_3rd_dose_1"></option>\n\
-                                                <option value="9" id="{plot_tag}_button_death_1" selected></option>\n\
-                                                <option value="10" id="{plot_tag}_button_weekly_fatality_1"></option>\n\
-                                                <option value="11" id="{plot_tag}_button_cumulative_fatality_1"></option>\n\
-                                                <option value="12" id="{plot_tag}_button_test_1"></option>\n\
-                                                <option value="13" id="{plot_tag}_button_positivity_1"></option>\n\
+                                                <option value="3" id="{plot_tag}_button_local_incidence_1"></option>\n\
+                                                <option value="4" id="{plot_tag}_button_vaccination_1"></option>\n\
+                                                <option value="5" id="{plot_tag}_button_1st_dose_1"></option>\n\
+                                                <option value="6" id="{plot_tag}_button_2nd_dose_1"></option>\n\
+                                                <option value="7" id="{plot_tag}_button_3rd_dose_1"></option>\n\
+                                                <option value="8" id="{plot_tag}_button_death_1" selected></option>\n\
+                                                <option value="9" id="{plot_tag}_button_weekly_fatality_1"></option>\n\
+                                                <option value="10" id="{plot_tag}_button_cumulative_fatality_1"></option>\n\
+                                                <option value="11" id="{plot_tag}_button_test_1"></option>\n\
+                                                <option value="12" id="{plot_tag}_button_positivity_1"></option>\n\
                                             </select>\n\
                                             \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
   

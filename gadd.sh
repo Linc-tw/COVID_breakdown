@@ -24,6 +24,7 @@ else
   git add index.html
   git add README.md
 fi
+echo
 
 date
 echo "## Log - gadd.sh"
