@@ -1,8 +1,10 @@
-python/COVID_plot.py 
+python/COVID_plot.py
+raw_data/COVID-19_in_Taiwan_raw_data_county_age.csv
 
 .kdev4/
 COVID_breakdown.kdev4
 archives/
+js/archives/
 data
 images
 log/
