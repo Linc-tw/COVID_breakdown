@@ -14,7 +14,6 @@ import numpy as np
 import scipy as sp
 import scipy.signal as signal
 import pandas as pd
-import statsmodels as sm
 
 import COVID_common as ccm
 

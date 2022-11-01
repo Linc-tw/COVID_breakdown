@@ -46,7 +46,7 @@ Raw data
 
 Raw data are a subset of files or spreadsheets downloaded from sources mentioned earlier.
 
-There are 8 `csv` files. These files contain abundant Mandarin strings.
+There are 9 `csv` files. These files contain abundant Mandarin strings.
 
 
 Contents
@@ -90,3 +90,10 @@ Contents
 `COVID-19_in_Taiwan_raw_data_death.csv`
 - Breakdown table of every single deaths
 - Downloaded from [here](https://covid-19.nchc.org.tw/api.php?tableID=4002)
+
+### Out of date
+
+`COVID-19_in_Taiwan_raw_data_border_statistics.csv`
+- Daily border entries & exits at all airports & seaports
+- Updated monthly until May 2022
+- This is just a sorted version of offical datasets that can be found [here](https://data.gov.tw/dataset/12369).
