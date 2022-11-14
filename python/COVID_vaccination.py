@@ -31,8 +31,8 @@ class VaccinationSheet(ccm.Template):
     self.coltag_cum_2nd = '第二劑累計接種人次'
     self.coltag_cum_3rd_1 = '追加劑累計接種人次'
     self.coltag_cum_3rd_2 = '加強劑累計接種人次'
-    self.coltag_cum_4rd_1 = '第2次追加劑'
-    self.coltag_cum_4rd_2 = '第2次加強劑'
+    self.coltag_cum_4th_1 = '第2次追加劑'
+    self.coltag_cum_4th_2 = '第2次加強劑'
     self.coltag_cum_tot = '總共累計接種人次'
     
     name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination.csv'.format(ccm.DATA_PATH)
@@ -44,7 +44,7 @@ class VaccinationSheet(ccm.Template):
     self.n_total = len(set(self.getDate()))
     
     self.brand_key_list = ['AZ', 'Moderna', 'Medigen', 'Pfizer', 'Novavax']
-    self.dose_key_list = ['ppl_vacc_rate', 'ppl_fully_vacc_rate', 'ppl_vacc_3_rate']
+    self.dose_key_list = ['ppl_vacc_rate', 'ppl_fully_vacc_rate', 'ppl_vacc_3_rate', 'ppl_vacc_4_rate']
     
     if verbose:
       print('N_total = {:d}'.format(self.n_total))
@@ -72,6 +72,9 @@ class VaccinationSheet(ccm.Template):
   
   def getCum3rd(self):
     return [int(value_1)+int(value_2) for value_1, value_2 in zip(self.getCol(self.coltag_cum_3rd_1), self.getCol(self.coltag_cum_3rd_2))]
+  
+  def getCum4th(self):
+    return [int(value_1)+int(value_2) for value_1, value_2 in zip(self.getCol(self.coltag_cum_4th_1), self.getCol(self.coltag_cum_4th_2))]
   
   def getCumTot(self):
     return [int(value) for value in self.getCol(self.coltag_cum_tot)]
@@ -391,6 +394,7 @@ class VaccinationSheet(ccm.Template):
     cum_1st_list = self.getCum1st()
     cum_2nd_list = self.getCum2nd()
     cum_3rd_list = self.getCum3rd()
+    cum_4th_list = self.getCum4th()
     
     ## Get variables
     ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
@@ -402,7 +406,7 @@ class VaccinationSheet(ccm.Template):
       stock[key] = stock[key].astype(float) + np.nan
     
     ## Fill from raw data
-    for date, brand, cum_1st, cum_2nd, cum_3rd in zip(date_list, brand_list, cum_1st_list, cum_2nd_list, cum_3rd_list):
+    for date, brand, cum_1st, cum_2nd, cum_3rd, cum_4th in zip(date_list, brand_list, cum_1st_list, cum_2nd_list, cum_3rd_list, cum_4th_list):
       if brand != 'total':
         continue
       
@@ -411,6 +415,7 @@ class VaccinationSheet(ccm.Template):
       stock['ppl_vacc_rate'][ind] = float(cum_1st)
       stock['ppl_fully_vacc_rate'][ind] = float(cum_2nd)
       stock['ppl_vacc_3_rate'][ind] = float(cum_3rd)
+      stock['ppl_vacc_4_rate'][ind] = float(cum_4th)
     return stock
     
   def interpolate_vaccinationByDose(self, stock):
@@ -435,6 +440,7 @@ class VaccinationSheet(ccm.Template):
     stock.append('  - `ppl_vacc_rate`: proportion of the population vaccinated with their 1st dose')
     stock.append('  - `ppl_fully_vacc_rate`: proportion of the population fully vaccinated')
     stock.append('  - `ppl_vacc_3_rate`: proportion of the population vaccinated with their 3rd dose')
+    stock.append('  - `ppl_vacc_4_rate`: proportion of the population vaccinated with their 4th dose')
     ccm.README_DICT[gr][key] = stock
     return
   

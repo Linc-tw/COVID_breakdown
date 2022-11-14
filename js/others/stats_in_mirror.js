@@ -63,10 +63,12 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_vaccination_1', '疫苗劑數');
     LS_AddStr('stats_in_mirror_button_1st_dose_0', '第一劑人口比');
     LS_AddStr('stats_in_mirror_button_1st_dose_1', '第一劑人口比');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '第兩劑人口比');
-    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '第兩劑人口比');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_0', '第二劑人口比');
+    LS_AddStr('stats_in_mirror_button_2nd_dose_1', '第二劑人口比');
     LS_AddStr('stats_in_mirror_button_3rd_dose_0', '第三劑人口比');
     LS_AddStr('stats_in_mirror_button_3rd_dose_1', '第三劑人口比');
+    LS_AddStr('stats_in_mirror_button_4th_dose_0', '第四劑人口比');
+    LS_AddStr('stats_in_mirror_button_4th_dose_1', '第四劑人口比');
     LS_AddStr('stats_in_mirror_button_death_0', '死亡人數');
     LS_AddStr('stats_in_mirror_button_death_1', '死亡人數');
     LS_AddStr('stats_in_mirror_button_weekly_fatality_0', '週平均致死率');
@@ -120,6 +122,8 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_2nd_dose_1', 'Taux de la 2e dose');
     LS_AddStr('stats_in_mirror_button_3rd_dose_0', 'Taux de la 3e dose');
     LS_AddStr('stats_in_mirror_button_3rd_dose_1', 'Taux de la 3e dose');
+    LS_AddStr('stats_in_mirror_button_4th_dose_0', 'Taux de la 4e dose');
+    LS_AddStr('stats_in_mirror_button_4th_dose_1', 'Taux de la 4e dose');
     LS_AddStr('stats_in_mirror_button_death_0', 'Décès');
     LS_AddStr('stats_in_mirror_button_death_1', 'Décès');
     LS_AddStr('stats_in_mirror_button_weekly_fatality_0', 'Taux de létalité hebdomadaire');
@@ -173,6 +177,8 @@ function SIM_ResetText() {
     LS_AddStr('stats_in_mirror_button_2nd_dose_1', '2nd dose ratio');
     LS_AddStr('stats_in_mirror_button_3rd_dose_0', '3rd dose ratio');
     LS_AddStr('stats_in_mirror_button_3rd_dose_1', '3rd dose ratio');
+    LS_AddStr('stats_in_mirror_button_4th_dose_0', '4th dose ratio');
+    LS_AddStr('stats_in_mirror_button_4th_dose_1', '4th dose ratio');
     LS_AddStr('stats_in_mirror_button_death_0', 'Death counts');
     LS_AddStr('stats_in_mirror_button_death_1', 'Death counts');
     LS_AddStr('stats_in_mirror_button_weekly_fatality_0', 'Weekly fatality rate');
@@ -256,13 +262,13 @@ function SIM_FormatData(wrap, data, index) {
       sub_wrap.x_list = x_list.concat(sub_wrap.x_list);
     }
   }
-  else if (stat == 5 || stat == 6 || stat == 7) {
+  else if (stat == 5 || stat == 6 || stat == 7 || stat == 8) {
     VBD_FormatData(sub_wrap, data);
     
     if (wrap.tag.includes('overall')) {
       var block_zero = {};
       block_zero['y'] = 0;
-      block_zero['y_list'] = [0, 0, 0];
+      block_zero['y_list'] = [0, 0, 0, 0];
       
       var formatted_data = [];
       var x_list = [];
@@ -278,18 +284,18 @@ function SIM_FormatData(wrap, data, index) {
       sub_wrap.x_list = x_list.concat(sub_wrap.x_list);
     }
   }
-  else if (stat == 8)
+  else if (stat == 9)
     DC_FormatData(sub_wrap, data);
-  else if (stat == 9 || stat == 10) {
-    if (stat == 9)
+  else if (stat == 10 || stat == 11) {
+    if (stat == 10)
       sub_wrap.col_ind = 0; //-- For y_max
     else 
       sub_wrap.col_ind = 1;
     CFR_FormatData(sub_wrap, data);
   }
-  else if (stat == 11)
+  else if (stat == 12)
     TC_FormatData(sub_wrap, data);
-  else if (stat == 12) {
+  else if (stat == 13) {
     sub_wrap.col_ind = 0; //-- For choosing column (necessary)
     TPR_FormatData(sub_wrap, data);
   }
@@ -580,7 +586,7 @@ function SIM_ReplotLine(wrap, index, list_ind) {
     
   //-- Define line
   var draw_line = d3.line()
-    .defined(d => !isNaN(d.y))//-- Don't show line if NaN
+    .defined(d => !isNaN(d.y)) //-- Don't show line if NaN
     .x(function (d) {return xscale(d.x) + 0.5*xscale.bandwidth();})
     .y(function (d) {return yscale(d.y);});
   
@@ -734,7 +740,7 @@ function SIM_Replot(wrap) {
   var list_ind, format, ylabel_dict;
   
   //-- Cases
-  //--   CC    - SIM(3) - 0, (3, 10)
+  //--   CC    - SIM(3) - 0, (9, 10)
   //--   LCPC  - COL    - 7
   //--   CBA   - COL    - 2
   //-- 
@@ -747,7 +753,7 @@ function SIM_Replot(wrap) {
   //-- Vaccination
   //--   VBB   - SIM    - 1
   //--   VP(2) - COL    - 4, 11
-  //--   VBD(3)- SIM(3) - 3, 2, 6
+  //--   VBD(4)- SIM(4) - 3, 2, 6, 7
   //--   VBA(3)-  -     - 
   //--   VBC(3)-  -     - 
   //-- 
@@ -760,7 +766,7 @@ function SIM_Replot(wrap) {
   //-- Others
   //--   TC    - SIM    - 8
   //--   TPR   - SIM    - 11
-  //--   BS    - SIM(3) - 7, (6, 9)
+  //--   BS    - NON    - 7
   
   for (i=0; i<2; i++) {
     stat = wrap.stat_list[i];
@@ -778,7 +784,7 @@ function SIM_Replot(wrap) {
         ylabel_dict = {en: 'Total confirmed cases', fr: 'Cas confirmés totaux', 'zh-tw': '總確診案例'};
       }
       else if (stat == 1) {
-        sub_wrap.color = GP_wrap.c_list[3];
+        sub_wrap.color = GP_wrap.c_list[9];
         ylabel_dict = {en: 'Imported cases', fr: 'Cas importés', 'zh-tw': '境外移入案例'};
       }
       else {
@@ -816,7 +822,7 @@ function SIM_Replot(wrap) {
       SIM_ReplotAvgLine(wrap, i);
       SIM_ReplotDot(wrap, i, 0);
     }
-    else if (stat == 5 || stat == 6 || stat == 7) {
+    else if (stat == 5 || stat == 6 || stat == 7 || stat == 8) {
       sub_wrap.mouse_move = VBD_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
@@ -832,17 +838,22 @@ function SIM_Replot(wrap) {
         sub_wrap.color = GP_wrap.c_list[2];
         ylabel_dict = {en: 'At least 2 doses', fr: 'Au moins 2 doses', 'zh-tw': '至少兩劑之人口比'};
       }
-      else {
+      else if (stat == 7) {
         list_ind = 2;
         sub_wrap.color = GP_wrap.c_list[6];
         ylabel_dict = {en: 'At least 3 doses', fr: 'Au moins 3 doses', 'zh-tw': '至少三劑之人口比'};
+      }
+      else {
+        list_ind = 3;
+        sub_wrap.color = GP_wrap.c_list[7];
+        ylabel_dict = {en: 'At least 4 doses', fr: 'Au moins 4 doses', 'zh-tw': '至少四劑之人口比'};
       }
       
       SIM_ReplotFaintSingleBar(wrap, i);
       SIM_ReplotLine(wrap, i, list_ind);
       SIM_ReplotDot(wrap, i, list_ind);
     }
-    else if (stat == 8) {
+    else if (stat == 9) {
       sub_wrap.color = GP_wrap.c_list[5];
       sub_wrap.mouse_move = DC_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
@@ -854,13 +865,13 @@ function SIM_Replot(wrap) {
       SIM_ReplotAvgLine(wrap, i);
       SIM_ReplotDot(wrap, i, 0);
     }
-    else if (stat == 9 || stat == 10) {
+    else if (stat == 10 || stat == 11) {
       sub_wrap.mouse_move = CFR_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
       sub_wrap.trans_delay = GP_wrap.trans_delay;
       format = 'percentage';
       
-      if (stat == 9) {
+      if (stat == 10) {
         list_ind = 0;
         sub_wrap.color = GP_wrap.c_list[8];
         ylabel_dict = {en: 'Weekly fatality rate', fr: 'Taux de létalité hebdomadaire', 'zh-tw': '週平均致死率'};
@@ -875,7 +886,7 @@ function SIM_Replot(wrap) {
       SIM_ReplotLine(wrap, i, list_ind);
       SIM_ReplotDot(wrap, i, list_ind);
     }
-    else if (stat == 11) {
+    else if (stat == 12) {
       sub_wrap.color = GP_wrap.c_list[8];
       sub_wrap.mouse_move = TC_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.faint_opacity;
@@ -887,7 +898,7 @@ function SIM_Replot(wrap) {
       SIM_ReplotAvgLine(wrap, i);
       SIM_ReplotDot(wrap, i, 0);
     }
-    else if (stat == 12) {
+    else if (stat == 13) {
       sub_wrap.color = GP_wrap.c_list[11];
       sub_wrap.mouse_move = TPR_MouseMove;
       sub_wrap.plot_opacity = GP_wrap.trans_opacity_bright;
@@ -926,7 +937,7 @@ function SIM_Load(wrap) {
   d3.queue()
     .defer(d3.csv, wrap.data_path_list[wrap.stat_list[0]])
     .defer(d3.csv, wrap.data_path_list[wrap.stat_list[1]])
-    .defer(d3.csv, wrap.data_path_list[13]) //-- new_stat_flag
+    .defer(d3.csv, wrap.data_path_list[14]) //-- new_stat_flag
     .await(function (error, data, data2, data3) {
       if (error)
         return console.warn(error);
@@ -975,7 +986,7 @@ function SIM_ButtonListener(wrap) {
     var tag_list = [
       'total_cases', 'imported_cases', 'local_cases', 
       'local_incidence', 
-      'vaccination', '1st_dose', '2nd_dose', '3rd_dose', 
+      'vaccination', '1st_dose', '2nd_dose', '3rd_dose', '4th_dose', 
       'deaths', 'weekly_fatality', 'cumulative_fatality', 
       'tests', 'positivity', 
     ];
@@ -1004,7 +1015,7 @@ function SIM_Main(wrap) {
   
   //-- Swap active to current value
   if (wrap.tag.includes('mini'))
-    wrap.stat_list = [0, 8]; //-- new_stat_flag
+    wrap.stat_list = [0, 9]; //-- new_stat_flag
   else
     wrap.stat_list = [
       document.getElementById(wrap.tag + '_stat_0').value,

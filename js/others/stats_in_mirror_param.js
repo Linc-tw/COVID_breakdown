@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  stats_in_mirror_param.js  --//
     //--  Chieh-An Lin              --//
-    //--  2022.10.17                --//
+    //--  2022.11.14                --//
     //--------------------------------//
 
 var SIM_mini_wrap = {
@@ -13,6 +13,7 @@ var SIM_mini_wrap = {
     '../processed_data/latest/case_counts_by_report_day.csv', 
     '../processed_data/latest/incidence_rates.csv',
     '../processed_data/latest/vaccination_by_brand.csv', 
+    '../processed_data/latest/vaccination_by_dose.csv', 
     '../processed_data/latest/vaccination_by_dose.csv', 
     '../processed_data/latest/vaccination_by_dose.csv', 
     '../processed_data/latest/vaccination_by_dose.csv', 
@@ -39,6 +40,7 @@ var SIM_latest_wrap = {
     '../processed_data/latest/vaccination_by_dose.csv', 
     '../processed_data/latest/vaccination_by_dose.csv', 
     '../processed_data/latest/vaccination_by_dose.csv', 
+    '../processed_data/latest/vaccination_by_dose.csv', 
     '../processed_data/latest/death_counts.csv', 
     '../processed_data/latest/case_fatality_rates.csv',
     '../processed_data/latest/case_fatality_rates.csv',
@@ -59,6 +61,7 @@ var SIM_overall_wrap = {
     '../processed_data/overall/case_counts_by_report_day.csv', 
     '../processed_data/overall/incidence_rates.csv',
     '../processed_data/overall/vaccination_by_brand.csv', 
+    '../processed_data/overall/vaccination_by_dose.csv', 
     '../processed_data/overall/vaccination_by_dose.csv', 
     '../processed_data/overall/vaccination_by_dose.csv', 
     '../processed_data/overall/vaccination_by_dose.csv', 

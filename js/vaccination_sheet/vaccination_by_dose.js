@@ -195,11 +195,11 @@ function VBD_MouseMove(wrap, d) {
   //-- Get column tags
   var col_label_list;
   if (LS_lang == 'zh-tw')
-    col_label_list = ['第一劑', '第兩劑', '第三劑'];
+    col_label_list = ['第一劑', '第二劑', '第三劑', '第四劑'];
   else if (LS_lang == 'fr')
-    col_label_list = ['1ère dose ', '2e dose', '3e dose'];
+    col_label_list = ['1ère dose ', '2e dose', '3e dose', '4e dose'];
   else
-    col_label_list = ['1st dose', '2nd dose', '3rd dose'];
+    col_label_list = ['1st dose', '2nd dose', '3rd dose', '4th dose'];
   
   //-- Define tooltip texts
   var fct_format = d3.format('.2%');
@@ -232,7 +232,7 @@ function VBD_Plot(wrap) {
     GP_MakeTooltip(wrap);
   
   //-- Define color
-  wrap.color_list = [GP_wrap.c_list[3], GP_wrap.c_list[2], GP_wrap.c_list[6]];
+  wrap.color_list = [GP_wrap.c_list[3], GP_wrap.c_list[2], GP_wrap.c_list[6], GP_wrap.c_list[7]];
   
   //-- Define mouse-move
   wrap.mouse_move = VBD_MouseMove;
@@ -289,11 +289,11 @@ function VBD_Replot(wrap) {
   
   //-- Define legend label
   if (LS_lang == 'zh-tw')
-    wrap.legend_label = ['已施打一劑', '已施打兩劑', '已施打三劑'];
+    wrap.legend_label = ['已施打一劑', '已施打兩劑', '已施打三劑', '已施打四劑'];
   else if (LS_lang == 'fr')
-    wrap.legend_label = ['1ère dose ', '2e dose', '3e dose'];
+    wrap.legend_label = ['1ère dose ', '2e dose', '3e dose', '4e dose'];
   else
-    wrap.legend_label = ['1st dose', '2nd dose', '3rd dose'];
+    wrap.legend_label = ['1st dose', '2nd dose', '3rd dose', '4th dose'];
   
   //-- Update legend title
   GP_UpdateLegendTitle(wrap, wrap.last_date);
