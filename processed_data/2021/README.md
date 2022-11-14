@@ -200,6 +200,7 @@ Contents
   - `ppl_vacc_rate`: proportion of the population vaccinated with their 1st dose
   - `ppl_fully_vacc_rate`: proportion of the population fully vaccinated
   - `ppl_vacc_3_rate`: proportion of the population vaccinated with their 3rd dose
+  - `ppl_vacc_4_rate`: proportion of the population vaccinated with their 4th dose
 
 `vaccination_progress_injections.csv`
 - Row = report date
