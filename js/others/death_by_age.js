@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_by_age.js           --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.28                --//
+    //--  2022.12.05                --//
     //--------------------------------//
 
 function DBA_InitFig(wrap) {
@@ -22,6 +22,7 @@ function DBA_ResetText() {
     LS_AddStr('death_by_age_button_2020', '2020');
     LS_AddStr('death_by_age_button_2021', '2021');
     LS_AddStr('death_by_age_button_2022', '2022');
+    LS_AddStr('death_by_age_button_2023', '2023');
     
     LS_AddHtml('death_by_age_description', '\
       此圖數字可能會和「死亡人數」的統計不同，\
@@ -40,6 +41,7 @@ function DBA_ResetText() {
     LS_AddStr('death_by_age_button_2020', '2020');
     LS_AddStr('death_by_age_button_2021', '2021');
     LS_AddStr('death_by_age_button_2022', '2022');
+    LS_AddStr('death_by_age_button_2023', '2023');
     
     LS_AddHtml('death_by_age_description', '\
       Le chiffre dans cette figure peut ne pas correspond à celui du « Nombre de décès »,\
@@ -59,6 +61,7 @@ function DBA_ResetText() {
     LS_AddStr('death_by_age_button_2020', '2020');
     LS_AddStr('death_by_age_button_2021', '2021');
     LS_AddStr('death_by_age_button_2022', '2022');
+    LS_AddStr('death_by_age_button_2023', '2023');
     
     LS_AddHtml('death_by_age_description', '\
       The value on this figure does not necessarily match to the one in "Death Counts",\

@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  event_timeline.js         --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.08                --//
+    //--  2022.12.05                --//
     //--------------------------------//
 
 function ET_InitFig(wrap) {
@@ -38,6 +38,9 @@ function ET_ResetText() {
     LS_AddStr('event_timeline_2022_title', '2021-2022 疫情時間軸');
     LS_AddStr('event_timeline_2022_button_sun', '週日為首');
     LS_AddStr('event_timeline_2022_button_mon', '週一為首');
+    LS_AddStr('event_timeline_2024_title', '2023-2024 疫情時間軸');
+    LS_AddStr('event_timeline_2024_button_sun', '週日為首');
+    LS_AddStr('event_timeline_2024_button_mon', '週一為首');
     
     LS_AddHtml('event_timeline_description', '\
       此月曆標示台灣與全球之重大疫情事件，\
@@ -54,6 +57,9 @@ function ET_ResetText() {
     LS_AddStr('event_timeline_2022_title', 'Chronologie de la pandémie 2021-2022');
     LS_AddStr('event_timeline_2022_button_sun', '1er jour dimanche');
     LS_AddStr('event_timeline_2022_button_mon', '1er jour lundi');
+    LS_AddStr('event_timeline_2024_title', 'Chronologie de la pandémie 2023-2024');
+    LS_AddStr('event_timeline_2024_button_sun', '1er jour dimanche');
+    LS_AddStr('event_timeline_2024_button_mon', '1er jour lundi');
     
     LS_AddHtml('event_timeline_description', '\
       Ce calendrier permet de documenter les événements majeurs qui sont liés à la covid\
@@ -72,6 +78,9 @@ function ET_ResetText() {
     LS_AddStr('event_timeline_2022_title', 'Pandemic Timeline 2021-2022');
     LS_AddStr('event_timeline_2022_button_sun', '1st day Sunday');
     LS_AddStr('event_timeline_2022_button_mon', '1st day Monday');
+    LS_AddStr('event_timeline_2024_title', 'Pandemic Timeline 2023-2024');
+    LS_AddStr('event_timeline_2024_button_sun', '1st day Sunday');
+    LS_AddStr('event_timeline_2024_button_mon', '1st day Monday');
     
     LS_AddHtml('event_timeline_description', '\
       This calendar records major COVID events in Taiwan, the world, and in the scope of Taiwan\'s CDC.\

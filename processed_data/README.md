@@ -28,6 +28,9 @@ Contents
 `2022/`
 - Contains statistics of 2022
 
+`2023/`
+- Contains statistics of 2023
+
 `latest/`
 - Contains statistics of last 90 days
 
@@ -63,6 +66,7 @@ Contents
   - `n_2020`: number of confirmed cases during 2020
   - `n_2021`: number of confirmed cases during 2021
   - `n_2022`: number of confirmed cases during 2022
+  - `n_2023`: number of confirmed cases during 2023
   - `timestamp`: time of last update
 - Column
   - `key`

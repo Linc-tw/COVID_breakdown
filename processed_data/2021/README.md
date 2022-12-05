@@ -11,17 +11,6 @@ This folder hosts data files which summarize COVID statistics in Taiwan during 2
 Contents
 --------
 
-`border_statistics.csv`
-- Row: report date
-- Column
-  - `date`
-  - `entry`
-  - `exit`
-  - `total`: `entry` + `exit`
-  - `entry_avg`: 7-day moving average of `entry`
-  - `exit_avg`: 7-day moving average of `exit`
-  - `total_avg`: 7-day moving average of `total`
-
 `case_by_age.csv`
 - Row: age group
 - Column
@@ -36,29 +25,6 @@ Contents
   - `label`: label in English
   - `label_fr`: label in French (contains non-ASCII characters)
   - `label_zh`: label in Mandarin (contains non-ASCII characters)
-
-`case_by_transmission_by_onset_day.csv`
-- Row: onset date
-- Column
-  - `date`
-  - `imported`
-  - `linked`: local cases linked to known ones
-  - `unlinked`: local cases with unknown origin
-  - `fleet`: on boat
-  - `plane`: on plane
-  - `unknown`: undetermined`
-- Cases without onset date do not show up in the file
-
-`case_by_transmission_by_report_day.csv`
-- Row: report date
-- Column
-  - `date`
-  - `imported`
-  - `linked`: local cases linked to known ones
-  - `unlinked`: local cases with unknown origin
-  - `fleet`: on boat
-  - `plane`: on plane
-  - `unknown`: undetermined`
 
 `case_counts_by_report_day.csv`
 - Row: report date
@@ -102,12 +68,6 @@ Contents
   - `key`
   - `value`
 
-`hospitalization_or_isolation.csv`
-- Row: report date
-- Column
-  - `date`
-  - `hospitalized`: number of cases that are confirmed & not closed, either in hospitalization or isolation
-
 `incidence_map.csv`
 - Row: city or county
 - Column
@@ -124,13 +84,6 @@ Contents
   - `label`: label in English
   - `label_fr`: label in French (contains non-ASCII characters)
   - `label_zh`: label in Mandarin (contains non-ASCII characters)
-
-`incidence_rates.csv`
-- Row: date
-- Column
-  - `date`
-  - `arr_incidence`: number of imported confirmed cases over number of arrival passengers
-  - `local_incidence`: number of local confirmed cases over population
 
 `local_case_per_county.csv`
 - Row: report date

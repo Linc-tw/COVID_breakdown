@@ -1,11 +1,11 @@
-processed_data/2022/
+processed_data/2023/
 ====================
 
 
 Summary
 -------
 
-This folder hosts data files which summarize COVID statistics in Taiwan during 2022.
+This folder hosts data files which summarize COVID statistics in Taiwan during 2023.
 
 
 Contents
@@ -15,7 +15,7 @@ Contents
 - Row: age group
 - Column
   - `age`
-  - `total`: 2022 all year
+  - `total`: 2023 all year
   - `MMM`: during month `MMM`
 
 `case_by_age_label.csv`
@@ -57,7 +57,7 @@ Contents
 - Row: delay in days between case and death report
 - Column: transmission type
   - `difference`: see row
-  - `total`: all year 2022
+  - `total`: all year 2023
 
 `death_delay_label.csv`
 - Row
@@ -72,7 +72,7 @@ Contents
 - Row: city or county
 - Column
   - `county`
-  - `total`: 2022 all year
+  - `total`: 2023 all year
   - `MMM`: during month `MMM`
 
 `incidence_map_label.csv`

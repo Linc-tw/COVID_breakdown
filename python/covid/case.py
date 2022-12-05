@@ -1,8 +1,8 @@
 
     ################################
-    ##  COVID_case.py             ##
+    ##  case.py                   ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.22                ##
+    ##  2022.12.05                ##
     ################################
 
 import os
@@ -15,12 +15,12 @@ import scipy as sp
 import scipy.signal as signal
 import pandas as pd
 
-import COVID_common as ccm
+import covid.common as cvcm
 
 ################################################################################
 ## Class - case sheet
 
-class CaseSheet(ccm.Template):
+class CaseSheet(cvcm.Template):
   
   def __init__(self, verbose=True):
     self.coltag_case = '案例'
@@ -50,8 +50,8 @@ class CaseSheet(ccm.Template):
     self.n_year_dict = {}
     self.n_empty = 0
     
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv'.format(ccm.DATA_PATH)
-    data = ccm.loadCsv(name, verbose=verbose)
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv'.format(cvcm.DATA_PATH)
+    data = cvcm.loadCsv(name, verbose=verbose)
     
     self.setData(data)
     self.setCaseCounts()
@@ -61,7 +61,7 @@ class CaseSheet(ccm.Template):
     if verbose:
       print('N_total = {:d}'.format(self.n_total))
       print('N_latest = {:d}'.format(self.n_latest))
-      for year in ccm.GROUP_YEAR_LIST:
+      for year in cvcm.GROUP_YEAR_LIST:
         print('N_{} = {:d}'.format(year, self.n_year_dict[year]))
       print('N_empty = {:d}'.format(self.n_empty))
     return 
@@ -73,14 +73,14 @@ class CaseSheet(ccm.Template):
     return
   
   def setCaseCounts(self):
-    n_list = [0] * len(ccm.GROUP_LIST)
+    n_list = [0] * len(cvcm.GROUP_LIST)
     
     for report_date, trans in zip(self.getReportDate(), self.getCol(self.coltag_transmission)):
       if trans != trans: ## NaN
         self.n_empty += 1
         continue
       
-      index_list = ccm.makeIndexList(report_date)
+      index_list = cvcm.makeIndexList(report_date)
       
       for i, ind in enumerate(index_list):
         if ind != ind: ## If NaN
@@ -90,7 +90,7 @@ class CaseSheet(ccm.Template):
         
     self.n_latest = n_list[0]
     self.n_total = n_list[1]
-    for i, year in enumerate(ccm.GROUP_YEAR_LIST):
+    for i, year in enumerate(cvcm.GROUP_YEAR_LIST):
       self.n_year_dict[year] = n_list[i+2]
     return
   
@@ -419,63 +419,58 @@ class CaseSheet(ccm.Template):
     entry_date_list = []
     
     for i, entry_date in enumerate(self.getCol(self.coltag_entry_date)):
-      if entry_date != entry_date: ## NaN
-        entry_date_list.append(np.nan)
-        
-      elif entry_date in ['x', 'X', '3/7-5/12', '2017年8月']:
-        entry_date_list.append(np.nan)
-        
-      elif entry_date in ['3/1\n3/8']:
-        entry_date_list.append('2020-03-08')
+      try:
+        mmdd = entry_date.split('/') ## new_year_token (obsolete)
+        m = int(mmdd[0])
+        d = int(mmdd[1])
+        assert m <= 12
+          
+        if i+1 <= 447 and m > 6: ## 2020/06
+          y = 2019
+        elif i+1 <= 800 or (i+1 < 14900 and m > 6): ## 2020/12, 2021/06
+          y = 2020
+        elif i+1 <= 14900 or (i+1 < 22000 and m > 6): ## 2021/12, 2022/06
+          y = 2021
+        else: ## 2022/12
+          y = 2022
+          
+        str_ = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
       
-      elif entry_date in ['10/28(29)']:
-        entry_date_list.append('2020-10-28')
-      
-      elif entry_date in ['11/7(8)']:
-        entry_date_list.append('2020-11-07')
-      
-      elif entry_date in ['11/20(-27)']:
-        entry_date_list.append('2020-11-24')
+      except:
+        if entry_date != entry_date: ## NaN
+          str_ = np.nan
+        elif entry_date in ['x', 'X', '3/7-5/12']:
+          str_ = np.nan
+          
+        elif entry_date == '3/1\n3/8' and i < 100:
+          str_ = '2020-03-08'
+        elif entry_date == '10/28(29)' and i < 1000:
+          str_ = '2020-10-28'
+        elif entry_date == '11/7(8)' and i < 1000:
+          str_ = '2020-11-07'
+        elif entry_date == '11/20(-27)' and i < 1000:
+          str_ = '2020-11-24'
+        elif entry_date == '11/28(12/2)' and i < 1000:
+          str_ = '2020-11-30'
+        elif entry_date in ['12/4\n12/15', '12/7\n12/15'] and i < 1000:
+          str_ = '2020-12-15'
+        elif entry_date == '12/27(30)' and i < 1000:
+          str_ = '2020-12-29'
+          
+        elif entry_date == '5/5(6)' and i < 3000:
+          str_ = '2021-05-05'
+        elif entry_date == '5/17(18)' and i < 3000:
+          str_ = '2021-05-17'
+          
+        elif entry_date == '109/2/？':
+          str_ = np.nan
+        elif entry_date == '2022/1/7':
+          str_ = '2022-01-07'
         
-      elif entry_date in ['11/28(12/2)']:
-        entry_date_list.append('2020-11-30')
-        
-      elif entry_date in ['12/4\n12/15', '12/7\n12/15']:
-        entry_date_list.append('2020-12-15')
-        
-      elif entry_date in ['12/27(30)']:
-        entry_date_list.append('2020-12-29')
-        
-      elif entry_date in ['5/5(6)']:
-        entry_date_list.append('2021-05-05')
-        
-      elif entry_date in ['5/17(18)']:
-        entry_date_list.append('2021-05-17')
-        
-      else:
-        try:
-          mmdd = entry_date.split('/') ## new_year_token (2023)
-          m = int(mmdd[0])
-          d = int(mmdd[1])
-          if i+1 <= 447 and m > 6: ## 2020/06
-            y = 2019
-          elif i+1 <= 800 or (i+1 < 14900 and m > 6): ## 2020/12, 2021/06
-            y = 2020
-          elif i+1 <= 14900 or (i+1 < 22000 and m > 6): ## 2021/12, 2022/06
-            y = 2021
-          else: ## 2022/12
-            y = 2022
-            
-          if '109/2/？' == entry_date:
-            entry_date = np.nan
-          elif '2022/1/7' == entry_date:
-            entry_date = '2022-01-07'
-          else:
-            entry_date = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
-          entry_date_list.append(entry_date)
-        except:
-          print('Entry date, Case {:d}, {}'.format(i+1, entry_date))
-          entry_date_list.append(np.nan)
+        else:
+          print(f'Entry date, Case {i+1}, {entry_date}')
+          str_ = np.nan
+      entry_date_list.append(str_)
     
     return entry_date_list
   
@@ -483,72 +478,75 @@ class CaseSheet(ccm.Template):
     onset_date_list = []
     
     for i, onset_date in enumerate(self.getCol(self.coltag_onset_date)):
-      if onset_date != onset_date: ## NaN
-        onset_date_list.append(np.nan)
-      
-      elif onset_date in [
-        '1月', '2/18-25', '3月', '4/1-6/3', '4/6-5/15', '4/25-5/22', '4/26-5/26', '4/28-6/2', '4/29-5/27', '4/29-5/30', '4/30-5/18', 
-        '5/1-19', '5/2-13', '5/2-22', '5/2-6/1', '5/5-16', '5/5-17', '5/6-22', '5/6-27', '5/6-6/13', '5/7-20', '5/7-24', '5/7-25', '5/7-28', 
-        '5/8-20', '5/8-25', '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', '5/13-31',
-        '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/18-6/24', '5/19-6/10', 
-        '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
-        '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', '6/4-19', '6/4-23', '6/8-20', '6/10-22', '6/10-26', '6/10-7/5', '6/11-25', '6/14-21', 
-        '6/16-28', '6/17-7/3', '6/19-27', '6/19-7/4', '6/20-29', '6/20-7/11', '6/22-30', '6/22-7/1', '6/22-7/2', '6/22-7/9', '6/26-7/6', '6/26-7/10', '6/26-7/12', 
-        '7/1-7', '7/1-8', '7/5-15', '7/7-13', '7/7-14', '7/10-17', '7/10-22', '7/12-19', '7/12-27', '7/14-17', '7/14-26', 
-        '7/19-23', '7/19-25', '7/23-30', '7/23-31', '7/23-8/4', '7/24-28', '7/24-8/3', '7/25-28', '7/26-8/2', '7/27-8/5',
-        '8/2-7', '8/2-10', '8/4-9', '8/10-15', '8/16-28', '8/16(30)', '8/27-9/7', '8/28-9/4', '9/1-5', 
-        '9月下旬', '去年9月起', '10月中旬', '11月初', '11月上旬', '11月下旬', '12/', '12月上旬', '×', 'x', 'X', 'x\n*6/25',
-      ]:
-        onset_date_list.append(np.nan)
+      try:
+        mmdd = onset_date.split('/')
+        m = int(mmdd[0])
+        d = int(mmdd[1])
+        if i+1 < 100 and m > 6:
+          y = 2019
+        elif i+1 < 800:
+          y = 2020
+        elif i+1 < 10000 and m > 6:
+          y = 2020
+        elif i+1 < 14000:
+          y = 2021
+        elif i+1 < 20000 and m > 6:
+          y = 2021
+        else:
+          y = 2022
+        str_ = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
         
-      elif onset_date in ['4/11-4/13']:
-        onset_date_list.append('2022-04-12')
-      elif onset_date in ['5/26 採檢\n5/26 確診']:
-        onset_date_list.append('2021-05-26')
-      elif onset_date in ['6/7 喉嚨痛、疲勞\n6/8 發燒']:
-        onset_date_list.append('2021-06-07')
-      elif onset_date in ['6/8 發燒']:
-        onset_date_list.append('2021-06-08')
-      elif onset_date in ['7月、11/1']:
-        onset_date_list.append('2020-11-01')
-      elif onset_date in ['5/8-10']:
-        onset_date_list.append('2021-05-09')
-      elif onset_date in ['7/23-24']:
-        onset_date_list.append('2021-07-23')
-      elif onset_date in ['7/29-31']:
-        onset_date_list.append('2021-07-30')
-      elif onset_date in ['8/4-5']:
-        onset_date_list.append('2021-08-04')
-      elif onset_date in ['8/7-8']:
-        onset_date_list.append('2021-08-07')
-      elif onset_date in ['8/7-9']:
-        onset_date_list.append('2021-08-08')
-      elif onset_date in ['9/7-9']:
-        onset_date_list.append('2021-09-08')
+      except:
+        if onset_date != onset_date: ## NaN
+          str_ = np.nan
         
-      else:
-        try:
-          mmdd = onset_date.split('/')
-          m = int(mmdd[0])
-          d = int(mmdd[1])
-          if i+1 < 100 and m > 6:
-            y = 2019
-          elif i+1 < 800:
-            y = 2020
-          elif i+1 < 10000 and m > 6:
-            y = 2020
-          elif i+1 < 14000:
-            y = 2021
-          elif i+1 < 20000 and m > 6:
-            y = 2021
-          else:
-            y = 2022
-          onset_date = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
-          onset_date_list.append(onset_date)
-        except:
+        elif onset_date in [
+          '1月', '2/18-25', '3月', '4/1-6/3', '4/6-5/15', '4/25-5/22', '4/26-5/26', '4/28-6/2', '4/29-5/27', '4/29-5/30', '4/30-5/18', 
+          '5/1-19', '5/2-13', '5/2-22', '5/2-6/1', '5/5-16', '5/5-17', '5/6-22', '5/6-27', '5/6-6/13', '5/7-20', '5/7-24', '5/7-25', '5/7-28', 
+          '5/8-20', '5/8-25', '5/10-16', '5/10-5/18', '5/10-20', '5/10-21', '5/10-23', '5/11-27', '5/13-25', '5/13-27', '5/13-30', '5/13-31',
+          '5/14-22', '5/14-29', '5/14-6/8', '5/15-26', '5/15-6/4', '5/16\n*5/24', '5/18-6/2', '5/18-6/24', '5/19-6/10', 
+          '5/20-30', '5/20-31', '5/21-6/6', '5/22-6/7', '5/22-6/9', '5/23-6/12', '5/24-6/5', '5/28-6/11', '5/28-6/13',
+          '6/1-2', '6/1-14', '6/1-15', '6/3-16', '6/3-18', '6/4-19', '6/4-23', '6/8-20', '6/10-22', '6/10-26', '6/10-7/5', '6/11-25', '6/14-21', 
+          '6/16-28', '6/17-7/3', '6/19-27', '6/19-7/4', '6/20-29', '6/20-7/11', '6/22-30', '6/22-7/1', '6/22-7/2', '6/22-7/9', '6/26-7/6', '6/26-7/10', '6/26-7/12', 
+          '7/1-7', '7/1-8', '7/5-15', '7/7-13', '7/7-14', '7/10-17', '7/10-22', '7/12-19', '7/12-27', '7/14-17', '7/14-26', 
+          '7/19-23', '7/19-25', '7/23-30', '7/23-31', '7/23-8/4', '7/24-28', '7/24-8/3', '7/25-28', '7/26-8/2', '7/27-8/5',
+          '8/2-7', '8/2-10', '8/4-9', '8/10-15', '8/16-28', '8/16(30)', '8/27-9/7', '8/28-9/4', '9/1-5', 
+          '9月下旬', '去年9月起', '10月中旬', '11月初', '11月上旬', '11月下旬', '12月上旬', 
+          '×', 'x', 'X', 'x\n*6/25',
+        ]:
+          str_ = np.nan
+          
+        elif onset_date == '7月、11/1' and i < 800:
+          str_ = '2020-11-01'
+          
+        elif onset_date == '5/8-10' and i < 1300:
+          str_ = '2021-05-09'
+        elif onset_date == '6/7 喉嚨痛、疲勞\n6/8 發燒' and i < 13000:
+          str_ = '2021-06-07'
+        elif onset_date == '6/8 發燒' and i < 13000:
+          str_ = '2021-06-08'
+        elif onset_date == '7/23-24' and i < 17000:
+          str_ = '2021-07-23'
+        elif onset_date == '7/29-31' and i < 17000:
+          str_ = '2021-07-30'
+        elif onset_date == '8/4-5' and i < 17000:
+          str_ = '2021-08-04'
+        elif onset_date == '8/7-8' and i < 17000:
+          str_ = '2021-08-07'
+        elif onset_date == '8/7-9' and i < 17000:
+          str_ = '2021-08-08'
+        elif onset_date == '9/7-9' and i < 17000:
+          str_ = '2021-09-08'
+          
+        elif onset_date == '4/11-4/13' and i < 32000:
+          str_ = '2022-04-12'
+          
+        else:
           print('Onset date, Case {:d}, {}'.format(i+1, onset_date))
-          onset_date_list.append(np.nan)
+          str_ = np.nan
     
+      onset_date_list.append(str_)
+      
     return onset_date_list
   
   def getChannel(self):
@@ -788,8 +786,8 @@ class CaseSheet(ccm.Template):
     
     ## Initialize stocks
     trans_key_list = ['imported', 'linked', 'unlinked', 'fleet', 'plane', 'unknown']
-    stock_r = ccm.initializeStock_dailyCounts(trans_key_list)
-    stock_o = ccm.initializeStock_dailyCounts(trans_key_list)
+    stock_r = cvcm.initializeStock_dailyCounts(trans_key_list)
+    stock_o = cvcm.initializeStock_dailyCounts(trans_key_list)
     
     ## Loop over cases
     for report_date, onset_date, trans, link in zip(report_date_list, onset_date_list, trans_list, link_list):
@@ -806,7 +804,7 @@ class CaseSheet(ccm.Template):
         key = trans
         
       try:
-        ind = ccm.indexForOverall(report_date)
+        ind = cvcm.indexForOverall(report_date)
         stock_r[key][ind] += 1
       except IndexError: ## If NaN
         pass
@@ -816,7 +814,7 @@ class CaseSheet(ccm.Template):
         continue
       
       try:
-        ind = ccm.indexForOverall(onset_date)
+        ind = cvcm.indexForOverall(onset_date)
         stock_o[key][ind] += 1
       except IndexError: ## If NaN
         pass
@@ -836,7 +834,7 @@ class CaseSheet(ccm.Template):
     stock.append('  - `fleet`: on boat')
     stock.append('  - `plane`: on plane')
     stock.append('  - `unknown`: undetermined`')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     
     key = 'case_by_transmission_by_onset_day'
     stock = []
@@ -851,7 +849,7 @@ class CaseSheet(ccm.Template):
     stock.append('  - `plane`: on plane')
     stock.append('  - `unknown`: undetermined`')
     stock.append('- Cases without onset date do not show up in the file')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_caseByTransmission(self, mode='both'):
@@ -859,21 +857,21 @@ class CaseSheet(ccm.Template):
       stock_r, stock_o = self.increment_caseByTransmission()
       
       stock_r = pd.DataFrame(stock_r)
-      stock_r = ccm.adjustDateRange(stock_r)
+      stock_r = cvcm.adjustDateRange(stock_r)
       
       stock_o = pd.DataFrame(stock_o)
-      stock_o = ccm.adjustDateRange(stock_o)
+      stock_o = cvcm.adjustDateRange(stock_o)
     
-    for gr in ccm.GROUP_LIST:
+    for gr in cvcm.GROUP_LIST:
       if mode in ['data', 'both']:
-        data_r = ccm.truncateStock(stock_r, gr)
-        data_o = ccm.truncateStock(stock_o, gr)
+        data_r = cvcm.truncateStock(stock_r, gr)
+        data_o = cvcm.truncateStock(stock_o, gr)
         
         ## Save
-        name = '{}processed_data/{}/case_by_transmission_by_report_day.csv'.format(ccm.DATA_PATH, gr)
-        ccm.saveCsv(name, data_r)
-        name = '{}processed_data/{}/case_by_transmission_by_onset_day.csv'.format(ccm.DATA_PATH, gr)
-        ccm.saveCsv(name, data_o)
+        name = '{}processed_data/{}/case_by_transmission_by_report_day.csv'.format(cvcm.DATA_PATH, gr)
+        cvcm.saveCsv(name, data_r)
+        name = '{}processed_data/{}/case_by_transmission_by_onset_day.csv'.format(cvcm.DATA_PATH, gr)
+        cvcm.saveCsv(name, data_o)
       
       if mode in ['readme', 'both']:
         self.makeReadme_caseByTransmission(gr)
@@ -887,8 +885,8 @@ class CaseSheet(ccm.Template):
     
     ## Initialize data dict
     det_key_list = ['airport', 'quarantine', 'isolation', 'monitoring', 'hospital', 'overseas', 'no_data']
-    stock_r = ccm.initializeStock_dailyCounts(det_key_list)
-    stock_o = ccm.initializeStock_dailyCounts(det_key_list)
+    stock_r = cvcm.initializeStock_dailyCounts(det_key_list)
+    stock_o = cvcm.initializeStock_dailyCounts(det_key_list)
     
     ## Loop over cases
     for report_date, onset_date, trans, channel in zip(report_date_list, onset_date_list, trans_list, channel_list):
@@ -902,7 +900,7 @@ class CaseSheet(ccm.Template):
         key = channel
       
       try:
-        ind = ccm.indexForOverall(report_date)
+        ind = cvcm.indexForOverall(report_date)
         stock_r[key][ind] += 1
       except IndexError: ## If NaN
         pass
@@ -912,7 +910,7 @@ class CaseSheet(ccm.Template):
         continue
       
       try:
-        ind = ccm.indexForOverall(onset_date)
+        ind = cvcm.indexForOverall(onset_date)
         stock_o[key][ind] += 1
       except IndexError: ## If NaN
         pass
@@ -933,7 +931,7 @@ class CaseSheet(ccm.Template):
     stock.append('  - `hospital`: detected in community`')
     stock.append('  - `overseas`: diagnosed overseas`')
     stock.append('  - `no_data`: no detection channel data`')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     
     key = 'case_by_detection_by_onset_day'
     stock = []
@@ -948,30 +946,30 @@ class CaseSheet(ccm.Template):
     stock.append('  - `hospital`: detected in community`')
     stock.append('  - `overseas`: diagnosed overseas`')
     stock.append('  - `no_data`: no detection channel data`')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_caseByDetection(self, mode='both'):
-    gr = ccm.GROUP_2020
+    gr = cvcm.GROUP_2020
     
     if mode in ['data', 'both']:
       stock_r, stock_o = self.increment_caseByDetection()
       
       stock_r = pd.DataFrame(stock_r)
-      stock_r = ccm.adjustDateRange(stock_r)
+      stock_r = cvcm.adjustDateRange(stock_r)
       
       stock_o = pd.DataFrame(stock_o)
-      stock_o = ccm.adjustDateRange(stock_o)
+      stock_o = cvcm.adjustDateRange(stock_o)
       
       ## Make data frame
-      data_r = ccm.truncateStock(stock_r, gr)
-      data_o = ccm.truncateStock(stock_o, gr)
+      data_r = cvcm.truncateStock(stock_r, gr)
+      data_o = cvcm.truncateStock(stock_o, gr)
       
       ## Save
-      name = '{}processed_data/{}/case_by_detection_by_report_day.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_r)
-      name = '{}processed_data/{}/case_by_detection_by_onset_day.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_o)
+      name = '{}processed_data/{}/case_by_detection_by_report_day.csv'.format(cvcm.DATA_PATH, gr)
+      cvcm.saveCsv(name, data_r)
+      name = '{}processed_data/{}/case_by_detection_by_onset_day.csv'.format(cvcm.DATA_PATH, gr)
+      cvcm.saveCsv(name, data_o)
     
     if mode in ['readme', 'both']:
       self.makeReadme_caseByDetection(gr)
@@ -984,14 +982,14 @@ class CaseSheet(ccm.Template):
     symp_list = self.getSymptom()
     
     stock = {'x_list_list': [], 'y_list_list': [], 'nb_dict': {'N_total': 0, 'N_imported': 0, 'N_data': 0}}
-    stock_dict = ccm.initializeStockDict_general(stock)
+    stock_dict = cvcm.initializeStockDict_general(stock)
     
     ## Loop over case
     for report_date, trans, trav_hist, symp in zip(report_date_list, trans_list, trav_hist_list, symp_list):
       if trans != trans:
         continue
       
-      index_list = ccm.makeIndexList(report_date)
+      index_list = cvcm.makeIndexList(report_date)
       
       for ind, stock in zip(index_list, stock_dict.values()):
         if ind != ind: ## If NaN
@@ -1044,8 +1042,8 @@ class CaseSheet(ccm.Template):
         y_bool_mat.append(y_bool_arr)
       y_bool_mat = np.array(y_bool_mat)
       
-      x_norm_mat = np.array([ccm.normalizeBoolArr(x_bool_arr) for x_bool_arr in x_bool_mat])
-      y_norm_mat = np.array([ccm.normalizeBoolArr(y_bool_arr) for y_bool_arr in y_bool_mat])
+      x_norm_mat = np.array([cvcm.normalizeBoolArr(x_bool_arr) for x_bool_arr in x_bool_mat])
+      y_norm_mat = np.array([cvcm.normalizeBoolArr(y_bool_arr) for y_bool_arr in y_bool_mat])
       
       stock['x_hist'] = x_hist
       stock['y_hist'] = y_hist
@@ -1080,11 +1078,11 @@ class CaseSheet(ccm.Template):
     tot_dict.update(y_dict)
     tot_dict.update(x_dict)
     key_arr = list(tot_dict.keys())
-    x_list_fr = [ccm.SYMPTOM_DICT[x]['fr'] for x in x_list]
+    x_list_fr = [cvcm.SYMPTOM_DICT[x]['fr'] for x in x_list]
     value_arr = list(tot_dict.values())
     label_arr_en = ['', '', ''] + y_list + [x[0].upper() + x[1:] for x in x_list]
-    label_arr_fr = ['', '', ''] + [ccm.TRAVEL_HISTORY_DICT[y]['fr'] for y in y_list] + [x[0].upper() + x[1:] for x in x_list_fr]
-    label_arr_zh = ['', '', ''] + [ccm.TRAVEL_HISTORY_DICT[y]['zh-tw'] for y in y_list] + [ccm.SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
+    label_arr_fr = ['', '', ''] + [cvcm.TRAVEL_HISTORY_DICT[y]['fr'] for y in y_list] + [x[0].upper() + x[1:] for x in x_list_fr]
+    label_arr_zh = ['', '', ''] + [cvcm.TRAVEL_HISTORY_DICT[y]['zh-tw'] for y in y_list] + [cvcm.SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
     
     ## Make new stocks
     stock_c = {'symptom': symp_arr, 'trav_hist': trav_hist_arr, 'corr': corr_arr, 'count': count_arr}
@@ -1101,7 +1099,7 @@ class CaseSheet(ccm.Template):
     stock.append('  - `trav_hist`: country as travel history')
     stock.append('  - `corr`: correlation coefficient between `symptom` & `trav_hist`')
     stock.append('  - `count`: number of confirmed cases having `symptom` & `trav_hist` simultaneously')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     
     key = 'travel_history_symptom_correlations_label'
     stock = []
@@ -1113,11 +1111,11 @@ class CaseSheet(ccm.Template):
     stock.append('  - `label`: label in English')
     stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
     stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_travHistSymptomCorr(self, mode='both'):
-    gr = ccm.GROUP_2020
+    gr = cvcm.GROUP_2020
     
     if mode in ['data', 'both']:
       stock_dict = self.increment_travHistSymptomCorr()
@@ -1130,10 +1128,10 @@ class CaseSheet(ccm.Template):
       data_l = pd.DataFrame(data_l)
       
       ## Save
-      name = '{}processed_data/{}/travel_history_symptom_correlations.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_c)
-      name = '{}processed_data/{}/travel_history_symptom_correlations_label.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_l)
+      name = '{}processed_data/{}/travel_history_symptom_correlations.csv'.format(cvcm.DATA_PATH, gr)
+      cvcm.saveCsv(name, data_c)
+      name = '{}processed_data/{}/travel_history_symptom_correlations_label.csv'.format(cvcm.DATA_PATH, gr)
+      cvcm.saveCsv(name, data_l)
     
     if mode in ['readme', 'both']:
       self.makeReadme_travHistSymptomCorr(gr)
@@ -1146,14 +1144,14 @@ class CaseSheet(ccm.Template):
     symp_list = self.getSymptom()
     
     stock = {'x_list_list': [], 'y_list_list': [], 'nb_dict': {'N_total': 0, 'N_data': 0}}
-    stock_dict = ccm.initializeStockDict_general(stock)
+    stock_dict = cvcm.initializeStockDict_general(stock)
     
     ## Loop over case
     for report_date, trans, age, symp in zip(report_date_list, trans_list, age_list, symp_list):
       if trans != trans:
         continue
       
-      index_list = ccm.makeIndexList(report_date)
+      index_list = cvcm.makeIndexList(report_date)
       
       for ind, stock in zip(index_list, stock_dict.values()):
         if ind != ind: ## If NaN
@@ -1184,7 +1182,7 @@ class CaseSheet(ccm.Template):
       
       ## Make histogram
       y_hist = clt.Counter(stock['y_list_list'])
-      for key in ccm.AGE_DICT:
+      for key in cvcm.AGE_DICT:
         y_hist[key] = y_hist.get(key, 0)
       y_hist = sorted(y_hist.items(), key=lambda t: str(len(t[0]))+t[0], reverse=True)
     
@@ -1202,8 +1200,8 @@ class CaseSheet(ccm.Template):
         y_bool_mat.append(y_bool_arr)
       y_bool_mat = np.array(y_bool_mat)
       
-      x_norm_mat = np.array([ccm.normalizeBoolArr(x_bool_arr) for x_bool_arr in x_bool_mat])
-      y_norm_mat = np.array([ccm.normalizeBoolArr(y_bool_arr) for y_bool_arr in y_bool_mat])
+      x_norm_mat = np.array([cvcm.normalizeBoolArr(x_bool_arr) for x_bool_arr in x_bool_mat])
+      y_norm_mat = np.array([cvcm.normalizeBoolArr(y_bool_arr) for y_bool_arr in y_bool_mat])
       
       stock['x_hist'] = x_hist
       stock['y_hist'] = y_hist
@@ -1238,11 +1236,11 @@ class CaseSheet(ccm.Template):
     tot_dict.update(y_dict)
     tot_dict.update(x_dict)
     key_arr = list(tot_dict.keys())
-    x_list_fr = [ccm.SYMPTOM_DICT[x]['fr'] for x in x_list]
+    x_list_fr = [cvcm.SYMPTOM_DICT[x]['fr'] for x in x_list]
     value_arr = list(tot_dict.values())
     label_arr_en = ['', ''] + y_list + [x[0].upper() + x[1:] for x in x_list]
-    label_arr_fr = ['', ''] + [ccm.AGE_DICT[y]['fr'] for y in y_list] + [x[0].upper() + x[1:] for x in x_list_fr]
-    label_arr_zh = ['', ''] + [ccm.AGE_DICT[y]['zh-tw'] for y in y_list] + [ccm.SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
+    label_arr_fr = ['', ''] + [cvcm.AGE_DICT[y]['fr'] for y in y_list] + [x[0].upper() + x[1:] for x in x_list_fr]
+    label_arr_zh = ['', ''] + [cvcm.AGE_DICT[y]['zh-tw'] for y in y_list] + [cvcm.SYMPTOM_DICT[x]['zh-tw'] for x in x_list]
     
     ## Make new stocks
     stock_c = {'symptom': symp_arr, 'age': age_arr, 'corr': corr_arr, 'count': count_arr}
@@ -1259,7 +1257,7 @@ class CaseSheet(ccm.Template):
     stock.append('  - `age`: age range')
     stock.append('  - `corr`: correlation coefficient between `symptom` & `age`')
     stock.append('  - `count`: number of confirmed cases from `age` having `symptom`')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     
     key = 'age_symptom_correlations_label'
     stock = []
@@ -1271,11 +1269,11 @@ class CaseSheet(ccm.Template):
     stock.append('  - `label`: label in English')
     stock.append('  - `label_fr`: label in French (contains non-ASCII characters)')
     stock.append('  - `label_zh`: label in Mandarin (contains non-ASCII characters)')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_ageSymptomCorr(self, mode='both'):
-    gr = ccm.GROUP_2020
+    gr = cvcm.GROUP_2020
     
     if mode in ['data', 'both']:
       stock_dict = self.increment_ageSymptomCorr()
@@ -1288,10 +1286,10 @@ class CaseSheet(ccm.Template):
       data_l = pd.DataFrame(data_l)
       
       ## Save
-      name = '{}processed_data/{}/age_symptom_correlations.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_c)
-      name = '{}processed_data/{}/age_symptom_correlations_label.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_l)
+      name = '{}processed_data/{}/age_symptom_correlations.csv'.format(cvcm.DATA_PATH, gr)
+      cvcm.saveCsv(name, data_c)
+      name = '{}processed_data/{}/age_symptom_correlations_label.csv'.format(cvcm.DATA_PATH, gr)
+      cvcm.saveCsv(name, data_l)
       
     if mode in ['readme', 'both']:
       self.makeReadme_ageSymptomCorr(gr)
@@ -1305,7 +1303,7 @@ class CaseSheet(ccm.Template):
     
     trans_key_list = ['total'] + self.trans_key_list
     stock = {key: [] for key in trans_key_list}
-    stock_dict = ccm.initializeStockDict_general(stock)
+    stock_dict = cvcm.initializeStockDict_general(stock)
 
     for report_date, entry_date, onset_date, trans in zip(report_date_list, entry_date_list, onset_date_list, trans_list):
       if trans != trans:
@@ -1316,12 +1314,12 @@ class CaseSheet(ccm.Template):
       else:
         key = 'others'
         
-      ord_rep = ccm.ISODateToOrd(report_date)
-      ord_entry = ccm.ISODateToOrd(entry_date) if entry_date == entry_date else 0
-      ord_onset = ccm.ISODateToOrd(onset_date) if onset_date == onset_date else 0
+      ord_rep = cvcm.ISODateToOrd(report_date)
+      ord_entry = cvcm.ISODateToOrd(entry_date) if entry_date == entry_date else 0
+      ord_onset = cvcm.ISODateToOrd(onset_date) if onset_date == onset_date else 0
       diff = min(ord_rep-ord_entry, ord_rep-ord_onset)
       
-      index_list = ccm.makeIndexList(report_date)
+      index_list = cvcm.makeIndexList(report_date)
       
       for ind, stock in zip(index_list, stock_dict.values()):
         if ind != ind: ## If NaN
@@ -1342,7 +1340,7 @@ class CaseSheet(ccm.Template):
     
     for gr, stock in stock_dict.items():
       for key in trans_key_list:
-        n_arr, ctr_bins = ccm.makeHist(stock[key], bins)
+        n_arr, ctr_bins = cvcm.makeHist(stock[key], bins)
         n_arr = n_arr.round(0).astype(int)
         stock[key] = n_arr
       
@@ -1368,11 +1366,11 @@ class CaseSheet(ccm.Template):
     stock.append('  - `others`: on plane, on boat, & unknown')
     stock.append('- Value: number of case counts')
     stock.append('- This information is not available for all cases.')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_diffByTransmission(self, mode='both'):
-    gr = ccm.GROUP_2020
+    gr = cvcm.GROUP_2020
     
     if mode in ['data', 'both']:
       stock_dict = self.increment_diffByTransmission()
@@ -1384,8 +1382,8 @@ class CaseSheet(ccm.Template):
       data = {key: stock[key] for key in col_tag_list}
       data = pd.DataFrame(data)
       
-      name = '{}processed_data/{}/difference_by_transmission.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data)
+      name = '{}processed_data/{}/difference_by_transmission.csv'.format(cvcm.DATA_PATH, gr)
+      cvcm.saveCsv(name, data)
     
     if mode in ['readme', 'both']:
       self.makeReadme_diffByTransmission(gr)

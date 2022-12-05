@@ -1,8 +1,8 @@
 
     ################################
-    ##  COVID_death.py            ##
+    ##  death.py                  ##
     ##  Chieh-An Lin              ##
-    ##  2022.06.24                ##
+    ##  2022.12.05                ##
     ################################
 
 import os
@@ -13,12 +13,12 @@ import collections as clt
 import numpy as np
 import pandas as pd
 
-import COVID_common as ccm
+import covid.common as cvcm
 
 ################################################################################
 ## Class - death sheet
 
-class DeathSheet(ccm.Template):
+class DeathSheet(cvcm.Template):
   
   def __init__(self, verbose=True):
     self.coltag_row_id = 'id'
@@ -36,8 +36,8 @@ class DeathSheet(ccm.Template):
     self.coltag_confirmed_date = '確診日'
     self.coltag_death_date = '死亡日'
     
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_death.csv'.format(ccm.DATA_PATH)
-    data = ccm.loadCsv(name, verbose=verbose)
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_death.csv'.format(cvcm.DATA_PATH)
+    data = cvcm.loadCsv(name, verbose=verbose)
     ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002
     ## https://covid-19.nchc.org.tw/api/download/covidtable_taiwan_cdc_death_2022-06-22.csv
     
@@ -95,29 +95,33 @@ class DeathSheet(ccm.Template):
     return age_list
   
   def getConfirmedDate(self):
+    length = self.getCol(self.coltag_confirmed_date).size
     confirmed_date_list = []
     
     for i, confirmed_date in enumerate(self.getCol(self.coltag_confirmed_date)):
-      if confirmed_date != confirmed_date:
-        confirmed_date = np.nan
-      elif confirmed_date in ['--', '調查中', '2022/倦怠', '2022/調查中']:
-        confirmed_date = np.nan
-      elif confirmed_date == 'Dec-21':
-        confirmed_date = '2021-12-21'
-      elif confirmed_date == '5/2o':
-        confirmed_date = '2021-05-20'
-      elif confirmed_date == '4/27':
-        confirmed_date = '2022-04-27'
-      elif confirmed_date == '4/28':
-        confirmed_date = '2022-04-28'
-      else:
-        try:
-          confirmed_date = [int(value) for value in confirmed_date.split('/')]
-          confirmed_date = '{:04d}-{:02d}-{:02d}'.format(*confirmed_date)
-        except:
-          print('ID = {}, confirmed_date = {}'.format(i+1, confirmed_date))
-          confirmed_date = np.nan
-      confirmed_date_list.append(confirmed_date)
+      try:
+        str_ = [int(value) for value in confirmed_date.split('/')]
+        str_ = '{:04d}-{:02d}-{:02d}'.format(*str_)
+      
+      except:
+        if confirmed_date != confirmed_date:
+          str_ = np.nan
+        elif confirmed_date in ['--', '調查中', '2022/倦怠', '2022/調查中']:
+          str_ = np.nan
+        elif confirmed_date == '5/2o' and i > length-50:
+          str_ = '2021-05-20'
+        elif confirmed_date == 'Dec-21' and i > length-900:
+          str_ = '2021-12-21'
+        elif confirmed_date == '4/27' and i > length-1700:
+          str_ = '2022-04-27'
+        elif confirmed_date == '4/28' and i > length-1700:
+          str_ = '2022-04-28'
+        elif confirmed_date == ' 10/16' and i > length-13700:
+          str_ = '2022-10-16'
+        else:
+          print(f'Confirmed data, ID = {i+1}, index = {i-length}, confirmed_date = {confirmed_date}')
+          str_ = np.nan
+      confirmed_date_list.append(str_)
       
     return confirmed_date_list
   
@@ -129,19 +133,19 @@ class DeathSheet(ccm.Template):
     
     ## Initialize stocks
     col_tag_list = ['death']
-    stock = ccm.initializeStock_dailyCounts(col_tag_list)
+    stock = cvcm.initializeStock_dailyCounts(col_tag_list)
     
     ## Loop over cases
     for report_date in report_date_list:
       try:
-        ind = ccm.indexForOverall(report_date)
+        ind = cvcm.indexForOverall(report_date)
         stock['death'][ind] += 1
       except IndexError: ## If NaN
         pass
         
     ## Make avg
     for key in col_tag_list:
-      stock[key+'_avg'] = ccm.makeMovingAverage(stock[key])
+      stock[key+'_avg'] = cvcm.makeMovingAverage(stock[key])
     return stock
     
   def makeReadme_deathCounts(self, gr):
@@ -153,7 +157,7 @@ class DeathSheet(ccm.Template):
     stock.append('  - `date`')
     stock.append('  - `death`')
     stock.append('  - `death_avg`: 7-day moving average of `death`')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     return
   
   ## Not used
@@ -161,15 +165,15 @@ class DeathSheet(ccm.Template):
     if mode in ['data', 'both']:
       stock = self.increment_deathCounts()
       stock = pd.DataFrame(stock)
-      stock = ccm.adjustDateRange(stock)
+      stock = cvcm.adjustDateRange(stock)
     
-    for gr in ccm.GROUP_LIST:
+    for gr in cvcm.GROUP_LIST:
       if mode in ['data', 'both']:
-        data = ccm.truncateStock(stock, gr)
+        data = cvcm.truncateStock(stock, gr)
         
         ## Save
-        name = '{}processed_data/{}/death_counts.csv'.format(ccm.DATA_PATH, gr)
-        ccm.saveCsv(name, data)
+        name = '{}processed_data/{}/death_counts.csv'.format(cvcm.DATA_PATH, gr)
+        cvcm.saveCsv(name, data)
       
       if mode in ['readme', 'both']:
         self.makeReadme_deathCounts(gr)
@@ -180,17 +184,17 @@ class DeathSheet(ccm.Template):
     confirmed_date_list = self.getConfirmedDate()
     
     stock = {'list': []}
-    stock_dict = ccm.initializeStockDict_general(stock)
+    stock_dict = cvcm.initializeStockDict_general(stock)
     
     for report_date, confirmed_date in zip(report_date_list, confirmed_date_list):
       if confirmed_date != confirmed_date:
         continue
       
-      ord_rep = ccm.ISODateToOrd(report_date)
-      ord_cf = ccm.ISODateToOrd(confirmed_date)
+      ord_rep = cvcm.ISODateToOrd(report_date)
+      ord_cf = cvcm.ISODateToOrd(confirmed_date)
       diff = ord_rep - ord_cf
       
-      index_list = ccm.makeIndexList(report_date)
+      index_list = cvcm.makeIndexList(report_date)
       
       for ind, stock in zip(index_list, stock_dict.values()):
         if ind != ind: ## If NaN
@@ -207,7 +211,7 @@ class DeathSheet(ccm.Template):
     bins[-1] = 999
     
     for gr, stock in stock_dict.items():
-      n_arr, ctr_bins = ccm.makeHist(stock['list'], bins)
+      n_arr, ctr_bins = cvcm.makeHist(stock['list'], bins)
       n_arr = n_arr.round(0).astype(int)
       ctr_bins = ctr_bins.round(0).astype(int)
       ctr_bins[-1] = upper
@@ -232,10 +236,10 @@ class DeathSheet(ccm.Template):
       stock_c = {'difference': stock['bins']}
       stock_l = {'key': key_list}
       
-      if gr == ccm.GROUP_OVERALL:
+      if gr == cvcm.GROUP_OVERALL:
         stock_c['total'] = stock['n_arr']
         stock_l['total'] = [stock[key] for key in key_list]
-        for year in ccm.GROUP_YEAR_LIST:
+        for year in cvcm.GROUP_YEAR_LIST:
           stock_c[year] = stock_dict[year]['n_arr']
           stock_l[year] = [stock_dict[year][key] for key in key_list]
       else:
@@ -253,14 +257,14 @@ class DeathSheet(ccm.Template):
     stock.append('- Row: delay in days between case and death report')
     stock.append('- Column: transmission type')
     stock.append('  - `difference`: see row')
-    if gr == ccm.GROUP_LATEST:
+    if gr == cvcm.GROUP_LATEST:
       stock.append('  - `total`: last 90 days')
-    elif gr == ccm.GROUP_OVERALL:
+    elif gr == cvcm.GROUP_OVERALL:
       stock.append('  - `total`: overall stats')
       stock.append('  - `YYYY`: during year `YYYY`')
-    elif gr in ccm.GROUP_YEAR_LIST:
+    elif gr in cvcm.GROUP_YEAR_LIST:
       stock.append('  - `total`: all year {}'.format(gr))
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     
     key = 'death_delay_label'
     stock = []
@@ -271,12 +275,12 @@ class DeathSheet(ccm.Template):
     stock.append('  - `avg`: average delay')
     stock.append('- Column')
     stock.append('  - `key`')
-    if gr == ccm.GROUP_OVERALL:
+    if gr == cvcm.GROUP_OVERALL:
       stock.append('  - `total`: overall stats')
       stock.append('  - `YYYY`: during year `YYYY`')
     else:
       stock.append('  - `value`')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_deathDelay(self, mode='both'):
@@ -285,7 +289,7 @@ class DeathSheet(ccm.Template):
       stock_dict = self.makeHist_deathDelay(stock_dict)
       stock_dict_c, stock_dict_l = self.makeStock_deathDelay(stock_dict)
     
-    for gr in ccm.GROUP_LIST:
+    for gr in cvcm.GROUP_LIST:
       if mode in ['data', 'both']:
         data_c = stock_dict_c[gr]
         data_c = pd.DataFrame(data_c)
@@ -294,10 +298,10 @@ class DeathSheet(ccm.Template):
         data_l = pd.DataFrame(data_l)
         
         ## Save
-        name = '{}processed_data/{}/death_delay.csv'.format(ccm.DATA_PATH, gr)
-        ccm.saveCsv(name, data_c)
-        name = '{}processed_data/{}/death_delay_label.csv'.format(ccm.DATA_PATH, gr)
-        ccm.saveCsv(name, data_l)
+        name = '{}processed_data/{}/death_delay.csv'.format(cvcm.DATA_PATH, gr)
+        cvcm.saveCsv(name, data_c)
+        name = '{}processed_data/{}/death_delay_label.csv'.format(cvcm.DATA_PATH, gr)
+        cvcm.saveCsv(name, data_l)
       
       if mode in ['readme', 'both']:
         self.makeReadme_deathDelay(gr)
@@ -307,7 +311,7 @@ class DeathSheet(ccm.Template):
     report_date_list = self.getReportDate()
     age_list = self.getAge()
     
-    year_list = ['total'] + ccm.GROUP_YEAR_LIST
+    year_list = ['total'] + cvcm.GROUP_YEAR_LIST
     age_key_list = ['total'] + self.age_key_list
     
     ## Initialize stock dict

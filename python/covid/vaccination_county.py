@@ -1,9 +1,9 @@
 
-    ###################################
-    ##  COVID_vaccination_county.py  ##
-    ##  Chieh-An Lin                 ##
-    ##  2022.06.22                   ##
-    ###################################
+    ################################
+    ##  vaccination_county.py     ##
+    ##  Chieh-An Lin              ##
+    ##  2022.12.05                ##
+    ################################
 
 import os
 import sys
@@ -14,12 +14,12 @@ import scipy as sp
 import scipy.signal as signal
 import pandas as pd
 
-import COVID_common as ccm
+import covid.common as cvcm
 
 ################################################################################
 ## Class - vaccination county sheet
 
-class VaccinationCountySheet(ccm.Template):
+class VaccinationCountySheet(cvcm.Template):
   
   def __init__(self, verbose=True):
     self.coltag_row_id = 'ID'
@@ -31,8 +31,8 @@ class VaccinationCountySheet(ccm.Template):
     self.coltag_3rd_dose_2 = '加強劑'
     self.coltag_3rd_dose_1 = '追加劑'
     
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv'.format(ccm.DATA_PATH)
-    data = ccm.loadCsv(name, verbose=verbose)
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv'.format(cvcm.DATA_PATH)
+    data = cvcm.loadCsv(name, verbose=verbose)
     ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006
     ## https://covid-19.nchc.org.tw/api/download/vaccineCityLevel_2022-06-22.csv
     
@@ -60,7 +60,7 @@ class VaccinationCountySheet(ccm.Template):
     
     for county in self.getCol(self.coltag_county):
       try:
-        county_list.append(ccm.COUNTY_DICT_2[county])
+        county_list.append(cvcm.COUNTY_DICT_2[county])
       except KeyError:
         print('County, {}'.format(county))
         county_list.append('unknown')
@@ -72,7 +72,7 @@ class VaccinationCountySheet(ccm.Template):
     
     for age in self.getCol(self.coltag_age):
       try:
-        age_list.append(ccm.AGE_DICT_3[age])
+        age_list.append(cvcm.AGE_DICT_3[age])
       except KeyError:
         print('Age, {}'.format(age))
         age_list.append('unknown')
@@ -100,9 +100,9 @@ class VaccinationCountySheet(ccm.Template):
     dose_3rd_1_list = self.get3rdDose1()
     dose_3rd_2_list = self.get3rdDose2()
     
-    ord_list = [ccm.ISODateToOrd(date) for date in set(date_list)]
+    ord_list = [cvcm.ISODateToOrd(date) for date in set(date_list)]
     ord_max = max(ord_list)
-    latest_date = ccm.ordDateToISO(ord_max)
+    latest_date = cvcm.ordDateToISO(ord_max)
     
     stock = {'latest_date': latest_date}
     
@@ -114,7 +114,7 @@ class VaccinationCountySheet(ccm.Template):
     return stock
   
   def addLabel_vaccinationByCounty(self, stock):
-    county_dict = {dict_['tag']: dict_ for dict_ in ccm.COUNTY_DICT.values()}
+    county_dict = {dict_['tag']: dict_ for dict_ in cvcm.COUNTY_DICT.values()}
     county_key_list = ['total'] + self.county_key_list
     col_tag_list = ['key', 'value_1', 'value_2', 'value_3', 'label', 'label_fr', 'label_zh']
     stock_new = {col_tag: [] for col_tag in col_tag_list}
@@ -145,7 +145,7 @@ class VaccinationCountySheet(ccm.Template):
     stock.append('  - `label`: label in English')
     stock.append('  - `label_fr`: label in French')
     stock.append('  - `label_zh`: label in Mandarin')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     
     key = 'vaccination_by_county_label'
     stock = []
@@ -155,11 +155,11 @@ class VaccinationCountySheet(ccm.Template):
     stock.append('- Column')
     stock.append('  - `key`')
     stock.append('  - `value`')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_vaccinationByCounty(self, mode='both'):
-    gr = ccm.GROUP_LATEST
+    gr = cvcm.GROUP_LATEST
     
     if mode in ['data', 'both']:
       stock = self.makeStock_vaccinationByCounty()
@@ -170,10 +170,10 @@ class VaccinationCountySheet(ccm.Template):
       data_r = pd.DataFrame(data_r)
       
       ## Save
-      name = '{}processed_data/{}/vaccination_by_county.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_r)
-      name = '{}processed_data/{}/vaccination_by_county_label.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_l)
+      name = '{}processed_data/{}/vaccination_by_county.csv'.format(cvcm.DATA_PATH, gr)
+      cvcm.saveCsv(name, data_r)
+      name = '{}processed_data/{}/vaccination_by_county_label.csv'.format(cvcm.DATA_PATH, gr)
+      cvcm.saveCsv(name, data_l)
     
     if mode in ['readme', 'both']:
       self.makeReadme_vaccinationByCounty(gr)
@@ -188,9 +188,9 @@ class VaccinationCountySheet(ccm.Template):
     dose_3rd_1_list = self.get3rdDose1()
     dose_3rd_2_list = self.get3rdDose2()
     
-    ord_list = [ccm.ISODateToOrd(date) for date in set(date_list)]
+    ord_list = [cvcm.ISODateToOrd(date) for date in set(date_list)]
     ord_max = max(ord_list)
-    latest_date = ccm.ordDateToISO(ord_max)
+    latest_date = cvcm.ordDateToISO(ord_max)
     
     stock = {'latest_date': latest_date}
     
@@ -208,7 +208,7 @@ class VaccinationCountySheet(ccm.Template):
     
     for key in age_key_list:
       value_list = stock[key]
-      label_dict = ccm.AGE_DICT_2['label'][key]
+      label_dict = cvcm.AGE_DICT_2['label'][key]
       
       stock_new['key'].append(key)
       stock_new['value_1'].append(np.around(value_list[0], decimals=2))
@@ -232,7 +232,7 @@ class VaccinationCountySheet(ccm.Template):
     stock.append('  - `label`: label in English')
     stock.append('  - `label_fr`: label in French')
     stock.append('  - `label_zh`: label in Mandarin')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     
     key = 'vaccination_by_age_label'
     stock = []
@@ -242,11 +242,11 @@ class VaccinationCountySheet(ccm.Template):
     stock.append('- Column')
     stock.append('  - `key`')
     stock.append('  - `value`')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_vaccinationByAge(self, mode='both'):
-    gr = ccm.GROUP_LATEST
+    gr = cvcm.GROUP_LATEST
     
     if mode in ['data', 'both']:
       stock = self.makeStock_vaccinationByAge()
@@ -257,10 +257,10 @@ class VaccinationCountySheet(ccm.Template):
       data_r = pd.DataFrame(data_r)
       
       ## Save
-      name = '{}processed_data/{}/vaccination_by_age.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_r)
-      name = '{}processed_data/{}/vaccination_by_age_label.csv'.format(ccm.DATA_PATH, gr)
-      ccm.saveCsv(name, data_l)
+      name = '{}processed_data/{}/vaccination_by_age.csv'.format(cvcm.DATA_PATH, gr)
+      cvcm.saveCsv(name, data_r)
+      name = '{}processed_data/{}/vaccination_by_age_label.csv'.format(cvcm.DATA_PATH, gr)
+      cvcm.saveCsv(name, data_l)
     
     if mode in ['readme', 'both']:
       self.makeReadme_vaccinationByAge(gr)

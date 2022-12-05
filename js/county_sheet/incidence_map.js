@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  incidence_map.js          --//
     //--  Chieh-An Lin              --//
-    //--  2022.06.16                --//
+    //--  2022.12.05                --//
     //--------------------------------//
 
 function IM_InitFig(wrap) {
@@ -40,6 +40,7 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_2020', '2020');
     LS_AddStr('incidence_map_button_2021', '2021');
     LS_AddStr('incidence_map_button_2022', '2022');
+    LS_AddStr('incidence_map_button_2023', '2023');
     LS_AddStr('incidence_map_button_all_year', '全年');
     LS_AddStr('incidence_map_button_m1', '1月');
     LS_AddStr('incidence_map_button_m2', '2月');
@@ -83,6 +84,7 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_2020', '2020');
     LS_AddStr('incidence_map_button_2021', '2021');
     LS_AddStr('incidence_map_button_2022', '2022');
+    LS_AddStr('incidence_map_button_2023', '2023');
     LS_AddStr('incidence_map_button_all_year', 'Toute l\'année');
     LS_AddStr('incidence_map_button_m1', 'Janvier');
     LS_AddStr('incidence_map_button_m2', 'Février');
@@ -127,6 +129,7 @@ function IM_ResetText() {
     LS_AddStr('incidence_map_button_2020', '2020');
     LS_AddStr('incidence_map_button_2021', '2021');
     LS_AddStr('incidence_map_button_2022', '2022');
+    LS_AddStr('incidence_map_button_2023', '2023');
     LS_AddStr('incidence_map_button_all_year', 'All year');
     LS_AddStr('incidence_map_button_m1', 'January');
     LS_AddStr('incidence_map_button_m2', 'February');
@@ -451,7 +454,7 @@ function IM_Replot(wrap) {
       ]; 
   }
   else if (wrap.tag.includes('overall')) {
-    year_list = ['2020', '2021', '2022'];
+    year_list = ['2020', '2021', '2022', '2023'];
     legend_title_list = [];
     
     if (LS_lang == 'zh-tw') {

@@ -17,7 +17,8 @@ if [ "${MODE}" = "data" ]; then
 else
   git add js/**
   git add page/**
-  git add python/*.py
+  git add python/covid/*.py
+  git add python/COVID_process.py
   git add css/plots.css
   git add gadd.sh
   git add download.sh

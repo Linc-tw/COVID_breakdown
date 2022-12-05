@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_delay.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.06.10                --//
+    //--  2022.12.05                --//
     //--------------------------------//
 
 function DD_InitFig(wrap) {
@@ -20,6 +20,7 @@ function DD_ResetText() {
     LS_AddStr('death_delay_button_2020', '2020');
     LS_AddStr('death_delay_button_2021', '2021');
     LS_AddStr('death_delay_button_2022', '2022');
+    LS_AddStr('death_delay_button_2023', '2023');
     
     LS_AddHtml('death_delay_description', '\
       當個案死亡時，其「確診到死亡所需時間」為確診通報日與死亡通報日間相隔天數。\
@@ -36,6 +37,7 @@ function DD_ResetText() {
     LS_AddStr('death_delay_button_2020', '2020');
     LS_AddStr('death_delay_button_2021', '2021');
     LS_AddStr('death_delay_button_2022', '2022');
+    LS_AddStr('death_delay_button_2023', '2023');
     
     LS_AddHtml('death_delay_description', '\
       Le « Délai entre l\'infection et le décès » est, lorsque un patient est mort,\
@@ -54,6 +56,7 @@ function DD_ResetText() {
     LS_AddStr('death_delay_button_2020', '2020');
     LS_AddStr('death_delay_button_2021', '2021');
     LS_AddStr('death_delay_button_2022', '2022');
+    LS_AddStr('death_delay_button_2023', '2023');
     
     LS_AddHtml('death_delay_description', '\
       The "Delay between Case and Death Reports" is, when a patient dies,\

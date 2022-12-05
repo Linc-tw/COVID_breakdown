@@ -1,8 +1,8 @@
 
     ################################
-    ##  COVID_timeline.py         ##
+    ##  timeline.py               ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.22                ##
+    ##  2022.12.05                ##
     ################################
 
 import os
@@ -14,12 +14,12 @@ import scipy as sp
 import scipy.signal as signal
 import pandas as pd
 
-import COVID_common as ccm
+import covid.common as cvcm
 
 ################################################################################
 ## Class - timeline sheet
 
-class TimelineSheet(ccm.Template):
+class TimelineSheet(cvcm.Template):
   
   def __init__(self, verbose=True):
     self.coltag_date = '時間'
@@ -28,8 +28,8 @@ class TimelineSheet(ccm.Template):
     self.coltag_global_evt = '全球事件'
     self.coltag_cdc_evt = 'CDC時間軸'
     
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_timeline.csv'.format(ccm.DATA_PATH)
-    data = ccm.loadCsv(name, verbose=verbose)
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_timeline.csv'.format(cvcm.DATA_PATH)
+    data = cvcm.loadCsv(name, verbose=verbose)
     
     self.data = data
     self.n_total = self.getNbRows()
@@ -115,7 +115,7 @@ class TimelineSheet(ccm.Template):
     stock.append('  - `key_event`')
     stock.append('- Timeline table for major pandemic events')
     stock.append('- Contains non-ASCII characters')
-    ccm.README_DICT['root'][key] = stock
+    cvcm.README_DICT['root'][key] = stock
     return
   
   def saveCsv_evtTimeline(self, mode='both'):
@@ -123,8 +123,8 @@ class TimelineSheet(ccm.Template):
       data = self.makeStock_evtTimeline()
       data = pd.DataFrame(data)
       
-      name = '{}processed_data/event_timeline_zh-tw.csv'.format(ccm.DATA_PATH)
-      ccm.saveCsv(name, data)
+      name = '{}processed_data/event_timeline_zh-tw.csv'.format(cvcm.DATA_PATH)
+      cvcm.saveCsv(name, data)
     
     if mode in ['readme', 'both']:
       self.makeReadme_evtTimeline()

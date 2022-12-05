@@ -1,8 +1,8 @@
 
     ################################
-    ##  COVID_border.py           ##
+    ##  border.py                 ##
     ##  Chieh-An Lin              ##
-    ##  2022.05.22                ##
+    ##  2022.12.05                ##
     ################################
 
 import os
@@ -14,12 +14,12 @@ import scipy as sp
 import scipy.signal as signal
 import pandas as pd
 
-import COVID_common as ccm
+import covid.common as cvcm
 
 ################################################################################
 ## Class - border sheet
 
-class BorderSheet(ccm.Template):
+class BorderSheet(cvcm.Template):
   
   def __init__(self, verbose=True):
     self.coltag_date = '日期 '
@@ -141,9 +141,10 @@ class BorderSheet(ccm.Template):
       'Pintung A both': '屏東機場 小計'
     }
     
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_border_statistics.csv'.format(ccm.DATA_PATH)
-    data = ccm.loadCsv(name, verbose=verbose, header=[0, 1])
+    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_border_statistics.csv'.format(cvcm.DATA_PATH)
+    data = cvcm.loadCsv(name, verbose=verbose, header=[0, 1])
     #https://data.gov.tw/dataset/12369
+    #https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pub?output=csv&gid=1449990493
     
     self.setData(data)
     self.n_total = self.getNbRows()
@@ -291,7 +292,7 @@ class BorderSheet(ccm.Template):
       
     ## Make avg
     for key in border_key_list:
-      stock[key+'_avg'] = ccm.makeMovingAverage(stock[key])
+      stock[key+'_avg'] = cvcm.makeMovingAverage(stock[key])
     return stock
   
   def makeReadme_borderStats(self, gr):
@@ -307,30 +308,30 @@ class BorderSheet(ccm.Template):
     stock.append('  - `entry_avg`: 7-day moving average of `entry`')
     stock.append('  - `exit_avg`: 7-day moving average of `exit`')
     stock.append('  - `total_avg`: 7-day moving average of `total`')
-    ccm.README_DICT[gr][key] = stock
+    cvcm.README_DICT[gr][key] = stock
     return
   
   def saveCsv_borderStats(self, mode='both'):
     if mode in ['data', 'both']:
       stock = self.makeStock_borderStats()
       stock = pd.DataFrame(stock)
-      stock = ccm.adjustDateRange(stock)
+      stock = cvcm.adjustDateRange(stock)
     
-    for gr in ccm.GROUP_LIST:
+    for gr in cvcm.GROUP_LIST:
       if mode in ['data', 'both']:
-        data = ccm.truncateStock(stock, gr)
+        data = cvcm.truncateStock(stock, gr)
         
         ## Save
-        name = '{}processed_data/{}/border_statistics.csv'.format(ccm.DATA_PATH, gr)
-        ccm.saveCsv(name, data)
+        name = '{}processed_data/{}/border_statistics.csv'.format(cvcm.DATA_PATH, gr)
+        cvcm.saveCsv(name, data)
       
       if mode in ['readme', 'both']:
         self.makeReadme_borderStats(gr)
     return
       
   def updateNewEntryCounts(self, stock):
-    ord_ref = ccm.ISODateToOrd(ccm.ISO_DATE_REF)
-    ord_today = ccm.getTodayOrdinal()
+    ord_ref = cvcm.ISODateToOrd(cvcm.ISO_DATE_REF)
+    ord_today = cvcm.getTodayOrdinal()
     nb_days = ord_today - ord_ref
     
     stock['new_entries'] = np.zeros(nb_days, dtype=int) + np.nan
@@ -339,7 +340,7 @@ class BorderSheet(ccm.Template):
     entry_list = self.getEntry()
     
     for date, entry in zip(date_list, entry_list):
-      ind = ccm.ISODateToOrd(date) - ord_ref
+      ind = cvcm.ISODateToOrd(date) - ord_ref
       if ind < 0 or ind >= nb_days:
         print('Bad ind_r = {:d}'.format(ind))
         continue

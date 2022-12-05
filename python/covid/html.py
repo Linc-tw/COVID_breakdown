@@ -1,8 +1,8 @@
 
     ################################
-    ##  COVID_html.py             ##
+    ##  html.py                   ##
     ##  Chieh-An Lin              ##
-    ##  2022.11.14                ##
+    ##  2022.12.05                ##
     ################################
 
 ################################################################################
@@ -223,7 +223,7 @@ PLOT_DICT = {
     plot_tag = 'event_timeline',
     js_path = 'timeline_sheet/',
     wdt_str = 'col-xl-12',
-    fontawe_str = {'2020': 'fa-calendar-alt', '2022': 'fa-calendar-check'},
+    fontawe_str = {'2020': 'fa-calendar-alt', '2022': 'fa-calendar-check', '2024': 'fa-calendar-alt', },
   ),
   
   ## Other pages
@@ -710,6 +710,7 @@ def makeStr_CBA(gr_tag):
                                                 <option value="1" id="{plot_tag}_button_2020"></option>\n\
                                                 <option value="2" id="{plot_tag}_button_2021"></option>\n\
                                                 <option value="3" id="{plot_tag}_button_2022"></option>\n\
+                                                <option value="4" id="{plot_tag}_button_2023"></option>\n\
                                             </select>\n\
                                             \n\
                                             <select id="{plot_tag}_{gr_tag}_month" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_month">\n\
@@ -791,6 +792,7 @@ def makeStr_IM(gr_tag):
                                                 <option value="1" id="{plot_tag}_button_2020"></option>\n\
                                                 <option value="2" id="{plot_tag}_button_2021"></option>\n\
                                                 <option value="3" id="{plot_tag}_button_2022"></option>\n\
+                                                <option value="4" id="{plot_tag}_button_2023"></option>\n\
                                             </select>\n\
                                             \n\
                                             <select id="{plot_tag}_{gr_tag}_month" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_month">\n\
@@ -967,6 +969,7 @@ def makeStr_DD(gr_tag):
                                                 <option value="1" id="{plot_tag}_button_2020"></option>\n\
                                                 <option value="2" id="{plot_tag}_button_2021"></option>\n\
                                                 <option value="3" id="{plot_tag}_button_2022"></option>\n\
+                                                <option value="4" id="{plot_tag}_button_2023"></option>\n\
                                             </select>\n\
                                             \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
   
@@ -998,6 +1001,7 @@ def makeStr_DBA(gr_tag):
                                                 <option value="1" id="{plot_tag}_button_2020"></option>\n\
                                                 <option value="2" id="{plot_tag}_button_2021"></option>\n\
                                                 <option value="3" id="{plot_tag}_button_2022"></option>\n\
+                                                <option value="4" id="{plot_tag}_button_2023"></option>\n\
                                             </select>\n\
                                             \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
   
@@ -1272,6 +1276,7 @@ def saveHtml_page(page_tag, verbose=True):
       f.write(makeStr_CT())
       f.write(makeStr_ET('2020'))
       f.write(makeStr_ET('2022'))
+      f.write(makeStr_ET('2024'))
       ## new_year_token
     
     elif page_tag == 'data_source':

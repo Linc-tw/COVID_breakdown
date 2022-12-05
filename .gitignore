@@ -9,4 +9,5 @@ images
 js/archives/
 log/
 python/__pycache__/
+python/covid/__pycache__/
 raw_data/*_big5.csv

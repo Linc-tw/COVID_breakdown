@@ -145,11 +145,11 @@ function VBD_FormatData(wrap, data) {
   //-- Calculate y_path
   if (wrap.tag.includes('mini'))
     wrap.nb_yticks = 1;
-  var y_path = GP_CalculateTickInterval(y_max, wrap.nb_yticks, 'percentage');
+  var y_path = 0.2;
   
   //-- Generate yticks
   var ytick = [];
-  for (i=0; i<y_max; i+=y_path) 
+  for (i=0; i<1.01; i+=y_path) 
     ytick.push(i);
   
   //-- Save to wrapper

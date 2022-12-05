@@ -12,7 +12,7 @@ var VBD_latest_wrap = {
     '../processed_data/key_numbers.csv',
   ],
 
-  y_max_factor: 1.55,
+  y_max_factor: 1.7,
   nb_yticks: 4,
   legend_pos_x: 95,
   legend_pos_x1: 190,
