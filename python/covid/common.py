@@ -2,7 +2,7 @@
     ################################
     ##  common.py                 ##
     ##  Chieh-An Lin              ##
-    ##  2022.12.05                ##
+    ##  2022.12.07                ##
     ################################
 
 import os
@@ -521,7 +521,7 @@ DELIVERY_LIST = [
   ['Medigen',   'Medigen',   86910,           '', '2021-08-05',                                                   '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600479'],
   [     'AZ', 'Lithuania',   19400, '2021-07-31', '2021-08-10', 'https://www.cna.com.tw/news/ahel/202107310085.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600484'],
   ['Moderna',   'Moderna',   99000, '2021-08-08', '2021-08-17', 'https://www.cna.com.tw/news/ahel/202108090129.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600498'],
-  ['Medigen',   'Medigen',  261766,           '', '2021-08-17',                                                        '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600498'],
+  ['Medigen',   'Medigen',  261766,           '', '2021-08-17',                                                   '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600498'],
   [     'AZ',        'AZ',  524200, '2021-08-12', '2021-08-20', 'https://www.cna.com.tw/news/ahel/202108120201.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600505'],
   ['Moderna',   'Moderna',  249000, '2021-08-15', '2021-08-24', 'https://www.cna.com.tw/news/ahel/202108155005.aspx', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600513'],
   ['Medigen',   'Medigen',  263586,           '', '2021-08-24',                                                   '', 'https://www.fda.gov.tw/TC/newsContent.aspx?cid=4&id=t600513'],
@@ -633,14 +633,22 @@ DELIVERY_LIST = [
   ['Novavax',     'COVAX',  503400,           '', '2022-09-30', '', ''],
   
   ## 2022/10
-  #['',   '', ,           '', '2022-10-', '', ''],
-  #['',   '', ,           '', '2022-10-', '', ''],
-  #['',   '', ,           '', '2022-10-', '', ''],
-  #['',   '', ,           '', '2022-10-', '', ''],
-  #['',   '', ,           '', '2022-10-', '', ''],
-  #['',   '', ,           '', '2022-10-', '', ''],
+  ['Moderna',   'Moderna',  802900,           '', '2022-10-02', '', ''],
+  ['Moderna',   'Moderna',  786500,           '', '2022-10-08', '', ''],
+  ['Moderna',   'Moderna',  604650,           '', '2022-10-15', '', ''],
+  
   ## 2022/11
+  [ 'Pfizer',    'Pfizer',  623700,           '', '2022-11-05', '', ''],
+  ['Moderna',   'Moderna',  702750,           '', '2022-11-18', '', ''],
+  [ 'Pfizer',    'Pfizer', 1103400,           '', '2022-11-22', '', ''],
+  
   ## 2022/12
+  #['',   '', ,           '', '2022-12-', '', ''],
+  #['',   '', ,           '', '2022-12-', '', ''],
+  #['',   '', ,           '', '2022-12-', '', ''],
+  #['',   '', ,           '', '2022-12-', '', ''],
+  #['',   '', ,           '', '2022-12-', '', ''],
+  #['',   '', ,           '', '2022-12-', '', ''],
 ]
 
 QC_REF_DICT = {
@@ -664,9 +672,13 @@ QC_REF_DICT = {
   '2022-07': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637951347967034141',
   '2022-08': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f637979938217806761',
   '2022-09': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f638012623837640579',
-  '2022-10': '',
-  '2022-11': '',
+  '2022-10': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f638036742605271331',
+  '2022-11': 'https://www.fda.gov.tw/TC/includes/GetFile.ashx?id=f638059139837148280',
   '2022-12': '',
+  
+  '2023-01': '',
+  '2023-02': '',
+  '2023-03': '',
 }
 
 ################################################################################

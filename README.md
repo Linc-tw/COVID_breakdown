@@ -18,11 +18,12 @@ Features
 
 The most recent statisitcs can be found in _Last 90 days_.
 The overall statistics can be found in _Overall stats_.
-Each of these two sections contains 5 pages: 
+Each of these two sections contains 6 pages: 
 - _Case breakdown_
 - _Incidence rates_
 - _Vaccination_
-- _Other stats_
+- _Deaths_
+- _Tests_
 - _Comparison_
 
 Plots on [_Case breakdown_](http://covidtaiwan.linc.tw/page/latest_cases.html) are:
@@ -43,12 +44,15 @@ Plots on [_Vaccination_](http://covidtaiwan.linc.tw/page/latest_vaccination.html
 - Vaccination by Age Group (only in _Last 90 days_)
 - Vaccination by City & County (only in _Last 90 days_)
 
-Plots on [_Other stats_](http://covidtaiwan.linc.tw/page/latest_others.html) are:
-- Test Counts
-- Positive Rate & Case Fatality Rate
+Plots on [_Deaths_](http://covidtaiwan.linc.tw/page/latest_deaths.html) are:
 - Death Counts
+- Case Fatality Rates
+- Delay between Case and Death Reports
 - Deaths by Age (only in _Overall stats_)
-- Border Crossing
+
+Plots on [_Tests_](http://covidtaiwan.linc.tw/page/latest_others.html) are:
+- Test Counts
+- Test Positive Rate
 
 The plot on [_Comparison_](http://covidtaiwan.linc.tw/page/latest_comparison.html) is:
 - Statistics in Mirror
@@ -56,8 +60,6 @@ The plot on [_Comparison_](http://covidtaiwan.linc.tw/page/latest_comparison.htm
 And 2 other plots on the [_Timeline_](http://covidtaiwan.linc.tw/page/timeline.html) page:
 - Chronology of Systematic Testing
 - Pandemic Timeline (text in Mandarin)
-
-Other ideas for plots are welcome. To be proposed at [Issues](https://github.com/Linc-tw/COVID_breakdown/issues).
 
 
 Language support
@@ -71,7 +73,7 @@ Language support
 Current workflow
 ----------------
 
-An automatic update is scheduled at 15:15 everyday.
+An automatic update is scheduled at 18:30 everyday.
 This is done by executing `upload.sh`. It will:
 - download raw data from the sources,
 - execute `python python/COVID_process.py` to generate processed data, and
