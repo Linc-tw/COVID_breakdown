@@ -89,7 +89,7 @@ Contents
 - Row: report date
 - Column
   - `date`
-  - `total`: nationalwide
+  - `total`: nationwide
   - `Keelung` to `Matsu`: individual city or county
   - `Hsinchu`: Hsinchu county
   - `Hsinchu_C`: Hsinchu city
