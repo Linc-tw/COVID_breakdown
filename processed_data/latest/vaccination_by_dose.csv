@@ -1,5 +1,4 @@
 date,interpolated,ppl_vacc_rate,ppl_fully_vacc_rate,ppl_vacc_3_rate,ppl_vacc_4_rate
-2022-10-24,0,0.9227,0.8673,0.7312,0.107
 2022-10-25,0,0.9228,0.8674,0.7314,0.1071
 2022-10-26,0,0.9229,0.8676,0.7315,0.1071
 2022-10-27,0,0.923,0.8677,0.7315,0.1072
@@ -89,3 +88,4 @@ date,interpolated,ppl_vacc_rate,ppl_fully_vacc_rate,ppl_vacc_3_rate,ppl_vacc_4_r
 2023-01-19,,,,,
 2023-01-20,,,,,
 2023-01-21,,,,,
+2023-01-22,,,,,
