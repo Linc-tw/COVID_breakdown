@@ -2,7 +2,7 @@
     ################################
     ##  county.py                 ##
     ##  Chieh-An Lin              ##
-    ##  2022.12.05                ##
+    ##  2023.01.25                ##
     ################################
 
 import os
@@ -31,7 +31,7 @@ class CountySheet(cvcm.Template):
     self.coltag_age = '年齡層'
     self.coltag_nb_cases = '確定病例數'
     
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_county_age.csv'.format(cvcm.DATA_PATH)
+    name = f'{cvcm.DATA_PATH}raw_data/COVID-19_in_Taiwan_raw_data_county_age.csv'
     data = cvcm.loadCsv(name, verbose=verbose)
     ## https://od.cdc.gov.tw/eic/Day_Confirmation_Age_County_Gender_19CoV.csv
     
@@ -51,7 +51,7 @@ class CountySheet(cvcm.Template):
     ]
     
     if verbose:
-      print('N_total = {:d}'.format(self.n_total))
+      print(f'N_total = {self.n_total}')
     return
   
   def getReportDate(self):
@@ -61,7 +61,7 @@ class CountySheet(cvcm.Template):
       yyyy = report_date[:4]
       mm = report_date[5:7]
       dd = report_date[8:]
-      report_date = '{}-{}-{}'.format(yyyy, mm, dd)
+      report_date = f'{yyyy}-{mm}-{dd}'
       report_date_list.append(report_date)
     
     return report_date_list
@@ -73,7 +73,7 @@ class CountySheet(cvcm.Template):
       try:
         county_list.append(cvcm.COUNTY_DICT_2[county])
       except KeyError:
-        print('County, {}'.format(county))
+        print(f'County, {county}')
         county_list.append('unknown')
     
     return county_list
@@ -142,11 +142,11 @@ class CountySheet(cvcm.Template):
   def makeReadme_localCasePerCounty(self, gr):
     key = 'local_case_per_county'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `total`: nationalwide')
+    stock.append('  - `total`: nationwide')
     stock.append('  - `Keelung` to `Matsu`: individual city or county')
     stock.append('  - `Hsinchu`: Hsinchu county')
     stock.append('  - `Hsinchu_C`: Hsinchu city')
@@ -167,7 +167,7 @@ class CountySheet(cvcm.Template):
         data = cvcm.truncateStock(stock, gr)
       
         ## Save
-        name = '{}processed_data/{}/local_case_per_county.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/local_case_per_county.csv'
         cvcm.saveCsv(name, data)
       
       if mode in ['readme', 'both']:
@@ -229,33 +229,33 @@ class CountySheet(cvcm.Template):
     
     if gr == cvcm.GROUP_LATEST:
       for i in range(12):
-        str_ = '{:d}-{:d}'.format(7*i, 7*i+6)
-        key_list.append('week_-{:d}'.format(i+1))
-        label_list_en.append('{} days ago'.format(str_))
-        label_list_fr.append('{} jours plus tôt'.format(str_))
-        label_list_zh.append('{}天前'.format(str_))
+        str_ = f'{7*i}-{7*i+6}'
+        key_list.append(f'week_-{i+1}')
+        label_list_en.append(f'{str_} days ago')
+        label_list_fr.append(f'{str_} jours plus tôt')
+        label_list_zh.append(f'{str_}天前')
       
     elif gr == cvcm.GROUP_OVERALL:
       for year in cvcm.GROUP_YEAR_LIST:
         key_list.append(year)
-        label_list_en.append('{} all year'.format(year))
-        label_list_fr.append('Année {}'.format(year))
-        label_list_zh.append('{}全年'.format(year))
+        label_list_en.append(f'{year} all year')
+        label_list_fr.append(f'Année {year}')
+        label_list_zh.append(f'{year}全年')
         
         for i in range(12):
-          str_ = '{:d}-{:d}'.format(7*i, 7*i+6)
-          key_list.append('{}_{}'.format(cvcm.numMonthToAbbr(i+1), year))
-          label_list_en.append('{} {}'.format(cvcm.MONTH_NAME_EN[i], year))
-          label_list_fr.append('{} {}'.format(cvcm.MONTH_NAME_FR[i], year))
-          label_list_zh.append('{}年{:d}月'.format(year, i+1))
+          str_ = f'{7*i}-{7*i+6}'
+          key_list.append(f'{cvcm.numMonthToAbbr(i+1)}_{year}')
+          label_list_en.append(f'{cvcm.MONTH_NAME_EN[i]} {year}')
+          label_list_fr.append(f'{cvcm.MONTH_NAME_FR[i]} {year}')
+          label_list_zh.append(f'{year}年{i+1}月')
         
     elif gr in cvcm.GROUP_YEAR_LIST:
       for i in range(12):
-        str_ = '{:d}-{:d}'.format(7*i, 7*i+6)
-        key_list.append('{}'.format(cvcm.numMonthToAbbr(i+1)))
-        label_list_en.append('{}'.format(cvcm.MONTH_NAME_EN[i]))
-        label_list_fr.append('{}'.format(cvcm.MONTH_NAME_FR[i]))
-        label_list_zh.append('{:d}月'.format(i+1))
+        str_ = f'{7*i}-{7*i+6}'
+        key_list.append(f'{cvcm.numMonthToAbbr(i+1)}')
+        label_list_en.append(f'{cvcm.MONTH_NAME_EN[i]}')
+        label_list_fr.append(f'{cvcm.MONTH_NAME_FR[i]}')
+        label_list_zh.append(f'{i+1}月')
         
     stock = {'key': key_list, 'label': label_list_en, 'label_fr': label_list_fr, 'label_zh': label_list_zh}
     return stock
@@ -263,7 +263,7 @@ class CountySheet(cvcm.Template):
   def makeReadme_caseByAge(self, gr):
     key = 'case_by_age'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: age group')
     stock.append('- Column')
     stock.append('  - `age`')
@@ -275,13 +275,13 @@ class CountySheet(cvcm.Template):
       stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
     elif gr in cvcm.GROUP_YEAR_LIST:
-      stock.append('  - `total`: {} all year'.format(gr))
+      stock.append(f'  - `total`: {gr} all year')
       stock.append('  - `MMM`: during month `MMM`')
     cvcm.README_DICT[gr][key] = stock
     
     key = 'case_by_age_label'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: time range')
     stock.append('- Column')
     stock.append('  - `key`')
@@ -308,9 +308,9 @@ class CountySheet(cvcm.Template):
         data_c = pd.DataFrame(data_c)
         
         ## Save
-        name = '{}processed_data/{}/case_by_age.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/case_by_age.csv'
         cvcm.saveCsv(name, data_c)
-        name = '{}processed_data/{}/case_by_age_label.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/case_by_age_label.csv'
         cvcm.saveCsv(name, data_l)
       
       if mode in ['readme', 'both']:
@@ -396,7 +396,7 @@ class CountySheet(cvcm.Template):
   def makeReadme_incidenceMap(self, gr):
     key = 'incidence_map'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: city or county')
     stock.append('- Column')
     stock.append('  - `county`')
@@ -408,13 +408,13 @@ class CountySheet(cvcm.Template):
       stock.append('  - `YYYY`: during year `YYYY`')
       stock.append('  - `MMM_YYYY`: during month `MMM` of year `YYYY`')
     elif gr in cvcm.GROUP_YEAR_LIST:
-      stock.append('  - `total`: {} all year'.format(gr))
+      stock.append(f'  - `total`: {gr} all year')
       stock.append('  - `MMM`: during month `MMM`')
     cvcm.README_DICT[gr][key] = stock
     
     key = 'incidence_map_label'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: city or county')
     stock.append('- Column')
     stock.append('  - `key`')
@@ -444,9 +444,9 @@ class CountySheet(cvcm.Template):
         data_c = pd.DataFrame(data_c)
         
         ## Save
-        name = '{}processed_data/{}/incidence_map.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/incidence_map.csv'
         cvcm.saveCsv(name, data_c)
-        name = '{}processed_data/{}/incidence_map_label.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/incidence_map_label.csv'
         cvcm.saveCsv(name, data_l)
       
       if mode in ['readme', 'both']:
@@ -499,11 +499,11 @@ class CountySheet(cvcm.Template):
   def makeReadme_incidenceEvolutionByCounty(self, gr):
     key = 'incidence_evolution_by_county'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
-    stock.append('  - `total`: nationalwide')
+    stock.append('  - `total`: nationwide')
     stock.append('  - `Keelung` to `Matsu`: individual city or county')
     stock.append('  - `Hsinchu`: Hsinchu county')
     stock.append('  - `Hsinchu_C`: Hsinchu city')
@@ -513,7 +513,7 @@ class CountySheet(cvcm.Template):
     
     key = 'incidence_evolution_by_county_label'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: city or county')
     stock.append('- Column')
     stock.append('  - `key`')
@@ -534,9 +534,9 @@ class CountySheet(cvcm.Template):
       data_l = pd.DataFrame(data_l)
       
       ## Save
-      name = '{}processed_data/{}/incidence_evolution_by_county.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/incidence_evolution_by_county.csv'
       cvcm.saveCsv(name, data_r)
-      name = '{}processed_data/{}/incidence_evolution_by_county_label.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/incidence_evolution_by_county_label.csv'
       cvcm.saveCsv(name, data_l)
     
     if mode in ['readme', 'both']:
@@ -618,7 +618,7 @@ class CountySheet(cvcm.Template):
   def makeReadme_incidenceEvolutionByAge(self, gr):
     key = 'incidence_evolution_by_age'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -628,7 +628,7 @@ class CountySheet(cvcm.Template):
     
     key = 'incidence_evolution_by_age_label'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: age group')
     stock.append('- Column')
     stock.append('  - `key`')
@@ -649,9 +649,9 @@ class CountySheet(cvcm.Template):
       data_l = pd.DataFrame(data_l)
     
       ## Save
-      name = '{}processed_data/{}/incidence_evolution_by_age.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/incidence_evolution_by_age.csv'
       cvcm.saveCsv(name, data_r)
-      name = '{}processed_data/{}/incidence_evolution_by_age_label.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/incidence_evolution_by_age_label.csv'
       cvcm.saveCsv(name, data_l)
     
     if mode in ['readme', 'both']:

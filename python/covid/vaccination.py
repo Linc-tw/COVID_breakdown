@@ -2,7 +2,7 @@
     ################################
     ##  vaccination.py            ##
     ##  Chieh-An Lin              ##
-    ##  2022.12.05                ##
+    ##  2023.01.25                ##
     ################################
 
 import os
@@ -35,10 +35,9 @@ class VaccinationSheet(cvcm.Template):
     self.coltag_cum_4th_2 = '第2次加強劑'
     self.coltag_cum_tot = '總共累計接種人次'
     
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination.csv'.format(cvcm.DATA_PATH)
+    name = f'{cvcm.DATA_PATH}raw_data/COVID-19_in_Taiwan_raw_data_vaccination.csv'
     data = cvcm.loadCsv(name, verbose=verbose)
-    ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004
-    ## https://covid-19.nchc.org.tw/api/download/csse_covid_19_daily_reports_vaccine_manufacture_v1_2022-06-22.csv
+    ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004&chartset=utf-8
     
     self.data = data
     self.n_total = len(set(self.getDate()))
@@ -47,7 +46,7 @@ class VaccinationSheet(cvcm.Template):
     self.dose_key_list = ['ppl_vacc_rate', 'ppl_fully_vacc_rate', 'ppl_vacc_3_rate', 'ppl_vacc_4_rate']
     
     if verbose:
-      print('N_total = {:d}'.format(self.n_total))
+      print(f'N_total = {self.n_total}')
     return
   
   def getDate(self):
@@ -60,7 +59,7 @@ class VaccinationSheet(cvcm.Template):
       try:
         brand_list.append(cvcm.BRAND_DICT[brand])
       except KeyError:
-        print('Brand, {}'.format(brand))
+        print(f'Brand, {brand}')
         brand_list.append('unknown')
     return brand_list
   
@@ -171,7 +170,7 @@ class VaccinationSheet(cvcm.Template):
   def makeReadme_vaccinationByBrand(self, gr):
     key = 'vaccination_by_brand'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -210,7 +209,7 @@ class VaccinationSheet(cvcm.Template):
           data = data[ind:]
           
         ## Save
-        name = '{}processed_data/{}/vaccination_by_brand.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/vaccination_by_brand.csv'
         cvcm.saveCsv(name, data)
         
       if mode in ['readme', 'both']:
@@ -258,7 +257,7 @@ class VaccinationSheet(cvcm.Template):
   def makeReadme_vaccinationProgress(self, gr):
     key = 'vaccination_progress_supplies'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: available date')
     stock.append('- Column')
     stock.append('  - `date`: available date of the supply')
@@ -274,7 +273,7 @@ class VaccinationSheet(cvcm.Template):
     
     key = 'vaccination_progress_injections'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row = report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -311,9 +310,9 @@ class VaccinationSheet(cvcm.Template):
           ind = cvcm.ISODateToOrd(cvcm.ISO_DATE_REF_VACC) - cvcm.ISODateToOrd(cvcm.ISO_DATE_REF)
           data_i = data_i[ind:]
         
-        name = '{}processed_data/{}/vaccination_progress_supplies.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/vaccination_progress_supplies.csv'
         cvcm.saveCsv(name, data_s)
-        name = '{}processed_data/{}/vaccination_progress_injections.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/vaccination_progress_injections.csv'
         cvcm.saveCsv(name, data_i)
       
       if mode in ['readme', 'both']:
@@ -340,7 +339,7 @@ class VaccinationSheet(cvcm.Template):
   def makeReadme_vaccinationDeliveries(self, gr):
     key = 'vaccination_deliveries_list'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: deliveries')
     stock.append('- Column')
     stock.append('  - `brand`')
@@ -357,7 +356,7 @@ class VaccinationSheet(cvcm.Template):
     
     key = 'vaccination_deliveries_reference'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row = month')
     stock.append('- Column')
     stock.append('  - `month`')
@@ -366,6 +365,8 @@ class VaccinationSheet(cvcm.Template):
     return
   
   def saveCsv_vaccinationDeliveries(self, mode='both'):
+    gr = cvcm.GROUP_OVERALL
+    
     if mode in ['data', 'both']:
       data_d = self.makeDeliveries_vaccinationDeliveries()
       data_d = pd.DataFrame(data_d)
@@ -373,19 +374,15 @@ class VaccinationSheet(cvcm.Template):
       data_r = self.makeRef_vaccinationDeliveries()
       data_r = pd.DataFrame(data_r)
     
-    for gr in cvcm.GROUP_LIST:
-      if gr != cvcm.GROUP_OVERALL:
-        continue
-      
-      ## Save
-      if mode in ['data', 'both']:
-        name = '{}processed_data/{}/vaccination_deliveries_list.csv'.format(cvcm.DATA_PATH, gr)
-        cvcm.saveCsv(name, data_d)
-        name = '{}processed_data/{}/vaccination_deliveries_reference.csv'.format(cvcm.DATA_PATH, gr)
-        cvcm.saveCsv(name, data_r)
-      
-      if mode in ['readme', 'both']:
-        self.makeReadme_vaccinationProgress(gr)
+    ## Save
+    if mode in ['data', 'both']:
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/vaccination_deliveries_list.csv'
+      cvcm.saveCsv(name, data_d)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/vaccination_deliveries_reference.csv'
+      cvcm.saveCsv(name, data_r)
+    
+    if mode in ['readme', 'both']:
+      self.makeReadme_vaccinationDeliveries(gr)
     return
   
   def makeStock_vaccinationByDose(self):
@@ -430,7 +427,7 @@ class VaccinationSheet(cvcm.Template):
   def makeReadme_vaccinationByDose(self, gr):
     key = 'vaccination_by_dose'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -464,7 +461,7 @@ class VaccinationSheet(cvcm.Template):
           data = data[ind:]
           
         ## Save
-        name = '{}processed_data/{}/vaccination_by_dose.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/vaccination_by_dose.csv'
         cvcm.saveCsv(name, data)
       
       if mode in ['readme', 'both']:

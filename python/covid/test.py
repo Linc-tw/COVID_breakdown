@@ -2,7 +2,7 @@
     ################################
     ##  test.py                   ##
     ##  Chieh-An Lin              ##
-    ##  2022.12.05                ##
+    ##  2023.01.25                ##
     ################################
 
 import os
@@ -26,7 +26,7 @@ class TestSheet(cvcm.Template):
     self.coltag_extended = '擴大監測送驗'
     self.coltag_total = 'Total'
     
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv'.format(cvcm.DATA_PATH)
+    name = f'{cvcm.DATA_PATH}raw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv'
     data = cvcm.loadCsv(name, verbose=verbose)
     #https://od.cdc.gov.tw/eic/covid19/covid19_tw_specimen.csv
     
@@ -34,7 +34,7 @@ class TestSheet(cvcm.Template):
     self.n_total = self.getNbRows()
     
     if verbose:
-      print('N_total = {:d}'.format(self.n_total))
+      print(f'N_total = {self.n_total}')
     return 
     
   def setData(self, data):
@@ -53,7 +53,7 @@ class TestSheet(cvcm.Template):
       m = int(md_slash[1])
       d = int(md_slash[2])
       
-      date = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
+      date = f'{y:04}-{m:02}-{d:02}'
       date_list.append(date)
     return date_list
   
@@ -84,7 +84,7 @@ class TestSheet(cvcm.Template):
   def makeReadme_testCounts(self, gr):
     key = 'test_counts'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -98,11 +98,10 @@ class TestSheet(cvcm.Template):
       date_list = self.getDate()
       total_list = self.getTotal()
       avg_arr = cvcm.makeMovingAverage(total_list)
+      print(f'Latest nb of tests = {total_list[-1]}')
       
       stock = {'date': date_list, 'total': total_list, 'total_avg': avg_arr}
       stock = pd.DataFrame(stock)
-      print('Latest nb of tests = {:d}'.format(stock.iloc[-1]['total']))
-      stock = stock[:-1] ## Trim the last
       stock = cvcm.adjustDateRange(stock)
     
     for gr in cvcm.GROUP_LIST:
@@ -110,7 +109,7 @@ class TestSheet(cvcm.Template):
         data = cvcm.truncateStock(stock, gr)
         
         ## Save
-        name = '{}processed_data/{}/test_counts.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/test_counts.csv'
         cvcm.saveCsv(name, data)
       
       if mode in ['readme', 'both']:
@@ -120,7 +119,7 @@ class TestSheet(cvcm.Template):
   def makeReadme_testByCriterion(self, gr):
     key = 'test_by_criterion'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -139,7 +138,6 @@ class TestSheet(cvcm.Template):
       
       stock = {'date': date_list, 'clinical': clin_def_list, 'quarantine': qt_list, 'extended': ext_list}
       stock = pd.DataFrame(stock)
-      stock = stock[:-1] ## Trim the last
       stock = cvcm.adjustDateRange(stock)
     
     for gr in cvcm.GROUP_LIST:
@@ -147,13 +145,14 @@ class TestSheet(cvcm.Template):
         data = cvcm.truncateStock(stock, gr)
         
         ## Save
-        name = '{}processed_data/{}/test_by_criterion.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/test_by_criterion.csv'
         cvcm.saveCsv(name, data)
       
       if mode in ['readme', 'both']:
         self.makeReadme_testByCriterion(gr)
     return
   
+  ## Not used
   def getUrlDict(self):
     url_dict = {
       '2020-01-16': 'http://at.cdc.tw/6Jlc8w', ##   [(F&R)|P & Wuhan] | [(F&R)|P & contact]
@@ -197,7 +196,7 @@ class TestSheet(cvcm.Template):
   def makeReadme_criteriaTimeline(self):
     key = 'criteria_timeline'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: date')
     stock.append('- Column: language')
     stock.append('  - `en`')
@@ -326,7 +325,7 @@ class TestSheet(cvcm.Template):
       data = {'date': date_list, 'en': en_list, 'fr': fr_list, 'zh-tw': zh_tw_list}
       data = pd.DataFrame(data)
       
-      name = '{}processed_data/criteria_timeline.csv'.format(cvcm.DATA_PATH)
+      name = f'{cvcm.DATA_PATH}processed_data/criteria_timeline.csv'
       cvcm.saveCsv(name, data)
     
     if mode in ['readme', 'both']:
@@ -339,7 +338,6 @@ class TestSheet(cvcm.Template):
     
     stock_tmp = {'date': date_list, 'new_tests': total_list}
     stock_tmp = pd.DataFrame(stock_tmp)
-    stock_tmp = stock_tmp[:-1] ## Trim the last
     stock_tmp = cvcm.adjustDateRange(stock_tmp)
     
     stock['new_tests'] = stock_tmp['new_tests'].values

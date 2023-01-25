@@ -2,7 +2,7 @@
     ################################
     ##  case.py                   ##
     ##  Chieh-An Lin              ##
-    ##  2022.12.05                ##
+    ##  2023.01.25                ##
     ################################
 
 import os
@@ -50,7 +50,7 @@ class CaseSheet(cvcm.Template):
     self.n_year_dict = {}
     self.n_empty = 0
     
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv'.format(cvcm.DATA_PATH)
+    name = f'{cvcm.DATA_PATH}raw_data/COVID-19_in_Taiwan_raw_data_case_breakdown.csv'
     data = cvcm.loadCsv(name, verbose=verbose)
     
     self.setData(data)
@@ -59,11 +59,13 @@ class CaseSheet(cvcm.Template):
     self.trans_key_list = ['imported', 'local', 'others']
     
     if verbose:
-      print('N_total = {:d}'.format(self.n_total))
-      print('N_latest = {:d}'.format(self.n_latest))
+      print(f'N_total = {self.n_total}')
+      print(f'N_latest = {self.n_latest}')
       for year in cvcm.GROUP_YEAR_LIST:
-        print('N_{} = {:d}'.format(year, self.n_year_dict[year]))
-      print('N_empty = {:d}'.format(self.n_empty))
+        if year not in [cvcm.GROUP_2020, cvcm.GROUP_2021, cvcm.GROUP_2022]:
+          continue
+        print(f'N_{year} = {self.n_year_dict[year]}')
+      print(f'N_empty = {self.n_empty}')
     return 
     
   def setData(self, data):
@@ -91,6 +93,8 @@ class CaseSheet(cvcm.Template):
     self.n_latest = n_list[0]
     self.n_total = n_list[1]
     for i, year in enumerate(cvcm.GROUP_YEAR_LIST):
+      if year not in [cvcm.GROUP_2020, cvcm.GROUP_2021, cvcm.GROUP_2022]:
+        continue
       self.n_year_dict[year] = n_list[i+2]
     return
   
@@ -108,7 +112,7 @@ class CaseSheet(cvcm.Template):
       m = int(mdday_zh[0])
       dday_zh = mdday_zh[1].split('日')
       d = int(dday_zh[0])
-      report_date = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
+      report_date = f'{y:04}-{m:02}-{d:02}'
       report_date_list.append(report_date)
         
     return report_date_list
@@ -156,7 +160,7 @@ class CaseSheet(cvcm.Template):
       elif age != age:
         age_list.append(np.nan)
       else:
-        print('Age, Case {:d}, {}'.format(i+1, age))
+        print(f'Age, Case {i+1}, {age}')
         age_list.append(np.nan)
     return age_list
   
@@ -183,7 +187,7 @@ class CaseSheet(cvcm.Template):
         trans_list.append('unknown')
       
       else:
-        print('Transmission, Case {:d}, {}'.format(i+1, trans))
+        print(f'Transmission, Case {i+1}, {trans}')
         trans_list.append(np.nan)
         
     return trans_list
@@ -395,7 +399,7 @@ class CaseSheet(cvcm.Template):
       
       ## Complain if unrecognized texts remain
       if len(trav_hist) > 0:
-        print('Travel history, Case {:d}, {}'.format(i+1, trav_hist))
+        print(f'Travel history, Case {i+1}, {trav_hist}')
       
       ## If no travel history but imported, add nationality (only for i >= 460)
       if i >= 460 and len(stock) == 0:
@@ -434,7 +438,7 @@ class CaseSheet(cvcm.Template):
         else: ## 2022/12
           y = 2022
           
-        str_ = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
+        str_ = f'{y:04}-{m:02}-{d:02}'
       
       except:
         if entry_date != entry_date: ## NaN
@@ -494,7 +498,7 @@ class CaseSheet(cvcm.Template):
           y = 2021
         else:
           y = 2022
-        str_ = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
+        str_ = f'{y:04}-{m:02}-{d:02}'
         
       except:
         if onset_date != onset_date: ## NaN
@@ -542,7 +546,7 @@ class CaseSheet(cvcm.Template):
           str_ = '2022-04-12'
           
         else:
-          print('Onset date, Case {:d}, {}'.format(i+1, onset_date))
+          print(f'Onset date, Case {i+1}, {onset_date}')
           str_ = np.nan
     
       onset_date_list.append(str_)
@@ -612,7 +616,7 @@ class CaseSheet(cvcm.Template):
         channel_list.append('overseas')
         
       else:
-        print('Channel, Case {:d}, {}'.format(i+1, channel))
+        print(f'Channel, Case {i+1}, {channel}')
         channel_list.append(np.nan)
     return channel_list
   
@@ -742,8 +746,8 @@ class CaseSheet(cvcm.Template):
       symp = symp.lstrip('  0123456789/\n\r .，、與及有')
       
       if len(symp) > 0:
-        print('Symptom, Case {:d}, {}'.format(i+1, symp))
-        print('Symptom, Case {:d}, {}'.format(i+1, symp_orig))
+        print(f'Symptom, Case {i+1}, {symp}')
+        print(f'Symptom, Case {i+1}, {symp_orig}')
       
       stock = list(set(stock))
       symp_list.append(stock)
@@ -824,7 +828,7 @@ class CaseSheet(cvcm.Template):
   def makeReadme_caseByTransmission(self, gr):
     key = 'case_by_transmission_by_report_day'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -838,7 +842,7 @@ class CaseSheet(cvcm.Template):
     
     key = 'case_by_transmission_by_onset_day'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: onset date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -862,15 +866,15 @@ class CaseSheet(cvcm.Template):
       stock_o = pd.DataFrame(stock_o)
       stock_o = cvcm.adjustDateRange(stock_o)
     
-    for gr in cvcm.GROUP_LIST:
+    for gr in [cvcm.GROUP_OVERALL, cvcm.GROUP_2020, cvcm.GROUP_2021, cvcm.GROUP_2022]:
       if mode in ['data', 'both']:
         data_r = cvcm.truncateStock(stock_r, gr)
         data_o = cvcm.truncateStock(stock_o, gr)
         
         ## Save
-        name = '{}processed_data/{}/case_by_transmission_by_report_day.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/case_by_transmission_by_report_day.csv'
         cvcm.saveCsv(name, data_r)
-        name = '{}processed_data/{}/case_by_transmission_by_onset_day.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/case_by_transmission_by_onset_day.csv'
         cvcm.saveCsv(name, data_o)
       
       if mode in ['readme', 'both']:
@@ -920,7 +924,7 @@ class CaseSheet(cvcm.Template):
   def makeReadme_caseByDetection(self, gr):
     key = 'case_by_detection_by_report_day'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -935,7 +939,7 @@ class CaseSheet(cvcm.Template):
     
     key = 'case_by_detection_by_onset_day'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: onset date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -966,9 +970,9 @@ class CaseSheet(cvcm.Template):
       data_o = cvcm.truncateStock(stock_o, gr)
       
       ## Save
-      name = '{}processed_data/{}/case_by_detection_by_report_day.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/case_by_detection_by_report_day.csv'
       cvcm.saveCsv(name, data_r)
-      name = '{}processed_data/{}/case_by_detection_by_onset_day.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/case_by_detection_by_onset_day.csv'
       cvcm.saveCsv(name, data_o)
     
     if mode in ['readme', 'both']:
@@ -1092,7 +1096,7 @@ class CaseSheet(cvcm.Template):
   def makeReadme_travHistSymptomCorr(self, gr):
     key = 'travel_history_symptom_correlations'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: matrix element')
     stock.append('- Column')
     stock.append('  - `symptom`')
@@ -1103,7 +1107,7 @@ class CaseSheet(cvcm.Template):
     
     key = 'travel_history_symptom_correlations_label'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: symptom or travel history')
     stock.append('- Column')
     stock.append('  - `key`')
@@ -1128,9 +1132,9 @@ class CaseSheet(cvcm.Template):
       data_l = pd.DataFrame(data_l)
       
       ## Save
-      name = '{}processed_data/{}/travel_history_symptom_correlations.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/travel_history_symptom_correlations.csv'
       cvcm.saveCsv(name, data_c)
-      name = '{}processed_data/{}/travel_history_symptom_correlations_label.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/travel_history_symptom_correlations_label.csv'
       cvcm.saveCsv(name, data_l)
     
     if mode in ['readme', 'both']:
@@ -1250,7 +1254,7 @@ class CaseSheet(cvcm.Template):
   def makeReadme_ageSymptomCorr(self, gr):
     key = 'age_symptom_correlations'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: matrix element')
     stock.append('- Column')
     stock.append('  - `symptom`')
@@ -1261,7 +1265,7 @@ class CaseSheet(cvcm.Template):
     
     key = 'age_symptom_correlations_label'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: symptom or age range')
     stock.append('- Column')
     stock.append('  - `key`')
@@ -1286,9 +1290,9 @@ class CaseSheet(cvcm.Template):
       data_l = pd.DataFrame(data_l)
       
       ## Save
-      name = '{}processed_data/{}/age_symptom_correlations.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/age_symptom_correlations.csv'
       cvcm.saveCsv(name, data_c)
-      name = '{}processed_data/{}/age_symptom_correlations_label.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/age_symptom_correlations_label.csv'
       cvcm.saveCsv(name, data_l)
       
     if mode in ['readme', 'both']:
@@ -1354,7 +1358,7 @@ class CaseSheet(cvcm.Template):
   def makeReadme_diffByTransmission(self, gr):
     key = 'difference_by_transmission' 
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: delay in number of days before identifying a transmission')
     stock.append('  - For local cases, it is defined as the delay between the report date & the onset date.')
     stock.append('  - For imported cases, it is defined as the delay between the report date & the later one of the onset date & the entry date.')
@@ -1382,7 +1386,7 @@ class CaseSheet(cvcm.Template):
       data = {key: stock[key] for key in col_tag_list}
       data = pd.DataFrame(data)
       
-      name = '{}processed_data/{}/difference_by_transmission.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/difference_by_transmission.csv'
       cvcm.saveCsv(name, data)
     
     if mode in ['readme', 'both']:

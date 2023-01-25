@@ -2,7 +2,7 @@
     ################################
     ##  timeline.py               ##
     ##  Chieh-An Lin              ##
-    ##  2022.12.05                ##
+    ##  2023.01.25                ##
     ################################
 
 import os
@@ -28,14 +28,14 @@ class TimelineSheet(cvcm.Template):
     self.coltag_global_evt = '全球事件'
     self.coltag_cdc_evt = 'CDC時間軸'
     
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_timeline.csv'.format(cvcm.DATA_PATH)
+    name = f'{cvcm.DATA_PATH}raw_data/COVID-19_in_Taiwan_raw_data_timeline.csv'
     data = cvcm.loadCsv(name, verbose=verbose)
     
     self.data = data
     self.n_total = self.getNbRows()
     
     if verbose:
-      print('N_total = {:d}'.format(self.n_total))
+      print(f'N_total = {self.n_total}')
     return 
     
   def getDate(self):
@@ -48,7 +48,7 @@ class TimelineSheet(cvcm.Template):
       m = int(mmddday_zh[0])
       ddday_zh = mmddday_zh[1].split('日')
       d = int(ddday_zh[0])
-      date = '{:04d}-{:02d}-{:02d}'.format(y, m, d)
+      date = f'{y:04}-{m:02}-{d:02}'
       date_list.append(date)
     return date_list
   
@@ -107,7 +107,7 @@ class TimelineSheet(cvcm.Template):
   def makeReadme_evtTimeline(self):
     key = 'event_timeline_zh-tw'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: date')
     stock.append('- Column')
     stock.append('  - `Taiwan_event`')
@@ -123,7 +123,7 @@ class TimelineSheet(cvcm.Template):
       data = self.makeStock_evtTimeline()
       data = pd.DataFrame(data)
       
-      name = '{}processed_data/event_timeline_zh-tw.csv'.format(cvcm.DATA_PATH)
+      name = f'{cvcm.DATA_PATH}processed_data/event_timeline_zh-tw.csv'
       cvcm.saveCsv(name, data)
     
     if mode in ['readme', 'both']:
@@ -131,7 +131,7 @@ class TimelineSheet(cvcm.Template):
     return
   
   def saveCsv(self, mode='both'):
-    self.saveCsv_evtTimeline(mode=mode)
+    self.saveCsv_evtTimeline(mode='readme')
     return
   
 ## End of file

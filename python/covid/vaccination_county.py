@@ -2,7 +2,7 @@
     ################################
     ##  vaccination_county.py     ##
     ##  Chieh-An Lin              ##
-    ##  2022.12.05                ##
+    ##  2023.01.25                ##
     ################################
 
 import os
@@ -31,10 +31,9 @@ class VaccinationCountySheet(cvcm.Template):
     self.coltag_3rd_dose_2 = '加強劑'
     self.coltag_3rd_dose_1 = '追加劑'
     
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv'.format(cvcm.DATA_PATH)
+    name = f'{cvcm.DATA_PATH}raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv'
     data = cvcm.loadCsv(name, verbose=verbose)
-    ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006
-    ## https://covid-19.nchc.org.tw/api/download/vaccineCityLevel_2022-06-22.csv
+    ## https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006&chartset=utf-8
     
     self.data = data
     self.n_total = len(set(self.getDate()))
@@ -49,7 +48,7 @@ class VaccinationCountySheet(cvcm.Template):
     self.age_key_list = ['0-4', '5-11', '12-17', '18-29', '30-49', '50-64', '65-74', '75+']
     
     if verbose:
-      print('N_total = {:d}'.format(self.n_total))
+      print(f'N_total = {self.n_total}')
     return
   
   def getDate(self):
@@ -62,7 +61,7 @@ class VaccinationCountySheet(cvcm.Template):
       try:
         county_list.append(cvcm.COUNTY_DICT_2[county])
       except KeyError:
-        print('County, {}'.format(county))
+        print(f'County, {county}')
         county_list.append('unknown')
     
     return county_list
@@ -74,7 +73,7 @@ class VaccinationCountySheet(cvcm.Template):
       try:
         age_list.append(cvcm.AGE_DICT_3[age])
       except KeyError:
-        print('Age, {}'.format(age))
+        print(f'Age, {age}')
         age_list.append('unknown')
         
     return age_list
@@ -135,7 +134,7 @@ class VaccinationCountySheet(cvcm.Template):
   def makeReadme_vaccinationByCounty(self, gr):
     key = 'vaccination_by_county'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: city or county')
     stock.append('- Column')
     stock.append('  - `key`: name of key')
@@ -149,7 +148,7 @@ class VaccinationCountySheet(cvcm.Template):
     
     key = 'vaccination_by_county_label'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row')
     stock.append('  - `latest_date`: date of last available data')
     stock.append('- Column')
@@ -170,9 +169,9 @@ class VaccinationCountySheet(cvcm.Template):
       data_r = pd.DataFrame(data_r)
       
       ## Save
-      name = '{}processed_data/{}/vaccination_by_county.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/vaccination_by_county.csv'
       cvcm.saveCsv(name, data_r)
-      name = '{}processed_data/{}/vaccination_by_county_label.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/vaccination_by_county_label.csv'
       cvcm.saveCsv(name, data_l)
     
     if mode in ['readme', 'both']:
@@ -222,7 +221,7 @@ class VaccinationCountySheet(cvcm.Template):
   def makeReadme_vaccinationByAge(self, gr):
     key = 'vaccination_by_age'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: age group')
     stock.append('- Column')
     stock.append('  - `key`: name of key')
@@ -236,7 +235,7 @@ class VaccinationCountySheet(cvcm.Template):
     
     key = 'vaccination_by_age_label'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row')
     stock.append('  - `latest_date`: date of last available data')
     stock.append('- Column')
@@ -257,9 +256,9 @@ class VaccinationCountySheet(cvcm.Template):
       data_r = pd.DataFrame(data_r)
       
       ## Save
-      name = '{}processed_data/{}/vaccination_by_age.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/vaccination_by_age.csv'
       cvcm.saveCsv(name, data_r)
-      name = '{}processed_data/{}/vaccination_by_age_label.csv'.format(cvcm.DATA_PATH, gr)
+      name = f'{cvcm.DATA_PATH}processed_data/{gr}/vaccination_by_age_label.csv'
       cvcm.saveCsv(name, data_l)
     
     if mode in ['readme', 'both']:

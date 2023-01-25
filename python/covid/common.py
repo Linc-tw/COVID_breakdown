@@ -2,7 +2,7 @@
     ################################
     ##  common.py                 ##
     ##  Chieh-An Lin              ##
-    ##  2022.12.07                ##
+    ##  2023.01.25                ##
     ################################
 
 import os
@@ -324,7 +324,7 @@ AGE_DICT_3 = {
 COUNTY_DICT = {
   '00000': dict( ## Total
     tag = 'total', 
-    label = ['Nationalwide', 'National', '全國'], 
+    label = ['Nationwide', 'National', '全國'], 
     population = 23588597,
   ),
   
@@ -692,13 +692,13 @@ README_DICT = {}
 def loadCsv(name, verbose=True, **kwargs):
   data = pd.read_csv(name, dtype=object, skipinitialspace=True, **kwargs)
   if verbose:
-    print('Loaded \"{}\"'.format(name))
+    print(f'Loaded \"{name}\"')
   return data
 
 def saveCsv(name, data, verbose=True):
   data.to_csv(name, index=False)
   if verbose:
-    print('Saved \"{}\"'.format(name))
+    print(f'Saved \"{name}\"')
   return
 
 def loadJson(name, verbose=True):
@@ -706,7 +706,7 @@ def loadJson(name, verbose=True):
   data = json.load(file_)
   file_.close()
   if verbose:
-    print('Loaded \"{}\"'.format(name))
+    print(f'Loaded \"{name}\"')
   return data
 
 ################################################################################
@@ -830,7 +830,7 @@ def indexForOverall(iso):
 
 def indexForYear(iso, year):
   correction = int(year % 4 == 0) - int(year % 100 == 0) + int(year % 400 == 0)
-  ord_begin = ISODateToOrd('{:4d}-01-01'.format(year))
+  ord_begin = ISODateToOrd(f'{year:04}-01-01')
   ind = ISODateToOrd(iso) - ord_begin
   if ind < 0 or ind >= 365+correction:
     return np.nan
@@ -930,8 +930,8 @@ def initializeReadme_root():
   stock.append('--------')
   stock.append('')
   for year in GROUP_YEAR_LIST:
-    stock.append('`{}/`'.format(year))
-    stock.append('- Contains statistics of {}'.format(year))
+    stock.append(f'`{year}/`')
+    stock.append(f'- Contains statistics of {year}')
     stock.append('')
   stock.append('`latest/`')
   stock.append('- Contains statistics of last 90 days')
@@ -943,7 +943,7 @@ def initializeReadme_root():
   
   stock = []
   key = 'adminMap_byCounties_offsetIslands_sphe'
-  stock.append('`{}.geojson`'.format(key))
+  stock.append(f'`{key}.geojson`')
   stock.append('- Map of Taiwan with its islands rearranged')
   stock.append('- Contain non-ASCII characters')
   README_DICT[gr][key] = stock
@@ -955,7 +955,7 @@ def initializeReadme_page(gr):
     dict_[year] = year
   
   stock = []
-  stock.append('processed_data/{}/'.format(gr))
+  stock.append(f'processed_data/{gr}/')
   stock.append('================' + '='*len(gr) + '')
   stock.append('')
   
@@ -963,7 +963,7 @@ def initializeReadme_page(gr):
   stock.append('Summary')
   stock.append('-------')
   stock.append('')
-  stock.append('This folder hosts data files which summarize COVID statistics in Taiwan during {}.'.format(dict_[gr]))
+  stock.append(f'This folder hosts data files which summarize COVID statistics in Taiwan during {dict_[gr]}.')
   stock.append('')
   
   stock.append('')
@@ -990,7 +990,7 @@ def saveMarkdown_readme(verbose=True):
     if gr == 'root':
       gr = ''
     
-    name = '{}processed_data/{}/README.md'.format(DATA_PATH, gr)
+    name = f'{DATA_PATH}processed_data/{gr}/README.md'
     f = open(name, 'w')
     
     ## Print header
@@ -999,11 +999,11 @@ def saveMarkdown_readme(verbose=True):
     
     for row_list in sect_dict.values():
       str_ = '\n'.join(row_list)
-      f.write('\n{}\n'.format(str_))
+      f.write(f'\n{str_}\n')
     f.close()
     
     if verbose:
-      print('Saved \"{}\"'.format(name))
+      print(f'Saved \"{name}\"')
   return
 
 ################################################################################

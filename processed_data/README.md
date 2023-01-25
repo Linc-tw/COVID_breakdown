@@ -40,3 +40,34 @@ Contents
 `adminMap_byCounties_offsetIslands_sphe.geojson`
 - Map of Taiwan with its islands rearranged
 - Contain non-ASCII characters
+
+`criteria_timeline.csv`
+- Row: date
+- Column: language
+  - `en`
+  - `fr`
+  - `zh-tw`
+- Timeline table for evolution of testing criteria in Taiwan
+- Contains non-ASCII characters
+
+`event_timeline_zh-tw.csv`
+- Row: date
+- Column
+  - `Taiwan_event`
+  - `global_event`
+  - `key_event`
+- Timeline table for major pandemic events
+- Contains non-ASCII characters
+
+`key_numbers.csv`
+- Row
+  - `n_total`: total confirmed case counts
+  - `n_latest`: number of confirmed cases during last 90 days
+  - `n_2020`: number of confirmed cases during 2020
+  - `n_2021`: number of confirmed cases during 2021
+  - `n_2022`: number of confirmed cases during 2022
+  - `n_2023`: number of confirmed cases during 2023
+  - `timestamp`: time of last update
+- Column
+  - `key`
+  - `value`

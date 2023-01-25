@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2022.12.05                ##
+    ##  2023.01.25                ##
     ################################
 
 import os
@@ -25,6 +25,7 @@ import covid.county as cvct
 import covid.vaccination as cvva
 import covid.vaccination_county as cvvc
 import covid.death as cvde
+import covid.case_counts as cvcc
 import covid.others as cvot
 
 import covid.html as cvht
@@ -36,8 +37,8 @@ def sandbox():
   mode = 'data'
   #cvcm.initializeReadme()
   
-  case_sheet = cvca.CaseSheet()
-  case_sheet.getOnsetDate()
+  #case_sheet = cvca.CaseSheet()
+  #case_sheet.getOnsetDate()
   
   #status_sheet = cvst.StatusSheet()
   #status_sheet.saveCsv_caseFatalityRate(mode=mode)
@@ -61,16 +62,24 @@ def sandbox():
   #vc_sheet.saveCsv_vaccinationByAge(mode=mode)
   
   #death_sheet = cvde.DeathSheet()
-  #death_sheet.saveCsv_deathDelay(mode=mode)
+  #death_sheet.saveCsv_deathCounts(mode=mode)
   
-  #status_sheet = cvst.StatusSheet()
-  #test_sheet = cvte.TestSheet()
+  #cc_sheet = cvcc.CaseCountsSheet()
+  #cc_sheet.saveCsv(mode=mode)
+  
+  status_sheet = cvst.StatusSheet()
+  cc_sheet = cvcc.CaseCountsSheet()
   #border_sheet = cvbd.BorderSheet()
+  death_sheet = cvde.DeathSheet()
   #county_sheet = cvct.CountySheet()
-  #death_sheet = cvde.DeathSheet()
-  #cvot.saveCsv_incidenceRates(status_sheet, border_sheet, mode=mode)
-  #cvot.saveCsv_positivityAndFatality(status_sheet, test_sheet, mode=mode)
+  #test_sheet = cvte.TestSheet()
+  #cvot.saveCsv_keyNb(status_sheet, cc_sheet, mode=mode)
+  #cvot.saveCsv_caseCounts(status_sheet, cc_sheet, mode=mode)
+  #cvot.saveCsv_incidenceRates(status_sheet, cc_sheet, border_sheet, mode=mode)
+  #cvot.saveCsv_deathCounts(status_sheet, death_sheet, mode=mode)
+  cvot.saveCsv_caseFatalityRates(status_sheet, cc_sheet, death_sheet, mode=mode)
   #cvot.saveCsv_deathByAge(county_sheet, death_sheet, mode=mode)
+  #cvot.saveCsv_testPositiveRate(status_sheet, cc_sheet, test_sheet, mode=mode)
   return
 
 ################################################################################
@@ -80,52 +89,49 @@ def saveCsv_all():
   mode = 'both'
   cvcm.initializeReadme()
   
+  ## README-only
   print()
   status_sheet = cvst.StatusSheet()
   status_sheet.saveCsv(mode=mode)
-  
   print()
-  test_sheet = cvte.TestSheet()
-  test_sheet.saveCsv(mode=mode)
-  
+  case_sheet = cvca.CaseSheet()
+  case_sheet.saveCsv(mode=mode)
   print()
-  county_sheet = cvct.CountySheet()
-  county_sheet.saveCsv(mode=mode)
-  
-  print()
-  death_sheet = cvde.DeathSheet()
-  death_sheet.saveCsv(mode=mode)
-  
-  print()
-  cvot.saveCsv_others(status_sheet, test_sheet, None, county_sheet, death_sheet, mode=mode)
-  
+  border_sheet = cvbd.BorderSheet()
+  border_sheet.saveCsv(mode=mode)
   print()
   timeline_sheet = cvtl.TimelineSheet()
   timeline_sheet.saveCsv(mode=mode)
   
+  ## From CDC
+  print()
+  county_sheet = cvct.CountySheet()
+  county_sheet.saveCsv(mode=mode)
+  print()
+  test_sheet = cvte.TestSheet()
+  test_sheet.saveCsv(mode=mode)
+  
+  ## From NCHC
+  print()
+  cc_sheet = cvcc.CaseCountsSheet()
+  cc_sheet.saveCsv(mode=mode)
+  print()
+  death_sheet = cvde.DeathSheet()
+  death_sheet.saveCsv(mode=mode)
   print()
   vc_sheet = cvvc.VaccinationCountySheet()
   vc_sheet.saveCsv(mode=mode)
-  
   print()
   vacc_sheet = cvva.VaccinationSheet()
   vacc_sheet.saveCsv(mode=mode)
   
   print()
+  cvot.saveCsv_others(status_sheet, cc_sheet, border_sheet, death_sheet, county_sheet, test_sheet, mode=mode)
+  
+  print()
   cvcm.saveMarkdown_readme()
   
   print()
-  
-  ## Obsolete
-  
-  #print()
-  #case_sheet = cvca.CaseSheet()
-  #case_sheet.saveCsv(mode=mode)
-  
-  #print()
-  #border_sheet = cvbd.BorderSheet()
-  #border_sheet.saveCsv(mode=mode)
-  
   return
 
 ################################################################################

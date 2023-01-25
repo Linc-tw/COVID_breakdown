@@ -490,7 +490,7 @@ function IM_Replot(wrap) {
     else if (LS_lang == 'fr')
       legend_label = 'Niveau national';
     else 
-      legend_label = 'Nationalwide level';
+      legend_label = 'Nationwide level';
     
     if (wrap.legend_value >= 1000)
       legend_label += ' \u00A0' + wrap.legend_value.toFixed(0);
@@ -503,7 +503,7 @@ function IM_Replot(wrap) {
     else if (LS_lang == 'fr')
       legend_label = 'Totaux nationaux';
     else 
-      legend_label = 'Nationalwide total';
+      legend_label = 'Nationwide total';
     legend_label += ' \u00A0' + GP_ValueStr_Legend(wrap.legend_value);
   }
   legend_caption_bottom = [legend_title_list[wrap.col_ind], legend_label];

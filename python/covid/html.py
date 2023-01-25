@@ -2,7 +2,7 @@
     ################################
     ##  html.py                   ##
     ##  Chieh-An Lin              ##
-    ##  2022.12.05                ##
+    ##  2023.01.25                ##
     ################################
 
 ################################################################################
@@ -278,7 +278,7 @@ def makeStr_html_front(page_tag):
   site_name = 'COVID-19 Statistics in Taiwan'
   page_name = PAGE_DICT[page_tag]['name']
   
-  str_ = '<!DOCTYPE html>\n<html lang="en">\n\
+  str_ = f'<!DOCTYPE html>\n<html lang="en">\n\
     <head>\n\
         <!-- Metadata - common part -->\n\
         <meta charset="utf-8" />\n\
@@ -301,7 +301,7 @@ def makeStr_html_front(page_tag):
         <title>{page_name} | {site_name}</title>\n\
     </head>\n\
     \n\
-    <body class="sb-nav-fixed">\n'.format(url=url, page_name=page_name, site_name=site_name)
+    <body class="sb-nav-fixed">\n'
   return str_
   
 def makeStr_redirection():
@@ -315,7 +315,7 @@ def makeStr_redirection():
 def makeStr_sideBar_lang():
   site_abrv = 'COVID · TAIWAN'
   
-  str_ = '\
+  str_ = f'\
         <!-- Navigation bar -->\n\
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-gray-dark">\n\
             <a class="navbar-brand ps-3" href="index.html">{site_abrv}</a>\n\
@@ -350,7 +350,7 @@ def makeStr_sideBar_lang():
                             <a class="nav-link" href="index.html">\n\
                                 <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>\n\
                                 <span id="menu_index"></span>\n\
-                            </a>\n'.format(site_abrv=site_abrv)
+                            </a>\n'
   return str_
   
 def makeStr_sideBar_pages():
@@ -449,7 +449,7 @@ def makeStr_sideBar_socialMedia():
   return str_
 
 def makeStr_title(page_tag):
-  str_ = '\
+  str_ = f'\
             \n\
             <div id="layoutSidenav_content">\n\
                 <!-- Main body -->\n\
@@ -457,7 +457,7 @@ def makeStr_title(page_tag):
                     <div class="container-fluid px-4">\n\
                         <h1 id="title" class="mt-4"></h1>\n\
                         <h4 id="title_{page_tag}" class="mb-4"></h4>\n\
-                        <div class="row">\n'.format(page_tag=page_tag)
+                        <div class="row">\n'
   return str_
 
 def makeStr_footer(page_tag):
@@ -468,21 +468,21 @@ def makeStr_footer(page_tag):
     plot_tag = PLOT_DICT[plot_abrv]['plot_tag']
     js_path = PLOT_DICT[plot_abrv]['js_path']
     
-    str_ = '\
+    str_ = f'\
         <script src="../js/{js_path}{plot_tag}.js"></script>\n\
-        <script src="../js/{js_path}{plot_tag}_param.js"></script>\n'.format(plot_tag=plot_tag, js_path=js_path)
+        <script src="../js/{js_path}{plot_tag}_param.js"></script>\n'
     
     plot_js_str.append(str_)
     
   plot_js_str = ''.join(plot_js_str)
   
   if len(plot_list) > 0:
-    main_js_str = '\
-        <script src="../js/plot/plot_{page_tag}.js"></script>\n'.format(page_tag=page_tag)
+    main_js_str = f'\
+        <script src="../js/plot/plot_{page_tag}.js"></script>\n'
   else:
     main_js_str = ''
   
-  str_ = '\
+  str_ = f'\
                         \n\
                         </div>\n\
                     </div>\n\
@@ -522,7 +522,7 @@ def makeStr_footer(page_tag):
         <!-- Plots -->\n{plot_js_str}\
         \n\
         <!-- Main -->\n{main_js_str}\
-        \n'.format(plot_js_str=plot_js_str, main_js_str=main_js_str)
+        \n'
   return str_
 
 def makeStr_html_back():
@@ -539,12 +539,12 @@ def makeStr_cmtAndSaveBtn(plot_tag, gr_tag):
   if gr_tag != '':
     gr_tag = '_' + gr_tag
     
-  str_ = '\
+  str_ = f'\
                                             <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#{plot_tag}_collapse" aria-expanded="false" aria-controls="{plot_tag}_collapse">\n\
                                                 <i class="fas fa-comment-alt"></i>\n\
                                             </button>\n\
                                             \n\
-                                            <button id="{plot_tag}{gr_tag}_save" class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>\n'.format(plot_tag=plot_tag, gr_tag=gr_tag)
+                                            <button id="{plot_tag}{gr_tag}_save" class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>\n'
   return str_
 
 def makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str):
@@ -556,7 +556,7 @@ def makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str):
   if wdt_str is None:
     wdt_str = 'col-xl-6'
     
-  str_ = '\
+  str_ = f'\
                             \n\
                             <!-- {plot_tag} -->\n\
                             <div class="{wdt_str}">\n\
@@ -578,7 +578,7 @@ def makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str):
                                     \n\
                                     <div class="card-body" id="{plot_tag}{gr_tag}"></div>\n\
                                 </div>\n\
-                            </div>\n'.format(plot_tag=plot_tag, gr_tag=gr_tag, fontawe_str=fontawe_str, btn_str=btn_str, wdt_str=wdt_str)
+                            </div>\n'
   return str_
 
 def makeStr_noOtherBtn(plot_abrv, gr_tag):
@@ -604,7 +604,7 @@ def makeStr_CC(gr_tag, index=False):
     selected_0 = ' selected'
     selected_2 = ''
   
-  btn_str = '\
+  btn_str = f'\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_{gr_tag}_cumul_0">\n\
                                                     <input type="radio" class="btn-check" name="{plot_tag}_{gr_tag}_cumul" value=0 checked>\n\
@@ -622,7 +622,7 @@ def makeStr_CC(gr_tag, index=False):
                                                 <option value="2" id="{plot_tag}_button_local"{selected_2}></option>\n\
                                                 <option value="3" id="{plot_tag}_button_others"></option>\n\
                                             </select>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, selected_0=selected_0, selected_2=selected_2, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -634,7 +634,7 @@ def makeStr_LCPC(gr_tag):
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
-  btn_str = '\
+  btn_str = f'\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_{gr_tag}_cumul_0">\n\
                                                     <input type="radio" class="btn-check" name="{plot_tag}_{gr_tag}_cumul" value=0 checked>\n\
@@ -671,7 +671,7 @@ def makeStr_LCPC(gr_tag):
                                                 <option value="21" id="{plot_tag}_button_kinmen"></option>\n\
                                                 <option value="22" id="{plot_tag}_button_matsu"></option>\n\
                                             </select>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -684,7 +684,7 @@ def makeStr_CBA(gr_tag):
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
   if gr_tag == 'latest':
-    btn_str = '\
+    btn_str = f'\
                                             <select id="{plot_tag}_{gr_tag}_period" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_period">\n\
                                                 <option value="0" id="{plot_tag}_button_total" selected></option>\n\
                                                 <option value="1" id="{plot_tag}_button_w-1"></option>\n\
@@ -700,11 +700,11 @@ def makeStr_CBA(gr_tag):
                                                 <option value="11" id="{plot_tag}_button_w-11"></option>\n\
                                                 <option value="12" id="{plot_tag}_button_w-12"></option>\n\
                                             </select>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   ## new_year_token
   elif gr_tag == 'overall':
-    btn_str = '\
+    btn_str = f'\
                                             <select id="{plot_tag}_{gr_tag}_year" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_year">\n\
                                                 <option value="0" id="{plot_tag}_button_total" selected></option>\n\
                                                 <option value="1" id="{plot_tag}_button_2020"></option>\n\
@@ -728,7 +728,7 @@ def makeStr_CBA(gr_tag):
                                                 <option value="11" id="{plot_tag}_button_m11"></option>\n\
                                                 <option value="12" id="{plot_tag}_button_m12"></option>\n\
                                             </select>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -744,7 +744,7 @@ def makeStr_IM(gr_tag):
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
   if gr_tag == 'latest':
-    btn_str = '\
+    btn_str = f'\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_{gr_tag}_rate_0">\n\
                                                     <input type="radio" class="btn-check" name="{plot_tag}_{gr_tag}_rate" value=0 checked>\n\
@@ -771,11 +771,11 @@ def makeStr_IM(gr_tag):
                                                 <option value="11" id="{plot_tag}_button_w-11"></option>\n\
                                                 <option value="12" id="{plot_tag}_button_w-12"></option>\n\
                                             </select>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   ## new_year_token
   elif gr_tag == 'overall':
-    btn_str = '\
+    btn_str = f'\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_{gr_tag}_rate_0">\n\
                                                     <input type="radio" class="btn-check" name="{plot_tag}_{gr_tag}_rate" value=0 checked>\n\
@@ -810,7 +810,7 @@ def makeStr_IM(gr_tag):
                                                 <option value="11" id="{plot_tag}_button_m11"></option>\n\
                                                 <option value="12" id="{plot_tag}_button_m12"></option>\n\
                                             </select>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -828,7 +828,7 @@ def makeStr_VBB(gr_tag):
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
-  btn_str = '\
+  btn_str = f'\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_{gr_tag}_cumul_0">\n\
                                                     <input type="radio" class="btn-check" name="{plot_tag}_{gr_tag}_cumul" value=0 checked>\n\
@@ -848,7 +848,7 @@ def makeStr_VBB(gr_tag):
                                                 <option value="4" id="{plot_tag}_button_Pfizer"></option>\n\
                                                 <option value="5" id="{plot_tag}_button_Novavax"></option>\n\
                                             </select>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -860,7 +860,7 @@ def makeStr_VP(gr_tag):
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
-  btn_str = '\
+  btn_str = f'\
                                             <select id="{plot_tag}_{gr_tag}_brand" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_brand">\n\
                                                 <option value="0" id="{plot_tag}_button_total" selected></option>\n\
                                                 <option value="1" id="{plot_tag}_button_AZ"></option>\n\
@@ -869,7 +869,7 @@ def makeStr_VP(gr_tag):
                                                 <option value="4" id="{plot_tag}_button_Pfizer"></option>\n\
                                                 <option value="5" id="{plot_tag}_button_Novavax"></option>\n\
                                             </select>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -887,14 +887,14 @@ def makeStr_VBC(gr_tag):
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
-  btn_str = '\
+  btn_str = f'\
                                             <select id="{plot_tag}_{gr_tag}_sort" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_sort">\n\
                                                 <option value="0" id="{plot_tag}_button_geo"></option>\n\
                                                 <option value="1" id="{plot_tag}_button_1st" selected></option>\n\
                                                 <option value="2" id="{plot_tag}_button_2nd"></option>\n\
                                                 <option value="3" id="{plot_tag}_button_3rd"></option>\n\
                                             </select>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -906,7 +906,7 @@ def makeStr_TC(gr_tag):
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
-  btn_str = '\
+  btn_str = f'\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_{gr_tag}_cumul_0">\n\
                                                     <input type="radio" class="btn-check" name="{plot_tag}_{gr_tag}_cumul" value=0 checked>\n\
@@ -917,7 +917,7 @@ def makeStr_TC(gr_tag):
                                                     <span id="{plot_tag}_button_cumul"></span>\n\
                                                 </label>\n\
                                             </div>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -932,7 +932,7 @@ def makeStr_DC(gr_tag):
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
-  btn_str = '\
+  btn_str = f'\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_{gr_tag}_cumul_0">\n\
                                                     <input type="radio" class="btn-check" name="{plot_tag}_{gr_tag}_cumul" value=0 checked>\n\
@@ -943,7 +943,7 @@ def makeStr_DC(gr_tag):
                                                     <span id="{plot_tag}_button_cumul"></span>\n\
                                                 </label>\n\
                                             </div>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -963,7 +963,7 @@ def makeStr_DD(gr_tag):
   
   ## new_year_token
   elif gr_tag == 'overall':
-    btn_str = '\
+    btn_str = f'\
                                             <select id="{plot_tag}_{gr_tag}_year" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_year">\n\
                                                 <option value="0" id="{plot_tag}_button_total" selected></option>\n\
                                                 <option value="1" id="{plot_tag}_button_2020"></option>\n\
@@ -971,7 +971,7 @@ def makeStr_DD(gr_tag):
                                                 <option value="3" id="{plot_tag}_button_2022"></option>\n\
                                                 <option value="4" id="{plot_tag}_button_2023"></option>\n\
                                             </select>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -984,7 +984,7 @@ def makeStr_DBA(gr_tag):
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
   ## new_year_token
-  btn_str = '\
+  btn_str = f'\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_{gr_tag}_rate_0">\n\
                                                     <input type="radio" class="btn-check" name="{plot_tag}_{gr_tag}_rate" value=0 checked>\n\
@@ -1003,7 +1003,7 @@ def makeStr_DBA(gr_tag):
                                                 <option value="3" id="{plot_tag}_button_2022"></option>\n\
                                                 <option value="4" id="{plot_tag}_button_2023"></option>\n\
                                             </select>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -1015,7 +1015,7 @@ def makeStr_BS(gr_tag):
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
-  btn_str = '\
+  btn_str = f'\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_{gr_tag}_exit_0">\n\
                                                     <input type="radio" class="btn-check" name="{plot_tag}_{gr_tag}_exit" value=0 checked>\n\
@@ -1030,7 +1030,7 @@ def makeStr_BS(gr_tag):
                                                     <span id="{plot_tag}_button_total"></span>\n\
                                                 </label>\n\
                                             </div>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -1042,7 +1042,7 @@ def makeStr_SIM(gr_tag):
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
-  btn_str = '\
+  btn_str = f'\
                                             <select id="{plot_tag}_{gr_tag}_stat_0" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_stat_0">\n\
                                                 <option value="0" id="{plot_tag}_button_total_case_0" selected></option>\n\
                                                 <option value="1" id="{plot_tag}_button_imported_case_0"></option>\n\
@@ -1076,7 +1076,7 @@ def makeStr_SIM(gr_tag):
                                                 <option value="12" id="{plot_tag}_button_test_1"></option>\n\
                                                 <option value="13" id="{plot_tag}_button_positivity_1"></option>\n\
                                             </select>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, gr_tag=gr_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -1089,7 +1089,7 @@ def makeStr_CT():
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
-  btn_str = '\
+  btn_str = f'\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_full_0">\n\
                                                     <input type="radio" class="btn-check" name="{plot_tag}_full" value=0 checked>\n\
@@ -1111,11 +1111,11 @@ def makeStr_CT():
                                                     <span id="{plot_tag}_button_disk"></span>\n\
                                                 </label>\n\
                                             </div>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
-                                            
+
 def makeStr_ET(gr_tag):
   plot_abrv = 'ET'
   plot_tag = PLOT_DICT[plot_abrv]['plot_tag'] + '_' + gr_tag
@@ -1124,7 +1124,7 @@ def makeStr_ET(gr_tag):
   gr_tag = ''
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
-  btn_str = '\
+  btn_str = f'\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_start_0">\n\
                                                     <input type="radio" class="btn-check" name="{plot_tag}_start" value=0 checked>\n\
@@ -1135,7 +1135,7 @@ def makeStr_ET(gr_tag):
                                                     <span id="{plot_tag}_button_mon"></span>\n\
                                                 </label>\n\
                                             </div>\n\
-                                            \n{cmt_save_btn}'.format(plot_tag=plot_tag, cmt_save_btn=cmt_save_btn)
+                                            \n{cmt_save_btn}'
   
   str_ = makeStr_plot(plot_tag, gr_tag, wdt_str, fontawe_str, btn_str)
   return str_
@@ -1146,13 +1146,13 @@ def makeStr_DS():
   wdt_str = PLOT_DICT[plot_abrv]['wdt_str']
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   
-  str_ = '\
+  str_ = f'\
                             \n\
                             <!-- {plot_tag}_original -->\n\
                             <div class="{wdt_str}">\n\
                                 <div class="card mb-4">\n\
                                     <div class="card-header">\n\
-                                        <i class="fas {fontawe_str_0} me-1"></i>\n\
+                                        <i class="fas {fontawe_str[0]} me-1"></i>\n\
                                         <span id="{plot_tag}_original_title"></span>\n\
                                     </div>\n\
                                     \n\
@@ -1164,7 +1164,7 @@ def makeStr_DS():
                             <div class="{wdt_str}">\n\
                                 <div class="card mb-4">\n\
                                     <div class="card-header">\n\
-                                        <i class="fas {fontawe_str_1} me-1"></i>\n\
+                                        <i class="fas {fontawe_str[1]} me-1"></i>\n\
                                         <span id="{plot_tag}_raw_title"></span>\n\
                                     </div>\n\
                                     \n\
@@ -1176,14 +1176,14 @@ def makeStr_DS():
                             <div class="{wdt_str}">\n\
                                 <div class="card mb-4">\n\
                                     <div class="card-header">\n\
-                                        <i class="fas {fontawe_str_2} me-1"></i>\n\
+                                        <i class="fas {fontawe_str[2]} me-1"></i>\n\
                                         <span id="{plot_tag}_processed_title"></span>\n\
                                     </div>\n\
                                     \n\
                                     <div id="{plot_tag}_processed_body" class="card-body" style="text-align: justify;"></div>\n\
                                 </div>\n\
                             </div>\n\
-                            \n'.format(plot_tag=plot_tag, fontawe_str_0=fontawe_str[0], fontawe_str_1=fontawe_str[1], fontawe_str_2=fontawe_str[2], wdt_str=wdt_str)
+                            \n'
   return str_
 
 def makeStr_NRR():
@@ -1192,7 +1192,7 @@ def makeStr_NRR():
   wdt_str = PLOT_DICT[plot_abrv]['wdt_str']
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   
-  str_ = '\
+  str_ = f'\
                             \n\
                             <!-- {plot_tag} -->\n\
                             <div class="{wdt_str}">\n\
@@ -1203,7 +1203,7 @@ def makeStr_NRR():
                                     \n\
                                     <div id="{plot_tag}_body" class="card-body" style="text-align: justify;"></div>\n\
                                 </div>\n\
-                            </div>\n'.format(plot_tag=plot_tag, fontawe_str=fontawe_str, wdt_str=wdt_str)
+                            </div>\n'
   return str_
 
 def makeStr_vignette(plot_abrv, cate_tag):
@@ -1214,15 +1214,15 @@ def makeStr_vignette(plot_abrv, cate_tag):
   
   for gr_tag in gr_tag_list:
     page_tag = gr_tag + '_' + cate_tag
-    str_ = '\
+    str_ = f'\
                                             <a href="{page_tag}.html" class="btn btn-covid">\n\
                                                 <span id="vignette_{page_tag}"></span>\n\
-                                            </a>\n'.format(page_tag=page_tag)
+                                            </a>\n'
     vignette_str.append(str_)
   
   vignette_str = ''.join(vignette_str)
   
-  str_ = '\
+  str_ = f'\
                             \n\
                             <!-- Vignettes - {plot_tag} -->\n\
                             <div class="col-xl-3 col-sm-6">\n\
@@ -1238,9 +1238,9 @@ def makeStr_vignette(plot_abrv, cate_tag):
                                         </div>\n\
                                     </div>\n\
                                 </div>\n\
-                            </div>\n'.format(plot_tag=plot_tag, cate_tag=cate_tag, fontawe_str=fontawe_str, vignette_str=vignette_str)
+                            </div>\n'
   return str_
-                            
+
 ################################################################################
 ## Functions - save
 
@@ -1248,7 +1248,7 @@ def saveHtml_page(page_tag, verbose=True):
   if page_tag == 'home':
     name = 'index.html'
   else:
-    name = 'page/{page_tag}.html'.format(page_tag=page_tag)
+    name = f'page/{page_tag}.html'
     
   f = open(name, 'w')
   f.write(makeStr_header(page_tag))
@@ -1330,7 +1330,7 @@ def saveHtml_page(page_tag, verbose=True):
   f.close()
   
   if verbose:
-    print('Saved \"{}\"'.format(name))
+    print(f'Saved \"{name}\"')
   return
 
 def saveHtml_all(verbose=True):

@@ -57,7 +57,7 @@ function IEBC_ResetText() {
       The last column is empty since today\'s data are only available tomorrow.\
       <br><br>\
       The imported cases are not included.\
-      Thus, the incidence rate of "Nationalwide" could be different from the value of "All ages" in "Evolution of Incidence Rate by Age Group".\
+      Thus, the incidence rate of "Nationwide" could be different from the value of "All ages" in "Evolution of Incidence Rate by Age Group".\
     ');
   }
 }

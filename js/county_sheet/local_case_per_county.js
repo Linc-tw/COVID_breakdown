@@ -93,7 +93,7 @@ function LCPC_ResetText() {
     LS_AddStr('local_case_per_county_title', 'Local Confirmed Cases per City & County');
     LS_AddStr('local_case_per_county_button_daily', 'Daily');
     LS_AddStr('local_case_per_county_button_cumul', 'Cumulative');
-    LS_AddStr('local_case_per_county_button_total', 'Nationalwide total');
+    LS_AddStr('local_case_per_county_button_total', 'Nationwide total');
     LS_AddStr('local_case_per_county_button_keelung', 'Keelung');
     LS_AddStr('local_case_per_county_button_taipei', 'Taipei');
     LS_AddStr('local_case_per_county_button_new_taipei', 'New Taipei');
@@ -277,7 +277,7 @@ function LCPC_MouseMove(wrap, d) {
   
   else {
     col_label_list = [
-      'Nationalwide total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Nationwide total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
     avg_text = '7-day average';
@@ -377,7 +377,7 @@ function LCPC_Replot(wrap) {
     ];
   else
     legend_label = [
-      'Nationalwide total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
+      'Nationwide total', 'Keelung', 'Taipei', 'New Taipei', 'Taoyuan', 'Hsinchu County', 'Hsinchu City', 'Miaoli', 'Taichung', 'Changhua', 'Nantou', 'Yunlin', 
       'Chiayi County', 'Chiayi City', 'Tainan', 'Kaohsiung', 'Pingtung', 'Yilan', 'Hualien', 'Taitung', 'Penghu', 'Kinmen', 'Matsu'
     ];
   wrap.legend_label = [legend_label[wrap.col_ind], legend_label[0]];

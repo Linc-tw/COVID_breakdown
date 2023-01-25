@@ -11,6 +11,48 @@ This folder hosts data files which summarize COVID statistics in Taiwan during l
 Contents
 --------
 
+`case_by_age.csv`
+- Row: age group
+- Column
+  - `age`
+  - `total`: last 90 days
+  - `week_-N`: between 7*`N`-7 & 7*`N`-1 days ago
+
+`case_by_age_label.csv`
+- Row: time range
+- Column
+  - `key`
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
+
+`case_counts_by_report_day.csv`
+- Row: report date
+- Column
+  - `date`
+  - `total`: `imported` + `local` + `others`
+  - `imported`: imported cases
+  - `local`: local cases
+  - `others`: on plane, on boat, & unknown
+  - `total_avg`: 7-day moving average of `total`
+  - `imported_avg`: 7-day moving average of `imported`
+  - `local_avg`: 7-day moving average of `local`
+  - `others_avg`: 7-day moving average of `others`
+
+`case_fatality_rate.csv`
+- Row: date
+- Column
+  - `date`
+  - `weekly_CFR`: 7-day-averaged case fatality rate
+  - `cumul_CFR`: cumulative case fatality rate
+
+`death_counts.csv`
+- Row: report date
+- Column
+  - `date`
+  - `death`
+  - `death_avg`: 7-day moving average of `death`
+
 `death_delay.csv`
 - Row: delay in days between case and death report
 - Column: transmission type
@@ -25,6 +67,97 @@ Contents
 - Column
   - `key`
   - `value`
+
+`incidence_evolution_by_age.csv`
+- Row: report date
+- Column
+  - `date`
+  - `total`: all ages
+  - `0-4` to `70+`: age group
+
+`incidence_evolution_by_age_label.csv`
+- Row: age group
+- Column
+  - `key`
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
+
+`incidence_evolution_by_county.csv`
+- Row: report date
+- Column
+  - `date`
+  - `total`: nationwide
+  - `Keelung` to `Matsu`: individual city or county
+  - `Hsinchu`: Hsinchu county
+  - `Hsinchu_C`: Hsinchu city
+  - `Chiayi`: Chiayi county
+  - `Chiayi_C`: Chiayi city
+
+`incidence_evolution_by_county_label.csv`
+- Row: city or county
+- Column
+  - `key`
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
+
+`incidence_map.csv`
+- Row: city or county
+- Column
+  - `county`
+  - `total`: last 90 days
+  - `week_-N`: between 7*`N`-7 & 7*`N`-1 days ago
+
+`incidence_map_label.csv`
+- Row: city or county
+- Column
+  - `key`
+  - `code`: unique code attributed to city or county by Ministry of Interior
+  - `population`
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
+
+`incidence_rates.csv`
+- Row: date
+- Column
+  - `date`
+  - `arr_incidence`: number of imported confirmed cases over number of arrival passengers
+  - `local_incidence`: number of local confirmed cases over population
+
+`local_case_per_county.csv`
+- Row: report date
+- Column
+  - `date`
+  - `total`: nationwide
+  - `Keelung` to `Matsu`: individual city or county
+  - `Hsinchu`: Hsinchu county
+  - `Hsinchu_C`: Hsinchu city
+  - `Chiayi`: Chiayi county
+  - `Chiayi_C`: Chiayi city
+  - `*_avg`: 7-day moving average of `*`
+
+`test_by_criterion.csv`
+- Row: report date
+- Column
+  - `date`
+  - `clinical`: based on clinical criteria
+  - `quarantine`: on people in quarantine (obsolete)
+  - `extended`: extended community search
+
+`test_counts.csv`
+- Row: report date
+- Column
+  - `date`
+  - `total`: total test counts
+  - `total_avg`: 7-day moving average of `total`
+
+`test_positive_rate.csv`
+- Row: date
+- Column
+  - `date`
+  - `positivity`: number of confirmed cases over number of tests
 
 `vaccination_by_age.csv`
 - Row: age group

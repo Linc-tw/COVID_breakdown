@@ -2,7 +2,7 @@
     ################################
     ##  border.py                 ##
     ##  Chieh-An Lin              ##
-    ##  2022.12.05                ##
+    ##  2023.01.25                ##
     ################################
 
 import os
@@ -141,7 +141,7 @@ class BorderSheet(cvcm.Template):
       'Pintung A both': '屏東機場 小計'
     }
     
-    name = '{}raw_data/COVID-19_in_Taiwan_raw_data_border_statistics.csv'.format(cvcm.DATA_PATH)
+    name = f'{cvcm.DATA_PATH}raw_data/COVID-19_in_Taiwan_raw_data_border_statistics.csv'
     data = cvcm.loadCsv(name, verbose=verbose, header=[0, 1])
     #https://data.gov.tw/dataset/12369
     #https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pub?output=csv&gid=1449990493
@@ -150,7 +150,7 @@ class BorderSheet(cvcm.Template):
     self.n_total = self.getNbRows()
     
     if verbose:
-      print('N_total = {:d}'.format(self.n_total))
+      print(f'N_total = {self.n_total}')
     return 
     
   def setData(self, data):
@@ -173,7 +173,7 @@ class BorderSheet(cvcm.Template):
     return
   
   def getDate(self):
-    date_list = ['{}-{}-{}'.format(date[:4], date[4:6], date[6:8]) for date in self.getCol(self.coltag_date)]
+    date_list = [f'{date[:4]}-{date[4:6]}-{date[6:8]}' for date in self.getCol(self.coltag_date)]
     return date_list
     
   def getNumbers(self, tag):
@@ -298,7 +298,7 @@ class BorderSheet(cvcm.Template):
   def makeReadme_borderStats(self, gr):
     key = 'border_statistics'
     stock = []
-    stock.append('`{}.csv`'.format(key))
+    stock.append(f'`{key}.csv`')
     stock.append('- Row: report date')
     stock.append('- Column')
     stock.append('  - `date`')
@@ -317,12 +317,12 @@ class BorderSheet(cvcm.Template):
       stock = pd.DataFrame(stock)
       stock = cvcm.adjustDateRange(stock)
     
-    for gr in cvcm.GROUP_LIST:
+    for gr in [cvcm.GROUP_OVERALL, cvcm.GROUP_2020, cvcm.GROUP_2021, cvcm.GROUP_2022]:
       if mode in ['data', 'both']:
         data = cvcm.truncateStock(stock, gr)
         
         ## Save
-        name = '{}processed_data/{}/border_statistics.csv'.format(cvcm.DATA_PATH, gr)
+        name = f'{cvcm.DATA_PATH}processed_data/{gr}/border_statistics.csv'
         cvcm.saveCsv(name, data)
       
       if mode in ['readme', 'both']:
@@ -342,14 +342,14 @@ class BorderSheet(cvcm.Template):
     for date, entry in zip(date_list, entry_list):
       ind = cvcm.ISODateToOrd(date) - ord_ref
       if ind < 0 or ind >= nb_days:
-        print('Bad ind_r = {:d}'.format(ind))
+        print(f'Bad ind_r = {ind}')
         continue
       
       stock['new_entries'][ind] = entry
     return
   
   def saveCsv(self, mode='both'):
-    self.saveCsv_borderStats(mode=mode)
+    self.saveCsv_borderStats(mode='readme')
     return
 
 ## End of file

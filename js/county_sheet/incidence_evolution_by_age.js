@@ -57,7 +57,7 @@ function IEBA_ResetText() {
       The last column is empty since today\'s data are only available tomorrow.\
       <br><br>\
       The imported cases are included.\
-      Thus, the incidence rate of "All ages" could be different from the value of "Nationalwide" in "Evolution of Incidence Rate by City & County".\
+      Thus, the incidence rate of "All ages" could be different from the value of "Nationwide" in "Evolution of Incidence Rate by City & County".\
     ');
   }
 }

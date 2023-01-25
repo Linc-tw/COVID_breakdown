@@ -16,28 +16,28 @@ echo
 wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_number_of_tests.csv' 'https://od.cdc.gov.tw/eic/covid19/covid19_tw_specimen.csv' &
 sleep 4
 echo
-wget -O 'raw_data/COVID-19_in_Taiwan_raw_data_status_evolution.csv' 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pub?output=csv&gid=1036676170' &
+wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_case_counts.csv' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4051&chartset=utf-8&limited=TWN"
+wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination.csv' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004&chartset=utf-8"
+wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006&chartset=utf-8"
+wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_death.csv' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002&chartset=utf-8"
 sleep 4
-echo
-wget -O 'raw_data/COVID-19_in_Taiwan_raw_data_timeline.csv' 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pub?output=csv&gid=1744708886' &
-sleep 4
-wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_big5.csv' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2004"
-wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county_big5.csv' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=2006"
-wget --no-check-certificate -O 'raw_data/COVID-19_in_Taiwan_raw_data_death_big5.csv' "https://covid-19.nchc.org.tw/api/csv?CK=covid-19@nchc.org.tw&querydata=4002"
-sleep 30
 echo
 
-echo "## Convert data encoding"
-iconv -f Big-5 -t UTF-8 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_big5.csv' > 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination.csv'
-iconv -f Big-5 -t UTF-8 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county_big5.csv' > 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv'
-iconv -f Big-5 -t UTF-8 'raw_data/COVID-19_in_Taiwan_raw_data_death_big5.csv' > 'raw_data/COVID-19_in_Taiwan_raw_data_death.csv'
-echo "Done"
-echo
+#wget -O 'raw_data/COVID-19_in_Taiwan_raw_data_timeline.csv' 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRM7gTCUvuCqR3zdcLGccuGLv1s7dpDcQ-MeH_AZxnCXtW4iqVmEzUnDSKR7o8OiMLPMelEpxE7Pi4Q/pub?output=csv&gid=1744708886' &
+#sleep 4
+#echo
+
+# echo "## Convert data encoding"
+# iconv -f Big-5 -t UTF-8 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_big5.csv' > 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination.csv'
+# iconv -f Big-5 -t UTF-8 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county_big5.csv' > 'raw_data/COVID-19_in_Taiwan_raw_data_vaccination_county.csv'
+# iconv -f Big-5 -t UTF-8 'raw_data/COVID-19_in_Taiwan_raw_data_death_big5.csv' > 'raw_data/COVID-19_in_Taiwan_raw_data_death.csv'
+# echo "Done"
+# echo
 
 if [ "${MODE}" = "a" ] || [ "${MODE}" = "m" ]; then
   echo "## Process data"
   echo
-  /usr/bin/python3.8 python/COVID_process.py & sleep 75
+  /usr/bin/python3.8 python/COVID_process.py & sleep 80
   echo
 
   echo "## Push to repo"

@@ -11,6 +11,82 @@ This folder hosts data files which summarize COVID statistics in Taiwan during 2
 Contents
 --------
 
+`border_statistics.csv`
+- Row: report date
+- Column
+  - `date`
+  - `entry`
+  - `exit`
+  - `total`: `entry` + `exit`
+  - `entry_avg`: 7-day moving average of `entry`
+  - `exit_avg`: 7-day moving average of `exit`
+  - `total_avg`: 7-day moving average of `total`
+
+`case_by_age.csv`
+- Row: age group
+- Column
+  - `age`
+  - `total`: 2021 all year
+  - `MMM`: during month `MMM`
+
+`case_by_age_label.csv`
+- Row: time range
+- Column
+  - `key`
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
+
+`case_by_transmission_by_onset_day.csv`
+- Row: onset date
+- Column
+  - `date`
+  - `imported`
+  - `linked`: local cases linked to known ones
+  - `unlinked`: local cases with unknown origin
+  - `fleet`: on boat
+  - `plane`: on plane
+  - `unknown`: undetermined`
+- Cases without onset date do not show up in the file
+
+`case_by_transmission_by_report_day.csv`
+- Row: report date
+- Column
+  - `date`
+  - `imported`
+  - `linked`: local cases linked to known ones
+  - `unlinked`: local cases with unknown origin
+  - `fleet`: on boat
+  - `plane`: on plane
+  - `unknown`: undetermined`
+
+`case_counts_by_report_day.csv`
+- Row: report date
+- Column
+  - `date`
+  - `total`: `imported` + `local` + `others`
+  - `imported`: imported cases
+  - `local`: local cases
+  - `others`: on plane, on boat, & unknown
+  - `total_avg`: 7-day moving average of `total`
+  - `imported_avg`: 7-day moving average of `imported`
+  - `local_avg`: 7-day moving average of `local`
+  - `others_avg`: 7-day moving average of `others`
+
+`case_fatality_rate.csv`
+- Row: date
+- Column
+  - `date`
+  - `weekly_CFR`: 7-day-averaged case fatality rate
+  - `cumul_CFR`: cumulative case fatality rate
+
+`death_counts.csv`
+- Row: report date
+- Column
+  - `date`
+  - `death`
+  - `death_avg`: 7-day moving average of `death`
+
 `death_delay.csv`
 - Row: delay in days between case and death report
 - Column: transmission type
@@ -25,6 +101,77 @@ Contents
 - Column
   - `key`
   - `value`
+
+`hospitalization_or_isolation.csv`
+- Row: report date
+- Column
+  - `date`
+  - `hospitalized`: number of cases that are confirmed & not closed, either in hospitalization or isolation
+
+`incidence_map.csv`
+- Row: city or county
+- Column
+  - `county`
+  - `total`: 2021 all year
+  - `MMM`: during month `MMM`
+
+`incidence_map_label.csv`
+- Row: city or county
+- Column
+  - `key`
+  - `code`: unique code attributed to city or county by Ministry of Interior
+  - `population`
+  - `label`: label in English
+  - `label_fr`: label in French (contains non-ASCII characters)
+  - `label_zh`: label in Mandarin (contains non-ASCII characters)
+
+`incidence_rates.csv`
+- Row: date
+- Column
+  - `date`
+  - `arr_incidence`: number of imported confirmed cases over number of arrival passengers
+  - `local_incidence`: number of local confirmed cases over population
+
+`local_case_per_county.csv`
+- Row: report date
+- Column
+  - `date`
+  - `total`: nationwide
+  - `Keelung` to `Matsu`: individual city or county
+  - `Hsinchu`: Hsinchu county
+  - `Hsinchu_C`: Hsinchu city
+  - `Chiayi`: Chiayi county
+  - `Chiayi_C`: Chiayi city
+  - `*_avg`: 7-day moving average of `*`
+
+`status_evolution.csv`
+- Row: report date
+- Column
+  - `date`
+  - `discharged`
+  - `hospitalized`: number of cases that are confirmed & not closed, either in hospitalization or isolation
+  - `death`
+
+`test_by_criterion.csv`
+- Row: report date
+- Column
+  - `date`
+  - `clinical`: based on clinical criteria
+  - `quarantine`: on people in quarantine (obsolete)
+  - `extended`: extended community search
+
+`test_counts.csv`
+- Row: report date
+- Column
+  - `date`
+  - `total`: total test counts
+  - `total_avg`: 7-day moving average of `total`
+
+`test_positive_rate.csv`
+- Row: date
+- Column
+  - `date`
+  - `positivity`: number of confirmed cases over number of tests
 
 `vaccination_by_brand.csv`
 - Row: report date
