@@ -2,7 +2,7 @@
     ################################
     ##  html.py                   ##
     ##  Chieh-An Lin              ##
-    ##  2023.01.25                ##
+    ##  2023.02.09                ##
     ################################
 
 ################################################################################
@@ -223,7 +223,7 @@ PLOT_DICT = {
     plot_tag = 'event_timeline',
     js_path = 'timeline_sheet/',
     wdt_str = 'col-xl-12',
-    fontawe_str = {'2020': 'fa-calendar-alt', '2022': 'fa-calendar-check', '2024': 'fa-calendar-alt', },
+    fontawe_str = {'2020': 'fa-calendar-alt', '2022': 'fa-calendar-check', },
   ),
   
   ## Other pages
@@ -597,13 +597,6 @@ def makeStr_CC(gr_tag, index=False):
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
   cmt_save_btn = makeStr_cmtAndSaveBtn(plot_tag, gr_tag)
   
-  if index:
-    selected_0 = ''
-    selected_2 = ' selected'
-  else:
-    selected_0 = ' selected'
-    selected_2 = ''
-  
   btn_str = f'\
                                             <div class="btn-group btn-group-sm btn-group-toggle me-2" data-toggle="buttons">\n\
                                                 <label class="btn btn-covid active" id="{plot_tag}_{gr_tag}_cumul_0">\n\
@@ -617,9 +610,9 @@ def makeStr_CC(gr_tag, index=False):
                                             </div>\n\
                                             \n\
                                             <select id="{plot_tag}_{gr_tag}_trans" class="form-select form-select-sm me-2" aria-label="{plot_tag}_{gr_tag}_trans">\n\
-                                                <option value="0" id="{plot_tag}_button_total"{selected_0}></option>\n\
+                                                <option value="0" id="{plot_tag}_button_total" selected></option>\n\
                                                 <option value="1" id="{plot_tag}_button_imported"></option>\n\
-                                                <option value="2" id="{plot_tag}_button_local"{selected_2}></option>\n\
+                                                <option value="2" id="{plot_tag}_button_local"></option>\n\
                                                 <option value="3" id="{plot_tag}_button_others"></option>\n\
                                             </select>\n\
                                             \n{cmt_save_btn}'
@@ -1276,7 +1269,6 @@ def saveHtml_page(page_tag, verbose=True):
       f.write(makeStr_CT())
       f.write(makeStr_ET('2020'))
       f.write(makeStr_ET('2022'))
-      f.write(makeStr_ET('2024'))
       ## new_year_token
     
     elif page_tag == 'data_source':

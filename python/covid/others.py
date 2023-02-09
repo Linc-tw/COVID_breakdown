@@ -511,9 +511,9 @@ def saveCsv_others(status_sheet, cc_sheet, border_sheet, death_sheet, county_she
   saveCsv_keyNb(status_sheet, cc_sheet)
   saveCsv_caseCounts(status_sheet, cc_sheet)
   saveCsv_incidenceRates(status_sheet, cc_sheet, border_sheet, mode=mode)
-  saveCsv_deathCounts(status_sheet, death_sheet, mode=mode)
-  saveCsv_caseFatalityRates(status_sheet, cc_sheet, death_sheet, mode=mode)
-  saveCsv_deathByAge(county_sheet, death_sheet, mode=mode)
+  saveCsv_deathCounts(status_sheet, death_sheet, mode='readme')
+  saveCsv_caseFatalityRates(status_sheet, cc_sheet, death_sheet, mode='readme')
+  saveCsv_deathByAge(county_sheet, death_sheet, mode='readme')
   saveCsv_testPositiveRate(status_sheet, cc_sheet, test_sheet, mode=mode)
   return
 

@@ -154,6 +154,11 @@ function BS_FormatData2(wrap, data2) {
   
   //-- Calculate xlim
   GP_MakeXLim(wrap);
+  
+  //-- Overwrite end day
+  var iso_today = '2022-04-30';
+  wrap.x_max = GP_DateOrdinal(iso_today);
+  wrap.x_max += 0.5; //-- Edge correction
 }
 
 //-- Tooltip

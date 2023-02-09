@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  general_plotting.js       --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.26                --//
+    //--  2023.02.09                --//
     //--------------------------------//
 
 //------------------------------------------------------------------------------
@@ -1357,6 +1357,8 @@ function GP_ReplotLegend(wrap, format, legend_size) {
       .attr('text-anchor', 'end')
       .style('fill', function (d, i) {return wrap.legend_color[i];})
       .text(function (d, i) {
+        if (Number.isNaN(d))
+          return 'NaN';
         if (0 == i) 
           return ''; 
         if (format.includes('count')) 

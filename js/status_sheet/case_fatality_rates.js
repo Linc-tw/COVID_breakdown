@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_fatality_rates.js    --//
     //--  Chieh-An Lin              --//
-    //--  2022.06.10                --//
+    //--  2023.02.09                --//
     //--------------------------------//
 
 function CFR_InitFig(wrap) {
@@ -25,6 +25,8 @@ function CFR_ResetText() {
       為平均死亡人數除以12日前的平均確診人數。\
       <br><br>\
       累計致死率則是從疫情開始到該日的整體比率。\
+      <br><br>\
+      資料自2023年1月20日起停止更新。\
     ');
   }
   
@@ -38,6 +40,8 @@ function CFR_ResetText() {
       C\'est le ratio entre le décès moyen et le nombre moyen des cas d\'il y a 12 jours.\
       <br><br>\
       Le taux cumulé est le ratio global à partir du début de la pandémie jusqu\'au jour concerné.\
+      <br><br>\
+      La mise à jour s\'est arrêté à partir du 20 janvier 2023.\
     ');
   }
   
@@ -51,6 +55,8 @@ function CFR_ResetText() {
       It is the average death counts over the average confirmed cases of 12 days ago.\
       <br><br>\
       The cumulative fatality is the cumulative result calculated from the beginning of the pandemic to a given day.\
+      <br><br>\
+      The update of data has stopped since Jan 20th 2023.\
     ');
   }
 }
@@ -186,6 +192,11 @@ function CFR_FormatData2(wrap, data2) {
   
   //-- Calculate xlim
   GP_MakeXLim(wrap);
+  
+  //-- Overwrite end day
+  var iso_today = '2023-01-19';
+  wrap.x_max = GP_DateOrdinal(iso_today);
+  wrap.x_max += 0.5; //-- Edge correction
 }
 
 //-- Tooltip

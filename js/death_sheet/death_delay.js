@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_delay.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.12.05                --//
+    //--  2023.02.09                --//
     //--------------------------------//
 
 function DD_InitFig(wrap) {
@@ -28,6 +28,8 @@ function DD_ResetText() {
       確診通報日未必等同於採檢日或發病日，同理死亡通報日也未必等同於死亡日。\
       <br><br>\
       此分佈圖有助於估計確診高峰與死亡高峰間之時間差。\
+      <br><br>\
+      資料自2023年1月20日起停止更新。\
     ');
   }
   
@@ -47,6 +49,8 @@ function DD_ResetText() {
       De même, la date du signalement de décès n\'est pas nécessairement celle de décès.\
       <br><br>\
       Cette distribution aide à caractériser le délai entre les pics d\'une vague des cas et celle des décès.\
+      <br><br>\
+      La mise à jour s\'est arrêté à partir du 20 janvier 2023.\
     ');
   }
   
@@ -66,6 +70,8 @@ function DD_ResetText() {
       Similarly, the death report date is not necessarily the date of death.\
       <br><br>\
       This distribution helps characterizing the delay between the peaks of a case wave and a death wave.\
+      <br><br>\
+      The update of data has stopped since Jan 20th 2023.\
     ');
   }
 }

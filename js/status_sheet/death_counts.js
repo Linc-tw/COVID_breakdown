@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_counts.js           --//
     //--  Chieh-An Lin              --//
-    //--  2022.06.10                --//
+    //--  2023.02.09                --//
     //--------------------------------//
 
 function DC_InitFig(wrap) {
@@ -24,6 +24,8 @@ function DC_ResetText() {
       2020和2021年之統計採全死因認定， 只要死者曾檢驗為陽性即被納入。\
       <br><br>\
       自2022年起，主要死因為意外、自殺、他殺者將不再採計。\
+      <br><br>\
+      資料自2023年1月20日起停止更新。\
     ');
   }
   
@@ -36,6 +38,8 @@ function DC_ResetText() {
       En 2020 & 2021, le nombre de décès inclut tous les décès qui ont été testés positifs indépendamment de leurs causes du décès.\
       <br><br>\
       À partir de 2022, les décès causés par les accidents, les suicides et les homicides sont exclus.\
+      <br><br>\
+      La mise à jour s\'est arrêté à partir du 20 janvier 2023.\
     ');
   }
   
@@ -48,6 +52,8 @@ function DC_ResetText() {
       In 2020 & 2021, death counts include all deaths that were tested positive independent from their causes of death.\
       <br><br>\
       Since 2022, accidents, suicides, & homicides have been excluded.\
+      <br><br>\
+      The update of data has stopped since Jan 20th 2023.\
     ');
   }
 }
@@ -163,6 +169,11 @@ function DC_FormatData2(wrap, data2) {
   
   //-- Calculate xlim
   GP_MakeXLim(wrap);
+  
+  //-- Overwrite end day
+  var iso_today = '2023-01-19';
+  wrap.x_max = GP_DateOrdinal(iso_today);
+  wrap.x_max += 0.5; //-- Edge correction
 }
 
 //-- Tooltip

@@ -298,7 +298,7 @@ class DeathSheet(cvcm.Template):
     return
     
   def saveCsv(self, mode='both'):
-    self.saveCsv_deathDelay(mode=mode)
+    self.saveCsv_deathDelay(mode='readme')
     return
 
 ## End of file

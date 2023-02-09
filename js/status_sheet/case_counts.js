@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  case_counts.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.22                --//
+    //--  2023.02.09                --//
     //--------------------------------//
 
 function CC_InitFig(wrap) {
@@ -64,7 +64,7 @@ function CC_FormatData(wrap, data) {
   var col_tag = col_tag_list[wrap.col_ind];
   var col_tag_avg = col_tag + '_avg';
   var nb_col = col_tag_list.length;
-  var i, j, x, y, row;
+  var i, j, x, y, row, y2;
   
   //-- Variables for plot
   var x_key = 'date';
@@ -115,10 +115,15 @@ function CC_FormatData(wrap, data) {
     
     //-- Update y_last
     for (j=0; j<nb_col; j++) {
-      if (wrap.cumul == 0)
-        y_last[j] = +row[col_tag_list[j]];
+      y2 = row[col_tag_list[j]];
+      if (wrap.cumul == 0) {
+        if ('' == y2)
+          y_last[j] = NaN;
+        else
+          y_last[j] = +y2;
+      }
       else 
-        y_last[j] = Math.max(y_last[j], +row[col_tag_list[j]]);
+        y_last[j] = Math.max(y_last[j], +y2);
     }
     
     //-- Update y_max
@@ -386,7 +391,7 @@ function CC_Main(wrap) {
   //-- Swap active to current value
   if (wrap.tag.includes('mini')) {
     wrap.cumul = 0;
-    wrap.col_ind = 2;
+    wrap.col_ind = 0;
   }
   else {
     wrap.cumul = document.querySelector("input[name='" + wrap.tag + "_cumul']:checked").value;
