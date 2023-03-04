@@ -218,6 +218,7 @@ function SIM_ResetText() {
 function SIM_FormatData(wrap, data, index) {
   var stat = wrap.stat_list[index];
   var sub_wrap = wrap.sub_wrap_list[index];
+  var i;
   
   if (wrap.tag.includes('overall'))
     sub_wrap.r = 1.5;
@@ -233,22 +234,66 @@ function SIM_FormatData(wrap, data, index) {
     else
       sub_wrap.col_ind = 2;
     CC_FormatData(sub_wrap, data);
+    
+    if (wrap.tag.includes('overall')) {
+      //-- Make zero block
+      var block_zero = {};
+      for (i in sub_wrap.formatted_data[0])
+        block_zero[i] = 0;
+      
+      //-- Back zero-padding
+      var formatted_data = [];
+      var x_list = [];
+      for (i=sub_wrap.formatted_data.length; i<wrap.nb_days; i++) {
+        block = JSON.parse(JSON.stringify(block_zero));
+        block['date'] = GP_ISODateAddition('2020-01-01', i);
+        formatted_data.push(block);
+        x_list.push(block['date']);
+      }
+      
+      sub_wrap.formatted_data = sub_wrap.formatted_data.concat(formatted_data);
+      sub_wrap.x_list = sub_wrap.x_list.concat(x_list);
+    }
   }
   else if (stat == 3) {
     sub_wrap.col_ind = 0; //-- For y_max
     IR_FormatData(sub_wrap, data);
+    
+    if (wrap.tag.includes('overall')) {
+      //-- Make zero block
+      var block_zero = {};
+      block_zero['y'] = 0;
+      block_zero['y_list'] = [];
+      for (i in sub_wrap.formatted_data[0][0]['y_list'])
+        block_zero['y_list'].push(0);
+      
+      //-- Back zero-padding
+      formatted_data = [];
+      x_list = [];
+      for (i=sub_wrap.formatted_data[0].length; i<wrap.nb_days; i++) {
+        block = JSON.parse(JSON.stringify(block_zero));
+        block['x'] = GP_ISODateAddition('2020-01-01', i);
+        formatted_data.push(block);
+        x_list.push(block['x']);
+      }
+      
+      for (i=0; i<sub_wrap.formatted_data.length; i++)
+        sub_wrap.formatted_data[i] = sub_wrap.formatted_data[i].concat(formatted_data);
+      sub_wrap.x_list = sub_wrap.x_list.concat(x_list);
+    }
   }
   else if (stat == 4) {
     sub_wrap.col_ind = 0; //-- For choosing column
     VBB_FormatData(sub_wrap, data);
     
     if (wrap.tag.includes('overall')) {
+      //-- Make zero block
       var block_zero = {};
-      var i;
       for (i in sub_wrap.formatted_data[0])
         block_zero[i] = 0;
       block_zero['interpolated'] = 1;
       
+      //-- Front zero-padding
       var formatted_data = [];
       var x_list = [];
       for (i=0; i<425; i++) {
@@ -260,16 +305,33 @@ function SIM_FormatData(wrap, data, index) {
       
       sub_wrap.formatted_data = formatted_data.concat(sub_wrap.formatted_data);
       sub_wrap.x_list = x_list.concat(sub_wrap.x_list);
+      
+      //-- Back zero-padding
+      formatted_data = [];
+      x_list = [];
+      for (i=sub_wrap.formatted_data.length; i<wrap.nb_days; i++) {
+        block = JSON.parse(JSON.stringify(block_zero));
+        block['date'] = GP_ISODateAddition('2020-01-01', i);
+        formatted_data.push(block);
+        x_list.push(block['date']);
+      }
+      
+      sub_wrap.formatted_data = sub_wrap.formatted_data.concat(formatted_data);
+      sub_wrap.x_list = sub_wrap.x_list.concat(x_list);
     }
   }
   else if (stat == 5 || stat == 6 || stat == 7 || stat == 8) {
     VBD_FormatData(sub_wrap, data);
     
     if (wrap.tag.includes('overall')) {
+      //-- Make zero block
       var block_zero = {};
       block_zero['y'] = 0;
-      block_zero['y_list'] = [0, 0, 0, 0];
+      block_zero['y_list'] = [];
+      for (i in sub_wrap.formatted_data[0][0]['y_list'])
+        block_zero['y_list'].push(0);
       
+      //-- Front zero-padding
       var formatted_data = [];
       var x_list = [];
       for (i=0; i<425; i++) {
@@ -282,22 +344,124 @@ function SIM_FormatData(wrap, data, index) {
       for (i=0; i<sub_wrap.formatted_data.length; i++)
         sub_wrap.formatted_data[i] = formatted_data.concat(sub_wrap.formatted_data[i]);
       sub_wrap.x_list = x_list.concat(sub_wrap.x_list);
+    
+      //-- Back zero-padding
+      formatted_data = [];
+      x_list = [];
+      for (i=sub_wrap.formatted_data[0].length; i<wrap.nb_days; i++) {
+        block = JSON.parse(JSON.stringify(block_zero));
+        block['x'] = GP_ISODateAddition('2020-01-01', i);
+        formatted_data.push(block);
+        x_list.push(block['x']);
+      }
+      
+      for (i=0; i<sub_wrap.formatted_data.length; i++)
+        sub_wrap.formatted_data[i] = sub_wrap.formatted_data[i].concat(formatted_data);
+      sub_wrap.x_list = sub_wrap.x_list.concat(x_list);
     }
   }
-  else if (stat == 9)
+  else if (stat == 9) {
     DC_FormatData(sub_wrap, data);
+    
+    if (wrap.tag.includes('overall')) {
+      //-- Make zero block
+      var block_zero = {};
+      for (i in sub_wrap.formatted_data[0])
+        block_zero[i] = 0;
+      
+      //-- Back zero-padding
+      var formatted_data = [];
+      var x_list = [];
+      for (i=sub_wrap.formatted_data.length; i<wrap.nb_days; i++) {
+        block = JSON.parse(JSON.stringify(block_zero));
+        block['date'] = GP_ISODateAddition('2020-01-01', i);
+        formatted_data.push(block);
+        x_list.push(block['date']);
+      }
+      
+      sub_wrap.formatted_data = sub_wrap.formatted_data.concat(formatted_data);
+      sub_wrap.x_list = sub_wrap.x_list.concat(x_list);
+    }
+  }
   else if (stat == 10 || stat == 11) {
     if (stat == 10)
       sub_wrap.col_ind = 0; //-- For y_max
     else 
       sub_wrap.col_ind = 1;
     CFR_FormatData(sub_wrap, data);
+    
+    if (wrap.tag.includes('overall')) {
+      //-- Make zero block
+      var block_zero = {};
+      block_zero['y'] = 0;
+      block_zero['y_list'] = [];
+      for (i in sub_wrap.formatted_data[0][0]['y_list'])
+        block_zero['y_list'].push(0);
+      
+      //-- Back zero-padding
+      var formatted_data = [];
+      var x_list = [];
+      for (i=sub_wrap.formatted_data[0].length; i<wrap.nb_days; i++) {
+        block = JSON.parse(JSON.stringify(block_zero));
+        block['x'] = GP_ISODateAddition('2020-01-01', i);
+        formatted_data.push(block);
+        x_list.push(block['x']);
+      }
+      
+      for (i=0; i<sub_wrap.formatted_data.length; i++)
+        sub_wrap.formatted_data[i] = sub_wrap.formatted_data[i].concat(formatted_data);
+      sub_wrap.x_list = sub_wrap.x_list.concat(x_list);
+    }
   }
-  else if (stat == 12)
+  else if (stat == 12) {
     TC_FormatData(sub_wrap, data);
+    
+    if (wrap.tag.includes('overall')) {
+      //-- Make zero block
+      var block_zero = {};
+      for (i in sub_wrap.formatted_data[0])
+        block_zero[i] = 0;
+      
+      //-- Back zero-padding
+      var formatted_data = [];
+      var x_list = [];
+      for (i=sub_wrap.formatted_data.length; i<wrap.nb_days; i++) {
+        block = JSON.parse(JSON.stringify(block_zero));
+        block['date'] = GP_ISODateAddition('2020-01-01', i);
+        formatted_data.push(block);
+        x_list.push(block['date']);
+      }
+      
+      sub_wrap.formatted_data = sub_wrap.formatted_data.concat(formatted_data);
+      sub_wrap.x_list = sub_wrap.x_list.concat(x_list);
+    }
+  }
   else if (stat == 13) {
     sub_wrap.col_ind = 0; //-- For choosing column (necessary)
     TPR_FormatData(sub_wrap, data);
+    
+    if (wrap.tag.includes('overall')) {
+      //-- Make zero block
+      var block_zero = {};
+      block_zero['y'] = 0;
+      block_zero['y_list'] = [];
+      for (i in sub_wrap.formatted_data[0][0]['y_list'])
+        block_zero['y_list'].push(0);
+      
+      //-- Back zero-padding
+      var formatted_data = [];
+      var x_list = [];
+      for (i=sub_wrap.formatted_data[0].length; i<wrap.nb_days; i++) {
+        block = JSON.parse(JSON.stringify(block_zero));
+        block['x'] = GP_ISODateAddition('2020-01-01', i);
+        formatted_data.push(block);
+        x_list.push(block['x']);
+      }
+      
+      for (i=0; i<sub_wrap.formatted_data.length; i++)
+        sub_wrap.formatted_data[i] = sub_wrap.formatted_data[i].concat(formatted_data);
+      sub_wrap.x_list = sub_wrap.x_list.concat(x_list);
+    }
   }
 }
 
@@ -318,6 +482,8 @@ function SIM_FormatData2(wrap, data2) {
   
   //-- Calculate xlim
   GP_MakeXLim(wrap);
+  
+  wrap.nb_days = GP_DateOrdinal(wrap.timestamp.slice(0, 10));
 }
 
 function SIM_PlotSingleBar(wrap, index) {
@@ -942,9 +1108,9 @@ function SIM_Load(wrap) {
       if (error)
         return console.warn(error);
       
+      SIM_FormatData2(wrap, data3);
       SIM_FormatData(wrap, data, 0);
       SIM_FormatData(wrap, data2, 1);
-      SIM_FormatData2(wrap, data3);
       SIM_Plot(wrap);
       SIM_Replot(wrap);
     });
