@@ -1,5 +1,4 @@
 date,total,imported,local,others,total_avg,imported_avg,local_avg,others_avg
-2022-12-31,25740,67,25673,0,23669.7143,119.5714,23550.1429,0.0
 2023-01-01,25386,,,,24763.7143,,,
 2023-01-02,16600,,,,25101.7143,,,
 2023-01-03,25005,,,,25176.7143,,,
@@ -89,3 +88,4 @@ date,total,imported,local,others,total_avg,imported_avg,local_avg,others_avg
 2023-03-28,,,,,,,,
 2023-03-29,,,,,,,,
 2023-03-30,,,,,,,,
+2023-03-31,,,,,,,,
