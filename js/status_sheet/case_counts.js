@@ -169,6 +169,9 @@ function CC_FormatData2(wrap, data2) {
       wrap.timestamp = data2[i]['value'];
   }
   
+  //-- Overwrite timestamp
+  wrap.timestamp = '2023-03-04 18:00:00 UTC+0800';
+  
   //-- Set iso_begin
   wrap.iso_begin = GP_wrap.iso_ref;
   

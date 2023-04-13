@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  test_counts.js            --//
     //--  Chieh-An Lin              --//
-    //--  2022.05.26                --//
+    //--  2023.04.13                --//
     //--------------------------------//
 
 function TC_InitFig(wrap) {
@@ -162,6 +162,9 @@ function TC_FormatData2(wrap, data2) {
     if ('timestamp' == data2[i]['key'])
       wrap.timestamp = data2[i]['value'];
   }
+  
+  //-- Overwrite timestamp
+  wrap.timestamp = '2023-03-01 18:00:00 UTC+0800';
   
   //-- Set iso_begin
   wrap.iso_begin = GP_wrap.iso_ref;

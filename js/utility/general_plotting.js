@@ -23,10 +23,10 @@ var GP_wrap = {
   //-- xlabel overall
   iso_ref: '2020-01-01',
   iso_ref_vacc: '2021-03-01',
-  xticklabel_min_space_month: 23,
-  xticklabel_min_space_month_vacc: 17,
-  xticklabel_min_space_year: 50,
-  xticklabel_min_space_year_vacc: 25,
+  xticklabel_min_space_month: 21,
+  xticklabel_min_space_month_vacc: 18,
+  xticklabel_min_space_year: 70,
+  xticklabel_min_space_year_vacc: 40,
   
   //-- padding
   padding_bar: 0.2,

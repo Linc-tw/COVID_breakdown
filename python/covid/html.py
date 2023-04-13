@@ -2,7 +2,7 @@
     ################################
     ##  html.py                   ##
     ##  Chieh-An Lin              ##
-    ##  2023.02.09                ##
+    ##  2023.04.13                ##
     ################################
 
 ################################################################################
@@ -49,7 +49,7 @@ PAGE_DICT = {
   ),
   'overall_vaccination': dict(
     name = 'Overall vaccination',
-    plot_list = ['VBB', 'VP', 'VBD'],
+    plot_list = ['VBB', 'VP', 'VBD', 'VBA', 'VBC'],
   ),
   'overall_deaths': dict(
     name = 'Overall deaths',
@@ -354,63 +354,66 @@ def makeStr_sideBar_lang():
   return str_
   
 def makeStr_sideBar_pages():
+                            #<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_latest" aria-expanded="false" aria-controls="collapse_latest">\n\
+                                #<div class="sb-nav-link-icon"><i class="fas fa-fast-forward"></i></div>\n\
+                                #<span id="menu_latest"></span>\n\
+                                #<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>\n\
+                            #</a>\n\
+                            #<div class="collapse" id="collapse_latest" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">\n\
+                                #<nav class="sb-sidenav-menu-nested nav">\n\
+                                    #<a class="nav-link" href="latest_cases.html">\n\
+                                        #<span id="menu_latest_cases"></span>\n\
+                                    #</a>\n\
+                                    #<a class="nav-link" href="latest_incidence.html">\n\
+                                        #<span id="menu_latest_incidence"></span>\n\
+                                    #</a>\n\
+                                    #<a class="nav-link" href="latest_vaccination.html">\n\
+                                        #<span id="menu_latest_vaccination"></span>\n\
+                                    #</a>\n\
+                                    #<a class="nav-link" href="latest_deaths.html">\n\
+                                        #<span id="menu_latest_deaths"></span>\n\
+                                    #</a>\n\
+                                    #<a class="nav-link" href="latest_others.html">\n\
+                                        #<span id="menu_latest_others"></span>\n\
+                                    #</a>\n\
+                                    #<a class="nav-link" href="latest_comparison.html">\n\
+                                        #<span id="menu_latest_comparison"></span>\n\
+                                    #</a>\n\
+                                #</nav>\n\
+                            #</div>\n\
+                            #\n\
   str_ = '\
                             \n\
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_latest" aria-expanded="false" aria-controls="collapse_latest">\n\
-                                <div class="sb-nav-link-icon"><i class="fas fa-fast-forward"></i></div>\n\
-                                <span id="menu_latest"></span>\n\
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>\n\
+                            <a class="nav-link" href="overall_cases.html">\n\
+                                <div class="sb-nav-link-icon"><i class="fas fa-suitcase"></i></div>\n\
+                                <span id="menu_overall_cases"></span>\n\
                             </a>\n\
-                            <div class="collapse" id="collapse_latest" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">\n\
-                                <nav class="sb-sidenav-menu-nested nav">\n\
-                                    <a class="nav-link" href="latest_cases.html">\n\
-                                        <span id="menu_latest_cases"></span>\n\
-                                    </a>\n\
-                                    <a class="nav-link" href="latest_incidence.html">\n\
-                                        <span id="menu_latest_incidence"></span>\n\
-                                    </a>\n\
-                                    <a class="nav-link" href="latest_vaccination.html">\n\
-                                        <span id="menu_latest_vaccination"></span>\n\
-                                    </a>\n\
-                                    <a class="nav-link" href="latest_deaths.html">\n\
-                                        <span id="menu_latest_deaths"></span>\n\
-                                    </a>\n\
-                                    <a class="nav-link" href="latest_others.html">\n\
-                                        <span id="menu_latest_others"></span>\n\
-                                    </a>\n\
-                                    <a class="nav-link" href="latest_comparison.html">\n\
-                                        <span id="menu_latest_comparison"></span>\n\
-                                    </a>\n\
-                                </nav>\n\
-                            </div>\n\
                             \n\
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_overall" aria-expanded="false" aria-controls="collapse_overall">\n\
-                                <div class="sb-nav-link-icon"><i class="fas fa-calculator"></i></div>\n\
-                                <span id="menu_overall"></span>\n\
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>\n\
+                            <a class="nav-link" href="overall_incidence.html">\n\
+                                <div class="sb-nav-link-icon"><i class="fas fa-percent"></i></div>\n\
+                                <span id="menu_overall_incidence"></span>\n\
                             </a>\n\
-                            <div class="collapse" id="collapse_overall" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">\n\
-                                <nav class="sb-sidenav-menu-nested nav">\n\
-                                    <a class="nav-link" href="overall_cases.html">\n\
-                                        <span id="menu_overall_cases"></span>\n\
-                                    </a>\n\
-                                    <a class="nav-link" href="overall_incidence.html">\n\
-                                        <span id="menu_overall_incidence"></span>\n\
-                                    </a>\n\
-                                    <a class="nav-link" href="overall_vaccination.html">\n\
-                                        <span id="menu_overall_vaccination"></span>\n\
-                                    </a>\n\
-                                    <a class="nav-link" href="overall_deaths.html">\n\
-                                        <span id="menu_overall_deaths"></span>\n\
-                                    </a>\n\
-                                    <a class="nav-link" href="overall_others.html">\n\
-                                        <span id="menu_overall_others"></span>\n\
-                                    </a>\n\
-                                    <a class="nav-link" href="overall_comparison.html">\n\
-                                        <span id="menu_overall_comparison"></span>\n\
-                                    </a>\n\
-                                </nav>\n\
-                            </div>\n'
+                            \n\
+                            <a class="nav-link" href="overall_vaccination.html">\n\
+                                <div class="sb-nav-link-icon"><i class="fas fa-syringe"></i></div>\n\
+                                <span id="menu_overall_vaccination"></span>\n\
+                            </a>\n\
+                            \n\
+                            <a class="nav-link" href="overall_deaths.html">\n\
+                                <div class="sb-nav-link-icon"><i class="fas fa-skull-crossbones"></i></div>\n\
+                                <span id="menu_overall_deaths"></span>\n\
+                            </a>\n\
+                            \n\
+                            <a class="nav-link" href="overall_others.html">\n\
+                                <div class="sb-nav-link-icon"><i class="fas fa-vials"></i></div>\n\
+                                <span id="menu_overall_others"></span>\n\
+                            </a>\n\
+                            \n\
+                            <a class="nav-link" href="overall_comparison.html">\n\
+                                <div class="sb-nav-link-icon"><i class="fas fa-balance-scale"></i></div>\n\
+                                <span id="menu_overall_comparison"></span>\n\
+                            </a>\n\
+                            \n'
   return str_
 
 def makeStr_sideBar_socialMedia():
@@ -1202,7 +1205,7 @@ def makeStr_NRR():
 def makeStr_vignette(plot_abrv, cate_tag):
   plot_tag = PLOT_DICT[plot_abrv]['plot_tag']
   fontawe_str = PLOT_DICT[plot_abrv]['fontawe_str']
-  gr_tag_list = ['latest', 'overall']
+  gr_tag_list = ['overall'] ## 'latest', 
   vignette_str = []
   
   for gr_tag in gr_tag_list:
@@ -1256,8 +1259,6 @@ def saveHtml_page(page_tag, verbose=True):
     f.write(makeStr_title(page_tag))
     
     if page_tag == 'index':
-      f.write(makeStr_CC('latest', index=True))
-      f.write(makeStr_VBD('latest'))
       f.write(makeStr_vignette('CC', 'cases'))
       f.write(makeStr_vignette('IR', 'incidence'))
       f.write(makeStr_vignette('VBB', 'vaccination'))
@@ -1296,9 +1297,8 @@ def saveHtml_page(page_tag, verbose=True):
         f.write(makeStr_VBB(gr_tag))
         f.write(makeStr_VP(gr_tag))
         f.write(makeStr_VBD(gr_tag))
-        if gr_tag == 'latest':
-          f.write(makeStr_VBA(gr_tag))
-          f.write(makeStr_VBC(gr_tag))
+        f.write(makeStr_VBA(gr_tag))
+        f.write(makeStr_VBC(gr_tag))
           
       elif cate_tag == 'deaths':
         f.write(makeStr_DC(gr_tag))

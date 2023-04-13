@@ -73,6 +73,7 @@ Contents
 - Table of confirmed cases as were reported by local health authorities
 - Contains report date, county/city, village/district, gender, age, whether imported, & number of cases
 - Removed from repo since its size is too large
+- Updated until Mar 19th 2023
 - Downloaded from [here](https://data.cdc.gov.tw/zh_TW/dataset/aagsdctable-day-19cov)
 
 `COVID-19_in_Taiwan_raw_data_number_of_tests.csv`

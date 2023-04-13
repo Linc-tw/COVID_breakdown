@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  vaccination_by_brand.js   --//
     //--  Chieh-An Lin              --//
-    //--  2022.07.10                --//
+    //--  2023.04.13                --//
     //--------------------------------//
 
 function VBB_InitFig(wrap) {
@@ -189,6 +189,9 @@ function VBB_FormatData2(wrap, data2) {
     if ('timestamp' == data2[i]['key'])
       wrap.timestamp = data2[i]['value'];
   }
+  
+  //-- Overwrite timestamp
+  wrap.timestamp = '2023-03-25 18:00:00 UTC+0800';
   
   //-- Set iso_begin
   wrap.iso_begin = GP_wrap.iso_ref_vacc;

@@ -149,16 +149,14 @@ function BS_FormatData2(wrap, data2) {
       wrap.timestamp = data2[i]['value'];
   }
   
+  //-- Overwrite timestamp
+  wrap.timestamp = '2022-04-30 18:00:00 UTC+0800';
+  
   //-- Set iso_begin
   wrap.iso_begin = GP_wrap.iso_ref;
   
   //-- Calculate xlim
   GP_MakeXLim(wrap);
-  
-  //-- Overwrite end day
-  var iso_today = '2022-04-30';
-  wrap.x_max = GP_DateOrdinal(iso_today);
-  wrap.x_max += 0.5; //-- Edge correction
 }
 
 //-- Tooltip

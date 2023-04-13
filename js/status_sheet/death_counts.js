@@ -2,7 +2,7 @@
     //--------------------------------//
     //--  death_counts.js           --//
     //--  Chieh-An Lin              --//
-    //--  2023.02.09                --//
+    //--  2023.04.13                --//
     //--------------------------------//
 
 function DC_InitFig(wrap) {
@@ -164,16 +164,14 @@ function DC_FormatData2(wrap, data2) {
       wrap.timestamp = data2[i]['value'];
   }
   
+  //-- Overwrite timestamp
+  wrap.timestamp = '2023-01-19 18:00:00 UTC+0800';
+  
   //-- Set iso_begin
   wrap.iso_begin = GP_wrap.iso_ref;
   
   //-- Calculate xlim
   GP_MakeXLim(wrap);
-  
-  //-- Overwrite end day
-  var iso_today = '2023-01-19';
-  wrap.x_max = GP_DateOrdinal(iso_today);
-  wrap.x_max += 0.5; //-- Edge correction
 }
 
 //-- Tooltip

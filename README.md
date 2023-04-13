@@ -16,9 +16,7 @@ It shows cases, testing, & vaccination statistics in Taiwan.
 Features
 --------
 
-The most recent statisitcs can be found in _Last 90 days_.
-The overall statistics can be found in _Overall stats_.
-Each of these two sections contains 6 pages: 
+The statisitcs over all pandemic period are shown on 6 different pages: 
 - _Case breakdown_
 - _Incidence rates_
 - _Vaccination_
@@ -27,28 +25,26 @@ Each of these two sections contains 6 pages:
 - _Comparison_
 
 Plots on [_Case breakdown_](http://covidtaiwan.linc.tw/page/latest_cases.html) are:
-- Confirmed Case Counts (also shown in [_Home_](http://covidtaiwan.linc.tw/page/index.html))
+- Confirmed Case Counts
 - Local Confirmed Cases per City & County
 - Confirmed Cases by Age
 
 Plots on [_Incidence rates_](http://covidtaiwan.linc.tw/page/latest_incidence.html) are:
 - Arrival & Local Incidence Rates
 - Incidence Map
-- Evolution of Incidence Rate by City & County (only in _Last 90 days_)
-- Evolution of Incidence Rate by Age Group (only in _Last 90 days_)
 
 Plots on [_Vaccination_](http://covidtaiwan.linc.tw/page/latest_vaccination.html) are:
 - Vaccination by Brand
 - Vaccination Progress & Deliveries
-- Vaccination Progress by Dose (also shown in [_Home_](http://covidtaiwan.linc.tw/page/index.html))
-- Vaccination by Age Group (only in _Last 90 days_)
-- Vaccination by City & County (only in _Last 90 days_)
+- Vaccination Progress by Dose
+- Vaccination by Age Group
+- Vaccination by City & County
 
 Plots on [_Deaths_](http://covidtaiwan.linc.tw/page/latest_deaths.html) are:
 - Death Counts
 - Case Fatality Rates
 - Delay between Case and Death Reports
-- Deaths by Age (only in _Overall stats_)
+- Deaths by Age
 
 Plots on [_Tests_](http://covidtaiwan.linc.tw/page/latest_others.html) are:
 - Test Counts
@@ -70,17 +66,11 @@ Language support
 - Taiwanese Mandarin
 
 
-Current workflow
-----------------
+Current status
+--------------
 
-An automatic update is scheduled at 18:30 everyday.
-This is done by executing `upload.sh`. It will:
-- download raw data from the sources,
-- execute `python python/COVID_process.py` to generate processed data, and
-- commit & push the data to the repository.
-
-Automatic updates can be interrupted when processing scripts raise errors (typically when data formats change) or when my computer is down.
-Manual data regularization may be done from time to time.
+An automatic daily update was scheduled previouslym but was suspended at the beginning of April 2023.
+The site & its data repository are conserved as they are.
 
 
 Credits

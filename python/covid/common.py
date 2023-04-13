@@ -729,6 +729,7 @@ def ordDateToISO(ord_):
 
 def getTodayOrdinal():
   today = dtt.datetime.today()
+  #today = dtt.date.fromisoformat('2023-03-19')
   delta = dtt.timedelta(hours=12)
   ord_today = (today - delta).toordinal() + 1
   return ord_today

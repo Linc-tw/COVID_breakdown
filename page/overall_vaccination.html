@@ -66,61 +66,36 @@
                                 <span id="menu_index"></span>
                             </a>
                             
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_latest" aria-expanded="false" aria-controls="collapse_latest">
-                                <div class="sb-nav-link-icon"><i class="fas fa-fast-forward"></i></div>
-                                <span id="menu_latest"></span>
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <a class="nav-link" href="overall_cases.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-suitcase"></i></div>
+                                <span id="menu_overall_cases"></span>
                             </a>
-                            <div class="collapse" id="collapse_latest" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="latest_cases.html">
-                                        <span id="menu_latest_cases"></span>
-                                    </a>
-                                    <a class="nav-link" href="latest_incidence.html">
-                                        <span id="menu_latest_incidence"></span>
-                                    </a>
-                                    <a class="nav-link" href="latest_vaccination.html">
-                                        <span id="menu_latest_vaccination"></span>
-                                    </a>
-                                    <a class="nav-link" href="latest_deaths.html">
-                                        <span id="menu_latest_deaths"></span>
-                                    </a>
-                                    <a class="nav-link" href="latest_others.html">
-                                        <span id="menu_latest_others"></span>
-                                    </a>
-                                    <a class="nav-link" href="latest_comparison.html">
-                                        <span id="menu_latest_comparison"></span>
-                                    </a>
-                                </nav>
-                            </div>
                             
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapse_overall" aria-expanded="false" aria-controls="collapse_overall">
-                                <div class="sb-nav-link-icon"><i class="fas fa-calculator"></i></div>
-                                <span id="menu_overall"></span>
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <a class="nav-link" href="overall_incidence.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-percent"></i></div>
+                                <span id="menu_overall_incidence"></span>
                             </a>
-                            <div class="collapse" id="collapse_overall" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="overall_cases.html">
-                                        <span id="menu_overall_cases"></span>
-                                    </a>
-                                    <a class="nav-link" href="overall_incidence.html">
-                                        <span id="menu_overall_incidence"></span>
-                                    </a>
-                                    <a class="nav-link" href="overall_vaccination.html">
-                                        <span id="menu_overall_vaccination"></span>
-                                    </a>
-                                    <a class="nav-link" href="overall_deaths.html">
-                                        <span id="menu_overall_deaths"></span>
-                                    </a>
-                                    <a class="nav-link" href="overall_others.html">
-                                        <span id="menu_overall_others"></span>
-                                    </a>
-                                    <a class="nav-link" href="overall_comparison.html">
-                                        <span id="menu_overall_comparison"></span>
-                                    </a>
-                                </nav>
-                            </div>
+                            
+                            <a class="nav-link" href="overall_vaccination.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-syringe"></i></div>
+                                <span id="menu_overall_vaccination"></span>
+                            </a>
+                            
+                            <a class="nav-link" href="overall_deaths.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-skull-crossbones"></i></div>
+                                <span id="menu_overall_deaths"></span>
+                            </a>
+                            
+                            <a class="nav-link" href="overall_others.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-vials"></i></div>
+                                <span id="menu_overall_others"></span>
+                            </a>
+                            
+                            <a class="nav-link" href="overall_comparison.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-balance-scale"></i></div>
+                                <span id="menu_overall_comparison"></span>
+                            </a>
+                            
                             
                             <a class="nav-link" href="timeline.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-hourglass-half"></i></div>
@@ -270,6 +245,67 @@
                                     <div class="card-body" id="vaccination_by_dose_overall"></div>
                                 </div>
                             </div>
+                            
+                            <!-- vaccination_by_age -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-baby-carriage me-1"></i> <span id="vaccination_by_age_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#vaccination_by_age_collapse" aria-expanded="false" aria-controls="vaccination_by_age_collapse">
+                                                <i class="fas fa-comment-alt"></i>
+                                            </button>
+                                            
+                                            <button id="vaccination_by_age_overall_save" class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="collapse" id="vaccination_by_age_collapse">
+                                        <div class="card-body">
+                                            <span id="vaccination_by_age_description">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="vaccination_by_age_overall"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- vaccination_by_county -->
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-city me-1"></i> <span id="vaccination_by_county_title"></span>
+                                    </div>
+                                    
+                                    <div class="card-img">
+                                        <div class="btn-pos">
+                                            <select id="vaccination_by_county_overall_sort" class="form-select form-select-sm me-2" aria-label="vaccination_by_county_overall_sort">
+                                                <option value="0" id="vaccination_by_county_button_geo"></option>
+                                                <option value="1" id="vaccination_by_county_button_1st" selected></option>
+                                                <option value="2" id="vaccination_by_county_button_2nd"></option>
+                                                <option value="3" id="vaccination_by_county_button_3rd"></option>
+                                            </select>
+                                            
+                                            <button class="btn btn-sm btn-covid me-2" data-bs-toggle="collapse" data-bs-target="#vaccination_by_county_collapse" aria-expanded="false" aria-controls="vaccination_by_county_collapse">
+                                                <i class="fas fa-comment-alt"></i>
+                                            </button>
+                                            
+                                            <button id="vaccination_by_county_overall_save" class="btn btn-sm btn-covid"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="collapse" id="vaccination_by_county_collapse">
+                                        <div class="card-body">
+                                            <span id="vaccination_by_county_description">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body" id="vaccination_by_county_overall"></div>
+                                </div>
+                            </div>
                         
                         </div>
                     </div>
@@ -313,6 +349,10 @@
         <script src="../js/vaccination_sheet/vaccination_progress_param.js"></script>
         <script src="../js/vaccination_sheet/vaccination_by_dose.js"></script>
         <script src="../js/vaccination_sheet/vaccination_by_dose_param.js"></script>
+        <script src="../js/vaccination_county_sheet/vaccination_by_age.js"></script>
+        <script src="../js/vaccination_county_sheet/vaccination_by_age_param.js"></script>
+        <script src="../js/vaccination_county_sheet/vaccination_by_county.js"></script>
+        <script src="../js/vaccination_county_sheet/vaccination_by_county_param.js"></script>
         
         <!-- Main -->
         <script src="../js/plot/plot_overall_vaccination.js"></script>

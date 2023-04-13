@@ -491,7 +491,7 @@ class CountySheet(cvcm.Template):
       nb_cases_arr = nb_cases_arr[-nb_lookback_days:]
       nb_cases_arr *= 7 / population_dict[county]
       nb_cases_arr = np.around(nb_cases_arr, decimals=2)
-      nb_cases_arr[-1] = np.nan ## Force to NaN
+      #nb_cases_arr[-1] = np.nan ## Force to NaN
       
       stock[county] = nb_cases_arr
     return stock
@@ -596,7 +596,7 @@ class CountySheet(cvcm.Template):
       nb_cases_arr = nb_cases_arr[-nb_lookback_days:]
       nb_cases_arr *= 7 / population_dict[age]
       nb_cases_arr = np.around(nb_cases_arr, decimals=2)
-      nb_cases_arr[-1] = np.nan ## Force to NaN
+      #nb_cases_arr[-1] = np.nan ## Force to NaN
       
       stock[age] = nb_cases_arr
     return stock

@@ -74,6 +74,9 @@ function VP_FormatData(wrap, data) {
       population = +data[i]['value'];
   }
   
+  //-- Overwrite timestamp
+  wrap.timestamp = '2023-03-25 18:00:00 UTC+0800';
+  
   //-- Set iso_begin
   if (wrap.tag.includes('latest'))
     wrap.iso_begin = GP_ISODateAddition(wrap.timestamp.slice(0, 10), -90+1);
