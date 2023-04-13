@@ -2,7 +2,7 @@
     ################################
     ##  COVID_process.py          ##
     ##  Chieh-An Lin              ##
-    ##  2023.01.25                ##
+    ##  2023.04.13                ##
     ################################
 
 import os
@@ -89,7 +89,7 @@ def saveCsv_all():
   mode = 'both'
   cvcm.initializeReadme()
   
-  ## README-only
+  ## From crowd-sourcing
   print()
   status_sheet = cvst.StatusSheet()
   status_sheet.saveCsv(mode=mode)

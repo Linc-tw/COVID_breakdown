@@ -57,12 +57,15 @@ Contents
 `COVID-19_in_Taiwan_raw_data_case_breakdown.csv`
 - Breakdown table of every single confirmed cases
 - Contains report date, onset date, entry date, gender, age, nationality, transmission type, detection channel, symptoms, travel history, & link to known cases
+- Updated until Apr 29th 2022
 
 `COVID-19_in_Taiwan_raw_data_status_evolution.csv`
 - Evolution of numbers of confirmed cases, discharged cases, & deaths
+- Updated until Dec 31st 2022
 
 `COVID-19_in_Taiwan_raw_data_timeline.csv`
 - Timeline of major pandemic events for Taiwan & the world
+- Updated until Dec 31st 2022
 
 ### CDC
 
@@ -75,20 +78,24 @@ Contents
 `COVID-19_in_Taiwan_raw_data_number_of_tests.csv`
 - Daily test statistics
 - Shows date of tests when they were administrated, which is **not** necessary the same date as when they were analyzed
+- Updated until Mar 1st 2023
 - Downloaded from [here](https://data.gov.tw/dataset/120451)
 
 ### NCHC
 
 `COVID-19_in_Taiwan_raw_data_vaccination.csv`
 - Table of administrated doses of different vaccine brands
+- Updated until Mar 25th 2023
 - Downloaded from [here](https://covid-19.nchc.org.tw/api.php?tableID=2004)
 
 `COVID-19_in_Taiwan_raw_data_vaccination_county.csv`
 - Table of administrated doses from different regions for different age ranges
+- Updated until Dec 14th 2022
 - Downloaded from [here](https://covid-19.nchc.org.tw/api.php?tableID=2006)
 
 `COVID-19_in_Taiwan_raw_data_death.csv`
 - Breakdown table of every single deaths
+- Updated until Jan 19th 2023
 - Downloaded from [here](https://covid-19.nchc.org.tw/api.php?tableID=4002)
 
 ### Out of date

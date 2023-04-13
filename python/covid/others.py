@@ -2,7 +2,7 @@
     ################################
     ##  others.py                 ##
     ##  Chieh-An Lin              ##
-    ##  2023.01.25                ##
+    ##  2023.04.13                ##
     ################################
 
 import os
@@ -508,13 +508,13 @@ def saveCsv_testPositiveRate(status_sheet, cc_sheet, test_sheet, mode='both'):
 ## Functions - main
 
 def saveCsv_others(status_sheet, cc_sheet, border_sheet, death_sheet, county_sheet, test_sheet, mode='both'):
-  saveCsv_keyNb(status_sheet, cc_sheet)
-  saveCsv_caseCounts(status_sheet, cc_sheet)
-  saveCsv_incidenceRates(status_sheet, cc_sheet, border_sheet, mode=mode)
+  saveCsv_keyNb(status_sheet, cc_sheet, mode='readme')
+  saveCsv_caseCounts(status_sheet, cc_sheet, mode='readme')
+  saveCsv_incidenceRates(status_sheet, cc_sheet, border_sheet, mode='readme')
   saveCsv_deathCounts(status_sheet, death_sheet, mode='readme')
   saveCsv_caseFatalityRates(status_sheet, cc_sheet, death_sheet, mode='readme')
   saveCsv_deathByAge(county_sheet, death_sheet, mode='readme')
-  saveCsv_testPositiveRate(status_sheet, cc_sheet, test_sheet, mode=mode)
+  saveCsv_testPositiveRate(status_sheet, cc_sheet, test_sheet, mode='readme')
   return
 
 ## End of file

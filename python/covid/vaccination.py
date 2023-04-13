@@ -2,7 +2,7 @@
     ################################
     ##  vaccination.py            ##
     ##  Chieh-An Lin              ##
-    ##  2023.01.25                ##
+    ##  2023.04.13                ##
     ################################
 
 import os
@@ -469,10 +469,10 @@ class VaccinationSheet(cvcm.Template):
     return
   
   def saveCsv(self, mode='both'):
-    self.saveCsv_vaccinationByBrand(mode=mode)
-    self.saveCsv_vaccinationProgress(mode=mode)
-    self.saveCsv_vaccinationDeliveries(mode=mode)
-    self.saveCsv_vaccinationByDose(mode=mode)
+    self.saveCsv_vaccinationByBrand(mode='readme')
+    self.saveCsv_vaccinationProgress(mode='readme')
+    self.saveCsv_vaccinationDeliveries(mode='readme')
+    self.saveCsv_vaccinationByDose(mode='readme')
     return
   
 ## End of file

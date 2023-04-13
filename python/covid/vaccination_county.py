@@ -2,7 +2,7 @@
     ################################
     ##  vaccination_county.py     ##
     ##  Chieh-An Lin              ##
-    ##  2023.01.25                ##
+    ##  2023.04.13                ##
     ################################
 
 import os
@@ -266,8 +266,8 @@ class VaccinationCountySheet(cvcm.Template):
     return
   
   def saveCsv(self, mode='both'):
-    self.saveCsv_vaccinationByCounty(mode=mode)
-    self.saveCsv_vaccinationByAge(mode=mode)
+    self.saveCsv_vaccinationByCounty(mode='readme')
+    self.saveCsv_vaccinationByAge(mode='readme')
     return
   
 ## End of file

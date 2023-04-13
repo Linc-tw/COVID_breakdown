@@ -344,8 +344,8 @@ class TestSheet(cvcm.Template):
     return
   
   def saveCsv(self, mode='both'):
-    self.saveCsv_testCounts(mode=mode)
-    self.saveCsv_testByCriterion(mode=mode)
+    self.saveCsv_testCounts(mode='readme')
+    self.saveCsv_testByCriterion(mode='readme')
     self.saveCsv_criteriaTimeline(mode='readme')
     return
 

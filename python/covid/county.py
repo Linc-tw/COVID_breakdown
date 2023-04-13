@@ -2,7 +2,7 @@
     ################################
     ##  county.py                 ##
     ##  Chieh-An Lin              ##
-    ##  2023.01.25                ##
+    ##  2023.04.13                ##
     ################################
 
 import os
@@ -672,11 +672,11 @@ class CountySheet(cvcm.Template):
     return
   
   def saveCsv(self, mode='both'):
-    self.saveCsv_localCasePerCounty(mode=mode)
-    self.saveCsv_caseByAge(mode=mode)
-    self.saveCsv_incidenceMap(mode=mode)
-    self.saveCsv_incidenceEvolutionByCounty(mode=mode)
-    self.saveCsv_incidenceEvolutionByAge(mode=mode)
+    self.saveCsv_localCasePerCounty(mode='readme')
+    self.saveCsv_caseByAge(mode='readme')
+    self.saveCsv_incidenceMap(mode='readme')
+    self.saveCsv_incidenceEvolutionByCounty(mode='readme')
+    self.saveCsv_incidenceEvolutionByAge(mode='readme')
     return
   
 ## End of file
